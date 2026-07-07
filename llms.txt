@@ -23,7 +23,7 @@ are its main features:
   unbounded, and also rounded or discretized.
 - **No modelling assumptions** such as gaussianity, linearity, or any
   other kind of model. The analysis and inferences are fully
-  [*non-parametric*](https://dictionary.apa.org/nonparametric).
+  [non-parametric](https://dictionary.apa.org/nonparametric).
 - **No assumptions about functional dependence** between variates. The
   analysis and inferences are therefore more general than those by
   neural networks, random forests, or similar machine-learning
