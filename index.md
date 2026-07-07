@@ -97,8 +97,8 @@ Newer versions of **Prova** can be installed with
 
 ## Documentation
 
-The vignette [*Bayesian nonparametric inference with
-**Prova***](https://pglpm.github.io/prova/articles/intro.html) is a
+The vignette [*An introduction to probabilistic-statistical variate
+analysis*](https://pglpm.github.io/prova/articles/intro.html) is a
 step-by-step introduction to **Prova** and also to Bayesian
 nonparametrics. It guides you through a concrete example with various
 kinds of inferences. You may also try to follow it using a dataset of
