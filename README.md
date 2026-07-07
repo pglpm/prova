@@ -47,7 +47,7 @@ remotes::install_github('pglpm/prova')
 
 ## Documentation
 
-The vignette [*Bayesian nonparametric inference with **Prova***](https://pglpm.github.io/prova/articles/intro.html) is a step-by-step introduction to **Prova** and also to Bayesian nonparametrics. It guides you through a concrete example with various kinds of inferences. You may also try to follow it using a dataset of your own.
+The vignette [*An introduction to probabilistic-statistical variate analysis*](https://pglpm.github.io/prova/articles/intro.html) is a step-by-step introduction to **Prova** and also to Bayesian nonparametrics. It guides you through a concrete example with various kinds of inferences. You may also try to follow it using a dataset of your own.
 
 Other tutorials are available at [pglpm.github.io/prova](https://pglpm.github.io/prova/), or can be accessed in an R session with `browseVignettes('prova')`.
 
