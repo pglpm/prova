@@ -215,10 +215,14 @@ flexiplot <- function(
             col = 'black', lwd = 1, lty = 1, ...)
         if(grid){
             ## Save and restore user's par()
-            oldpar <- par(no.readonly = TRUE)
-            on.exit(par(oldpar))
-            if(!is.null('xaxp')){ par(xaxp = xaxp) }
-            if(!is.null('yaxp')){ par(yaxp = yaxp) }
+            if(!is.null('xaxp')){
+                oldparx <- par(xaxp = xaxp)
+                on.exit(par(oldparx))
+            }
+            if(!is.null('yaxp')){
+                oldpary <- par(yaxp = yaxp)
+                on.exit(par(oldpary), add = TRUE)
+            }
             graphics::grid(nx = NULL, ny = NULL, lty = 1, col = '#BBBBBB80')
         }
     }
