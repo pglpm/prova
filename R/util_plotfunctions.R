@@ -214,6 +214,9 @@ flexiplot <- function(
         graphics::axis(2, at = yat, labels = ydomain, tick = !grid,
             col = 'black', lwd = 1, lty = 1, ...)
         if(grid){
+            ## Save and restore user's par()
+            oldpar <- par(no.readonly = TRUE)
+            on.exit(par(oldpar))
             if(!is.null('xaxp')){ par(xaxp = xaxp) }
             if(!is.null('yaxp')){ par(yaxp = yaxp) }
             graphics::grid(nx = NULL, ny = NULL, lty = 1, col = '#BBBBBB80')
