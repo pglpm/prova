@@ -90,3 +90,4 @@ c(datapoints)
 
 \code{\link[=qPr]{qPr()}} to calculate quantiles.
 }
+\concept{generate}

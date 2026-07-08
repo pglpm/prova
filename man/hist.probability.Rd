@@ -79,3 +79,4 @@ hist(probs, legend = 'topright')
 
 \code{\link[=plotquantiles]{plotquantiles()}} to plot quantile ranges.
 }
+\concept{plot}

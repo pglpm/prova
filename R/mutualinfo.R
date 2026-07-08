@@ -109,6 +109,7 @@
 #' @import stats
 #' @import utils
 #'
+#' @concept association
 #' @export
 mutualinfo <- function(
     Y1names,

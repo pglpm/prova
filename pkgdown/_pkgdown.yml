@@ -6,23 +6,24 @@ template:
     bootswatch: zephyr
     pkgdown-nav-height: 100px
 reference:
-- title: "Main functions"
+- title: "Learn from data"
   contents:
-    - Pr
-    - flexiplot
-    - hist.probability
-    - learn
-    - learntExample
-    - metadataExample
-    - metadatatemplate
-    - mutualinfo
-    - plot.probability
-    - plotquantiles
-    - print.probability
-    - prova.data
-    - qPr
-    - rPr
-    - vrtgrid
+  - has_keyword("learn")
+- title: "Calculate probabilities & statistics"
+  contents:
+  - has_keyword("probability")
+- title: "Generate synthetic datapoints"
+  contents:
+  - has_keyword("generate")
+- title: "Plot & print probability distributions"
+  contents:
+  - has_keyword("display")
+- title: "Handle metadata and data files"
+  contents:
+  - has_keyword("data")
+- title: "Quantify associations between variate groups"
+  contents:
+  - has_keyword("association")
 - title: "Internal functions"
   desc: "For developers."
   contents:

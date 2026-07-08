@@ -37,6 +37,7 @@
 #' ## check first few lines of the raw file
 #' writeLines(readLines(filename, n = 10))
 #'
+#' @concept data
 NULL
 
 #' @rdname prova.data

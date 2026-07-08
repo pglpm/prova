@@ -153,8 +153,8 @@
 #' @import stats
 #' @import utils
 #'
+#' @concept learn
 #' @export
-## #' @rawNamespace import(nimble, except = rcat)
 learn <- function(
     data,
     metadata,

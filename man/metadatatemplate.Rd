@@ -118,3 +118,4 @@ print(metadata)
 \seealso{
 \code{\link[=learn]{learn()}}, which generates the information necessary to calculate posterior probabilities, based on data and metadata.
 }
+\concept{data}

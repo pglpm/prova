@@ -58,3 +58,4 @@ plot(probs)
 
 \code{\link[=plot.probability]{plot.probability()}} to plot probabilities and quantiles calculated by \code{Pr()}.
 }
+\concept{probability}

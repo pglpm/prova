@@ -99,6 +99,7 @@
 #' @import utils
 #' @import stats
 #'
+#' @concept probability
 #' @export
 qPr <- function(
     p = c(0.25, 0.5, 0.75),

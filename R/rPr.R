@@ -70,6 +70,7 @@
 #' @import utils
 #' @import stats
 #'
+#' @concept generate
 #' @export
 rPr <- function(
     n,

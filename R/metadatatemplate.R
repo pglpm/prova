@@ -101,6 +101,7 @@
 #' @import stats
 #' @import utils
 #'
+#' @concept data
 #' @export
 metadatatemplate <- function(
     data,

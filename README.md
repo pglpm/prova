@@ -23,7 +23,7 @@ This repository provides an R package and some theoretical background to perform
 - Easy and straightforward **subgroup analyses** and **stratified analyses**, for any division of variates, with full statistical details.
 - **Quantification of [generalizability](https://dictionary.apa.org/generalizability)** beyond the finite sample size. In other words, quantification of uncertainty of results regarding the whole, unsampled, population.
 - Straightforward use within **decision theory**, such as **clinical decision-making**. Users can immediately combine the probabilistic results with any measures of utilities, such as [quality-adjusted life years](https://dictionary.apa.org/quality-adjusted-life-years).
-- **Quantification of associations** between any kinds of variates, without modelling assumptions (gaussianity, linearity, etc.), thanks to the use of [*mutual information*](https://electropedia.org/iev/iev.nsf/display?openform&ievref=171-07-26).
+- **Quantification of associations** between any kinds of variates, without modelling assumptions (gaussianity, linearity, etc.), thanks to the use of [mutual information](https://electropedia.org/iev/iev.nsf/display?openform&ievref=171-07-26).
 - **[Base-rate](https://dictionary.apa.org/base-rate-fallacy) correction** for inferences about out-of-population data, by means of Bayes's theorem.
 - **Automated Markov-chain Monte Carlo** computation. Users unfamiliar with Monte Carlo methods don't have to worry, because the computations are handled automatically.
 

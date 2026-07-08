@@ -193,6 +193,7 @@
 #' @import stats
 #' @import utils
 #'
+#' @concept probability
 #' @export
 Pr <- function(
     Y,

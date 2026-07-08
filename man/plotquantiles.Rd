@@ -65,3 +65,4 @@ flexiplot(x = values, y = probs$values, lwd = 5, lty = 2, col = 2, add = TRUE)
 
 \code{\link[=flexiplot]{flexiplot()}} for more general plots.
 }
+\concept{plot}

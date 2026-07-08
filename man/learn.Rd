@@ -218,3 +218,4 @@ About Markov-chain Monte Carlo and "convergence":
 
 \code{\link[=pread.csv]{pread.csv()}} and \code{\link[=pwrite.csv]{pwrite.csv()}} to read and write CSV files in the format used by \code{learn()}.
 }
+\concept{learn}

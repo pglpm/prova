@@ -133,3 +133,4 @@ print(probs)
 
 \code{\link[=learn]{learn()}}, which generates the \code{learnt} objects required by \code{mutualinfo()}.
 }
+\concept{association}

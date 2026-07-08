@@ -24,4 +24,5 @@ A \link[base:data.frame]{data frame} containing the prior information about the 
 
 \code{\link[=learn]{learn()}} which needs this kind of metadata files to "learn" from data.
 }
+\concept{data}
 \keyword{datasets}

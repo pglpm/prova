@@ -98,3 +98,4 @@ flexiplot(x = x, y = y, ylim = c(0, NA))
 
 \code{\link[=plotquantiles]{plotquantiles()}} to plot quantile ranges.
 }
+\concept{plot}

@@ -62,6 +62,7 @@
 #' @import grDevices
 #' @import graphics
 #'
+#' @concept plot
 #' @export
 flexiplot <- function(
     x, y,
@@ -274,6 +275,7 @@ flexiplot <- function(
 #'
 #' @import grDevices
 #'
+#' @concept plot
 #' @export
 plotquantiles <- function(
     x, y,
@@ -376,6 +378,7 @@ plotquantiles <- function(
 #'
 #' @import grDevices
 #'
+#' @concept plot
 #' @export
 plot.probability <- function(
     x,
@@ -664,6 +667,7 @@ plot.probability <- function(
 #'
 #' @import grDevices
 #'
+#' @concept plot
 #' @export
 hist.probability <- function(
     x,
@@ -852,6 +856,7 @@ hist.probability <- function(
 #' ## diplay 'values' only, and only for the species value 'Gentoo'
 #' print(probs, elements = 'values', subset = list(species = 'Gentoo'))
 #'
+#' @concept plot
 #' @export
 print.probability <- function(
     x,

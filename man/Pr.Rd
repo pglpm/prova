@@ -227,3 +227,4 @@ probs$quantiles[, , c('5.5\%', '94.5\%')]
 
 \code{\link[=rPr]{rPr()}} to generate datapoints.
 }
+\concept{probability}

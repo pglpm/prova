@@ -32,4 +32,5 @@ It is a list that essentially contains posterior hyperparameters for drawing sta
 
 \code{\link[=Pr]{Pr()}}, \code{\link[=qPr]{qPr()}}, \code{\link[=rPr]{rPr()}}, \code{\link[=mutualinfo]{mutualinfo()}}: functions that require this kind of object in order to calculate probabilities and quantiles, generate data points, and calculate mutual information.
 }
+\concept{learn}
 \keyword{datasets}

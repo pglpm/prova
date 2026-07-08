@@ -48,6 +48,7 @@
 #'
 #' @import utils
 #'
+#' @concept probability
 #' @export
 vrtgrid <- function(
     vrt,

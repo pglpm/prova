@@ -136,3 +136,4 @@ probs$values
 
 \code{\link[=rPr]{rPr()}} to generate datapoints.
 }
+\concept{probability}
