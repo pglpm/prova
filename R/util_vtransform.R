@@ -55,7 +55,7 @@ vtransform <- function(
     useLquantiles <- TRUE
 
     if(!is.data.frame(x)){
-        if(is.vector(x)){
+        if(is.atomic(x)){
             dim(x) <- c(length(x), 1)
         }
         x <- as.data.frame(x)
@@ -188,7 +188,7 @@ vtransform <- function(
 
                     } else if (Cout == 'leftbound') {
                         ## used in Pr()
-                        ## non-boundary points are st to NA
+                        ## non-boundary points are set to NA
                         ## boundaries are enforced
                         datum[datum > domainmin] <- NA
                         datum[datum < domainmin] <- domainmin
@@ -208,7 +208,7 @@ vtransform <- function(
 
                     } else if (Cout == 'rightbound') {
                         ## used in Pr()
-                        ## non-boundary points are st to NA
+                        ## non-boundary points are set to NA
                         ## boundaries are enforced
                         datum[datum < domainmax] <- NA
                         datum[datum > domainmax] <- domainmax
