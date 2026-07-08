@@ -8,22 +8,22 @@ template:
 reference:
 - title: "Learn from data"
   contents:
-  - has_keyword("learn")
+  - has_concept("learn")
 - title: "Calculate probabilities & statistics"
   contents:
-  - has_keyword("probability")
+  - has_concept("probability")
 - title: "Generate synthetic datapoints"
   contents:
-  - has_keyword("generate")
+  - has_concept("generate")
 - title: "Plot & print probability distributions"
   contents:
-  - has_keyword("display")
+  - has_concept("display")
 - title: "Handle metadata and data files"
   contents:
-  - has_keyword("data")
+  - has_concept("data")
 - title: "Quantify associations between variate groups"
   contents:
-  - has_keyword("association")
+  - has_concept("association")
 - title: "Internal functions"
   desc: "For developers."
   contents:
