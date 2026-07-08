@@ -24,7 +24,6 @@ reference:
 - title: "Quantify associations between variate groups"
   contents:
   - has_concept("association")
-- text: -------
 - title: "Internal functions"
   desc: "For developers (beware!)"
   contents:
