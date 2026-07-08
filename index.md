@@ -46,8 +46,8 @@ are its main features:
   years](https://dictionary.apa.org/quality-adjusted-life-years).
 - **Quantification of associations** between any kinds of variates,
   without modelling assumptions (gaussianity, linearity, etc.), thanks
-  to the use of [*mutual
-  information*](https://electropedia.org/iev/iev.nsf/display?openform&ievref=171-07-26).
+  to the use of [mutual
+  information](https://electropedia.org/iev/iev.nsf/display?openform&ievref=171-07-26).
 - **[Base-rate](https://dictionary.apa.org/base-rate-fallacy)
   correction** for inferences about out-of-population data, by means of
   Bayes’s theorem.

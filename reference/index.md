@@ -1,16 +1,6 @@
 # Package index
 
-## Main functions
-
-- [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) : Calculate
-  posterior probabilities
-
-- [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
-  : Plot numeric or character values
-
-- [`hist(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/hist.probability.md)
-  : Plot the variability of an object of class "probability" as a
-  histogram
+## Learn from data
 
 - [`learn()`](https://pglpm.github.io/prova/reference/learn.md) : Monte
   Carlo computation of posterior probability distribution
@@ -20,23 +10,41 @@
 
   Example `learnt` object produced by learn()
 
+## Calculate probabilities & statistics
+
+- [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) : Calculate
+  posterior probabilities
+- [`qPr()`](https://pglpm.github.io/prova/reference/qPr.md) : Calculate
+  quantiles
+- [`vrtgrid()`](https://pglpm.github.io/prova/reference/vrtgrid.md) :
+  Create a grid of values for a variate
+
+## Generate synthetic datapoints
+
+- [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md) : Generate
+  datapoints
+
+## Plot & print probability distributions
+
+- [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
+  : Plot numeric or character values
+- [`hist(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/hist.probability.md)
+  : Plot the variability of an object of class "probability" as a
+  histogram
+- [`plot(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/plot.probability.md)
+  : Plot an object of class "probability"
+- [`plotquantiles()`](https://pglpm.github.io/prova/reference/plotquantiles.md)
+  : Plot pairs of quantiles
+- [`print(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/print.probability.md)
+  : Print an object of class "probability"
+
+## Handle metadata and data files
+
 - [`metadataExample`](https://pglpm.github.io/prova/reference/metadataExample.md)
   : Example metadata file
 
 - [`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadatatemplate.md)
   : Metadata and helper function for metadata
-
-- [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
-  : Calculate mutual information between groups of joint variates
-
-- [`plot(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/plot.probability.md)
-  : Plot an object of class "probability"
-
-- [`plotquantiles()`](https://pglpm.github.io/prova/reference/plotquantiles.md)
-  : Plot pairs of quantiles
-
-- [`print(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/print.probability.md)
-  : Print an object of class "probability"
 
 - [`pwrite.csv()`](https://pglpm.github.io/prova/reference/prova.data.md)
   [`pread.csv()`](https://pglpm.github.io/prova/reference/prova.data.md)
@@ -44,14 +52,10 @@
 
   Write and read CSV files in **Prova**
 
-- [`qPr()`](https://pglpm.github.io/prova/reference/qPr.md) : Calculate
-  quantiles
+## Quantify associations between variate groups
 
-- [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md) : Generate
-  datapoints
-
-- [`vrtgrid()`](https://pglpm.github.io/prova/reference/vrtgrid.md) :
-  Create a grid of values for a variate
+- [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+  : Calculate mutual information between groups of joint variates
 
 ## Internal functions
 
