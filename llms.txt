@@ -256,6 +256,8 @@ For developers (beware!)
   : Cumulative sum along first dimension
 - [`rowinvcumsum()`](https://pglpm.github.io/prova/reference/rowinvcumsum.md)
   : Inverse cumulative sum along first dimension
+- [`testPr()`](https://pglpm.github.io/prova/reference/testPr.md) : Test
+  posterior probabilities
 - [`util_Pcheckpoints()`](https://pglpm.github.io/prova/reference/util_Pcheckpoints.md)
   : Calculate joint frequencies for MCMC-monitoring checkpoints
 - [`util_cleanup()`](https://pglpm.github.io/prova/reference/util_cleanup.md)

@@ -85,7 +85,7 @@ probs <- Pr(Y = Y, X = X, learnt = learnt, parallel = 1)
 print(probs)
 #> , , |bill_len = 43
 #> 
-#>            prob. & vrb.
+#>            probability & variability
 #> species     value Q5.5%  Q25%  Q75% Q94.5%
 #>   Adelie    0.465 0.367 0.421 0.513  0.568
 #>   Chinstrap 0.146 0.081 0.117 0.172  0.219
@@ -93,7 +93,7 @@ print(probs)
 #> 
 #> , , |bill_len = 44
 #> 
-#>            prob. & vrb.
+#>            probability & variability
 #> species     value Q5.5%  Q25%  Q75% Q94.5%
 #>   Adelie    0.222 0.140 0.187 0.255  0.307
 #>   Chinstrap 0.205 0.120 0.172 0.243  0.297

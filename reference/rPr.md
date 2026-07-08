@@ -44,7 +44,7 @@ rPr(
 
   Named vector or list, or `NULL` (default). The names must match some
   or all of the variates in arguments `X`. For variates in this list,
-  the probability conditional is understood in an semi-open interval
+  the probability conditional is understood in a semi-open interval
   sense: \\X \le x\\ or \\X \ge x\\, an so on. See analogous argument in
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 

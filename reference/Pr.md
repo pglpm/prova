@@ -1,10 +1,10 @@
 # Calculate posterior probabilities
 
-This function calculates posterior probability densities, cumulative
-posterior probabilities, and mixtures thereof. It also outputs the
-variability of such probabilities if more training data were available,
-and the Monte Carlo Standard Error for the calculated posterior
-probabilities.
+This function calculates posterior probabilities and probability
+densities, cumulative posterior probabilities, and mixtures thereof. It
+also outputs the variability of such probabilities if more training data
+were available, and the Monte Carlo Standard Error for the calculated
+posterior probabilities.
 
 ## Usage
 
@@ -52,10 +52,10 @@ Pr(
 
   Named vector or list, or `NULL` (default). The names must match some
   or all of the variates in arguments `Y` and `X`. For variates in this
-  list, the probability arguments are understood in an semi-open
-  interval sense: \\Y \le y\\ or \\Y \ge y\\, an so on. This is true for
-  `Y` and `X` variates (on the left and on the right of the conditional
-  sign \\\\\vert\\\\). A left-open interval \\Y \le y\\ is indicated by
+  list, the probability arguments are understood in a semi-open interval
+  sense: \\Y \le y\\ or \\Y \ge y\\, an so on. This is true for `Y` and
+  `X` variates (on the left and on the right of the conditional sign
+  \\\\\vert\\\\). A left-open interval \\Y \le y\\ is indicated by
   `'<='` or `'left'` or `-1`; a right-open interval \\Y \ge y\\ is
   indicated by `'>='` or `'right'` or `+1`. Values `NULL`, `'=='`, `0`
   indicate that a point value `Y = y` (not an interval) should be
