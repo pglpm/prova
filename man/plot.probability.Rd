@@ -75,4 +75,4 @@ plot(probs)
 
 \code{\link[=plotquantiles]{plotquantiles()}} to plot quantile ranges.
 }
-\concept{plot}
+\concept{display}

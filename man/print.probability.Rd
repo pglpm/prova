@@ -49,4 +49,4 @@ print(probs, elements = 'values', subset = list(species = 'Gentoo'))
 \code{\link[=plot.probability]{plot.probability()}} to plot probabilities and quantiles calculated by `Pr()'.
 \code{\link[=hist.probability]{hist.probability()}} to plot the variability of the probabilities as a distribution.
 }
-\concept{plot}
+\concept{display}
