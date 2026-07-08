@@ -59,7 +59,7 @@
 
 ## Internal functions
 
-For developers.
+For developers (beware!)
 
 - [`buildauxmetadata()`](https://pglpm.github.io/prova/reference/buildauxmetadata.md)
   : Build augmented metadata file
