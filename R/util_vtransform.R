@@ -55,14 +55,13 @@ vtransform <- function(
     useLquantiles <- TRUE
 
     if(!is.data.frame(x)){
-        if(is.atomic(x)){
-            dim(x) <- c(length(x), 1)
-        }
         x <- as.data.frame(x)
     }
+
     if (!is.null(variates)) {
         colnames(x) <- variates
     }
+
     as.data.frame(lapply(colnames(x), function(v) {
         datum <- x[[v]]
         with(data = as.list(auxmetadata[auxmetadata$name == v, ]),
@@ -226,11 +225,11 @@ vtransform <- function(
                         ##
                         datum <- (datum - tlocation) / tscale
 
-                    } else if (Cout == 'boundisinf') {
-                        ## used in sampling functions
+                    } else if (Cout == '1') {
+                        ## used in Pr() with tail = 'left'
                         ## points outside or on boundaries are moved to infinity
                         selmax <- (datum >= domainmax)
-                        selmin <- (datum <= domainmin)
+                        datum[datum < domainmin] <- domainmin
                         ##
                         if (transform == 'log') {
                             datum <- log(datum - domainmin)
@@ -245,6 +244,25 @@ vtransform <- function(
                         ##
                         datum <- (datum - tlocation) / tscale
                         datum[selmax] <- +Inf
+
+                    } else if (Cout == '-1') {
+                        ## used in Pr() with tail = 'right'
+                        ## points outside or on boundaries are moved to infinity
+                        selmin <- (datum <= domainmin)
+                        datum[datum > domainmax] <- domainmax
+                        ##
+                        if (transform == 'log') {
+                            datum <- log(datum - domainmin)
+                        } else if (transform == 'logminus') {
+                            datum <- -log(domainmax - datum)
+                        } else if (transform == 'Q') {
+                            datum <- util_Q(0.5 +
+                                                (datum -
+                                                     (domainmin + domainmax)/2) /
+                                                (domainmax - domainmin))
+                        }
+                        ##
+                        datum <- (datum - tlocation) / tscale
                         datum[selmin] <- -Inf
 
                     } else if (Cout == 'boundnormalized') {

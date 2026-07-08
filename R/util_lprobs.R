@@ -111,7 +111,7 @@ util_lprobsargsyx <- function(
                 t(as.matrix(vtransform(
                     x[, aux$name, drop = FALSE],
                     auxmetadata = auxmetadata,
-                    Cout = 'boundnormalized',
+                    Cout = as.character(tails[aux$name]),
                     logjacobianOr = NULL
                 )))
         )
@@ -353,7 +353,7 @@ util_lprobsargsyx <- function(
         nVN <- TRUE
         for(i in seq_len(nrow(aux))) {
             VNprobs <- learnbind(VNprobs,
-                if(tails[aux$name[i]] < 0) {
+                if(tails[aux$name[i]] > 0) {
                     rowcumsum(learnt$Oprob[
                         aux$indexpos[i] + seq_len(aux$Nvalues[i]), , , drop = FALSE
                     ])

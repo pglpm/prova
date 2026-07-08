@@ -23,7 +23,7 @@ rPr(
 
 \item{learnt}{Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
 
-\item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in an semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
+\item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
 \item{mcsamples}{Vector of integers, or \code{'all'}, or \code{NULL} (default): which Monte Carlo samples calculated by the \code{\link[=learn]{learn()}} function should be used to draw the variate values. The default is to choose a random subset if \code{n} is smaller than their number, otherwise to recycle them as necessary.}
 

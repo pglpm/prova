@@ -1,3 +1,11 @@
+# Prova v1.0.5
+
+* Corrected a bug affecting computation of probabilities for censored, non-rounded variates.
+
+* Corrected a bug affecting computation of cumulative probabilities ('tails =' argument) of ordinal variates.
+
+* Corrected typos in documentation.
+
 # Prova v1.0.0
 
 * Improved documentation, also of internal functions.

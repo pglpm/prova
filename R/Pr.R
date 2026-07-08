@@ -507,7 +507,6 @@ Pr <- function(
                 logjacobianOr = TRUE)),
             na.rm = TRUE
         ))
-        print('**') ; print(jacobians)
         rm(y)
     }
 
