@@ -519,7 +519,7 @@ Pr <- function(
             apply(X = X, MARGIN = 1, FUN = paste0, collapse = sep,
                 simplify = TRUE)),
             nm = paste0(if(is.null(priorY)){solidus},
-                paste0(colnames(X), collapse = sep)) )
+                colnames(X), collapse = sep) )
     } else {
         Xnames <- list(NULL)
     }
@@ -528,7 +528,7 @@ Pr <- function(
             apply(X = Y, MARGIN = 1, FUN = paste0, collapse = sep,
                 simplify = TRUE)),
             nm = paste0(if(!is.null(priorY)){solidus},
-                paste0(colnames(Y), collapse = sep)) )
+                colnames(Y), collapse = sep) )
     } else {
         Ynames <- list(NULL)
     }
