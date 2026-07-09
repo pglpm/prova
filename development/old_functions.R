@@ -425,3 +425,283 @@ util_learntvar2sd <- function(file){
     saveRDS(object = learnt, file = file)
 }
 
+
+
+
+
+#' Format datapoints used for MCMC monitoring
+#'
+#' Used in 'util_Pcheckpoints()' within 'learn()'.
+#'
+#' @param x Datapoints to be used for checking MCMC progress
+#' @param auxmetadata auxmetadata object
+#' @param pointsid Id of datapoints
+#'
+#' @return some arguments to be repeatedly used in util_Pcheckpoints
+#'
+#' @keywords internal
+util_oldprepPcheckpoints <- function(
+    x, auxmetadata, pointsid = NULL
+){
+
+    nX <- nrow(x)
+
+    auxV0a <- auxV0b <- auxV1a <- auxV1b <- auxV1c <- auxV1d <- NULL
+    auxV2 <- auxVNO <- auxVNN <- auxVB <- NULL
+    V2steps <- NULL
+
+    nV0 <- nV1 <- nV2 <- nVN <- nVB <- FALSE
+
+    xV0 <- xV1 <- xV2 <- xVN <- xVB <- matrix(data = NA_real_,
+        nrow = 0, ncol = nX, dimnames = NULL)
+
+###
+### point probability density
+###
+
+### R-variates not in 'cumul'
+    toselect <- which(auxmetadata$mcmctype == 'R')
+    if(length(toselect) > 0){
+        nV0 <- TRUE
+        aux <- auxmetadata[toselect, ]
+        auxV0a <- aux$id
+        xV0 <- rbind(xV0,
+            t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Rout = 'normalized',
+                logjacobianOr = NULL
+            )))
+        )
+    }
+
+### C-variates not in 'cumul' and with some non-boundary value
+    toselect <- which(auxmetadata$mcmctype == 'C')
+    if(length(toselect) > 0) {
+        toselect <- toselect[sapply(toselect, function(i){
+            any(x[,auxmetadata$name[i]] > auxmetadata$domainmin[i] &
+                    x[,auxmetadata$name[i]] < auxmetadata$domainmax[i],
+                na.rm = TRUE)
+        })]
+    }
+    if(length(toselect) > 0){
+        nV0 <- TRUE
+        aux <- auxmetadata[toselect, ]
+        auxV0b <- aux$id
+        xV0 <- rbind(xV0,
+            t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Cout = 'boundisna',
+                logjacobianOr = NULL
+            )))
+        )
+    }
+
+###
+### tail probability
+###
+
+### C-variates not in 'cumul' and with left boundary values
+    toselect <- which(auxmetadata$mcmctype == 'C')
+    if(length(toselect) > 0) {
+        toselect <- toselect[sapply(toselect, function(i){
+            any(x[,auxmetadata$name[i]] <= auxmetadata$domainmin[i],
+                na.rm = TRUE)
+        })]
+    }
+    if(length(toselect) > 0){
+        nV1 <- TRUE
+        aux <- auxmetadata[toselect, ]
+        auxV1a <- aux$id
+        xV1 <- rbind(xV1,
+            t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Cout = 'leftbound',
+                logjacobianOr = NULL
+            )))
+        )
+    }
+
+### C-variates not in 'cumul' and with right boundary values
+    toselect <- which(auxmetadata$mcmctype == 'C')
+    if(length(toselect) > 0) {
+        toselect <- toselect[sapply(toselect, function(i){
+            any(x[,auxmetadata$name[i]] >= auxmetadata$domainmax[i],
+                na.rm = TRUE)
+        })]
+    }
+    if(length(toselect) > 0){
+        nV1 <- TRUE
+        aux <- auxmetadata[toselect, ]
+        auxV1b <- aux$id
+        xV1 <- rbind(xV1,
+            - t(as.matrix(vtransform( # minus sign
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Cout = 'rightbound',
+                logjacobianOr = NULL
+            )))
+        )
+    }
+
+### D-variates not in 'cumul' and with left boundary values
+    toselect <- which(auxmetadata$mcmctype == 'D')
+    if(length(toselect) > 0) {
+        toselect <- toselect[sapply(toselect, function(i){
+            any(x[,auxmetadata$name[i]] <= auxmetadata$domainminplushs[i],
+                na.rm = TRUE)
+        })]
+    }
+    if(length(toselect) > 0){
+        nV1 <- TRUE
+        aux <- auxmetadata[toselect, ]
+        auxV1c <- aux$id
+        xV1 <- rbind(xV1,
+            t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Dout = 'leftbound',
+                logjacobianOr = NULL
+            )))
+        )
+    }
+
+### D-variates not in 'cumul' and with right boundary values
+    toselect <- which(auxmetadata$mcmctype == 'D')
+    if(length(toselect) > 0) {
+        toselect <- toselect[sapply(toselect, function(i){
+            any(x[,auxmetadata$name[i]] >= auxmetadata$domainmaxminushs[i],
+                na.rm = TRUE)
+        })]
+    }
+    if(length(toselect) > 0){
+        nV1 <- TRUE
+        aux <- auxmetadata[toselect, ]
+        auxV1d <- aux$id
+        xV1 <- rbind(xV1,
+            - t(as.matrix(vtransform( # minus sign
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Dout = 'rightbound',
+                logjacobianOr = NULL
+            )))
+        )
+    }
+
+###
+### interval probability
+###
+
+### D-variates not in 'cumul'
+    toselect <- which(auxmetadata$mcmctype == 'D')
+    if(length(toselect) > 0) {
+        toselect <- toselect[sapply(toselect, function(i){
+            any(x[,auxmetadata$name[i]] > auxmetadata$domainminplushs[i] &
+                    x[,auxmetadata$name[i]] < auxmetadata$domainmaxminushs[i],
+                na.rm = TRUE)
+        })]
+    }
+    if(length(toselect) > 0){
+        nV2 <- TRUE
+        aux <- auxmetadata[toselect, ]
+        auxV2 <- aux$id
+        V2steps <- aux$halfstep / aux$tscale
+        xV2 <- rbind(xV2,
+            t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Dout = 'boundisna',
+                logjacobianOr = NULL
+            )))
+        )
+    }
+
+###
+### discrete case
+###
+    Nshift <- 0L
+### O-variates not in 'cumul'
+    toselect <- which(auxmetadata$mcmctype == 'O')
+    if(length(toselect) > 0){
+        nVN <- TRUE
+        aux <- auxmetadata[toselect, ]
+        auxVNO <- aux$id
+        Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
+            aux$indexpos, aux$Nvalues,
+            SIMPLIFY = FALSE))
+        xVN <- rbind(xVN,
+            t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Oout = 'numeric',
+                logjacobianOr = NULL
+            ))) +
+                Nshift + c(0, cumsum(aux$Nvalues[-1]))
+        )
+        Nshift <- Nshift + length(Nindices)
+    }
+### N-variates
+    toselect <- which(auxmetadata$mcmctype == 'N')
+    if(length(toselect) > 0){
+        nVN <- TRUE
+        aux <- auxmetadata[toselect, ]
+        auxVNN <- aux$id
+        Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
+            aux$indexpos, aux$Nvalues,
+            SIMPLIFY = FALSE))
+        xVN <- rbind(xVN,
+            t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Nout = 'numeric',
+                logjacobianOr = NULL
+            ))) +
+                Nshift + c(0, cumsum(aux$Nvalues[-1]))
+        )
+    }
+
+###
+### binary case
+###
+
+### B-variates
+    toselect <- which(auxmetadata$mcmctype == 'B')
+    if(length(toselect) > 0){
+        nVB <- TRUE
+        aux <- auxmetadata[toselect, ]
+        auxVB <- aux$id
+        xVB <- rbind(xVB,
+            t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Bout = 'numeric',
+                logjacobianOr = NULL
+            )))
+        )
+    }
+
+    list(
+        nV0 = nV0, nV1 = nV1, nV2 = nV2, nVN = nVN, nVB = nVB,
+        ## xV0 = xV0, xV1 = xV1, xV2 = xV2, xVN = xVN, xVB = xVB,
+        auxV0a = auxV0a, auxV0b = auxV0b,
+        auxV1a = auxV1a, auxV1b = auxV1b, auxV1c = auxV1c, auxV1d = auxV1d,
+        auxV2 = auxV2,
+        auxVNO = auxVNO, auxVNN = auxVNN,
+        auxVB = auxVB,
+        V2steps = V2steps,
+        pointsid = pointsid,
+        ##
+        xVs = lapply(seq_len(nX), function(i){
+            list(
+                xV0 = xV0[,i],
+                xV1 = xV1[,i],
+                xV2 = xV2[,i],
+                xVN = xVN[,i],
+                xVB = xVB[,i]
+            )})
+    )
+}
+
+

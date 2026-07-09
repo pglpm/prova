@@ -79,7 +79,7 @@ testPr <- function(
             auxid <- auxmetadata[auxmetadata$name == vrt, 'id']
 
             if(mctype == 'R'){
-                val <- unlist(vtransform(Z[vrt], 'Rout' = 'normalized',
+                val <- unlist(vtransform(Z[vrt], Rout = 'normalized',
                     auxmetadata = auxmetadata, logjacobianOr = NULL))
 
                 if(!(vrt %in% names(tails))){
@@ -109,7 +109,7 @@ testPr <- function(
                     'domainmax']
                 domainmin <- auxmetadata[auxmetadata$name == vrt,
                     'domainmin']
-                val <- unlist(vtransform(Z[vrt], 'Cout' = 'boundisna',
+                val <- unlist(vtransform(Z[vrt], Cout = 'boundisna',
                     auxmetadata = auxmetadata, logjacobianOr = NULL))
 
                 if(!(vrt %in% names(tails))){
@@ -119,14 +119,14 @@ testPr <- function(
                             sd = learnt$Csd[auxid, , ],
                             log = TRUE)
                     } else if(xorig > domainmin){
-                        val <- unlist(vtransform(Z[vrt], 'Cout' = 'rightbound',
+                        val <- unlist(vtransform(Z[vrt], Cout = 'rightbound',
                             auxmetadata = auxmetadata, logjacobianOr = NULL))
                         logP <- pnorm(q = val,
                             mean = learnt$Cmean[auxid, , ],
                             sd = learnt$Csd[auxid, , ],
                             lower.tail = FALSE, log.p = TRUE)
                     } else if(xorig < domainmax){
-                        val <- unlist(vtransform(Z[vrt], 'Cout' = 'leftbound',
+                        val <- unlist(vtransform(Z[vrt], Cout = 'leftbound',
                             auxmetadata = auxmetadata, logjacobianOr = NULL))
                         logP <- pnorm(q = val,
                             mean = learnt$Cmean[auxid, , ],
@@ -137,7 +137,7 @@ testPr <- function(
                     }
 
                 } else if(tails[vrt] %in% tailsleft){
-                    val <- unlist(vtransform(Z[vrt], 'Cout' = '1',
+                    val <- unlist(vtransform(Z[vrt], Cout = '1',
                         auxmetadata = auxmetadata, logjacobianOr = NULL))
                     logP <- pnorm(q = val,
                         mean = learnt$Cmean[auxid, , ],
@@ -145,7 +145,7 @@ testPr <- function(
                         lower.tail = TRUE, log.p = TRUE)
 
                 } else if(tails[vrt] %in% tailsright){
-                    val <- unlist(vtransform(Z[vrt], 'Cout' = '-1',
+                    val <- unlist(vtransform(Z[vrt], Cout = '-1',
                         auxmetadata = auxmetadata, logjacobianOr = NULL))
                     logP <- pnorm(q = val,
                         mean = learnt$Cmean[auxid, , ],
@@ -156,7 +156,7 @@ testPr <- function(
 
             } else if(mctype == 'D'){
                 xorig <- Z[[vrt]]
-                val <- unlist(vtransform(Z[vrt], 'Dout' = 'boundnormalized',
+                val <- unlist(vtransform(Z[vrt], Dout = 'boundisna',
                     auxmetadata = auxmetadata, logjacobianOr = NULL))
                 hstep <- auxmetadata[auxmetadata$name == vrt, 'halfstep'] /
                     auxmetadata[auxmetadata$name == vrt, 'tscale']
@@ -166,7 +166,7 @@ testPr <- function(
                     'domainminplushs']
 
                 if(!(vrt %in% names(tails))){
-                    if(xorig > domainminplushs && xorig < domainmaxminushs){
+                    if(!is.na(val)){
                         logP <- log(
                             pnorm(q = val + hstep,
                                 mean = learnt$Dmean[auxid, , ],
@@ -178,12 +178,16 @@ testPr <- function(
                                     lower.tail = TRUE, log.p = FALSE)
                         )
                     } else if(xorig <= domainmaxminushs){
+                        val <- unlist(vtransform(Z[vrt], Dout = 'leftbound',
+                            auxmetadata = auxmetadata, logjacobianOr = NULL))
                         logP <- pnorm(q = val + hstep,
                             mean = learnt$Dmean[auxid, , ],
                             sd = learnt$Dsd[auxid, , ],
                             lower.tail = TRUE, log.p = TRUE)
 
                     } else if(xorig >= domainminplushs){
+                        val <- unlist(vtransform(Z[vrt], Dout = 'rightbound',
+                            auxmetadata = auxmetadata, logjacobianOr = NULL))
                         logP <- pnorm(q = val - hstep,
                             mean = learnt$Dmean[auxid, , ],
                             sd = learnt$Dsd[auxid, , ],
@@ -191,12 +195,16 @@ testPr <- function(
                     }
 
                 } else if(tails[vrt] %in% tailsleft){
+                    val <- unlist(vtransform(Z[vrt], Dout = '1',
+                        auxmetadata = auxmetadata, logjacobianOr = NULL))
                     logP <- pnorm(q = val + hstep,
                         mean = learnt$Dmean[auxid, , ],
                         sd = learnt$Dsd[auxid, , ],
                         lower.tail = TRUE, log.p = TRUE)
 
                 } else if(tails[vrt] %in% tailsright){
+                    val <- unlist(vtransform(Z[vrt], Dout = '-1',
+                        auxmetadata = auxmetadata, logjacobianOr = NULL))
                     logP <- pnorm(q = val - hstep,
                         mean = learnt$Dmean[auxid, , ],
                         sd = learnt$Dsd[auxid, , ],
@@ -205,7 +213,7 @@ testPr <- function(
 
 
             } else if(mctype == 'N'){
-                val <- unlist(vtransform(Z[vrt], 'Nout' = 'index',
+                val <- unlist(vtransform(Z[vrt], Nout = 'index',
                     auxmetadata = auxmetadata, logjacobianOr = NULL))
                 logP <- log(learnt$Nprob[val, , ])
 
@@ -215,7 +223,7 @@ testPr <- function(
                 seqO <- auxmetadata[auxmetadata$name == vrt, 'indexpos'] +
                     seq_len(Nvals)
                 allP <- learnt$Oprob[seqO, , , drop = FALSE]
-                val <- unlist(vtransform(Z[vrt], 'Oout' = 'numeric',
+                val <- unlist(vtransform(Z[vrt], Oout = 'numeric',
                     auxmetadata = auxmetadata, logjacobianOr = NULL))
 
                 if(!(vrt %in% names(tails))){
@@ -229,7 +237,7 @@ testPr <- function(
                 }
 
             } else if(mctype == 'B'){
-                val <- unlist(vtransform(Z[vrt], 'Bout' = 'numeric',
+                val <- unlist(vtransform(Z[vrt], Bout = 'numeric',
                     auxmetadata = auxmetadata, logjacobianOr = NULL))
                 if(val == 0){
                     logP <- log(1 - learnt$Bprob[auxid, , ])

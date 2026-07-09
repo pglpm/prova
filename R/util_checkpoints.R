@@ -12,17 +12,20 @@
 util_prepPcheckpoints <- function(
     x, auxmetadata, pointsid = NULL
 ){
+    ## Use util_lprobsargsyx() as done in Pr(), but throw away some elements
+    temp <- util_lprobsargsyx(
+        x = x, auxmetadata = auxmetadata,
+        learnt = list(
+            Cmean = array(NA, dim = c(max(auxmetadata$id), 1, 1)),
+            Dmean = array(NA, dim = c(max(auxmetadata$id), 1, 1))
+        ), tails = NULL
+    )
+    for(i in seq_len(length(temp$xVs))){temp$xVs[[i]]$ii <- NULL}
 
     nX <- nrow(x)
 
     auxV0a <- auxV0b <- auxV1a <- auxV1b <- auxV1c <- auxV1d <- NULL
     auxV2 <- auxVNO <- auxVNN <- auxVB <- NULL
-    V2steps <- NULL
-
-    nV0 <- nV1 <- nV2 <- nVN <- nVB <- FALSE
-
-    xV0 <- xV1 <- xV2 <- xVN <- xVB <- matrix(data = NA_real_,
-        nrow = 0, ncol = nX, dimnames = NULL)
 
 ###
 ### point probability density
@@ -31,17 +34,8 @@ util_prepPcheckpoints <- function(
 ### R-variates not in 'cumul'
     toselect <- which(auxmetadata$mcmctype == 'R')
     if(length(toselect) > 0){
-        nV0 <- TRUE
         aux <- auxmetadata[toselect, ]
         auxV0a <- aux$id
-        xV0 <- rbind(xV0,
-            t(as.matrix(vtransform(
-                x[, aux$name, drop = FALSE],
-                auxmetadata = auxmetadata,
-                Rout = 'normalized',
-                logjacobianOr = NULL
-            )))
-        )
     }
 
 ### C-variates not in 'cumul' and with some non-boundary value
@@ -54,17 +48,8 @@ util_prepPcheckpoints <- function(
         })]
     }
     if(length(toselect) > 0){
-        nV0 <- TRUE
         aux <- auxmetadata[toselect, ]
         auxV0b <- aux$id
-        xV0 <- rbind(xV0,
-            t(as.matrix(vtransform(
-                x[, aux$name, drop = FALSE],
-                auxmetadata = auxmetadata,
-                Cout = 'boundisna',
-                logjacobianOr = NULL
-            )))
-        )
     }
 
 ###
@@ -80,17 +65,8 @@ util_prepPcheckpoints <- function(
         })]
     }
     if(length(toselect) > 0){
-        nV1 <- TRUE
         aux <- auxmetadata[toselect, ]
         auxV1a <- aux$id
-        xV1 <- rbind(xV1,
-            t(as.matrix(vtransform(
-                x[, aux$name, drop = FALSE],
-                auxmetadata = auxmetadata,
-                Cout = 'leftbound',
-                logjacobianOr = NULL
-            )))
-        )
     }
 
 ### C-variates not in 'cumul' and with right boundary values
@@ -102,17 +78,8 @@ util_prepPcheckpoints <- function(
         })]
     }
     if(length(toselect) > 0){
-        nV1 <- TRUE
         aux <- auxmetadata[toselect, ]
         auxV1b <- aux$id
-        xV1 <- rbind(xV1,
-            - t(as.matrix(vtransform( # minus sign
-                x[, aux$name, drop = FALSE],
-                auxmetadata = auxmetadata,
-                Cout = 'rightbound',
-                logjacobianOr = NULL
-            )))
-        )
     }
 
 ### D-variates not in 'cumul' and with left boundary values
@@ -124,17 +91,8 @@ util_prepPcheckpoints <- function(
         })]
     }
     if(length(toselect) > 0){
-        nV1 <- TRUE
         aux <- auxmetadata[toselect, ]
         auxV1c <- aux$id
-        xV1 <- rbind(xV1,
-            t(as.matrix(vtransform(
-                x[, aux$name, drop = FALSE],
-                auxmetadata = auxmetadata,
-                Dout = 'leftbound',
-                logjacobianOr = NULL
-            )))
-        )
     }
 
 ### D-variates not in 'cumul' and with right boundary values
@@ -146,17 +104,8 @@ util_prepPcheckpoints <- function(
         })]
     }
     if(length(toselect) > 0){
-        nV1 <- TRUE
         aux <- auxmetadata[toselect, ]
         auxV1d <- aux$id
-        xV1 <- rbind(xV1,
-            - t(as.matrix(vtransform( # minus sign
-                x[, aux$name, drop = FALSE],
-                auxmetadata = auxmetadata,
-                Dout = 'rightbound',
-                logjacobianOr = NULL
-            )))
-        )
     }
 
 ###
@@ -173,18 +122,8 @@ util_prepPcheckpoints <- function(
         })]
     }
     if(length(toselect) > 0){
-        nV2 <- TRUE
         aux <- auxmetadata[toselect, ]
         auxV2 <- aux$id
-        V2steps <- aux$halfstep / aux$tscale
-        xV2 <- rbind(xV2,
-            t(as.matrix(vtransform(
-                x[, aux$name, drop = FALSE],
-                auxmetadata = auxmetadata,
-                Dout = 'boundisna',
-                logjacobianOr = NULL
-            )))
-        )
     }
 
 ###
@@ -194,41 +133,14 @@ util_prepPcheckpoints <- function(
 ### O-variates not in 'cumul'
     toselect <- which(auxmetadata$mcmctype == 'O')
     if(length(toselect) > 0){
-        nVN <- TRUE
         aux <- auxmetadata[toselect, ]
         auxVNO <- aux$id
-        Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
-            aux$indexpos, aux$Nvalues,
-            SIMPLIFY = FALSE))
-        xVN <- rbind(xVN,
-            t(as.matrix(vtransform(
-                x[, aux$name, drop = FALSE],
-                auxmetadata = auxmetadata,
-                Oout = 'numeric',
-                logjacobianOr = NULL
-            ))) +
-                Nshift + c(0, cumsum(aux$Nvalues[-1]))
-        )
-        Nshift <- Nshift + length(Nindices)
     }
 ### N-variates
     toselect <- which(auxmetadata$mcmctype == 'N')
     if(length(toselect) > 0){
-        nVN <- TRUE
         aux <- auxmetadata[toselect, ]
         auxVNN <- aux$id
-        Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
-            aux$indexpos, aux$Nvalues,
-            SIMPLIFY = FALSE))
-        xVN <- rbind(xVN,
-            t(as.matrix(vtransform(
-                x[, aux$name, drop = FALSE],
-                auxmetadata = auxmetadata,
-                Nout = 'numeric',
-                logjacobianOr = NULL
-            ))) +
-                Nshift + c(0, cumsum(aux$Nvalues[-1]))
-        )
     }
 
 ###
@@ -238,42 +150,27 @@ util_prepPcheckpoints <- function(
 ### B-variates
     toselect <- which(auxmetadata$mcmctype == 'B')
     if(length(toselect) > 0){
-        nVB <- TRUE
         aux <- auxmetadata[toselect, ]
         auxVB <- aux$id
-        xVB <- rbind(xVB,
-            t(as.matrix(vtransform(
-                x[, aux$name, drop = FALSE],
-                auxmetadata = auxmetadata,
-                Bout = 'numeric',
-                logjacobianOr = NULL
-            )))
-        )
     }
 
     list(
-        nV0 = nV0, nV1 = nV1, nV2 = nV2, nVN = nVN, nVB = nVB,
-        ## xV0 = xV0, xV1 = xV1, xV2 = xV2, xVN = xVN, xVB = xVB,
+        nV0 = temp$params$nV0,
+        nV1 = temp$params$nV1,
+        nV2 = temp$params$nV2,
+        nVN = temp$params$nVN,
+        nVB = temp$params$nVB,
         auxV0a = auxV0a, auxV0b = auxV0b,
         auxV1a = auxV1a, auxV1b = auxV1b, auxV1c = auxV1c, auxV1d = auxV1d,
         auxV2 = auxV2,
         auxVNO = auxVNO, auxVNN = auxVNN,
         auxVB = auxVB,
-        V2steps = V2steps,
+        V2steps = temp$params$V2steps,
         pointsid = pointsid,
         ##
-        xVs = lapply(seq_len(nX), function(i){
-            list(
-                xV0 = xV0[,i],
-                xV1 = xV1[,i],
-                xV2 = xV2[,i],
-                xVN = xVN[,i],
-                xVB = xVB[,i]
-            )})
+        xVs = temp$xVs
     )
 }
-
-
 
 
 #' Calculate joint frequencies for MCMC-monitoring checkpoints

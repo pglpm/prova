@@ -133,7 +133,7 @@ util_lprobsargsyx <- function(
                 t(as.matrix(vtransform(
                     x[, aux$name, drop = FALSE],
                     auxmetadata = auxmetadata,
-                    Dout = 'boundnormalized',
+                    Dout = as.character(tails[aux$name]),
                     logjacobianOr = NULL
                 ))) +
                 aux$halfstep / aux$tscale

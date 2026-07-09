@@ -168,7 +168,7 @@ vtransform <- function(
 
                     } else if (Cout == 'boundisna') {
                         ## used in sampling functions
-                        ## points outside or on boundaries are moved to infinity
+                        ## points outside or on boundaries are neglected
                         datum[datum <= domainmin] <- NA
                         datum[datum >= domainmax] <- NA
                         ##
@@ -187,8 +187,8 @@ vtransform <- function(
 
                     } else if (Cout == 'leftbound') {
                         ## used in Pr()
-                        ## non-boundary points are set to NA
-                        ## boundaries are enforced
+                        ## points outside left zone are neglected
+                        ## left boundary is enforced
                         datum[datum > domainmin] <- NA
                         datum[datum < domainmin] <- domainmin
                         ##
@@ -207,8 +207,8 @@ vtransform <- function(
 
                     } else if (Cout == 'rightbound') {
                         ## used in Pr()
-                        ## non-boundary points are set to NA
-                        ## boundaries are enforced
+                        ## points outside right zone are neglected
+                        ## right boundary is enforced
                         datum[datum < domainmax] <- NA
                         datum[datum > domainmax] <- domainmax
                         ##
@@ -265,24 +265,24 @@ vtransform <- function(
                         datum <- (datum - tlocation) / tscale
                         datum[selmin] <- -Inf
 
-                    } else if (Cout == 'boundnormalized') {
-                        ## used in Pr()
-                        ## points outside boundaries are moved to boundaries
-                        datum[datum < domainmin] <- domainmin
-                        datum[datum > domainmax] <- domainmax
-                        ##
-                        if (transform == 'log') {
-                            datum <- log(datum - domainmin)
-                        } else if (transform == 'logminus') {
-                            datum <- -log(domainmax - datum)
-                        } else if (transform == 'Q') {
-                            datum <- util_Q(0.5 +
-                                                (datum -
-                                                     (domainmin + domainmax)/2) /
-                                                (domainmax - domainmin))
-                        }
-                        ##
-                        datum <- (datum - tlocation) / tscale
+                        ## ## Not used anymore
+                        ## } else if (Cout == 'boundnormalized') {
+                        ##  ## points outside boundaries are moved to boundaries
+                        ##     datum[datum < domainmin] <- domainmin
+                        ##     datum[datum > domainmax] <- domainmax
+                        ##     ##
+                        ##     if (transform == 'log') {
+                        ##         datum <- log(datum - domainmin)
+                        ##     } else if (transform == 'logminus') {
+                        ##         datum <- -log(domainmax - datum)
+                        ##     } else if (transform == 'Q') {
+                        ##         datum <- util_Q(0.5 +
+                        ##                             (datum -
+                        ##                                  (domainmin + domainmax)/2) /
+                        ##                             (domainmax - domainmin))
+                        ##     }
+                        ##     ##
+                        ##     datum <- (datum - tlocation) / tscale
 
                     } else if (Cout == 'miboundisna') {
                         ## used in mutualinfo
@@ -372,30 +372,52 @@ vtransform <- function(
                         ##     datum[selmin] <- -Inf
                         ##     datum[selmax] <- +Inf
 
-                    } else if (Dout == 'boundnormalized') {
-                        ## used in sampling functions
-                        datum[datum < domainmin] <- domainmin
-                        datum[datum > domainmax] <- domainmax
-                        ##
-                        datum <- (datum - tlocation) / tscale
-
                     } else if (Dout == 'boundisna') {
-                        ## used in Pr()
+                        ## used in Pr() for interval prob.
+                        ## points outside or on boundaries are neglected
                         datum[datum <= domainminplushs] <- NA
                         datum[datum >= domainmaxminushs] <- NA
                         datum <- (datum - tlocation) / tscale
 
                     } else if (Dout == 'leftbound') {
                         ## used in Pr()
+                        ## points outside left zone are neglected
+                        ## left boundary is enforced
                         datum[datum > domainminplushs] <- NA
                         datum[datum < domainmin] <- domainmin
                         datum <- (datum - tlocation) / tscale
 
                     } else if (Dout == 'rightbound') {
                         ## used in Pr()
+                        ## points outside right zone are neglected
+                        ## right boundary is enforced
                         datum[datum < domainmaxminushs] <- NA
                         datum[datum > domainmax] <- domainmax
                         datum <- (datum - tlocation) / tscale
+
+                    } else if (Dout == '1') {
+                        ## used in Pr() with tail = 'left'
+                        ## points outside or on boundaries are moved to infinity
+                        selmax <- (datum >= domainmax)
+                        datum[datum < domainmin] <- domainmin
+                        datum <- (datum - tlocation) / tscale
+                        datum[selmax] <- +Inf
+
+                    } else if (Dout == '-1') {
+                        ## used in Pr() with tail = 'right'
+                        ## points outside or on boundaries are moved to infinity
+                        selmin <- (datum <= domainmin)
+                        datum[datum > domainmax] <- domainmax
+                        datum <- (datum - tlocation) / tscale
+                        datum[selmin] <- -Inf
+
+                        ## ## Not used anymore
+                        ## } else if (Dout == 'boundnormalized') {
+                        ##     ## used in sampling functions
+                        ##     datum[datum < domainmin] <- domainmin
+                        ##     datum[datum > domainmax] <- domainmax
+                        ##     ##
+                        ##     datum <- (datum - tlocation) / tscale
 
                     } else if (Dout == 'miboundisna') {
                         ## used in mutualinfo
