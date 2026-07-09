@@ -520,9 +520,7 @@ joint variates.</p>
 <span>    Y1names <span class="op">=</span> <span class="st">'island'</span>, Y2names <span class="op">=</span> <span class="st">'species'</span>,</span>
 <span>    learnt <span class="op">=</span> <span class="va">learnt</span>,</span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span> <span class="co">## let's use 4 cores</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co"># Registered socket cluster with 4 nodes on host ‘localhost’.</span></span>
-<span><span class="co"># Closing connections to cores.</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The resulting object <code>MIislandspecies</code> is a list of
 several quantities; the mutual information is given in the
 <code>$MI</code> element, which includes the accuracy of the result:</p>
@@ -631,9 +629,7 @@ explored previously, and calculate also their mutual information.</p>
 <span>    Y1names <span class="op">=</span> <span class="st">'body_mass'</span>, Y2names <span class="op">=</span> <span class="st">'species'</span>,</span>
 <span>    learnt <span class="op">=</span> <span class="va">learnt</span>,</span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co"># Registered socket cluster with 4 nodes on host ‘localhost’.</span></span>
-<span><span class="co"># Closing connections to cores.</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Scatter plot:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## mutual info</span></span>
@@ -664,9 +660,7 @@ explored previously, and calculate also their mutual information.</p>
 <span>    Y1names <span class="op">=</span> <span class="st">'body_mass'</span>, Y2names <span class="op">=</span> <span class="st">'bill_len'</span>,</span>
 <span>    learnt <span class="op">=</span> <span class="va">learnt</span>,</span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co"># Registered socket cluster with 4 nodes on host ‘localhost’.</span></span>
-<span><span class="co"># Closing connections to cores.</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Scatter plot:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## mutual info</span></span>
@@ -692,8 +686,8 @@ length</strong>
 <code>body_mass</code> and <code>bill_len</code> is</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">samples</span><span class="op">$</span><span class="va">body_mass</span>, <span class="va">samples</span><span class="op">$</span><span class="va">bill_len</span>, method <span class="op">=</span> <span class="st">'pearson'</span><span class="op">)</span></span>
-<span><span class="co"># [1] 0.553292</span></span></code></pre></div>
-<p>which is different from the rough <span class="math inline">\(r\)</span>-equivalent 0.67.</p>
+<span><span class="co"># [1] 0.556366</span></span></code></pre></div>
+<p>which is different from the rough <span class="math inline">\(r\)</span>-equivalent 0.68.</p>
 <p><br></p>
 </div>
 </div>

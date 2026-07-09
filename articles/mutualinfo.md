@@ -518,8 +518,6 @@ MIislandspecies <- mutualinfo(
     learnt = learnt,
     parallel = 4 ## let's use 4 cores
 )
-# Registered socket cluster with 4 nodes on host ‘localhost’.
-# Closing connections to cores.
 ```
 
 The resulting object `MIislandspecies` is a list of several quantities;
@@ -639,8 +637,6 @@ MIbodymassspecies <- mutualinfo(
     learnt = learnt,
     parallel = 4
 )
-# Registered socket cluster with 4 nodes on host ‘localhost’.
-# Closing connections to cores.
 ```
 
 Scatter plot:
@@ -678,8 +674,6 @@ MIbodymassbilllen <- mutualinfo(
     learnt = learnt,
     parallel = 4
 )
-# Registered socket cluster with 4 nodes on host ‘localhost’.
-# Closing connections to cores.
 ```
 
 Scatter plot:
@@ -712,10 +706,10 @@ Note that in this case the Pearson correlation between `body_mass` and
 ``` r
 
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.553292
+# [1] 0.556366
 ```
 
-which is different from the rough \\r\\-equivalent 0.67.
+which is different from the rough \\r\\-equivalent 0.68.
 
   
 
