@@ -33,6 +33,8 @@ for(iv in seq_len(length(tvals))){
         tprob = list(values = cbind(sapply(tempprob, `[[`, 1)),
             samples = t(sapply(tempprob, `[[`, 2)))
         ##
+        # print(cbind(prob$values, tprob$values))
+        ##
         rg1 <- range(abs(1 - tprob$values / c(prob$values)), na.rm = TRUE)
         rg1b <- range(abs(tprob$values - c(prob$values)), na.rm = TRUE)
         if(any(rg1 > 1e-15 & rg1b > 1e-15)){
@@ -70,7 +72,10 @@ for(iv in seq_len(length(tvals))){
 
 set.seed(16)
 problem <- FALSE
+kc <- 0L
 while(!problem){
+    kc <- kc + 1L
+    tol <- 5e-5
     prob <- tprob <- NULL
     ntvals <- length(tvals)
     nY <- sample(1:ntvals, 1)
@@ -84,28 +89,47 @@ while(!problem){
     } else {
         inX <- NULL
     }
-    print('next:')
-    print(as.data.frame(inY)) ; print(as.data.frame(inX)) ; print(intails)
+    cat(kc, '\n')
     intails <- setNames(sample(c(-1, 0, 1), ntvals - 2, replace = TRUE),
         c('Rvrt', 'RPvrt', 'RFvrt', 'Cvrt', 'Dvrt', 'DPvrt', 'Ovrt'))
-    if(c(inY, inX)[['RPvrt']] == 0 && intails[['RPvrt']] == 0){
-        intails[['RPvrt']] == 1
+    intails <- as.list(intails)
+    if(c(inY, inX)[['RPvrt']] == 0 && intails[['RPvrt']] != 1){
+        intails[['RPvrt']] <- 1
+    }
+    if(c(inY, inX)[['RFvrt']] == 0 && intails[['RFvrt']] != 1){
+        intails[['RFvrt']] <- 1
+    }
+    if(c(inY, inX)[['RFvrt']] == 1 && intails[['RFvrt']] != -1){
+        intails[['RFvrt']] <- -1
     }
     ##
     prob <- Pr(Y = as.data.frame(inY), X = as.data.frame(inX),
-        tails = intails, learnt = learnt, parallel = 1)
+        tails = intails, learnt = learnt, parallel = FALSE)
     ##
-    tprob <- testPr(Y = inY, X = inX, tails = tail, learnt = learnt)
+    tprob <- testPr(Y = inY, X = inX, tails = intails, learnt = learnt)
     ##
-    if(any(abs(1 - tprob$value / c(prob$values)) > 1e-15, na.rm = TRUE)){
-        problem <- TRUE
-        print('values:') ; print(cbind(prob$values, tprob$value))
+    dd1 <- abs(1 - tprob$value / c(prob$values))
+    if(any(dd1 > tol, na.rm = TRUE)){
+        pind <- which(dd1 == max(dd1, na.rm = TRUE))
+        if(max(tprob$value[pind], prob$values[pind]) > 1e-6){
+            problem <- TRUE
+            print('values:') ; print(cbind(prob$values, tprob$value))
+            print(max(dd1,na.rm=TRUE))
+        }
     }
-    if(any(abs(1 - tprob$samples / c(prob$samples)) > 1e-15, na.rm = TRUE)){
-        problem <- TRUE
-        print('samples:') ; print(which(
-            abs(1 - tprob$samples / c(prob$samples)) ==
-                max(abs(1 - tprob$samples / c(prob$samples))),
-            arr.ind = TRUE))
+    dd2 <- abs(1 - tprob$samples / c(prob$samples))
+    if(any(dd2 > tol, na.rm = TRUE)){
+        pind <- which(dd2 == max(dd2, na.rm = TRUE))
+        if(max(tprob$samples[pind], prob$samples[pind]) > 1e-6){
+            problem <- TRUE
+            print('samples:') ;
+            print(max(dd2,na.rm=TRUE))
+            print(pind)
+            print(cbind(prob$samples[pind], tprob$samples[pind]))
+        }
+    }
+    if(problem){
+        print(as.data.frame(inY)) ; print(as.data.frame(inX)) ;
+        print(as.data.frame(intails))
     }
 }

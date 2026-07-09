@@ -75,8 +75,8 @@ util_lprobsargsyx <- function(
 
 ### R-variates in 'tails'
     toselect <- which((auxmetadata$name %in% Xv) &
-                          (auxmetadata$name %in% tailsv) &
-                          (auxmetadata$mcmctype == 'R'))
+                          (auxmetadata$mcmctype == 'R') &
+                          (auxmetadata$name %in% tailsv))
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
@@ -95,55 +95,96 @@ util_lprobsargsyx <- function(
         )
     }
 
-### C-variates in 'tails'
+### C-variates in left tails
     toselect <- which((auxmetadata$name %in% Xv) &
+                          (auxmetadata$mcmctype == 'C') &
                           (auxmetadata$name %in% tailsv) &
-                          (auxmetadata$mcmctype == 'C'))
+                          (tails[auxmetadata$name] == 1) )
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- learnbind(V1mean,
-                tails[aux$name] * learnt$Cmean[aux$id, , , drop = FALSE])
-        V1sd <- learnbind(V1sd,
-            learnt$Csd[aux$id, , , drop = FALSE])
+        V1mean <- learnbind(V1mean, learnt$Cmean[aux$id, , , drop = FALSE])
+        V1sd <- learnbind(V1sd, learnt$Csd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
-            tails[aux$name] *
-                t(as.matrix(vtransform(
-                    x[, aux$name, drop = FALSE],
-                    auxmetadata = auxmetadata,
-                    Cout = as.character(tails[aux$name]),
-                    logjacobianOr = NULL
-                )))
+            t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Cout = '1',
+                logjacobianOr = NULL
+            )))
         )
     }
 
-### D-variates in 'tails'
+### C-variates in right tails
     toselect <- which((auxmetadata$name %in% Xv) &
+                          (auxmetadata$mcmctype == 'C') &
                           (auxmetadata$name %in% tailsv) &
-                          (auxmetadata$mcmctype == 'D'))
+                          (tails[auxmetadata$name] == -1) )
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- learnbind(V1mean,
-                tails[aux$name] * learnt$Dmean[aux$id, , , drop = FALSE])
-        V1sd <- learnbind(V1sd,
-            learnt$Dsd[aux$id, , , drop = FALSE])
+        ## note the minus!
+        V1mean <- learnbind(V1mean, -learnt$Cmean[aux$id, , , drop = FALSE])
+        V1sd <- learnbind(V1sd, learnt$Csd[aux$id, , , drop = FALSE])
+        ## note the minus!
         xV1 <- rbind(xV1,
-            tails[aux$name] *
-                t(as.matrix(vtransform(
-                    x[, aux$name, drop = FALSE],
-                    auxmetadata = auxmetadata,
-                    Dout = as.character(tails[aux$name]),
-                    logjacobianOr = NULL
-                ))) +
+            - t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Cout = '-1',
+                logjacobianOr = NULL
+            )))
+        )
+    }
+
+### D-variates in left tails
+    toselect <- which((auxmetadata$name %in% Xv) &
+                          (auxmetadata$mcmctype == 'D') &
+                          (auxmetadata$name %in% tailsv) &
+                          (tails[auxmetadata$name] == 1) )
+    if(length(toselect) > 0){
+        aux <- auxmetadata[toselect, ]
+        nV1 <- TRUE
+        V1mean <- learnbind(V1mean, learnt$Dmean[aux$id, , , drop = FALSE])
+        V1sd <- learnbind(V1sd, learnt$Dsd[aux$id, , , drop = FALSE])
+        xV1 <- rbind(xV1,
+            t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Dout = '1',
+                logjacobianOr = NULL
+            ))) +
+                aux$halfstep / aux$tscale
+        )
+    }
+
+### D-variates in right tails
+    toselect <- which((auxmetadata$name %in% Xv) &
+                          (auxmetadata$mcmctype == 'D') &
+                          (auxmetadata$name %in% tailsv) &
+                          (tails[auxmetadata$name] == -1) )
+    if(length(toselect) > 0){
+        aux <- auxmetadata[toselect, ]
+        nV1 <- TRUE
+        ## note the minus!
+        V1mean <- learnbind(V1mean, -learnt$Dmean[aux$id, , , drop = FALSE])
+        V1sd <- learnbind(V1sd, learnt$Dsd[aux$id, , , drop = FALSE])
+        ## note the minus!
+        xV1 <- rbind(xV1,
+            - t(as.matrix(vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Dout = '-1',
+                logjacobianOr = NULL
+            ))) +
                 aux$halfstep / aux$tscale
         )
     }
 
 ### C-variates not in 'tails' and with left boundary values
     toselect <- which((auxmetadata$name %in% Xv) &
-                          !(auxmetadata$name %in% tailsv) &
-                          (auxmetadata$mcmctype == 'C'))
+                          (auxmetadata$mcmctype == 'C') &
+                          !(auxmetadata$name %in% tailsv))
     if(length(toselect) > 0) {
         toselect <- toselect[sapply(toselect, function(i){
             any(x[,auxmetadata$name[i]] <= auxmetadata$domainmin[i],
@@ -169,8 +210,8 @@ util_lprobsargsyx <- function(
 
 ### C-variates not in 'tails' and with right boundary values
     toselect <- which((auxmetadata$name %in% Xv) &
-                          !(auxmetadata$name %in% tailsv) &
-                          (auxmetadata$mcmctype == 'C'))
+                          (auxmetadata$mcmctype == 'C') &
+                          !(auxmetadata$name %in% tailsv))
     if(length(toselect) > 0) {
         toselect <- toselect[sapply(toselect, function(i){
             any(x[,auxmetadata$name[i]] >= auxmetadata$domainmax[i],
@@ -196,8 +237,8 @@ util_lprobsargsyx <- function(
 
 ### D-variates not in 'tails' and with left boundary values
     toselect <- which((auxmetadata$name %in% Xv) &
-                          !(auxmetadata$name %in% tailsv) &
-                          (auxmetadata$mcmctype == 'D'))
+                          (auxmetadata$mcmctype == 'D') &
+                          !(auxmetadata$name %in% tailsv))
     if(length(toselect) > 0) {
         toselect <- toselect[sapply(toselect, function(i){
             any(x[,auxmetadata$name[i]] <= auxmetadata$domainminplushs[i],
@@ -224,8 +265,8 @@ util_lprobsargsyx <- function(
 
 ### D-variates not in 'tails' and with right boundary values
     toselect <- which((auxmetadata$name %in% Xv) &
-                          !(auxmetadata$name %in% tailsv) &
-                          (auxmetadata$mcmctype == 'D'))
+                          (auxmetadata$mcmctype == 'D') &
+                          !(auxmetadata$name %in% tailsv))
     if(length(toselect) > 0) {
         toselect <- toselect[sapply(toselect, function(i){
             any(x[,auxmetadata$name[i]] >= auxmetadata$domainmaxminushs[i],
@@ -258,8 +299,8 @@ util_lprobsargsyx <- function(
 
 ### D-variates not in 'tails'
     toselect <- which((auxmetadata$name %in% Xv) &
-                          !(auxmetadata$name %in% tailsv) &
-                          (auxmetadata$mcmctype == 'D'))
+                          (auxmetadata$mcmctype == 'D') &
+                          !(auxmetadata$name %in% tailsv))
     if(length(toselect) > 0) {
         toselect <- toselect[sapply(toselect, function(i){
             xx <- x[,auxmetadata$name[i]]
@@ -294,8 +335,8 @@ util_lprobsargsyx <- function(
     Nshift <- 0L
 ### O-variates not in 'tails'
     toselect <- which((auxmetadata$name %in% Xv) &
-                          !(auxmetadata$name %in% tailsv) &
-                          (auxmetadata$mcmctype == 'O'))
+                          (auxmetadata$mcmctype == 'O') &
+                          !(auxmetadata$name %in% tailsv))
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nVN <- TRUE
@@ -346,8 +387,8 @@ util_lprobsargsyx <- function(
 
 ### O-variates in 'tails'
     toselect <- which((auxmetadata$name %in% Xv) &
-                          (auxmetadata$name %in% tailsv) &
-                          (auxmetadata$mcmctype == 'O'))
+                          (auxmetadata$mcmctype == 'O') &
+                          (auxmetadata$name %in% tailsv))
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nVN <- TRUE
@@ -457,6 +498,16 @@ util_lprobsbase <- function(
                     log.p = TRUE, lower.tail = TRUE) - pright
             )),
             na.rm = TRUE, dims = 1)
+        ##
+        ## ## this alternate form seems less precise,
+        ## ## compared with infinite-precision results
+        ## out <- out + colSums(x = log(
+        ##     pnorm(q = xV2 + V2steps, mean = V2mean, sd = V2sd,
+        ##         log.p = FALSE, lower.tail = TRUE) -
+        ##         pnorm(q = xV2 - V2steps, mean = V2mean, sd = V2sd,
+        ##             log.p = FALSE, lower.tail = TRUE) ),
+        ##     na.rm = TRUE, dims = 1)
+        ##
         ## ## this alternate form leads to infinities in some cases
         ## pleft <- pnorm(q = xV2 - V2steps, mean = V2mean, sd = V2sd,
         ##     log.p = TRUE, lower.tail = TRUE)

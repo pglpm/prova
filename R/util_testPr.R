@@ -167,16 +167,30 @@ testPr <- function(
 
                 if(!(vrt %in% names(tails))){
                     if(!is.na(val)){
-                        logP <- log(
-                            pnorm(q = val + hstep,
+                        temp <- pnorm(q = val + hstep,
+                            mean = learnt$Dmean[auxid, , ],
+                            sd = learnt$Dsd[auxid, , ],
+                            lower.tail = TRUE, log.p = TRUE)
+                        logP <- temp + log(-expm1(
+                            pnorm(q = val - hstep,
                                 mean = learnt$Dmean[auxid, , ],
                                 sd = learnt$Dsd[auxid, , ],
-                                lower.tail = TRUE, log.p = FALSE) -
-                                pnorm(q = val - hstep,
-                                    mean = learnt$Dmean[auxid, , ],
-                                    sd = learnt$Dsd[auxid, , ],
-                                    lower.tail = TRUE, log.p = FALSE)
-                        )
+                                lower.tail = TRUE, log.p = TRUE) - temp
+                        ))
+                        ##
+                        ## ## this alternate form seems less precise,
+                        ## ## compared with infinite-precision results
+                        ## logP <- log(
+                        ##     pnorm(q = val + hstep,
+                        ##         mean = learnt$Dmean[auxid, , ],
+                        ##         sd = learnt$Dsd[auxid, , ],
+                        ##         lower.tail = TRUE, log.p = FALSE) -
+                        ##         pnorm(q = val - hstep,
+                        ##             mean = learnt$Dmean[auxid, , ],
+                        ##             sd = learnt$Dsd[auxid, , ],
+                        ##             lower.tail = TRUE, log.p = FALSE)
+                        ## )
+
                     } else if(xorig <= domainmaxminushs){
                         val <- unlist(vtransform(Z[vrt], Dout = 'leftbound',
                             auxmetadata = auxmetadata, logjacobianOr = NULL))
@@ -245,7 +259,7 @@ testPr <- function(
                     logP <- log(learnt$Bprob[auxid, , ])
                 }
             }
-
+## cat(vrt, ':', logP[,1532],'\n')
 
             logprob <- logprob + logP
         }
@@ -257,6 +271,9 @@ testPr <- function(
     ## Conditional formula sum(W KX KY)/sum(W kX), sum over components
     if(is.null(X)){
         FF <- colSums(x = exp(log(learnt$W) + logKY), na.rm = TRUE)
+        ## logKX <- log(learnt$W)
+        ## FF <- colSums(x = exp(logKX + logKY), na.rm = TRUE) /
+        ##     colSums(x = exp(logKX), na.rm = TRUE)
     } else {
         logKX <- log(learnt$W) + logK(X)
         FF <- colSums(x = exp(logKX + logKY), na.rm = TRUE) /
