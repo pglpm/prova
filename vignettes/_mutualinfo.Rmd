@@ -314,14 +314,12 @@ Be aware that the computation can take even tens of minutes if the arguments `Y1
 
 Let's calculate the mutual information between the variates `island` and `species`, [previously discussed and visualized](#newsamples):
 
-```{r miislandspecies, eval = FALSE}
+```{r miislandspecies, eval = TRUE}
 MIislandspecies <- mutualinfo(
     Y1names = 'island', Y2names = 'species',
     learnt = learnt,
     parallel = 4 ## let's use 4 cores
 )
-# Registered socket cluster with 4 nodes on host ‘localhost’.
-# Closing connections to cores.
 ```
 
 ```{r loadpmiis, echo = FALSE}
@@ -402,14 +400,12 @@ flexiplot(x = samples$island, y = samples$species,
 
 Calculation of mutual info:
 
-```{r mibodymassspecies, eval = FALSE}
+```{r mibodymassspecies, eval = TRUE}
 MIbodymassspecies <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'species',
     learnt = learnt,
     parallel = 4
 )
-# Registered socket cluster with 4 nodes on host ‘localhost’.
-# Closing connections to cores.
 ```
 
 Scatter plot:
@@ -434,14 +430,12 @@ flexiplot(x = samples$body_mass, y = samples$species,
 
 Calculation of mutual information:
 
-```{r mibodymassbilllen, eval = FALSE}
+```{r mibodymassbilllen, eval = TRUE}
 MIbodymassbilllen <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     learnt = learnt,
     parallel = 4
 )
-# Registered socket cluster with 4 nodes on host ‘localhost’.
-# Closing connections to cores.
 ```
 
 Scatter plot:
@@ -478,7 +472,7 @@ We [previously discovered](#subpopplots) that the association between body mass 
 
 The subpopulation is chosen with the argument `X`, as in the `Pr()` and `rPr()` functions. Let's calculate the mutual information between `body_mass` and `bill_len` within each penguin species (please be aware that the whole computation could take half an hour):
 
-```{r misubpop, eval = FALSE}
+```{r misubpop, eval = TRUE}
 MIadelie <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Adelie'), ## choose subpopulation

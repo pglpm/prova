@@ -547,7 +547,7 @@ X <- penguin[1, colnames(penguin) != 'sex']
 imputeddata <- Pr(Y = Yimp, X = X, learnt = learnt10, parallel = 4)
 
 print(imputeddata)
-# , , |species,|island,|bill_len,|bill_dep,|flipper_len,|body_mass,|year = Adelie,Torgersen,37.8,17.1,186,3300,2007
+# , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007
 # 
 #         probability & variability
 # sex      value Q5.5%  Q25%  Q75% Q94.5%
@@ -823,12 +823,12 @@ Fspecies10IS <- Pr(
 ## within all six combinations of subpopulations
 print(Fspecies10IS, 'values')
 # $values
-#            |island,|sex
+#            |island,sex
 # species     Biscoe,female Dream,female Torgersen,female Biscoe,male
 #   Adelie            0.128        0.399            0.483       0.211
 #   Chinstrap         0.111        0.395            0.266       0.221
 #   Gentoo            0.761        0.205            0.251       0.569
-#            |island,|sex
+#            |island,sex
 # species     Dream,male Torgersen,male
 #   Adelie         0.322          0.450
 #   Chinstrap      0.542          0.376
