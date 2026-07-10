@@ -143,8 +143,8 @@ rPr <- function(
     }
     tailsv <- names(tails)
     tailscentre <- list('==', 0, '0', NULL)
-    tailsleft <- list('<=', -1, '-1', 'left')
-    tailsright <- list('>=', 1, '+1', 'right')
+    tailsleft <- list('<=', -1, '-1', 'left', 'lower')
+    tailsright <- list('>=', 1, '+1', 'right', 'upper')
     tailsvalues <- c(tailscentre, tailsleft, tailsright)
 
     ## Consistency checks
