@@ -56,15 +56,16 @@ Pr(
   sense: \\Y \le y\\ or \\Y \ge y\\, an so on. This is true for `Y` and
   `X` variates (on the left and on the right of the conditional sign
   \\\\\vert\\\\). A left-open interval \\Y \le y\\ is indicated by
-  `'<='` or `'left'` or `-1`; a right-open interval \\Y \ge y\\ is
-  indicated by `'>='` or `'right'` or `+1`. Values `NULL`, `'=='`, `0`
-  indicate that a point value `Y = y` (not an interval) should be
-  calculated. **NB**: the semi-open intervals *always* include the given
-  value; this is important for ordinal or rounded variates. For
-  instance, if \\Y\\ is an integer variate, then to calculate
-  \\\mathrm{Pr}(Y \< 3)\\ you should require \\\mathrm{Pr}(Y \le 2)\\;
-  for this reason we also have that \\\mathrm{Pr}(Y \le 2)\\ and
-  \\\mathrm{Pr}(Y \ge 2)\\ generally add up to *more* than 1.
+  `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \\Y \ge
+  y\\ is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values
+  `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an
+  interval) should be calculated. **NB**: the semi-open intervals
+  *always* include the given value; this is important for ordinal or
+  rounded variates. For instance, if \\Y\\ is an integer variate, then
+  to calculate \\\mathrm{Pr}(Y \< 3)\\ you should require
+  \\\mathrm{Pr}(Y \le 2)\\; for this reason we also have that
+  \\\mathrm{Pr}(Y \le 2)\\ and \\\mathrm{Pr}(Y \ge 2)\\ generally add up
+  to *more* than 1.
 
 - priorY:
 
