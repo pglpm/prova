@@ -599,9 +599,9 @@ util_combineYX <- function(
 
 
 
-#' Calculate pairs of log-probabilities for mutualinfo()
+#' Calculate and combine log-probabilities
 #'
-#' Used in 'mutualinfo()'.
+#' Calculate log2_p(Y1|Y2), log2_p(Y2|Y1), log2_p(Y1), log2_p(Y2) for one datapoint. Used in mutualinfo().
 #'
 #' @keywords internal
 util_lprobsmi <- function(xVs, params1, params2, lWnorm, lW) {
@@ -634,9 +634,8 @@ util_lprobsmi <- function(xVs, params1, params2, lWnorm, lW) {
         colSums(exp(lprobY2 + lprobnorm)) / colSums(exp(lprobnorm)),
         na.rm = TRUE))
 
-    mi <- lpY1and2 - lpY1 - lpY2
     c(
-        MI = mi,
+        MI = lpY1and2 - lpY1 - lpY2,
         CondEn12 = -lpY1given2,
         CondEn21 = -lpY2given1,
         En1 = -lpY1,

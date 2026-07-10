@@ -477,7 +477,11 @@ mutualinfo <- function(
     gc()
 
 
-#### STEP 2. Calculate sum_i log2_p(Y1|Y2) for all samples
+#### STEP 2. Calculate, for each generated datapoint:
+#### log2_p(Y1|Y2),
+#### log2_p(Y2|Y1)
+#### log2_p(Y1)
+#### log2_p(Y2)
     lpargs1 <- util_lprobsargsyx(
         x = Y1transf,
         auxmetadata = auxmetadata,
