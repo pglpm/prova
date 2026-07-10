@@ -430,6 +430,7 @@ Pr <- function(
             tails = tails
         )
 
+        ## each instance of util_lprobsbase() takes one datapoint
         invisible(parallel::parLapply(cl = cl,
             X = lpargs$xVs,
             fun = util_lprobsbase,
@@ -458,6 +459,7 @@ Pr <- function(
         tails = tails
     )
 
+    ## each instance of util_lprobsbase() takes one datapoint
     invisible(parallel::parLapply(cl = cl,
         X = lpargs$xVs,
         fun = util_lprobsbase,

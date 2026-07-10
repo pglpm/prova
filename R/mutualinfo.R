@@ -498,6 +498,7 @@ mutualinfo <- function(
         tails = NULL
     )
 
+    ## each instance of util_lprobsmi() takes one datapoint
     out <- do.call(rbind,
         parallel::parLapply(cl = cl,
         X = mapply(c, lpargs1$xVs, lpargs2$xVs, SIMPLIFY = FALSE),

@@ -1,6 +1,6 @@
 #' Prepare arguments for util_lprobsyx from data
 #'
-#' Used in 'Pr()', 'qPr()', 'rPr()', 'mutualinfo()'
+#' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()]
 #'
 #' @keywords internal
 util_lprobsargsyx <- function(
@@ -66,6 +66,7 @@ util_lprobsargsyx <- function(
             )))
         )
     }
+    xV0 <- unname(xV0)
 
 ###
 ### tail probability
@@ -290,6 +291,7 @@ util_lprobsargsyx <- function(
                 aux$halfstep / aux$tscale
         )
     }
+    xV1 <- unname(xV1)
 
 ###
 ### interval probability
@@ -326,6 +328,7 @@ util_lprobsargsyx <- function(
                 )))
         )
     }
+    xV2 <- unname(xV2)
 
 ###
 ### discrete case
@@ -415,6 +418,7 @@ util_lprobsargsyx <- function(
                 Nshift + c(0, cumsum(aux$Nvalues[-1]))
         )
     }
+    xVN <- unname(xVN)
 
 ###
 ### binary case
@@ -438,6 +442,8 @@ util_lprobsargsyx <- function(
             )))
         )
     }
+    xVB <- unname(xVB)
+
 
     list(
         params = list(
@@ -451,11 +457,11 @@ util_lprobsargsyx <- function(
         xVs = lapply(seq_len(nX), function(i){
             list(
                 ii = i,
-                xV0 = xV0[,i],
-                xV1 = xV1[,i],
-                xV2 = xV2[,i],
-                xVN = xVN[,i],
-                xVB = xVB[,i]
+                xV0 = xV0[,i], # point vrts, handled by dnorm()
+                xV1 = xV1[,i], # tail vrts, handled by pnorm()
+                xV2 = xV2[,i], # interval vrts, handled by pnorm()-diff.
+                xVN = xVN[,i], # nominal vrts, handled directly
+                xVB = xVB[,i] # binary vrts, handled directly
             )})
     )
 }
@@ -464,7 +470,7 @@ util_lprobsargsyx <- function(
 
 #' Calculate collection of log-probabilities for different components and samples
 #'
-#' Used in 'Pr()', 'qPr()', 'rPr()', 'mutualinfo()', 'util_checkpoints()'.
+#' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()], [util_Pcheckpoints()].
 #'
 #' @return Matrix of log-probabilities, with as many rows as components and as many cols as samples.
 #' @keywords internal
@@ -536,10 +542,7 @@ util_lprobsbase <- function(
     if(is.null(temporarydir)){
         out
     }else{
-        saveRDS(out,
-            file.path(temporarydir,
-                paste0(lab, ii, '__.rds'))
-        )
+        saveRDS(out, file.path(temporarydir, paste0(lab, ii, '__.rds')))
     }
     })
 }
@@ -548,7 +551,7 @@ util_lprobsbase <- function(
 
 #' Calculate probabilities, quantiles, etc, for all Y and X combinations
 #'
-#' Used in 'Pr()'.
+#' Used in [Pr()].
 #'
 #' @import stats
 #'
@@ -599,15 +602,17 @@ util_combineYX <- function(
 
 
 
-#' Calculate and combine log-probabilities
+#' Calculate and combine log-probabilities to compute entropies
 #'
-#' Calculate log2_p(Y1|Y2), log2_p(Y2|Y1), log2_p(Y1), log2_p(Y2) for one datapoint. Used in mutualinfo().
+#' Calculate log2_p(Y1|Y2), log2_p(Y2|Y1), log2_p(Y1), log2_p(Y2) for one datapoint. Used in [mutualinfo()].
 #'
 #' @keywords internal
 util_lprobsmi <- function(xVs, params1, params2, lW) {
 
-    lprobY1 <- util_lprobsbase(xVs = xVs[1:6], params = params1, logW = 0)
-    lprobY2 <- util_lprobsbase(xVs = xVs[7:12], params = params2, logW = 0)
+    lprobY1 <- util_lprobsbase(xVs = xVs[1:6], params = params1, logW = 0,
+        temporarydir= NULL)
+    lprobY2 <- util_lprobsbase(xVs = xVs[7:12], params = params2, logW = 0,
+        temporarydir = NULL)
 
     lprobnorm <- util_denorm(lW) # subtract max from each prob-col. of lW
     celprobnorm <- colSums(exp(lprobnorm))

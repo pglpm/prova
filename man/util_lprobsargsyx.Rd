@@ -7,6 +7,6 @@
 util_lprobsargsyx(x, auxmetadata, learnt, tails = NULL)
 }
 \description{
-Used in 'Pr()', 'qPr()', 'rPr()', 'mutualinfo()'
+Used in \code{\link[=Pr]{Pr()}}, \code{\link[=qPr]{qPr()}}, \code{\link[=rPr]{rPr()}}, \code{\link[=mutualinfo]{mutualinfo()}}
 }
 \keyword{internal}

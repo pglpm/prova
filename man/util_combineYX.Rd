@@ -16,6 +16,6 @@ util_combineYX(
 )
 }
 \description{
-Used in 'Pr()'.
+Used in \code{\link[=Pr]{Pr()}}.
 }
 \keyword{internal}
