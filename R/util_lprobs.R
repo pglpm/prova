@@ -527,7 +527,7 @@ util_lprobsbase <- function(
     }
     ##
     if(nVB) {
-        ## VBprob is the probability that x = 1
+        ## VBprob is the probability that x = 1 (V2, 2nd value)
         out <- out + colSums(
             x = log(1 - xVB - VBprobs + 2 * xVB * VBprobs),
             na.rm = TRUE, dims = 1)

@@ -2,11 +2,11 @@
 % Please edit documentation in R/util_lprobs.R
 \name{util_lprobsmi}
 \alias{util_lprobsmi}
-\title{Calculate pairs of log-probabilities for mutualinfo()}
+\title{Calculate and combine log-probabilities}
 \usage{
 util_lprobsmi(xVs, params1, params2, lWnorm, lW)
 }
 \description{
-Used in 'mutualinfo()'.
+Calculate log2_p(Y1|Y2), log2_p(Y2|Y1), log2_p(Y1), log2_p(Y2) for one datapoint. Used in mutualinfo().
 }
 \keyword{internal}

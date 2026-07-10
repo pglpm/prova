@@ -874,12 +874,16 @@ print.probability <- function(
         ## rearrange and combine values and quantiles in a special way
 
         if(isTRUE(digits)){
+            tempdigits <- 1 + log10(
+                c(x$values / x$values.MCaccuracy,
+                    x$quantiles / x$quantiles.MCaccuracy)
+            )
+            ## in case MCaccuracy is 0:
+            tempdigits[is.na(tempdigits)] <- +Inf
+
             temp <- aperm(
                 a = array(signif(x = c(x$values, x$quantiles),
-                    digits = 1 + log10(
-                        c(x$values / x$values.MCaccuracy,
-                            x$quantiles / x$quantiles.MCaccuracy)
-                    )),
+                    digits = tempdigits),
                     dim = dim(x$quantiles) + c(0, 0, 1),
                     dimnames = c(
                         dimnames(x$values),
@@ -904,13 +908,20 @@ print.probability <- function(
         }
     } else {
         if(isTRUE(digits)){
+            tempdigits <- 1 + log10(c(x$values / x$values.MCaccuracy))
             if('values' %in% elements){
+            tempdigits <- 1 + log10(c(x$values / x$values.MCaccuracy))
+            ## in case MCaccuracy is 0:
+            tempdigits[is.na(tempdigits)] <- +Inf
                 x$values <- signif(x = x$values,
-                    digits = 1 + log10(c(x$values / x$values.MCaccuracy)) )
+                    digits = tempdigits)
             }
             if('quantiles' %in% elements){
+                tempdigits <- 1 + log10(c(x$quantiles / x$quantiles.MCaccuracy))
+                ## in case MCaccuracy is 0:
+                tempdigits[is.na(tempdigits)] <- +Inf
                 x$quantiles <- signif(x = x$quantiles,
-                    digits = 1 + log10(c(x$quantiles / x$quantiles.MCaccuracy)) )
+                    digits = tempdigits)
             }
             if('samples' %in% elements){
                 x$samples <- signif(x = x$samples, digits = 2)
