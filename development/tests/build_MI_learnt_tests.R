@@ -63,13 +63,14 @@ saveRDS(learnt, '~/repos/prova/development/tests/MIlearnt.rds')
 
 
 #### Tests
+## nn <- 60 * 3600 # values in comments
+nn <- 30
 
 ## MI: B, N
 seqcl <- 1:length(W)
 Bprob2 <- rbind(1 - Bprob, Bprob)
 seqB <- 1:nrow(Bprob2)
 seqN <- 1:nrow(Nprob)
-nn <- 60 * 3600
 mi2 <- sapply(1:nn, function(xx){
     i <- sample(seqcl, 1, prob = W)
     Bv <- sample(seqB, 1, prob = Bprob2[,i])
@@ -99,7 +100,6 @@ seqcl <- 1:length(W)
 Bprob2 <- rbind(1 - Bprob, Bprob)
 seqB <- 1:nrow(Bprob2)
 seqN <- 1:nrow(Nprob)
-nn <- 60 * 3600
 mi2 <- sapply(1:nn, function(xx){
     i <- sample(seqcl, 1, prob = W)
     Bv <- sample(seqB, 1, prob = Bprob2[,i])
@@ -129,7 +129,6 @@ seqcl <- 1:length(W)
 Bprob2 <- rbind(1 - Bprob, Bprob)
 seqB <- 1:nrow(Bprob2)
 seqN <- 1:nrow(Nprob)
-nn <- 60 * 3600
 mi2 <- sapply(1:nn, function(xx){
     i <- sample(seqcl, 1, prob = W)
     ## Bv <- sample(seqB, 1, prob = Bprob2[,i])
@@ -159,7 +158,6 @@ seqcl <- 1:length(W)
 Bprob2 <- rbind(1 - Bprob, Bprob)
 seqB <- 1:nrow(Bprob2)
 seqN <- 1:nrow(Nprob)
-nn <- 60 * 3600
 mi2 <- sapply(1:nn, function(xx){
     i <- sample(seqcl, 1, prob = W)
     Bv <- sample(seqB, 1, prob = Bprob2[,i])
@@ -189,7 +187,6 @@ seqcl <- 1:length(W)
 Bprob2 <- rbind(1 - Bprob, Bprob)
 seqB <- 1:nrow(Bprob2)
 seqN <- 1:nrow(Nprob)
-nn <- 60 * 3600
 mi2 <- sapply(1:nn, function(xx){
     i <- sample(seqcl, 1, prob = W)
     Bv <- sample(seqB, 1, prob = Bprob2[,i])
@@ -219,7 +216,6 @@ seqcl <- 1:length(W)
 Bprob2 <- rbind(1 - Bprob, Bprob)
 seqB <- 1:nrow(Bprob2)
 seqN <- 1:nrow(Nprob)
-nn <- 60 * 3600
 mi2 <- sapply(1:nn, function(xx){
     i <- sample(seqcl, 1, prob = W)
     Bv <- sample(seqB, 1, prob = Bprob2[,i])
@@ -249,7 +245,6 @@ seqcl <- 1:length(W)
 Bprob2 <- rbind(1 - Bprob, Bprob)
 seqB <- 1:nrow(Bprob2)
 seqN <- 1:nrow(Nprob)
-nn <- 60 * 3600
 W2 <- W * c(pnorm(-8, mean = Rmean, sd = Rsd, lower.tail = FALSE))
 W2 <- W2/sum(W2)
 mi2 <- sapply(1:nn, function(xx){
@@ -281,7 +276,6 @@ seqcl <- 1:length(W)
 Bprob2 <- rbind(1 - Bprob, Bprob)
 seqB <- 1:nrow(Bprob2)
 seqN <- 1:nrow(Nprob)
-nn <- 60 * 3600
 W2 <- W * Nprob[2,]
 W2 <- W2/sum(W2)
 mi2 <- sapply(1:nn, function(xx){
@@ -313,7 +307,6 @@ seqcl <- 1:length(W)
 Bprob2 <- rbind(1 - Bprob, Bprob)
 seqB <- 1:nrow(Bprob2)
 seqN <- 1:nrow(Nprob)
-nn <- 60 * 3600
 W2 <- W * Bprob2[1,]
 W2 <- W2/sum(W2)
 mi2 <- sapply(1:nn, function(xx){
