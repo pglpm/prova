@@ -466,7 +466,7 @@ util_lprobsargsyx <- function(
 #'
 #' Used in 'Pr()', 'qPr()', 'rPr()', 'mutualinfo()', 'util_checkpoints()'.
 #'
-#' @return Matrix with as many rows as components and as many cols as samples
+#' @return Matrix of log-probabilities, with as many rows as components and as many cols as samples.
 #' @keywords internal
 util_lprobsbase <- function(
     xVs, params, logW,

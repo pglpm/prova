@@ -308,7 +308,7 @@ The **Prova** package provides the function `mutualinfo()` to calculate the mutu
 - `X`: data frame of variate values to restrict the calculation to specific subpopulations.
 - `learnt`: the object that points to the computation made with the `learn()` function.
 - Optionally, `unit`: the mutual information unit; default "shannons" (Sh).
-- Optionally, `parallel` specifies how many cores we should use for the computation.
+- Optionally, `parallel` specifies how many cores we should use for the computation. If `NULL` or omitted, half of the cores available will be used.
 
 Be aware that the computation can take even tens of minutes if the arguments `Y1names` and `Y2names` include multiple joint variates.
 
@@ -403,8 +403,7 @@ Calculation of mutual info:
 ```{r mibodymassspecies, eval = TRUE}
 MIbodymassspecies <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'species',
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 ```
 
@@ -433,8 +432,7 @@ Calculation of mutual information:
 ```{r mibodymassbilllen, eval = TRUE}
 MIbodymassbilllen <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 ```
 
@@ -476,22 +474,19 @@ The subpopulation is chosen with the argument `X`, as in the `Pr()` and `rPr()` 
 MIadelie <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Adelie'), ## choose subpopulation
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 
 MIchinstrap <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Chinstrap'), ## choose subpopulation
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 
 MIgentoo <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Gentoo'), ## choose subpopulation
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 ```
 

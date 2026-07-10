@@ -7,7 +7,7 @@
 util_lprobsbase(xVs, params, logW, temporarydir = NULL, lab = "")
 }
 \value{
-Matrix with as many rows as components and as many cols as samples
+Matrix of log-probabilities, with as many rows as components and as many cols as samples.
 }
 \description{
 Used in 'Pr()', 'qPr()', 'rPr()', 'mutualinfo()', 'util_checkpoints()'.

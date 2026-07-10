@@ -125,11 +125,11 @@ rPr(
     learnt = learnt
 )
 #        island   species
-# 644_1   Dream Chinstrap
-# 996_1   Dream Chinstrap
-# 1228_1  Dream Chinstrap
-# 2230_1 Biscoe    Gentoo
-# 3083_1  Dream    Adelie
+# 644_1   Dream    Adelie
+# 996_1  Biscoe Chinstrap
+# 1228_1  Dream    Adelie
+# 2230_1  Dream Chinstrap
+# 3083_1 Biscoe    Gentoo
 ```
 
 The rows of the resulting data frame are named according to the Monte Carlo samples used from the `learnt` object; they can be useful for peculiar studies but we can completely ignore them in the present case.
@@ -327,7 +327,7 @@ The **Prova** package provides the function `mutualinfo()` to calculate the mutu
 - `X`: data frame of variate values to restrict the calculation to specific subpopulations.
 - `learnt`: the object that points to the computation made with the `learn()` function.
 - Optionally, `unit`: the mutual information unit; default "shannons" (Sh).
-- Optionally, `parallel` specifies how many cores we should use for the computation.
+- Optionally, `parallel` specifies how many cores we should use for the computation. If `NULL` or omitted, half of the cores available will be used.
 
 Be aware that the computation can take even tens of minutes if the arguments `Y1names` and `Y2names` include multiple joint variates.
 
@@ -426,8 +426,7 @@ Calculation of mutual info:
 ``` r
 MIbodymassspecies <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'species',
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 ```
 
@@ -463,8 +462,7 @@ Calculation of mutual information:
 ``` r
 MIbodymassbilllen <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 ```
 
@@ -497,7 +495,7 @@ Note that in this case the Pearson correlation between `body_mass` and `bill_len
 
 ``` r
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.556366
+# [1] 0.537968
 ```
 
 which is different from the rough $r$-equivalent 0.68.
@@ -515,22 +513,19 @@ The subpopulation is chosen with the argument `X`, as in the `Pr()` and `rPr()` 
 MIadelie <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Adelie'), ## choose subpopulation
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 
 MIchinstrap <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Chinstrap'), ## choose subpopulation
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 
 MIgentoo <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Gentoo'), ## choose subpopulation
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 ```
 
@@ -575,15 +570,15 @@ It is interesting to contrast this result with values of the Pearson correlation
 ``` r
 ## Pearson r for Adelie subpopulation:
 cor(samplesAdelie$body_mass, samplesAdelie$bill_len, method = 'pearson')
-# [1] 0.405675
+# [1] 0.454133
 
 ## Pearson r for Chinstrap subpopulation:
 cor(samplesChinstrap$body_mass, samplesChinstrap$bill_len, method = 'pearson')
-# [1] 0.304721
+# [1] 0.309702
 
 ## Pearson r for Gentoo subpopulation:
 cor(samplesGentoo$body_mass, samplesGentoo$bill_len, method = 'pearson')
-# [1] 0.547162
+# [1] 0.58767
 ```
 
 The Pearson correlation yields the same the association *ranking* as the mutual information does (first Gentoo, then Adélie, then Chinstrap), but it yields the association for the Adélie subpopulation to be closer to the Gentoo one than to the Chinstrap one. The mutual information yields the opposite.
