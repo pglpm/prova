@@ -4,7 +4,7 @@
 \alias{util_lprobsmi}
 \title{Calculate and combine log-probabilities}
 \usage{
-util_lprobsmi(xVs, params1, params2, lWnorm, lW)
+util_lprobsmi(xVs, params1, params2, lW)
 }
 \description{
 Calculate log2_p(Y1|Y2), log2_p(Y2|Y1), log2_p(Y1), log2_p(Y2) for one datapoint. Used in mutualinfo().

@@ -103,7 +103,7 @@
 #' print(probs)
 #' }
 #'
-#' @importFrom extraDistr rcat
+#' @importFrom extraDistr rcatlp
 #' @importFrom extraDistr rbern
 #' @import parallel
 #' @import stats
@@ -349,14 +349,16 @@ mutualinfo <- function(
 
 #### STEP 1. Draw samples of Ynames (that is, Y1names,Y2names)
 
-    lWnorm <- util_denorm(lW)
-    Ws <- extraDistr::rcat(n = n, prob = t(
-        apply(X = lWnorm[, sseq, drop = FALSE], MARGIN = 2, FUN = function(xx){
-            xx <- exp(xx)
-            xx / sum(xx, na.rm = TRUE)
-        }, simplify = TRUE)
-    ))
-
+    ## extraDistr::rcatlp() can use non-normalized probabilities
+    ## NOTA BENE: the '1 +' is because of a possible bug in rcatlp()
+    Ws <- 1 + extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
+    ## ## Old version with extraDistr::cat(), can be 10 times slower
+    ## Ws <- extraDistr::rcat(n = n, prob = t(
+    ##     apply(X = lWnorm[, sseq, drop = FALSE], MARGIN = 2, FUN = function(xx){
+    ##         xx <- exp(xx)
+    ##         xx / sum(xx, na.rm = TRUE)
+    ##     }, simplify = TRUE)
+    ## ))
     Yout <- NULL
     vYout <- NULL
 
@@ -474,7 +476,7 @@ mutualinfo <- function(
     Y1transf <- Yout[, Y1names, drop = FALSE]
     Y2transf <- Yout[, Y2names, drop = FALSE]
     rm(Yout)
-    gc()
+    gc(full = TRUE)
 
 
 #### STEP 2. Calculate, for each generated datapoint:
@@ -502,9 +504,7 @@ mutualinfo <- function(
         fun = util_lprobsmi,
         params1 = lpargs1$params,
         params2 = lpargs2$params,
-        lWnorm = lWnorm,
-        lW = lW
-        )
+        lW = lW)
         )
 
     ## Jacobian factors

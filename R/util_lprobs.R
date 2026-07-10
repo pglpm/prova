@@ -604,25 +604,27 @@ util_combineYX <- function(
 #' Calculate log2_p(Y1|Y2), log2_p(Y2|Y1), log2_p(Y1), log2_p(Y2) for one datapoint. Used in mutualinfo().
 #'
 #' @keywords internal
-util_lprobsmi <- function(xVs, params1, params2, lWnorm, lW) {
+util_lprobsmi <- function(xVs, params1, params2, lW) {
 
     lprobY1 <- util_lprobsbase(xVs = xVs[1:6], params = params1, logW = 0)
     lprobY2 <- util_lprobsbase(xVs = xVs[7:12], params = params2, logW = 0)
 
-    celWnorm <- colSums(exp(lWnorm))
+    lprobnorm <- util_denorm(lW) # subtract max from each prob-col. of lW
+    celprobnorm <- colSums(exp(lprobnorm))
 
 ### Construct probabilities from lprobY1, lprobY2
     lpY1and2 <- log(mean(
-        colSums(exp(lprobY1 + lprobY2 + lWnorm)) / celWnorm,
+        colSums(exp(lprobY1 + lprobY2 + lprobnorm)) / celprobnorm,
         na.rm = TRUE))
 
     lpY1 <- log(mean(
-        colSums(exp(lprobY1 + lWnorm)) / celWnorm,
+        colSums(exp(lprobY1 + lprobnorm)) / celprobnorm,
         na.rm = TRUE))
 
     lpY2 <- log(mean(
-        colSums(exp(lprobY2 + lWnorm)) / celWnorm,
+        colSums(exp(lprobY2 + lprobnorm)) / celprobnorm,
         na.rm = TRUE))
+
 
     lprobnorm <- util_denorm(lprobY2 + lW)
     lpY1given2 <- log(mean(
@@ -888,9 +890,9 @@ util_qYXdiscr <- function(
 
 
 
-#' Utility function to avoid finite-precision accuracys
+#' Utility function to improve accuracy
 #'
-#' Used in 'rPr()', 'mutualinfo()', 'util_lprobsmi()'.
+#' Used in 'util_lprobsmi()'.
 #'
 #' @keywords internal
 util_denorm <- function(lprob) {

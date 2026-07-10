@@ -2,11 +2,11 @@
 % Please edit documentation in R/util_lprobs.R
 \name{util_denorm}
 \alias{util_denorm}
-\title{Utility function to avoid finite-precision accuracys}
+\title{Utility function to improve accuracy}
 \usage{
 util_denorm(lprob)
 }
 \description{
-Used in 'rPr()', 'mutualinfo()', 'util_lprobsmi()'.
+Used in 'util_lprobsmi()'.
 }
 \keyword{internal}

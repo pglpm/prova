@@ -91,8 +91,8 @@ rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI
 )
-## [1,] 0.702622 0.0011172
-## [2,] 0.705471 0.0011000
+## [1,] 0.703343 0.00111552
+## [2,] 0.704237 0.00110000
 
 ## MI: B, R
 seqcl <- 1:length(W)
@@ -151,8 +151,8 @@ rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI
 )
-## [1,] 1.99983 0.000042397
-## [2,] 1.99981 0.000045000
+## [1,] 1.99982 0.000044971
+## [2,] 1.99983 0.000048000
 
 ## MI: NB, R
 seqcl <- 1:length(W)
@@ -273,8 +273,8 @@ rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI
 )
-## [1,] 0.315410 0.00145363
-## [2,] 0.315134 0.00140000
+## [1,] 0.316227 0.00145174
+## [2,] 0.317738 0.00150000
 
 ## MI: B, R | N
 seqcl <- 1:length(W)
@@ -305,8 +305,8 @@ rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI
 )
-## [1,] -2.99224e-17  3.98732e-19
-## [2,]  0.00000e+00 -4.24914e-17
+## [1,] -3.06706e-17  3.94064e-19
+## [2,]  0.00000e+00 -4.26256e-17
 
 ## MI: N, R | B
 seqcl <- 1:length(W)

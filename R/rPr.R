@@ -65,7 +65,7 @@
 #'
 #' c(datapoints)
 #'
-#' @importFrom extraDistr rcat
+#' @importFrom extraDistr rcatlp
 #' @importFrom extraDistr rbern
 #' @import utils
 #' @import stats
@@ -228,13 +228,17 @@ rPr <- function(
 
 #### Draw samples of Ynames
 
-    lWnorm <- util_denorm(lW[, sseq, drop = FALSE])
-    Ws <- extraDistr::rcat(n = n, prob = t(
-        apply(X = lWnorm, MARGIN = 2, FUN = function(xx){
-            xx <- exp(xx)
-            xx/sum(xx, na.rm = TRUE)
-        }, simplify = TRUE)
-    ))
+    ## extraDistr::rcatlp() can use non-normalized probabilities
+    ## NOTA BENE: the '1 +' is because of a possible bug in rcatlp()
+    Ws <- 1 + extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
+    ## ## Old version with extraDistr::cat(), can be 10 times slower
+    ## lWnorm <- util_denorm(lW[, sseq, drop = FALSE])
+    ## Ws <- extraDistr::rcat(n = n, prob = t(
+    ##     apply(X = lWnorm, MARGIN = 2, FUN = function(xx){
+    ##         xx <- exp(xx)
+    ##         xx/sum(xx, na.rm = TRUE)
+    ##     }, simplify = TRUE)
+    ## ))
 
     Yout <- NULL
     vYout <- NULL
