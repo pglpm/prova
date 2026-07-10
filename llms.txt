@@ -275,7 +275,7 @@ For developers (beware!)
   : Calculate collection of log-probabilities for different components
   and samples
 - [`util_lprobsmi()`](https://pglpm.github.io/prova/reference/util_lprobsmi.md)
-  : Calculate pairs of log-probabilities for mutualinfo()
+  : Calculate and combine log-probabilities
 - [`util_prepPcheckpoints()`](https://pglpm.github.io/prova/reference/util_prepPcheckpoints.md)
   : Format datapoints used for MCMC monitoring
 - [`util_qYXcont()`](https://pglpm.github.io/prova/reference/util_qYXcont.md)
