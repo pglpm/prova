@@ -119,7 +119,7 @@ mutualinfo2 <- function(
     tails = NULL,
     quantiles =  c(0.055, 0.945),
     ns = NULL,
-    nv = NULL,
+    nv = 12,
     unit = 'Sh',
     parallel = TRUE,
     verbose = FALSE
@@ -210,7 +210,7 @@ mutualinfo2 <- function(
 
     if(is.null(ns) || !is.finite(ns)){ ns <- nmcs }
     ns <- max(min(ns, nmcs), 2)
-    if(is.null(nv) || !is.finite(nv)){ nv <- 12 }
+    if(is.null(nv) || !is.finite(nv)){ nv <- 2 }
     nv <- max(nv, 2)
 
     ntot <- ns *nv
@@ -536,27 +536,28 @@ mutualinfo2 <- function(
 
     outmi <- out0[, c('pY1and2', 'pY1given2', 'pY2given1', 'pY1', 'pY2')]
     ## Calculate MI
-    outmi[, 'pY1and2'] <- pmax(0,
-        outmi[, 'pY1'] + outmi[, 'pY2'] - outmi[, 'pY1and2'])
+    outmi[, 'pY1and2'] <- outmi[, 'pY1'] + outmi[, 'pY2'] - outmi[, 'pY1and2']
     colnames(outmi) <- outnames
 
     ## Correct entropies with log-Jacobian factors
     outmi[, outnames[-1]] <- outmi[, outnames[-1]] - c(logjacobians1, logjacobians2)
 
     outva <- t(out0[, c('fY1and2', 'fY1given2', 'fY2given1', 'fY1', 'fY2', 'id')])
-    outva['fY1and2',] <- pmax(0,
-        outva['fY1',] + outva['fY2',] - outva['fY1and2',])
+    outva['fY1and2',] <- outva['fY1',] + outva['fY2',] - outva['fY1and2',]
     dim(outva) <- c(6, ns, nv)
     outva <- t(rowMeans(x = outva, dims = 2, na.rm = TRUE))
     colnames(outva) <- c(outnames, 'id')
+    outva[outva[, 'MI'] < 0, 'MI'] <- 0
 
     values <- colMeans(outmi, na.rm = TRUE) / lbase
+    if(values['MI'] < 0){values['MI'] <- 0}
     accuracies <- apply(X = outmi, MARGIN = 2, FUN = sd, na.rm = TRUE) /
         (sqrt(ntot) * lbase)
     quantiles <- apply(X = outva, MARGIN = 2, FUN = quantile,
         probs = quantiles, type = 6, na.rm = TRUE, names = TRUE,
         simplify = TRUE) / lbase
 
+    ## Output
     setNames(object = lapply(X = outnames,
         FUN = function(item){c(list(
             value = unname(values[item]),
@@ -565,7 +566,8 @@ mutualinfo2 <- function(
             unit = unit),
             if(item == 'MI'){list(
                 rGauss = sqrt(1 - exp(-2 * unname(values[item]) * lbase))
-                )},
+            )},
+            if(item == 'MI'){list(samples = outva[, 'MI'])},
             if(!(item == 'En1')){list(Y1names = Y1names)},
             if(!(item == 'En2')){list(Y2names = Y2names)}
             )}
