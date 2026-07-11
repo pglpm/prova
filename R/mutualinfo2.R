@@ -117,6 +117,7 @@ mutualinfo2 <- function(
     X = NULL,
     learnt,
     tails = NULL,
+    quantiles =  c(0.055, 0.945),
     ns = NULL,
     nv = NULL,
     unit = 'Sh',
@@ -208,7 +209,7 @@ mutualinfo2 <- function(
     nmcs <- ncol(learnt$W)
 
     if(is.null(ns) || !is.finite(ns)){ ns <- nmcs }
-    ns <- max(ns, 2)
+    ns <- max(min(ns, nmcs), 2)
     if(is.null(nv) || !is.finite(nv)){ nv <- 12 }
     nv <- max(nv, 2)
 
@@ -535,67 +536,38 @@ mutualinfo2 <- function(
 
     outmi <- out0[, c('pY1and2', 'pY1given2', 'pY2given1', 'pY1', 'pY2')]
     ## Calculate MI
-    outmi[, 'pY1and2'] <- outmi[, 'pY1'] + outmi[, 'pY2'] - outmi[, 'pY1and2']
+    outmi[, 'pY1and2'] <- pmax(0,
+        outmi[, 'pY1'] + outmi[, 'pY2'] - outmi[, 'pY1and2'])
     colnames(outmi) <- outnames
 
     ## Correct entropies with log-Jacobian factors
     outmi[, outnames[-1]] <- outmi[, outnames[-1]] - c(logjacobians1, logjacobians2)
 
     outva <- t(out0[, c('fY1and2', 'fY1given2', 'fY2given1', 'fY1', 'fY2', 'id')])
-    outva['fY1and2',] <- outva['fY1',] + outva['fY2',] - outva['fY1and2',]
+    outva['fY1and2',] <- pmax(0,
+        outva['fY1',] + outva['fY2',] - outva['fY1and2',])
     dim(outva) <- c(6, ns, nv)
-    outva <- rowMeans(x = outva, dims = 2, na.rm = TRUE)
+    outva <- t(rowMeans(x = outva, dims = 2, na.rm = TRUE))
+    colnames(outva) <- c(outnames, 'id')
 
-    print(outmi)
-    print(outva)
-    on.exit(return(outva))
-    stop()
+    values <- colMeans(outmi, na.rm = TRUE) / lbase
+    accuracies <- apply(X = outmi, MARGIN = 2, FUN = sd, na.rm = TRUE) /
+        (sqrt(ntot) * lbase)
+    quantiles <- apply(X = outva, MARGIN = 2, FUN = quantile,
+        probs = quantiles, type = 6, na.rm = TRUE, names = TRUE,
+        simplify = TRUE) / lbase
 
-
-    test <- c(
-        as.list(colMeans(out0[, outnames], na.rm = TRUE) / lbase),
-        ##
-        setNames(object = as.list(
-            apply(X = out0[, outnames], MARGIN = 2, FUN = sd, na.rm = TRUE) /
-                (sqrt(ntot) * lbase),
-            ), nm = paste0(outnames, '.MCaccuracy')),
-        ##
-        )
-
-    print(test) ; stop()
-
-    out[, c('CondEn12', 'CondEn21', 'En1', 'En2')] <-
-        out[, c('CondEn12', 'CondEn21', 'En1', 'En2')] -
-        c(logjacobians1, logjacobians2)
-
-    out <- unlist(apply(
-        X = rbind(
-            value = colMeans(x = out, na.rm = TRUE) / lbase,
-            accuracy = signif(x = apply(
-                X = out, MARGIN = 2, FUN = sd, na.rm = TRUE, simplify = TRUE
-            ) / (sqrt(ntot) * lbase), digits = 2)
-        ),
-        MARGIN = 2, FUN = list, simplify = TRUE), recursive = FALSE)
-
-    if(out$MI['value'] < 0){
-        out$MI['accuracy'] <- out$MI['accuracy'] + out$MI['value']
-        out$MI['value'] <- 0
-    }
-
-
-    ## ## generally there's no MI maximum for continous variates
-    ## mmax <- paste0('En', which.min(c(out$En1['value'], out$En2['value'])) )
-    rgauss <- sqrt(1 - exp(-2 * out$MI['value'] * lbase))
-
-    c(out,
-        list(#MImax = out[[mmax]],
-            MI.rGauss = c(
-                rgauss,
-                signif(x = out$MI['accuracy'] *
-                           exp(-2 * out$MI['value'] * lbase) / rgauss,
-                    digits = 2)
-            ),
-            unit = unit, Y1names = Y1names, Y2names = Y2names
-        )
-    )
+    setNames(object = lapply(X = outnames,
+        FUN = function(item){c(list(
+            value = unname(values[item]),
+            quantiles = quantiles[,item],
+            value.MCaccuracy = unname(accuracies[item]),
+            unit = unit),
+            if(item == 'MI'){list(
+                rGauss = sqrt(1 - exp(-2 * unname(values[item]) * lbase))
+                )},
+            if(!(item == 'En1')){list(Y1names = Y1names)},
+            if(!(item == 'En2')){list(Y2names = Y2names)}
+            )}
+    ), nm = outnames)
 }

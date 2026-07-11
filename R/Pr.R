@@ -598,8 +598,7 @@ Pr <- function(
             ## calculate quantiles from samples
             out$quantiles <- aperm(
                 a = apply(X = out$samples, MARGIN = c(1, 2), FUN = quantile,
-                    probs = quantiles, type = 6,
-                    na.rm = TRUE, names = FALSE,
+                    probs = quantiles, type = 6, na.rm = TRUE, names = FALSE,
                     simplify = TRUE),
                 perm = c(2, 3, 1), resize = FALSE)
 
