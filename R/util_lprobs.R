@@ -646,7 +646,8 @@ util_lprobsmi <- function(xVs, params1, params2, lW) {
         CondEn12 = -lpY1given2,
         CondEn21 = -lpY2given1,
         En1 = -lpY1,
-        En2 = -lpY2
+        En2 = -lpY2,
+        id = xVs[[1]]
         ## MIalt = (mi + lpY1given2 - lpY1 + lpY2given1 - lpY2) / 3,
     )
 }

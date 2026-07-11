@@ -111,13 +111,14 @@
 #'
 #' @concept association
 #' @export
-mutualinfo <- function(
+mutualinfo2 <- function(
     Y1names,
     Y2names = NULL,
     X = NULL,
     learnt,
     tails = NULL,
     n = NULL,
+    nv = NULL,
     unit = 'Sh',
     parallel = TRUE,
     verbose = FALSE
@@ -206,17 +207,26 @@ mutualinfo <- function(
     ncomponents <- nrow(learnt$W)
     nmcs <- ncol(learnt$W)
 
-    if(is.null(n) || n == 0) {
-        n <- 1 * nmcs
-    } else if(n < 0) {
-        n <- -n * nmcs
-    }
+    if(is.null(n) || !is.finite(n)){ n <- nmcs }
+    n <- max(n, 2)
+    if(is.null(nv) || !is.finite(nv)){ nv <- 12 }
+    nv <- max(nv, 2)
 
-    if(n <= nmcs) {
-        sseq <- sort(sample.int(nmcs, n))
-    } else {
-        sseq <- c(rep(x = seq_len(nmcs), times = n %/% nmcs),
-            seq_len(nmcs)[sort.int(sample.int(nmcs, n %% nmcs))])
+    ntot <- n *nv
+
+    sseq <- sort(sample.int(nmcs, n))
+    if(n < nmcs){
+        ## Restrict to subset of MC samples
+        learnt$W <- learnt$W[, sseq, drop = FALSE]
+        learnt$Rmean <- learnt$Rmean[, , sseq, drop = FALSE]
+        learnt$Rsd <- learnt$Rsd[, , sseq, drop = FALSE]
+        learnt$Dmean <- learnt$Dmean[, , sseq, drop = FALSE]
+        learnt$Dsd <- learnt$Dsd[, , sseq, drop = FALSE]
+        learnt$Cmean <- learnt$Cmean[, , sseq, drop = FALSE]
+        learnt$Csd <- learnt$Csd[, , sseq, drop = FALSE]
+        learnt$Nprob <- learnt$Nprob[, , sseq, drop = FALSE]
+        learnt$Oprob <- learnt$Oprob[, , sseq, drop = FALSE]
+        learnt$Bprob <- learnt$Bprob[, , sseq, drop = FALSE]
     }
 
     if(all(is.na(X))){X <- NULL}
@@ -349,8 +359,10 @@ mutualinfo <- function(
 #### STEP 1. Draw samples of Ynames (that is, Y1names,Y2names)
 
     ## extraDistr::rcatlp() can use non-normalized probabilities
-    ## NOTA BENE: the '1 +' is because of a possible bug in rcatlp()
-    Ws <- 1 + extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
+    ## NOTA BENE: the '1 - ...' is because of a possible bug in rcatlp()
+    Ws <- 1 - extraDistr::rcatlp(1, 0) +
+        extraDistr::rcatlp(n = ntot, log_prob = t(lW))
+
     ## ## Old version with extraDistr::cat(), can be 10 times slower
     ## Ws <- extraDistr::rcat(n = n, prob = t(
     ##     apply(X = lWnorm[, sseq, drop = FALSE], MARGIN = 2, FUN = function(xx){
@@ -500,13 +512,13 @@ mutualinfo <- function(
     ## each instance of util_lprobsmi() takes one datapoint
     out <- do.call(rbind,
         parallel::parLapply(cl = cl,
-        X = mapply(c, lpargs1$xVs, lpargs2$xVs, SIMPLIFY = FALSE),
-        fun = util_lprobsmi,
-        params1 = lpargs1$params,
-        params2 = lpargs2$params,
-        lW = lW)
-        )
-
+            X = mapply(c, lpargs1$xVs, lpargs2$xVs, SIMPLIFY = FALSE),
+            fun = util_lprobsmi,
+            params1 = lpargs1$params,
+            params2 = lpargs2$params,
+            lW = lW)
+    )
+    print(out) ; stop()
     ## Jacobian factors
     logjacobians1 <- rowSums(
         as.matrix(vtransform(Y1transf,
