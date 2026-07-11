@@ -4,7 +4,7 @@
 #'
 #' @keywords internal
 util_lprobsargsyx <- function(
-    x, auxmetadata, learnt, tails = NULL
+    x, auxmetadata, learnt, tails = NULL, ids = seq_len(nrow(x))
 ) {
     Xv <- colnames(x)
     nX <- nrow(x)
@@ -456,7 +456,7 @@ util_lprobsargsyx <- function(
         ),
         xVs = lapply(seq_len(nX), function(i){
             list(
-                ii = i,
+                ii = ids[i],
                 xV0 = xV0[,i], # point vrts, handled by dnorm()
                 xV1 = xV1[,i], # tail vrts, handled by pnorm()
                 xV2 = xV2[,i], # interval vrts, handled by pnorm()-diff.
@@ -648,6 +648,64 @@ util_lprobsmi <- function(xVs, params1, params2, lW) {
         En1 = -lpY1,
         En2 = -lpY2,
         id = xVs[[1]]
+        ## MIalt = (mi + lpY1given2 - lpY1 + lpY2given1 - lpY2) / 3,
+    )
+}
+
+#' Calculate and combine log-probabilities to compute entropies
+#'
+#' Calculate log2_p(Y1|Y2), log2_p(Y2|Y1), log2_p(Y1), log2_p(Y2) for one datapoint. Used in [mutualinfo()].
+#'
+#' @return A vector of various probabilities (calculated from all MC samples) and "limit frequencies" (calculated from the MC sample corresponding to the input datapoint).
+#' @keywords internal
+util_lprobsmi2 <- function(xVs, params1, params2, lW) {
+
+    thisid <- xVs[[1]] # MC-sample id of this datapoint
+
+    lprobY1 <- util_lprobsbase(xVs = xVs[1:6], params = params1, logW = 0,
+        temporarydir= NULL)
+    lprobY2 <- util_lprobsbase(xVs = xVs[7:12], params = params2, logW = 0,
+        temporarydir = NULL)
+
+    lprobnorm <- util_denorm(lW) # subtract max from each prob-col. of lW
+    celprobnorm <- colSums(exp(lprobnorm))
+
+### Construct log-probabilities from lprobY1, lprobY2
+    temp <- colSums(exp(lprobY1 + lprobY2 + lprobnorm)) / celprobnorm
+    pY1and2 <- mean(temp, na.rm = TRUE)
+    fY1and2 <- temp[thisid]
+
+    temp <- colSums(exp(lprobY1 + lprobnorm)) / celprobnorm
+    pY1 <- mean(temp, na.rm = TRUE)
+    fY1 <- temp[thisid]
+
+    temp <- colSums(exp(lprobY2 + lprobnorm)) / celprobnorm
+    pY2 <- mean(temp, na.rm = TRUE)
+    fY2 <- temp[thisid]
+
+    lprobnorm <- util_denorm(lprobY2 + lW)
+    temp <- colSums(exp(lprobY1 + lprobnorm)) / colSums(exp(lprobnorm))
+    pY1given2 <- mean(temp, na.rm = TRUE)
+    fY1given2 <- temp[thisid]
+
+    lprobnorm <- util_denorm(lprobY1 + lW)
+    temp <- colSums(exp(lprobY2 + lprobnorm)) / colSums(exp(lprobnorm))
+    pY2given1 <- mean(temp, na.rm = TRUE)
+    fY2given1 <- temp[thisid]
+
+    c(
+        pY1and2 = pY1and2,
+        pY1given2 = pY1given2,
+        pY2given1 = pY2given1,
+        pY1 = pY1,
+        pY2 = pY2,
+        ##
+        fY1and2 = fY1and2,
+        fY1given2 = fY1given2,
+        fY2given1 = fY2given1,
+        fY1 = fY1,
+        fY2 = fY2,
+        id = thisid
         ## MIalt = (mi + lpY1given2 - lpY1 + lpY2given1 - lpY2) / 3,
     )
 }
