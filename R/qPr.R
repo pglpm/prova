@@ -2,7 +2,7 @@
 #'
 #' @description This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the variability of such quantiles if more training data were available.
 #'
-#' @details This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, \text{data})} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the variability of those quantiles if more learning data were provided. It is somewhat analogous to the `q`-variants of R distribution functions, such as [stats::qnorm()]. The variability can be expressed in the form of quantiles, samples, or both, as in the [Pr()] function. If several joint values are given for the probability levels and for `X`, the function creates a 2D grid of results for all possible combinations of the given probability levels and `X` values. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails`.
+#' @details This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, \text{data})} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the variability of those quantiles if more learning data were provided. It is somewhat analogous to the `qxxx`-variants of [R distribution functions][stats::Distributions]. The variability can be expressed in the form of quantiles, samples, or both, as in the [Pr()] function. If several joint values are given for the probability levels and for `X`, the function creates a 2D grid of results for all possible combinations of the given probability levels and `X` values. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails`.
 #'
 #' @param p Numeric vector of probability levels. Default: `c(0.25, 0.5, 0.75)`.
 #' @param Yname Character vector: name of variate whose quantiles will be computed.
@@ -22,10 +22,10 @@
 
 #'
 #' @return A list of the following elements:
-#' - `values`: a matrix with the requested \eqn{Y}-quantiles `p` conditional on the requested \eqn{X}-values in `X`, for all combinations of `p` (rows) and `X` (columns).
-#' - `quantiles` (possibly `NULL`): an array with the variability quantiles (3rd dimension of the array) for the quantiles of the `value` element.
-#' - `samples` (possibly `NULL`): an array with the variability samples (3rd dimension of the array) for such quantiles.
-#' - `Y`, `X`: copies of the `Y` and `X` arguments.
+#' - `$values`: a matrix with the requested \eqn{Y}-quantiles `p` conditional on the requested \eqn{X}-values in `X`, for all combinations of `p` (rows) and `X` (columns).
+#' - `$quantiles` (possibly `NULL`): an array with the variability quantiles (3rd dimension of the array) for the quantiles of the `value` element.
+#' - `$samples` (possibly `NULL`): an array with the variability samples (3rd dimension of the array) for such quantiles.
+#' - `$Y`, `$X`: copies of the `Y` and `X` arguments.
 #'
 #' @references
 #' - Porta Mana (2025): *What's special about 89% credibility intervals?* <doi:10.5281/zenodo.17072199>.

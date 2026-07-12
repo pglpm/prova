@@ -52,14 +52,14 @@ An object of class "probability", which is a list consisting of the following el
 \item \verb{$quantiles} (possibly \code{NULL}): an array with the variability quantiles (3rd dimension of the array) for such probabilities.
 \item \verb{$samples} (possibly \code{NULL}): an array with the variability samples (3rd dimension of the array) for such probabilities.
 \item \verb{$values.MCaccuracy}, \code{quantiles.MCaccuracy}: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the \code{values} and \code{quantiles} elements.
-\item \verb{$Y}, \verb{$X}: copies of the \code{Y} and \code{X} arguments.
+\item \verb{$Y}, \verb{$X}, \verb{$tails}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
 }
 }
 \description{
 This function calculates posterior probabilities and probability densities, cumulative posterior probabilities, and mixtures thereof. It also outputs the variability of such probabilities if more training data were available, and the Monte Carlo Standard Error for the calculated posterior probabilities.
 }
 \details{
-This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as \link[base:data.frame]{data frame} arguments \code{Y} and \code{X}. It is somewhat analogous to the \code{d}-variants and \code{p}-variantes of R distribution functions, such as \code{\link[stats:dnorm]{stats::dnorm()}} and \code{\link[stats:pnorm]{stats::pnorm()}}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert \text{data})} is calculated.
+This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as \link[base:data.frame]{data frame} arguments \code{Y} and \code{X}. It is somewhat analogous to the \code{dxxx}-variants and \code{pxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert \text{data})} is calculated.
 
 For some variates in \code{Y} or \code{X}, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, \text{data})\ .} Tail values are inputted via the \code{'tails'} argument; see "Usage".
 

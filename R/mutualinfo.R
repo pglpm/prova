@@ -61,8 +61,8 @@
 #' - `$quantiles`, a vector with the variability quantiles for the mutual information.
 #' - `$MCaccuracy`, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the `value` of the mutual information.
 #' - `$samples`, a vector with the variability samples for the mutual information.
-#' - `$MI.rGauss`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
-#' - `$unit`, `$Y1names`, `$Y1names`: same as the input arguments, included for the user's convenience.
+#' - `$rGauss`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
+#' - `$unit`, `$Y1names`, `$Y1names`: same as the input arguments.
 #'
 #' @seealso
 #' [Pr()] to calculate probabilities and their variability.

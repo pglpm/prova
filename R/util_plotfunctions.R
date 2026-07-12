@@ -517,7 +517,7 @@ plot.probability <- function(
 
     if(is.null(xlab)){xlab <- tempxlab}
     if(missing(main)){
-        main <- paste0('prob. or freq.  ',
+        main <- paste0('prob.  ',
             paste0(names(x$Y), collapse = ', '),
             if(!is.null(x$X)){paste0(' | ', paste0(names(x$X), collapse = ', '))}
         )
@@ -528,7 +528,7 @@ plot.probability <- function(
         }
     }
     if(is.null(ylab)){
-        ylab <- 'probability or rel.frequency'
+        ylab <- 'probability'
     }
 
     if(is.null(type)){
@@ -606,9 +606,14 @@ plot.probability <- function(
         ## (legend %in%
         ##      c("bottomright", "bottom", "bottomleft", "left", "topleft",
         ##          "top", "topright", "right", "center"))
+        tails <- list()
+        tails[names(leg)] <- '='
+        tails[names(x$tails)] <- x$tails
         graphics::legend(x = legend,
             legend = apply(leg, 1, function(xxx){
-                paste0(paste0(names(xxx), ' = ', xxx), collapse = ', ')
+                nxxx <- names(xxx)
+                paste0(paste0(nxxx, ' ', tails[nxxx], ' ', xxx),
+                    collapse = ', ')
             }),
             bty = 'n',
             col = col,
@@ -623,12 +628,12 @@ plot.probability <- function(
 #' Plot the variability of an object of class "probability" as a histogram
 #'
 #' @description
-#' The posterior probabilities calculated with the [Pr()] function, and outputted as a `probability` object, have an associated variability that comes from the finite size of the data sample. This variability can be interpreted in two ways:
+#' The posterior probabilities calculated with the [Pr()] function, and outputted as a "probability" object, have an associated variability that comes from the finite size of the data sample. This variability can be interpreted in two ways:
 #'
-#' - How the probabilities would change, if we could collect a very large (infinite) amount of additional data, and how likely would such change be;
+#' - How the probabilities could change, if we collected a much larger (infinite) data sample, and how likely would such change be;
 #' - The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
 #'
-#' The `hist()` method for a `probability` object is a utility to visualize this kind of variability, in the form of a distribution.
+#' The `hist()` method for a "probability" object is a utility to visualize this kind of variability, in the form of a distribution.
 #'
 #' @param x Object of class "probability", obtained with [Pr()].
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
@@ -665,7 +670,7 @@ plot.probability <- function(
 #' ## 'Adelie' penguins in the full population
 #' hist(probs, legend = 'topright')
 #'
-#' @import grDevices
+#' @import graphics
 #'
 #' @concept display
 #' @export
@@ -704,7 +709,7 @@ hist.probability <- function(
 
     ## Check that samples are available in the probability object
     if(is.null(x$samples)) {
-        stop('The probability object does not contain any frequency samples')
+        stop('The "probability" object does not contain any variability samples')
         }
     pvar <- x$samples
     Ylen <- nrow(x$values)
@@ -727,11 +732,7 @@ hist.probability <- function(
     } }
 
     if(is.null(xlab)){
-        if(!is.null(x$Y)){
-            xlab <- 'relative frequency'
-        } else {
-            xlab <- 'quantile'
-        }
+        xlab <- 'long-run relative frequency'
     }
     if(is.null(ylab)){ylab <- 'probability density'}
     if(isFALSE(fill.alpha.f) || !is.numeric(fill.alpha.f)){fill.alpha.f <- 0}
@@ -747,6 +748,8 @@ hist.probability <- function(
         thiscol <- col[(i - 1) %% length(col) + 1]
         thislty <- lty[(i - 1) %% length(lty) + 1]
         if(alpha.f > 0){
+            ## Plot the shaded areas under the histograms
+            ## by means of plotquantiles()
             plotquantiles(x = midx, y = cbind(rep(0, length(y)), y),
                 col = thiscol,
                 alpha.f = fill.alpha.f,
@@ -786,20 +789,32 @@ hist.probability <- function(
            (legend %in%
                  c("bottomright", "bottom", "bottomleft", "left", "topleft",
                      "top", "topright", "right", "center"))){
+        tails <- list()
         if(!is.null(x$Y)){
-        legs <- paste0(apply(x$Y, 1, function(xxx){
-                paste0(paste0(names(xxx), ' = ', xxx), collapse = ', ')
+            tails[names(x$Y)] <- '='
+            tails[names(x$tails)] <- x$tails
+            legs <- paste0(apply(x$Y, 1, function(xxx){
+                nxxx <- names(xxx)
+                paste0(paste0(nxxx, ' ', tails[nxxx], ' ', xxx),
+                    collapse = ', ')
         }))
+        ## legs <- paste0(apply(x$Y, 1, function(xxx){
+        ##         paste0(paste0(names(xxx), ' = ', xxx), collapse = ', ')
+        ## }))
         } else {
         legs <- paste0(apply(as.data.frame(x$pY), 1, function(xxx){
                 paste0(paste0(xxx, '-qtl'), collapse = ', ')
         }))
         }
         if(!is.null(x$X)){
+            tails[names(x$X)] <- '='
+            tails[names(x$tails)] <- x$tails
             legs <- c(outer( legs,
                 paste0(' | ',
                     apply(x$X, 1, function(xxx){
-                        paste0(paste0(names(xxx), ' = ', xxx), collapse = ', ')
+                        nxxx <- names(xxx)
+                        paste0(paste0(nxxx, ' ', tails[nxxx], ' ', xxx),
+                            collapse = ', ')
                     })
                 ),
                 paste0))
@@ -826,7 +841,7 @@ hist.probability <- function(
 #' @param x Object of class "probability", obtained with [Pr()].
 #' @param elements character or integer vector, or `NULL` (default): elements of the "probability" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `$values` and `$quantiles` are displayed together in a special way.
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
-#' @param digits positive number or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for elements `$values` and `$quantiles` are determined from their respective `$values.MCaccuracy` and `$quantiles.MCaccuracy` elements of the `probability` object, see [Pr()]; whereas `$samples` elements use 2 significant digits.
+#' @param digits positive number or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for elements `$values` and `$quantiles` are determined from their respective `$values.MCaccuracy` and `$quantiles.MCaccuracy` elements of the "probability" object, see [Pr()]; whereas `$samples` elements use 2 significant digits.
 #' @param ... Other parameters to be passed to [base::print()].
 #'
 #' @return Its `x` argument, [invisibly][base::invisible()]; see [base::print()].
@@ -935,66 +950,53 @@ print.probability <- function(
 }
 
 
-#' Plot the variability of an object of class "probability" as a histogram
+#' Plot the variability of an object of class "MI" as a histogram
 #'
 #' @description
-#' The posterior probabilities calculated with the [Pr()] function, and outputted as a `probability` object, have an associated variability that comes from the finite size of the data sample. This variability can be interpreted in two ways:
+#' The mutual information calculated with the [mutualinfo()] function, and outputted as a "MI" object, has an associated variability that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
 #'
-#' - How the probabilities would change, if we could collect a very large (infinite) amount of additional data, and how likely would such change be;
-#' - The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
+#' The `hist()` method for a "MI" object is a utility to visualize this kind of variability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
 #'
-#' The `hist()` method for a `probability` object is a utility to visualize this kind of variability, in the form of a distribution.
-#'
-#' @param x Object of class "probability", obtained with [Pr()].
-#' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
+#' @param x Object of class "MI", obtained with [mutualinfo()].
 #' @param breaks `NULL` or as in function [graphics::hist()]. If `NULL` (default), an optimal number of breaks for each probability distribution is computed.
 #' @param fill.alpha.f Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
-#' @param legend One of the values `"bottomright"`, `"bottom"`, `"bottomleft"`, `"left"`, `"topleft"`, `"top"`, `"topright"`, `"right"`, `"center"` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `"top"`.
-#' @param showmean Logical, default `TRUE`: show the means of the probability distributions? The means correspond to the probabilities about the next observed unit.
+#' @param showvalue Logical, default `TRUE`: show the mutual information obtained from the current data sample?
 #' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,add see analogous arguments in [graphics::matplot()]
 #' @param ... Other parameters to be passed to [flexiplot()].
 #'
 #' @return [Invisibly][base::invisible()], an object of class ["histogram"][graphics::hist()].
 #'
 #' @seealso
-#' [Pr()] to calculate posterior probabilities and quantiles.
+#' [mutualinfo()] to calculate mutual information and its variability.
 #'
-#' [plot.probability()] to plot the posterior probabilities.
-#'
-#' [flexiplot()] (on which `hist.probability()` is based) for more general plots.
-#'
-#' [plotquantiles()] to plot quantile ranges.
+#' [flexiplot()] (on which `hist.MI()` is based) for more general plots.
 #'
 #' @examples
 #' ## Load the example `learnt` object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #' learnt <- learntExample
 #'
-#' ## calculate the probability, and its variability,
-#' ## for the value 'Adelie' of the "species" variate
-#' probs <- Pr(Y = data.frame(species = 'Adelie'), learnt = learnt, parallel = 1)
-#' probs$values
+#' ## calculate the mutual information and its variability
+#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
+#'   learnt = learnt, nv = 2, parallel = 1)
 #'
-#' ## show the variability of this probability; equivalently show
-#' ## the probability distribution for the relative frequency of
-#' ## 'Adelie' penguins in the full population
-#' hist(probs, legend = 'topright')
+#' ## show the possible variability of the mutual information,
+#' ## if a much larger data sample were collected
+#' hist(MI)
 #'
-#' @import grDevices
+#' @import graphics
 #'
 #' @concept display
 #' @export
 hist.MI <- function(
     x,
-    subset = NULL,
     breaks = NULL,
-    legend = 'top',
     lty = c(1, 2, 4, 3, 6, 5),
     lwd = 2,
     col = palette(),
     alpha.f = 1,
     fill.alpha.f = 0.125,
-    showmean = TRUE,
+    showvalue = TRUE,
     ##     c( ## Tol's colour-blind-safe scheme, or palette()
     ##     '#4477AA',
     ##     '#EE6677',
@@ -1012,123 +1014,75 @@ hist.MI <- function(
     add = FALSE,
     ...
 ){
-    ## Replace object x keeping only values given in 'subset'
-    if(!is.null(subset)){
-        x <- prsubset(x, subset = subset)
-    }
 
-    ## Check that samples are available in the probability object
+    ## Check that samples are available in the HI object
     if(is.null(x$samples)) {
-        stop('The probability object does not contain any frequency samples')
+        stop('The MI object does not contain any variability samples')
         }
-    pvar <- x$samples
-    Ylen <- nrow(x$values)
-    Xlen <- ncol(x$values)
+    ff <- x$samples
 
-    if(is.null(breaks)){n <- ceiling(sqrt(dim(pvar)[3])/2)} else {n <- NULL}
+    if(is.null(breaks)){n <- ceiling(sqrt(length(ff))/2)} else {n <- NULL}
 
-    ## Precompute histograms, to determine maximum y-value
-    midslist <- densitylist <- list()
-    i <- 0L
-    for(xx in seq_len(Xlen)){ for(yy in seq_len(Ylen)){
-        i <- i + 1L
-        ff <- pvar[yy, xx, ]
-        rg <- range(ff)
-        if(diff(rg)==0){rg <- c(0, 1)}
-        if(!is.null(n)){ breaks <- seq(rg[1], rg[2], length.out = n + 1) }
-        hd <- graphics::hist(x = ff, breaks = breaks, plot = FALSE)
-        midslist[[i]] <- hd$mids
-        densitylist[[i]] <- hd$density
-    } }
+    ## Precompute histogram
+    rg <- range(ff)
+    if(diff(rg)==0){rg <- c(0, 1)}
+    if(!is.null(n)){ breaks <- seq(rg[1], rg[2], length.out = n + 1) }
+    hd <- graphics::hist(x = ff, breaks = breaks, plot = FALSE)
+    midslist <- hd$mids
+    densitylist <- hd$density
 
     if(is.null(xlab)){
-        if(!is.null(x$Y)){
-            xlab <- 'relative frequency'
-        } else {
-            xlab <- 'quantile'
-        }
+        xlab <- paste0('long-run mutual information / ', x$unit)
     }
+
     if(is.null(ylab)){ylab <- 'probability density'}
     if(isFALSE(fill.alpha.f) || !is.numeric(fill.alpha.f)){fill.alpha.f <- 0}
+    if(missing(xlim)){xlim <- range(midslist)}
+    if(missing(main)){
+        main <- paste0('long-run MI  ',
+            paste0(x$Y1names, collapse = ', '),
+            '  &  ',
+            paste0(x$Y2names, collapse = ', ')
+        )
+    }
 
-    if(missing(xlim)){xlim <- range(unlist(midslist))}
-    if(is.na(ylim)[2]){ylim[2] <- max(unlist(densitylist))}
-
-    i <- 0L
-    for(xx in seq_len(Xlen)){ for(yy in seq_len(Ylen)){
-        i <- i + 1L
-        midx <- midslist[[i]]
-        y <- densitylist[[i]]
-        thiscol <- col[(i - 1) %% length(col) + 1]
-        thislty <- lty[(i - 1) %% length(lty) + 1]
-        if(alpha.f > 0){
-            plotquantiles(x = midx, y = cbind(rep(0, length(y)), y),
-                col = thiscol,
-                alpha.f = fill.alpha.f,
-                xlab = xlab, ylab = ylab,
-                xlim = xlim, ylim = ylim,
-                main = main,
-                grid = grid,
-                lty = 0,
-                add = (add || i > 1),
-                ...)
-        }
-
-        flexiplot(x = midslist[[i]], y = densitylist[[i]],
+    if(alpha.f > 0){
+            ## Plot the shaded areas under the histograms
+            ## by means of plotquantiles()
+        plotquantiles(x = midslist,
+            y = cbind(rep(0, length(densitylist)), densitylist),
+            col = col,
+            alpha.f = fill.alpha.f,
             xlab = xlab, ylab = ylab,
             xlim = xlim, ylim = ylim,
             main = main,
-            col = thiscol,
-            alpha.f = alpha.f,
-            lty = thislty,
-            lwd = lwd,
             grid = grid,
-            xjitter = FALSE,
-            yjitter = FALSE,
-            add = (add || alpha.f >0 || i > 1),
-            ...
-        )
-        if(isTRUE(showmean)){
-            graphics::abline(v = x$values[yy, xx],
-                col = adjustcolor(thiscol, alpha.f * 0.75),
-                lty = thislty,
-                lwd = lwd * 0.75)
-        }
-    } }
-
-    ## Plot legends
-    if(is.character(legend) &&
-           (legend %in%
-                 c("bottomright", "bottom", "bottomleft", "left", "topleft",
-                     "top", "topright", "right", "center"))){
-        if(!is.null(x$Y)){
-        legs <- paste0(apply(x$Y, 1, function(xxx){
-                paste0(paste0(names(xxx), ' = ', xxx), collapse = ', ')
-        }))
-        } else {
-        legs <- paste0(apply(as.data.frame(x$pY), 1, function(xxx){
-                paste0(paste0(xxx, '-qtl'), collapse = ', ')
-        }))
-        }
-        if(!is.null(x$X)){
-            legs <- c(outer( legs,
-                paste0(' | ',
-                    apply(x$X, 1, function(xxx){
-                        paste0(paste0(names(xxx), ' = ', xxx), collapse = ', ')
-                    })
-                ),
-                paste0))
-        }
-
-        graphics::legend(x = legend,
-            legend = legs,
-            bty = 'n',
-            col = col,
-            lty = lty,
-            lwd = lwd,
+            lty = 0,
+            add = add,
             ...)
     }
-    ## Return output of initial hist()
+
+    flexiplot(x = midslist, y = densitylist,
+        xlab = xlab, ylab = ylab,
+        xlim = xlim, ylim = ylim,
+        main = main,
+        col = col,
+        alpha.f = alpha.f,
+        lty = lty,
+        lwd = lwd,
+        grid = grid,
+        xjitter = FALSE,
+        yjitter = FALSE,
+        add = (add || alpha.f >0),
+        ...
+    )
+    if(isTRUE(showvalue)){
+        graphics::abline(v = x$value,
+            col = adjustcolor(col, alpha.f * 0.75),
+            lty = lty,
+            lwd = lwd * 0.75)
+    }
+
     invisible(hd)
 }
 
@@ -1173,6 +1127,6 @@ print.MI <- function(
     ...
 ){
     temp <- signif(x = c(x$value, x$quantiles), digits = digits)
-    names(temp) <- c('value', paste0('Q', names(x$quantiles)))
+    names(temp) <- c(paste0('value/', x$unit), paste0('Q', names(x$quantiles)))
     print(x = temp, ...)
 }

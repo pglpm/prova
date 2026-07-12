@@ -49,8 +49,8 @@ An object of class "MI", which is a list consisting of the following elements:
 \item \verb{$quantiles}, a vector with the variability quantiles for the mutual information.
 \item \verb{$MCaccuracy}, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the \code{value} of the mutual information.
 \item \verb{$samples}, a vector with the variability samples for the mutual information.
-\item \verb{$MI.rGauss}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
-\item \verb{$unit}, \verb{$Y1names}, \verb{$Y1names}: same as the input arguments, included for the user's convenience.
+\item \verb{$rGauss}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
+\item \verb{$unit}, \verb{$Y1names}, \verb{$Y1names}: same as the input arguments.
 }
 }
 \description{

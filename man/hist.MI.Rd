@@ -2,19 +2,17 @@
 % Please edit documentation in R/util_plotfunctions.R
 \name{hist.MI}
 \alias{hist.MI}
-\title{Plot the variability of an object of class "probability" as a histogram}
+\title{Plot the variability of an object of class "MI" as a histogram}
 \usage{
 \method{hist}{MI}(
   x,
-  subset = NULL,
   breaks = NULL,
-  legend = "top",
   lty = c(1, 2, 4, 3, 6, 5),
   lwd = 2,
   col = palette(),
   alpha.f = 1,
   fill.alpha.f = 0.125,
-  showmean = TRUE,
+  showvalue = TRUE,
   xlab = NULL,
   ylab = NULL,
   xlim = NULL,
@@ -26,19 +24,15 @@
 )
 }
 \arguments{
-\item{x}{Object of class "probability", obtained with \code{\link[=Pr]{Pr()}}.}
-
-\item{subset}{Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.}
+\item{x}{Object of class "MI", obtained with \code{\link[=mutualinfo]{mutualinfo()}}.}
 
 \item{breaks}{\code{NULL} or as in function \code{\link[graphics:hist]{graphics::hist()}}. If \code{NULL} (default), an optimal number of breaks for each probability distribution is computed.}
-
-\item{legend}{One of the values \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"}, \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"}, \code{"right"}, \code{"center"} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{"top"}.}
 
 \item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
 
 \item{fill.alpha.f}{Numeric, default 0.125: opacity of the histogram filling. \code{0} means no filling.}
 
-\item{showmean}{Logical, default \code{TRUE}: show the means of the probability distributions? The means correspond to the probabilities about the next observed unit.}
+\item{showvalue}{Logical, default \code{TRUE}: show the mutual information obtained from the current data sample?}
 
 \item{...}{Other parameters to be passed to \code{\link[=flexiplot]{flexiplot()}}.}
 }
@@ -46,37 +40,27 @@
 \link[base:invisible]{Invisibly}, an object of class \link[graphics:hist]{"histogram"}.
 }
 \description{
-The posterior probabilities calculated with the \code{\link[=Pr]{Pr()}} function, and outputted as a \code{probability} object, have an associated variability that comes from the finite size of the data sample. This variability can be interpreted in two ways:
-\itemize{
-\item How the probabilities would change, if we could collect a very large (infinite) amount of additional data, and how likely would such change be;
-\item The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
-}
+The mutual information calculated with the \code{\link[=mutualinfo]{mutualinfo()}} function, and outputted as a "MI" object, has an associated variability that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
 
-The \code{hist()} method for a \code{probability} object is a utility to visualize this kind of variability, in the form of a distribution.
+The \code{hist()} method for a "MI" object is a utility to visualize this kind of variability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
 }
 \examples{
 ## Load the example `learnt` object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 learnt <- learntExample
 
-## calculate the probability, and its variability,
-## for the value 'Adelie' of the "species" variate
-probs <- Pr(Y = data.frame(species = 'Adelie'), learnt = learnt, parallel = 1)
-probs$values
+## calculate the mutual information and its variability
+MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
+  learnt = learnt, nv = 2, parallel = 1)
 
-## show the variability of this probability; equivalently show
-## the probability distribution for the relative frequency of
-## 'Adelie' penguins in the full population
-hist(probs, legend = 'topright')
+## show the possible variability of the mutual information,
+## if a much larger data sample were collected
+hist(MI)
 
 }
 \seealso{
-\code{\link[=Pr]{Pr()}} to calculate posterior probabilities and quantiles.
+\code{\link[=mutualinfo]{mutualinfo()}} to calculate mutual information and its variability.
 
-\code{\link[=plot.probability]{plot.probability()}} to plot the posterior probabilities.
-
-\code{\link[=flexiplot]{flexiplot()}} (on which \code{hist.probability()} is based) for more general plots.
-
-\code{\link[=plotquantiles]{plotquantiles()}} to plot quantile ranges.
+\code{\link[=flexiplot]{flexiplot()}} (on which \code{hist.MI()} is based) for more general plots.
 }
 \concept{display}

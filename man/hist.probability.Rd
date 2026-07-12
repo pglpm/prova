@@ -46,13 +46,13 @@
 \link[base:invisible]{Invisibly}, an object of class \link[graphics:hist]{"histogram"}.
 }
 \description{
-The posterior probabilities calculated with the \code{\link[=Pr]{Pr()}} function, and outputted as a \code{probability} object, have an associated variability that comes from the finite size of the data sample. This variability can be interpreted in two ways:
+The posterior probabilities calculated with the \code{\link[=Pr]{Pr()}} function, and outputted as a "probability" object, have an associated variability that comes from the finite size of the data sample. This variability can be interpreted in two ways:
 \itemize{
-\item How the probabilities would change, if we could collect a very large (infinite) amount of additional data, and how likely would such change be;
+\item How the probabilities could change, if we collected a much larger (infinite) data sample, and how likely would such change be;
 \item The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
 }
 
-The \code{hist()} method for a \code{probability} object is a utility to visualize this kind of variability, in the form of a distribution.
+The \code{hist()} method for a "probability" object is a utility to visualize this kind of variability, in the form of a distribution.
 }
 \examples{
 ## Load the example `learnt` object calculated from the "penguins" dataset;
