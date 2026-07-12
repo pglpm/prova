@@ -413,7 +413,7 @@ Scatter plot:
 mi <- signif(MIbodymassspecies$value, digits = 2)
 
 ## approx r-equivalent
-r <- signif(MIbodymassspecies$.rGauss, digits = 2)
+r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), learnt = learnt)
 
@@ -545,13 +545,13 @@ The function `mutualinfo()` calculates not only the mutual information between t
 
 Let's see for example how much variation we can expect in the case of the [association between island and species]{#islandspecies}. One way to ask this is "with more data, what would be value of the mutual information between island and species, with 89% probability?". The answer was already calculated by `mutualinfo()`, and can be seen with the utility function `print()`:
 
-```{r variabilityislandspecies, eval = TRUE
+```{r variabilityislandspecies, eval = TRUE}
 print(MIislandspecies)
 ```
 
 which shows that, acquiring more data, we can expect with 89% probability a mutual information between `r signif(MIislandspecies$quantiles[1], 2)` Sh and `r signif(MIislandspecies$quantiles[4], 2)` Sh. We can also visualize our uncertainty about this "long-run" mutual information by means of a probability distribution, using the `hist()` function:
 
-```{r hisislandspecies, eval = TRUE
+```{r hisislandspecies, eval = TRUE, fig.cap='**Variability of mutual information with larger data samples**'}
 hist(MIislandspecies)
 ```
 
