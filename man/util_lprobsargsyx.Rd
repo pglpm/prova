@@ -4,7 +4,7 @@
 \alias{util_lprobsargsyx}
 \title{Prepare arguments for util_lprobsyx from data}
 \usage{
-util_lprobsargsyx(x, auxmetadata, learnt, tails = NULL)
+util_lprobsargsyx(x, auxmetadata, learnt, tails = NULL, ids = seq_len(nrow(x)))
 }
 \description{
 Used in \code{\link[=Pr]{Pr()}}, \code{\link[=qPr]{qPr()}}, \code{\link[=rPr]{rPr()}}, \code{\link[=mutualinfo]{mutualinfo()}}

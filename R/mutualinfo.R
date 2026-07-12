@@ -55,7 +55,7 @@
 #' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use roughly half of available cores; `FALSE`: use serial computation; integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #'
-#' @return A list consisting of the following elements:
+#' @return An object of class "MI", which is a list consisting of the following elements:
 #'
 #' - `$value`, the mutual information between (joint) variates `Y1names` and (joint) variates `Y2names`.
 #' - `$quantiles`, a vector with the variability quantiles for the mutual information.
@@ -533,7 +533,7 @@ mutualinfo <- function(
     ## Output
     MI <- mean(out)
     if(MI < 0){ MI <- 0 }
-    list(
+    out <- list(
         value = MI / lbase,
         quantiles = quantile(outva, probs = quantiles,
             type = 6, na.rm = TRUE, names = TRUE) / lbase,
@@ -545,4 +545,6 @@ mutualinfo <- function(
         Y2names = Y2names
         ## , ids = rowMeans(ids) # for debugging
         )
+    class(out) <- 'MI'
+    out
 }

@@ -33,7 +33,7 @@
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #' @param keepYX Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in the output? This is used for the plot method.
 #'
-#' @return An object of class "probability", effectively a list consisting of the following elements:
+#' @return An object of class "probability", which is a list consisting of the following elements:
 #'
 #' - `$values`: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
 #' - `$quantiles` (possibly `NULL`): an array with the variability quantiles (3rd dimension of the array) for such probabilities.

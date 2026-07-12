@@ -10,7 +10,9 @@ mutualinfo(
   X = NULL,
   learnt,
   tails = NULL,
-  n = NULL,
+  quantiles = c(0.055, 0.25, 0.75, 0.945),
+  ns = NULL,
+  nv = 12,
   unit = "Sh",
   parallel = TRUE,
   verbose = FALSE
@@ -28,7 +30,11 @@ for an 'learnt.rds' object, or such an object itself.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
-\item{n}{Integer or \code{NULL} (default): number of samples from which to approximately calculate the mutual information. Default as many as Monte Carlo samples in \code{learnt}.}
+\item{quantiles}{Numeric vector, between 0 and 1: desired quantiles of the variability of the mutual information. Default \code{c(0.055, 0.25, 0.75, 0.945)}, that is, the 5.5\%, 25\%, 75\%, 94.5\% quantiles. See similar argument in \code{\link[=Pr]{Pr()}}.}
+
+\item{ns}{Integer or \code{Inf} or \code{NULL} (default): number of Monte Carlo samples in the "learnt" object to use for calculating the mutual information. If \code{Inf} or \code{NULL}, use all Monte Carlo samples available in the "learnt" object.}
+
+\item{nv}{Integer, default 12: number of \emph{duplicates} of Monte Carlo samples in the "learnt" object to use for calculating the variability of the mutual information.}
 
 \item{unit}{Either one of 'Sh' for \emph{shannon} (default), 'Hart' for \emph{hartley}, 'nat' for \emph{natural unit}, or a positive real indicating the base of the logarithms to be used.}
 
@@ -37,13 +43,14 @@ for an 'learnt.rds' object, or such an object itself.}
 \item{verbose}{Logical, default \code{FALSE}: give messages about parallel processing?}
 }
 \value{
-A list consisting of the following elements:
+An object of class "MI", which is a list consisting of the following elements:
 \itemize{
-\item \code{MI}, a vector of \code{value} and \code{accuracy}: the mutual information between (joint) variates \code{Y1names} and (joint) variates \code{Y2names}.
-\item \code{CondEn12}, \code{CondEn21}, vectors of \code{value} and \code{accuracy}: the conditional entropy of the first variate given the second, and vice versa.
-\item \code{En1}, \code{En2}, vectors of \code{value} and \code{accuracy}: the (differential) entropies of the first and second variates.
-\item \code{MI.rGauss}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
-\item \code{unit}, \code{Y1names}, \code{Y1names}: same as the input arguments, included for the user's convenience.
+\item \verb{$value}, the mutual information between (joint) variates \code{Y1names} and (joint) variates \code{Y2names}.
+\item \verb{$quantiles}, a vector with the variability quantiles for the mutual information.
+\item \verb{$MCaccuracy}, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the \code{value} of the mutual information.
+\item \verb{$samples}, a vector with the variability samples for the mutual information.
+\item \verb{$MI.rGauss}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
+\item \verb{$unit}, \verb{$Y1names}, \verb{$Y1names}: same as the input arguments, included for the user's convenience.
 }
 }
 \description{
@@ -97,35 +104,14 @@ learnt <- learntExample
 
 ## mutual information between variates 'species' and 'bill_len'
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-  learnt = learnt, parallel = 1)
+  learnt = learnt, nv = 2, parallel = 1)
 
-paste0(MI$MI, ' ', MI$unit, collapse = ' +/- ')
+## The value:
+MI$value
 
-## Shannon entropy of variate 'species'
-paste0(MI$En1, ' ', MI$unit, collapse = ' +/- ')
-
-
-\donttest{
-## Shannon entropy of variate 'species',
-## conditional on a bill length of 30 mm:
-entr <- mutualinfo(
-  Y1names = 'species',
-  X = data.frame(bill_len = 30),
-  learnt = learnt, parallel = 1
-)
-
-paste0(entr$En1, ' ', entr$unit, collapse = ' +/- ')
-
-## the entropy is now lower; indeed a penguin with a short bill length
-## is most probably of the 'Adelie' species:
-probs <- Pr(
-  Y = data.frame(species = c('Adelie', 'Gentoo', 'Chinstrap')),
-  X = data.frame(bill_len = 30),
-  learnt = learnt, parallel = 1
-)
-
-print(probs)
-}
+## If we had many more data, we could instead expect to obtain values
+## within the following ranges, with corresponding probabilities:
+MI$quantiles
 
 }
 \seealso{
