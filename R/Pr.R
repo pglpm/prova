@@ -35,11 +35,11 @@
 #'
 #' @return An object of class "probability", effectively a list consisting of the following elements:
 #'
-#' - `values`: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
-#' - `quantiles` (possibly `NULL`): an array with the variability quantiles (3rd dimension of the array) for such probabilities.
-#' - `samples` (possibly `NULL`): an array with the variability samples (3rd dimension of the array) for such probabilities.
-#' - `values.MCaccuracy`, `quantiles.MCaccuracy`: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the `values` and `quantiles` elements.
-#' - `Y`, `X`: copies of the `Y` and `X` arguments.
+#' - `$values`: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
+#' - `$quantiles` (possibly `NULL`): an array with the variability quantiles (3rd dimension of the array) for such probabilities.
+#' - `$samples` (possibly `NULL`): an array with the variability samples (3rd dimension of the array) for such probabilities.
+#' - `$values.MCaccuracy`, `quantiles.MCaccuracy`: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the `values` and `quantiles` elements.
+#' - `$Y`, `$X`: copies of the `Y` and `X` arguments.
 #'
 #' @references
 #'

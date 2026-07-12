@@ -3509,8 +3509,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 #### END LOOP OVER CHAINS (WITHIN ONE CORE)
 
     ##
-    cat('\nCurrent time:',
-        format(Sys.time(), '%Y-%m-%d %H:%M:%S'))
+    cat('\nCurrent time:', format(Sys.time(), '%Y-%m-%d %H:%M:%S'))
 
     cat('\nTotal time',
         printtimediff(difftime(Sys.time(), headertimestart, units = 'auto')),

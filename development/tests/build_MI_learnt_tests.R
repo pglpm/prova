@@ -88,16 +88,15 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 system.time(testmi <- mutualinfo(Y1names = 'B', Y2names = 'N', X = NULL, learnt = learnt, n = nn))
-system.time(testmi2 <- mutualinfo2(Y1names = 'B', Y2names = 'N', X = NULL, learnt = learnt,
-    ns = NULL, nv = nn/ncol(learnt$W)))
+system.time(testmi2 <- mutualinfo3(Y1names = 'B', Y2names = 'N', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W)))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI,
-    testmi2$MI[c('value', 'value.MCaccuracy')]
+    unlist(testmi2[c(1,3)])
 )
-## [1,] 0.702276 0.00111638
-## [2,] 0.704552 0.0011    
-## [3,] 0.704264 0.00111654
+## [1,] 0.704214 0.00111485
+## [2,] 0.703409 0.00110000
+## [3,] 0.707436 0.00111551
 
 ## MI: B, R
 seqcl <- 1:length(W)
@@ -121,16 +120,16 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'B', Y2names = 'R', X = NULL, learnt = learnt, n = nn)
-testmi2 <- mutualinfo2(Y1names = 'B', Y2names = 'R', X = NULL, learnt = learnt,
+testmi2 <- mutualinfo3(Y1names = 'B', Y2names = 'R', X = NULL, learnt = learnt,
     ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI,
-    testmi2$MI[c('value', 'value.MCaccuracy')]
+    unlist(testmi2[c(1,3)])
 )
-## [1,] 0.706489 0.00111602
-## [2,] 0.704318 0.0011    
-## [3,] 0.703669 0.00111843
+## [1,] 0.704416 0.00111600
+## [2,] 0.705243 0.00110000
+## [3,] 0.704648 0.00111654
 
 ## MI: N, R
 seqcl <- 1:length(W)
@@ -154,16 +153,16 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'N', Y2names = 'R', X = NULL, learnt = learnt, n = nn)
-testmi2 <- mutualinfo2(Y1names = 'N', Y2names = 'R', X = NULL, learnt = learnt,
+testmi2 <- mutualinfo3(Y1names = 'N', Y2names = 'R', X = NULL, learnt = learnt,
     ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI,
-    testmi2$MI[c('value', 'value.MCaccuracy')]
+    unlist(testmi2[c(1,3)])
 )
-## [1,] 1.99984 0.0000477898
-## [2,] 1.99981 0.000052    
-## [3,] 1.99967 0.0000812933
+## [1,] 1.99980 0.0000429070
+## [2,] 1.99976 0.0000550000
+## [3,] 1.99982 0.0000521042
 
 ## MI: NB, R
 seqcl <- 1:length(W)
@@ -187,16 +186,16 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = c('N', 'B'), Y2names = 'R', X = NULL, learnt = learnt, n = nn)
-testmi2 <- mutualinfo2(Y1names = c('N', 'B'), Y2names = 'R', X = NULL, learnt = learnt,
+testmi2 <- mutualinfo3(Y1names = c('N', 'B'), Y2names = 'R', X = NULL, learnt = learnt,
     ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI,
-    testmi2$MI[c('value', 'value.MCaccuracy')]
+    unlist(testmi2[c(1,3)])
 )
-## [1,] 1.99976 0.0000785799
-## [2,] 1.99978 0.000061    
-## [3,] 1.99979 0.0000550814
+## [1,] 1.99980 0.0000427974
+## [2,] 1.99978 0.0000640000
+## [3,] 1.99984 0.0000395938
 
 ## MI: BR, N
 seqcl <- 1:length(W)
@@ -220,16 +219,16 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = c('B', 'R'), Y2names = 'N', X = NULL, learnt = learnt, n = nn)
-testmi2 <- mutualinfo2(Y1names = c('B', 'R'), Y2names = 'N', X = NULL, learnt = learnt,
+testmi2 <- mutualinfo3(Y1names = c('B', 'R'), Y2names = 'N', X = NULL, learnt = learnt,
     ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI,
-    testmi2$MI[c('value', 'value.MCaccuracy')]
+    unlist(testmi2[c(1,3)])
 )
-## [1,] 1.99986 0.0000507009
-## [2,] 1.99985 0.000046    
-## [3,] 1.99979 0.0000545991
+## [1,] 1.99969 0.0000827804
+## [2,] 1.99992 0.0000210000
+## [3,] 1.99986 0.0000344047
 
 ## MI: NR, B
 seqcl <- 1:length(W)
@@ -253,16 +252,17 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = c('N', 'R'), Y2names = 'B', X = NULL, learnt = learnt, n = nn)
-testmi2 <- mutualinfo2(Y1names = c('N', 'R'), Y2names = 'B', X = NULL, learnt = learnt,
+testmi2 <- mutualinfo3(Y1names = c('N', 'R'), Y2names = 'B', X = NULL, learnt = learnt,
     ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI,
-    testmi2$MI[c('value', 'value.MCaccuracy')]
+    unlist(testmi2[c(1,3)])
 )
-## [1,] 0.703589 0.0011162 
-## [2,] 0.703597 0.0011    
-## [3,] 0.704307 0.00111614
+## [1,] 0.704503 0.00111794
+## [2,] 0.702978 0.00110000
+## [3,] 0.703494 0.00111638
+
 
 ## MI: B, N | R
 seqcl <- 1:length(W)
@@ -288,15 +288,15 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'N', Y2names = 'B', X = data.frame(R = -8), tails = list(R = +1), learnt = learnt, n = nn)
-testmi2 <- mutualinfo2(Y1names = 'N', Y2names = 'B', X = data.frame(R = -8), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- mutualinfo3(Y1names = 'N', Y2names = 'B', X = data.frame(R = -8), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI,
-    testmi2$MI[c('value', 'value.MCaccuracy')]
+    unlist(testmi2[c(1,3)])
 )
-## [1,] 0.318    0.00145215
-## [2,] 0.315013 0.0015    
-## [3,] 0.314283 0.00144847
+## [1,] 0.317497 0.00145109
+## [2,] 0.318583 0.00150000
+## [3,] 0.318087 0.00145401
 
 ## MI: B, R | N
 seqcl <- 1:length(W)
@@ -322,15 +322,15 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'R', Y2names = 'B', X = data.frame(N = 'b'), learnt = learnt, n = nn)
-testmi2 <- mutualinfo2(Y1names = 'R', Y2names = 'B', X = data.frame(N = 'b'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- mutualinfo3(Y1names = 'R', Y2names = 'B', X = data.frame(N = 'b'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI,
-    testmi2$MI[c('value', 'value.MCaccuracy')]
+    unlist(testmi2[c(1,3)])
 )
-## [1,] -3.02887e-17 3.96657e-19 
-## [2,] 0            -4.20294e-17
-## [3,] 0            1.29545e-19 
+## [1,] -2.97852e-17  3.98349e-19
+## [2,]  0.00000e+00 -4.17943e-17
+## [3,]  0.00000e+00  3.29814e-19
 
 ## MI: N, R | B
 seqcl <- 1:length(W)
@@ -356,16 +356,15 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'R', Y2names = 'N', X = data.frame(B = 'y'), learnt = learnt, n = nn)
-testmi2 <- mutualinfo2(Y1names = 'R', Y2names = 'N', X = data.frame(B = 'y'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- mutualinfo3(Y1names = 'R', Y2names = 'N', X = data.frame(B = 'y'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     testmi$MI,
-    testmi2$MI[c('value', 'value.MCaccuracy')]
+    unlist(testmi2[c(1,3)])
 )
-## [1,] 0.918029 0.00101452
-## [2,] 0.918636 0.001     
-## [3,] 0.917302 0.0010145 
-
+## [1,] 0.918152 0.00101560
+## [2,] 0.915869 0.00100000
+## [3,] 0.918777 0.00101504
 
 
 
