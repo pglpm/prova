@@ -551,7 +551,7 @@ print(MIislandspecies)
 
 which shows that, acquiring more data, we can expect with 89% probability a mutual information between `r signif(MIislandspecies$quantiles[1], 2)` Sh and `r signif(MIislandspecies$quantiles[4], 2)` Sh. We can also visualize our uncertainty about this "long-run" mutual information by means of a probability distribution, using the `hist()` function:
 
-```{r hisislandspecies, eval = TRUE, fig.cap='**Variability of mutual information with larger data samples**'}
+```{r histislandspecies, eval = TRUE, fig.cap='**Variability of mutual information with larger data samples**'}
 hist(MIislandspecies)
 ```
 
