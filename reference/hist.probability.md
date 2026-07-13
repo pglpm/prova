@@ -1,14 +1,13 @@
-# Plot the variability of an object of class "probability" as a histogram
+# Plot the revisability of an object of class "probability" as a histogram
 
 The posterior probabilities calculated with the
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function, and
-outputted as a `probability` object, have an associated variability that
-comes from the finite size of the data sample. This variability can be
-interpreted in two ways:
+outputted as a "probability" object, have an associated "revisability"
+that comes from the finite size of the data sample. This revisability
+can be interpreted in two ways:
 
-- How the probabilities would change, if we could collect a very large
-  (infinite) amount of additional data, and how likely would such change
-  be;
+- How the probabilities could change, if we collected a much larger
+  (infinite) data sample, and how likely would such change be;
 
 - The relative frequency of a particular variate value in the full
   (sampled and unsampled) population is unknown; we can quantify our
@@ -16,8 +15,8 @@ interpreted in two ways:
   distribution.
 
 The [`hist()`](https://rdrr.io/r/graphics/hist.html) method for a
-`probability` object is a utility to visualize this kind of variability,
-in the form of a distribution.
+"probability" object is a utility to visualize this kind of
+revisability, in the form of a distribution.
 
 ## Usage
 
@@ -120,7 +119,7 @@ to plot quantile ranges.
 ## variates: 'species' and 'bill_len'
 learnt <- learntExample
 
-## calculate the probability, and its variability,
+## calculate the probability, and its revisability,
 ## for the value 'Adelie' of the "species" variate
 probs <- Pr(Y = data.frame(species = 'Adelie'), learnt = learnt, parallel = 1)
 probs$values
@@ -128,7 +127,7 @@ probs$values
 #> species      [,1]
 #>   Adelie 0.440685
 
-## show the variability of this probability; equivalently show
+## show the revisability of this probability; equivalently show
 ## the probability distribution for the relative frequency of
 ## 'Adelie' penguins in the full population
 hist(probs, legend = 'topright')

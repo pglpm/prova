@@ -56,7 +56,7 @@ A list consisting of the following elements:
 
 - `value`: value of \\\mathrm{Pr}(Y = y \vert X = x, \text{data})\\.
 
-- `samples`: a vector with the variability samples of the probability
+- `samples`: a vector with the revisability samples of the probability
   above.
 
 - `jacobians`: a vector with the Jacobian of the internal

@@ -3,7 +3,7 @@
 This [`base::plot()`](https://rdrr.io/r/base/plot.html) method is a
 utility to plot probabilities obtained with
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md), as well as
-their variabilities. The probabilities are plotted either against `Y`,
+their revisabilities. The probabilities are plotted either against `Y`,
 with one curve for each value of `X`, or vice versa.
 
 ## Usage
@@ -12,7 +12,7 @@ with one curve for each value of `X`, or vice versa.
 # S3 method for class 'probability'
 plot(
   x,
-  variability = NULL,
+  spread = NULL,
   subset = NULL,
   PvsY = NULL,
   legend = "top",
@@ -39,15 +39,15 @@ plot(
   Object of class "probability", obtained with
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 
-- variability:
+- spread:
 
   One of the values `'quantiles'`, `'samples'`, `'none'` (equivalent to
-  `NA` or `FALSE`), or `NULL` (default), in which case the variability
+  `NA` or `FALSE`), or `NULL` (default), in which case the revisability
   available in `p` is used. This argument chooses how to represent the
-  variability of the probability; see
+  revisability of the probability; see
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md). If the
-  requested variability is not available in the object `p`, then a
-  warning is issued and no variability is plotted.
+  requested representation is not available in the object `x`, then a
+  warning is issued and no revisability is plotted.
 
 - subset:
 
@@ -102,7 +102,7 @@ plot, see
 posterior probabilities and quantiles.
 
 [`hist.probability()`](https://pglpm.github.io/prova/reference/hist.probability.md)
-to plot the variability of the probabilities as a distribution.
+to plot the revisability of the probabilities as a distribution.
 
 [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
 (on which `plot.probability()` is based) for more general plots.

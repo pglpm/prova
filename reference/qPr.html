@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calculate quantiles — qPr"><meta name="description" content="This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the variability of such quantiles if more training data were available."><meta property="og:description" content="This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the variability of such quantiles if more training data were available."></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calculate quantiles — qPr"><meta name="description" content="This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the revisability of such quantiles if more training data were available."><meta property="og:description" content="This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the revisability of such quantiles if more training data were available."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@
     </div>
 
     <div class="ref-description section level2">
-    <p>This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the variability of such quantiles if more training data were available.</p>
+    <p>This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the revisability of such quantiles if more training data were available.</p>
     </div>
 
     <div class="section level2">
@@ -97,11 +97,11 @@
 
 
 <dt id="arg-nsamples">nsamples<a class="anchor" aria-label="anchor" href="#arg-nsamples"></a></dt>
-<dd><p>Integer or <code>NULL</code> or <code>'all'</code> (default): desired number of samples of the variability of the quantile for <code>Y</code>. If <code>NULL</code>, no samples are reported. If <code>'all'</code> (or <code>Inf</code>), all samples obtained by the <code><a href="learn.html">learn()</a></code> function are used.</p></dd>
+<dd><p>Integer or <code>NULL</code> or <code>'all'</code> (default): desired number of samples of the revisability of the quantile for <code>Y</code>. If <code>NULL</code>, no samples are reported. If <code>'all'</code> (or <code>Inf</code>), all samples obtained by the <code><a href="learn.html">learn()</a></code> function are used.</p></dd>
 
 
 <dt id="arg-quantiles">quantiles<a class="anchor" aria-label="anchor" href="#arg-quantiles"></a></dt>
-<dd><p>Numeric vector, between 0 and 1, or <code>NULL</code>: desired quantiles of the variability of the quantile for <code>Y</code>. Default <code>c(0.055, 0.25, 0.75, 0.945)</code>, that is, the 5.5%, 25%, 75%, 94.5% quantiles (these are typical quantile values in the Bayesian literature: they give 50% and 89% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty). If <code>NULL</code>, no quantiles are calculated.</p></dd>
+<dd><p>Numeric vector, between 0 and 1, or <code>NULL</code>: desired quantiles of the revisability of the quantile for <code>Y</code>. Default <code>c(0.055, 0.25, 0.75, 0.945)</code>, that is, the 5.5%, 25%, 75%, 94.5% quantiles (these are typical quantile values in the Bayesian literature: they give 50% and 89% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty). If <code>NULL</code>, no quantiles are calculated.</p></dd>
 
 
 <dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
@@ -130,14 +130,14 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list of the following elements:</p><ul><li><p><code>values</code>: a matrix with the requested \(Y\)-quantiles <code>p</code> conditional on the requested \(X\)-values in <code>X</code>, for all combinations of <code>p</code> (rows) and <code>X</code> (columns).</p></li>
-<li><p><code>quantiles</code> (possibly <code>NULL</code>): an array with the variability quantiles (3rd dimension of the array) for the quantiles of the <code>value</code> element.</p></li>
-<li><p><code>samples</code> (possibly <code>NULL</code>): an array with the variability samples (3rd dimension of the array) for such quantiles.</p></li>
-<li><p><code>Y</code>, <code>X</code>: copies of the <code>Y</code> and <code>X</code> arguments.</p></li>
+    <p>A list of the following elements:</p><ul><li><p><code>$values</code>: a matrix with the requested \(Y\)-quantiles <code>p</code> conditional on the requested \(X\)-values in <code>X</code>, for all combinations of <code>p</code> (rows) and <code>X</code> (columns).</p></li>
+<li><p><code>$quantiles</code> (possibly <code>NULL</code>): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the <code>value</code> element.</p></li>
+<li><p><code>$samples</code> (possibly <code>NULL</code>): an array with the revisability samples (3rd dimension of the array) for such quantiles.</p></li>
+<li><p><code>$Y</code>, <code>$X</code>: copies of the <code>Y</code> and <code>X</code> arguments.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function calculates the quantiles of \(\mathrm{Pr}(Y = y \vert X = x, \text{data})\) or of \(\mathrm{Pr}(Y = y \vert X \le x, \text{data})\) or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \(Y\) having specified cumulative probabilities or conditional probabilities. It also calculates the variability of those quantiles if more learning data were provided. It is somewhat analogous to the <code>q</code>-variants of R distribution functions, such as <code><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">stats::qnorm()</a></code>. The variability can be expressed in the form of quantiles, samples, or both, as in the <code><a href="Pr.html">Pr()</a></code> function. If several joint values are given for the probability levels and for <code>X</code>, the function creates a 2D grid of results for all possible combinations of the given probability levels and <code>X</code> values. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
+    <p>This function calculates the quantiles of \(\mathrm{Pr}(Y = y \vert X = x, \text{data})\) or of \(\mathrm{Pr}(Y = y \vert X \le x, \text{data})\) or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \(Y\) having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the <code>qxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. The revisability can be expressed in the form of quantiles, samples, or both, as in the <code><a href="Pr.html">Pr()</a></code> function. If several joint values are given for the probability levels and for <code>X</code>, the function creates a 2D grid of results for all possible combinations of the given probability levels and <code>X</code> values. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -192,7 +192,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>     44.3 0.5026998</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     48.3 0.7501943</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## display the variability about the quantiles</span></span></span>
+<span class="r-in"><span><span class="co">## display the revisability about the quantiles</span></span></span>
 <span class="r-in"><span><span class="va">quants</span><span class="op">$</span><span class="va">quantiles</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , Q = 5.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

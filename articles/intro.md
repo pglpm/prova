@@ -751,10 +751,10 @@ Fspecies10$values
 print(Fspecies10, 'values')
 # $values
 #            
-# species      [,1]
-#   Adelie    0.299
-#   Chinstrap 0.305
-#   Gentoo    0.397
+# species         [,1]
+#   Adelie    0.298718
+#   Chinstrap 0.304615
+#   Gentoo    0.396668
 ```
 
 These frequency estimates have also another important meaning: they are
@@ -867,11 +867,11 @@ function to display values and quantiles together:
 ``` r
 
 print(Fspecies10)
-#            probability & variability
-# species     value Q5.5%  Q25%  Q75% Q94.5%
-#   Adelie    0.299 0.122 0.207 0.376  0.507
-#   Chinstrap 0.305 0.123 0.211 0.389  0.522
-#   Gentoo    0.397 0.192 0.300 0.489  0.618
+#            probability
+# species      value    +/-  Q5.5%   Q25%   Q75% Q94.5%
+#   Adelie    0.2987 0.0018 0.1218 0.2072 0.3763 0.5068
+#   Chinstrap 0.3046 0.0018 0.1230 0.2112 0.3889 0.5221
+#   Gentoo    0.3967 0.0021 0.1921 0.2995 0.4894 0.6183
 ```
 
 ### Imputation of missing data
@@ -899,10 +899,10 @@ imputeddata <- Pr(Y = Yimp, X = X, learnt = learnt10, parallel = 4)
 print(imputeddata)
 # , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007
 # 
-#         probability & variability
-# sex      value Q5.5%  Q25%  Q75% Q94.5%
-#   female 0.674 0.240 0.516 0.872 0.9735
-#   male   0.326 0.027 0.128 0.484 0.7610
+#         probability
+# sex       value   +/-  Q5.5%   Q25%   Q75% Q94.5%
+#   female 0.6739 0.003 0.2390 0.5161 0.8724 0.9735
+#   male   0.3261 0.003 0.0265 0.1276 0.4839 0.7609
 ```
 
 We see that penguin \#1 might have been female with probability 0.67,
@@ -1005,14 +1005,14 @@ Fspeciessex10 <- Pr(
 ## Display the estimated frequencies of all six combinations,
 ## as well as their credibility intervals
 print(Fspeciessex10)
-#                   probability & variability
-# species,sex        value  Q5.5%   Q25%  Q75% Q94.5%
-#   Adelie,female    0.163 0.0508 0.0984 0.215  0.319
-#   Chinstrap,female 0.129 0.0340 0.0728 0.171  0.272
-#   Gentoo,female    0.288 0.1240 0.1990 0.366  0.495
-#   Adelie,male      0.135 0.0380 0.0754 0.179  0.280
-#   Chinstrap,male   0.175 0.0556 0.1050 0.229  0.351
-#   Gentoo,male      0.109 0.0216 0.0530 0.146  0.247
+#                   probability
+# species,sex         value    +/-   Q5.5%    Q25%   Q75% Q94.5%
+#   Adelie,female    0.1634 0.0013 0.05080 0.09840 0.2153 0.3193
+#   Chinstrap,female 0.1293 0.0014 0.03400 0.07280 0.1710 0.2719
+#   Gentoo,female    0.2881 0.0019 0.12390 0.19870 0.3660 0.4954
+#   Adelie,male      0.1353 0.0013 0.03760 0.07540 0.1794 0.2804
+#   Chinstrap,male   0.1754 0.0013 0.05560 0.10540 0.2292 0.3505
+#   Gentoo,male      0.1086 0.0012 0.02159 0.05305 0.1459 0.2467
 ```
 
 Now let’s continue with our simpler plan.
@@ -1095,19 +1095,19 @@ precise values are contained in the `values` element of the
 print(Fspecies10I)
 # , , |island = Biscoe
 # 
-#            probability & variability
-# species     value Q5.5%   Q25%  Q75% Q94.5%
-#   Adelie    0.145 0.015 0.0526 0.207 0.3800
-#   Chinstrap 0.137 0.012 0.0476 0.193 0.3780
-#   Gentoo    0.718 0.419 0.6090 0.853 0.9409
+#            probability
+# species      value    +/-   Q5.5%   Q25%   Q75% Q94.5%
+#   Adelie    0.1450 0.0024 0.01482 0.0526 0.2069 0.3800
+#   Chinstrap 0.1371 0.0016 0.01245 0.0476 0.1933 0.3782
+#   Gentoo    0.7179 0.0030 0.41880 0.6086 0.8528 0.9409
 # 
 # , , |island = Dream
 # 
-#            probability & variability
-# species     value Q5.5%  Q25%  Q75% Q94.5%
-#   Adelie    0.358 0.100 0.228 0.477  0.657
-#   Chinstrap 0.475 0.186 0.338 0.607  0.774
-#   Gentoo    0.167 0.019 0.068 0.237  0.417
+#            probability
+# species      value    +/-  Q5.5%   Q25%   Q75% Q94.5%
+#   Adelie    0.3582 0.0022 0.1041 0.2282 0.4767 0.6569
+#   Chinstrap 0.4747 0.0025 0.1863 0.3380 0.6070 0.7737
+#   Gentoo    0.1671 0.0019 0.0192 0.0680 0.2369 0.4175
 ```
 
 According to these estimates, on Biscoe there should be a predominance
@@ -1188,19 +1188,19 @@ function as usual:
 print(Fspecies10I)
 # , , |island = Biscoe
 # 
-#            probability & variability
-# species     value Q5.5%   Q25%  Q75% Q94.5%
-#   Adelie    0.145 0.015 0.0526 0.207 0.3800
-#   Chinstrap 0.137 0.012 0.0476 0.193 0.3780
-#   Gentoo    0.718 0.419 0.6090 0.853 0.9409
+#            probability
+# species      value    +/-   Q5.5%   Q25%   Q75% Q94.5%
+#   Adelie    0.1450 0.0024 0.01482 0.0526 0.2069 0.3800
+#   Chinstrap 0.1371 0.0016 0.01245 0.0476 0.1933 0.3782
+#   Gentoo    0.7179 0.0030 0.41880 0.6086 0.8528 0.9409
 # 
 # , , |island = Dream
 # 
-#            probability & variability
-# species     value Q5.5%  Q25%  Q75% Q94.5%
-#   Adelie    0.358 0.100 0.228 0.477  0.657
-#   Chinstrap 0.475 0.186 0.338 0.607  0.774
-#   Gentoo    0.167 0.019 0.068 0.237  0.417
+#            probability
+# species      value    +/-  Q5.5%   Q25%   Q75% Q94.5%
+#   Adelie    0.3582 0.0022 0.1041 0.2282 0.4767 0.6569
+#   Chinstrap 0.4747 0.0025 0.1863 0.3380 0.6070 0.7737
+#   Gentoo    0.1671 0.0019 0.0192 0.0680 0.2369 0.4175
 ```
 
 ### Differences from “null-hypothesis testing” and *p*-value methods
@@ -1282,14 +1282,14 @@ print(Fspecies10IS, 'values')
 # $values
 #            |island,sex
 # species     Biscoe,female Dream,female Torgersen,female Biscoe,male
-#   Adelie            0.128        0.399            0.483       0.211
-#   Chinstrap         0.111        0.395            0.266       0.221
-#   Gentoo            0.761        0.205            0.251       0.569
+#   Adelie         0.127799     0.399408         0.482569    0.210545
+#   Chinstrap      0.111345     0.395410         0.266167    0.220873
+#   Gentoo         0.760857     0.205182         0.251263    0.568582
 #            |island,sex
 # species     Dream,male Torgersen,male
-#   Adelie         0.322          0.450
-#   Chinstrap      0.542          0.376
-#   Gentoo         0.137          0.175
+#   Adelie      0.321940       0.449652
+#   Chinstrap   0.541526       0.375734
+#   Gentoo      0.136535       0.174614
 ```
 
   
@@ -1546,11 +1546,11 @@ is as follows:
 ``` r
 
 print(Fspecies60)
-#            probability & variability
-# species     value Q5.5%  Q25%  Q75% Q94.5%
-#   Adelie    0.395 0.296 0.352 0.436  0.498
-#   Chinstrap 0.210 0.133 0.174 0.242  0.295
-#   Gentoo    0.395 0.298 0.353 0.436  0.495
+#            probability
+# species       value     +/-  Q5.5%   Q25%   Q75% Q94.5%
+#   Adelie    0.39500 0.00100 0.2960 0.3522 0.4357 0.4976
+#   Chinstrap 0.20999 0.00081 0.1331 0.1735 0.2424 0.2955
+#   Gentoo    0.39500 0.00100 0.2982 0.3528 0.4360 0.4946
 ```
 
 > From a sample of 10 penguins, the inference about the relative
@@ -1856,11 +1856,11 @@ be extracted from the `Fspeciesall` in the usual way:
 ``` r
 
 print(Fspeciesall)
-#            probability & variability
-# species      value  Q5.5%   Q25%   Q75% Q94.5%
-#   Adelie    0.4417 0.3981 0.4231 0.4603 0.4838
-#   Chinstrap 0.1988 0.1660 0.1839 0.2126 0.2340
-#   Gentoo    0.3594 0.3194 0.3413 0.3773 0.4002
+#            probability
+# species       value     +/-   Q5.5%    Q25%    Q75%  Q94.5%
+#   Adelie    0.44171 0.00041 0.39809 0.42309 0.46035 0.48378
+#   Chinstrap 0.19884 0.00040 0.16568 0.18395 0.21262 0.23371
+#   Gentoo    0.35945 0.00039 0.31938 0.34128 0.37726 0.40024
 ```
 
 > From a sample of 344 penguins \[add a more thorough specification of
@@ -1953,11 +1953,11 @@ hist(Fanalysis, xlim = c(0, 1), col = 2:4, ## same colours as before!
 print(Fanalysis)
 # , , |island = Biscoe
 # 
-#            probability & variability
-# species      value  Q5.5%   Q25%   Q75% Q94.5%
-#   Adelie    0.2662 0.2130 0.2427 0.2880 0.3220
-#   Chinstrap 0.0117 0.0028 0.0059 0.0156 0.0254
-#   Gentoo    0.7221 0.6662 0.6993 0.7463 0.7747
+#            probability
+# species       value    +/-    Q5.5%    Q25%    Q75%  Q94.5%
+#   Adelie    0.26621 0.0006 0.213200 0.24273 0.28830 0.32230
+#   Chinstrap 0.01167 0.0002 0.002755 0.00590 0.01559 0.02538
+#   Gentoo    0.72211 0.0006 0.666200 0.69935 0.74631 0.77468
 ```
 
 Conclusion:
@@ -2020,11 +2020,11 @@ hist(Fanalysis, xlim = c(0, 1), col = 5:7,
 print(Fanalysis)
 # , , |species = Adelie
 # 
-#            probability & variability
-# island       value Q5.5%   Q25%   Q75% Q94.5%
-#   Biscoe    0.2919 0.238 0.2668 0.3156  0.353
-#   Dream     0.3696 0.308 0.3427 0.3964  0.434
-#   Torgersen 0.3385 0.279 0.3115 0.3641  0.401
+#            probability
+# island        value     +/-  Q5.5%    Q25%    Q75% Q94.5%
+#   Biscoe    0.29190 0.00063 0.2377 0.26682 0.31562 0.3525
+#   Dream     0.36962 0.00065 0.3084 0.34267 0.39637 0.4337
+#   Torgersen 0.33848 0.00079 0.2787 0.31146 0.36410 0.4006
 ```
 
 Conclusions:

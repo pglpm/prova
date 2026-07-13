@@ -173,10 +173,10 @@ learn(
 - maxrelMCSE:
 
   Numeric positive, default `+Inf`: desired maximal *relative Monte
-  Carlo Standard Error* of calculated probabilities with respect to
-  their variability with new data. The default `+Inf` means that
-  `minESS` is used instead. `maxrelMCSE` is related to `minESS` by
-  \\\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}\\.
+  Carlo Standard Error* of calculated probabilities. The default `+Inf`
+  means that `minESS` is used instead. `maxrelMCSE` is related to
+  `minESS` by \\\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} +
+  \mathrm{initES}}\\.
 
 - minESS:
 
@@ -235,11 +235,11 @@ output directory contain several diagnostic files for the Monte Carlo
 computation; in particular:
 
 - `MCtraces.pdf`: shows several trace plots of the Monte Carlo sampling;
-  the correspondin data are in the file `MCtraces.rds`.
+  the corresponding data are in the file `MCtraces.rds`.
 
 - `plotsamples_learnt.pdf`, `plotquantiles_learnt.pdf`: show the
   marginal posterior distributions of each individual variate, together
-  with their variability (as samples or quantiles).
+  with their "revisability" (as samples or quantiles).
 
 - `log-1.log`, `log-2.log`, ... one for each parallel core; report the
   progress of each parallel Monte Carlo computation and notes about it.
@@ -260,7 +260,7 @@ useful to report Monte Carlo convergence in any work of yours that used
 
 This function takes as main inputs a set of data and metadata, and
 computes the full joint probability distribution for new data, including
-its variability. From this full joint distribution any other
+its "revisability". From this full joint distribution any other
 distributions of interest can subsequently be computed; see
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) and related
 functions. This computation can also be interpreted as an estimation of
@@ -435,8 +435,8 @@ learnt <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/Rtmphoxjrz/prova-V1_D3_S10_260710T194409_1c187e36d2
-#> Prova v1.0.5.
+#> /tmp/RtmpyZEBpL/prova-V1_D3_S10_260713T125453_1a49609bb182
+#> Prova v1.2.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
@@ -451,32 +451,32 @@ learnt <- learn(
 #> 
 #> Checking test data
 #> (#1 #2 #3):
-#> rel. quantile error: 0.277 to 0.757
-#> ESS: 8.59 to 8.59
-#> needed thinning: 1.05 to 5.15
-#> average: 0.144 to 0.904
-#> quantile width: 0.216 to 3.27
+#> rel. quantile error: 0.58 to 0.867
+#> ESS: 5.68 to 8.59
+#> needed thinning: 3.03 to 6.77
+#> average: 0.0878 to 0.305
+#> quantile width: 0.191 to 0.798
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 35 secs
-#> Average preparation & finalization time: 34 secs.
-#> Average Monte Carlo time per chain: 0.7 secs.
+#> Total computation time: 34 secs
+#> Average preparation & finalization time: 32 secs.
+#> Average Monte Carlo time per chain: 0.73 secs.
 #> Max total memory used: approx 350MB.
 #> Max memory used per core: approx 350MB.
 #> Removing temporary output files.
 #> Finished.
 #> 
-#> ********************************************************
+#> **********************************************************
 #> Output saved in directory
-#> /tmp/Rtmphoxjrz/prova-V1_D3_S10_260710T194409_1c187e36d2
-#> ********************************************************
+#> /tmp/RtmpyZEBpL/prova-V1_D3_S10_260713T125453_1a49609bb182
+#> **********************************************************
 
 ## Check structure of `learnt` object:
 str(learnt)
 #> List of 6
-#>  $ Rmean      : num [1, 1:64, 1:9] 2.92 -1.05 3.25 2.55 -2.54 ...
-#>  $ Rsd        : num [1, 1:64, 1:9] 0.346 7.822 1.841 1.145 0.638 ...
-#>  $ W          : num [1:64, 1:9] 1.11e-12 1.17e-09 1.76e-27 3.55e-262 7.41e-28 ...
+#>  $ Rmean      : num [1, 1:64, 1:9] -1.047 3.247 2.547 -2.543 -0.296 ...
+#>  $ Rsd        : num [1, 1:64, 1:9] 8.224 0.227 1.145 0.638 7.141 ...
+#>  $ W          : num [1:64, 1:9] 4.10e-13 4.32e-10 6.51e-28 1.31e-262 2.73e-28 ...
 #>  $ MCindex    : num [1:9(1d)] 1 2 3 4 6 7 8 9 10
 #>  $ auxmetadata:'data.frame': 1 obs. of  24 variables:
 #>   ..$ name             : chr "V"
@@ -497,10 +497,10 @@ str(learnt)
 #>   ..$ domainmaxminushs : num Inf
 #>   ..$ tdomainminplushs : num -Inf
 #>   ..$ tdomainmaxminushs: num Inf
-#>   ..$ tlocation        : num 0.0796
-#>   ..$ tscale           : num 0.507
-#>   ..$ plotmin          : num -2.34
-#>   ..$ plotmax          : num 1.99
+#>   ..$ tlocation        : num 0.729
+#>   ..$ tscale           : num 0.206
+#>   ..$ plotmin          : num 0.179
+#>   ..$ plotmax          : num 1.94
 #>   ..$ V1               : logi NA
 #>   ..$ V2               : logi NA
 #>  $ auxinfo    :List of 12
@@ -532,15 +532,15 @@ str(learnt)
 #>   ..$ maxusedcomponents  : num 2
 #>   ..$ nonfinitechains    : num 0
 #>   ..$ stoppedchains      : num 0
-#>   ..$ rel. quantile error: Named num [1:4] 0.384 0.277 0.395 0.757
+#>   ..$ rel. quantile error: Named num [1:4] 0.58 0.737 0.867 0.758
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ ESS                : Named num [1:4] 8.59 8.59 8.59 8.59
+#>   ..$ ESS                : Named num [1:4] 5.68 8.14 8.59 8.59
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ needed thinning    : Named num [1:4] 1.33 1.05 1.41 5.15
+#>   ..$ needed thinning    : Named num [1:4] 3.03 4.89 6.77 5.17
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ average            : Named num [1:4] 0.198 0.18 0.144 0.904
+#>   ..$ average            : Named num [1:4] 0.1399 0.3048 0.0878 0.2886
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ quantile width     : Named num [1:4] 0.216 0.26 0.229 3.267
+#>   ..$ quantile width     : Named num [1:4] 0.191 0.645 0.399 0.798
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
 # }
 ```

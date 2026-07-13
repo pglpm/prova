@@ -191,13 +191,17 @@ and of its documents.
 
 - [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
   : Plot numeric or character values
+- [`hist(`*`<MI>`*`)`](https://pglpm.github.io/prova/reference/hist.MI.md)
+  : Plot the revisability of an object of class "MI" as a histogram
 - [`hist(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/hist.probability.md)
-  : Plot the variability of an object of class "probability" as a
+  : Plot the revisability of an object of class "probability" as a
   histogram
 - [`plot(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/plot.probability.md)
   : Plot an object of class "probability"
 - [`plotquantiles()`](https://pglpm.github.io/prova/reference/plotquantiles.md)
   : Plot pairs of quantiles
+- [`print(`*`<MI>`*`)`](https://pglpm.github.io/prova/reference/print.MI.md)
+  : Print an object of class "MI" (mutual information)
 - [`print(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/print.probability.md)
   : Print an object of class "probability"
 
@@ -266,7 +270,7 @@ For developers (beware!)
   : Calculate probabilities, quantiles, etc, for all Y and X
   combinations
 - [`util_denorm()`](https://pglpm.github.io/prova/reference/util_denorm.md)
-  : Utility function to avoid finite-precision accuracys
+  : Utility function to improve accuracy
 - [`util_joinPtraces()`](https://pglpm.github.io/prova/reference/util_joinPtraces.md)
   : Join '\_\_\_\_tempPtraces-' files
 - [`util_lprobsargsyx()`](https://pglpm.github.io/prova/reference/util_lprobsargsyx.md)
@@ -275,7 +279,7 @@ For developers (beware!)
   : Calculate collection of log-probabilities for different components
   and samples
 - [`util_lprobsmi()`](https://pglpm.github.io/prova/reference/util_lprobsmi.md)
-  : Calculate and combine log-probabilities
+  : Calculate and combine log-probabilities to compute entropies
 - [`util_prepPcheckpoints()`](https://pglpm.github.io/prova/reference/util_prepPcheckpoints.md)
   : Format datapoints used for MCMC monitoring
 - [`util_qYXcont()`](https://pglpm.github.io/prova/reference/util_qYXcont.md)

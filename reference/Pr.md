@@ -2,9 +2,9 @@
 
 This function calculates posterior probabilities and probability
 densities, cumulative posterior probabilities, and mixtures thereof. It
-also outputs the variability of such probabilities if more training data
-were available, and the Monte Carlo Standard Error for the calculated
-posterior probabilities.
+also outputs the "revisability" of such probabilities if more training
+data were available, and the Monte Carlo Standard Error for the
+calculated posterior probabilities.
 
 ## Usage
 
@@ -77,7 +77,7 @@ Pr(
 - nsamples:
 
   Integer or `NULL` or `'all'` (default): desired number of samples of
-  the variability of the probability for `Y`. If `NULL`, no samples are
+  the revisability of the probability for `Y`. If `NULL`, no samples are
   reported. If `'all'` (or `Inf`), all samples obtained by the
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function
   are used.
@@ -85,7 +85,7 @@ Pr(
 - quantiles:
 
   Numeric vector, between 0 and 1, or `NULL`: desired quantiles of the
-  variability of the probability for `Y`. Default
+  revisability of the probability for `Y`. Default
   `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5%
   quantiles. These are typical quantile values in the Bayesian
   literature: they give 50% and 89% credibility intervals, which
@@ -123,24 +123,24 @@ Pr(
 
 ## Value
 
-An object of class "probability", effectively a list consisting of the
+An object of class "probability", which is a list consisting of the
 following elements:
 
-- `values`: a matrix with the probabilities \\\mathrm{Pr}(Y = y \vert X
+- `$values`: a matrix with the probabilities \\\mathrm{Pr}(Y = y \vert X
   = x, \text{data})\\, for all joint values \\y\\ of the \\Y\\-variates
   (rows) and all joint values \\x\\ of the \\X\\-variates (columns).
 
-- `quantiles` (possibly `NULL`): an array with the variability quantiles
+- `$quantiles` (possibly `NULL`): an array with the revisability
+  quantiles (3rd dimension of the array) for such probabilities.
+
+- `$samples` (possibly `NULL`): an array with the revisability samples
   (3rd dimension of the array) for such probabilities.
 
-- `samples` (possibly `NULL`): an array with the variability samples
-  (3rd dimension of the array) for such probabilities.
+- `$values.MCaccuracy`, `quantiles.MCaccuracy`: arrays with the
+  numerical accuracies (roughly speaking a standard deviation) of the
+  Monte Carlo calculations for the `values` and `quantiles` elements.
 
-- `values.MCaccuracy`, `quantiles.MCaccuracy`: arrays with the numerical
-  accuracies (roughly speaking a standard deviation) of the Monte Carlo
-  calculations for the `values` and `quantiles` elements.
-
-- `Y`, `X`: copies of the `Y` and `X` arguments.
+- `$Y`, `$X`, `$tails`: copies of the `Y`, `X`, `tails` arguments.
 
 ## Details
 
@@ -148,12 +148,10 @@ This function calculates the posterior probability \\\mathrm{Pr}(Y = y
 \vert X = x, \text{data})\\, where \\Y = y\\ and \\X = x\\ are two (non
 overlapping) sets of joint variate values, inputted as [data
 frame](https://rdrr.io/r/base/data.frame.html) arguments `Y` and `X`. It
-is somewhat analogous to the `d`-variants and `p`-variantes of R
-distribution functions, such as
-[`stats::dnorm()`](https://rdrr.io/r/stats/Normal.html) and
-[`stats::pnorm()`](https://rdrr.io/r/stats/Normal.html). If `X` is
-omitted or `NULL`, then the posterior probability \\\mathrm{Pr}(Y = y
-\vert \text{data})\\ is calculated.
+is somewhat analogous to the `dxxx`-variants and `pxxx`-variants of [R
+distribution functions](https://rdrr.io/r/stats/Distributions.html). If
+`X` is omitted or `NULL`, then the posterior probability \\\mathrm{Pr}(Y
+= y \vert \text{data})\\ is calculated.
 
 For some variates in `Y` or `X`, tail values can also be prescribed, so
 that this function calculates mixed probabilities such as
@@ -161,11 +159,11 @@ that this function calculates mixed probabilities such as
 x_2, \dotsc, \text{data})\\ .\$\$ Tail values are inputted via the
 `'tails'` argument; see "Usage".
 
-This function also outputs the variability of the posterior
+This function also outputs the "revisability" of the posterior
 probabilities above, that is, probabilities such as \\\mathrm{Pr}(Y = y
 \vert X = x, \text{new\\data}, \text{data})\\ that we could have if more
 learning data were provided, as well as a number of samples of the
-possible values of such probability. This variability can be outputted
+possible values of such probability. This revisability can be outputted
 in two ways; the user can choose either, or both, or none:
 
 - As samples (default 3600 samples, depending on the 'nsamples' argument
@@ -175,7 +173,7 @@ in two ways; the user can choose either, or both, or none:
   could have.
 
 - As quantiles (default 5.5%, 25%, 75%, 94.5%) of the possible
-  variability.
+  revisability.
 
 If several joint values are given for `Y` or `X`, the function will
 create a 2D grid of results for all possible combinations of the given

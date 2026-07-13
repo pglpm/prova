@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,7 +99,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function generates datapoints according to the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, \text{data})\) or \(\mathrm{Pr}(Y = y \vert X \le x, \text{data})\) or combinations thereof, for the variates specified in the argument <code>Y</code>, and conditional on the variate values specified in the argument <code>X</code>. It is somewhat analogous to the <code>r</code>-variants of R distribution functions, such as <code><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">stats::rnorm()</a></code>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probability \(\mathrm{Pr}(Y | \text{data})\) is used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
+    <p>This function generates datapoints according to the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, \text{data})\) or \(\mathrm{Pr}(Y = y \vert X \le x, \text{data})\) or combinations thereof, for the variates specified in the argument <code>Y</code>, and conditional on the variate values specified in the argument <code>X</code>. It is somewhat analogous to the <code>rxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probability \(\mathrm{Pr}(Y | \text{data})\) is used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -126,8 +126,8 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">datapoints</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Chinstrap"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "Gentoo"    "Adelie"    "Adelie"    "Adelie"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Gentoo"    "Gentoo"    "Chinstrap" "Chinstrap" "Gentoo"    "Adelie"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "Adelie"    "Chinstrap" "Chinstrap" "Adelie"   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -142,11 +142,11 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">datapoints</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">## row names give MCMC information</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    species bill_len</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     36.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     38.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     35.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Chinstrap     42.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Chinstrap     48.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Chinstrap     48.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo     49.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     41.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Chinstrap     48.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     37.0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 3:</span></span></span>

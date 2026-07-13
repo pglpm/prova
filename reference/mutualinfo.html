@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,9 @@
 <span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">learnt</span>,</span>
 <span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  n <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.055</span>, <span class="fl">0.25</span>, <span class="fl">0.75</span>, <span class="fl">0.945</span><span class="op">)</span>,</span>
+<span>  ns <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nv <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  unit <span class="op">=</span> <span class="st">"Sh"</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -88,8 +90,16 @@ for an 'learnt.rds' object, or such an object itself.</p></dd>
 <dd><p>Named vector or list, or <code>NULL</code> (default). The names must match some or all of the variates in arguments <code>X</code>. For variates in this list, the probability conditional is understood in a semi-open interval sense: \(X \le x\) or \(X \ge x\), an so on. See analogous argument in <code><a href="Pr.html">Pr()</a></code>.</p></dd>
 
 
-<dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
-<dd><p>Integer or <code>NULL</code> (default): number of samples from which to approximately calculate the mutual information. Default as many as Monte Carlo samples in <code>learnt</code>.</p></dd>
+<dt id="arg-quantiles">quantiles<a class="anchor" aria-label="anchor" href="#arg-quantiles"></a></dt>
+<dd><p>Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default <code>c(0.055, 0.25, 0.75, 0.945)</code>, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in <code><a href="Pr.html">Pr()</a></code>.</p></dd>
+
+
+<dt id="arg-ns">ns<a class="anchor" aria-label="anchor" href="#arg-ns"></a></dt>
+<dd><p>Integer or <code>Inf</code> or <code>NULL</code> (default): number of Monte Carlo samples in the "learnt" object to use for calculating the mutual information. If <code>Inf</code> or <code>NULL</code>, use all Monte Carlo samples available in the "learnt" object.</p></dd>
+
+
+<dt id="arg-nv">nv<a class="anchor" aria-label="anchor" href="#arg-nv"></a></dt>
+<dd><p>Integer, default 12: number of <em>duplicates</em> of Monte Carlo samples in the "learnt" object to use for calculating the revisability of the mutual information.</p></dd>
 
 
 <dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
@@ -106,11 +116,12 @@ for an 'learnt.rds' object, or such an object itself.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list consisting of the following elements:</p><ul><li><p><code>MI</code>, a vector of <code>value</code> and <code>accuracy</code>: the mutual information between (joint) variates <code>Y1names</code> and (joint) variates <code>Y2names</code>.</p></li>
-<li><p><code>CondEn12</code>, <code>CondEn21</code>, vectors of <code>value</code> and <code>accuracy</code>: the conditional entropy of the first variate given the second, and vice versa.</p></li>
-<li><p><code>En1</code>, <code>En2</code>, vectors of <code>value</code> and <code>accuracy</code>: the (differential) entropies of the first and second variates.</p></li>
-<li><p><code>MI.rGauss</code>, a vector of <code>value</code> and <code>accuracy</code>: the absolute value of the Pearson correlation coefficient \(r\) of a <em>multivariate Gaussian distribution</em> having mutual information <code>MI</code>; the two are related by \(\mathrm{MI} = -\ln(1 - r^2)/2\). It may provide a vague intuition for the <code>MI</code> value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.</p></li>
-<li><p><code>unit</code>, <code>Y1names</code>, <code>Y1names</code>: same as the input arguments, included for the user's convenience.</p></li>
+    <p>An object of class "MI", which is a list consisting of the following elements:</p><ul><li><p><code>$value</code>, the mutual information between (joint) variates <code>Y1names</code> and (joint) variates <code>Y2names</code>.</p></li>
+<li><p><code>$quantiles</code>, a vector with the revisability quantiles for the mutual information.</p></li>
+<li><p><code>$MCaccuracy</code>, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the <code>value</code> of the mutual information.</p></li>
+<li><p><code>$samples</code>, a vector with the revisability samples for the mutual information.</p></li>
+<li><p><code>$rGauss</code>, a vector of <code>value</code> and <code>accuracy</code>: the absolute value of the Pearson correlation coefficient \(r\) of a <em>multivariate Gaussian distribution</em> having mutual information <code>MI</code>; the two are related by \(\mathrm{MI} = -\ln(1 - r^2)/2\). It may provide a vague intuition for the <code>MI</code> value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.</p></li>
+<li><p><code>$unit</code>, <code>$Y1names</code>, <code>$Y1names</code>: same as the input arguments.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -151,7 +162,7 @@ $$</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="Pr.html">Pr()</a></code> to calculate probabilities and their variability.</p>
+    <div class="dont-index"><p><code><a href="Pr.html">Pr()</a></code> to calculate probabilities and their revisability.</p>
 <p><code><a href="learn.html">learn()</a></code>, which generates the <code>learnt</code> objects required by <code>mutualinfo()</code>.</p></div>
     </div>
 
@@ -163,46 +174,17 @@ $$</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## mutual information between variates 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span><span class="va">MI</span> <span class="op">&lt;-</span> <span class="fu">mutualinfo</span><span class="op">(</span>Y1names <span class="op">=</span> <span class="st">'species'</span>, Y2names <span class="op">=</span> <span class="st">'bill_len'</span>,</span></span>
-<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span>, parallel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span>, nv <span class="op">=</span> <span class="fl">2</span>, parallel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">MI</span><span class="op">$</span><span class="va">MI</span>, <span class="st">' '</span>, <span class="va">MI</span><span class="op">$</span><span class="va">unit</span>, collapse <span class="op">=</span> <span class="st">' +/- '</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0.699139790987302 Sh +/- 0.053 Sh"</span>
+<span class="r-in"><span><span class="co">## The value:</span></span></span>
+<span class="r-in"><span><span class="va">MI</span><span class="op">$</span><span class="va">value</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8037673</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Shannon entropy of variate 'species'</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">MI</span><span class="op">$</span><span class="va">En1</span>, <span class="st">' '</span>, <span class="va">MI</span><span class="op">$</span><span class="va">unit</span>, collapse <span class="op">=</span> <span class="st">' +/- '</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1.5404796693525 Sh +/- 0.029 Sh"</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co">## Shannon entropy of variate 'species',</span></span></span>
-<span class="r-in"><span><span class="co">## conditional on a bill length of 30 mm:</span></span></span>
-<span class="r-in"><span><span class="va">entr</span> <span class="op">&lt;-</span> <span class="fu">mutualinfo</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  Y1names <span class="op">=</span> <span class="st">'species'</span>,</span></span>
-<span class="r-in"><span>  X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span>, parallel <span class="op">=</span> <span class="fl">1</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">entr</span><span class="op">$</span><span class="va">En1</span>, <span class="st">' '</span>, <span class="va">entr</span><span class="op">$</span><span class="va">unit</span>, collapse <span class="op">=</span> <span class="st">' +/- '</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "0.440800870784225 Sh +/- 0.081 Sh"</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## the entropy is now lower; indeed a penguin with a short bill length</span></span></span>
-<span class="r-in"><span><span class="co">## is most probably of the 'Adelie' species:</span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Adelie'</span>, <span class="st">'Gentoo'</span>, <span class="st">'Chinstrap'</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span>, parallel <span class="op">=</span> <span class="fl">1</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> , , |bill_len = 30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            probability &amp; variability</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> species     value  Q5.5%   Q25%   Q75% Q94.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.930 0.6300 0.9430 0.9925 0.9985</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.036 0.0002 0.0025 0.0220 0.1500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.034 0.0002 0.0016 0.0220 0.1700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co">## If we had many more data, we could instead expect to obtain values</span></span></span>
+<span class="r-in"><span><span class="co">## within the following ranges, with corresponding probabilities:</span></span></span>
+<span class="r-in"><span><span class="va">MI</span><span class="op">$</span><span class="va">quantiles</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       5.5%        25%        75%      94.5% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.07087549 0.74679350 1.09015145 1.28527153 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

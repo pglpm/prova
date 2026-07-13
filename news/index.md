@@ -1,5 +1,24 @@
 # Changelog
 
+## Prova v2.1.0
+
+- The function
+  [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+  now only outputs the mutual information (and not conditional entropies
+  or entropies), but it also outputs the “revisability” of the values in
+  view of a much larger dataset.
+
+- New functions `plot.MI()` and
+  [`print.MI()`](https://pglpm.github.io/prova/reference/print.MI.md)
+  for plotting and printing mutual information and its revisability.
+
+- Slight changes in plotting and printing outputs.
+
+- The vignette about mutual information now has an additional section
+  about the revisability of mutual information.
+
+- Small internal changes on how synthetic datapoints are generated.
+
 ## Prova v1.0.5
 
 - Corrected a bug affecting computation of probabilities for censored,

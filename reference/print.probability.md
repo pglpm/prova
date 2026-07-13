@@ -3,9 +3,9 @@
 This [`base::print()`](https://rdrr.io/r/base/print.html) method is a
 utility to display selected elements of a "probability" object obtained
 with [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md); typically
-its posterior probabilies (element `$values`) and their variabilities
+its posterior probabilies (element `$values`) and their revisabilities
 (element `$quantiles`). If the `Y` or `X` variates are joint variates,
-this method also allow to display only selected values of them
+this method also allow to display only selected values of them.
 
 ## Usage
 
@@ -42,7 +42,7 @@ print(x, elements = NULL, subset = NULL, digits = TRUE, ...)
   If value is `TRUE`, then the significant digits for elements `$values`
   and `$quantiles` are determined from their respective
   `$values.MCaccuracy` and `$quantiles.MCaccuracy` elements of the
-  `probability` object, see
+  "probability" object, see
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md); whereas
   `$samples` elements use 2 significant digits.
 
@@ -64,7 +64,7 @@ posterior probabilities and quantiles.
 [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md)
 to plot probabilities and quantiles calculated by \`Pr()'.
 [`hist.probability()`](https://pglpm.github.io/prova/reference/hist.probability.md)
-to plot the variability of the probabilities as a distribution.
+to plot the revisability of the probabilities as a distribution.
 
 ## Examples
 
@@ -81,30 +81,30 @@ X <- data.frame(bill_len = c(43, 44))
 
 probs <- Pr(Y = Y, X = X, learnt = learnt, parallel = 1)
 
-## display the values and variabilities of these probabilities
+## display the values and revisabilities of these probabilities
 print(probs)
 #> , , |bill_len = 43
 #> 
-#>            probability & variability
-#> species     value Q5.5%  Q25%  Q75% Q94.5%
-#>   Adelie    0.465 0.367 0.421 0.513  0.568
-#>   Chinstrap 0.146 0.081 0.117 0.172  0.219
-#>   Gentoo    0.389 0.299 0.348 0.430  0.481
+#>            probability
+#> species      value    +/-  Q5.5%   Q25%   Q75% Q94.5%
+#>   Adelie    0.4647 0.0049 0.3669 0.4212 0.5131 0.5679
+#>   Chinstrap 0.1458 0.0029 0.0810 0.1167 0.1723 0.2191
+#>   Gentoo    0.3894 0.0034 0.2985 0.3476 0.4302 0.4812
 #> 
 #> , , |bill_len = 44
 #> 
-#>            probability & variability
-#> species     value Q5.5%  Q25%  Q75% Q94.5%
-#>   Adelie    0.222 0.140 0.187 0.255  0.307
-#>   Chinstrap 0.205 0.120 0.172 0.243  0.297
-#>   Gentoo    0.572 0.467 0.527 0.620  0.672
+#>            probability
+#> species      value    +/-  Q5.5%   Q25%   Q75% Q94.5%
+#>   Adelie    0.2223 0.0029 0.1450 0.1866 0.2551 0.3069
+#>   Chinstrap 0.2054 0.0035 0.1198 0.1717 0.2429 0.2966
+#>   Gentoo    0.5722 0.0031 0.4671 0.5270 0.6204 0.6718
 #> 
 
 ## diplay 'values' only, and only for the species value 'Gentoo'
 print(probs, elements = 'values', subset = list(species = 'Gentoo'))
 #> $values
 #>         |bill_len
-#> species     43    44
-#>   Gentoo 0.389 0.572
+#> species         43        44
+#>   Gentoo 0.3894222 0.5722285
 #> 
 ```

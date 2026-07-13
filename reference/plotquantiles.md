@@ -41,7 +41,7 @@ plotquantiles(
 - xdomain:
 
   Character or numeric or `NULL` (default): vector of possible values of
-  the variable represented in the x-axis, if the `x` argument is a
+  the variate represented in the x-axis, if the `x` argument is a
   character vector. The ordering of the values is respected. If `NULL`,
   then `unique(x)` is used.
 

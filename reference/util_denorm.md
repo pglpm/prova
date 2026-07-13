@@ -1,6 +1,6 @@
-# Utility function to avoid finite-precision accuracys
+# Utility function to improve accuracy
 
-Used in 'rPr()', 'mutualinfo()', 'util_lprobsmi()'.
+Used in 'util_lprobsmi()'.
 
 ## Usage
 

@@ -49,7 +49,7 @@ A numeric or character vector of values.
 generates the `learnt` objects required by `vrtgrid()`.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
-probabilities and their variability.
+probabilities and their revisabilities.
 
 [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md)
 to plot probabilities and quantiles calculated by
@@ -87,7 +87,7 @@ probs <- Pr(
   learnt = learnt, parallel = 1
 )
 
-## plot the conditional probability distributions, and their variability
+## plot the conditional probability distributions, and their revisabilities
 plot(probs)
 
 ```

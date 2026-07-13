@@ -159,8 +159,8 @@ prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'),
     learnt = learnt)
 
 print(prob)
-#   value   Q5.5%    Q25%    Q75%  Q94.5% 
-# 0.00309 0.00041 0.00117 0.00415 0.00825
+#    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
+# 0.003085 0.000061 0.000408 0.001174 0.004149 0.008250
 ```
 
   
@@ -196,10 +196,10 @@ rPr(
     learnt = learnt
 )
 #        island   species
-# 644_1   Dream Chinstrap
-# 996_1   Dream Chinstrap
-# 1228_1  Dream Chinstrap
-# 2230_1 Biscoe    Gentoo
+# 644_1  Biscoe    Gentoo
+# 996_1   Dream    Adelie
+# 1228_1 Biscoe    Gentoo
+# 2230_1  Dream Chinstrap
 # 3083_1  Dream    Adelie
 ```
 
@@ -369,7 +369,7 @@ penguins.
 
   
 
-## Quantifying associations and correlations: mutual information
+## Quantifying associations and correlations: *mutual information*
 
 ### Pearson correlation coefficient and its limitations
 
@@ -384,11 +384,10 @@ One very common and quite abused measure of “association” is the
 [Pearson correlation
 coefficient](https://mathworld.wolfram.com/CorrelationCoefficient.html),
 usually denoted “\\r\\”. This measure is extremely limited, however. It
-is essentially [based on the assumption that all variates involved have
-a joint Gaussian
-distribution](https://doi.org/10.1080/01621459.1954.10501231). As a
-consequence, it is a measure of *linear* association, rather than
-general association.
+is essentially based on the assumption that all variates involved have a
+joint Gaussian distribution (Goodman, Kruskal 1954). As a consequence,
+it is a measure of *linear* association, rather than of general
+association.
 
 For instance, if the distribution of two continuous variates \\Y_1\\ and
 \\Y_2\\ lies in a semicircle, then \\Y_2\\ is actually a function of
@@ -420,13 +419,11 @@ correlation coefficient\*\*](figure/pearsonplot-1.jpeg)
 correlation coefficient**
 
 Similar limitations of the Pearson correlation coefficient are
-demonstrated by the “[Anscombe
-quartet](https://doi.org/10.2307/2682899)” of datasets.
+demonstrated by the “Anscombe quartet” of datasets (Anscombe 1973).
 
 The Pearson correlation coefficient, moreover, cannot be used in the
-case of nominal variates, because they cannot be sorted in any
-meaningful order. Yet there can be clear associations among nominal
-variates, as [was shown for the island and species
+case of ordinal or nominal variates. Yet there can be clear associations
+among these kinds of variates, as [was shown for the island and species
 variates](#newsamples).
 
 ### Mutual information
@@ -452,11 +449,11 @@ properties:
   of any kind between \\Y_1\\ and \\Y_2\\.
 
 - It can be defined for a pair of variates \\Y_1\\, \\Y_2\\ of any kind
-  – continuous, nominal, binary, images, audio signals, and so on.
+  – continuous, nominal, binary, joint variates; images, audio signals,
+  and so on.
 
 - It is defined for any probability distribution \\\mathrm{Pr}(Y_1,
-  Y_2)\\ for the two variates, without assumptions such as Gaussian
-  shapes.
+  Y_2)\\ for the two variates, without assumptions such as Gaussianity.
 
 Mutual information is always positive or zero, and can be defined in
 several mathematically equivalent ways, such as the following:
@@ -482,10 +479,11 @@ Commission
 
 Mutual information is in fact a core quantity of communication theory
 and information theory. The design and assessment of communication
-channels depends crucially on it. This makes sense: the main requisite
-of a communication channel is a strong association between two variates:
-its input and output messages. You can find a brilliant introduction to
-its meaning and uses in MacKay’s book, see references.
+channels, as well as of compression algorithms, depends crucially on it.
+This makes sense: the main requisite of a communication channel is a
+strong association between two variates: its input and output messages.
+You can find a brilliant introduction to its meaning and uses in MacKay
+(2005) and Cover & Thomas (2005).
 
   
 The **Prova** package provides the function
@@ -503,7 +501,8 @@ joint variates. Its main arguments are the following:
 - Optionally, `unit`: the mutual information unit; default “shannons”
   (Sh).
 - Optionally, `parallel` specifies how many cores we should use for the
-  computation.
+  computation. If `NULL` or omitted, half of the cores available will be
+  used.
 
 Be aware that the computation can take even tens of minutes if the
 arguments `Y1names` and `Y2names` include multiple joint variates.
@@ -521,18 +520,20 @@ MIislandspecies <- mutualinfo(
 ```
 
 The resulting object `MIislandspecies` is a list of several quantities;
-the mutual information is given in the `$MI` element, which includes the
-accuracy of the result:
+the mutual information is given in the `$value` element, and its unit in
+the `$unit` element:
 
 ``` r
 
-MIislandspecies$MI
-#    value accuracy 
-# 0.621682 0.016000
+MIislandspecies$value
+# [1] 0.614426
+
+MIislandspecies$unit
+# [1] "Sh"
 ```
 
 Between variates `island` and `species` there is thus a mutual
-information of 0.62 Sh. But what does this mean?
+information of 0.61 Sh. But what does this mean?
 
 ### Understanding mutual-information values
 
@@ -582,19 +583,21 @@ variates\*\*](figure/Ivsr-1.jpeg)
 This relationship can be a *rough* guide to get familiar with
 mutual-information values also for non-Gaussian variates. The
 [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
-function has an additional output element `$MI.rGauss$` with the
+function has an additional output element `$rGauss$` with the
 corresponding \\\lvert r \rvert\\ value. In the previous case of the
 `island` and `species` variates we have
 
 ``` r
 
-MIislandspecies$MI
-#    value accuracy 
-# 0.621682 0.016000
+MIislandspecies[c('value', 'unit')]
+# $value
+# [1] 0.614426
+# 
+# $unit
+# [1] "Sh"
 
-MIislandspecies$MI.rGauss
-#    value accuracy 
-# 0.760009 0.008900
+MIislandspecies$rGauss
+# [1] 0.757194
 ```
 
 ### Mutual information for previous examples
@@ -607,10 +610,10 @@ explored previously, and calculate also their mutual information.
 ``` r
 
 ## mutual info, previously calculated
-mi <- signif(MIislandspecies$MI['value'], digits = 2)
+mi <- signif(MIislandspecies$value, digits = 2)
 
 ## approx r-equivalent
-r <- signif(MIislandspecies$MI.rGauss['value'], digits = 2)
+r <- signif(MIislandspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('island', 'species'), learnt = learnt)
 
@@ -634,8 +637,7 @@ Calculation of mutual info:
 
 MIbodymassspecies <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'species',
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 ```
 
@@ -644,10 +646,10 @@ Scatter plot:
 ``` r
 
 ## mutual info
-mi <- signif(MIbodymassspecies$MI['value'], digits = 2)
+mi <- signif(MIbodymassspecies$value, digits = 2)
 
 ## approx r-equivalent
-r <- signif(MIbodymassspecies$MI.rGauss['value'], digits = 2)
+r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), learnt = learnt)
 
@@ -671,8 +673,7 @@ Calculation of mutual information:
 
 MIbodymassbilllen <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 ```
 
@@ -681,10 +682,10 @@ Scatter plot:
 ``` r
 
 ## mutual info
-mi <- signif(MIbodymassbilllen$MI['value'], digits = 2)
+mi <- signif(MIbodymassbilllen$value, digits = 2)
 
 ## approx r-equivalent
-r <- signif(MIbodymassbilllen$MI.rGauss['value'], digits = 2)
+r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), learnt = learnt)
 
@@ -706,7 +707,7 @@ Note that in this case the Pearson correlation between `body_mass` and
 ``` r
 
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.556366
+# [1] 0.571658
 ```
 
 which is different from the rough \\r\\-equivalent 0.68.
@@ -739,22 +740,19 @@ computation could take half an hour):
 MIadelie <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Adelie'), ## choose subpopulation
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 
 MIchinstrap <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Chinstrap'), ## choose subpopulation
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 
 MIgentoo <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Gentoo'), ## choose subpopulation
-    learnt = learnt,
-    parallel = 4
+    learnt = learnt
 )
 ```
 
@@ -766,9 +764,9 @@ scatter plot:
 
 ## mutual info, joined
 mispecies <- signif(c(
-    MIadelie$MI['value'],
-    MIchinstrap$MI['value'], 
-    MIgentoo$MI['value']
+    MIadelie$value,
+    MIchinstrap$value,
+    MIgentoo$value
 ), digits = 2)
 
 flexiplot(
@@ -798,29 +796,56 @@ Gentoo species than in the Adélie or Chinstrap ones. In other words we
 can more precisely predict body mass from bill length, or vice versa,
 for Gentoo penguins than for the other two species.
 
-It is interesting to contrast this result with values of the Pearson
-correlation coefficient:
+  
+
+### Uncertainty about associations and revisability of mutual information
+
+Any measure of association that we calculate from a finite sample of
+data is obviously uncertain: a much larger data sample might reveal a
+stronger or weaker association. Likewise, the mutual association that we
+calculate from a finite sample of data is subject to a possible
+“revisability”, in the sense that if we collected many more data, and
+calculated the mutual association from them, we could find a slightly
+different – or maybe the same – value.
+
+The function
+[`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+calculates not only the mutual information between two groups of
+variates from the present dataset. It also calculates the possible
+revisability of the mutual information, if more data were collected,
+together with the probability of such a revision.
+
+Let’s see for example how much variation we can expect in the case of
+the association between island and species. One way to ask this is “with
+more data, what would be value of the mutual information between island
+and species, with 89% probability?”. The answer was already calculated
+by
+[`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md),
+and can be seen with the utility function
+[`print()`](https://rdrr.io/r/base/print.html):
 
 ``` r
 
-## Pearson r for Adelie subpopulation:
-cor(samplesAdelie$body_mass, samplesAdelie$bill_len, method = 'pearson')
-# [1] 0.405675
-
-## Pearson r for Chinstrap subpopulation:
-cor(samplesChinstrap$body_mass, samplesChinstrap$bill_len, method = 'pearson')
-# [1] 0.304721
-
-## Pearson r for Gentoo subpopulation:
-cor(samplesGentoo$body_mass, samplesGentoo$bill_len, method = 'pearson')
-# [1] 0.547162
+print(MIislandspecies)
+# value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
+#     0.61     0.15     0.45     0.82     1.00
 ```
 
-The Pearson correlation yields the same the association *ranking* as the
-mutual information does (first Gentoo, then Adélie, then Chinstrap), but
-it yields the association for the Adélie subpopulation to be closer to
-the Gentoo one than to the Chinstrap one. The mutual information yields
-the opposite.
+which shows that, acquiring more data, we can expect with 89%
+probability a mutual information between 0.15 Sh and 1 Sh. We can also
+visualize our uncertainty about this “long-run” mutual information by
+means of a probability distribution, using the
+[`hist()`](https://rdrr.io/r/graphics/hist.html) function:
+
+``` r
+
+hist(MIislandspecies)
+```
+
+![\*\*Revisability of mutual information with a much larger data
+sample\*\*](figure/histislandspecies-1.jpeg)
+
+**Revisability of mutual information with a much larger data sample**
 
   
 
@@ -828,11 +853,17 @@ the opposite.
 
 ### References
 
-- Cover, Thomas: [*Elements of Information
-  Theory*](https://doi.org/10.1002/0471200611) (2nd ed. 2005).
+- Anscombe (1973): [*Graphs in statistical
+  analysis*](https://doi.org/10.2307/2682899).
 
-- MacKay: [*Information Theory, Inference, and Learning
-  Algorithms*](https://www.inference.org.uk/itila/book.html) (2005).
+- Cover, Thomas (2005): [*Elements of Information
+  Theory*](https://doi.org/10.1002/0471200611), 2nd ed.
+
+- Goodman, Kruskal (1954): [*Measures of association for cross
+  classifications*](https://doi.org/10.1080/01621459.1954.10501231).
+
+- MacKay (2005): [*Information Theory, Inference, and Learning
+  Algorithms*](https://www.inference.org.uk/itila/book.html).
 
 - Chapter “Information, relevance, independence, association” in [*Data
   Science and AI

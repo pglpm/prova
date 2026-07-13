@@ -13,7 +13,9 @@ mutualinfo(
   X = NULL,
   learnt,
   tails = NULL,
-  n = NULL,
+  quantiles = c(0.055, 0.25, 0.75, 0.945),
+  ns = NULL,
+  nv = 12,
   unit = "Sh",
   parallel = TRUE,
   verbose = FALSE
@@ -48,11 +50,25 @@ mutualinfo(
   sense: \\X \le x\\ or \\X \ge x\\, an so on. See analogous argument in
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 
-- n:
+- quantiles:
 
-  Integer or `NULL` (default): number of samples from which to
-  approximately calculate the mutual information. Default as many as
-  Monte Carlo samples in `learnt`.
+  Numeric vector, between 0 and 1: desired quantiles of the revisability
+  of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that
+  is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in
+  [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
+
+- ns:
+
+  Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in
+  the "learnt" object to use for calculating the mutual information. If
+  `Inf` or `NULL`, use all Monte Carlo samples available in the "learnt"
+  object.
+
+- nv:
+
+  Integer, default 12: number of *duplicates* of Monte Carlo samples in
+  the "learnt" object to use for calculating the revisability of the
+  mutual information.
 
 - unit:
 
@@ -75,27 +91,30 @@ mutualinfo(
 
 ## Value
 
-A list consisting of the following elements:
+An object of class "MI", which is a list consisting of the following
+elements:
 
-- `MI`, a vector of `value` and `accuracy`: the mutual information
-  between (joint) variates `Y1names` and (joint) variates `Y2names`.
+- `$value`, the mutual information between (joint) variates `Y1names`
+  and (joint) variates `Y2names`.
 
-- `CondEn12`, `CondEn21`, vectors of `value` and `accuracy`: the
-  conditional entropy of the first variate given the second, and vice
-  versa.
+- `$quantiles`, a vector with the revisability quantiles for the mutual
+  information.
 
-- `En1`, `En2`, vectors of `value` and `accuracy`: the (differential)
-  entropies of the first and second variates.
+- `$MCaccuracy`, vector with the numerical accuracies (roughly speaking
+  a standard deviation) of the Monte Carlo calculation for the `value`
+  of the mutual information.
 
-- `MI.rGauss`, a vector of `value` and `accuracy`: the absolute value of
+- `$samples`, a vector with the revisability samples for the mutual
+  information.
+
+- `$rGauss`, a vector of `value` and `accuracy`: the absolute value of
   the Pearson correlation coefficient \\r\\ of a *multivariate Gaussian
   distribution* having mutual information `MI`; the two are related by
   \\\mathrm{MI} = -\ln(1 - r^2)/2\\. It may provide a vague intuition
   for the `MI` value for people more familiar with Pearson's
   correlation, but should be taken with a grain of salt.
 
-- `unit`, `Y1names`, `Y1names`: same as the input arguments, included
-  for the user's convenience.
+- `$unit`, `$Y1names`, `$Y1names`: same as the input arguments.
 
 ## Details
 
@@ -152,7 +171,7 @@ this computation.
 ## See also
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
-probabilities and their variability.
+probabilities and their revisability.
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
 generates the `learnt` objects required by `mutualinfo()`.
@@ -166,44 +185,15 @@ learnt <- learntExample
 
 ## mutual information between variates 'species' and 'bill_len'
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-  learnt = learnt, parallel = 1)
+  learnt = learnt, nv = 2, parallel = 1)
 
-paste0(MI$MI, ' ', MI$unit, collapse = ' +/- ')
-#> [1] "0.699139790987302 Sh +/- 0.053 Sh"
+## The value:
+MI$value
+#> [1] 0.8037673
 
-## Shannon entropy of variate 'species'
-paste0(MI$En1, ' ', MI$unit, collapse = ' +/- ')
-#> [1] "1.5404796693525 Sh +/- 0.029 Sh"
-
-
-# \donttest{
-## Shannon entropy of variate 'species',
-## conditional on a bill length of 30 mm:
-entr <- mutualinfo(
-  Y1names = 'species',
-  X = data.frame(bill_len = 30),
-  learnt = learnt, parallel = 1
-)
-
-paste0(entr$En1, ' ', entr$unit, collapse = ' +/- ')
-#> [1] "0.440800870784225 Sh +/- 0.081 Sh"
-
-## the entropy is now lower; indeed a penguin with a short bill length
-## is most probably of the 'Adelie' species:
-probs <- Pr(
-  Y = data.frame(species = c('Adelie', 'Gentoo', 'Chinstrap')),
-  X = data.frame(bill_len = 30),
-  learnt = learnt, parallel = 1
-)
-
-print(probs)
-#> , , |bill_len = 30
-#> 
-#>            probability & variability
-#> species     value  Q5.5%   Q25%   Q75% Q94.5%
-#>   Adelie    0.930 0.6300 0.9430 0.9925 0.9985
-#>   Gentoo    0.036 0.0002 0.0025 0.0220 0.1500
-#>   Chinstrap 0.034 0.0002 0.0016 0.0220 0.1700
-#> 
-# }
+## If we had many more data, we could instead expect to obtain values
+## within the following ranges, with corresponding probabilities:
+MI$quantiles
+#>       5.5%        25%        75%      94.5% 
+#> 0.07087549 0.74679350 1.09015145 1.28527153 
 ```

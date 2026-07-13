@@ -57,7 +57,7 @@ flexiplot(
 - xdomain, ydomain:
 
   Character or numeric or `NULL` (default): vector of possible values of
-  the variables represented in the `x`- and `y`-axes, in case the `x` or
+  the variates represented in the `x`- and `y`-axes, in case the `x` or
   `y` argument is a character vector. The ordering of the values is
   respected. If `NULL`, then `unique(x)` or `unique(y)` is used.
 

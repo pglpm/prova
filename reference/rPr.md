@@ -76,8 +76,8 @@ probability \\\mathrm{Pr}(Y = y \vert X = x, \text{data})\\ or
 \\\mathrm{Pr}(Y = y \vert X \le x, \text{data})\\ or combinations
 thereof, for the variates specified in the argument `Y`, and conditional
 on the variate values specified in the argument `X`. It is somewhat
-analogous to the `r`-variants of R distribution functions, such as
-[`stats::rnorm()`](https://rdrr.io/r/stats/Normal.html). If `X` is
+analogous to the `rxxx`-variants of [R distribution
+functions](https://rdrr.io/r/stats/Distributions.html). If `X` is
 omitted or `NULL`, then the posterior probability \\\mathrm{Pr}(Y \|
 \text{data})\\ is used. Each variate in the argument `X` can be
 specified either as a point-value \\X = x\\ or as a left-open interval
@@ -115,8 +115,8 @@ datapoints <- rPr(
 
 c(datapoints)
 #> $species
-#>  [1] "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Gentoo"    "Chinstrap"
-#>  [7] "Gentoo"    "Adelie"    "Adelie"    "Adelie"   
+#>  [1] "Gentoo"    "Gentoo"    "Chinstrap" "Chinstrap" "Gentoo"    "Adelie"   
+#>  [7] "Adelie"    "Chinstrap" "Chinstrap" "Adelie"   
 #> 
 
 
@@ -131,11 +131,11 @@ datapoints <- rPr(
 
 print(datapoints, row.names = FALSE) ## row names give MCMC information
 #>    species bill_len
-#>     Adelie     36.0
-#>     Adelie     38.4
-#>     Adelie     35.8
-#>  Chinstrap     42.1
-#>  Chinstrap     48.6
+#>  Chinstrap     48.9
+#>     Gentoo     49.4
+#>     Adelie     41.0
+#>  Chinstrap     48.7
+#>     Adelie     37.0
 
 
 ## ## Example 3:
