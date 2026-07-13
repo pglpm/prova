@@ -101,8 +101,8 @@ prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'),
     learnt = learnt)
 
 print(prob)
-#   value   Q5.5%    Q25%    Q75%  Q94.5% 
-# 0.00309 0.00041 0.00117 0.00415 0.00825
+#    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
+# 0.003085 0.000061 0.000408 0.001174 0.004149 0.008250
 ```
 
 \
@@ -614,13 +614,6 @@ hist(MIislandspecies)
 <img src="figure/histislandspecies-1.jpeg" alt="**Revisability of mutual information with a much larger data sample**" width="100%" />
 <p class="caption">**Revisability of mutual information with a much larger data sample**</p>
 </div>
-
-
-<!-- 
-\ 
-
-*(To be continued in future versions)*
--->
 
 \
 

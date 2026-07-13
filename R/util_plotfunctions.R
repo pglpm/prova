@@ -340,7 +340,7 @@ plotquantiles <- function(
 #' This [base::plot()] method is a utility to plot probabilities obtained with [Pr()], as well as their revisabilities. The probabilities are plotted either against `Y`, with one curve for each value of `X`, or vice versa.
 #'
 #' @param x Object of class "probability", obtained with [Pr()].
-#' @param concentration One of the values `'quantiles'`, `'samples'`, `'none'` (equivalent to `NA` or `FALSE`), or `NULL` (default), in which case the revisability available in `p` is used. This argument chooses how to represent the revisability of the probability; see [Pr()]. If the requested representation is not available in the object `x`, then a warning is issued and no revisability is plotted.
+#' @param spread One of the values `'quantiles'`, `'samples'`, `'none'` (equivalent to `NA` or `FALSE`), or `NULL` (default), in which case the revisability available in `p` is used. This argument chooses how to represent the revisability of the probability; see [Pr()]. If the requested representation is not available in the object `x`, then a warning is issued and no revisability is plotted.
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
 #'
 #' @param PvsY Logical or `NULL`: should probabilities be plotted against their `Y` argument? If `NULL`, the argument between `Y` and `X` having larger number of values is chosen. As many probability curves will be plotted as the number of values of the other argument.
@@ -382,7 +382,7 @@ plotquantiles <- function(
 #' @export
 plot.probability <- function(
     x,
-    concentration = NULL,
+    spread = NULL,
     subset = NULL,
     PvsY = NULL,
     legend = 'top',
@@ -415,7 +415,7 @@ plot.probability <- function(
 
     ## If there's only one probability it doesn't make sense to plot anything:
     ## print() the result instead
-    if(length(x$values) == 1){
+    if(length(x[['values']]) == 1){
         return(print(x))
     }
 
@@ -424,38 +424,38 @@ plot.probability <- function(
     ## Check how we should represent the revisability
     ## The user can choose among three options
     ## provided that option is available in argument 'x'
-    if(is.null(concentration)) { # User is not choosing
+    if(is.null(spread)) { # User is not choosing
         ## We choose 'quantiles' or what's available
-        if(!is.null(x$quantiles)) {
-            concentration <- 'quantiles'
-        } else if(!is.null(x$samples)){
-            concentration <- 'samples'
+        if(!is.null(x[['quantiles']])) {
+            spread <- 'quantiles'
+        } else if(!is.null(x[['samples']])){
+            spread <- 'samples'
         } else {
-            concentration <- 'none'
+            spread <- 'none'
         }
     } else { # User is choosing
-        if(is.na(concentration) || isFALSE(concentration)){ concentration <- 'none'}
+        if(is.na(spread) || isFALSE(spread)){ spread <- 'none'}
 
         ## handle shortenings
-        concentration <- match.arg(concentration, c('quantiles', 'samples', 'none'))
+        spread <- match.arg(spread, c('quantiles', 'samples', 'none'))
 
         ## handle impossible requests
         if(
-        (concentration == 'quantiles' && is.null(x$quantiles)) ||
-            (concentration == 'samples' && is.null(x$samples))
+        (spread == 'quantiles' && is.null(x[['quantiles']])) ||
+            (spread == 'samples' && is.null(x[['samples']]))
         ) {
-            message('Requested concentration not available. Omitting its plot.')
-            concentration <- 'none'
+            message('Requested spread not available. Omitting its plot.')
+            spread <- 'none'
         }
     }
 
-    Ylen <- nrow(x$values)
-    Xlen <- ncol(x$values)
+    Ylen <- nrow(x[['values']])
+    Xlen <- ncol(x[['values']])
 
     ## Rename the revisability object so as to avoid if-else below
-    if(concentration == 'quantiles'){
+    if(spread == 'quantiles'){
         mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
-        pvar <- x$quantiles
+        pvar <- x[['quantiles']]
         ## if we are plotting more than one curve, keep only the 89% band
         if(Xlen > 1 && Ylen > 1){
             qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
@@ -466,8 +466,8 @@ plot.probability <- function(
         }
         qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
         if(is.null(var.alpha.f)){var.alpha.f <- 0.25}
-    } else if(concentration == 'samples'){
-        pvar <- x$samples
+    } else if(spread == 'samples'){
+        pvar <- x[['samples']]
         if(is.null(var.alpha.f)){var.alpha.f <- 1/ceiling(sqrt(dim(pvar)[3]))}
     } else {
         pvar <- NULL
@@ -493,7 +493,7 @@ plot.probability <- function(
         xxx <- x$X
         leg <- x$Y
         tempxlab <- 'X'
-        x$values <- t(x$values)
+        x[['values']] <- t(x[['values']])
         if(!is.null(pvar)){ pvar <- aperm(pvar, c(2, 1, 3)) }
     }
 
@@ -521,7 +521,7 @@ plot.probability <- function(
             paste0(names(x$Y), collapse = ', '),
             if(!is.null(x$X)){paste0(' | ', paste0(names(x$X), collapse = ', '))}
         )
-        if(concentration == 'quantiles'){
+        if(spread == 'quantiles'){
             main <- paste0(main, '  [',
                 paste0(round(qnames, 1), '%', collapse = ', '),
                 ']')
@@ -538,12 +538,12 @@ plot.probability <- function(
     ## Plot the revisability first
     ## find maximum and minimum y-value first, if needed
     if(is.na(ylim[2])){
-        ylim[2] <- max(pvar, x$values)
+        ylim[2] <- max(pvar, x[['values']])
     }
     if(is.na(ylim[1])){
-        ylim[1] <- min(pvar, x$values)
+        ylim[1] <- min(pvar, x[['values']])
     }
-    if(concentration == 'quantiles'){
+    if(spread == 'quantiles'){
         for(i in seq_len(dim(pvar)[2])){
             plotquantiles(x = unlist(xxx), y = pvar[, i, ],
                 col = col[(i - 1) %% length(col) + 1],
@@ -559,7 +559,7 @@ plot.probability <- function(
             add <- TRUE
         }
 
-    } else if(concentration == 'samples'){
+    } else if(spread == 'samples'){
         ## the samples are plotted alternating between the different subgroups,
         ## rather than one group at a time, in order to avoid that
         ## the samples of the last subgroup cover the previous ones
@@ -584,7 +584,7 @@ plot.probability <- function(
     }
 
     ## Plot the probabilities
-    flexiplot(x = xxx, y = x$values,
+    flexiplot(x = xxx, y = x[['values']],
         type = type,
         col = col,
         alpha.f = alpha.f,
@@ -625,10 +625,10 @@ plot.probability <- function(
 }
 
 
-#' Plot the revisability or concentration of an object of class "probability" as a histogram
+#' Plot the revisability of an object of class "probability" as a histogram
 #'
 #' @description
-#' The posterior probabilities calculated with the [Pr()] function, and outputted as a "probability" object, have an associated "revisability", also called "concentration", that comes from the finite size of the data sample. This revisability can be interpreted in two ways:
+#' The posterior probabilities calculated with the [Pr()] function, and outputted as a "probability" object, have an associated "revisability" that comes from the finite size of the data sample. This revisability can be interpreted in two ways:
 #'
 #' - How the probabilities could change, if we collected a much larger (infinite) data sample, and how likely would such change be;
 #' - The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
@@ -708,12 +708,12 @@ hist.probability <- function(
     }
 
     ## Check that samples are available in the probability object
-    if(is.null(x$samples)) {
+    if(is.null(x[['samples']])) {
         stop('The "probability" object does not contain any revisability samples')
         }
-    pvar <- x$samples
-    Ylen <- nrow(x$values)
-    Xlen <- ncol(x$values)
+    pvar <- x[['samples']]
+    Ylen <- nrow(x[['values']])
+    Xlen <- ncol(x[['values']])
 
     if(is.null(breaks)){n <- ceiling(sqrt(dim(pvar)[3])/2)} else {n <- NULL}
 
@@ -777,7 +777,7 @@ hist.probability <- function(
             ...
         )
         if(isTRUE(showmean)){
-            graphics::abline(v = x$values[yy, xx],
+            graphics::abline(v = x[['values']][yy, xx],
                 col = adjustcolor(thiscol, alpha.f * 0.75),
                 lty = thislty,
                 lwd = lwd * 0.75)
@@ -884,38 +884,56 @@ print.probability <- function(
     if(!is.null(subset)){
         x <- prsubset(x, subset = subset)
     }
+    values <- x[['values']]
+    quantiles <- x[['quantiles']]
 
     if(is.null(elements)){
         ## rearrange and combine values and quantiles in a special way
-
         if(isTRUE(digits)){
-            tempdigits <- 1 + log10(
-                c(x$values / x$values.MCaccuracy,
-                    x$quantiles / x$quantiles.MCaccuracy)
+            tempdigits <- c(1 - floor(log10(x[['values.MCaccuracy']])),
+                1 - floor(log10(x[['values.MCaccuracy']])),
+            if(!is.null(quantiles)){
+                1 - floor(log10(x[['quantiles.MCaccuracy']]))
+                }
             )
             ## in case MCaccuracy is 0:
             tempdigits[is.na(tempdigits)] <- +Inf
 
             temp <- aperm(
-                a = array(signif(x = c(x$values, x$quantiles),
-                    digits = tempdigits),
-                    dim = dim(x$quantiles) + c(0, 0, 1),
+                a = array(round(x = c(
+                    values, x[['values.MCaccuracy']], quantiles
+                ), digits = tempdigits),
+                dim = c(dim(values),
+                    2 + (if(is.null(quantiles)){0}else{dim(quantiles)[3]})
+                    ),
                     dimnames = c(
-                        dimnames(x$values),
-                        list(`probability & revisability` = c('value', paste0('Q', dimnames(x$quantiles)[[3]])))
-                    ) ), perm = c(1,3,2))
+                        dimnames(values),
+                        list(`probability` = c('value', '+/-',
+                            if(!is.null(quantiles)){
+                                paste0('Q', dimnames(quantiles)[[3]])
+                            }
+                        )))
+              ), perm = c(1,3,2))
 
             if(is.null(x$X)){temp <- temp[,,]}
 
             print(x = temp, ...)
         }else{
             temp <- aperm(
-                a = array(c(x$values, x$quantiles),
-                    dim = dim(x$quantiles) + c(0, 0, 1),
+                a = array(signif(x = c(
+                    values, x[['values.MCaccuracy']], quantiles
+                ), digits = digits),
+                dim = c(dim(values),
+                    2 + (if(is.null(quantiles)){0}else{dim(quantiles)[3]})
+                    ),
                     dimnames = c(
-                        dimnames(x$values),
-                        list(`probability & revisability` = c('value', paste0('Q', dimnames(x$quantiles)[[3]])))
-                    ) ), perm = c(1,3,2))
+                        dimnames(values),
+                        list(`probability` = c('value', '+/-',
+                            if(!is.null(quantiles)){
+                                paste0('Q', dimnames(quantiles)[[3]])
+                            }
+                        )))
+              ), perm = c(1,3,2))
 
             if(is.null(x$X)){temp <- temp[,,]}
 
@@ -923,23 +941,34 @@ print.probability <- function(
         }
     } else {
         if(isTRUE(digits)){
-            tempdigits <- 1 + log10(c(x$values / x$values.MCaccuracy))
             if('values' %in% elements){
-            tempdigits <- 1 + log10(c(x$values / x$values.MCaccuracy))
+            tempdigits <- 1 - floor(log10(x[['values.MCaccuracy']]))
             ## in case MCaccuracy is 0:
             tempdigits[is.na(tempdigits)] <- +Inf
-                x$values <- signif(x = x$values,
-                    digits = tempdigits)
+                values <- round(x = values, digits = tempdigits)
             }
-            if('quantiles' %in% elements){
-                tempdigits <- 1 + log10(c(x$quantiles / x$quantiles.MCaccuracy))
+            if('values.MCaccuracy' %in% elements){
+            tempdigits <- 1 - floor(log10(x[['values.MCaccuracy']]))
+            ## in case MCaccuracy is 0:
+            tempdigits[is.na(tempdigits)] <- +Inf
+            x[['values.MCaccuracy']] <- round(x = x[['values.MCaccuracy']],
+                digits = tempdigits)
+            }
+            if('quantiles' %in% elements && !is.null(quantiles)){
+                tempdigits <- 1 - floor(log10(x[['quantiles.MCaccuracy']]))
                 ## in case MCaccuracy is 0:
                 tempdigits[is.na(tempdigits)] <- +Inf
-                x$quantiles <- signif(x = x$quantiles,
-                    digits = tempdigits)
+                quantiles <- round(x = quantiles, digits = tempdigits)
+            }
+            if('quantiles.MCaccuracy' %in% elements){
+            tempdigits <- 1 - floor(log10(x[['quantiles.MCaccuracy']]))
+            ## in case MCaccuracy is 0:
+            tempdigits[is.na(tempdigits)] <- +Inf
+            x[['quantiles.MCaccuracy']] <- round(x = x[['quantiles.MCaccuracy']],
+                digits = tempdigits)
             }
             if('samples' %in% elements){
-                x$samples <- signif(x = x$samples, digits = 2)
+                x[['samples']] <- signif(x = x[['samples']], digits = 3)
             }
         print(x = x[elements], ...)
         } else {
@@ -1016,10 +1045,10 @@ hist.MI <- function(
 ){
 
     ## Check that samples are available in the HI object
-    if(is.null(x$samples)) {
+    if(is.null(x[['samples']])) {
         stop('The MI object does not contain any revisability samples')
         }
-    ff <- x$samples
+    ff <- x[['samples']]
 
     if(is.null(breaks)){n <- ceiling(sqrt(length(ff))/2)} else {n <- NULL}
 
@@ -1077,7 +1106,7 @@ hist.MI <- function(
         ...
     )
     if(isTRUE(showvalue)){
-        graphics::abline(v = x$value,
+        graphics::abline(v = x[['value']],
             col = adjustcolor(col, alpha.f * 0.75),
             lty = lty,
             lwd = lwd * 0.75)
@@ -1115,7 +1144,7 @@ hist.MI <- function(
 #' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
 #'   learnt = learnt, parallel = 1)
 #'
-#' ## display the values and revisability of the mutual information
+#' ## display the value and revisability of the mutual information
 #' print(MI)
 #' }
 #'
@@ -1126,7 +1155,7 @@ print.MI <- function(
     digits = 2,
     ...
 ){
-    temp <- signif(x = c(x$value, x$quantiles), digits = digits)
-    names(temp) <- c(paste0('value/', x$unit), paste0('Q', names(x$quantiles)))
+    temp <- signif(x = c(x[['value']], x[['quantiles']]), digits = digits)
+    names(temp) <- c(paste0('value/', x$unit), paste0('Q', names(x[['quantiles']])))
     print(x = temp, ...)
 }

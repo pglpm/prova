@@ -555,13 +555,6 @@ which shows that, acquiring more data, we can expect with 89% probability a mutu
 hist(MIislandspecies)
 ```
 
-
-<!-- 
-\ 
-
-*(To be continued in future versions)*
--->
-
 \
 
 # Appendices {#appendix}

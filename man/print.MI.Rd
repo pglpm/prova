@@ -31,7 +31,7 @@ learnt <- learntExample
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
   learnt = learnt, parallel = 1)
 
-## display the values and revisability of the mutual information
+## display the value and revisability of the mutual information
 print(MI)
 }
 

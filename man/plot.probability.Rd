@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{probability}(
   x,
-  concentration = NULL,
+  spread = NULL,
   subset = NULL,
   PvsY = NULL,
   legend = "top",
@@ -28,7 +28,7 @@
 \arguments{
 \item{x}{Object of class "probability", obtained with \code{\link[=Pr]{Pr()}}.}
 
-\item{concentration}{One of the values \code{'quantiles'}, \code{'samples'}, \code{'none'} (equivalent to \code{NA} or \code{FALSE}), or \code{NULL} (default), in which case the revisability available in \code{p} is used. This argument chooses how to represent the revisability of the probability; see \code{\link[=Pr]{Pr()}}. If the requested representation is not available in the object \code{x}, then a warning is issued and no revisability is plotted.}
+\item{spread}{One of the values \code{'quantiles'}, \code{'samples'}, \code{'none'} (equivalent to \code{NA} or \code{FALSE}), or \code{NULL} (default), in which case the revisability available in \code{p} is used. This argument chooses how to represent the revisability of the probability; see \code{\link[=Pr]{Pr()}}. If the requested representation is not available in the object \code{x}, then a warning is issued and no revisability is plotted.}
 
 \item{subset}{Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.}
 
