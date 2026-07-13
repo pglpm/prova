@@ -47,14 +47,14 @@ probs <- Pr(
   learnt = learnt, parallel = 1
 )
 
-## plot the conditional probability distributions, and their variability
+## plot the conditional probability distributions, and their revisabilities
 plot(probs)
 
 }
 \seealso{
 \code{\link[=learn]{learn()}}, which generates the \code{learnt} objects required by \code{vrtgrid()}.
 
-\code{\link[=Pr]{Pr()}} to calculate probabilities and their variability.
+\code{\link[=Pr]{Pr()}} to calculate probabilities and their revisabilities.
 
 \code{\link[=plot.probability]{plot.probability()}} to plot probabilities and quantiles calculated by \code{Pr()}.
 }

@@ -36,7 +36,7 @@ flexiplot(
 
 \item{xlim, ylim}{\code{NULL} (default) or a vector of two values. In the latter case, if any of the two values is not finite (including \code{NA} or \code{NULL}), then the \code{min} or \code{max} \code{x}- or \code{y}-coordinates of the plotted points are used.}
 
-\item{xdomain, ydomain}{Character or numeric or \code{NULL} (default): vector of possible values of the variables represented in the \code{x}- and \code{y}-axes, in case the \code{x} or \code{y} argument is a character vector. The ordering of the values is respected. If \code{NULL}, then \code{unique(x)} or \code{unique(y)} is used.}
+\item{xdomain, ydomain}{Character or numeric or \code{NULL} (default): vector of possible values of the variates represented in the \code{x}- and \code{y}-axes, in case the \code{x} or \code{y} argument is a character vector. The ordering of the values is respected. If \code{NULL}, then \code{unique(x)} or \code{unique(y)} is used.}
 
 \item{alpha.f}{Numeric, default 1: opacity of the colours, \code{0} being completely invisible and \code{1} completely opaque.}
 

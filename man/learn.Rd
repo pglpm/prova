@@ -78,7 +78,7 @@ learn(
 
 \item{ncheckpoints}{Integer or \code{NULL}, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If \code{NULL}, this is equal to number of variates + 2. If Inf, use all datapoints.}
 
-\item{maxrelMCSE}{Numeric positive, default \code{+Inf}: desired maximal \emph{relative Monte Carlo Standard Error} of calculated probabilities with respect to their variability with new data. The default \code{+Inf} means that \code{minESS} is used instead. \code{maxrelMCSE} is related to \code{minESS} by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}}.}
+\item{maxrelMCSE}{Numeric positive, default \code{+Inf}: desired maximal \emph{relative Monte Carlo Standard Error} of calculated probabilities. The default \code{+Inf} means that \code{minESS} is used instead. \code{maxrelMCSE} is related to \code{minESS} by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}}.}
 
 \item{minESS}{Numeric positive or \code{NULL}, default 450: desired minimal Monte Carlo \emph{Expected Sample Size}. If \code{NULL}, it is equal to the final \code{nsamplesperchain}. \code{minESS} is related to \code{maxrelMCSE} by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}}.}
 
@@ -101,8 +101,8 @@ A "learnt" object, or name of directory containing such an object and other outp
 
 \code{learn()} saves several files in a directory. By default this output directory is a temporary directory within the one used by \code{\link[base:tempdir]{base::tempdir()}}, but an alternative one can be chosen with the argument \verb{outputdir =}. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
 \itemize{
-\item \code{MCtraces.pdf}: shows several trace plots of the Monte Carlo sampling; the correspondin data are in the file \code{MCtraces.rds}.
-\item \code{plotsamples_learnt.pdf}, \code{plotquantiles_learnt.pdf}: show the marginal posterior distributions of each individual variate, together with their variability (as samples or quantiles).
+\item \code{MCtraces.pdf}: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file \code{MCtraces.rds}.
+\item \code{plotsamples_learnt.pdf}, \code{plotquantiles_learnt.pdf}: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
 \item \verb{log-1.log}, \verb{log-2.log}, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.
 \item \code{rng_seed.rds}: the state of the pseudorandom seed (see \link[base:Random]{base::Random}) when \code{learn()} was called.
 \item \code{metadata.csv}: a copy of the metadata.
@@ -114,7 +114,7 @@ It is recommended that you give an explicit argument \verb{outputdir =} and save
 Compute the posterior joint probability distribution of the variates conditional on the given data, by means of Markov-chain Monte Carlo, using the package \strong{Nimble}.
 }
 \details{
-This function takes as main inputs a set of data and metadata, and computes the full joint probability distribution for new data, including its variability. From this full joint distribution any other distributions of interest can subsequently be computed; see \code{\link[=Pr]{Pr()}} and related functions. This computation can also be interpreted as an estimation of the full joint frequency distribution of the variates in the \emph{whole population}, beyond the sample data, together with its uncertainty. The computation allows for the use of datapoints with partially missing variables: imputation is automatically made. This imputation is \emph{principled}, made according to the rules of probability theory.
+This function takes as main inputs a set of data and metadata, and computes the full joint probability distribution for new data, including its "revisability". From this full joint distribution any other distributions of interest can subsequently be computed; see \code{\link[=Pr]{Pr()}} and related functions. This computation can also be interpreted as an estimation of the full joint frequency distribution of the variates in the \emph{whole population}, beyond the sample data, together with its uncertainty. The computation allows for the use of datapoints with partially missing variables: imputation is automatically made. This imputation is \emph{principled}, made according to the rules of probability theory.
 
 The output is a "learnt" object, typically saved in a \code{learnt.rds} file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.
 

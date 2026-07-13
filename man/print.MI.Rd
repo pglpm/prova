@@ -17,7 +17,7 @@
 Its \code{x} argument, \link[base:invisible]{invisibly}; see \code{\link[base:print]{base::print()}}.
 }
 \description{
-This \code{\link[base:print]{base::print()}} method is a utility to display value and variability of an "MI" object obtained with \code{\link[=mutualinfo]{mutualinfo()}}.
+This \code{\link[base:print]{base::print()}} method is a utility to display value and revisability of an "MI" object obtained with \code{\link[=mutualinfo]{mutualinfo()}}.
 }
 \examples{
 \donttest{
@@ -31,7 +31,7 @@ learnt <- learntExample
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
   learnt = learnt, parallel = 1)
 
-## display the values and variabilities of the mutual information
+## display the values and revisability of the mutual information
 print(MI)
 }
 
@@ -39,6 +39,6 @@ print(MI)
 \seealso{
 \code{\link[=mutualinfo]{mutualinfo()}} to calculate mutual information.
 
-\code{\link[=hist.MI]{hist.MI()}} to plot the variability of the mutual information.
+\code{\link[=hist.MI]{hist.MI()}} to plot the revisability of the mutual information.
 }
 \concept{display}

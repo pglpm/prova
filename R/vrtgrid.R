@@ -11,7 +11,7 @@
 #' @seealso
 #' [learn()], which generates the `learnt` objects required by `vrtgrid()`.
 #'
-#' [Pr()] to calculate probabilities and their variability.
+#' [Pr()] to calculate probabilities and their revisabilities.
 #'
 #' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()`.
 #'
@@ -43,7 +43,7 @@
 #'   learnt = learnt, parallel = 1
 #' )
 #'
-#' ## plot the conditional probability distributions, and their variability
+#' ## plot the conditional probability distributions, and their revisabilities
 #' plot(probs)
 #'
 #' @import utils

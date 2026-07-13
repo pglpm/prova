@@ -9,7 +9,7 @@
 #' @return A list consisting of the following elements:
 #'
 #' - `value`: value of \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}.
-#' - `samples`: a vector with the variability samples of the probability above.
+#' - `samples`: a vector with the revisability samples of the probability above.
 #' - `jacobians`: a vector with the Jacobian of the internal transformation.
 #'
 #' @import stats

@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{probability}(
   x,
-  variability = NULL,
+  concentration = NULL,
   subset = NULL,
   PvsY = NULL,
   legend = "top",
@@ -28,7 +28,7 @@
 \arguments{
 \item{x}{Object of class "probability", obtained with \code{\link[=Pr]{Pr()}}.}
 
-\item{variability}{One of the values \code{'quantiles'}, \code{'samples'}, \code{'none'} (equivalent to \code{NA} or \code{FALSE}), or \code{NULL} (default), in which case the variability available in \code{p} is used. This argument chooses how to represent the variability of the probability; see \code{\link[=Pr]{Pr()}}. If the requested variability is not available in the object \code{p}, then a warning is issued and no variability is plotted.}
+\item{concentration}{One of the values \code{'quantiles'}, \code{'samples'}, \code{'none'} (equivalent to \code{NA} or \code{FALSE}), or \code{NULL} (default), in which case the revisability available in \code{p} is used. This argument chooses how to represent the revisability of the probability; see \code{\link[=Pr]{Pr()}}. If the requested representation is not available in the object \code{x}, then a warning is issued and no revisability is plotted.}
 
 \item{subset}{Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.}
 
@@ -48,7 +48,7 @@
 \code{NULL}, \link[base:invisible]{invisibly}; produces a plot, see \code{\link[graphics:matplot]{graphics::matplot()}}.
 }
 \description{
-This \code{\link[base:plot]{base::plot()}} method is a utility to plot probabilities obtained with \code{\link[=Pr]{Pr()}}, as well as their variabilities. The probabilities are plotted either against \code{Y}, with one curve for each value of \code{X}, or vice versa.
+This \code{\link[base:plot]{base::plot()}} method is a utility to plot probabilities obtained with \code{\link[=Pr]{Pr()}}, as well as their revisabilities. The probabilities are plotted either against \code{Y}, with one curve for each value of \code{X}, or vice versa.
 }
 \examples{
 ## Load the example `learnt` object calculated from the "penguins" dataset;
@@ -69,7 +69,7 @@ plot(probs)
 \seealso{
 \code{\link[=Pr]{Pr()}} to calculate posterior probabilities and quantiles.
 
-\code{\link[=hist.probability]{hist.probability()}} to plot the variability of the probabilities as a distribution.
+\code{\link[=hist.probability]{hist.probability()}} to plot the revisability of the probabilities as a distribution.
 
 \code{\link[=flexiplot]{flexiplot()}} (on which \code{plot.probability()} is based) for more general plots.
 

@@ -588,11 +588,11 @@ The Pearson correlation yields the same the association *ranking* as the mutual 
 
 \
 
-## Uncertainty about associations and variability of mutual information
+## Uncertainty about associations and revisability of mutual information
 
-Any measure of association that we calculate from a finite sample of data is obviously uncertain: a much larger data sample might reveal a stronger or weaker association. Likewise, the mutual association that we calculate from a finite sample of data is subject to a possible variability, in the sense that if we collected many more data, and calculated the mutual association from them, we could find a slightly different -- or maybe the same -- value.
+Any measure of association that we calculate from a finite sample of data is obviously uncertain: a much larger data sample might reveal a stronger or weaker association. Likewise, the mutual association that we calculate from a finite sample of data is subject to a possible "revisability", in the sense that if we collected many more data, and calculated the mutual association from them, we could find a slightly different -- or maybe the same -- value.
 
-The function `mutualinfo()` calculates not only the mutual information between two groups of variates from the present dataset. It also calculates the possible *variability* of the mutual information, if more data were collected, together with the probability of such a variation.
+The function `mutualinfo()` calculates not only the mutual information between two groups of variates from the present dataset. It also calculates the possible revisability of the mutual information, if more data were collected, together with the probability of such a revision.
 
 Let's see for example how much variation we can expect in the case of the [association between island and species]{#islandspecies}. One way to ask this is "with more data, what would be value of the mutual information between island and species, with 89% probability?". The answer was already calculated by `mutualinfo()`, and can be seen with the utility function `print()`:
 
@@ -611,8 +611,8 @@ hist(MIislandspecies)
 ```
 
 <div class="figure">
-<img src="figure/histislandspecies-1.jpeg" alt="**Variability of mutual information with larger data samples**" width="100%" />
-<p class="caption">**Variability of mutual information with larger data samples**</p>
+<img src="figure/histislandspecies-1.jpeg" alt="**Revisability of mutual information with a much larger data sample**" width="100%" />
+<p class="caption">**Revisability of mutual information with a much larger data sample**</p>
 </div>
 
 

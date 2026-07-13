@@ -48,9 +48,9 @@
 #' @param learnt Either a character with the name of a directory or full path
 #'   for an 'learnt.rds' object, or such an object itself.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
-#' @param quantiles Numeric vector, between 0 and 1: desired quantiles of the variability of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in [Pr()].
+#' @param quantiles Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in [Pr()].
 #' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "learnt" object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "learnt" object.
-#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "learnt" object to use for calculating the variability of the mutual information.
+#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "learnt" object to use for calculating the revisability of the mutual information.
 #' @param unit Either one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used.
 #' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use roughly half of available cores; `FALSE`: use serial computation; integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
@@ -58,14 +58,14 @@
 #' @return An object of class "MI", which is a list consisting of the following elements:
 #'
 #' - `$value`, the mutual information between (joint) variates `Y1names` and (joint) variates `Y2names`.
-#' - `$quantiles`, a vector with the variability quantiles for the mutual information.
+#' - `$quantiles`, a vector with the revisability quantiles for the mutual information.
 #' - `$MCaccuracy`, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the `value` of the mutual information.
-#' - `$samples`, a vector with the variability samples for the mutual information.
+#' - `$samples`, a vector with the revisability samples for the mutual information.
 #' - `$rGauss`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
 #' - `$unit`, `$Y1names`, `$Y1names`: same as the input arguments.
 #'
 #' @seealso
-#' [Pr()] to calculate probabilities and their variability.
+#' [Pr()] to calculate probabilities and their revisability.
 #'
 #' [learn()], which generates the `learnt` objects required by `mutualinfo()`.
 #'
@@ -520,7 +520,7 @@ mutualinfo <- function(
     ##         logjacobianOr = FALSE)),
     ##     na.rm = TRUE)
 
-    ## Separate columns for MI with columns for its variability
+    ## Separate columns for MI with columns for its revisability
     outva <- out[, 'fMI']
     ## ids <- out[,3] # for debugging
     ## dim(ids) <- c(ns, nv) # for debugging

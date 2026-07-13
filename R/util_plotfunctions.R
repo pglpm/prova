@@ -16,7 +16,7 @@
 #'
 #' @param x Numeric or character: vector of x-coordinates. If missing, a numeric vector `1:...` is created having as many values as the rows of `y`.
 #' @param y Numeric or character: vector of y coordinates. If missing, a numeric vector `1:...` is created having as many values as the rows of `x`.
-#' @param xdomain,ydomain Character or numeric or `NULL` (default): vector of possible values of the variables represented in the `x`- and `y`-axes, in case the `x` or `y` argument is a character vector. The ordering of the values is respected. If `NULL`, then `unique(x)` or `unique(y)` is used.
+#' @param xdomain,ydomain Character or numeric or `NULL` (default): vector of possible values of the variates represented in the `x`- and `y`-axes, in case the `x` or `y` argument is a character vector. The ordering of the values is respected. If `NULL`, then `unique(x)` or `unique(y)` is used.
 #' @param xlim,ylim `NULL` (default) or a vector of two values. In the latter case, if any of the two values is not finite (including `NA` or `NULL`), then the `min` or `max` `x`- or `y`-coordinates of the plotted points are used.
 #' @param grid Logical: whether to plot a light grid. Default `TRUE`.
 #' @param alpha.f Numeric, default 1: opacity of the colours, `0` being completely invisible and `1` completely opaque.
@@ -238,7 +238,7 @@ flexiplot <- function(
 #'
 #' @param x Numeric or character: vector of x-coordinates. See [flexiplot()].
 #' @param y Numeric: a matrix having as many rows as `x` and an even number of columns, with one column per quantile. Typically these quantiles have been obtained with [Pr()], as their `$quantiles` value. This value is a three-dimensional array, and one of its columns (corresponding to the possible values of the `X` argument of [Pr()]) or one of its rows (corresponding to the possible values of the `Y` argument of [Pr()]) should be selected before being used as `y` input.
-#' @param xdomain Character or numeric or `NULL` (default): vector of possible values of the variable represented in the x-axis, if the `x` argument is a character vector. The ordering of the values is respected. If `NULL`, then `unique(x)` is used.
+#' @param xdomain Character or numeric or `NULL` (default): vector of possible values of the variate represented in the x-axis, if the `x` argument is a character vector. The ordering of the values is respected. If `NULL`, then `unique(x)` is used.
 #' @param alpha.f Numeric, default 0.25: opacity of the quantile bands, `0` being completely invisible and `1` completely opaque.
 #' @param col Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. Default `#4477AA`.
 #' @param border Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
@@ -337,10 +337,10 @@ plotquantiles <- function(
 #' Plot an object of class "probability"
 #'
 #' @description
-#' This [base::plot()] method is a utility to plot probabilities obtained with [Pr()], as well as their variabilities. The probabilities are plotted either against `Y`, with one curve for each value of `X`, or vice versa.
+#' This [base::plot()] method is a utility to plot probabilities obtained with [Pr()], as well as their revisabilities. The probabilities are plotted either against `Y`, with one curve for each value of `X`, or vice versa.
 #'
 #' @param x Object of class "probability", obtained with [Pr()].
-#' @param variability One of the values `'quantiles'`, `'samples'`, `'none'` (equivalent to `NA` or `FALSE`), or `NULL` (default), in which case the variability available in `p` is used. This argument chooses how to represent the variability of the probability; see [Pr()]. If the requested variability is not available in the object `p`, then a warning is issued and no variability is plotted.
+#' @param concentration One of the values `'quantiles'`, `'samples'`, `'none'` (equivalent to `NA` or `FALSE`), or `NULL` (default), in which case the revisability available in `p` is used. This argument chooses how to represent the revisability of the probability; see [Pr()]. If the requested representation is not available in the object `x`, then a warning is issued and no revisability is plotted.
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
 #'
 #' @param PvsY Logical or `NULL`: should probabilities be plotted against their `Y` argument? If `NULL`, the argument between `Y` and `X` having larger number of values is chosen. As many probability curves will be plotted as the number of values of the other argument.
@@ -355,7 +355,7 @@ plotquantiles <- function(
 #' @seealso
 #' [Pr()] to calculate posterior probabilities and quantiles.
 #'
-#' [hist.probability()] to plot the variability of the probabilities as a distribution.
+#' [hist.probability()] to plot the revisability of the probabilities as a distribution.
 #'
 #' [flexiplot()] (on which `plot.probability()` is based) for more general plots.
 #'
@@ -382,7 +382,7 @@ plotquantiles <- function(
 #' @export
 plot.probability <- function(
     x,
-    variability = NULL,
+    concentration = NULL,
     subset = NULL,
     PvsY = NULL,
     legend = 'top',
@@ -421,39 +421,39 @@ plot.probability <- function(
 
 
 
-    ## Check how we should represent the variability
+    ## Check how we should represent the revisability
     ## The user can choose among three options
     ## provided that option is available in argument 'x'
-    if(is.null(variability)) { # User is not choosing
+    if(is.null(concentration)) { # User is not choosing
         ## We choose 'quantiles' or what's available
         if(!is.null(x$quantiles)) {
-            variability <- 'quantiles'
+            concentration <- 'quantiles'
         } else if(!is.null(x$samples)){
-            variability <- 'samples'
+            concentration <- 'samples'
         } else {
-            variability <- 'none'
+            concentration <- 'none'
         }
     } else { # User is choosing
-        if(is.na(variability) || isFALSE(variability)){ variability <- 'none'}
+        if(is.na(concentration) || isFALSE(concentration)){ concentration <- 'none'}
 
         ## handle shortenings
-        variability <- match.arg(variability, c('quantiles', 'samples', 'none'))
+        concentration <- match.arg(concentration, c('quantiles', 'samples', 'none'))
 
         ## handle impossible requests
         if(
-        (variability == 'quantiles' && is.null(x$quantiles)) ||
-            (variability == 'samples' && is.null(x$samples))
+        (concentration == 'quantiles' && is.null(x$quantiles)) ||
+            (concentration == 'samples' && is.null(x$samples))
         ) {
-            message('Requested variability not available. Omitting its plot.')
-            variability <- 'none'
+            message('Requested concentration not available. Omitting its plot.')
+            concentration <- 'none'
         }
     }
 
     Ylen <- nrow(x$values)
     Xlen <- ncol(x$values)
 
-    ## Rename the variability object so as to avoid if-else below
-    if(variability == 'quantiles'){
+    ## Rename the revisability object so as to avoid if-else below
+    if(concentration == 'quantiles'){
         mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
         pvar <- x$quantiles
         ## if we are plotting more than one curve, keep only the 89% band
@@ -466,7 +466,7 @@ plot.probability <- function(
         }
         qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
         if(is.null(var.alpha.f)){var.alpha.f <- 0.25}
-    } else if(variability == 'samples'){
+    } else if(concentration == 'samples'){
         pvar <- x$samples
         if(is.null(var.alpha.f)){var.alpha.f <- 1/ceiling(sqrt(dim(pvar)[3]))}
     } else {
@@ -521,7 +521,7 @@ plot.probability <- function(
             paste0(names(x$Y), collapse = ', '),
             if(!is.null(x$X)){paste0(' | ', paste0(names(x$X), collapse = ', '))}
         )
-        if(variability == 'quantiles'){
+        if(concentration == 'quantiles'){
             main <- paste0(main, '  [',
                 paste0(round(qnames, 1), '%', collapse = ', '),
                 ']')
@@ -535,7 +535,7 @@ plot.probability <- function(
         if(is.character(xxx)){type <- 'b'} else {type <- 'l'}
     }
 
-    ## Plot the variability first
+    ## Plot the revisability first
     ## find maximum and minimum y-value first, if needed
     if(is.na(ylim[2])){
         ylim[2] <- max(pvar, x$values)
@@ -543,7 +543,7 @@ plot.probability <- function(
     if(is.na(ylim[1])){
         ylim[1] <- min(pvar, x$values)
     }
-    if(variability == 'quantiles'){
+    if(concentration == 'quantiles'){
         for(i in seq_len(dim(pvar)[2])){
             plotquantiles(x = unlist(xxx), y = pvar[, i, ],
                 col = col[(i - 1) %% length(col) + 1],
@@ -559,7 +559,7 @@ plot.probability <- function(
             add <- TRUE
         }
 
-    } else if(variability == 'samples'){
+    } else if(concentration == 'samples'){
         ## the samples are plotted alternating between the different subgroups,
         ## rather than one group at a time, in order to avoid that
         ## the samples of the last subgroup cover the previous ones
@@ -625,15 +625,15 @@ plot.probability <- function(
 }
 
 
-#' Plot the variability of an object of class "probability" as a histogram
+#' Plot the revisability or concentration of an object of class "probability" as a histogram
 #'
 #' @description
-#' The posterior probabilities calculated with the [Pr()] function, and outputted as a "probability" object, have an associated variability that comes from the finite size of the data sample. This variability can be interpreted in two ways:
+#' The posterior probabilities calculated with the [Pr()] function, and outputted as a "probability" object, have an associated "revisability", also called "concentration", that comes from the finite size of the data sample. This revisability can be interpreted in two ways:
 #'
 #' - How the probabilities could change, if we collected a much larger (infinite) data sample, and how likely would such change be;
 #' - The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
 #'
-#' The `hist()` method for a "probability" object is a utility to visualize this kind of variability, in the form of a distribution.
+#' The `hist()` method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution.
 #'
 #' @param x Object of class "probability", obtained with [Pr()].
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
@@ -660,12 +660,12 @@ plot.probability <- function(
 #' ## variates: 'species' and 'bill_len'
 #' learnt <- learntExample
 #'
-#' ## calculate the probability, and its variability,
+#' ## calculate the probability, and its revisability,
 #' ## for the value 'Adelie' of the "species" variate
 #' probs <- Pr(Y = data.frame(species = 'Adelie'), learnt = learnt, parallel = 1)
 #' probs$values
 #'
-#' ## show the variability of this probability; equivalently show
+#' ## show the revisability of this probability; equivalently show
 #' ## the probability distribution for the relative frequency of
 #' ## 'Adelie' penguins in the full population
 #' hist(probs, legend = 'topright')
@@ -709,7 +709,7 @@ hist.probability <- function(
 
     ## Check that samples are available in the probability object
     if(is.null(x$samples)) {
-        stop('The "probability" object does not contain any variability samples')
+        stop('The "probability" object does not contain any revisability samples')
         }
     pvar <- x$samples
     Ylen <- nrow(x$values)
@@ -836,7 +836,7 @@ hist.probability <- function(
 #' Print an object of class "probability"
 #'
 #' @description
-#' This [base::print()] method is a utility to display selected elements of a "probability" object obtained with [Pr()]; typically its posterior probabilies (element `$values`) and their variabilities (element `$quantiles`). If the `Y` or `X` variates are joint variates, this method also allow to display only selected values of them.
+#' This [base::print()] method is a utility to display selected elements of a "probability" object obtained with [Pr()]; typically its posterior probabilies (element `$values`) and their revisabilities (element `$quantiles`). If the `Y` or `X` variates are joint variates, this method also allow to display only selected values of them.
 #'
 #' @param x Object of class "probability", obtained with [Pr()].
 #' @param elements character or integer vector, or `NULL` (default): elements of the "probability" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `$values` and `$quantiles` are displayed together in a special way.
@@ -850,7 +850,7 @@ hist.probability <- function(
 #' [Pr()] to calculate posterior probabilities and quantiles.
 #'
 #' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()'.
-#' [hist.probability()] to plot the variability of the probabilities as a distribution.
+#' [hist.probability()] to plot the revisability of the probabilities as a distribution.
 #'
 #' @examples
 #' ## Load the example `learnt` object calculated from the "penguins" dataset;
@@ -865,7 +865,7 @@ hist.probability <- function(
 #'
 #' probs <- Pr(Y = Y, X = X, learnt = learnt, parallel = 1)
 #'
-#' ## display the values and variabilities of these probabilities
+#' ## display the values and revisabilities of these probabilities
 #' print(probs)
 #'
 #' ## diplay 'values' only, and only for the species value 'Gentoo'
@@ -902,7 +902,7 @@ print.probability <- function(
                     dim = dim(x$quantiles) + c(0, 0, 1),
                     dimnames = c(
                         dimnames(x$values),
-                        list(`probability & variability` = c('value', paste0('Q', dimnames(x$quantiles)[[3]])))
+                        list(`probability & revisability` = c('value', paste0('Q', dimnames(x$quantiles)[[3]])))
                     ) ), perm = c(1,3,2))
 
             if(is.null(x$X)){temp <- temp[,,]}
@@ -914,7 +914,7 @@ print.probability <- function(
                     dim = dim(x$quantiles) + c(0, 0, 1),
                     dimnames = c(
                         dimnames(x$values),
-                        list(`probability & variability` = c('value', paste0('Q', dimnames(x$quantiles)[[3]])))
+                        list(`probability & revisability` = c('value', paste0('Q', dimnames(x$quantiles)[[3]])))
                     ) ), perm = c(1,3,2))
 
             if(is.null(x$X)){temp <- temp[,,]}
@@ -950,12 +950,12 @@ print.probability <- function(
 }
 
 
-#' Plot the variability of an object of class "MI" as a histogram
+#' Plot the revisability of an object of class "MI" as a histogram
 #'
 #' @description
-#' The mutual information calculated with the [mutualinfo()] function, and outputted as a "MI" object, has an associated variability that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
+#' The mutual information calculated with the [mutualinfo()] function, and outputted as a "MI" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
 #'
-#' The `hist()` method for a "MI" object is a utility to visualize this kind of variability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
+#' The `hist()` method for a "MI" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
 #'
 #' @param x Object of class "MI", obtained with [mutualinfo()].
 #' @param breaks `NULL` or as in function [graphics::hist()]. If `NULL` (default), an optimal number of breaks for each probability distribution is computed.
@@ -967,7 +967,7 @@ print.probability <- function(
 #' @return [Invisibly][base::invisible()], an object of class ["histogram"][graphics::hist()].
 #'
 #' @seealso
-#' [mutualinfo()] to calculate mutual information and its variability.
+#' [mutualinfo()] to calculate mutual information and its revisability.
 #'
 #' [flexiplot()] (on which `hist.MI()` is based) for more general plots.
 #'
@@ -976,11 +976,11 @@ print.probability <- function(
 #' ## variates: 'species' and 'bill_len'
 #' learnt <- learntExample
 #'
-#' ## calculate the mutual information and its variability
+#' ## calculate the mutual information and its revisability
 #' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
 #'   learnt = learnt, nv = 2, parallel = 1)
 #'
-#' ## show the possible variability of the mutual information,
+#' ## show the possible revisability of the mutual information,
 #' ## if a much larger data sample were collected
 #' hist(MI)
 #'
@@ -1017,7 +1017,7 @@ hist.MI <- function(
 
     ## Check that samples are available in the HI object
     if(is.null(x$samples)) {
-        stop('The MI object does not contain any variability samples')
+        stop('The MI object does not contain any revisability samples')
         }
     ff <- x$samples
 
@@ -1090,7 +1090,7 @@ hist.MI <- function(
 #' Print an object of class "MI" (mutual information)
 #'
 #' @description
-#' This [base::print()] method is a utility to display value and variability of an "MI" object obtained with [mutualinfo()].
+#' This [base::print()] method is a utility to display value and revisability of an "MI" object obtained with [mutualinfo()].
 #'
 #' @param x Object of class "MI", obtained with [mutualinfo()].
 #' @param digits positive number, default 2,: number of significant digits, see [base::print.default()].
@@ -1101,7 +1101,7 @@ hist.MI <- function(
 #' @seealso
 #' [mutualinfo()] to calculate mutual information.
 #'
-#' [hist.MI()] to plot the variability of the mutual information.
+#' [hist.MI()] to plot the revisability of the mutual information.
 #'
 #' @examples
 #' \donttest{
@@ -1115,7 +1115,7 @@ hist.MI <- function(
 #' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
 #'   learnt = learnt, parallel = 1)
 #'
-#' ## display the values and variabilities of the mutual information
+#' ## display the values and revisability of the mutual information
 #' print(MI)
 #' }
 #'

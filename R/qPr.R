@@ -1,8 +1,8 @@
 #' Calculate quantiles
 #'
-#' @description This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the variability of such quantiles if more training data were available.
+#' @description This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the revisability of such quantiles if more training data were available.
 #'
-#' @details This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, \text{data})} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the variability of those quantiles if more learning data were provided. It is somewhat analogous to the `qxxx`-variants of [R distribution functions][stats::Distributions]. The variability can be expressed in the form of quantiles, samples, or both, as in the [Pr()] function. If several joint values are given for the probability levels and for `X`, the function creates a 2D grid of results for all possible combinations of the given probability levels and `X` values. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails`.
+#' @details This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, \text{data})} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the `qxxx`-variants of [R distribution functions][stats::Distributions]. The revisability can be expressed in the form of quantiles, samples, or both, as in the [Pr()] function. If several joint values are given for the probability levels and for `X`, the function creates a 2D grid of results for all possible combinations of the given probability levels and `X` values. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails`.
 #'
 #' @param p Numeric vector of probability levels. Default: `c(0.25, 0.5, 0.75)`.
 #' @param Yname Character vector: name of variate whose quantiles will be computed.
@@ -11,8 +11,8 @@
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param priorY Reserved for use in future versions of the package.
 ## #' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal. For the moment only the value `NULL` is accepted.
-#' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the variability of the quantile for `Y`. If `NULL`, no samples are reported. If `'all'` (or `Inf`), all samples obtained by the [learn()] function are used.
-#' @param quantiles Numeric vector, between 0 and 1, or `NULL`: desired quantiles of the variability of the quantile for `Y`. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles (these are typical quantile values in the Bayesian literature: they give 50% and 89% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty). If `NULL`, no quantiles are calculated.
+#' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the quantile for `Y`. If `NULL`, no samples are reported. If `'all'` (or `Inf`), all samples obtained by the [learn()] function are used.
+#' @param quantiles Numeric vector, between 0 and 1, or `NULL`: desired quantiles of the revisability of the quantile for `Y`. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles (these are typical quantile values in the Bayesian literature: they give 50% and 89% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty). If `NULL`, no quantiles are calculated.
 #' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use roughly half of available cores; `FALSE`: use serial computation; integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
 #' @param sep character, default `','`: character to separate variate names and values
 #' @param solidus character, default `'|'`: character prepended to names of the variates in the conditional (typically the `X` variates).
@@ -23,8 +23,8 @@
 #'
 #' @return A list of the following elements:
 #' - `$values`: a matrix with the requested \eqn{Y}-quantiles `p` conditional on the requested \eqn{X}-values in `X`, for all combinations of `p` (rows) and `X` (columns).
-#' - `$quantiles` (possibly `NULL`): an array with the variability quantiles (3rd dimension of the array) for the quantiles of the `value` element.
-#' - `$samples` (possibly `NULL`): an array with the variability samples (3rd dimension of the array) for such quantiles.
+#' - `$quantiles` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the `value` element.
+#' - `$samples` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such quantiles.
 #' - `$Y`, `$X`: copies of the `Y` and `X` arguments.
 #'
 #' @references
@@ -67,7 +67,7 @@
 #' ## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
 #' probs$values
 #'
-#' ## display the variability about the quantiles
+#' ## display the revisability about the quantiles
 #' quants$quantiles
 #'
 #'

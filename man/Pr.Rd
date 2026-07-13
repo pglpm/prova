@@ -31,9 +31,9 @@ the joint probability of. One variate per column, one set of values per row.}
 
 \item{priorY}{Numeric vector with the same length as the rows of \code{Y}, or \code{TRUE}, or \code{NULL} (default): prior probabilities or base rates for the \code{Y} values. If \code{TRUE}, the prior probabilities are assumed to be all equal.}
 
-\item{nsamples}{Integer or \code{NULL} or \code{'all'} (default): desired number of samples of the variability of the probability for \code{Y}. If \code{NULL}, no samples are reported. If \code{'all'} (or \code{Inf}), all samples obtained by the \code{\link[=learn]{learn()}} function are used.}
+\item{nsamples}{Integer or \code{NULL} or \code{'all'} (default): desired number of samples of the revisability of the probability for \code{Y}. If \code{NULL}, no samples are reported. If \code{'all'} (or \code{Inf}), all samples obtained by the \code{\link[=learn]{learn()}} function are used.}
 
-\item{quantiles}{Numeric vector, between 0 and 1, or \code{NULL}: desired quantiles of the variability of the probability for \code{Y}. Default \code{c(0.055, 0.25, 0.75, 0.945)}, that is, the 5.5\%, 25\%, 75\%, 94.5\% quantiles. These are typical quantile values in the Bayesian literature: they give 50\% and 89\% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty (see \url{doi:10.5281/zenodo.17072199}). If \code{NULL}, no quantiles are calculated.}
+\item{quantiles}{Numeric vector, between 0 and 1, or \code{NULL}: desired quantiles of the revisability of the probability for \code{Y}. Default \code{c(0.055, 0.25, 0.75, 0.945)}, that is, the 5.5\%, 25\%, 75\%, 94.5\% quantiles. These are typical quantile values in the Bayesian literature: they give 50\% and 89\% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty (see \url{doi:10.5281/zenodo.17072199}). If \code{NULL}, no quantiles are calculated.}
 
 \item{parallel}{Logical or positive integer or cluster object. \code{TRUE} (default): use roughly half of available cores; \code{FALSE}: use serial computation; integer: use this many cores. It can also be a cluster object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}; in this case the parallel computation will use this object.}
 
@@ -49,24 +49,24 @@ the joint probability of. One variate per column, one set of values per row.}
 An object of class "probability", which is a list consisting of the following elements:
 \itemize{
 \item \verb{$values}: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
-\item \verb{$quantiles} (possibly \code{NULL}): an array with the variability quantiles (3rd dimension of the array) for such probabilities.
-\item \verb{$samples} (possibly \code{NULL}): an array with the variability samples (3rd dimension of the array) for such probabilities.
+\item \verb{$quantiles} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
+\item \verb{$samples} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such probabilities.
 \item \verb{$values.MCaccuracy}, \code{quantiles.MCaccuracy}: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the \code{values} and \code{quantiles} elements.
 \item \verb{$Y}, \verb{$X}, \verb{$tails}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
 }
 }
 \description{
-This function calculates posterior probabilities and probability densities, cumulative posterior probabilities, and mixtures thereof. It also outputs the variability of such probabilities if more training data were available, and the Monte Carlo Standard Error for the calculated posterior probabilities.
+This function calculates posterior probabilities and probability densities, cumulative posterior probabilities, and mixtures thereof. It also outputs the "revisability" of such probabilities if more training data were available, and the Monte Carlo Standard Error for the calculated posterior probabilities.
 }
 \details{
 This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as \link[base:data.frame]{data frame} arguments \code{Y} and \code{X}. It is somewhat analogous to the \code{dxxx}-variants and \code{pxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert \text{data})} is calculated.
 
 For some variates in \code{Y} or \code{X}, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, \text{data})\ .} Tail values are inputted via the \code{'tails'} argument; see "Usage".
 
-This function also outputs the variability of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new\,data}, \text{data})} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This variability can be outputted in two ways; the user can choose either, or both, or none:
+This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new\,data}, \text{data})} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:
 \itemize{
 \item As samples (default 3600 samples, depending on the 'nsamples' argument given to the \code{\link[=learn]{learn()}} function) of the alternative values that the posterior probability could have.
-\item As quantiles (default 5.5\%, 25\%, 75\%, 94.5\%) of the possible variability.
+\item As quantiles (default 5.5\%, 25\%, 75\%, 94.5\%) of the possible revisability.
 }
 
 If several joint values are given for \code{Y} or \code{X}, the function will create a 2D grid of results for all possible combinations of the given \code{Y} and \code{X} values.

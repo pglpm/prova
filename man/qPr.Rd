@@ -34,9 +34,9 @@ qPr(
 
 \item{priorY}{Reserved for use in future versions of the package.}
 
-\item{nsamples}{Integer or \code{NULL} or \code{'all'} (default): desired number of samples of the variability of the quantile for \code{Y}. If \code{NULL}, no samples are reported. If \code{'all'} (or \code{Inf}), all samples obtained by the \code{\link[=learn]{learn()}} function are used.}
+\item{nsamples}{Integer or \code{NULL} or \code{'all'} (default): desired number of samples of the revisability of the quantile for \code{Y}. If \code{NULL}, no samples are reported. If \code{'all'} (or \code{Inf}), all samples obtained by the \code{\link[=learn]{learn()}} function are used.}
 
-\item{quantiles}{Numeric vector, between 0 and 1, or \code{NULL}: desired quantiles of the variability of the quantile for \code{Y}. Default \code{c(0.055, 0.25, 0.75, 0.945)}, that is, the 5.5\%, 25\%, 75\%, 94.5\% quantiles (these are typical quantile values in the Bayesian literature: they give 50\% and 89\% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty). If \code{NULL}, no quantiles are calculated.}
+\item{quantiles}{Numeric vector, between 0 and 1, or \code{NULL}: desired quantiles of the revisability of the quantile for \code{Y}. Default \code{c(0.055, 0.25, 0.75, 0.945)}, that is, the 5.5\%, 25\%, 75\%, 94.5\% quantiles (these are typical quantile values in the Bayesian literature: they give 50\% and 89\% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty). If \code{NULL}, no quantiles are calculated.}
 
 \item{parallel}{Logical or positive integer or cluster object. \code{TRUE} (default): use roughly half of available cores; \code{FALSE}: use serial computation; integer: use this many cores. It can also be a cluster object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}; in this case the parallel computation will use this object.}
 
@@ -54,16 +54,16 @@ qPr(
 A list of the following elements:
 \itemize{
 \item \verb{$values}: a matrix with the requested \eqn{Y}-quantiles \code{p} conditional on the requested \eqn{X}-values in \code{X}, for all combinations of \code{p} (rows) and \code{X} (columns).
-\item \verb{$quantiles} (possibly \code{NULL}): an array with the variability quantiles (3rd dimension of the array) for the quantiles of the \code{value} element.
-\item \verb{$samples} (possibly \code{NULL}): an array with the variability samples (3rd dimension of the array) for such quantiles.
+\item \verb{$quantiles} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the \code{value} element.
+\item \verb{$samples} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such quantiles.
 \item \verb{$Y}, \verb{$X}: copies of the \code{Y} and \code{X} arguments.
 }
 }
 \description{
-This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the variability of such quantiles if more training data were available.
+This function calculates the quantiles of posterior probabilities and posterior conditional probabilities. It also outputs the revisability of such quantiles if more training data were available.
 }
 \details{
-This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, \text{data})} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the variability of those quantiles if more learning data were provided. It is somewhat analogous to the \code{qxxx}-variants of \link[stats:Distributions]{R distribution functions}. The variability can be expressed in the form of quantiles, samples, or both, as in the \code{\link[=Pr]{Pr()}} function. If several joint values are given for the probability levels and for \code{X}, the function creates a 2D grid of results for all possible combinations of the given probability levels and \code{X} values. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.
+This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, \text{data})} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the \code{qxxx}-variants of \link[stats:Distributions]{R distribution functions}. The revisability can be expressed in the form of quantiles, samples, or both, as in the \code{\link[=Pr]{Pr()}} function. If several joint values are given for the probability levels and for \code{X}, the function creates a 2D grid of results for all possible combinations of the given probability levels and \code{X} values. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.
 }
 \examples{
 ### WARNING: the following examples, if run, might even take a minute or more.
@@ -95,7 +95,7 @@ probs <- Pr(
 ## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
 probs$values
 
-## display the variability about the quantiles
+## display the revisability about the quantiles
 quants$quantiles
 
 

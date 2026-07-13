@@ -19,7 +19,7 @@ testPr(Y, X = NULL, learnt, tails = NULL)
 A list consisting of the following elements:
 \itemize{
 \item \code{value}: value of \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}.
-\item \code{samples}: a vector with the variability samples of the probability above.
+\item \code{samples}: a vector with the revisability samples of the probability above.
 \item \code{jacobians}: a vector with the Jacobian of the internal transformation.
 }
 }

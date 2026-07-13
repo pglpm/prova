@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_plotfunctions.R
 \name{hist.probability}
 \alias{hist.probability}
-\title{Plot the variability of an object of class "probability" as a histogram}
+\title{Plot the revisability or concentration of an object of class "probability" as a histogram}
 \usage{
 \method{hist}{probability}(
   x,
@@ -46,25 +46,25 @@
 \link[base:invisible]{Invisibly}, an object of class \link[graphics:hist]{"histogram"}.
 }
 \description{
-The posterior probabilities calculated with the \code{\link[=Pr]{Pr()}} function, and outputted as a "probability" object, have an associated variability that comes from the finite size of the data sample. This variability can be interpreted in two ways:
+The posterior probabilities calculated with the \code{\link[=Pr]{Pr()}} function, and outputted as a "probability" object, have an associated "revisability", also called "concentration", that comes from the finite size of the data sample. This revisability can be interpreted in two ways:
 \itemize{
 \item How the probabilities could change, if we collected a much larger (infinite) data sample, and how likely would such change be;
 \item The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
 }
 
-The \code{hist()} method for a "probability" object is a utility to visualize this kind of variability, in the form of a distribution.
+The \code{hist()} method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution.
 }
 \examples{
 ## Load the example `learnt` object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 learnt <- learntExample
 
-## calculate the probability, and its variability,
+## calculate the probability, and its revisability,
 ## for the value 'Adelie' of the "species" variate
 probs <- Pr(Y = data.frame(species = 'Adelie'), learnt = learnt, parallel = 1)
 probs$values
 
-## show the variability of this probability; equivalently show
+## show the revisability of this probability; equivalently show
 ## the probability distribution for the relative frequency of
 ## 'Adelie' penguins in the full population
 hist(probs, legend = 'topright')

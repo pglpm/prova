@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_plotfunctions.R
 \name{hist.MI}
 \alias{hist.MI}
-\title{Plot the variability of an object of class "MI" as a histogram}
+\title{Plot the revisability of an object of class "MI" as a histogram}
 \usage{
 \method{hist}{MI}(
   x,
@@ -40,26 +40,26 @@
 \link[base:invisible]{Invisibly}, an object of class \link[graphics:hist]{"histogram"}.
 }
 \description{
-The mutual information calculated with the \code{\link[=mutualinfo]{mutualinfo()}} function, and outputted as a "MI" object, has an associated variability that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
+The mutual information calculated with the \code{\link[=mutualinfo]{mutualinfo()}} function, and outputted as a "MI" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
 
-The \code{hist()} method for a "MI" object is a utility to visualize this kind of variability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
+The \code{hist()} method for a "MI" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
 }
 \examples{
 ## Load the example `learnt` object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 learnt <- learntExample
 
-## calculate the mutual information and its variability
+## calculate the mutual information and its revisability
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
   learnt = learnt, nv = 2, parallel = 1)
 
-## show the possible variability of the mutual information,
+## show the possible revisability of the mutual information,
 ## if a much larger data sample were collected
 hist(MI)
 
 }
 \seealso{
-\code{\link[=mutualinfo]{mutualinfo()}} to calculate mutual information and its variability.
+\code{\link[=mutualinfo]{mutualinfo()}} to calculate mutual information and its revisability.
 
 \code{\link[=flexiplot]{flexiplot()}} (on which \code{hist.MI()} is based) for more general plots.
 }

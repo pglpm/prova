@@ -21,7 +21,7 @@
 Its \code{x} argument, \link[base:invisible]{invisibly}; see \code{\link[base:print]{base::print()}}.
 }
 \description{
-This \code{\link[base:print]{base::print()}} method is a utility to display selected elements of a "probability" object obtained with \code{\link[=Pr]{Pr()}}; typically its posterior probabilies (element \verb{$values}) and their variabilities (element \verb{$quantiles}). If the \code{Y} or \code{X} variates are joint variates, this method also allow to display only selected values of them.
+This \code{\link[base:print]{base::print()}} method is a utility to display selected elements of a "probability" object obtained with \code{\link[=Pr]{Pr()}}; typically its posterior probabilies (element \verb{$values}) and their revisabilities (element \verb{$quantiles}). If the \code{Y} or \code{X} variates are joint variates, this method also allow to display only selected values of them.
 }
 \examples{
 ## Load the example `learnt` object calculated from the "penguins" dataset;
@@ -36,7 +36,7 @@ X <- data.frame(bill_len = c(43, 44))
 
 probs <- Pr(Y = Y, X = X, learnt = learnt, parallel = 1)
 
-## display the values and variabilities of these probabilities
+## display the values and revisabilities of these probabilities
 print(probs)
 
 ## diplay 'values' only, and only for the species value 'Gentoo'
@@ -47,6 +47,6 @@ print(probs, elements = 'values', subset = list(species = 'Gentoo'))
 \code{\link[=Pr]{Pr()}} to calculate posterior probabilities and quantiles.
 
 \code{\link[=plot.probability]{plot.probability()}} to plot probabilities and quantiles calculated by `Pr()'.
-\code{\link[=hist.probability]{hist.probability()}} to plot the variability of the probabilities as a distribution.
+\code{\link[=hist.probability]{hist.probability()}} to plot the revisability of the probabilities as a distribution.
 }
 \concept{display}

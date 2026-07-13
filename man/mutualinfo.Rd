@@ -30,11 +30,11 @@ for an 'learnt.rds' object, or such an object itself.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
-\item{quantiles}{Numeric vector, between 0 and 1: desired quantiles of the variability of the mutual information. Default \code{c(0.055, 0.25, 0.75, 0.945)}, that is, the 5.5\%, 25\%, 75\%, 94.5\% quantiles. See similar argument in \code{\link[=Pr]{Pr()}}.}
+\item{quantiles}{Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default \code{c(0.055, 0.25, 0.75, 0.945)}, that is, the 5.5\%, 25\%, 75\%, 94.5\% quantiles. See similar argument in \code{\link[=Pr]{Pr()}}.}
 
 \item{ns}{Integer or \code{Inf} or \code{NULL} (default): number of Monte Carlo samples in the "learnt" object to use for calculating the mutual information. If \code{Inf} or \code{NULL}, use all Monte Carlo samples available in the "learnt" object.}
 
-\item{nv}{Integer, default 12: number of \emph{duplicates} of Monte Carlo samples in the "learnt" object to use for calculating the variability of the mutual information.}
+\item{nv}{Integer, default 12: number of \emph{duplicates} of Monte Carlo samples in the "learnt" object to use for calculating the revisability of the mutual information.}
 
 \item{unit}{Either one of 'Sh' for \emph{shannon} (default), 'Hart' for \emph{hartley}, 'nat' for \emph{natural unit}, or a positive real indicating the base of the logarithms to be used.}
 
@@ -46,9 +46,9 @@ for an 'learnt.rds' object, or such an object itself.}
 An object of class "MI", which is a list consisting of the following elements:
 \itemize{
 \item \verb{$value}, the mutual information between (joint) variates \code{Y1names} and (joint) variates \code{Y2names}.
-\item \verb{$quantiles}, a vector with the variability quantiles for the mutual information.
+\item \verb{$quantiles}, a vector with the revisability quantiles for the mutual information.
 \item \verb{$MCaccuracy}, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the \code{value} of the mutual information.
-\item \verb{$samples}, a vector with the variability samples for the mutual information.
+\item \verb{$samples}, a vector with the revisability samples for the mutual information.
 \item \verb{$rGauss}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
 \item \verb{$unit}, \verb{$Y1names}, \verb{$Y1names}: same as the input arguments.
 }
@@ -115,7 +115,7 @@ MI$quantiles
 
 }
 \seealso{
-\code{\link[=Pr]{Pr()}} to calculate probabilities and their variability.
+\code{\link[=Pr]{Pr()}} to calculate probabilities and their revisability.
 
 \code{\link[=learn]{learn()}}, which generates the \code{learnt} objects required by \code{mutualinfo()}.
 }
