@@ -1,6 +1,6 @@
 # Changelog
 
-## Prova v2.1.0
+## Prova v1.2.0
 
 - The function
   [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
