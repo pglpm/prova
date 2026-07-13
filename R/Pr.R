@@ -539,7 +539,8 @@ Pr <- function(
     if(is.null(priorY)){
         ## multiply by jacobian factors
         out$values <- out$values * jacobians
-        out$values.MCaccuracy <- signif(x = out$values.MCaccuracy * jacobians,
+        out$values.MCaccuracy <- signif(
+            x = out$values.MCaccuracy * jacobians,
             digits = 2)
 
         dimnames(out$values) <- c(Ynames, Xnames)
@@ -588,7 +589,8 @@ Pr <- function(
             dim(out$quantiles.MCaccuracy) <- c(nY, nX, length(quantiles))
             ## multiply by jacobian factors
             out$quantiles <- out$quantiles * jacobians
-            out$quantiles.MCaccuracy <- signif(x = out$quantiles.MCaccuracy * jacobians,
+            out$quantiles.MCaccuracy <- signif(
+                x = out$quantiles.MCaccuracy * jacobians,
                 digits = 2)
 
             dimnames(out$quantiles) <- c(Ynames, Xnames, temp)
