@@ -884,96 +884,42 @@ print.probability <- function(
     if(!is.null(subset)){
         x <- prsubset(x, subset = subset)
     }
-    values <- x[['values']]
-    quantiles <- x[['quantiles']]
+
+    if(isTRUE(digits) && is.null(elements)){
+        vdigits <- 1 + ceiling(log10(x[['values']])) -
+            floor(log10(x[['values.MCaccuracy']]))
+        adigits <- rep.int(x = 2, times = length(x[['values.MCaccuracy']]))
+        if('quantiles' %in% names(x)){
+            qdigits <- 1 + ceiling(log10(x[['quantiles']])) -
+                floor(log10(x[['quantiles.MCaccuracy']]))
+        } else {qdigits <- NULL}
+    } else if(is.null(elements)){
+            vdigits <- adigits <- qdigits <- digits
+    } else if(!is.null(elements)){
+        digits <- 3
+    }
 
     if(is.null(elements)){
+        totake <- c('values', 'values.MCaccuracy', 'quantiles')
         ## rearrange and combine values and quantiles in a special way
-        if(isTRUE(digits)){
-            tempdigits <- c(1 - floor(log10(x[['values.MCaccuracy']])),
-                1 - floor(log10(x[['values.MCaccuracy']])),
-            if(!is.null(quantiles)){
-                1 - floor(log10(x[['quantiles.MCaccuracy']]))
-                }
-            )
-            ## in case MCaccuracy is 0:
-            tempdigits[is.na(tempdigits)] <- +Inf
+        temp <- aperm(a = array(data = signif(
+            x = unname(unlist(x[totake])),
+            digits = c(vdigits, adigits, qdigits) ),
+            dim = c(dim(x[['values']]),
+                2 + (if(is.null(x[['quantiles']])){0}else{dim(x[['quantiles']])[3]}) ),
+            dimnames = c(dimnames(x[['values']]),
+                list(`probability` = c('value', '+/-',
+                    if(!is.null(x[['quantiles']])){paste0('Q',
+                        dimnames(x[['quantiles']])[[3]])}
+                )))
+        ), perm = c(1,3,2))
 
-            temp <- aperm(
-                a = array(round(x = c(
-                    values, x[['values.MCaccuracy']], quantiles
-                ), digits = tempdigits),
-                dim = c(dim(values),
-                    2 + (if(is.null(quantiles)){0}else{dim(quantiles)[3]})
-                    ),
-                    dimnames = c(
-                        dimnames(values),
-                        list(`probability` = c('value', '+/-',
-                            if(!is.null(quantiles)){
-                                paste0('Q', dimnames(quantiles)[[3]])
-                            }
-                        )))
-              ), perm = c(1,3,2))
+        if(is.null(x$X)){temp <- temp[,,]}
 
-            if(is.null(x$X)){temp <- temp[,,]}
+        print(x = temp, ...)
 
-            print(x = temp, ...)
-        }else{
-            temp <- aperm(
-                a = array(signif(x = c(
-                    values, x[['values.MCaccuracy']], quantiles
-                ), digits = digits),
-                dim = c(dim(values),
-                    2 + (if(is.null(quantiles)){0}else{dim(quantiles)[3]})
-                    ),
-                    dimnames = c(
-                        dimnames(values),
-                        list(`probability` = c('value', '+/-',
-                            if(!is.null(quantiles)){
-                                paste0('Q', dimnames(quantiles)[[3]])
-                            }
-                        )))
-              ), perm = c(1,3,2))
-
-            if(is.null(x$X)){temp <- temp[,,]}
-
-            print(x = temp, digits = digits, ...)
-        }
     } else {
-        if(isTRUE(digits)){
-            if('values' %in% elements){
-            tempdigits <- 1 - floor(log10(x[['values.MCaccuracy']]))
-            ## in case MCaccuracy is 0:
-            tempdigits[is.na(tempdigits)] <- +Inf
-                values <- round(x = values, digits = tempdigits)
-            }
-            if('values.MCaccuracy' %in% elements){
-            tempdigits <- 1 - floor(log10(x[['values.MCaccuracy']]))
-            ## in case MCaccuracy is 0:
-            tempdigits[is.na(tempdigits)] <- +Inf
-            x[['values.MCaccuracy']] <- round(x = x[['values.MCaccuracy']],
-                digits = tempdigits)
-            }
-            if('quantiles' %in% elements && !is.null(quantiles)){
-                tempdigits <- 1 - floor(log10(x[['quantiles.MCaccuracy']]))
-                ## in case MCaccuracy is 0:
-                tempdigits[is.na(tempdigits)] <- +Inf
-                quantiles <- round(x = quantiles, digits = tempdigits)
-            }
-            if('quantiles.MCaccuracy' %in% elements){
-            tempdigits <- 1 - floor(log10(x[['quantiles.MCaccuracy']]))
-            ## in case MCaccuracy is 0:
-            tempdigits[is.na(tempdigits)] <- +Inf
-            x[['quantiles.MCaccuracy']] <- round(x = x[['quantiles.MCaccuracy']],
-                digits = tempdigits)
-            }
-            if('samples' %in% elements){
-                x[['samples']] <- signif(x = x[['samples']], digits = 3)
-            }
-        print(x = x[elements], ...)
-        } else {
         print(x = x[elements], digits = digits, ...)
-        }
     }
     invisible(x)
 }
