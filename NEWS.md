@@ -1,4 +1,4 @@
-# Prova v2.1.0
+# Prova v1.2.0
 
 * The function `mutualinfo()` now only outputs the mutual information (and not conditional entropies or entropies), but it also outputs the "revisability" of the values in view of a much larger dataset.
 
