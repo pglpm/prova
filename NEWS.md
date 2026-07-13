@@ -8,7 +8,7 @@
 
 - The vignette about mutual information now has an additional section about the revisability of mutual information.
 
-* Small internal changes on how synthetic datapoints are generated.
+* Small internal changes in how synthetic datapoints are generated.
 
 # Prova v1.0.5
 
