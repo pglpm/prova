@@ -22,8 +22,21 @@ for(iv in seq_len(length(tvals))){
         tail <- setNames(list(atail), vrt)
         ##
         prob <- oldPr(Y = as.data.frame(atest), X = NULL,
-            tails = tail,
+            tails = tail, nsamples =1200,
             learnt = learnt, parallel = 1)
+        probn <- Pr(Y = as.data.frame(atest), X = NULL,
+            tails = tail, nsamples =1200,
+            learnt = learnt, parallel = 1)
+            for(xx in names(prob)[-7]){
+                if(!identical(unname(prob[[xx]]), unname(probn[[xx]]))){
+                    print(xx)
+                    stop()
+                }
+            }
+    }
+}
+
+        
         ##
         vals <- atest[[1]]
         tempprob <- lapply(vals, function(x){
