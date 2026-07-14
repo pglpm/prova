@@ -559,8 +559,7 @@ util_lprobsbase <- function(
 util_combineYX <- function(
     iyx,
     temporarydir, usememory = TRUE,
-    doquantiles, quantiles,
-    dosamples, nsamples,
+    quantiles, nsamples,
     Qerror
 ) {
 
@@ -579,19 +578,19 @@ util_combineYX <- function(
     list(
         values = mean(x = FF, na.rm = TRUE),
         ##
-        quantiles = if(doquantiles) {
+        quantiles = if(!is.null(quantiles)){
             quantile(x = FF, probs = quantiles, type = 6,
                 na.rm = TRUE, names = FALSE)
         },
         ##
-        samples = if(dosamples) {
+        samples = if(nsamples > 0) {
             FF <- FF[!is.na(FF)]
             FF[round(seq(1, length(FF), length.out = nsamples))]
         },
         ##
         values.MCaccuracy = funMCSELD(x = FF),
         ##
-        quantiles.MCaccuracy = if(doquantiles) {
+        quantiles.MCaccuracy = if(!is.null(quantiles)){
             temp <- funMCEQ(x = FF, prob = quantiles, Qpair = Qerror)
             (temp[2, ] - temp[1, ]) / 2
         }

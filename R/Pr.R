@@ -281,8 +281,8 @@ Pr <- function(
 
     if(is.numeric(nsamples)){
         if(is.na(nsamples) || nsamples < 1) {
-            nsamples <- NULL
-        } else if(!is.finite(nsamples)) {
+            nsamples <- 0
+        } else if(nsamples > nmcsamples){
             nsamples <- nmcsamples
         }
     } else if (is.character(nsamples) && nsamples == 'all'){
@@ -366,7 +366,6 @@ Pr <- function(
     ## Check if a prior for Y is given, in that case Y and X will be swapped
     if (isFALSE(priorY) || is.null(priorY)) {
         priorY <- NULL
-        doquantiles <- !is.null(quantiles)
     } else {
         if(is.null(X)){ stop('X must be non-null if priorY is given') }
 
@@ -374,14 +373,27 @@ Pr <- function(
             stop('priorY must have as many elements a the rows of Y')
         }
 
-        doquantiles <- FALSE
-        if(!is.null(quantiles)) {
-            ## message('For the moment, ',
-            ##     'computation of quantiles is affected by a larger error',
-            ##     'if "priorY" is specified.')
-            nsamples0 <- nsamples
-            nsamples <- max(nsamples0, 1200L)
+        ## Swap X and Y, to use Bayes's theorem
+        ## And consider all values of Y, if it only has discrete variates
+        Y0 <- Y
+        Y <- X
+        if(all(auxmetadata[auxmetadata$name %in% Yv, 'mcmctype'] %in%
+                   c('B', 'O', 'N'))){
+            X <- do.call(what = expand.grid,
+                args = c(setNames(
+                    object = lapply(X = Yv, FUN = vrtgrid,
+                        learnt = list(auxmetadata = auxmetadata)),
+                    nm = Yv),
+                    list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+                ) )
+        } else {
+            X <- Y0
         }
+
+        . <- Yv
+        Yv <- Xv
+        Xv <- .
+        rm(.)
 
         ## if priorY is TRUE, the user wants a uniform prior distribution
         if(isTRUE(priorY)){
@@ -392,23 +404,10 @@ Pr <- function(
                 stop('priorY contains invalid probabilities')
             }
         }
-
-        ## Swap X and Y, to use Bayes's theorem
-        . <- Y
-        Y <- X
-        X <- .
-        rm(.)
-        . <- Yv
-        Yv <- Xv
-        Xv <- .
-        rm(.)
     }
 
     nY <- nrow(Y)
     nX <- max(nrow(X), 1L)
-
-    dosamples <- !is.null(nsamples)
-
 
 #### tmp dir where to save X and Y objects
     temporarydir <- tempdir()
@@ -477,15 +476,31 @@ Pr <- function(
         keys)}
     ## combfnc <- function(...){setNames(do.call(mapply, c(FUN=cbind, lapply(list(...), `[`, keys))), keys)}
 
-    out <- combfnr(parallel::parApply(cl = cl,
-            X = expand.grid(jy = seq_len(nY), jx = seq_len(nX)),
+    if(is.null(priorY)){
+        out <- combfnr(parallel::parApply(cl = cl,
+            X = expand.grid(
+                jy = seq_len(nY),
+                jx = seq_len(nX),
+                KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE),
             MARGIN = 1,
             FUN = util_combineYX,
             temporarydir = temporarydir, usememory = usememory,
-            doquantiles = doquantiles, quantiles = quantiles,
-            dosamples = dosamples, nsamples = nsamples,
+            quantiles = quantiles, nsamples = nsamples,
             Qerror = Qerror
         ))
+    } else {
+        out <- combfnr(parallel::parApply(cl = cl,
+            X = expand.grid(
+                jx = seq_len(nX),
+                jy = seq_len(nY),
+                KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE),
+            MARGIN = 1,
+            FUN = util_combineYX,
+            temporarydir = temporarydir, usememory = usememory,
+            quantiles = quantiles, nsamples = nsamples,
+            Qerror = Qerror
+        ))
+    }
 
     ## clean temp files
     if(usememory) {
@@ -499,8 +514,6 @@ Pr <- function(
         ))
     }
 
-
-    if(is.null(priorY)){
         y <- Y
         y[, colnames(Y) %in% tailsv] <- NA
         jacobians <- exp(rowSums(
@@ -509,20 +522,71 @@ Pr <- function(
                 logjacobianOr = TRUE)),
             na.rm = TRUE
         ))
-        rm(y)
-    }
+    rm(y)
+    gc(full = TRUE)
 
     ## transform to grid
     ## in the output-list elements the Y & X values are the rows
-    dim(out$values.MCaccuracy) <- dim(out$values) <- c(nY, nX)
+    if(is.null(priorY)){
+        dim(out$values) <- dim(out$values.MCaccuracy) <- c(nY, nX)
+
+        if(!is.null(quantiles)){
+            dim(out$quantiles) <- dim(out$quantiles.MCaccuracy) <-
+                c(nY, nX, length(quantiles))
+        }
+
+        if(nsamples > 0){
+            dim(out$samples) <- c(nY, nX, nsamples)
+        }
+    } else {
+        dim(out$values) <- dim(out$values.MCaccuracy) <- c(nX, nY)
+        ## now: *original Y* are rows, *original X* are cols
+        ## apply Bayes's theorem
+        out$values <- t(out$values * priorY)
+        out$values.MCaccuracies <- t(out$values.MCaccuracies * priorY)
+        ## now: *original X* are rows, *original Y* are cols
+
+        normf <- rowSums(x = out$values, na.rm = TRUE)
+
+        ## error propagaion:
+        out$values.MCaccuracies <- t(
+            out$values.MCaccuracies / normf +
+                out$values *
+                rowSums(x = out$values.MCaccuracies, na.rm = TRUE) /
+                (normf^2)
+        )
+        out$values <- t(out$values / normf)
+        ## now: *original Y* are rows, *original X* are cols
+
+
+
+
+        
+
+    if(!is.null(priorY)){
+        ## apply Bayes's theorem
+        out$values <- t(priorY * t(out$values))
+        out$values.MCaccuracy <- NULL
+        normf <- rowSums(out$values, na.rm = TRUE)
+        out$values <- t(out$values/normf)
+    }
 
     ## dimension & value names for variates
+
+    ## report also whether the probabilities are 'tails' or not
+    if(!is.null(tails)){
+        outtails <- list()
+        outtails[c(colnames(Y), colnames(X))] <- ''
+        outtails[names(tails == -1)] <- '>'
+        outtails[names(tails == 1)] <- '<'
+    } else {outtails <- NULL}
+
     if(!is.null(X)){
         Xnames <- setNames(object = list(
             apply(X = X, MARGIN = 1, FUN = paste0, collapse = sep,
                 simplify = TRUE)),
             nm = paste0(if(is.null(priorY)){solidus},
-                paste0(colnames(X), collapse = sep)) )
+                paste0(colnames(X), outtails[colnames(X)], collapse = sep)) )
     } else {
         Xnames <- list(NULL)
     }
@@ -531,7 +595,7 @@ Pr <- function(
             apply(X = Y, MARGIN = 1, FUN = paste0, collapse = sep,
                 simplify = TRUE)),
             nm = paste0(if(!is.null(priorY)){solidus},
-                paste0(colnames(Y), collapse = sep)) )
+                paste0(colnames(Y), outtails[colnames(Y)], collapse = sep)) )
     } else {
         Ynames <- list(NULL)
     }
@@ -539,9 +603,7 @@ Pr <- function(
     if(is.null(priorY)){
         ## multiply by jacobian factors
         out$values <- out$values * jacobians
-        out$values.MCaccuracy <- signif(
-            x = out$values.MCaccuracy * jacobians,
-            digits = 2)
+        out$values.MCaccuracy <- out$values.MCaccuracy * jacobians
 
         dimnames(out$values) <- c(Ynames, Xnames)
         dimnames(out$values.MCaccuracy) <- c(Ynames, Xnames)
@@ -556,7 +618,7 @@ Pr <- function(
         dimnames(out$values) <- c(Xnames, Ynames)
     }
 
-    if(dosamples){
+    if(nsamples > 0){
         temp <- list(sample = round(seq(1, nmcsamples, length.out = nsamples)))
 
         ## transform to grid
@@ -581,7 +643,7 @@ Pr <- function(
         }
     }
 
-    if(doquantiles){
+    if(!is.null(quantiles)){
         temp <- list(Q = names(quantile(x = 1, probs = quantiles, names = TRUE)))
         if(is.null(priorY)){
             ## transform to grid
@@ -589,9 +651,7 @@ Pr <- function(
             dim(out$quantiles.MCaccuracy) <- c(nY, nX, length(quantiles))
             ## multiply by jacobian factors
             out$quantiles <- out$quantiles * jacobians
-            out$quantiles.MCaccuracy <- signif(
-                x = out$quantiles.MCaccuracy * jacobians,
-                digits = 2)
+            out$quantiles.MCaccuracy <-out$quantiles.MCaccuracy * jacobians
 
             dimnames(out$quantiles) <- c(Ynames, Xnames, temp)
             dimnames(out$quantiles.MCaccuracy) <- c(Ynames, Xnames, temp)
@@ -604,6 +664,10 @@ Pr <- function(
                     simplify = TRUE),
                 perm = c(2, 3, 1), resize = FALSE)
 
+            dimnames(out$quantiles) <- c(Xnames, Ynames, temp)
+            dimnames(out$quantiles.MCaccuracy) <- c(Xnames, Ynames, temp)
+        }
+
             ## adjust number of samples as originally requested
             if(is.null(nsamples0)) {
                 out$samples <- NULL
@@ -611,11 +675,6 @@ Pr <- function(
                 out$samples <-out$samples[ , ,
                     round(seq(1, nsamples, length.out = nsamples0))]
             }
-
-            dimnames(out$quantiles) <- c(Xnames, Ynames, temp)
-            dimnames(out$quantiles.MCaccuracy) <- c(Xnames, Ynames, temp)
-        }
-
     }
 
     if(isTRUE(keepYX)){
@@ -629,9 +688,7 @@ Pr <- function(
             }
     }
     if(!is.null(tails)){
-        out$tails <- tails
-        out$tails[tails == -1] <- '>='
-        out$tails[tails == 1] <- '<='
+        out$tails <- outtails[!(outtails == '')]
     }
 
     class(out) <- 'probability'

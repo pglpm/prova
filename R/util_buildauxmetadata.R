@@ -368,8 +368,8 @@ buildauxmetadata <- function(data, metadata, Dthreshold = 1, tscalefactor = 4.26
                     ##
                     transf <- 'logminus'
                     if(!is.null(data)) {
-                        tlocation <- quantile(x = -log(domainmax - x), probs = 0.5,
-                            type = 6, names = FALSE)
+                        tlocation <- quantile(x = -log(domainmax - x),
+                            probs = 0.5, type = 6, names = FALSE)
                         tscale <- IQR(type = 6, na.rm = TRUE,
                             x = -log(domainmax - x)) / tscalefactor
                         if(tscale == 0){tscale <- 1 / tscalefactor}
@@ -399,8 +399,8 @@ buildauxmetadata <- function(data, metadata, Dthreshold = 1, tscalefactor = 4.26
                     ##
                     transf <- 'log'
                     if(!is.null(data)) {
-                        tlocation <- quantile(x = log(x - domainmin), probs = 0.5,
-                            type = 6, names = FALSE)
+                        tlocation <- quantile(x = log(x - domainmin),
+                            probs = 0.5, type = 6, names = FALSE)
                         tscale <- IQR(type = 6, na.rm = TRUE, x = log(x - domainmin)) / tscalefactor
                         if(tscale == 0){tscale <- 1 / tscalefactor}
 
@@ -542,8 +542,8 @@ buildauxmetadata <- function(data, metadata, Dthreshold = 1, tscalefactor = 4.26
                     ##
                     transf <- 'log'
                     if(!is.null(data)) {
-                        tlocation <- quantile(x = log(x - domainmin), probs = 0.5,
-                            type = 6, names = FALSE)
+                        tlocation <- quantile(x = log(x - domainmin),
+                            probs = 0.5, type = 6, names = FALSE)
                         tscale <- IQR(type = 6, na.rm = TRUE, x = log(x - domainmin)) / tscalefactor
                         if(tscale == 0){tscale <- 1 / tscalefactor}
 
@@ -568,8 +568,8 @@ buildauxmetadata <- function(data, metadata, Dthreshold = 1, tscalefactor = 4.26
                     ##
                     transf <- 'logminus'
                     if(!is.null(data)) {
-                        tlocation <- quantile(x = -log(domainmax - x), probs = 0.5,
-                            type = 6, names = FALSE)
+                        tlocation <- quantile(x = -log(domainmax - x),
+                            probs = 0.5, type = 6, names = FALSE)
                         tscale <- IQR(type = 6, na.rm = TRUE, x = -log(domainmax - x)) / tscalefactor
                         if(tscale == 0){tscale <- 1 / tscalefactor}
 

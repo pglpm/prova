@@ -1105,3 +1105,52 @@ print.MI <- function(
     names(temp) <- c(paste0('value/', x$unit), paste0('Q', names(x[['quantiles']])))
     print(x = temp, ...)
 }
+
+#' Calculate...
+#'
+#' @description
+#' Blah.
+#'
+#' @param x Object of class "MI", obtained with [mutualinfo()].
+#'
+#' @return Blah
+#'
+#' @seealso
+#' [mutualinfo()] to calculate mutual information.
+#'
+#' [hist.MI()] to plot the revisability of the mutual information.
+#'
+#' @examples
+#' \donttest{
+#' ### WARNING: the following example, if run, might even take a minute or more.
+#'
+#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## variates: 'species' and 'bill_len'
+#' learnt <- learntExample
+#'
+#' ## Calculate the mutual information between variates 'species' and 'bill_len'
+#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
+#'   learnt = learnt, parallel = 1)
+#'
+#' ## display the value and revisability of the mutual information
+#' print(MI)
+#' }
+#'
+#' @concept display
+#' @export
+quantile.probability <- function(
+    x,
+    probs = 2,
+    digits = 2,
+    ...
+){
+    if(is.null(x[['samples']])){
+        if(is.null(x[['quantiles']])){
+            stop("This probability object has no '$samples' or '$quantiles' elements")
+        } else {
+            warning("This probability object has no '$samples' elements. Outputting its '$quantile' element")
+            return(x[[c('quantiles', 'quantiles.MCaccuracy')]])
+        }
+    }
+    
+}
