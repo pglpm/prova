@@ -22,7 +22,7 @@ funMCEQ <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
     straces <- sort(x)
     sapply(prob, function(aprob) {
         Xlo <- quantile(x = x, probs = aprob,
-            na.rm = FALSE, names = FALSE, type = 6)
+            na.rm = TRUE, names = FALSE, type = 6)
         ##
         essXlo <- funESS3(x <= Xlo)
         ##

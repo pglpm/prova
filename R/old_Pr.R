@@ -477,7 +477,7 @@ oldPr <- function(
         keys)}
     ## combfnc <- function(...){setNames(do.call(mapply, c(FUN=cbind, lapply(list(...), `[`, keys))), keys)}
 
-    out <- combfnr(parallel::parApply(cl = cl,
+    out <- combfnr(apply(#parallel::parApply(cl = cl,
             X = expand.grid(jy = seq_len(nY), jx = seq_len(nX)),
             MARGIN = 1,
             FUN = oldutil_combineYX,
@@ -649,7 +649,6 @@ oldutil_combineYX <- function(
     dosamples, nsamples,
     Qerror
 ) {
-
     if(usememory) {
         lprobX <- readRDS(file.path(temporarydir,
             paste0('__X', iyx['jx'], '__.rds')
@@ -681,7 +680,5 @@ oldutil_combineYX <- function(
             temp <- funMCEQ(x = FF, prob = quantiles, Qpair = Qerror)
             (temp[2, ] - temp[1, ]) / 2
         }
-        ##
-        ## error = sd(FF, na.rm = TRUE)/sqrt(nmcsamples)
     )
 }

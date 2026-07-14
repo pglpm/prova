@@ -369,10 +369,6 @@ Pr <- function(
     } else {
         if(is.null(X)){ stop('X must be non-null if priorY is given') }
 
-        if(!isTRUE(priorY) && length(priorY) != nrow(Y)) {
-            stop('priorY must have as many elements a the rows of Y')
-        }
-
         ## Swap X and Y, to use Bayes's theorem
         ## And consider all values of Y, if it only has discrete variates
         Y0 <- Y
@@ -387,7 +383,12 @@ Pr <- function(
                     nm = Yv),
                     list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
                 ) )
-            Ytokeep <- match(do.call(paste0, X), do.call(paste0, Y0))
+        if(!isTRUE(priorY) && length(priorY) != nrow(X)) {
+            stop("Argument 'priorY' must have ", nrow(X), " elements.")
+        }
+
+            Ytokeep <- match(do.call(paste0, Y0), do.call(paste0, X))
+
         } else {
             X <- Y0
             Ytokeep <- TRUE
@@ -538,19 +539,20 @@ Pr <- function(
         ## now: *original Y* are rows, *original X* are cols
         ## apply Bayes's theorem
         out$values <- t(out$values * priorY)
-        out$values.MCaccuracies <- t(out$values.MCaccuracies * priorY)
+        out$values.MCaccuracy <- t(out$values.MCaccuracy * priorY)
         ## now: *original X* are rows, *original Y* are cols
 
         normf <- rowSums(x = out$values, na.rm = TRUE)
 
         ## error propagaion:
-        out$values.MCaccuracies <- t(
-            out$values.MCaccuracies / normf +
+        out$values.MCaccuracy <- t(
+            out$values.MCaccuracy / normf +
                 out$values *
-                rowSums(x = out$values.MCaccuracies, na.rm = TRUE) /
+                rowSums(x = out$values.MCaccuracy, na.rm = TRUE) /
                 (normf^2)
         )
         out$values <- t(out$values / normf)
+
         ## now: *original Y* are rows, *original X* are cols
 
         ## subset to original Y-values
@@ -582,12 +584,7 @@ Pr <- function(
                                 (temp[2, ] - temp[1, ]) / 2
                             )}
                     ), perm = c(2, 3, 1) )
-                out$quantiles <- aperm(
-                    a = apply(
-                        X = out$samples, MARGIN = c(1, 2),
-                        FUN = quantile,
-                        prob = quantiles, type = 6, na.rm = TRUE, names = FALSE
-                    ), perm = c(2, 3, 1) )
+
                 out$quantiles.MCaccuracy <- out$quantiles[, ,
                     -seq_along(quantiles), drop = FALSE]
                 out$quantiles <- out$quantiles[, ,
@@ -603,14 +600,13 @@ Pr <- function(
 
         ## swap back Y and X
         . <- Y
-        Y <- X
+        Y <- X[Ytokeep, , drop = FALSE]
         X <- .
         rm(.)
     }
 
     ## Jacobian factors
-    if(is.null(priorY)){
-        y <- Y} else {y <- X}
+    y <- Y
     y[, colnames(y) %in% tailsv] <- NA
     jacobians <- exp(rowSums(
         as.matrix(vtransform(y,
