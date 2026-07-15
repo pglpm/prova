@@ -87,12 +87,12 @@ mi2 <- sapply(1:nn, function(xx){
             ))
 })
 ##
-system.time(testmi <- mutualinfo(Y1names = 'B', Y2names = 'N', X = NULL, learnt = learnt, n = nn))
-system.time(testmi2 <- mutualinfo3(Y1names = 'B', Y2names = 'N', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W)))
+system.time(testmi <- mutualinfo(Y1names = 'B', Y2names = 'N', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W)))
+system.time(testmi2 <- mutualinfo2(Y1names = 'B', Y2names = 'N', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W)))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
-    testmi$MI,
-    unlist(testmi2[c(1,3)])
+    unlist(testmi2[c(1,3)]),
+    unlist(testmi[c(1,3)])
 )
 ## [1,] 0.704214 0.00111485
 ## [2,] 0.703409 0.00110000
@@ -119,13 +119,12 @@ mi2 <- sapply(1:nn, function(xx){
             ))
 })
 ##
-testmi <- mutualinfo(Y1names = 'B', Y2names = 'R', X = NULL, learnt = learnt, n = nn)
-testmi2 <- mutualinfo3(Y1names = 'B', Y2names = 'R', X = NULL, learnt = learnt,
-    ns = NULL, nv = nn/ncol(learnt$W))
+testmi <- mutualinfo(Y1names = 'B', Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- mutualinfo2(Y1names = 'B', Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
-    testmi$MI,
-    unlist(testmi2[c(1,3)])
+    unlist(testmi2[c(1,3)]),
+    unlist(testmi[c(1,3)])
 )
 ## [1,] 0.704416 0.00111600
 ## [2,] 0.705243 0.00110000
@@ -152,12 +151,11 @@ mi2 <- sapply(1:nn, function(xx){
             ))
 })
 ##
-testmi <- mutualinfo(Y1names = 'N', Y2names = 'R', X = NULL, learnt = learnt, n = nn)
-testmi2 <- mutualinfo3(Y1names = 'N', Y2names = 'R', X = NULL, learnt = learnt,
-    ns = NULL, nv = nn/ncol(learnt$W))
+testmi <- mutualinfo(Y1names = 'N', Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- mutualinfo2(Y1names = 'N', Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
-    testmi$MI,
+    unlist(testmi[c(1,3)]),
     unlist(testmi2[c(1,3)])
 )
 ## [1,] 1.99980 0.0000429070

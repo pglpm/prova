@@ -48,24 +48,21 @@
 #' @param learnt Either a character with the name of a directory or full path
 #'   for an 'learnt.rds' object, or such an object itself.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
-#' @param quantiles Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in [Pr()].
-#' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "learnt" object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "learnt" object.
-#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "learnt" object to use for calculating the revisability of the mutual information.
+#' @param n Integer or `NULL` (default): number of samples from which to approximately calculate the mutual information. Default as many as Monte Carlo samples in `learnt`.
 #' @param unit Either one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used.
 #' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use roughly half of available cores; `FALSE`: use serial computation; integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #'
-#' @return An object of class "MI", which is a list consisting of the following elements:
+#' @return A list consisting of the following elements:
 #'
-#' - `$value`, the mutual information between (joint) variates `Y1names` and (joint) variates `Y2names`.
-#' - `$quantiles`, a vector with the revisability quantiles for the mutual information.
-#' - `$MCaccuracy`, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the `value` of the mutual information.
-#' - `$samples`, a vector with the revisability samples for the mutual information.
-#' - `$rGauss`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
-#' - `$unit`, `$Y1names`, `$Y1names`: same as the input arguments.
+#' - `MI`, a vector of `value` and `accuracy`: the mutual information between (joint) variates `Y1names` and (joint) variates `Y2names`.
+#' - `CondEn12`, `CondEn21`, vectors of `value` and `accuracy`: the conditional entropy of the first variate given the second, and vice versa.
+#' - `En1`, `En2`, vectors of `value` and `accuracy`: the (differential) entropies of the first and second variates.
+#' - `MI.rGauss`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
+#' - `unit`, `Y1names`, `Y1names`: same as the input arguments, included for the user's convenience.
 #'
 #' @seealso
-#' [Pr()] to calculate probabilities and their revisability.
+#' [Pr()] to calculate probabilities and their variability.
 #'
 #' [learn()], which generates the `learnt` objects required by `mutualinfo()`.
 #'
@@ -76,33 +73,51 @@
 #'
 #' ## mutual information between variates 'species' and 'bill_len'
 #' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-#'   learnt = learnt, nv = 2, parallel = 1)
+#'   learnt = learnt, parallel = 1)
 #'
-#' ## The value:
-#' MI$value
+#' paste0(MI$MI, ' ', MI$unit, collapse = ' +/- ')
 #'
-#' ## If we had many more data, we could instead expect to obtain values
-#' ## within the following ranges, with corresponding probabilities:
-#' MI$quantiles
+#' ## Shannon entropy of variate 'species'
+#' paste0(MI$En1, ' ', MI$unit, collapse = ' +/- ')
 #'
-## #' @importFrom extraDistr rcatlp
-## #' @importFrom extraDistr rcat
-## #' @importFrom extraDistr rbern
+#'
+#' \donttest{
+#' ## Shannon entropy of variate 'species',
+#' ## conditional on a bill length of 30 mm:
+#' entr <- mutualinfo(
+#'   Y1names = 'species',
+#'   X = data.frame(bill_len = 30),
+#'   learnt = learnt, parallel = 1
+#' )
+#'
+#' paste0(entr$En1, ' ', entr$unit, collapse = ' +/- ')
+#'
+#' ## the entropy is now lower; indeed a penguin with a short bill length
+#' ## is most probably of the 'Adelie' species:
+#' probs <- Pr(
+#'   Y = data.frame(species = c('Adelie', 'Gentoo', 'Chinstrap')),
+#'   X = data.frame(bill_len = 30),
+#'   learnt = learnt, parallel = 1
+#' )
+#'
+#' print(probs)
+#' }
+#'
+#' @importFrom extraDistr rcatlp
+#' @importFrom extraDistr rbern
 #' @import parallel
 #' @import stats
 #' @import utils
 #'
 #' @concept association
 #' @export
-mutualinfo <- function(
+oldmutualinfo <- function(
     Y1names,
     Y2names = NULL,
     X = NULL,
     learnt,
     tails = NULL,
-    quantiles =  c(0.055, 0.25, 0.75, 0.945),
-    ns = NULL,
-    nv = 12,
+    n = NULL,
     unit = 'Sh',
     parallel = TRUE,
     verbose = FALSE
@@ -191,14 +206,18 @@ mutualinfo <- function(
     ncomponents <- nrow(learnt$W)
     nmcs <- ncol(learnt$W)
 
-    if(is.null(ns) || !is.finite(ns) || ns == 'all'){ ns <- nmcs }
-    ns <- max(min(ns, nmcs), 2)
-    if(is.null(nv) || !is.finite(nv)){ nv <- 2 }
-    nv <- max(nv, 2)
+    if(is.null(n) || n == 0) {
+        n <- 1 * nmcs
+    } else if(n < 0) {
+        n <- -n * nmcs
+    }
 
-    ntot <- ns *nv
-
-    sseq <- sort(sample.int(nmcs, ns))
+    if(n <= nmcs) {
+        sseq <- sort(sample.int(nmcs, n))
+    } else {
+        sseq <- c(rep(x = seq_len(nmcs), times = n %/% nmcs),
+            seq_len(nmcs)[sort.int(sample.int(nmcs, n %% nmcs))])
+    }
 
     if(all(is.na(X))){X <- NULL}
     if(!is.null(X)){
@@ -328,22 +347,11 @@ mutualinfo <- function(
     Ynames <- c(Y1names, Y2names)
 
 #### STEP 1. Draw samples of Ynames (that is, Y1names,Y2names)
-    print('here0')
-    Wdenorm <- exp(util_denorm(lW[, sseq, drop = FALSE]))
-    print('here1')
-    Ws <- c(replicate(n = nv, expr = apply(
-        X = Wdenorm, MARGIN = 2,
-        FUN = function(xx){sample.int(n = ncomponents, size = 1, prob = xx)},
-        simplify = TRUE
-    ), simplify = 'array'))
-    print('here2')
-    rm(Wdenorm)
-    gc(full = TRUE)
-    ## ## ## Old version with extraDistr::rcatlp()
-    ## ## extraDistr::rcatlp() can use non-normalized probabilities
-    ## ## NOTA BENE: the '1 - ...' is because of a bug in rcatlp() < 1.10.0.5
-    ## Ws <- 1 - extraDistr::rcatlp(n = 1, log_prob = 0) +
-    ##     extraDistr::rcatlp(n = ntot, log_prob = t(lW[, sseq, drop = FALSE]))
+
+    ## extraDistr::rcatlp() can use non-normalized probabilities
+    ## NOTA BENE: the '1 - ...' is because of a possible bug in rcatlp()
+    Ws <- 1 - extraDistr::rcatlp(1, 0) +
+        extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
     ## ## Old version with extraDistr::cat(), can be 10 times slower
     ## Ws <- extraDistr::rcat(n = n, prob = t(
     ##     apply(X = lWnorm[, sseq, drop = FALSE], MARGIN = 2, FUN = function(xx){
@@ -361,10 +369,9 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id,
-            times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
         Yout <- c(Yout,
-            rnorm(n = ntot * nvrt,
+            rnorm(n = n * nvrt,
                 mean = learnt$Rmean[totake],
                 sd = learnt$Rsd[totake] )
         )
@@ -377,10 +384,9 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id,
-            times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
         Yout <- c(Yout,
-            rnorm(n = ntot * nvrt,
+            rnorm(n = n * nvrt,
                 mean = learnt$Cmean[totake],
                 sd = learnt$Csd[totake] )
         )
@@ -393,10 +399,9 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id,
-            times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
         Yout <- c(Yout,
-            rnorm(n = ntot * nvrt,
+            rnorm(n = n * nvrt,
                 mean = learnt$Dmean[totake],
                 sd = learnt$Dsd[totake] )
         )
@@ -410,24 +415,16 @@ mutualinfo <- function(
         vYout <- c(vYout, auxmetadata$name[toselect])
         for(i in toselect) {
             aux <- auxmetadata[i, ]
-            Yout <- c(Yout, replicate(n = nv, expr = mapply(
-                FUN = function(xx, yy){
-                sample.int(n = aux$Nvalues, size = 1,
-                    prob = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues),
-                        xx, yy])},
-                Ws, sseq, SIMPLIFY = TRUE), simplify = 'array') )
-            ## ## old version with extraDistr::rcat()
-            ## totake <- cbind(Ws, sseq)
-            ## Yout <- c(Yout,
-            ##     extraDistr::rcat(n = ntot,
-            ##         prob = apply(
-            ##             X = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
-            ##             MARGIN = 1, FUN = `[`, totake,
-            ##             simplify = TRUE) )
-            ## )
+            totake <- cbind(Ws, sseq)
+            Yout <- c(Yout,
+                extraDistr::rcat(n = n,
+                    prob = apply(
+                        X = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+                        MARGIN = 1, FUN = `[`, totake,
+                        simplify = TRUE) )
+            )
         }
     }
-    print('herebeforeN')
 
     ## N
     toselect <- which((auxmetadata$name %in% Ynames) &
@@ -437,24 +434,16 @@ mutualinfo <- function(
         vYout <- c(vYout, auxmetadata$name[toselect])
         for(i in toselect) {
             aux <- auxmetadata[i, ]
-            Yout <- c(Yout, replicate(n = nv, expr = mapply(
-                FUN = function(xx, yy){
-                sample.int(n = aux$Nvalues, size = 1,
-                    prob = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues),
-                        xx, yy])},
-                Ws, sseq, SIMPLIFY = TRUE), simplify = 'array') )
-            ## ## old version with extraDistr::rcat()
-            ## totake <- cbind(Ws, sseq)
-            ## Yout <- c(Yout,
-            ##     extraDistr::rcat(n = ntot,
-            ##         prob = apply(
-            ##             X = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
-            ##             MARGIN = 1, FUN = `[`, totake,
-            ##             simplify = TRUE) )
-            ## )
+            totake <- cbind(Ws, sseq)
+            Yout <- c(Yout,
+                extraDistr::rcat(n = n,
+                    prob = apply(
+                        X = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+                        MARGIN = 1, FUN = `[`, totake,
+                        simplify = TRUE) )
+            )
         }
     }
-    print('herebeforeB')
 
     ## B
     toselect <- which((auxmetadata$name %in% Ynames) &
@@ -463,17 +452,14 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id,
-            times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
         Yout <- c(Yout,
-            rbinom(n = ntot * nvrt, size = 1, prob = learnt$Bprob[totake])
-            ## ## Old version
-            ## extraDistr::rbern(n = ntot * nvrt, prob = learnt$Bprob[totake])
+            extraDistr::rbern(n = n * nvrt,
+                prob = learnt$Bprob[totake])
         )
     }
-    print('hereafterB')
 
-    dim(Yout) <- c(ntot, length(Ynames))
+    dim(Yout) <- c(n, length(Ynames))
     Yout <- Yout[, match(Ynames, vYout), drop = FALSE]
     colnames(Yout) <- Ynames
 
@@ -486,14 +472,6 @@ mutualinfo <- function(
         Nout = 'original',
         Bout = 'original',
         logjacobianOr = NULL)
-    ## The rows of Yout corresponds to nv repetitions of ns MCsamples, eg:
-    ## MCsample 3
-    ## MCsample 5
-    ## MCsample 8
-    ## MCsample 3 again
-    ## MCsample 5 again
-    ## MCsample 8 again
-    # etc
 
     Y1transf <- Yout[, Y1names, drop = FALSE]
     Y2transf <- Yout[, Y2names, drop = FALSE]
@@ -506,79 +484,75 @@ mutualinfo <- function(
 #### log2_p(Y2|Y1)
 #### log2_p(Y1)
 #### log2_p(Y2)
-
-    ## Keep track of the MC-sample id of each datapoint
-    ids <- rep.int(x = sseq, times = nv)
-
     lpargs1 <- util_lprobsargsyx(
         x = Y1transf,
         auxmetadata = auxmetadata,
         learnt = learnt,
-        tails = NULL,
-        ids = ids
+        tails = NULL
     )
 
     lpargs2 <- util_lprobsargsyx(
         x = Y2transf,
         auxmetadata = auxmetadata,
         learnt = learnt,
-        tails = NULL,
-        ids = ids
+        tails = NULL
     )
 
     ## each instance of util_lprobsmi() takes one datapoint
     out <- do.call(rbind,
         parallel::parLapply(cl = cl,
-            X = mapply(c, lpargs1$xVs, lpargs2$xVs, SIMPLIFY = FALSE),
-            fun = util_lprobsmi,
-            params1 = lpargs1$params,
-            params2 = lpargs2$params,
-            lW = lW)
-    )
-    ## 'out' is a matrix with as many rows as the datapoints,
-    ## and with columns corresponding to
-    ## their probabilities (calculated from all MC samples)
-    ## and their "limit frequencies" (calculated from MC samples
-    ## from which the corresponding input datapoints were drawn)
-
-    ## ## Jacobian factors unneeded because we only output the MI
-    ## logjacobians1 <- rowSums(
-    ##     as.matrix(vtransform(Y1transf,
-    ##         auxmetadata = auxmetadata,
-    ##         logjacobianOr = FALSE)),
-    ##     na.rm = TRUE)
-    ##
-    ## logjacobians2 <- rowSums(
-    ##     as.matrix(vtransform(Y2transf,
-    ##         auxmetadata = auxmetadata,
-    ##         logjacobianOr = FALSE)),
-    ##     na.rm = TRUE)
-
-    ## Separate columns for MI with columns for its revisability
-    outva <- out[, 'fMI']
-    ## ids <- out[,3] # for debugging
-    ## dim(ids) <- c(ns, nv) # for debugging
-    out <- out[, 'pMI']
-
-    dim(outva) <- c(ns, nv)
-    outva <- rowMeans(x = outva, na.rm = TRUE)
-    outva[outva < 0] <- 0
-
-    ## Output
-    MI <- mean(out)
-    if(MI < 0){ MI <- 0 }
-    out <- list(
-        value = MI / lbase,
-        quantiles = quantile(outva, probs = quantiles,
-            type = 6, na.rm = TRUE, names = TRUE) / lbase,
-        MCaccuracy = sd(out, na.rm = TRUE) / (sqrt(ntot) * lbase),
-        samples = outva / lbase,
-        rGauss = sqrt(1 - exp(-2 * MI)),
-        unit = unit,
-        Y1names = Y1names,
-        Y2names = Y2names
-        ## , ids = rowMeans(ids) # for debugging
+        X = mapply(c, lpargs1$xVs, lpargs2$xVs, SIMPLIFY = FALSE),
+        fun = util_lprobsmi,
+        params1 = lpargs1$params,
+        params2 = lpargs2$params,
+        lW = lW)
         )
-    class(out) <- 'MI'
-    out
+
+    ## Jacobian factors
+    logjacobians1 <- rowSums(
+        as.matrix(vtransform(Y1transf,
+            auxmetadata = auxmetadata,
+            logjacobianOr = FALSE)),
+        na.rm = TRUE)
+
+    logjacobians2 <- rowSums(
+        as.matrix(vtransform(Y2transf,
+            auxmetadata = auxmetadata,
+            logjacobianOr = FALSE)),
+        na.rm = TRUE)
+
+    out[, c('CondEn12', 'CondEn21', 'En1', 'En2')] <-
+        out[, c('CondEn12', 'CondEn21', 'En1', 'En2')] -
+        c(logjacobians1, logjacobians2)
+
+    out <- unlist(apply(
+        X = rbind(
+            value = colMeans(x = out, na.rm = TRUE) / lbase,
+            accuracy = signif(x = apply(
+                X = out, MARGIN = 2, FUN = sd, na.rm = TRUE, simplify = TRUE
+            ) / (sqrt(n) * lbase), digits = 2)
+        ),
+        MARGIN = 2, FUN = list, simplify = TRUE), recursive = FALSE)
+
+    if(out$MI['value'] < 0){
+        out$MI['accuracy'] <- out$MI['accuracy'] + out$MI['value']
+        out$MI['value'] <- 0
+    }
+
+
+    ## ## generally there's no MI maximum for continous variates
+    ## mmax <- paste0('En', which.min(c(out$En1['value'], out$En2['value'])) )
+    rgauss <- sqrt(1 - exp(-2 * out$MI['value'] * lbase))
+
+    c(out,
+        list(#MImax = out[[mmax]],
+            MI.rGauss = c(
+                rgauss,
+                signif(x = out$MI['accuracy'] *
+                           exp(-2 * out$MI['value'] * lbase) / rgauss,
+                    digits = 2)
+            ),
+            unit = unit, Y1names = Y1names, Y2names = Y2names
+        )
+    )
 }

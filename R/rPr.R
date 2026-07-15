@@ -228,7 +228,7 @@ rPr <- function(
     ## }
 
 #### Draw samples of Ynames
-
+# !!!!!!
     Ws <- c(t(apply(
         X = learnt$W[, sseq, drop = FALSE], MARGIN = 2,
         FUN = function(xx){sample.int(n = ncomponents, size = 1, prob = xx)},
