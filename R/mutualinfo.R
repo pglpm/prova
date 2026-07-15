@@ -401,14 +401,19 @@ mutualinfo <- function(
         vYout <- c(vYout, auxmetadata$name[toselect])
         for(i in toselect) {
             aux <- auxmetadata[i, ]
-            totake <- cbind(Ws, sseq)
-            Yout <- c(Yout,
-                extraDistr::rcat(n = ntot,
-                    prob = apply(
-                        X = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
-                        MARGIN = 1, FUN = `[`, totake,
-                        simplify = TRUE) )
-            )
+            Yout <- c(Yout, mapply(FUN = function(xx, yy){
+                sample.int(n = aux$Nvalues, size = 1,
+                    prob = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
+                Ws, sseq, SIMPLIFY = TRUE))
+            ## ## old version with extraDistr::rcat()
+            ## totake <- cbind(Ws, sseq)
+            ## Yout <- c(Yout,
+            ##     extraDistr::rcat(n = ntot,
+            ##         prob = apply(
+            ##             X = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+            ##             MARGIN = 1, FUN = `[`, totake,
+            ##             simplify = TRUE) )
+            ## )
         }
     }
 
@@ -420,14 +425,19 @@ mutualinfo <- function(
         vYout <- c(vYout, auxmetadata$name[toselect])
         for(i in toselect) {
             aux <- auxmetadata[i, ]
-            totake <- cbind(Ws, sseq)
-            Yout <- c(Yout,
-                extraDistr::rcat(n = ntot,
-                    prob = apply(
-                        X = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
-                        MARGIN = 1, FUN = `[`, totake,
-                        simplify = TRUE) )
-            )
+            Yout <- c(Yout, mapply(FUN = function(xx, yy){
+                sample.int(n = aux$Nvalues, size = 1,
+                    prob = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
+                Ws, sseq, SIMPLIFY = TRUE))
+            ## ## old version with extraDistr::rcat()
+            ## totake <- cbind(Ws, sseq)
+            ## Yout <- c(Yout,
+            ##     extraDistr::rcat(n = ntot,
+            ##         prob = apply(
+            ##             X = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+            ##             MARGIN = 1, FUN = `[`, totake,
+            ##             simplify = TRUE) )
+            ## )
         }
     }
 
