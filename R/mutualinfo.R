@@ -328,15 +328,12 @@ mutualinfo <- function(
     Ynames <- c(Y1names, Y2names)
 
 #### STEP 1. Draw samples of Ynames (that is, Y1names,Y2names)
-    print('here0')
     Wdenorm <- exp(util_denorm(lW[, sseq, drop = FALSE]))
-    print('here1')
     Ws <- c(replicate(n = nv, expr = apply(
         X = Wdenorm, MARGIN = 2,
         FUN = function(xx){sample.int(n = ncomponents, size = 1, prob = xx)},
         simplify = TRUE
     ), simplify = 'array'))
-    print('here2')
     rm(Wdenorm)
     gc(full = TRUE)
     ## ## ## Old version with extraDistr::rcatlp()
@@ -410,12 +407,12 @@ mutualinfo <- function(
         vYout <- c(vYout, auxmetadata$name[toselect])
         for(i in toselect) {
             aux <- auxmetadata[i, ]
-            Yout <- c(Yout, replicate(n = nv, expr = mapply(
+            Yout <- c(Yout, mapply(
                 FUN = function(xx, yy){
                 sample.int(n = aux$Nvalues, size = 1,
                     prob = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues),
                         xx, yy])},
-                Ws, sseq, SIMPLIFY = TRUE), simplify = 'array') )
+                Ws, sseq, SIMPLIFY = TRUE) )
             ## ## old version with extraDistr::rcat()
             ## totake <- cbind(Ws, sseq)
             ## Yout <- c(Yout,
@@ -427,7 +424,6 @@ mutualinfo <- function(
             ## )
         }
     }
-    print('herebeforeN')
 
     ## N
     toselect <- which((auxmetadata$name %in% Ynames) &
@@ -437,12 +433,12 @@ mutualinfo <- function(
         vYout <- c(vYout, auxmetadata$name[toselect])
         for(i in toselect) {
             aux <- auxmetadata[i, ]
-            Yout <- c(Yout, replicate(n = nv, expr = mapply(
+            Yout <- c(Yout, mapply(
                 FUN = function(xx, yy){
                 sample.int(n = aux$Nvalues, size = 1,
                     prob = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues),
                         xx, yy])},
-                Ws, sseq, SIMPLIFY = TRUE), simplify = 'array') )
+                Ws, sseq, SIMPLIFY = TRUE) )
             ## ## old version with extraDistr::rcat()
             ## totake <- cbind(Ws, sseq)
             ## Yout <- c(Yout,
@@ -454,7 +450,6 @@ mutualinfo <- function(
             ## )
         }
     }
-    print('herebeforeB')
 
     ## B
     toselect <- which((auxmetadata$name %in% Ynames) &
@@ -471,7 +466,6 @@ mutualinfo <- function(
             ## extraDistr::rbern(n = ntot * nvrt, prob = learnt$Bprob[totake])
         )
     }
-    print('hereafterB')
 
     dim(Yout) <- c(ntot, length(Ynames))
     Yout <- Yout[, match(Ynames, vYout), drop = FALSE]

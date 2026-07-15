@@ -65,15 +65,14 @@
 #'
 #' c(datapoints)
 #'
-## #' @importFrom extraDistr rcatlp
-## #' @importFrom extraDistr rcat
-## #' @importFrom extraDistr rbern
+#' @importFrom extraDistr rcatlp
+#' @importFrom extraDistr rbern
 #' @import utils
 #' @import stats
 #'
 #' @concept generate
 #' @export
-rPr <- function(
+rPr2 <- function(
     n,
     Ynames,
     X = NULL,
@@ -120,10 +119,10 @@ rPr <- function(
 
     nmcs <- length(mcsamples)
     if(n <= nmcs) {
-        sseq <- mcsamples[sort.int(sample.int(n = nmcs, size = n))]
+        sseq <- mcsamples[sort.int(sample.int(nmcs, n))]
     } else {
-        sseq <- c(rep.int(x = mcsamples, times = n %/% nmcs),
-            mcsamples[sort.int(sample.int(n = nmcs, size = n %% nmcs))])
+        sseq <- c(rep(x = mcsamples, times = n %/% nmcs),
+            mcsamples[sort.int(sample.int(nmcs, n %% nmcs))])
     }
 
     if(all(is.na(X))){X <- NULL}
@@ -228,20 +227,11 @@ rPr <- function(
     ## }
 
 #### Draw samples of Ynames
-    Wdenorm <- exp(util_denorm(lW[, sseq, drop = FALSE]))
-    Ws <- c(t(apply(
-        X = Wdenorm, MARGIN = 2,
-        FUN = function(xx){sample.int(n = ncomponents, size = 1, prob = xx)},
-        simplify = TRUE
-    )))
-    rm(Wdenorm)
-    gc(full = TRUE)
-    ## ## Old version with extraDistr::rcatlp()
-    ## ## extraDistr::rcatlp() can use non-normalized probabilities
-    ## ## NOTA BENE: the '1 - ...' is because of a bug in rcatlp() < 1.10.0.5
-    ## Ws <- 1 - extraDistr::rcatlp(n = 1, log_prob = 0) +
-    ##     extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
-    ##
+
+    ## extraDistr::rcatlp() can use non-normalized probabilities
+    ## NOTA BENE: the '1 - ...' is because of a possible bug in rcatlp()
+    Ws <- 1 - extraDistr::rcatlp(1, 0) +
+        extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
     ## ## Old version with extraDistr::cat(), can be 10 times slower
     ## lWnorm <- util_denorm(lW[, sseq, drop = FALSE])
     ## Ws <- extraDistr::rcat(n = n, prob = t(
@@ -261,8 +251,7 @@ rPr <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id,
-            times = rep.int(x = n, times = nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = n * nvrt,
                 mean = learnt$Rmean[totake],
@@ -277,8 +266,7 @@ rPr <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id,
-            times = rep.int(x = n, times = nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = n * nvrt,
                 mean = learnt$Cmean[totake],
@@ -293,8 +281,7 @@ rPr <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id,
-            times = rep.int(x = n, times = nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = n * nvrt,
                 mean = learnt$Dmean[totake],
@@ -310,19 +297,14 @@ rPr <- function(
         vYout <- c(vYout, auxmetadata$name[toselect])
         for(i in toselect) {
             aux <- auxmetadata[i, ]
-            Yout <- c(Yout, mapply(FUN = function(xx, yy){
-                sample.int(n = aux$Nvalues, size = 1,
-                    prob = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
-                Ws, sseq, SIMPLIFY = TRUE))
-            ## ## old version with extraDistr::rcat()
-            ## totake <- cbind(Ws, sseq)
-            ## Yout <- c(Yout,
-            ##     extraDistr::rcat(n = n,
-            ##         prob = apply(
-            ##             X = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
-            ##             MARGIN = 1, FUN = `[`, totake,
-            ##             simplify = TRUE) )
-            ## )
+            totake <- cbind(Ws, sseq)
+            Yout <- c(Yout,
+                extraDistr::rcat(n = n,
+                    prob = apply(
+                        X = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+                        MARGIN = 1, FUN = `[`, totake,
+                        simplify = TRUE) )
+            )
         }
     }
 
@@ -334,19 +316,14 @@ rPr <- function(
         vYout <- c(vYout, auxmetadata$name[toselect])
         for(i in toselect) {
             aux <- auxmetadata[i, ]
-            Yout <- c(Yout, mapply(FUN = function(xx, yy){
-                sample.int(n = aux$Nvalues, size = 1,
-                    prob = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
-                Ws, sseq, SIMPLIFY = TRUE))
-            ## ## old version with extraDistr::rcat()
-            ## totake <- cbind(Ws, sseq)
-            ## Yout <- c(Yout,
-            ##     extraDistr::rcat(n = n,
-            ##         prob = apply(
-            ##             X = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
-            ##             MARGIN = 1, FUN = `[`, totake,
-            ##             simplify = TRUE) )
-            ## )
+            totake <- cbind(Ws, sseq)
+            Yout <- c(Yout,
+                extraDistr::rcat(n = n,
+                    prob = apply(
+                        X = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+                        MARGIN = 1, FUN = `[`, totake,
+                        simplify = TRUE) )
+            )
         }
     }
 
@@ -357,12 +334,10 @@ rPr <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id,
-            times = rep.int(x = n, times = nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
         Yout <- c(Yout,
-            rbinom(n = n * nvrt, size = 1, prob = learnt$Bprob[totake])
-            ## ## Old version
-            ## extraDistr::rbern(n = n * nvrt, prob = learnt$Bprob[totake])
+            extraDistr::rbern(n = n * nvrt,
+                prob = learnt$Bprob[totake])
         )
     }
 
