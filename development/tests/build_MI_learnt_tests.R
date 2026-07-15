@@ -88,7 +88,7 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 system.time(testmi <- mutualinfo(Y1names = 'B', Y2names = 'N', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W)))
-system.time(testmi2 <- mutualinfo2(Y1names = 'B', Y2names = 'N', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W)))
+system.time(testmi2 <- debug_mutualinfo(Y1names = 'B', Y2names = 'N', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W)))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     unlist(testmi2[c(1,3)]),
@@ -120,7 +120,7 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'B', Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
-testmi2 <- mutualinfo2(Y1names = 'B', Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- debug_mutualinfo(Y1names = 'B', Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     unlist(testmi2[c(1,3)]),
@@ -152,7 +152,7 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'N', Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
-testmi2 <- mutualinfo2(Y1names = 'N', Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- debug_mutualinfo(Y1names = 'N', Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     unlist(testmi[c(1,3)]),
@@ -184,7 +184,7 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = c('N', 'B'), Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
-testmi2 <- mutualinfo2(Y1names = c('N', 'B'), Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- debug_mutualinfo(Y1names = c('N', 'B'), Y2names = 'R', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     unlist(testmi2[c(1,3)]),
@@ -216,7 +216,7 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = c('B', 'R'), Y2names = 'N', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
-testmi2 <- mutualinfo2(Y1names = c('B', 'R'), Y2names = 'N', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- debug_mutualinfo(Y1names = c('B', 'R'), Y2names = 'N', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     unlist(testmi2[c(1,3)]),
@@ -248,7 +248,7 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = c('N', 'R'), Y2names = 'B', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
-testmi2 <- mutualinfo2(Y1names = c('N', 'R'), Y2names = 'B', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- debug_mutualinfo(Y1names = c('N', 'R'), Y2names = 'B', X = NULL, learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     unlist(testmi2[c(1,3)]),
@@ -283,7 +283,7 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'N', Y2names = 'B', X = data.frame(R = -8), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
-testmi2 <- mutualinfo2(Y1names = 'N', Y2names = 'B', X = data.frame(R = -8), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- debug_mutualinfo(Y1names = 'N', Y2names = 'B', X = data.frame(R = -8), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     unlist(testmi2[c(1,3)]),
@@ -317,7 +317,7 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'R', Y2names = 'B', X = data.frame(N = 'b'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
-testmi2 <- mutualinfo2(Y1names = 'R', Y2names = 'B', X = data.frame(N = 'b'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- debug_mutualinfo(Y1names = 'R', Y2names = 'B', X = data.frame(N = 'b'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     unlist(testmi2[c(1,3)]),
@@ -351,7 +351,7 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'R', Y2names = 'N', X = data.frame(B = 'y'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
-testmi2 <- mutualinfo2(Y1names = 'R', Y2names = 'N', X = data.frame(B = 'y'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi2 <- debug_mutualinfo(Y1names = 'R', Y2names = 'N', X = data.frame(B = 'y'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
     unlist(testmi2[c(1,3)]),

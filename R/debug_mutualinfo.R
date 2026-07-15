@@ -91,9 +91,9 @@
 #' @import stats
 #' @import utils
 #'
-#' @concept association
-#' @export
-mutualinfo2 <- function(
+#' @keywords debug
+#' @noRd
+debug_mutualinfo <- function(
     Y1names,
     Y2names = NULL,
     X = NULL,

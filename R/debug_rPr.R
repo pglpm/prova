@@ -70,9 +70,9 @@
 #' @import utils
 #' @import stats
 #'
-#' @concept generate
-#' @export
-rPr2 <- function(
+#' @keywords debug
+#' @noRd
+debug_rPr <- function(
     n,
     Ynames,
     X = NULL,
