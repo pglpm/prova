@@ -485,7 +485,7 @@ Pr <- function(
     ## combfnc <- function(...){setNames(do.call(mapply, c(FUN=cbind, lapply(list(...), `[`, keys))), keys)}
 
     if(is.null(priorY)){
-        out <- combfnr(apply(#parallel::parApply(cl = cl,
+        out <- combfnr(parallel::parApply(cl = cl,
             X = expand.grid(
                 jy = seq_len(nY),
                 jx = seq_len(nX),
