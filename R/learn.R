@@ -500,8 +500,8 @@ learn <- function(
             predirmsgs <- c(predirmsgs, list(
                 'Subsampling data, as requested.'
             ))
-            data <- data[sample(seq_len(nrow(data)),
-                min(subsampledata, nrow(data)),
+            data <- data[sample.int(n = nrow(data),
+                size = min(subsampledata, nrow(data)),
                 replace = FALSE), ]
         }
 
@@ -680,7 +680,8 @@ learn <- function(
         ## (using extra memory)
         ## Each chain uses a different set of testdata
         for(achain in 0:nchains) {
-            pointsid <- sort(sample(seq_len(npoints), min(ncheckpoints, npoints)))
+            pointsid <- sort(sample.int(n = npoints,
+                size = min(ncheckpoints, npoints), replace = FALSE))
             testdata <- util_prepPcheckpoints(
                 x = data[pointsid, , drop = FALSE],
                 auxmetadata = auxmetadata,
@@ -706,8 +707,8 @@ learn <- function(
                                    c('R', 'C', 'D', 'L')) {
                                 rnorm(n = ncheckpoints, mean = 0, sd = 2)
                             } else {
-                                sample(seq_len(auxmetadata[ii, 'Nvalues']),
-                                    ncheckpoints,
+                                sample.int(n = auxmetadata[ii, 'Nvalues'],
+                                    size = ncheckpoints,
                                     replace = TRUE) +
                                     auxmetadata[ii, 'indexpos']
                             }
@@ -2100,7 +2101,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
         ## pre-clustering, centering on data
         initsfn <- function() {
             ## assign each cluster to a datapoint
-            iK <- sample(seq_len(constants$npoints), constants$ncomponents,
+            iK <- sample.int(constants$npoints, size = constants$ncomponents,
                 replace = (constants$npoints < constants$ncomponents))
 
             ## Create components centres
