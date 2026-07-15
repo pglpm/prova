@@ -193,9 +193,9 @@
 #' @import stats
 #' @import utils
 #'
-#' @concept probability
-#' @export
-oldPr <- function(
+#' @keywords debug
+#' @noRd
+debug_Pr <- function(
     Y,
     X = NULL,
     learnt,
@@ -480,7 +480,7 @@ oldPr <- function(
     out <- combfnr(parallel::parApply(cl = cl,
             X = expand.grid(jy = seq_len(nY), jx = seq_len(nX)),
             MARGIN = 1,
-            FUN = oldutil_combineYX,
+            FUN = debug_util_combineYX,
             temporarydir = temporarydir, usememory = usememory,
             doquantiles = doquantiles, quantiles = quantiles,
             dosamples = dosamples, nsamples = nsamples,
@@ -641,8 +641,9 @@ oldPr <- function(
 #'
 #' @import stats
 #'
-#' @keywords internal
-oldutil_combineYX <- function(
+#' @keywords debug
+#' @noRd
+debug_util_combineYX <- function(
     iyx,
     temporarydir, usememory = TRUE,
     doquantiles, quantiles,

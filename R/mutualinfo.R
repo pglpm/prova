@@ -85,9 +85,6 @@
 #' ## within the following ranges, with corresponding probabilities:
 #' MI$quantiles
 #'
-## #' @importFrom extraDistr rcatlp
-## #' @importFrom extraDistr rcat
-## #' @importFrom extraDistr rbern
 #' @import parallel
 #' @import stats
 #' @import utils

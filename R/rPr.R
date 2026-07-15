@@ -65,9 +65,6 @@
 #'
 #' c(datapoints)
 #'
-## #' @importFrom extraDistr rcatlp
-## #' @importFrom extraDistr rcat
-## #' @importFrom extraDistr rbern
 #' @import utils
 #' @import stats
 #'
