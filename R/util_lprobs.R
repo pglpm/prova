@@ -562,7 +562,6 @@ util_combineYX <- function(
     quantiles, nsamples,
     Qerror
 ) {
-
     if(usememory) {
         lprobX <- readRDS(file.path(temporarydir,
             paste0('__X', iyx['jx'], '__.rds')
