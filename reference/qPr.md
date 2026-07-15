@@ -201,11 +201,11 @@ probs <- Pr(
 
 ## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
 probs$values
-#>         
-#> bill_len      [,1]
-#>     39.2 0.2528194
-#>     44.3 0.5026998
-#>     48.3 0.7501943
+#>          
+#> bill_len<      [,1]
+#>      39.2 0.2528194
+#>      44.3 0.5026998
+#>      48.3 0.7501943
 
 ## display the revisability about the quantiles
 quants$quantiles
@@ -262,10 +262,10 @@ probs <- Pr(
 
 ## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
 probs$values
-#>         |species
-#> bill_len    Adelie
-#>     37   0.2530943
-#>     38.8 0.5050883
-#>     40.6 0.7515390
+#>          |species
+#> bill_len<    Adelie
+#>      37   0.2530943
+#>      38.8 0.5050883
+#>      40.6 0.7515390
 # }
 ```

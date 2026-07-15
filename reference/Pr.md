@@ -77,8 +77,8 @@ Pr(
 - nsamples:
 
   Integer or `NULL` or `'all'` (default): desired number of samples of
-  the revisability of the probability for `Y`. If `NULL`, no samples are
-  reported. If `'all'` (or `Inf`), all samples obtained by the
+  the revisability of the probability for `Y`. If `NULL` or 0, no
+  samples are reported. If `'all'` or `Inf`, all samples obtained by the
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function
   are used.
 

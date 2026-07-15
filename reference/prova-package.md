@@ -19,7 +19,7 @@ Bernardo & Smith (2000)
 [doi:10.1002/9780470316870](https://doi.org/10.1002/9780470316870) ,
 Müller et al. (2015)
 [doi:10.1007/978-3-319-18968-0](https://doi.org/10.1007/978-3-319-18968-0)
-. Requires the packages 'Nimble', 'parallel', 'extraDistr'.
+. Requires the packages 'Nimble' and 'parallel'.
 
 ## See also
 

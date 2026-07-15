@@ -189,11 +189,11 @@ MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
 
 ## The value:
 MI$value
-#> [1] 0.8037673
+#> [1] 0.7155356
 
 ## If we had many more data, we could instead expect to obtain values
 ## within the following ranges, with corresponding probabilities:
 MI$quantiles
-#>       5.5%        25%        75%      94.5% 
-#> 0.07087549 0.74679350 1.09015145 1.28527153 
+#>      5.5%       25%       75%     94.5% 
+#> 0.0000000 0.7148847 1.0244033 1.1872572 
 ```

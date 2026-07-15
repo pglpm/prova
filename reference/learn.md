@@ -435,8 +435,8 @@ learnt <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpLZ9Dxd/prova-V1_D3_S10_260713T130136_1a1012b0f18f
-#> Prova v1.2.0.
+#> /tmp/RtmpTziQ4D/prova-V1_D3_S10_260715T203915_1a1d566da2b5
+#> Prova v1.6.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
@@ -451,24 +451,24 @@ learnt <- learn(
 #> 
 #> Checking test data
 #> (#1 #2 #3):
-#> rel. quantile error: 0.58 to 0.867
-#> ESS: 5.68 to 8.59
-#> needed thinning: 3.03 to 6.77
-#> average: 0.0878 to 0.305
-#> quantile width: 0.191 to 0.798
+#> rel. quantile error: 0.324 to 0.751
+#> ESS: 8.05 to 8.59
+#> needed thinning: 1.05 to 5.07
+#> average: 0.0546 to 0.392
+#> quantile width: 0.143 to 0.998
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 35 secs
-#> Average preparation & finalization time: 34 secs.
-#> Average Monte Carlo time per chain: 0.62 secs.
-#> Max total memory used: approx 350MB.
-#> Max memory used per core: approx 350MB.
+#> Total computation time: 36 secs
+#> Average preparation & finalization time: 35 secs.
+#> Average Monte Carlo time per chain: 0.53 secs.
+#> Max total memory used: approx 340MB.
+#> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
 #> Finished.
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpLZ9Dxd/prova-V1_D3_S10_260713T130136_1a1012b0f18f
+#> /tmp/RtmpTziQ4D/prova-V1_D3_S10_260715T203915_1a1d566da2b5
 #> **********************************************************
 
 ## Check structure of `learnt` object:
@@ -497,10 +497,10 @@ str(learnt)
 #>   ..$ domainmaxminushs : num Inf
 #>   ..$ tdomainminplushs : num -Inf
 #>   ..$ tdomainmaxminushs: num Inf
-#>   ..$ tlocation        : num 0.729
-#>   ..$ tscale           : num 0.206
-#>   ..$ plotmin          : num 0.179
-#>   ..$ plotmax          : num 1.94
+#>   ..$ tlocation        : num 0.523
+#>   ..$ tscale           : num 0.251
+#>   ..$ plotmin          : num -0.988
+#>   ..$ plotmax          : num 1.15
 #>   ..$ V1               : logi NA
 #>   ..$ V2               : logi NA
 #>  $ auxinfo    :List of 12
@@ -532,15 +532,15 @@ str(learnt)
 #>   ..$ maxusedcomponents  : num 2
 #>   ..$ nonfinitechains    : num 0
 #>   ..$ stoppedchains      : num 0
-#>   ..$ rel. quantile error: Named num [1:4] 0.58 0.737 0.867 0.758
+#>   ..$ rel. quantile error: Named num [1:4] 0.468 0.751 0.71 0.324
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ ESS                : Named num [1:4] 5.68 8.14 8.59 8.59
+#>   ..$ ESS                : Named num [1:4] 8.59 8.59 8.05 8.59
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ needed thinning    : Named num [1:4] 3.03 4.89 6.77 5.17
+#>   ..$ needed thinning    : Named num [1:4] 1.97 5.07 4.53 1.05
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ average            : Named num [1:4] 0.1399 0.3048 0.0878 0.2886
+#>   ..$ average            : Named num [1:4] 0.1442 0.3919 0.0546 0.2606
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ quantile width     : Named num [1:4] 0.191 0.645 0.399 0.798
+#>   ..$ quantile width     : Named num [1:4] 0.226 0.998 0.143 0.327
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
 # }
 ```

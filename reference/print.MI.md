@@ -59,6 +59,6 @@ MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
 ## display the value and revisability of the mutual information
 print(MI)
 #> value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#>     0.74     0.29     0.65     0.94     1.10 
+#>     0.77     0.35     0.71     0.92     1.00 
 # }
 ```

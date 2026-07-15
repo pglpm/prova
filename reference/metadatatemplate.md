@@ -414,7 +414,7 @@ dataset <- runif(10)
 metadata <- metadatatemplate(data = dataset, file = NULL)
 #> Analyzing1variates for10datapoints.
 #> * "data" variate:
-#>   - Numeric values between 0.0123494409490377 and 0.998656426556408
+#>   - Numeric values between 0.0164011577144265 and 0.968623074935749
 #>   Assuming variate to be CONTINUOUS.
 #>   - All values are positive
 #>   Assuming "domainmin" to be 0

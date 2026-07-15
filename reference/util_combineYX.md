@@ -9,9 +9,7 @@ util_combineYX(
   iyx,
   temporarydir,
   usememory = TRUE,
-  doquantiles,
   quantiles,
-  dosamples,
   nsamples,
   Qerror
 )

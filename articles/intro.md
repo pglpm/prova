@@ -751,10 +751,10 @@ Fspecies10$values
 print(Fspecies10, 'values')
 # $values
 #            
-# species         [,1]
-#   Adelie    0.298718
-#   Chinstrap 0.304615
-#   Gentoo    0.396668
+# species      [,1]
+#   Adelie    0.299
+#   Chinstrap 0.305
+#   Gentoo    0.397
 ```
 
 These frequency estimates have also another important meaning: they are
@@ -1282,14 +1282,14 @@ print(Fspecies10IS, 'values')
 # $values
 #            |island,sex
 # species     Biscoe,female Dream,female Torgersen,female Biscoe,male
-#   Adelie         0.127799     0.399408         0.482569    0.210545
-#   Chinstrap      0.111345     0.395410         0.266167    0.220873
-#   Gentoo         0.760857     0.205182         0.251263    0.568582
+#   Adelie            0.128        0.399            0.483       0.211
+#   Chinstrap         0.111        0.395            0.266       0.221
+#   Gentoo            0.761        0.205            0.251       0.569
 #            |island,sex
 # species     Dream,male Torgersen,male
-#   Adelie      0.321940       0.449652
-#   Chinstrap   0.541526       0.375734
-#   Gentoo      0.136535       0.174614
+#   Adelie         0.322          0.450
+#   Chinstrap      0.542          0.376
+#   Gentoo         0.137          0.175
 ```
 
   

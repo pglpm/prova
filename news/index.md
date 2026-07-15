@@ -1,5 +1,18 @@
 # Changelog
 
+## Prova v1.6.0
+
+- The package does not require the package ‘extraDistr’ any longer.
+
+- Internal changes to some functions.
+
+- Improved and more consistent digit-rounding system for print() output
+  of “probability” objects.
+
+- Fixed some bugs in the use of Pr() with base-rate correction.
+
+- Introduced a print() method for mutual-information objects.
+
 ## Prova v1.2.0
 
 - The function

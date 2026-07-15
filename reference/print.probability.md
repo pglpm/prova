@@ -104,7 +104,7 @@ print(probs)
 print(probs, elements = 'values', subset = list(species = 'Gentoo'))
 #> $values
 #>         |bill_len
-#> species         43        44
-#>   Gentoo 0.3894222 0.5722285
+#> species     43    44
+#>   Gentoo 0.389 0.572
 #> 
 ```

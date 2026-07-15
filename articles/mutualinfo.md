@@ -196,11 +196,11 @@ rPr(
     learnt = learnt
 )
 #        island   species
-# 644_1  Biscoe    Gentoo
-# 996_1   Dream    Adelie
-# 1228_1 Biscoe    Gentoo
-# 2230_1  Dream Chinstrap
-# 3083_1  Dream    Adelie
+# 644_1   Dream Chinstrap
+# 996_1   Dream Chinstrap
+# 1228_1  Dream Chinstrap
+# 2230_1 Biscoe    Gentoo
+# 3083_1 Biscoe    Adelie
 ```
 
 The rows of the resulting data frame are named according to the Monte
@@ -526,14 +526,14 @@ the `$unit` element:
 ``` r
 
 MIislandspecies$value
-# [1] 0.614426
+# [1] 0.621548
 
 MIislandspecies$unit
 # [1] "Sh"
 ```
 
 Between variates `island` and `species` there is thus a mutual
-information of 0.61 Sh. But what does this mean?
+information of 0.62 Sh. But what does this mean?
 
 ### Understanding mutual-information values
 
@@ -591,13 +591,13 @@ corresponding \\\lvert r \rvert\\ value. In the previous case of the
 
 MIislandspecies[c('value', 'unit')]
 # $value
-# [1] 0.614426
+# [1] 0.621548
 # 
 # $unit
 # [1] "Sh"
 
 MIislandspecies$rGauss
-# [1] 0.757194
+# [1] 0.759957
 ```
 
 ### Mutual information for previous examples
@@ -707,10 +707,10 @@ Note that in this case the Pearson correlation between `body_mass` and
 ``` r
 
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.571658
+# [1] 0.560428
 ```
 
-which is different from the rough \\r\\-equivalent 0.68.
+which is different from the rough \\r\\-equivalent 0.67.
 
   
 
@@ -828,7 +828,7 @@ and can be seen with the utility function
 
 print(MIislandspecies)
 # value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#     0.61     0.15     0.45     0.82     1.00
+#     0.62     0.15     0.47     0.82     1.00
 ```
 
 which shows that, acquiring more data, we can expect with 89%
