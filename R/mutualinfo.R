@@ -85,8 +85,9 @@
 #' ## within the following ranges, with corresponding probabilities:
 #' MI$quantiles
 #'
-#' @importFrom extraDistr rcatlp
-#' @importFrom extraDistr rbern
+## #' @importFrom extraDistr rcatlp
+## #' @importFrom extraDistr rcat
+## #' @importFrom extraDistr rbern
 #' @import parallel
 #' @import stats
 #' @import utils
@@ -355,7 +356,8 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, times = rep(ntot, nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id,
+            times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = ntot * nvrt,
                 mean = learnt$Rmean[totake],
@@ -370,7 +372,8 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, times = rep(ntot, nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id,
+            times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = ntot * nvrt,
                 mean = learnt$Cmean[totake],
@@ -385,7 +388,8 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, times = rep(ntot, nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id,
+            times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = ntot * nvrt,
                 mean = learnt$Dmean[totake],
@@ -448,10 +452,12 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, times = rep(ntot, nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id,
+            times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
-            extraDistr::rbern(n = ntot * nvrt,
-                prob = learnt$Bprob[totake])
+            rbinom(n = ntot * nvrt, size = 1, prob = learnt$Bprob[totake])
+            ## ## Old version
+            ## extraDistr::rbern(n = ntot * nvrt, prob = learnt$Bprob[totake])
         )
     }
 

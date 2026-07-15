@@ -65,8 +65,9 @@
 #'
 #' c(datapoints)
 #'
-#' @importFrom extraDistr rcatlp
-#' @importFrom extraDistr rbern
+## #' @importFrom extraDistr rcatlp
+## #' @importFrom extraDistr rcat
+## #' @importFrom extraDistr rbern
 #' @import utils
 #' @import stats
 #'
@@ -121,7 +122,7 @@ rPr <- function(
     if(n <= nmcs) {
         sseq <- mcsamples[sort.int(sample.int(n = nmcs, size = n))]
     } else {
-        sseq <- c(rep(x = mcsamples, times = n %/% nmcs),
+        sseq <- c(rep.int(x = mcsamples, times = n %/% nmcs),
             mcsamples[sort.int(sample.int(n = nmcs, size = n %% nmcs))])
     }
 
@@ -258,7 +259,8 @@ rPr <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id,
+            times = rep.int(x = n, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = n * nvrt,
                 mean = learnt$Rmean[totake],
@@ -273,7 +275,8 @@ rPr <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id,
+            times = rep.int(x = n, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = n * nvrt,
                 mean = learnt$Cmean[totake],
@@ -288,7 +291,8 @@ rPr <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id,
+            times = rep.int(x = n, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = n * nvrt,
                 mean = learnt$Dmean[totake],
@@ -351,10 +355,12 @@ rPr <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, times = rep(n, nvrt)), Ws, sseq)
+        totake <- cbind(rep.int(x = aux$id,
+            times = rep.int(x = n, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
-            extraDistr::rbern(n = n * nvrt,
-                prob = learnt$Bprob[totake])
+            rbinom(n = n * nvrt, size = 1, prob = learnt$Bprob[totake])
+            ## ## Old version
+            ## extraDistr::rbern(n = n * nvrt, prob = learnt$Bprob[totake])
         )
     }
 

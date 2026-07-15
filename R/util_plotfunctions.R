@@ -103,7 +103,8 @@ flexiplot <- function(
 
     if(missing('x') && !missing('y')){
         x <- y
-        x[] <- rep(seq_len(NROW(y)), each = NCOL(y))
+        x[] <- rep.int(x = seq_len(NROW(y)),
+            times = rep.int(x = NCOL(y), times = NROW(y)))
         if(is.null(ylab)){ ylab <- deparse1(substitute(y)) }
         if(is.null(yjitter)){ yjitter <- FALSE }
         if(is.null(xdomain) && is.null(xlim)){
@@ -117,7 +118,8 @@ flexiplot <- function(
         }
     } else if(!missing('x') && missing('y')){
         y <- x
-        y[] <- rep(seq_len(NROW(x)), each = NCOL(x))
+        y[] <- rep.int(x = seq_len(NROW(x)),
+            times = rep.int(x = NCOL(x)), times = NROW(x))
         if(is.null(xlab)){ xlab <- deparse1(substitute(x)) }
         if(is.null(xjitter)){ xjitter <- FALSE }
         if(is.null(ydomain) && is.null(ylim)){
@@ -137,12 +139,12 @@ flexiplot <- function(
     }
 
     if(NROW(y) == 1 && NCOL(y) == NCOL(x)){
-        y <- rep(y, each = NROW(x))
+        y <- rep(x = y, times = rep.int(x = NROW(x), times = length(y)))
         dim(y) <- dim(x)
         if(is.null(type)){ type <- 'p' }
     }
     if(NROW(x) == 1 && NCOL(x) == NCOL(y)){
-        x <- rep(x, each = NROW(y))
+        x <- rep(x = x, times = rep.int(x = NROW(y), times = length(x)))
         dim(x) <- dim(y)
         if(is.null(type)){ type <- 'p' }
     }
@@ -750,7 +752,8 @@ hist.probability <- function(
         if(alpha.f > 0){
             ## Plot the shaded areas under the histograms
             ## by means of plotquantiles()
-            plotquantiles(x = midx, y = cbind(rep(0, length(y)), y),
+            plotquantiles(x = midx,
+                y = cbind(rep.int(x = 0, times = length(y)), y),
                 col = thiscol,
                 alpha.f = fill.alpha.f,
                 xlab = xlab, ylab = ylab,
@@ -1025,7 +1028,7 @@ hist.MI <- function(
             ## Plot the shaded areas under the histograms
             ## by means of plotquantiles()
         plotquantiles(x = midslist,
-            y = cbind(rep(0, length(densitylist)), densitylist),
+            y = cbind(rep.int(x = 0, times = length(densitylist)), densitylist),
             col = col,
             alpha.f = fill.alpha.f,
             xlab = xlab, ylab = ylab,

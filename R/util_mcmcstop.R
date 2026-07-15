@@ -53,7 +53,7 @@ funESS3 <- function(x){
   mean_var <- var_plus * N / (N - 1)
   ##
   ## Geyer's initial positive sequence
-  rho_hat_t <- rep.int(0, N)
+  rho_hat_t <- rep.int(x = 0, times = N)
   t <- 0
   rho_hat_even <- 1
   rho_hat_t[t + 1] <- rho_hat_even
@@ -143,7 +143,7 @@ funAC <- function(y) {
   N <- length(y)
   Mt2 <- 2 * fftNGS(N)
   yc <- y - mean(y)
-  yc <- c(yc, rep.int(0, Mt2 - N))
+  yc <- c(yc, rep.int(x = 0, times = Mt2 - N))
   transform <- fft(yc)
   ac <- fft(Conj(transform) * transform, inverse = TRUE)
   # use "biased" estimate as recommended by Geyer (1992)

@@ -1960,7 +1960,8 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
             outlist <- list(
                 Alpha = round(constants$nalpha/2),
-                W = rep(1/constants$ncomponents, constants$ncomponents),
+                W = rep.int(x = 1/constants$ncomponents,
+                    times = constants$ncomponents),
                 ## ## Assign every point to the closest component centre
                 K = K
                 ## ## Other assignment methods:
@@ -2065,8 +2066,9 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 outlist <- c(
                     outlist,
                     list(
-                        Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
-                            rep(1 / acard, acard)
+                        Oprob = matrix(unlist(sapply(constants$Ocards,
+                            function(acard){
+                            rep.int(x = 1 / acard, times = acard)
                         })), nrow = sum(constants$Ocards), ncol = ncomponents)
                     )
                 )
@@ -2076,7 +2078,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                     outlist,
                     list(
                         Nprob = matrix(unlist(sapply(constants$Ncards, function(acard){
-                            rep(1 / acard, acard)
+                            rep.int(x = 1 / acard, times = acard)
                         })), nrow = sum(constants$Ncards), ncol = ncomponents)
                     )
                 )
@@ -2197,7 +2199,8 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
             outlist <- list(
                 Alpha = round(constants$nalpha/2),
-                W = rep(1/constants$ncomponents, constants$ncomponents),
+                W = rep.int(x = 1/constants$ncomponents,
+                    times = constants$ncomponents),
                 ## ## Assign every point to the closest component centre
                 K = K
                 ## ## Other assignment methods:
@@ -2306,7 +2309,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                     outlist,
                     list(
                         Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
-                            rep(1 / acard, acard)
+                            rep.int(x = 1 / acard, times = acard)
                         })), nrow = sum(constants$Ocards), ncol = ncomponents)
                     )
                 )
@@ -2316,7 +2319,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                     outlist,
                     list(
                         Nprob = matrix(unlist(sapply(constants$Ncards, function(acard){
-                            rep(1 / acard, acard)
+                            rep.int(x = 1 / acard, times = acard)
                         })), nrow = sum(constants$Ncards), ncol = ncomponents)
                     )
                 )
@@ -2338,14 +2341,16 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
     } else if(initmethod == 'prior'){
         ## values chosen from prior
         initsfn <- function() {
-            Alpha <- sample(1:constants$nalpha, 1, prob = probalpha0[1:constants$nalpha])
+            Alpha <- sample.int(n = constants$nalpha, size = 1,
+                prob = probalpha0[1:constants$nalpha])
             W <- nimble::rdirch(n = 1,
                 alpha = constants$dirchalphas[1:constants$ncomponents] *
                     constants$alphabase^Alpha)
             outlist <- list(
                 Alpha = Alpha,
                 W = W,
-                K = sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
+                K = sample(x = rep.int(x = which(W > 0), times = 2),
+                    size = constants$npoints, replace = TRUE)
             )
             ##
             if (vn$R > 0) { # continuous open domain
@@ -2436,7 +2441,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                     outlist,
                     list(
                         Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
-                            rep(1 / acard, acard)
+                            rep.int(x = 1 / acard, times = acard)
                         })), nrow = sum(constants$Ocards), ncol = ncomponents)
                     )
                 )
@@ -2476,9 +2481,10 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             initvar <- 6
             outlist <- list(
                 Alpha = round(constants$nalpha/2),
-                W = rep(1/constants$ncomponents, constants$ncomponents),
+                W = rep.int(x = 1/constants$ncomponents,
+                    times = constants$ncomponents),
                 ## ## Assign every point to first component
-                K = rep(1, constants$npoints)
+                K = rep.int(x = 1, times = constants$npoints)
             )
             ##
             if (vn$R > 0) { # continuous open domain
@@ -2535,7 +2541,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                     outlist,
                     list(
                         Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
-                            rep(1 / acard, acard)
+                            rep.int(x = 1 / acard, times = acard)
                         })), nrow = sum(constants$Ocards), ncol = ncomponents)
                     )
                 )
@@ -2545,7 +2551,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                     outlist,
                     list(
                         Nprob = matrix(unlist(sapply(constants$Ncards, function(acard){
-                            rep(1 / acard, acard)
+                            rep.int(x = 1 / acard, times = acard)
                         })), nrow = sum(constants$Ncards), ncol = ncomponents)
                     )
                 )
@@ -2567,9 +2573,10 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
         initsfn <- function() {
             outlist <- list(
                 Alpha = round(constants$nalpha/2),
-                W = rep(1/constants$ncomponents, constants$ncomponents),
+                W = rep_len(x = 1/constants$ncomponents,
+                    length.out = constants$ncomponents),
                 ## ## Assign every point to first component
-                K = rep(1, constants$npoints)
+                K = rep.int(x = 1, times = constants$npoints)
             )
             ##
             if (vn$R > 0) { # continuous open domain

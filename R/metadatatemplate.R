@@ -160,7 +160,7 @@ metadatatemplate <- function(
             ## plotmin = NA,
             ## plotmax = NA
         ),
-        setNames(as.list(rep(NA, 11)), paste0('V', 1:11)),
+        setNames(as.list(rep(x = NA, times = 11)), paste0('V', 1:11)),
             if (addsummary2metadata) {
                 list(datamin = NA,
                     datamax = NA,

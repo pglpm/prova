@@ -7,7 +7,7 @@ mcsubset <- function(learnt, subsamples) {
     lapply(learnt, function(xx) {
         do.call('[', c(
             list(xx),
-            rep(TRUE, length(dim(xx)) - 1),
+            rep(x = TRUE, times = length(dim(xx)) - 1),
             list(subsamples),
             list(drop = FALSE))
         )

@@ -712,7 +712,8 @@ util_qYXcont <- function(
         params2 <- t(params2[, selsamples])
         lprobX <- t(lprobX[, selsamples])
 
-        Yvals <- rep(.Machine$double.xmax * c(-0.125, 0.125), each = nmaxsamples)
+        Yvals <- rep.int(x = .Machine$double.xmax * c(-0.125, 0.125),
+            times = rep.int(x = nmaxsamples, times = 2))
         dim(Yvals) <- c(nmaxsamples, 2)
         sampleseq <- 1:nmaxsamples
 
@@ -833,7 +834,7 @@ util_qYXdiscr <- function(
             perm = c(1, 3, 2), resize = TRUE)
         lprobX <- t(lprobX[, selsamples])
 
-        samples <- rep(1L, nmaxsamples)
+        samples <- rep.int(x = 1L, times = nmaxsamples)
 
         i <- 1L
 
