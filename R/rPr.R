@@ -119,10 +119,10 @@ rPr <- function(
 
     nmcs <- length(mcsamples)
     if(n <= nmcs) {
-        sseq <- mcsamples[sort.int(sample.int(nmcs, n))]
+        sseq <- mcsamples[sort.int(sample.int(n = nmcs, size = n))]
     } else {
         sseq <- c(rep(x = mcsamples, times = n %/% nmcs),
-            mcsamples[sort.int(sample.int(nmcs, n %% nmcs))])
+            mcsamples[sort.int(sample.int(n = nmcs, size = n %% nmcs))])
     }
 
     if(all(is.na(X))){X <- NULL}
@@ -228,10 +228,17 @@ rPr <- function(
 
 #### Draw samples of Ynames
 
-    ## extraDistr::rcatlp() can use non-normalized probabilities
-    ## NOTA BENE: the '1 - ...' is because of a bug in rcatlp() < 1.10.0.5
-    Ws <- 1 - extraDistr::rcatlp(n = 1, log_prob = 0) +
-        extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
+    Ws <- c(t(apply(
+        X = learnt$W[, sseq, drop = FALSE], MARGIN = 2,
+        FUN = function(xx){sample.int(n = ncomponents, size = 1, prob = xx)},
+        simplify = TRUE
+    )))
+    ## ## Old version with extraDistr::rcatlp()
+    ## ## extraDistr::rcatlp() can use non-normalized probabilities
+    ## ## NOTA BENE: the '1 - ...' is because of a bug in rcatlp() < 1.10.0.5
+    ## Ws <- 1 - extraDistr::rcatlp(n = 1, log_prob = 0) +
+    ##     extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
+    ##
     ## ## Old version with extraDistr::cat(), can be 10 times slower
     ## lWnorm <- util_denorm(lW[, sseq, drop = FALSE])
     ## Ws <- extraDistr::rcat(n = n, prob = t(
@@ -317,13 +324,10 @@ rPr <- function(
         for(i in toselect) {
             aux <- auxmetadata[i, ]
             totake <- cbind(Ws, sseq)
-            Yout <- c(Yout,
-                extraDistr::rcat(n = n,
-                    prob = apply(
-                        X = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
-                        MARGIN = 1, FUN = `[`, totake,
-                        simplify = TRUE) )
-            )
+            Yout <- c(Yout, mapply(FUN = function(xx, yy){
+                sample.int(n = aux$Nvalues, size = 1,
+                    prob = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
+                Ws, sseq, SIMPLIFY = TRUE))
         }
     }
 
