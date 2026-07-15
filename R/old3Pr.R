@@ -1,0 +1,684 @@
+#' Calculate posterior probabilities
+#'
+#' @description This function calculates posterior probabilities and probability densities, cumulative posterior probabilities, and mixtures thereof. It also outputs the "revisability" of such probabilities if more training data were available, and the Monte Carlo Standard Error for the calculated posterior probabilities.
+#'
+#' @details This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as [data frame][base::data.frame()] arguments `Y` and `X`. It is somewhat analogous to the `dxxx`-variants and `pxxx`-variants of [R distribution functions][stats::Distributions]. If `X` is omitted or `NULL`, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert \text{data})} is calculated.
+#'
+#' For some variates in `Y` or `X`, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, \text{data})\ .} Tail values are inputted via the `'tails'` argument; see "Usage".
+#'
+#' This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new\,data}, \text{data})} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:
+#'
+#' - As samples (default 3600 samples, depending on the 'nsamples' argument given to the [learn()] function) of the alternative values that the posterior probability could have.
+#' - As quantiles (default 5.5%, 25%, 75%, 94.5%) of the possible revisability.
+#'
+#' If several joint values are given for `Y` or `X`, the function will create a 2D grid of results for all possible combinations of the given `Y` and `X` values.
+#'
+#' This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for `Y` is given, the function will calculate the probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})} from \eqn{\mathrm{Pr}(X = x \vert Y = y, \text{data})} and the prior, by means of Bayes's theorem.
+#'
+#' Each variate in each argument `Y`, `X` can be specified either as a point-value \eqn{Y = y} or as a left-open interval \eqn{Y \le y} or as a right-open interval \eqn{Y \ge y}, through the argument `tails`.
+#'
+#' See `vignette('intro')` for example uses.
+#'
+#' @param Y Matrix or data.table: set of values of variates of which we want
+#'   the joint probability of. One variate per column, one set of values per row.
+#' @param X Matrix or data.table or `NULL` (default): set of values of variates on which we want to condition the joint probability of `Y`. If `NULL`, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.
+#' @param learnt Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the [learn()] function, or such an object itself.
+#' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **NB**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
+#' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
+#' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the probability for `Y`. If `NULL`, no samples are reported. If `'all'` (or `Inf`), all samples obtained by the [learn()] function are used.
+#' @param quantiles Numeric vector, between 0 and 1, or `NULL`: desired quantiles of the revisability of the probability for `Y`. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. These are typical quantile values in the Bayesian literature: they give 50% and 89% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty (see <doi:10.5281/zenodo.17072199>). If `NULL`, no quantiles are calculated.
+#' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use roughly half of available cores; `FALSE`: use serial computation; integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
+#' @param sep character, default `','`: character to separate variate names and values
+#' @param solidus character, default `'|'`: character prepended to names of the variates in the conditional (typically the `X` variates).
+#' @param verbose Logical, default `FALSE`: give messages about parallel processing?
+#' @param keepYX Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in the output? This is used for the plot method.
+#'
+#' @return An object of class "probability", which is a list consisting of the following elements:
+#'
+#' - `$values`: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
+#' - `$quantiles` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
+#' - `$samples` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such probabilities.
+#' - `$values.MCaccuracy`, `quantiles.MCaccuracy`: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the `values` and `quantiles` elements.
+#' - `$Y`, `$X`, `$tails`: copies of the `Y`, `X`, `tails` arguments.
+#'
+#' @references
+#'
+#' - Lindley, Novick (1981): *The role of exchangeability in inference*, <doi:10.1214/aos/1176345331>.
+#' - Bernardo, Smith (2000): *Bayesian Theory*. Wiley <doi:10.1002/9780470316870>.
+#' - Jaynes (2003): *Probability Theory: The Logic of Science*. Cambridge University Press <doi:10.1017/CBO9780511790423>.
+#' - MacKay (2005): *Information Theory, Inference, and Learning Algorithms*. Cambridge University Press <https://www.inference.org.uk/itila/book.html>.
+#' - Porta Mana (2025): *What's special about 89% credibility intervals?* <doi:10.5281/zenodo.17072199>.
+#'
+#' @seealso
+#' [learn()], which generates the `learnt` objects required by `Pr()`.
+#'
+#' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()`.
+#'
+#' [hist.probability()] to plot histograms of the probability distributions calculated by `Pr()`.
+#'
+#' [print.probability()] to print the main elements of the probabilities calculated by `Pr()`.
+#'
+#' [qPr()] to calculate quantiles for a specific variate, that is, the variate values having given probabilities.
+#'
+#' [rPr()] to generate datapoints.
+#'
+#' @examples
+#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## variates: 'species' and 'bill_len'
+#' learnt <- learntExample
+#'
+#' ## ## Example 1:
+#' ## Calculate the probability that an unknown penguin from this population
+#' ## is of species 'Adelie'
+#'
+#' probs <- Pr(
+#'   Y = data.frame(species = 'Adelie'),
+#'   learnt = learnt, parallel = 1
+#' )
+#'
+#' ## display the probability value
+#' probs$values
+#'
+#' ## the full-population frequency of 'Adelie' penguins is unknown;
+#' ## display the 5.5%- and 94.5%-probability values
+#' ## for such frequency
+#' probs$quantiles[, , c('5.5%', '94.5%')]
+#'
+#' ## we can also plot the probability distribution for this full-population frequency
+#' hist(probs, legend = 'topright')
+#'
+#'
+#' ## ## Example 2:
+#' ## Calculate the 3 probabilities that an unknown penguin from this population
+#' ## is of species 'Adelie', 'Chinstrap', 'Gentoo'
+#'
+#' probs <- Pr(
+#'   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+#'   learnt = learnt, parallel = 1
+#' )
+#'
+#' ## display the 3 probability values
+#' probs$values
+#'
+#' ## the full-population frequencies of the three species are unknown;
+#' ## display the 5.5%- and 94.5%-probability values
+#' ## for such frequencies
+#' probs$quantiles[, , c('5.5%', '94.5%')]
+#'
+#' ## plot the probabilities and quantiles
+#' plot(probs)
+#'
+#' ## plot the probability distribution for the full-population frequency
+#' ## of each species
+#' hist(probs)
+#'
+#' ## ## Example 3:
+#' ## Calculate the probability that an unknown penguin is of species 'Adelie'
+#' ## GIVEN that its bill length is 43 mm
+#'
+#' probs <- Pr(
+#'   Y = data.frame(species = 'Adelie'),
+#'   X = data.frame(bill_len = 43),
+#'   learnt = learnt, parallel = 1
+#' )
+#'
+#' ## display the probability value
+#' probs$values
+#'
+#' ## the full-subpopulation frequency of 'Adelie' penguins,
+#' ## among penguins having bill length of 43 mm, is unknown;
+#' ## display the 5.5%- and 94.5%-probability values
+#' ## for such conditional frequency
+#' probs$quantiles[, , c('5.5%', '94.5%')]
+#'
+#'
+#' ## ## Example 4:
+#' ## Calculate the probability that
+#' ## an unknown penguin is of species 'Adelie' AND its bill length is 43 mm
+#'
+#' probs <- Pr(
+#'   Y = data.frame(species = 'Adelie', bill_len = 43),
+#'   learnt = learnt, parallel = 1
+#' )
+#'
+#' ## display the probability value
+#' probs$values
+#'
+#' ## display the 5.5%- and 94.5%-probability values
+#' ## for the full-population frequency of 'Adelie' penguins with 43 mm bills
+#' probs$quantiles[, , c('5.5%', '94.5%')]
+#'
+#'
+#' ## ## Example 5:
+#' ## Calculate the 3 x 2 probabilities for the 3 species
+#' ## GIVEN bill-lengths of 43 mm and 44 mm
+#'
+#' Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
+#'
+#' X <- data.frame(bill_len = c(43, 44))
+#'
+#' probs <- Pr(Y = Y, X = X, learnt = learnt, parallel = 1)
+#'
+#' ## display the 3 x 2 probability values
+#' probs$values
+#'
+#' ## display the 5.5%- and 94.5%-probability values
+#' ## for the full-population joint frequencies
+#' probs$quantiles[, , c('5.5%', '94.5%')]
+#'
+#' ## plot the probabilities and quantiles
+#' plot(probs)
+#'
+#'
+#' ## ## Example 6:
+#' ## Calculate the 3 x 2 joint probabilities for the 3 species
+#' ## AND bill-lengths of 43 mm and 44 mm
+#'
+#' Y <- expand.grid(
+#'   species = c('Adelie', 'Chinstrap', 'Gentoo'),
+#'   bill_len = c(43, 44)
+#' )
+#'
+#' probs <- Pr(Y = Y, learnt = learnt, parallel = 1)
+#'
+#' ## display the 6 joint-probability values
+#' probs$values
+#'
+#' ## display the 5.5%- and 94.5%-probability values
+#' ## for the full-population joint frequencies
+#' probs$quantiles[, , c('5.5%', '94.5%')]
+#'
+#'
+#' @import parallel
+#' @import stats
+#' @import utils
+#'
+#' @concept probability
+#' @export
+oldPr <- function(
+    Y,
+    X = NULL,
+    learnt,
+    tails = NULL,
+    priorY = NULL,
+    nsamples = 'all',
+    quantiles = c(0.055, 0.25, 0.75, 0.945),
+    parallel = TRUE,
+    sep = ',',
+    solidus = '|',
+    verbose = FALSE,
+    keepYX = TRUE
+) {
+    ## #' @param usememory Logical, default `TRUE`: save partial results to disc, to avoid excessive RAM use. (For the moment only possible value is `TRUE`.)
+    usememory <- TRUE
+
+    Qerror <- pnorm(c(-1, 1))
+
+#### Requested parallel processing
+    ## NB: doesn't make sense to have more cores than chains
+    closeexit <- FALSE
+    if ('cluster' %in% class(parallel)){
+        ## user provides a cluster object
+        cl <- parallel
+    } else if (isTRUE(parallel)) {
+        ## user wants us to register a parallel backend
+        ## and to choose number of cores
+        ncores <- max(1,
+            floor(parallel::detectCores() / 2))
+        cl <- parallel::makeCluster(ncores)
+        closeexit <- TRUE
+        if(verbose){message('Registered ', capture.output(print(cl)), '.')}
+    } else if (isFALSE(parallel)) {
+        ## user wants us not to use parallel cores
+        ncores <- 1
+        cl <- parallel::makeCluster(ncores)
+        closeexit <- TRUE
+    } else if (is.numeric(parallel) &&
+                   is.finite(parallel) && parallel >= 1) {
+        ## user wants us to register 'parallel' # of cores
+        ncores <- parallel
+        cl <- parallel::makeCluster(ncores)
+        closeexit <- TRUE
+        if(verbose){message('Registered ', capture.output(print(cl)), '.')}
+    } else {
+        stop("Unknown value of argument 'parallel'.")
+    }
+
+    ## Close parallel connections if any were opened
+    if(closeexit) {
+        closecoresonexit <- function(){
+            if(verbose){message('Closing connections to cores.')}
+            parallel::stopCluster(cl)
+            ## parallel::setDefaultCluster(NULL)
+        }
+        on.exit(closecoresonexit())
+    }
+
+    ## Extract Monte Carlo output & auxmetadata
+    ## If learnt is a string, check if it's a folder name or file name
+    if (is.character(learnt)) {
+        ## Check if 'learnt' is a folder containing learnt.rds
+        if (file_test('-d', learnt) &&
+                file.exists(file.path(learnt, 'learnt.rds'))) {
+            learnt <- readRDS(file.path(learnt, 'learnt.rds'))
+        } else {
+            ## Assume 'learnt' the full path of learnt.rds
+            ## possibly without the file extension '.rds'
+            learnt <- paste0(sub('.rds$', '', learnt), '.rds')
+            if (file.exists(learnt)) {
+                learnt <- readRDS(learnt)
+            } else {
+                stop('The argument "learnt" must be a folder containing learnt.rds, or the path to an rds-file containing the output from "learn()".')
+            }
+        }
+    }
+    ## Add check to see that learnt is correct type of object?
+    auxmetadata <- learnt$auxmetadata
+    learnt$auxmetadata <- NULL
+    learnt$auxinfo <- NULL
+    ncomponents <- nrow(learnt$W)
+    nmcsamples <- ncol(learnt$W)
+
+    if(is.numeric(nsamples)){
+        if(is.na(nsamples) || nsamples < 1) {
+            nsamples <- NULL
+        } else if(!is.finite(nsamples)) {
+            nsamples <- nmcsamples
+        }
+    } else if (is.character(nsamples) && nsamples == 'all'){
+        nsamples <- nmcsamples
+    }
+
+
+    Y <- as.data.frame(Y)
+    Yv <- colnames(Y)
+
+    if(all(is.na(X))){X <- NULL}
+    if(!is.null(X)){X <- as.data.frame(X)}
+    Xv <- colnames(X)
+
+    if(!is.null(tails)){
+        tails <- as.list(tails)
+        if(is.null(names(tails))) {
+            stop('Missing variate names in "tails"')
+        }
+    }
+    tailscentre <- list('==', 0, '0', NULL)
+    tailsleft <- list('<=', -1, '-1', 'left', 'lower')
+    tailsright <- list('>=', 1, '+1', 'right', 'upper')
+    tailsvalues <- c(tailscentre, tailsleft, tailsright)
+
+    ## Consistency checks
+
+    if (!all(Yv %in% auxmetadata$name)) {
+        stop('unknown Y variate ',
+            paste0(Yv[!(Yv %in% auxmetadata$name)], collapse = ' '),
+            '\n')
+    }
+    if (length(unique(Yv)) != length(Yv)) {
+        stop('duplicate Y variates\n')
+    }
+
+    if (!all(Xv %in% auxmetadata$name)) {
+        stop('unknown X variate ',
+            paste0(Xv[!(Xv %in% auxmetadata$name)], collapse = ' '),
+            '\n')
+    }
+    if (length(unique(Xv)) != length(Xv)) {
+        stop('duplicate X variates\n')
+    }
+
+    if (any(Yv %in% Xv)) {
+        stop('overlap in Y and X variates\n')
+    }
+
+    tailsv <- names(tails)
+    if (!all(tailsv %in% c(Yv, Xv))) {
+        warning('"tails" variate ',
+            paste0(tailsv[!(tailsv %in% c(Yv, Xv))], collapse = ' '),
+            ' not among Y and X; ignored\n')
+        tails <- tails[tailsv %in% c(Yv, Xv)]
+        tailsv <- names(tails)
+    }
+    if (length(unique(tailsv)) != length(tailsv)) {
+        stop('duplicate "tails" variates\n')
+    }
+    if(!all(tails %in% tailsvalues)) {
+        stop('"tails" values must be ',
+            paste0(tailsvalues, collapse = ' '), '\n')
+    }
+
+    ## transform 'tails' to -1, +1
+    ## +1: '<=',    -1: '>='
+    ## this is opposite of the argument convention because
+    ## interval probabilities are calculated with `lower.tail = TRUE`
+    ## eg:
+    ## pnorm(x, mean, sd, lower.tail = FALSE) ==
+    ##     pnorm(-x, -mean, sd, lower.tail = TRUE)
+    tails[tails %in% tailscentre] <- NULL
+    cleft <- tails %in% tailsleft
+    cright <- tails %in% tailsright
+    tails[cleft] <- +1
+    tails[cright] <- -1
+    tails <- unlist(tails)
+    tailsv <- names(tails)
+
+    ## Check if a prior for Y is given, in that case Y and X will be swapped
+    if (isFALSE(priorY) || is.null(priorY)) {
+        priorY <- NULL
+        doquantiles <- !is.null(quantiles)
+    } else {
+        if(is.null(X)){ stop('X must be non-null if priorY is given') }
+
+        if(!isTRUE(priorY) && length(priorY) != nrow(Y)) {
+            stop('priorY must have as many elements a the rows of Y')
+        }
+
+        doquantiles <- FALSE
+        if(!is.null(quantiles)) {
+            ## message('For the moment, ',
+            ##     'computation of quantiles is affected by a larger error',
+            ##     'if "priorY" is specified.')
+            nsamples0 <- nsamples
+            nsamples <- max(nsamples0, 1200L)
+        }
+
+        ## if priorY is TRUE, the user wants a uniform prior distribution
+        if(isTRUE(priorY)){
+            priorY <- 1 + numeric(nrow(Y))
+        } else {
+            ## Check for invalid probabilities
+            if (!is.numeric(priorY) || any(priorY < 0)) {
+                stop('priorY contains invalid probabilities')
+            }
+        }
+
+        ## Swap X and Y, to use Bayes's theorem
+        . <- Y
+        Y <- X
+        X <- .
+        rm(.)
+        . <- Yv
+        Yv <- Xv
+        Xv <- .
+        rm(.)
+    }
+
+    nY <- nrow(Y)
+    nX <- max(nrow(X), 1L)
+
+    dosamples <- !is.null(nsamples)
+
+
+#### tmp dir where to save X and Y objects
+    temporarydir <- tempdir()
+
+
+#### Calculate and save arrays for X values:
+    if (is.null(X)) {
+        lprobX <- log(learnt$W)
+        saveRDS(lprobX,
+            file.path(temporarydir,
+                paste0('__X', 1, '__.rds'))
+        )
+    } else {
+        ## Construction of the arguments for util_lprobs, X argument
+        lpargs <- util_lprobsargsyx(
+            x = X,
+            auxmetadata = auxmetadata,
+            learnt = learnt,
+            tails = tails
+        )
+
+        ## each instance of util_lprobsbase() takes one datapoint
+        invisible(parallel::parLapply(cl = cl,
+            X = lpargs$xVs,
+            fun = util_lprobsbase,
+            params = lpargs$params,
+            logW = c(log(learnt$W)),
+            temporarydir = temporarydir,
+            lab = '__X'
+        ))
+    }
+
+
+#### Calculate and save arrays for Y values:
+
+    ## Construction of the arguments for util_lprobs, Y argument
+    ## jacobians <- exp(-rowSums(
+    ##     log(vtransform(Y,
+    ##         auxmetadata = auxmetadata,
+    ##         invjacobian = TRUE)),
+    ##     na.rm = TRUE
+    ## ))
+
+    lpargs <- util_lprobsargsyx(
+        x = Y,
+        auxmetadata = auxmetadata,
+        learnt = learnt,
+        tails = tails
+    )
+
+    ## each instance of util_lprobsbase() takes one datapoint
+    invisible(parallel::parLapply(cl = cl,
+        X = lpargs$xVs,
+        fun = util_lprobsbase,
+        params = lpargs$params,
+        logW = 0,
+        temporarydir = temporarydir,
+        lab = '__Y'
+    ))
+
+    ## Calculation with all Y and X combinations
+    keys <- c('values', 'quantiles', 'samples', 'values.MCaccuracy', 'quantiles.MCaccuracy')
+    ##
+    combfnr <- function(...){setNames(do.call(mapply,
+        c(FUN = `rbind`, lapply(X = ..., FUN = `[`, keys, drop = FALSE))),
+        keys)}
+    ## combfnc <- function(...){setNames(do.call(mapply, c(FUN=cbind, lapply(list(...), `[`, keys))), keys)}
+
+    out <- combfnr(parallel::parApply(cl = cl,
+            X = expand.grid(jy = seq_len(nY), jx = seq_len(nX)),
+            MARGIN = 1,
+            FUN = oldutil_combineYX,
+            temporarydir = temporarydir, usememory = usememory,
+            doquantiles = doquantiles, quantiles = quantiles,
+            dosamples = dosamples, nsamples = nsamples,
+            Qerror = Qerror
+        ))
+
+    ## clean temp files
+    if(usememory) {
+        unlink(x = c(
+            sapply(seq_len(nX), function(jx){
+                file.path(temporarydir, paste0('__X', jx, '__.rds'))
+            }),
+            sapply(seq_len(nY), function(jy){
+                file.path(temporarydir, paste0('__Y', jy, '__.rds'))
+            })
+        ))
+    }
+
+
+    if(is.null(priorY)){
+        y <- Y
+        y[, colnames(Y) %in% tailsv] <- NA
+        jacobians <- exp(rowSums(
+            as.matrix(vtransform(y,
+                auxmetadata = auxmetadata,
+                logjacobianOr = TRUE)),
+            na.rm = TRUE
+        ))
+        rm(y)
+    }
+
+    ## transform to grid
+    ## in the output-list elements the Y & X values are the rows
+    dim(out$values.MCaccuracy) <- dim(out$values) <- c(nY, nX)
+
+    ## dimension & value names for variates
+    if(!is.null(X)){
+        Xnames <- setNames(object = list(
+            apply(X = X, MARGIN = 1, FUN = paste0, collapse = sep,
+                simplify = TRUE)),
+            nm = paste0(if(is.null(priorY)){solidus},
+                paste0(colnames(X), collapse = sep)) )
+    } else {
+        Xnames <- list(NULL)
+    }
+    if(!is.null(Y)){
+        Ynames <- setNames(object = list(
+            apply(X = Y, MARGIN = 1, FUN = paste0, collapse = sep,
+                simplify = TRUE)),
+            nm = paste0(if(!is.null(priorY)){solidus},
+                paste0(colnames(Y), collapse = sep)) )
+    } else {
+        Ynames <- list(NULL)
+    }
+
+    if(is.null(priorY)){
+        ## multiply by jacobian factors
+        out$values <- out$values * jacobians
+        out$values.MCaccuracy <- out$values.MCaccuracy * jacobians
+       
+        dimnames(out$values) <- c(Ynames, Xnames)
+        dimnames(out$values.MCaccuracy) <- c(Ynames, Xnames)
+
+    } else {
+        ## Bayes's theorem
+        out$values <- t(priorY * t(out$values))
+        out$values.MCaccuracy <- NULL
+        normf <- rowSums(out$values, na.rm = TRUE)
+        out$values <- t(out$values/normf)
+
+        dimnames(out$values) <- c(Xnames, Ynames)
+    }
+
+    if(dosamples){
+        temp <- list(sample = round(seq(1, nmcsamples, length.out = nsamples)))
+
+        ## transform to grid
+        dim(out$samples) <- c(nY, nX, nsamples)
+
+        if(is.null(priorY)){
+            ## multiply by jacobian factors
+            out$samples <- out$samples * jacobians
+
+            dimnames(out$samples) <- c(Ynames, Xnames, temp)
+
+        } else {
+            ## Bayes's theorem
+            out$samples <- priorY * aperm(a = out$samples, perm = c(2, 1, 3),
+                resize = TRUE)
+            normf <- c(t(colSums(out$samples, na.rm = TRUE)))
+            out$samples <- aperm(a = aperm(a = out$samples, perm = NULL,
+                resize = TRUE) / normf, perm = NULL,
+                resize = TRUE)
+
+            dimnames(out$samples) <- c(Xnames, Ynames, temp)
+        }
+    }
+
+    if(doquantiles){
+        temp <- list(Q = names(quantile(x = 1, probs = quantiles, names = TRUE)))
+        if(is.null(priorY)){
+            ## transform to grid
+            dim(out$quantiles) <- c(nY, nX, length(quantiles))
+            dim(out$quantiles.MCaccuracy) <- c(nY, nX, length(quantiles))
+            ## multiply by jacobian factors
+            out$quantiles <- out$quantiles * jacobians
+            out$quantiles.MCaccuracy <- out$quantiles.MCaccuracy * jacobians
+
+            dimnames(out$quantiles) <- c(Ynames, Xnames, temp)
+            dimnames(out$quantiles.MCaccuracy) <- c(Ynames, Xnames, temp)
+
+        } else {
+            ## calculate quantiles from samples
+            out$quantiles <- aperm(
+                a = apply(X = out$samples, MARGIN = c(1, 2), FUN = quantile,
+                    probs = quantiles, type = 6, na.rm = TRUE, names = FALSE,
+                    simplify = TRUE),
+                perm = c(2, 3, 1), resize = FALSE)
+
+            ## adjust number of samples as originally requested
+            if(is.null(nsamples0)) {
+                out$samples <- NULL
+            } else if(nsamples0 < nsamples) {
+                out$samples <-out$samples[ , ,
+                    round(seq(1, nsamples, length.out = nsamples0))]
+            }
+
+            dimnames(out$quantiles) <- c(Xnames, Ynames, temp)
+            dimnames(out$quantiles.MCaccuracy) <- c(Xnames, Ynames, temp)
+        }
+
+    }
+
+    if(isTRUE(keepYX)){
+        ## save Y and X values in the output; useful for plotting methods
+        if(is.null(priorY)){
+            out$Y <- Y
+            out$X <- X
+        } else {
+            out$Y <- X
+            out$X <- Y
+            }
+    }
+    if(!is.null(tails)){
+        out$tails <- tails
+        out$tails[tails == -1] <- '>='
+        out$tails[tails == 1] <- '<='
+    }
+
+    class(out) <- 'probability'
+    out
+}
+
+
+#' Calculate probabilities, quantiles, etc, for all Y and X combinations
+#'
+#' Used in [Pr()].
+#'
+#' @import stats
+#'
+#' @keywords internal
+oldutil_combineYX <- function(
+    iyx,
+    temporarydir, usememory = TRUE,
+    doquantiles, quantiles,
+    dosamples, nsamples,
+    Qerror
+) {
+    if(usememory) {
+        lprobX <- readRDS(file.path(temporarydir,
+            paste0('__X', iyx['jx'], '__.rds')
+        ))
+        lprobY <- readRDS(file.path(temporarydir,
+            paste0('__Y', iyx['jy'], '__.rds')
+        ))
+    }
+
+    FF <- colSums(x = exp(lprobX + lprobY), na.rm = TRUE) /
+        colSums(x = exp(lprobX), na.rm = TRUE)
+
+    list(
+        values = mean(x = FF, na.rm = TRUE),
+        ##
+        quantiles = if(doquantiles) {
+            quantile(x = FF, probs = quantiles, type = 6,
+                na.rm = TRUE, names = FALSE)
+        },
+        ##
+        samples = if(dosamples) {
+            FF <- FF[!is.na(FF)]
+            FF[round(seq(1, length(FF), length.out = nsamples))]
+        },
+        ##
+        values.MCaccuracy = funMCSELD(x = FF),
+        ##
+        quantiles.MCaccuracy = if(doquantiles) {
+            temp <- funMCEQ(x = FF, prob = quantiles, Qpair = Qerror)
+            (temp[2, ] - temp[1, ]) / 2
+        }
+    )
+}
