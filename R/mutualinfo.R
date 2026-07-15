@@ -329,8 +329,8 @@ mutualinfo <- function(
 #### STEP 1. Draw samples of Ynames (that is, Y1names,Y2names)
 
     ## extraDistr::rcatlp() can use non-normalized probabilities
-    ## NOTA BENE: the '1 - ...' is because of a possible bug in rcatlp()
-    Ws <- 1 - extraDistr::rcatlp(1, 0) +
+    ## NOTA BENE: the '1 - ...' is because of a bug in rcatlp() < 1.10.0.5
+    Ws <- 1 - extraDistr::rcatlp(n = 1, log_prob = 0) +
         extraDistr::rcatlp(n = ntot, log_prob = t(lW[, sseq, drop = FALSE]))
     ## ## Old version with extraDistr::cat(), can be 10 times slower
     ## Ws <- extraDistr::rcat(n = n, prob = t(

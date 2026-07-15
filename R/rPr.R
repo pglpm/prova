@@ -229,8 +229,8 @@ rPr <- function(
 #### Draw samples of Ynames
 
     ## extraDistr::rcatlp() can use non-normalized probabilities
-    ## NOTA BENE: the '1 - ...' is because of a possible bug in rcatlp()
-    Ws <- 1 - extraDistr::rcatlp(1, 0) +
+    ## NOTA BENE: the '1 - ...' is because of a bug in rcatlp() < 1.10.0.5
+    Ws <- 1 - extraDistr::rcatlp(n = 1, log_prob = 0) +
         extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
     ## ## Old version with extraDistr::cat(), can be 10 times slower
     ## lWnorm <- util_denorm(lW[, sseq, drop = FALSE])

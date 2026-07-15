@@ -26,7 +26,7 @@ Roxygen: list(markdown = TRUE)
 Depends:
     R (>= 4.5.0)
 Imports:
-    extraDistr,
+    extraDistr (>= 1.8.4),
     parallel
 Suggests:
     nimble (>= 1.4.2),
