@@ -377,7 +377,7 @@ Pr <- function(
     tailsv <- names(tails)
 
     ## Check if a prior for Y is given, in that case Y and X will be swapped
-    if(isFALSE(priorY) || is.na(priorY)){ priorY <- NULL }
+    if(!is.null(priorY) && (isFALSE(priorY) || is.na(priorY))){ priorY <- NULL }
 
     if(!is.null(priorY)){
         ## Conditions for using priorY
