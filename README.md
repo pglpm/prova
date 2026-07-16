@@ -1,5 +1,6 @@
 <!-- badges: start -->
-  [![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.19136582.svg)](https://doi.org/10.5281/zenodo.17226082)
+  [![CRAN status](https://www.r-pkg.org/badges/version/Pinference)](https://CRAN.R-project.org/package=prova)
+  [![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.17226082.svg)](https://doi.org/10.5281/zenodo.17226082)
 <!-- badges: end -->
 
 *[Looking for the R package "inferno"? you came to the right place! It's been renamed "Prova"]*
@@ -39,11 +40,12 @@ The package internally does the computations necessary for Bayesian inference by
 
 **You need to have installed the package [**Nimble**](https://r-nimble.org/), *at least version 1.4.2*.** Please follow its [installation instructions](https://r-nimble.org/manual/cha-installing-nimble.html) for your operating system.
 
-Newer versions of **Prova** can be installed with
+Then **Prova** can be installed from [CRAN](https://CRAN.R-project.org/package=prova) with `install.packages('prova')`.
+
+In case of a newer version not yet on CRAN, it can be installed with
 ```
 remotes::install_github('pglpm/prova')
 ```
-
 
 ## Documentation
 

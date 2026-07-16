@@ -60,6 +60,53 @@ learnt <- lapply(learnt, function(xx){
 learnt$MCindex <- seq_len(nsamples) ; dim(learnt$MCindex) <- nsamples
 learnt$auxmetadata <- auxmetadata
 saveRDS(learnt, '~/repos/prova/development/tests/MIlearnt.rds')
+##
+W <- learnt$W[, 1]
+nclu <- length(W)
+Bprob <- learnt$Bprob[,, 1] ; Bprob <- unname(rbind(1 - Bprob, Bprob))
+Nprob <- unname(learnt$Nprob)[,, 1] ; Nl <- nrow(Nprob)
+Rmean <- unname(learnt$Rmean)[,, 1]
+Rsd <- unname(learnt$Rsd)[,, 1]
+nv <- 3600
+ns <- 12
+nn <- 60 * 3600
+seqcl <- sample.int(n = nclu, size = nn, prob = W, replace = TRUE)
+points <- as.data.frame(t(rbind(
+    sapply(seqcl, function(i){
+        c(
+            B = sample.int(n = 2, size = 1, prob = Bprob[,i]),
+            N = sample.int(n = Nl, size = 1, prob = Nprob[,i])
+        )}),
+    R = rnorm(n = nn, mean = Rmean[seqcl], sd = Rsd[seqcl])
+)))
+##
+probsBNR <- list(
+    B = t(Bprob)[, points[, 'B']],
+    N = t(Nprob)[, points[, 'N']],
+    R = dnorm(
+        x = matrix(data = points[, 'R'], nrow = nclu, ncol = nn, byrow = TRUE),
+        mean = Rmean, sd = Rsd
+    )
+)
+saveRDS(as.data.frame(points), '~/repos/prova/development/tests/mitest_points.rds')
+saveRDS(probsBNR, '~/repos/prova/development/tests/mitest_probsBNR.rds')
+##
+testMI <- function(Y1names, Y2names, Xname = NULL, Xval = NULL, W){
+    prob1 <- do.call(`*`, c(list(1), probsBNR[Y1names]))
+    prob2 <- do.call(`*`, c(list(1), probsBNR[Y2names]))
+    ##
+    if(!is.null(Xname)){
+        W <- W * probsBNR[[Xname]][, Xval]
+        W <- W / sum(W)
+    }
+    mis <- -log(colSums(W * prob1)) -
+        log(colSums(W * prob2)) +
+        log(colSums(W * prob1 * prob2))
+    ##
+    c(value = mean(mis, na.rm = TRUE),
+        MCaccuracy = sd(mis, na.rm = TRUE)/sqrt(length(mis))) / log(2)
+}
+saveRDS(testMI, '~/repos/prova/development/tests/mitest_testMI.rds')
 
 
 #### Tests
@@ -282,7 +329,7 @@ mi2 <- sapply(1:nn, function(xx){
             ))
 })
 ##
-testmi <- mutualinfo(Y1names = 'N', Y2names = 'B', X = data.frame(R = -8), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi <- mutualinfo(Y1names = 'N', Y2names = 'B', X = data.frame(R = -7.98082), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 testmi2 <- debug_mutualinfo(Y1names = 'N', Y2names = 'B', X = data.frame(R = -8), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
@@ -351,10 +398,10 @@ mi2 <- sapply(1:nn, function(xx){
 })
 ##
 testmi <- mutualinfo(Y1names = 'R', Y2names = 'N', X = data.frame(B = 'y'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
-testmi2 <- debug_mutualinfo(Y1names = 'R', Y2names = 'N', X = data.frame(B = 'y'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+## testmi2 <- debug_mutualinfo(Y1names = 'R', Y2names = 'N', X = data.frame(B = 'y'), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
-    unlist(testmi2[c(1,3)]),
+    ## unlist(testmi2[c(1,3)]),
     unlist(testmi[c(1,3)])
 )
 ## [1,] 0.918152 0.00101560
