@@ -71,7 +71,18 @@ This function also outputs the "revisability" of the posterior probabilities abo
 
 If several joint values are given for \code{Y} or \code{X}, the function will create a 2D grid of results for all possible combinations of the given \code{Y} and \code{X} values.
 
-This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for \code{Y} is given, the function will calculate the probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})} from \eqn{\mathrm{Pr}(X = x \vert Y = y, \text{data})} and the prior, by means of Bayes's theorem.
+This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for the data corresponding to rows \code{Y} is given, the function will calculate the probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})} from \eqn{\mathrm{Pr}(X = x \vert Y = y, \text{data})} and the prior, by means of Bayes's theorem
+\deqn{\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})
+=
+\frac{
+\mathrm{Pr}(X = x \vert Y = y, \text{data}) \cdot
+\mathrm{Pr}(Y = y \vert \text{prior})
+}{
+\sum_{y'} \mathrm{Pr}(X = x \vert Y = y', \text{data}) \cdot
+\mathrm{Pr}(Y = y' \vert \text{prior})
+}
+\ .}
+\emph{Important}: any values \emph{not} present in the \code{Y} data frame are given \emph{zero} prior probability; in other words, the normalization \eqn{\sum_{y'}} only counts the $y$ values appearing in the data frame \code{Y}.
 
 Each variate in each argument \code{Y}, \code{X} can be specified either as a point-value \eqn{Y = y} or as a left-open interval \eqn{Y \le y} or as a right-open interval \eqn{Y \ge y}, through the argument \code{tails}.
 

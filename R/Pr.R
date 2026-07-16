@@ -13,7 +13,18 @@
 #'
 #' If several joint values are given for `Y` or `X`, the function will create a 2D grid of results for all possible combinations of the given `Y` and `X` values.
 #'
-#' This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for `Y` is given, the function will calculate the probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})} from \eqn{\mathrm{Pr}(X = x \vert Y = y, \text{data})} and the prior, by means of Bayes's theorem.
+#' This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for the data corresponding to rows `Y` is given, the function will calculate the probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})} from \eqn{\mathrm{Pr}(X = x \vert Y = y, \text{data})} and the prior, by means of Bayes's theorem
+#' \deqn{\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})
+#' =
+#' \frac{
+#' \mathrm{Pr}(X = x \vert Y = y, \text{data}) \cdot
+#' \mathrm{Pr}(Y = y \vert \text{prior})
+#' }{
+#' \sum_{y'} \mathrm{Pr}(X = x \vert Y = y', \text{data}) \cdot
+#' \mathrm{Pr}(Y = y' \vert \text{prior})
+#' }
+#' \ .}
+#' *Important*: any values *not* present in the `Y` data frame are given *zero* prior probability; in other words, the normalization \eqn{\sum_{y'}} only counts the $y$ values appearing in the data frame `Y`.
 #'
 #' Each variate in each argument `Y`, `X` can be specified either as a point-value \eqn{Y = y} or as a left-open interval \eqn{Y \le y} or as a right-open interval \eqn{Y \ge y}, through the argument `tails`.
 #'
@@ -312,12 +323,12 @@ Pr <- function(
 
     ## Consistency checks
 
-    if (!all(Yv %in% auxmetadata$name)) {
+    if(!all(Yv %in% auxmetadata$name)) {
         stop('unknown Y variate ',
             paste0(Yv[!(Yv %in% auxmetadata$name)], collapse = ' '),
             '\n')
     }
-    if (length(unique(Yv)) != length(Yv)) {
+    if(anyDuplicated(Yv)){
         stop('duplicate Y variates\n')
     }
 
@@ -326,23 +337,23 @@ Pr <- function(
             paste0(Xv[!(Xv %in% auxmetadata$name)], collapse = ' '),
             '\n')
     }
-    if (length(unique(Xv)) != length(Xv)) {
+    if(anyDuplicated(Xv)){
         stop('duplicate X variates\n')
     }
 
-    if (any(Yv %in% Xv)) {
+    if(anyDuplicated(c(Yv, Xv))){
         stop('overlap in Y and X variates\n')
     }
 
     tailsv <- names(tails)
-    if (!all(tailsv %in% c(Yv, Xv))) {
+    if(!all(tailsv %in% c(Yv, Xv))) {
         warning('"tails" variate ',
             paste0(tailsv[!(tailsv %in% c(Yv, Xv))], collapse = ' '),
             ' not among Y and X; ignored\n')
         tails <- tails[tailsv %in% c(Yv, Xv)]
         tailsv <- names(tails)
     }
-    if (length(unique(tailsv)) != length(tailsv)) {
+    if(anyDuplicated(tailsv)){
         stop('duplicate "tails" variates\n')
     }
     if(!all(tails %in% tailsvalues)) {
@@ -366,36 +377,51 @@ Pr <- function(
     tailsv <- names(tails)
 
     ## Check if a prior for Y is given, in that case Y and X will be swapped
-    if (isFALSE(priorY) || is.null(priorY)) {
-        priorY <- NULL
-    } else {
-        if(is.null(X)){ stop('X must be non-null if priorY is given') }
+    if(isFALSE(priorY) || is.na(priorY)){ priorY <- NULL }
+
+    if(!is.null(priorY)){
+        ## Conditions for using priorY
+        if(is.null(X)){ stop("'X' must be non-null if 'priorY' is given") }
+
+        if(anyDuplicated(Y)){
+            stop("All rows in 'Y' must be unique if 'priorY' is given")
+        }
+
+        ## if priorY is TRUE, the user wants a uniform prior distribution
+        if(isTRUE(priorY)){
+            priorY <- 1 + numeric(nrow(Y))
+        }
+        if(length(priorY) != nrow(Y)){
+            stop("'priorY' must have as many entries as rows of 'Y'")
+        }
+        if(!is.numeric(priorY) || any(priorY < 0)) {
+            stop("'priorY' contains invalid probabilities")
+        }
 
         ## Swap X and Y, to use Bayes's theorem
         ## And consider all values of Y, if it only has discrete variates
-        Y0 <- Y
+        . <- Y
         Y <- X
-        ## 'X' used below will contain all values of the original Y-variates
-        if(all(auxmetadata[auxmetadata$name %in% Yv, 'mcmctype'] %in%
-                   c('B', 'O', 'N'))){
-            X <- do.call(what = expand.grid,
-                args = c(setNames(
-                    object = lapply(X = Yv, FUN = vrtgrid,
-                        learnt = list(auxmetadata = auxmetadata)),
-                    nm = Yv),
-                    list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-                ) )
-        if(!isTRUE(priorY) && length(priorY) != nrow(X)) {
-            stop("Argument 'priorY' must have ", nrow(X), " elements.")
-        }
-
-            Ytokeep <- match(do.call(paste0, Y0), do.call(paste0, X))
-
-        } else {
-            X <- Y0
-            Ytokeep <- TRUE
-        }
-        rm(Y0)
+        X <- .
+        ## ## ## Alternative version: calculate for all possible Y-values,
+        ## ## ## if Y has finite domain
+        ## ## 'X' used below will contain all values of the original Y-variates
+        ## if(all(auxmetadata[auxmetadata$name %in% Yv, 'mcmctype'] %in%
+        ##            c('B', 'O', 'N'))){
+        ##     X <- do.call(what = expand.grid,
+        ##         args = c(setNames(
+        ##             object = lapply(X = Yv, FUN = vrtgrid,
+        ##                 learnt = list(auxmetadata = auxmetadata)),
+        ##             nm = Yv),
+        ##             list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+        ##         ) )
+        ##
+        ##     Ytokeep <- match(do.call(paste0, Y0), do.call(paste0, X))
+        ##
+        ## } else {
+        ##     X <- Y0
+        ##     Ytokeep <- TRUE
+        ## }
 
         . <- Yv
         Yv <- Xv
@@ -403,15 +429,6 @@ Pr <- function(
         rm(.)
         gc(full = TRUE)
 
-        ## if priorY is TRUE, the user wants a uniform prior distribution
-        if(isTRUE(priorY)){
-            priorY <- 1 + numeric(nrow(Y))
-        } else {
-            ## Check for invalid probabilities
-            if (!is.numeric(priorY) || any(priorY < 0)) {
-                stop('priorY contains invalid probabilities')
-            }
-        }
     }
 
     nY <- nrow(Y)
@@ -557,9 +574,10 @@ Pr <- function(
 
         ## now: *original Y* are rows, *original X* are cols
 
-        ## subset to original Y-values
-        out$values <- out$values[Ytokeep, , drop = FALSE]
-        out$values.MCaccuracy <- out$values.MCaccuracy[Ytokeep, , drop = FALSE]
+        ## ## ## Alternative version, with all Y-values
+        ## ## subset to original Y-values
+        ## out$values <- out$values[Ytokeep, , drop = FALSE]
+        ## out$values.MCaccuracy <- out$values.MCaccuracy[Ytokeep, , drop = FALSE]
 
         if(nsamples > 0){
             dim(out$samples) <- c(nX, nY, nsamples)
@@ -569,8 +587,9 @@ Pr <- function(
                 a = aperm(a = out$samples, perm = c(2, 3, 1)) / normf,
                 perm = c(3, 1, 2) )
 
-            ## subset to original Y-values
-            out$samples <- out$samples[Ytokeep, , , drop = FALSE]
+            ## ## ## Alternative version, with all Y-values
+            ## ## subset to original Y-values
+            ## out$samples <- out$samples[Ytokeep, , , drop = FALSE]
 
             ## Calculate quantiles from new samples
             if(!is.null(quantiles)){
@@ -592,18 +611,21 @@ Pr <- function(
                 out$quantiles <- out$quantiles[, ,
                     seq_along(quantiles), drop = FALSE]
 
-                ## subset to original Y-values
-                out$quantiles <- out$quantiles[Ytokeep, , , drop = FALSE]
-                out$quantiles.MCaccuracy <-
-                    out$quantiles.MCaccuracy[Ytokeep, , , drop = FALSE]
+                ## ## ## Alternative version, with all Y-values
+                ## ## subset to original Y-values
+                ## out$quantiles <- out$quantiles[Ytokeep, , , drop = FALSE]
+                ## out$quantiles.MCaccuracy <-
+                ##     out$quantiles.MCaccuracy[Ytokeep, , , drop = FALSE]
 
             }
         }
 
         ## swap back Y and X
-        . <- Y
-        Y <- X[Ytokeep, , drop = FALSE]
-        X <- .
+        ## ## ## Alternative version, with all Y-values
+        ## . <- X[Ytokeep, , drop = FALSE]
+        . <- X
+        X <- Y
+        Y <- .
         rm(.)
     }
 

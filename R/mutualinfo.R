@@ -240,49 +240,49 @@ mutualinfo <- function(
     }
 
     ## More consistency checks
-    if(!all(Y1names %in% auxmetadata$name)) {
+    if(!all(Y1names %in% auxmetadata$name)){
         stop('unknown Y1 variates\n')
     }
-    if(length(unique(Y1names)) != length(Y1names)) {
+    if(anyDuplicated(Y1names)){
         stop('duplicate Y1 variates\n')
     }
     ##
     if(!is.null(Y2names) && !all(Y2names %in% auxmetadata$name)){
         stop('unknown Y2 variates\n')
     }
-    if(length(unique(Y2names)) != length(Y2names)) {
+    if(anyDuplicated(Y2names)){
         stop('duplicate Y2 variates\n')
     }
 
 
-    if (!all(Xv %in% auxmetadata$name)) {
+    if(!all(Xv %in% auxmetadata$name)){
         stop('unknown X variates\n')
     }
-    if (length(unique(Xv)) != length(Xv)) {
+    if(anyDuplicated(Xv)){
         stop('duplicate X variates\n')
     }
     ##
-    if(any(Y1names %in% Y2names)) {
+    if(anyDuplicated(c(Y1names, Y2names))){
         stop('overlap in Y1 and Y2 variates\n')
     }
-    if(any(Y1names %in% Xv)) {
+    if(anyDuplicated(c(Y1names, Xv))){
         stop('overlap in Y1 and X variates\n')
     }
-    if(any(Y2names %in% Xv)) {
+    if(anyDuplicated(c(Y2names, Xv))){
         stop('overlap in Y2 and X variates\n')
     }
 
-    if (!all(tailsv %in% Xv)) {
+    if(!all(tailsv %in% Xv)){
         warning('variate ',
             paste0(tailsv[!(tailsv %in% Xv)], collapse = ' '),
             ' not among X; ignored\n')
         tails <- tails[tailsv %in% Xv]
         tailsv <- names(tails)
     }
-    if (length(unique(tailsv)) != length(tailsv)) {
+    if(anyDuplicated(tailsv)){
         stop('duplicate "tails" variates\n')
     }
-    if(!all(tails %in% tailsvalues)) {
+    if(!all(tails %in% tailsvalues)){
         stop('"tails" values must be ',
             paste0(tailsvalues, collapse = ' '), '\n')
     }

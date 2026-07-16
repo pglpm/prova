@@ -219,43 +219,43 @@ qPr <- function(
 
     ## Consistency checks
 
-    if (!all(Yname %in% auxmetadata$name)) {
+    if(!all(Yname %in% auxmetadata$name)){
         stop('unknown Y variate ',
             paste0(Yname[!(Yname %in% auxmetadata$name)], collapse = ' '),
             '\n')
     }
-    if (auxmetadata[auxmetadata$name == Yname, 'mcmctype'] %in% c('B', 'N')){
+    if(auxmetadata[auxmetadata$name == Yname, 'mcmctype'] %in% c('B', 'N')){
         stop('quantiles are undefined for binary and nominal variates.')
     }
-    if (length(unique(Yname)) != length(Yname)) {
+    if(anyDuplicated(Yname)){
         stop('duplicate Y variates\n')
     }
 
-    if (!all(Xv %in% auxmetadata$name)) {
+    if(!all(Xv %in% auxmetadata$name)){
         stop('unknown X variate ',
             paste0(Xv[!(Xv %in% auxmetadata$name)], collapse = ' '),
             '\n')
     }
-    if (length(unique(Xv)) != length(Xv)) {
+    if(anyDuplicated(Xv)){
         stop('duplicate X variates\n')
     }
 
-    if (any(Yname %in% Xv)) {
+    if(anyDuplicated(c(Yname, Xv))){
         stop('overlap in Y and X variates\n')
     }
 
     tailsv <- names(tails)
-    if (!all(tailsv %in% Xv)) {
+    if(!all(tailsv %in% Xv)){
         warning('"tails" variate ',
             paste0(tailsv[!(tailsv %in% Xv)], collapse = ' '),
             ' not among X; ignored\n')
         tails <- tails[(tailsv %in% Xv)]
         tailsv <- names(tails)
     }
-    if (length(unique(tailsv)) != length(tailsv)) {
+    if(anyDuplicated(tailsv)){
         stop('duplicate "tails" variates\n')
     }
-    if(!all(tails %in% tailsvalues)) {
+    if(!all(tails %in% tailsvalues)){
         stop('"tails" values must be ',
             paste0(tailsvalues, collapse = ' '), '\n')
     }

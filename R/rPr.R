@@ -156,24 +156,24 @@ rPr <- function(
         stop('duplicate Y variates\n')
     }
 
-    if (!all(Xv %in% auxmetadata$name)) {
+    if(!all(Xv %in% auxmetadata$name)){
         stop('unknown X variates\n')
     }
-    if (length(unique(Xv)) != length(Xv)) {
+    if(anyDuplicated(Xv)){
         stop('duplicate X variates\n')
     }
-    if(any(Ynames %in% Xv)) {
+    if(anyDuplicated(c(Ynames, Xv))){
         stop('overlap in Y and X variates\n')
     }
 
-    if (!all(tailsv %in% Xv)) {
+    if(!all(tailsv %in% Xv)){
         warning('"tails" variate ',
             paste0(tailsv[!(tailsv %in% Xv)], collapse = ' '),
             ' not among X; ignored\n')
         tails <- tails[tailsv %in% Xv]
         tailsv <- names(tails)
     }
-    if (length(unique(tailsv)) != length(tailsv)) {
+    if(anyDuplicated(tailsv)){
         stop('duplicate "tails" variates\n')
     }
     if(!all(tails %in% tailsvalues)) {
