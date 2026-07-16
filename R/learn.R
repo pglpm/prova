@@ -585,7 +585,7 @@ learn <- function(
     ))
 
 #### Output-folder setup
-    prefix <- paste0(
+    suffix <- paste0(
         'V', nrow(auxmetadata),
         '_D',
         (if (npoints == 1 && all(is.na(data))) {
@@ -602,15 +602,15 @@ learn <- function(
             warning('With the chosen "outputdir" and "valueislearnt" arguments, results are not saved to a persistent directory and not outputted; they will likely be lost.')
         }
         ## Use a temporary output directory
-        dirname <- tempfile(pattern = paste0('prova-', prefix, '_'))
+        dirname <- tempfile(pattern = paste0('prova-', suffix, '_'))
     } else if (is.na(outputdir)) {
         ## Create unique output directory within current directory
-        dirname <- tempfile(pattern = paste0('prova-', prefix, '_'),
+        dirname <- tempfile(pattern = paste0('prova-', suffix, '_'),
             tmpdir = getwd())
     } else if (is.character(outputdir)) {
         ## Create directory specified by user
         dirname <- outputdir
-        if (appendinfo){ dirname <- paste0(dirname, '-', prefix) }
+        if (appendinfo){ dirname <- paste0(dirname, '-', suffix) }
     } else {
         stop('Invalid "outputdir" argument')
     }
