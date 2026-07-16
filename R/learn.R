@@ -93,22 +93,23 @@
 #' About Bayesian inference under exchangeability ("population inference"):
 #'
 #' - Lindley, Novick (1981): *The role of exchangeability in inference*, <doi:10.1214/aos/1176345331>.
-#' - Bernardo, Smith (2000): *Bayesian Theory*. Wiley <doi:10.1002/9780470316870>.
+#' - Bernardo, Smith (2000): *Bayesian Theory*, Wiley <doi:10.1002/9780470316870>.
+#' - Fortini, Petrone (2024): *Prediction-based uncertainty quantification for exchangeable sequences*, <doi:10.1098/rsta.2022.0142>.
 #' - Porta Mana <https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf>.
 #'
 #' About nonparametrics:
 #'
-#' - Müller et al. (2015): *Nonparametric Bayesian inference*. IMS <doi:10.1007/978-3-319-18968-0>.
-#' - Hjort et al. (2010): *Bayesian Nonparametrics*. Cambridge University Press <doi:10.1017/CBO9780511802478>.
+#' - Müller et al. (2015): *Nonparametric Bayesian inference*, IMS <doi:10.1007/978-3-319-18968-0>.
+#' - Hjort et al. (2010): *Bayesian Nonparametrics*, Cambridge University Press <doi:10.1017/CBO9780511802478>.
 #'
 #' About Markov-chain Monte Carlo and "convergence":
 #'
-#' - de Valpine, Paciorek, Turek, & al. (2026): *NIMBLE: MCMC, Particle Filtering, and Programmable Hierarchical Modeling* <doi:10.5281/zenodo.1211190>, <https://cran.r-project.org/package=nimble>.
-#' - Kwon & al. (2025): *MCMC stopping rules in latent variable modelling* <doi:10.1111/bmsp.12357>.
-#' - Vehtari & al. (2021): *Rank-normalization, folding, and localization: an improved R-hat for assessing convergence of MCMC* <doi:10.1214/20-BA1221>.
-#' - Roy (2020): *Convergence diagnostics for Markov chain Monte Carlo* <doi:10.1146/annurev-statistics-031219-041300>.
-#' - Gilks & al. (1998): *Markov Chain Monte Carlo in Practice*. Chapman & Hall/CRC <doi:10.1201/b14835>.
-#' - D. J. C. MacKay (2005): *Information Theory, Inference, and Learning Algorithms*. Cambridge University Press <https://www.inference.org.uk/itila/book.html>.
+#' - de Valpine, Paciorek, Turek, & al. (2026): *NIMBLE: MCMC, Particle Filtering, and Programmable Hierarchical Modeling*, <doi:10.5281/zenodo.1211190>, <https://cran.r-project.org/package=nimble>.
+#' - Kwon & al. (2025): *MCMC stopping rules in latent variable modelling*, <doi:10.1111/bmsp.12357>.
+#' - Vehtari & al. (2021): *Rank-normalization, folding, and localization: an improved R-hat for assessing convergence of MCMC*, <doi:10.1214/20-BA1221>.
+#' - Roy (2020): *Convergence diagnostics for Markov chain Monte Carlo*, <doi:10.1146/annurev-statistics-031219-041300>.
+#' - Gilks & al. (1998): *Markov Chain Monte Carlo in Practice*, Chapman & Hall/CRC <doi:10.1201/b14835>.
+#' - D. J. C. MacKay (2005): *Information Theory, Inference, and Learning Algorithms*, Cambridge University Press <https://www.inference.org.uk/itila/book.html>.
 #' - Porta Mana <https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf>.
 #'
 #'

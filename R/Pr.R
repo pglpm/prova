@@ -55,10 +55,11 @@
 #' @references
 #'
 #' - Lindley, Novick (1981): *The role of exchangeability in inference*, <doi:10.1214/aos/1176345331>.
-#' - Bernardo, Smith (2000): *Bayesian Theory*. Wiley <doi:10.1002/9780470316870>.
-#' - Jaynes (2003): *Probability Theory: The Logic of Science*. Cambridge University Press <doi:10.1017/CBO9780511790423>.
-#' - MacKay (2005): *Information Theory, Inference, and Learning Algorithms*. Cambridge University Press <https://www.inference.org.uk/itila/book.html>.
-#' - Porta Mana (2025): *What's special about 89% credibility intervals?* <doi:10.5281/zenodo.17072199>.
+#' - Bernardo, Smith (2000): *Bayesian Theory*, Wiley <doi:10.1002/9780470316870>.
+#' - Fortini, Petrone (2024): *Prediction-based uncertainty quantification for exchangeable sequences*, <doi:10.1098/rsta.2022.0142>.
+#' - Jaynes (2003): *Probability Theory: The Logic of Science*, Cambridge University Press <doi:10.1017/CBO9780511790423>.
+#' - MacKay (2005): *Information Theory, Inference, and Learning Algorithms*, Cambridge University Press <https://www.inference.org.uk/itila/book.html>.
+#' - Porta Mana (2025): *What's special about 89% credibility intervals?*, <doi:10.5281/zenodo.17072199>.
 #'
 #' @seealso
 #' [learn()], which generates the `learnt` objects required by `Pr()`.

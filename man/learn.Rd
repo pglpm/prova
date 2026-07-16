@@ -186,24 +186,25 @@ For the mathematical representation of the frequency space:
 About Bayesian inference under exchangeability ("population inference"):
 \itemize{
 \item Lindley, Novick (1981): \emph{The role of exchangeability in inference}, \url{doi:10.1214/aos/1176345331}.
-\item Bernardo, Smith (2000): \emph{Bayesian Theory}. Wiley \url{doi:10.1002/9780470316870}.
+\item Bernardo, Smith (2000): \emph{Bayesian Theory}, Wiley \url{doi:10.1002/9780470316870}.
+\item Fortini, Petrone (2024): \emph{Prediction-based uncertainty quantification for exchangeable sequences}, \url{doi:10.1098/rsta.2022.0142}.
 \item Porta Mana \url{https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf}.
 }
 
 About nonparametrics:
 \itemize{
-\item Müller et al. (2015): \emph{Nonparametric Bayesian inference}. IMS \url{doi:10.1007/978-3-319-18968-0}.
-\item Hjort et al. (2010): \emph{Bayesian Nonparametrics}. Cambridge University Press \url{doi:10.1017/CBO9780511802478}.
+\item Müller et al. (2015): \emph{Nonparametric Bayesian inference}, IMS \url{doi:10.1007/978-3-319-18968-0}.
+\item Hjort et al. (2010): \emph{Bayesian Nonparametrics}, Cambridge University Press \url{doi:10.1017/CBO9780511802478}.
 }
 
 About Markov-chain Monte Carlo and "convergence":
 \itemize{
-\item de Valpine, Paciorek, Turek, & al. (2026): \emph{NIMBLE: MCMC, Particle Filtering, and Programmable Hierarchical Modeling} \url{doi:10.5281/zenodo.1211190}, \url{https://cran.r-project.org/package=nimble}.
-\item Kwon & al. (2025): \emph{MCMC stopping rules in latent variable modelling} \url{doi:10.1111/bmsp.12357}.
-\item Vehtari & al. (2021): \emph{Rank-normalization, folding, and localization: an improved R-hat for assessing convergence of MCMC} \url{doi:10.1214/20-BA1221}.
-\item Roy (2020): \emph{Convergence diagnostics for Markov chain Monte Carlo} \url{doi:10.1146/annurev-statistics-031219-041300}.
-\item Gilks & al. (1998): \emph{Markov Chain Monte Carlo in Practice}. Chapman & Hall/CRC \url{doi:10.1201/b14835}.
-\item D. J. C. MacKay (2005): \emph{Information Theory, Inference, and Learning Algorithms}. Cambridge University Press \url{https://www.inference.org.uk/itila/book.html}.
+\item de Valpine, Paciorek, Turek, & al. (2026): \emph{NIMBLE: MCMC, Particle Filtering, and Programmable Hierarchical Modeling}, \url{doi:10.5281/zenodo.1211190}, \url{https://cran.r-project.org/package=nimble}.
+\item Kwon & al. (2025): \emph{MCMC stopping rules in latent variable modelling}, \url{doi:10.1111/bmsp.12357}.
+\item Vehtari & al. (2021): \emph{Rank-normalization, folding, and localization: an improved R-hat for assessing convergence of MCMC}, \url{doi:10.1214/20-BA1221}.
+\item Roy (2020): \emph{Convergence diagnostics for Markov chain Monte Carlo}, \url{doi:10.1146/annurev-statistics-031219-041300}.
+\item Gilks & al. (1998): \emph{Markov Chain Monte Carlo in Practice}, Chapman & Hall/CRC \url{doi:10.1201/b14835}.
+\item D. J. C. MacKay (2005): \emph{Information Theory, Inference, and Learning Algorithms}, Cambridge University Press \url{https://www.inference.org.uk/itila/book.html}.
 \item Porta Mana \url{https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf}.
 }
 }

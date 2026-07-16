@@ -1250,25 +1250,27 @@ Consider also this question: "Do Adélie and Chinstrap penguins have identical b
 
 ### On *exchangeability*: {#referencesexchang}
 
-- Lindley, Novick: [*The role of exchangeability in inference*](https://doi.org/10.1214/aos/1176345331) (1981).
+- Lindley, Novick (1981): [*The role of exchangeability in inference*](https://doi.org/10.1214/aos/1176345331).
 
-- Bernardo, Smith: [*Bayesian Theory*](https://doi.org/10.1002/9780470316870) (repr. 2000). See especially §§ 4.2--4.3, 4.6.
+- Bernardo, Smith (2000): [*Bayesian Theory*](https://doi.org/10.1002/9780470316870). See especially §§ 4.2--4.3, 4.6.
 
-- Dawid: [*Exchangeability and its ramifications*](https://doi.org/10.1093/acprof:oso/9780199695607.003.0002) (2013).
+- Fortini, Petrone (2024): [*Prediction-based uncertainty quantification for exchangeable sequences*](https://doi.org/10.1098/rsta.2022.0142).
 
-- de Finetti: [*La prévision: ses lois logiques, ses sources subjectives*](https://www.numdam.org/item/AIHP_1937__7_1_1_0) (1937).
+- Dawid (2013): [*Exchangeability and its ramifications*](https://doi.org/10.1093/acprof:oso/9780199695607.003.0002).
 
-- Heath, Sudderth: [*De Finetti's theorem on exchangeable variables*](https://doi.org/10.1080/00031305.1976.10479175) (1976).
+- de Finetti (1937): [*La prévision: ses lois logiques, ses sources subjectives*](https://www.numdam.org/item/AIHP_1937__7_1_1_0).
 
-- Hewitt, Savage: [*Symmetric measures on Cartesian products*](https://doi.org/10.1090/S0002-9947-1955-0076206-8) (1955).
+- Heath, Sudderth (1976): [*De Finetti's theorem on exchangeable variables*](https://doi.org/10.1080/00031305.1976.10479175).
+
+- Hewitt, Savage (1955): [*Symmetric measures on Cartesian products*](https://doi.org/10.1090/S0002-9947-1955-0076206-8).
 
 - **Prova** accompanying manual: [*Foundations of inference under symmetry*](https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf) (draft).
 
 ### On Bayesian theory in general: {#referencesbayes}
 
-- Jaynes: [*Probability Theory*](https://doi.org/10.1017/CBO9780511790423) (2003).
+- Jaynes (2003): [*Probability Theory*](https://doi.org/10.1017/CBO9780511790423).
 
-- MacKay: [*Information Theory, Inference, and Learning Algorithms*](https://www.inference.org.uk/itila/book.html) (2005).
+- MacKay (2005): [*Information Theory, Inference, and Learning Algorithms*](https://www.inference.org.uk/itila/book.html).
 
 - [*Data Science and AI Prototyping*](https://pglpm.github.io/ADA511/).
 
@@ -1276,9 +1278,9 @@ Consider also this question: "Do Adélie and Chinstrap penguins have identical b
 
 ### On medical decision-making: {#referencesmedical}
 
-- Sox, Higgins, Owens, Sanders Schmidler: [*Medical Decision Making*](https://doi.org/10.1002/9781119627876) (3rd ed. 2024).
+- Sox, Higgins, Owens, Sanders Schmidler (2024): [*Medical Decision Making*](https://doi.org/10.1002/9781119627876).
 
-- Hunink, Weinstein, Wittenberg, Drummond, Pliskin, Wong, Glasziou: [*Decision Making in Health and Medicine: Integrating Evidence and Values*](https://doi.org/10.1017/CBO9781139506779) (2nd ed. 2014).
+- Hunink, Weinstein, Wittenberg, Drummond, Pliskin, Wong, Glasziou (2014): [*Decision Making in Health and Medicine: Integrating Evidence and Values*](https://doi.org/10.1017/CBO9781139506779).
 
 \
 

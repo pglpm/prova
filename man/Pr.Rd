@@ -219,10 +219,11 @@ probs$quantiles[, , c('5.5\%', '94.5\%')]
 \references{
 \itemize{
 \item Lindley, Novick (1981): \emph{The role of exchangeability in inference}, \url{doi:10.1214/aos/1176345331}.
-\item Bernardo, Smith (2000): \emph{Bayesian Theory}. Wiley \url{doi:10.1002/9780470316870}.
-\item Jaynes (2003): \emph{Probability Theory: The Logic of Science}. Cambridge University Press \url{doi:10.1017/CBO9780511790423}.
-\item MacKay (2005): \emph{Information Theory, Inference, and Learning Algorithms}. Cambridge University Press \url{https://www.inference.org.uk/itila/book.html}.
-\item Porta Mana (2025): \emph{What's special about 89\% credibility intervals?} \url{doi:10.5281/zenodo.17072199}.
+\item Bernardo, Smith (2000): \emph{Bayesian Theory}, Wiley \url{doi:10.1002/9780470316870}.
+\item Fortini, Petrone (2024): \emph{Prediction-based uncertainty quantification for exchangeable sequences}, \url{doi:10.1098/rsta.2022.0142}.
+\item Jaynes (2003): \emph{Probability Theory: The Logic of Science}, Cambridge University Press \url{doi:10.1017/CBO9780511790423}.
+\item MacKay (2005): \emph{Information Theory, Inference, and Learning Algorithms}, Cambridge University Press \url{https://www.inference.org.uk/itila/book.html}.
+\item Porta Mana (2025): \emph{What's special about 89\% credibility intervals?}, \url{doi:10.5281/zenodo.17072199}.
 }
 }
 \seealso{
