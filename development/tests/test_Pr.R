@@ -21,13 +21,13 @@ for(iv in seq_len(length(tvals))){
         print(paste0(vrt, ' - ', atail))
         tail <- setNames(list(atail), vrt)
         ##
-        prob <- oldPr(Y = as.data.frame(atest), X = NULL,
+        prob <- Pr(Y = as.data.frame(atest), X = NULL,
             tails = tail,
             learnt = learnt, parallel = 1)
         ##
         vals <- atest[[1]]
         tempprob <- lapply(vals, function(x){
-                Pr(Y = setNames(list(x), vrt), X = NULL,
+                testPr(Y = setNames(list(x), vrt), X = NULL,
                     tails = tail, learnt = learnt)
         })
         tprob = list(values = cbind(sapply(tempprob, `[[`, 1)),
@@ -72,6 +72,7 @@ for(iv in seq_len(length(tvals))){
 
 set.seed(16)
 problem <- FALSE
+cat('\n')
 kc <- 0L
 while(!problem){
     kc <- kc + 1L
@@ -89,7 +90,7 @@ while(!problem){
     } else {
         inX <- NULL
     }
-    cat(kc, '\n')
+    cat('\r', kc)
     intails <- setNames(sample(c(-1, 0, 1), ntvals - 2, replace = TRUE),
         c('Rvrt', 'RPvrt', 'RFvrt', 'Cvrt', 'Dvrt', 'DPvrt', 'Ovrt'))
     intails <- as.list(intails)
@@ -133,3 +134,118 @@ while(!problem){
         print(as.data.frame(intails))
     }
 }
+
+
+source('__debug_Pr.R')
+parallel <- 4
+nsamples <- 'all'
+pnames <- c('values', 'quantiles', 'samples', 'values.MCaccuracy', 'quantiles.MCaccuracy', 'Y', 'X')
+set.seed(11)
+problem <- FALSE
+kc <- 0L
+cat('\n')
+while(!problem){
+    kc <- kc + 1L
+    tol <- 5e-5
+    prob <- tprob <- NULL
+    ntvals <- length(tvals)
+    nY <- sample(1:ntvals, 1)
+    ninY <- sample(1:ntvals, nY, replace = FALSE)
+    ninX <- (1:ntvals)[-ninY]
+    inY <- tvals[ninY]
+    inY <- as.data.frame(
+        lapply(inY, function(x)sample(unlist(x), 2, replace = TRUE))
+        )
+    inX <- tvals[ninX]
+    if(length(inX) > 0){
+        inX <- as.data.frame(
+            lapply(inX, function(x)sample(unlist(x), 3, replace = TRUE))
+        )
+    } else {
+        inX <- NULL
+    }
+    cat('\r', kc)
+    intails <- setNames(sample(c(-1, 0, 1), ntvals - 2, replace = TRUE),
+        c('Rvrt', 'RPvrt', 'RFvrt', 'Cvrt', 'Dvrt', 'DPvrt', 'Ovrt'))
+    intails <- as.list(intails)
+    if(any(c(inY[['RPvrt']], inX[['RPvrt']]) == 0) && intails[['RPvrt']] != 1){
+        intails[['RPvrt']] <- 1
+    }
+    if(any(c(inY[['RFvrt']], inX[['RFvrt']]) == 0) && all(c(inY[['RFvrt']], inX[['RFvrt']]) != 1) && intails[['RFvrt']] != 1){
+        intails[['RFvrt']] <- 1
+    }
+    if(any(c(inY[['RFvrt']], inX[['RFvrt']]) == 1) && all(c(inY[['RFvrt']], inX[['RFvrt']]) != 0) && intails[['RFvrt']] != -1){
+        intails[['RFvrt']] <- -1
+    }
+    if(any(c(inY[['RFvrt']], inX[['RFvrt']]) == 1) && any(c(inY[['RFvrt']], inX[['RFvrt']]) == 0)){
+        next
+    }
+    ##
+    prob <- debug_Pr(Y = inY, X = inX,
+        tails = intails, nsamples = nsamples,
+        learnt = learnt, parallel = parallel)
+    ##
+    probn <- Pr(Y = inY, X = inX,
+        tails = intails, nsamples = nsamples,
+        learnt = learnt, parallel = parallel)
+    ##
+    for(xx in pnames){
+        if(!identical(unname(prob[[xx]]), unname(probn[[xx]]))){
+            problem <- TRUE
+            print(xx)
+        }
+    }
+    if(problem){
+        print(as.data.frame(inY)) ; print(as.data.frame(inX)) ;
+        print(as.data.frame(intails))
+    }
+}
+
+Yvals <- paste0('N', letters[1:4])
+prior <- c(1,0,0,0)
+probn <- Pr(Y = data.frame(Nvrt = Yvals),
+    X = data.frame(Rvrt = 1), learnt = learnt,
+    prior = prior, parallel = 1)
+probnt <- sapply(Yvals, function(val){
+    testPr(X = list(Nvrt = val), Y = list(Rvrt = 1), learnt = learnt)$value
+}) * prior
+probnt <- probnt/sum(probnt)
+cbind(probnt, probn$values)
+sum(probn$values)
+
+Yvals <- paste0('N', letters[1:4])
+prior <- c(0.5,0,0.5,0)
+probn <- Pr(Y = data.frame(Nvrt = Yvals),
+    X = data.frame(Rvrt = 1), learnt = learnt,
+    prior = prior, parallel = 1)
+probnt <- sapply(Yvals, function(val){
+    testPr(X = list(Nvrt = val), Y = list(Rvrt = 1), learnt = learnt)$value
+}) * prior
+probnt <- probnt/sum(probnt)
+cbind(probnt, probn$values)
+sum(probn$values)
+
+Yvals <- paste0('N', letters[c(1,3)])
+prior <- c(0.5,0.5)
+probn <- Pr(Y = data.frame(Nvrt = Yvals),
+    X = data.frame(Rvrt = 1), learnt = learnt,
+    prior = prior, parallel = 1)
+probnt <- sapply(Yvals, function(val){
+    testPr(X = list(Nvrt = val), Y = list(Rvrt = 1), learnt = learnt)$value
+}) * prior
+probnt <- probnt/sum(probnt)
+cbind(probnt, probn$values)
+sum(probn$values)
+
+
+Yvals <- paste0('N', letters[c(1,3,1)])
+prior <- c(0.5,0.5, 0.5)
+probn <- Pr(Y = data.frame(Nvrt = Yvals),
+    X = data.frame(Rvrt = 1), learnt = learnt,
+    prior = prior, parallel = 1)
+probnt <- sapply(Yvals, function(val){
+    testPr(X = list(Nvrt = val), Y = list(Rvrt = 1), learnt = learnt)$value
+}) * prior
+probnt <- probnt/sum(probnt)
+cbind(probnt, probn$values)
+sum(probn$values)
