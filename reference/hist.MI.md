@@ -80,6 +80,10 @@ hist(
 [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
 to calculate mutual information and its revisability.
 
+[`print.MI()`](https://pglpm.github.io/prova/reference/print.MI.md) \]
+to plot mutual information and quantiles calculated by
+[`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+
 [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
 (on which `hist.MI()` is based) for more general plots.
 

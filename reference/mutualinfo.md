@@ -170,6 +170,12 @@ this computation.
 
 ## See also
 
+[`print.MI()`](https://pglpm.github.io/prova/reference/print.MI.md) \]
+to plot mutual information and quantiles calculated by `mutualinfo()`
+
+[`hist.MI()`](https://pglpm.github.io/prova/reference/hist.MI.md) to
+plot the revisability of the mutual information.
+
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 probabilities and their revisability.
 

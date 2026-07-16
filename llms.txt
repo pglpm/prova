@@ -260,6 +260,8 @@ For developers (beware!)
   : Cumulative sum along first dimension
 - [`rowinvcumsum()`](https://pglpm.github.io/prova/reference/rowinvcumsum.md)
   : Inverse cumulative sum along first dimension
+- [`signifC()`](https://pglpm.github.io/prova/reference/signifC.md) :
+  Format numbers respecting significant digits
 - [`testPr()`](https://pglpm.github.io/prova/reference/testPr.md) : Test
   posterior probabilities
 - [`util_Pcheckpoints()`](https://pglpm.github.io/prova/reference/util_Pcheckpoints.md)
