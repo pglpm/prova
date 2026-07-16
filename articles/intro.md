@@ -751,10 +751,10 @@ Fspecies10$values
 print(Fspecies10, 'values')
 # $values
 #            
-# species      [,1]
-#   Adelie    0.299
-#   Chinstrap 0.305
-#   Gentoo    0.397
+# species     [,1]
+#   Adelie     0.3
+#   Chinstrap  0.3
+#   Gentoo     0.4
 ```
 
 These frequency estimates have also another important meaning: they are
@@ -868,7 +868,7 @@ function to display values and quantiles together:
 
 print(Fspecies10)
 #            probability
-# species      value    +/-  Q5.5%   Q25%   Q75% Q94.5%
+# species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
 #   Adelie    0.2987 0.0018 0.1218 0.2072 0.3763 0.5068
 #   Chinstrap 0.3046 0.0018 0.1230 0.2112 0.3889 0.5221
 #   Gentoo    0.3967 0.0021 0.1921 0.2995 0.4894 0.6183
@@ -900,9 +900,9 @@ print(imputeddata)
 # , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007
 # 
 #         probability
-# sex       value   +/-  Q5.5%   Q25%   Q75% Q94.5%
-#   female 0.6739 0.003 0.2390 0.5161 0.8724 0.9735
-#   male   0.3261 0.003 0.0265 0.1276 0.4839 0.7609
+# sex      value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
+#   female 0.6739 0.0030 0.239  0.5161 0.8724 0.9735
+#   male   0.3261 0.0030 0.0265 0.1276 0.4839 0.7609
 ```
 
 We see that penguin \#1 might have been female with probability 0.67,
@@ -1006,12 +1006,12 @@ Fspeciessex10 <- Pr(
 ## as well as their credibility intervals
 print(Fspeciessex10)
 #                   probability
-# species,sex         value    +/-   Q5.5%    Q25%   Q75% Q94.5%
-#   Adelie,female    0.1634 0.0013 0.05080 0.09840 0.2153 0.3193
-#   Chinstrap,female 0.1293 0.0014 0.03400 0.07280 0.1710 0.2719
-#   Gentoo,female    0.2881 0.0019 0.12390 0.19870 0.3660 0.4954
-#   Adelie,male      0.1353 0.0013 0.03760 0.07540 0.1794 0.2804
-#   Chinstrap,male   0.1754 0.0013 0.05560 0.10540 0.2292 0.3505
+# species,sex        value  +/-    Q5.5%   Q25%    Q75%   Q94.5%
+#   Adelie,female    0.1634 0.0013 0.0508  0.0984  0.2153 0.3193
+#   Chinstrap,female 0.1293 0.0014 0.0340  0.0728  0.1710 0.2719
+#   Gentoo,female    0.2881 0.0019 0.1239  0.1987  0.3660 0.4954
+#   Adelie,male      0.1353 0.0013 0.0376  0.0754  0.1794 0.2804
+#   Chinstrap,male   0.1754 0.0013 0.0556  0.1054  0.2292 0.3505
 #   Gentoo,male      0.1086 0.0012 0.02159 0.05305 0.1459 0.2467
 ```
 
@@ -1096,15 +1096,15 @@ print(Fspecies10I)
 # , , |island = Biscoe
 # 
 #            probability
-# species      value    +/-   Q5.5%   Q25%   Q75% Q94.5%
-#   Adelie    0.1450 0.0024 0.01482 0.0526 0.2069 0.3800
+# species     value  +/-    Q5.5%   Q25%   Q75%   Q94.5%
+#   Adelie    0.1450 0.0024 0.01482 0.0526 0.2069 0.380 
 #   Chinstrap 0.1371 0.0016 0.01245 0.0476 0.1933 0.3782
-#   Gentoo    0.7179 0.0030 0.41880 0.6086 0.8528 0.9409
+#   Gentoo    0.7179 0.0030 0.4188  0.6086 0.8528 0.9409
 # 
 # , , |island = Dream
 # 
 #            probability
-# species      value    +/-  Q5.5%   Q25%   Q75% Q94.5%
+# species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
 #   Adelie    0.3582 0.0022 0.1041 0.2282 0.4767 0.6569
 #   Chinstrap 0.4747 0.0025 0.1863 0.3380 0.6070 0.7737
 #   Gentoo    0.1671 0.0019 0.0192 0.0680 0.2369 0.4175
@@ -1189,15 +1189,15 @@ print(Fspecies10I)
 # , , |island = Biscoe
 # 
 #            probability
-# species      value    +/-   Q5.5%   Q25%   Q75% Q94.5%
-#   Adelie    0.1450 0.0024 0.01482 0.0526 0.2069 0.3800
+# species     value  +/-    Q5.5%   Q25%   Q75%   Q94.5%
+#   Adelie    0.1450 0.0024 0.01482 0.0526 0.2069 0.380 
 #   Chinstrap 0.1371 0.0016 0.01245 0.0476 0.1933 0.3782
-#   Gentoo    0.7179 0.0030 0.41880 0.6086 0.8528 0.9409
+#   Gentoo    0.7179 0.0030 0.4188  0.6086 0.8528 0.9409
 # 
 # , , |island = Dream
 # 
 #            probability
-# species      value    +/-  Q5.5%   Q25%   Q75% Q94.5%
+# species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
 #   Adelie    0.3582 0.0022 0.1041 0.2282 0.4767 0.6569
 #   Chinstrap 0.4747 0.0025 0.1863 0.3380 0.6070 0.7737
 #   Gentoo    0.1671 0.0019 0.0192 0.0680 0.2369 0.4175
@@ -1282,14 +1282,14 @@ print(Fspecies10IS, 'values')
 # $values
 #            |island,sex
 # species     Biscoe,female Dream,female Torgersen,female Biscoe,male
-#   Adelie            0.128        0.399            0.483       0.211
-#   Chinstrap         0.111        0.395            0.266       0.221
-#   Gentoo            0.761        0.205            0.251       0.569
+#   Adelie             0.13         0.40             0.48        0.21
+#   Chinstrap          0.11         0.40             0.27        0.22
+#   Gentoo             0.76         0.21             0.25        0.57
 #            |island,sex
 # species     Dream,male Torgersen,male
-#   Adelie         0.322          0.450
-#   Chinstrap      0.542          0.376
-#   Gentoo         0.137          0.175
+#   Adelie          0.32           0.45
+#   Chinstrap       0.54           0.38
+#   Gentoo          0.14           0.17
 ```
 
   
@@ -1547,10 +1547,10 @@ is as follows:
 
 print(Fspecies60)
 #            probability
-# species       value     +/-  Q5.5%   Q25%   Q75% Q94.5%
-#   Adelie    0.39500 0.00100 0.2960 0.3522 0.4357 0.4976
+# species     value   +/-     Q5.5%  Q25%   Q75%   Q94.5%
+#   Adelie    0.3950  0.0010  0.2960 0.3522 0.4357 0.4976
 #   Chinstrap 0.20999 0.00081 0.1331 0.1735 0.2424 0.2955
-#   Gentoo    0.39500 0.00100 0.2982 0.3528 0.4360 0.4946
+#   Gentoo    0.3950  0.0010  0.2982 0.3528 0.4360 0.4946
 ```
 
 > From a sample of 10 penguins, the inference about the relative
@@ -1857,7 +1857,7 @@ be extracted from the `Fspeciesall` in the usual way:
 
 print(Fspeciesall)
 #            probability
-# species       value     +/-   Q5.5%    Q25%    Q75%  Q94.5%
+# species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
 #   Adelie    0.44171 0.00041 0.39809 0.42309 0.46035 0.48378
 #   Chinstrap 0.19884 0.00040 0.16568 0.18395 0.21262 0.23371
 #   Gentoo    0.35945 0.00039 0.31938 0.34128 0.37726 0.40024
@@ -1954,10 +1954,10 @@ print(Fanalysis)
 # , , |island = Biscoe
 # 
 #            probability
-# species       value    +/-    Q5.5%    Q25%    Q75%  Q94.5%
-#   Adelie    0.26621 0.0006 0.213200 0.24273 0.28830 0.32230
-#   Chinstrap 0.01167 0.0002 0.002755 0.00590 0.01559 0.02538
-#   Gentoo    0.72211 0.0006 0.666200 0.69935 0.74631 0.77468
+# species     value   +/-     Q5.5%    Q25%    Q75%    Q94.5% 
+#   Adelie    0.26621 0.00060 0.2132   0.24273 0.2883  0.3223 
+#   Chinstrap 0.01167 0.00020 0.002755 0.00590 0.01559 0.02538
+#   Gentoo    0.72211 0.00060 0.6662   0.69935 0.74631 0.77468
 ```
 
 Conclusion:
@@ -2021,10 +2021,10 @@ print(Fanalysis)
 # , , |species = Adelie
 # 
 #            probability
-# island        value     +/-  Q5.5%    Q25%    Q75% Q94.5%
+# island      value   +/-     Q5.5%  Q25%    Q75%    Q94.5%
 #   Biscoe    0.29190 0.00063 0.2377 0.26682 0.31562 0.3525
 #   Dream     0.36962 0.00065 0.3084 0.34267 0.39637 0.4337
-#   Torgersen 0.33848 0.00079 0.2787 0.31146 0.36410 0.4006
+#   Torgersen 0.33848 0.00079 0.2787 0.31146 0.3641  0.4006
 ```
 
 Conclusions:
@@ -2106,25 +2106,27 @@ outside each other’s 89%-credibility interval.
 
 #### On *exchangeability*:
 
-- Lindley, Novick: [*The role of exchangeability in
-  inference*](https://doi.org/10.1214/aos/1176345331) (1981).
+- Lindley, Novick (1981): [*The role of exchangeability in
+  inference*](https://doi.org/10.1214/aos/1176345331).
 
-- Bernardo, Smith: [*Bayesian
-  Theory*](https://doi.org/10.1002/9780470316870) (repr. 2000). See
-  especially §§ 4.2–4.3, 4.6.
+- Bernardo, Smith (2000): [*Bayesian
+  Theory*](https://doi.org/10.1002/9780470316870). See especially
+  §§ 4.2–4.3, 4.6.
 
-- Dawid: [*Exchangeability and its
-  ramifications*](https://doi.org/10.1093/acprof:oso/9780199695607.003.0002)
-  (2013).
+- Fortini, Petrone (2024): [*Prediction-based uncertainty quantification
+  for exchangeable sequences*](https://doi.org/10.1098/rsta.2022.0142).
 
-- de Finetti: [*La prévision: ses lois logiques, ses sources
-  subjectives*](https://www.numdam.org/item/AIHP_1937__7_1_1_0) (1937).
+- Dawid (2013): [*Exchangeability and its
+  ramifications*](https://doi.org/10.1093/acprof:oso/9780199695607.003.0002).
 
-- Heath, Sudderth: [*De Finetti’s theorem on exchangeable
-  variables*](https://doi.org/10.1080/00031305.1976.10479175) (1976).
+- de Finetti (1937): [*La prévision: ses lois logiques, ses sources
+  subjectives*](https://www.numdam.org/item/AIHP_1937__7_1_1_0).
 
-- Hewitt, Savage: [*Symmetric measures on Cartesian
-  products*](https://doi.org/10.1090/S0002-9947-1955-0076206-8) (1955).
+- Heath, Sudderth (1976): [*De Finetti’s theorem on exchangeable
+  variables*](https://doi.org/10.1080/00031305.1976.10479175).
+
+- Hewitt, Savage (1955): [*Symmetric measures on Cartesian
+  products*](https://doi.org/10.1090/S0002-9947-1955-0076206-8).
 
 - **Prova** accompanying manual: [*Foundations of inference under
   symmetry*](https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf)
@@ -2132,11 +2134,11 @@ outside each other’s 89%-credibility interval.
 
 #### On Bayesian theory in general:
 
-- Jaynes: [*Probability
-  Theory*](https://doi.org/10.1017/CBO9780511790423) (2003).
+- Jaynes (2003): [*Probability
+  Theory*](https://doi.org/10.1017/CBO9780511790423).
 
-- MacKay: [*Information Theory, Inference, and Learning
-  Algorithms*](https://www.inference.org.uk/itila/book.html) (2005).
+- MacKay (2005): [*Information Theory, Inference, and Learning
+  Algorithms*](https://www.inference.org.uk/itila/book.html).
 
 - [*Data Science and AI Prototyping*](https://pglpm.github.io/ADA511/).
 
@@ -2145,12 +2147,12 @@ outside each other’s 89%-credibility interval.
 
 #### On medical decision-making:
 
-- Sox, Higgins, Owens, Sanders Schmidler: [*Medical Decision
-  Making*](https://doi.org/10.1002/9781119627876) (3rd ed. 2024).
+- Sox, Higgins, Owens, Sanders Schmidler (2024): [*Medical Decision
+  Making*](https://doi.org/10.1002/9781119627876).
 
-- Hunink, Weinstein, Wittenberg, Drummond, Pliskin, Wong, Glasziou:
-  [*Decision Making in Health and Medicine: Integrating Evidence and
-  Values*](https://doi.org/10.1017/CBO9781139506779) (2nd ed. 2014).
+- Hunink, Weinstein, Wittenberg, Drummond, Pliskin, Wong, Glasziou
+  (2014): [*Decision Making in Health and Medicine: Integrating Evidence
+  and Values*](https://doi.org/10.1017/CBO9781139506779).
 
   
 

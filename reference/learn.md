@@ -350,42 +350,45 @@ About Bayesian inference under exchangeability ("population inference"):
 - Lindley, Novick (1981): *The role of exchangeability in inference*,
   <doi:10.1214/aos/1176345331>.
 
-- Bernardo, Smith (2000): *Bayesian Theory*. Wiley
+- Bernardo, Smith (2000): *Bayesian Theory*, Wiley
   <doi:10.1002/9780470316870>.
+
+- Fortini, Petrone (2024): *Prediction-based uncertainty quantification
+  for exchangeable sequences*, <doi:10.1098/rsta.2022.0142>.
 
 - Porta Mana
   <https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf>.
 
 About nonparametrics:
 
-- Müller et al. (2015): *Nonparametric Bayesian inference*. IMS
+- Müller et al. (2015): *Nonparametric Bayesian inference*, IMS
   <doi:10.1007/978-3-319-18968-0>.
 
-- Hjort et al. (2010): *Bayesian Nonparametrics*. Cambridge University
+- Hjort et al. (2010): *Bayesian Nonparametrics*, Cambridge University
   Press <doi:10.1017/CBO9780511802478>.
 
 About Markov-chain Monte Carlo and "convergence":
 
 - de Valpine, Paciorek, Turek, & al. (2026): *NIMBLE: MCMC, Particle
-  Filtering, and Programmable Hierarchical Modeling*
+  Filtering, and Programmable Hierarchical Modeling*,
   <doi:10.5281/zenodo.1211190>,
   <https://cran.r-project.org/package=nimble>.
 
-- Kwon & al. (2025): *MCMC stopping rules in latent variable modelling*
+- Kwon & al. (2025): *MCMC stopping rules in latent variable modelling*,
   <doi:10.1111/bmsp.12357>.
 
 - Vehtari & al. (2021): *Rank-normalization, folding, and localization:
-  an improved R-hat for assessing convergence of MCMC*
+  an improved R-hat for assessing convergence of MCMC*,
   <doi:10.1214/20-BA1221>.
 
-- Roy (2020): *Convergence diagnostics for Markov chain Monte Carlo*
+- Roy (2020): *Convergence diagnostics for Markov chain Monte Carlo*,
   <doi:10.1146/annurev-statistics-031219-041300>.
 
-- Gilks & al. (1998): *Markov Chain Monte Carlo in Practice*. Chapman &
+- Gilks & al. (1998): *Markov Chain Monte Carlo in Practice*, Chapman &
   Hall/CRC <doi:10.1201/b14835>.
 
 - D. J. C. MacKay (2005): *Information Theory, Inference, and Learning
-  Algorithms*. Cambridge University Press
+  Algorithms*, Cambridge University Press
   <https://www.inference.org.uk/itila/book.html>.
 
 - Porta Mana
@@ -435,7 +438,7 @@ learnt <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpGKQDie/prova-V1_D3_S10_260716T101705_1a6f7b9dd75c
+#> /tmp/RtmpKOJ6yT/prova-V1_D3_S10_260716T104332_19e22731ea23
 #> Prova v1.7.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -458,9 +461,9 @@ learnt <- learn(
 #> quantile width: 0.143 to 0.998
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 33 secs
-#> Average preparation & finalization time: 32 secs.
-#> Average Monte Carlo time per chain: 0.52 secs.
+#> Total computation time: 28 secs
+#> Average preparation & finalization time: 26 secs.
+#> Average Monte Carlo time per chain: 0.62 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -468,7 +471,7 @@ learnt <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpGKQDie/prova-V1_D3_S10_260716T101705_1a6f7b9dd75c
+#> /tmp/RtmpKOJ6yT/prova-V1_D3_S10_260716T104332_19e22731ea23
 #> **********************************************************
 
 ## Check structure of `learnt` object:
