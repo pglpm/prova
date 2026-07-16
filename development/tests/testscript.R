@@ -1,6 +1,8 @@
 library('tinytest')
 library('prova')
 
+parallel <- 8
+
 results <- list()
 tc <- function(x, nm = ''){results <<- c(results, setNames(list(tryCatch(x, error = identity)), nm))}
 
@@ -84,76 +86,39 @@ rm(learnt)
 
 message('Simple MIs ', format(Sys.time(), '%y%m%dT%H%M%S'))
 learnt <- readRDS('MIlearnt.rds')
-W <- learnt$W[, 1]
-points <- readRDS('mitest_points.rds')
-probB <- readRDS('mitest_probB.rds')
-probN <- readRDS('mitest_probN.rds')
-probR <- readRDS('mitest_probR.rds')
-testmi <- readRDS('mitest_testmi.rds')
-nn <- nrow(points)
-ns <- ncol(W)
+testMI <- readRDS('mitest_testMI.rds')
+nn <- 60 * 3600
+ns <- 12
+nv <- nn/ns
 ##
 suite <- list(
-    list('B', 'N', NULL, NULL),
-    list('B', 'R', NULL, NULL),
-    list('N', 'R', NULL, NULL),
-    list(c('N', 'B'), 'R', NULL, NULL),
-    list(c('B', 'R'), 'N', NULL, NULL),
-    list(c('N', 'R'), 'B', NULL, NULL),
-    list('B', 'N', 'R', sample.int(n = nn, size = 1)),
-    list('B', 'N', 'R', sample.int(n = nn, size = 1)),
-    list('B', 'R', 'N', sample.int(n = nn, size = 1)),
-    list('B', 'R', 'N', sample.int(n = nn, size = 1)),
-    list('R', 'N', 'B', sample.int(n = nn, size = 1)),
-    list('R', 'N', 'B', sample.int(n = nn, size = 1))
+    list('B', 'N', NULL),
+    list('B', 'R', NULL),
+    list('N', 'R', NULL),
+    list(c('N', 'B'), 'R', NULL),
+    list(c('B', 'R'), 'N', NULL),
+    list(c('N', 'R'), 'B', NULL),
+    list('B', 'N', list(R = -8)),
+    list('B', 'N', list(R = 0)),
+    list('B', 'R', list(N = 'a')),
+    list('B', 'R', list(N = 'c')),
+    list('N', 'R', list(B = 'y')),
+    list('N', 'R', list(B = 'n'))
 )
-tc(expect_silent(
-    learntdir <- learn(
-    data = 'data_basetest.csv',
-    metadata = 'metadata_basetest.csv',
-    # nsamples = 200,
-    # nchains = parallel,
-    ## minMCiterations = 3600 * 3,
-    prior = FALSE,
-    outputdir = outputdir,
-    appendinfo = TRUE,
-    cleanup = TRUE,
-    parallel = parallel,
-    # maxrelMCSE = +Inf,
-    # minESS = 100,
-    verbose = FALSE,
-    ## ncheckpoints = 12,
-    ##
-    ## ## parameters for short test run:
-    ## subsampledata = 10,
-    ## maxhours = 0,
-    ## nsamplesperchain = 60,
-    ## nchains = parallel + 1,
-    ##
-    hyperparams = list(
-        ## ncomponents = 64,
-        ## minalpha = -4,
-        ## maxalpha = 4,
-        ## byalpha = 1,
-        ## Rshapelo = 0.5,
-        ## Rshapehi = 0.5,
-        ## Rvarm1 = 8^2,
-        ## Cshapelo = 0.5,
-        ## Cshapehi = 0.5,
-        ## Cvarm1 = 8^2,
-        ## Dshapelo = 0.5,
-        ## Dshapehi = 0.5,
-        ## Dvarm1 = 8^2,
-        ## Bshapelo = 1,
-        ## Bshapehi = 1,
-        ## Dthreshold = 1,
-        ## tscalefactor = 1,
-        ## initmethod = 'allinone',
-        ## avoidzeroW = TRUE
-        ## precluster, prior
+for(atest in suite[7]){
+    testand <- mutualinfo(
+        Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
+        learnt = learnt, nv = nv, ns = ns, parallel = parallel
     )
-)
-))
+    target <- testMI(
+        Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
+        nn = nn, learnt = learnt
+    )
+    tc(expect_equivalent(testand$value, target$value,
+        tolerance = (testand$MCaccuracy + target$MCaccuracy) * 2
+    ))
+}
+
 saveRDS(results, paste0('tests_',  starttime, '.rds'))
 
 

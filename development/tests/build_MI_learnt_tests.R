@@ -44,7 +44,7 @@ Nprob <- matrix(c(
     c(0, 0, 0.5, 0.5, 0),
     c(0, 0, 0, 0, 1)
 ), nrow = 5, ncol = 4, byrow = FALSE)
-## Bprob is the probability of the 2nd value, V2
+## ** Bprob is the probability of the 2nd value, 'n' **
 Bprob <- matrix(c(0, 0.5, 1, 1), nrow = 1, ncol = 4, byrow = FALSE)
 Rmean <- matrix(c(-12, -4, 4, 12), nrow = 1, ncol = 4, byrow = FALSE)
 Rsd <- matrix(1, nrow = 1, ncol = 4, byrow = FALSE)
@@ -61,50 +61,56 @@ learnt$MCindex <- seq_len(nsamples) ; dim(learnt$MCindex) <- nsamples
 learnt$auxmetadata <- auxmetadata
 saveRDS(learnt, '~/repos/prova/development/tests/MIlearnt.rds')
 ##
-W <- learnt$W[, 1]
-nclu <- length(W)
-Bprob <- learnt$Bprob[,, 1] ; Bprob <- unname(rbind(1 - Bprob, Bprob))
-Nprob <- unname(learnt$Nprob)[,, 1] ; Nl <- nrow(Nprob)
-Rmean <- unname(learnt$Rmean)[,, 1]
-Rsd <- unname(learnt$Rsd)[,, 1]
-nv <- 3600
-ns <- 12
-nn <- 60 * 3600
-seqcl <- sample.int(n = nclu, size = nn, prob = W, replace = TRUE)
-points <- as.data.frame(t(rbind(
-    sapply(seqcl, function(i){
-        c(
-            B = sample.int(n = 2, size = 1, prob = Bprob[,i]),
-            N = sample.int(n = Nl, size = 1, prob = Nprob[,i])
-        )}),
-    R = rnorm(n = nn, mean = Rmean[seqcl], sd = Rsd[seqcl])
-)))
-##
-probsBNR <- list(
-    B = t(Bprob)[, points[, 'B']],
-    N = t(Nprob)[, points[, 'N']],
-    R = dnorm(
-        x = matrix(data = points[, 'R'], nrow = nclu, ncol = nn, byrow = TRUE),
-        mean = Rmean, sd = Rsd
-    )
-)
-saveRDS(as.data.frame(points), '~/repos/prova/development/tests/mitest_points.rds')
-saveRDS(probsBNR, '~/repos/prova/development/tests/mitest_probsBNR.rds')
-##
-testMI <- function(Y1names, Y2names, Xname = NULL, Xval = NULL, W){
-    prob1 <- do.call(`*`, c(list(1), probsBNR[Y1names]))
-    prob2 <- do.call(`*`, c(list(1), probsBNR[Y2names]))
+testMI <- function(Y1names, Y2names, X = NULL, nn, learnt){
+    W <- learnt$W[,1]
+    Bprob2 <- unname(rbind(1 - learnt$Bprob[,,1], learnt$Bprob[,,1]))
+    Nprob <- learnt$Nprob[,,1]
+    Rmean <- learnt$Rmean[,,1]
+    Rsd <- learnt$Rsd[,,1]
     ##
-    if(!is.null(Xname)){
-        W <- W * probsBNR[[Xname]][, Xval]
-        W <- W / sum(W)
+    if(!is.null(X)){
+        if(names(X) == 'B'){
+            Xprob <- Bprob2[which(c('y', 'n') == X[[1]]),]
+        } else if(names(X) == 'N'){
+            Xprob <- Nprob[which(letters == X[[1]]),]
+        } else if(names(X) == 'R'){
+            Xprob <- dnorm(x = X[[1]], mean = Rmean, sd = Rsd)
+        } else {stop('testmi() used with wrong variate')}
+    } else {
+        Xprob <- 1
     }
-    mis <- -log(colSums(W * prob1)) -
-        log(colSums(W * prob2)) +
-        log(colSums(W * prob1 * prob2))
+    W <- W * Xprob
+    W <- W / sum(W)
     ##
-    c(value = mean(mis, na.rm = TRUE),
-        MCaccuracy = sd(mis, na.rm = TRUE)/sqrt(length(mis))) / log(2)
+    nclu <- length(W)
+    seqclu <- sample.int(n = nclu, size = nn, prob = W, replace = TRUE)
+    ## ** Bprob is the probability of the 2nd value, 'n' **
+    dpoints <- rbind(
+        sapply(seqclu, function(i){c(
+            B = sample.int(n = 2, size = 1, prob = Bprob2[,i]),
+            N = sample.int(n = nrow(Nprob), size = 1, prob = Nprob[,i])
+        )}),
+        R = rnorm(n = nn, mean = Rmean[seqclu], sd = Rsd[seqclu])
+    )
+##
+    lprobsBNR <- list(
+        ## rows: clusters, cols: points
+        B = t(log(Bprob2))[, dpoints['B',]],
+        N = t(log(Nprob))[, dpoints['N',]],
+        R = dnorm(
+            x = matrix(data = dpoints['R',], nrow = nclu, ncol = nn, byrow = TRUE),
+            mean = Rmean, sd = Rsd, log = TRUE)
+    )
+    lprob1 <- do.call(`+`, lprobsBNR[Y1names])
+    lprob2 <- do.call(`+`, lprobsBNR[Y2names])
+    W <- log(W)
+    ##
+    mis <- -log(colSums(exp(W + lprob1))) -
+        log(colSums(exp(W + lprob2))) +
+        log(colSums(exp(W + lprob1 + lprob2)))
+    ##
+    list(value = mean(mis, na.rm = TRUE) / log(2),
+        MCaccuracy = sd(mis, na.rm = TRUE)/(sqrt(length(mis)) * log(2)))
 }
 saveRDS(testMI, '~/repos/prova/development/tests/mitest_testMI.rds')
 
@@ -329,7 +335,7 @@ mi2 <- sapply(1:nn, function(xx){
             ))
 })
 ##
-testmi <- mutualinfo(Y1names = 'N', Y2names = 'B', X = data.frame(R = -7.98082), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
+testmi <- mutualinfo(Y1names = 'N', Y2names = 'B', X = data.frame(R = -8), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 testmi2 <- debug_mutualinfo(Y1names = 'N', Y2names = 'B', X = data.frame(R = -8), tails = list(R = +1), learnt = learnt, ns = NULL, nv = nn/ncol(learnt$W))
 rbind(
     c(value = mean(mi2)/log(2), accuracy = sd(mi2/log(2))/sqrt(length(mi2))),
