@@ -134,7 +134,18 @@ the joint probability of. One variate per column, one set of values per row.</p>
 <p>This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \(\mathrm{Pr}(Y = y \vert X = x, \text{new\,data}, \text{data})\) that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:</p><ul><li><p>As samples (default 3600 samples, depending on the 'nsamples' argument given to the <code><a href="learn.html">learn()</a></code> function) of the alternative values that the posterior probability could have.</p></li>
 <li><p>As quantiles (default 5.5%, 25%, 75%, 94.5%) of the possible revisability.</p></li>
 </ul><p>If several joint values are given for <code>Y</code> or <code>X</code>, the function will create a 2D grid of results for all possible combinations of the given <code>Y</code> and <code>X</code> values.</p>
-<p>This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for <code>Y</code> is given, the function will calculate the probability \(\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})\) from \(\mathrm{Pr}(X = x \vert Y = y, \text{data})\) and the prior, by means of Bayes's theorem.</p>
+<p>This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for the data corresponding to rows <code>Y</code> is given, the function will calculate the probability \(\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})\) from \(\mathrm{Pr}(X = x \vert Y = y, \text{data})\) and the prior, by means of Bayes's theorem
+$$\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})
+=
+\frac{
+\mathrm{Pr}(X = x \vert Y = y, \text{data}) \cdot
+\mathrm{Pr}(Y = y \vert \text{prior})
+}{
+\sum_{y'} \mathrm{Pr}(X = x \vert Y = y', \text{data}) \cdot
+\mathrm{Pr}(Y = y' \vert \text{prior})
+}
+\ .$$
+<em>Important</em>: any values <em>not</em> present in the <code>Y</code> data frame are given <em>zero</em> prior probability; in other words, the normalization \(\sum_{y'}\) only counts the $y$ values appearing in the data frame <code>Y</code>.</p>
 <p>Each variate in each argument <code>Y</code>, <code>X</code> can be specified either as a point-value \(Y = y\) or as a left-open interval \(Y \le y\) or as a right-open interval \(Y \ge y\), through the argument <code>tails</code>.</p>
 <p>See <code><a href="../articles/intro.html">vignette('intro')</a></code> for example uses.</p>
     </div>

@@ -180,10 +180,18 @@ create a 2D grid of results for all possible combinations of the given
 `Y` and `X` values.
 
 This function also allows for base-rate or other prior-probability
-corrections: If a prior (for instance, a base rate) for `Y` is given,
-the function will calculate the probability \\\mathrm{Pr}(Y = y \vert X
-= x, \text{data}, \text{prior})\\ from \\\mathrm{Pr}(X = x \vert Y = y,
-\text{data})\\ and the prior, by means of Bayes's theorem.
+corrections: If a prior (for instance, a base rate) for the data
+corresponding to rows `Y` is given, the function will calculate the
+probability \\\mathrm{Pr}(Y = y \vert X = x, \text{data},
+\text{prior})\\ from \\\mathrm{Pr}(X = x \vert Y = y, \text{data})\\ and
+the prior, by means of Bayes's theorem \$\$\mathrm{Pr}(Y = y \vert X =
+x, \text{data}, \text{prior}) = \frac{ \mathrm{Pr}(X = x \vert Y = y,
+\text{data}) \cdot \mathrm{Pr}(Y = y \vert \text{prior}) }{ \sum\_{y'}
+\mathrm{Pr}(X = x \vert Y = y', \text{data}) \cdot \mathrm{Pr}(Y = y'
+\vert \text{prior}) } \\ .\$\$ *Important*: any values *not* present in
+the `Y` data frame are given *zero* prior probability; in other words,
+the normalization \\\sum\_{y'}\\ only counts the \$y\$ values appearing
+in the data frame `Y`.
 
 Each variate in each argument `Y`, `X` can be specified either as a
 point-value \\Y = y\\ or as a left-open interval \\Y \le y\\ or as a
