@@ -844,10 +844,14 @@ hist.probability <- function(
 #' @param x Object of class "probability", obtained with [Pr()].
 #' @param elements character or integer vector, or `NULL` (default): elements of the "probability" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `$values` and `$quantiles` are displayed together in a special way.
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
-#' @param digits positive number or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for elements `$values` and `$quantiles` are determined from their respective `$values.MCaccuracy` and `$quantiles.MCaccuracy` elements of the "probability" object, see [Pr()]; whereas `$samples` elements use 2 significant digits.
+#' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for elements `$values` and `$quantiles` are determined from their respective `$values.MCaccuracy` and `$quantiles.MCaccuracy` elements of the "probability" object (see [Pr()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `$samples` elements uses `edigits` significant digits.
+#' @param edigits positive integer, default 2: number of significant digits for elements `$values.MCaccuracy` and `$quantiles.MCaccuracy`, if `digits = TRUE`.
 #' @param ... Other parameters to be passed to [base::print()].
 #'
 #' @return Its `x` argument, [invisibly][base::invisible()]; see [base::print()].
+#' @references
+#'
+#' - Joint Committee for Guides in Metrology (2008): *Guide to the expression of uncertainty in measurement*, <doi:10.59161/JCGM100-2008E>, <https://www.iso.org/sites/JCGM/GUM-JCGM100.htm>.
 #'
 #' @seealso
 #' [Pr()] to calculate posterior probabilities and quantiles.
@@ -881,6 +885,7 @@ print.probability <- function(
     elements = NULL,
     subset = NULL,
     digits = TRUE,
+    edigits = 2,
     ...
 ){
     ## Replace object x keeping only values given in 'subset'
@@ -889,23 +894,24 @@ print.probability <- function(
     }
 
     if(isTRUE(digits) && is.null(elements)){
-        vdigits <- 1 + ceiling(log10(x[['values']])) -
+        vdigits <- edigits - 1 + ceiling(log10(x[['values']])) -
             floor(log10(x[['values.MCaccuracy']]))
-        adigits <- rep.int(x = 2, times = length(x[['values.MCaccuracy']]))
+        adigits <- rep.int(x = edigits,
+            times = length(x[['values.MCaccuracy']]))
         if('quantiles' %in% names(x)){
-            qdigits <- 1 + ceiling(log10(x[['quantiles']])) -
+            qdigits <- edigits - 1 + ceiling(log10(x[['quantiles']])) -
                 floor(log10(x[['quantiles.MCaccuracy']]))
         } else {qdigits <- NULL}
     } else if(is.null(elements)){
             vdigits <- adigits <- qdigits <- digits
     } else if(!is.null(elements)){
-        digits <- 3
+        digits <- edigits
     }
 
     if(is.null(elements)){
         totake <- c('values', 'values.MCaccuracy', 'quantiles')
         ## rearrange and combine values and quantiles in a special way
-        temp <- aperm(a = array(data = signif(
+        temp <- aperm(a = array(data = signifC(
             x = unname(unlist(x[totake])),
             digits = c(vdigits, adigits, qdigits) ),
             dim = c(dim(x[['values']]),
@@ -919,7 +925,7 @@ print.probability <- function(
 
         if(is.null(x$X)){temp <- temp[,,]}
 
-        print(x = temp, ...)
+        print(x = noquote(temp), ...)
 
     } else {
         print(x = x[elements], digits = digits, ...)
@@ -946,6 +952,8 @@ print.probability <- function(
 #'
 #' @seealso
 #' [mutualinfo()] to calculate mutual information and its revisability.
+#'
+#' [print.MI()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
 #'
 #' [flexiplot()] (on which `hist.MI()` is based) for more general plots.
 #'
@@ -1071,7 +1079,9 @@ hist.MI <- function(
 #' This [base::print()] method is a utility to display value and revisability of an "MI" object obtained with [mutualinfo()].
 #'
 #' @param x Object of class "MI", obtained with [mutualinfo()].
-#' @param digits positive number, default 2,: number of significant digits, see [base::print.default()].
+#' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for element `$value` is determined from is respective `$MCaccuracy`  (see [mutualinfo()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `$quantiles` elements uses `edigits` significant digits.
+#' @param edigits positive integer, default 2: number of significant digits for element `$value` and `$quantiles`, if `digits = TRUE`.
+#' @param unit Either `NULL`, or one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used; see analogous argument in [mutualinfo()]. If `NULL` (default), the same unit as in the object `x` is used. Unit conversion is internally performed if this unit is different from that of the object `x`.
 #' @param ... Other parameters to be passed to [base::print()].
 #'
 #' @return Its `x` argument, [invisibly][base::invisible()]; see [base::print()].
@@ -1095,65 +1105,84 @@ hist.MI <- function(
 #'
 #' ## display the value and revisability of the mutual information
 #' print(MI)
+#'
+#' ## convert to hartleys (base-10 logarithms):
+#' print(MI, unit = 'Hart')
 #' }
 #'
 #' @concept display
 #' @export
 print.MI <- function(
     x,
-    digits = 2,
+    digits = TRUE,
+    edigits = 2,
+    unit = NULL,
     ...
 ){
-    temp <- signif(x = c(x[['value']], x[['quantiles']]), digits = digits)
-    names(temp) <- c(paste0('value/', x$unit), paste0('Q', names(x[['quantiles']])))
-    print(x = temp, ...)
+
+    xunit <- x[['unit']]
+    if(is.null(unit) || unit == xunit){
+        unit <- xunit
+        lbase <- 1
+    } else {
+        ## Consistency checks
+        if (unit == 'Sh') {
+            lbase <- log(2)
+        } else if (unit == 'Hart') {
+            lbase <- log(10)
+        } else if (unit == 'nat') {
+            lbase <- 1
+        } else if (is.numeric(unit) && unit > 0) {
+            lbase <- log(unit)
+        } else {
+            stop("unit must be 'Sh', 'Hart', 'nat', or a positive real")
+        }
+
+        ## Convert symbol in x-object to log
+        if (xunit == 'Sh') {
+            xlbase <- log(2)
+        } else if (xunit == 'Hart') {
+            xlbase <- log(10)
+        } else if (xunit == 'nat') {
+            xlbase <- 1
+        } else {
+            xlbase <- log(xunit)
+        }
+
+        lbase <- lbase / xlbase
+    }
+
+    xvalue <- x[['value']] / lbase
+    xquants <- x[['quantiles']] / lbase
+    xacc <- x[['MCaccuracy']] / lbase
+
+    if(isTRUE(digits)){
+        vdigits <- edigits - 1 + ceiling(log10(xvalue)) -
+            floor(log10(xacc))
+        adigits <- edigits
+        qdigits <- rep.int(x = edigits, times = length(xquants))
+    } else {
+        vdigits <- adigits <- qdigits <- digits
+    }
+
+    temp <- signifC(x = c(xvalue, xquants),
+        digits = c(vdigits, qdigits))
+    names(temp) <- c(paste0('value/', unit), paste0('Q', names(xquants)))
+    print(x = noquote(temp), ...)
 }
 
-## #### Under development
-## #' Calculate...
-## #'
-## #' @description
-## #' Blah.
-## #'
-## #' @param x Object of class "MI", obtained with [mutualinfo()].
-## #'
-## #' @return Blah
-## #'
-## #' @seealso
-## #' [mutualinfo()] to calculate mutual information.
-## #'
-## #' [hist.MI()] to plot the revisability of the mutual information.
-## #'
-## #' @examples
-## #' \donttest{
-## #' ### WARNING: the following example, if run, might even take a minute or more.
-## #'
-## #' ## Load the example `learnt` object calculated from the "penguins" dataset;
-## #' ## variates: 'species' and 'bill_len'
-## #' learnt <- learntExample
-## #'
-## #' ## Calculate the mutual information between variates 'species' and 'bill_len'
-## #' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-## #'   learnt = learnt, parallel = 1)
-## #'
-## #' ## display the value and revisability of the mutual information
-## #' print(MI)
-## #' }
-## #'
-## #' @concept display
-## # #' @export
-## quantile.probability <- function(
-##     x,
-##     probs = 2,
-##     digits = 2,
-##     ...
-## ){
-##     if(is.null(x[['samples']])){
-##         if(is.null(x[['quantiles']])){
-##             stop("This probability object has no '$samples' or '$quantiles' elements")
-##         } else {
-##             warning("This probability object has no '$samples' elements. Outputting its '$quantile' element")
-##             return(x[[c('quantiles', 'quantiles.MCaccuracy')]])
-##         }
-##     }
-## }
+
+#' Format numbers respecting significant digits
+#'
+#' This is a combination of the [base::signif()] and [base::formatC()] functions, which appropriately rounds non-decimal digits, like `signif()` does, and appends trailing zeros as necessary, lik `formatC()` does.
+#'
+#' @param x numerical vector, matrix, or array
+#' @param digits vector of positive integers: number of *significant* digits to be displayed
+#'
+#' @return A *character* vector, matrix, or array of the elements of `x`, appropriately rounded and truncated.
+#' @keywords internal
+signifC <- function(x, digits = 2){
+    mapply(FUN = function(xx, dd){formatC(
+        x = signif(x = xx, digits = dd),
+        digits = dd, format = 'fg', flag = '#'
+    )}, x, digits)}

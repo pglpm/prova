@@ -61,6 +61,8 @@ hist(MI)
 \seealso{
 \code{\link[=mutualinfo]{mutualinfo()}} to calculate mutual information and its revisability.
 
+\code{\link[=print.MI]{print.MI()}} ] to plot mutual information and quantiles calculated by \code{mutualinfo()}
+
 \code{\link[=flexiplot]{flexiplot()}} (on which \code{hist.MI()} is based) for more general plots.
 }
 \concept{display}

@@ -4,7 +4,7 @@
 \alias{print.probability}
 \title{Print an object of class "probability"}
 \usage{
-\method{print}{probability}(x, elements = NULL, subset = NULL, digits = TRUE, ...)
+\method{print}{probability}(x, elements = NULL, subset = NULL, digits = TRUE, edigits = 2, ...)
 }
 \arguments{
 \item{x}{Object of class "probability", obtained with \code{\link[=Pr]{Pr()}}.}
@@ -13,7 +13,9 @@
 
 \item{subset}{Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.}
 
-\item{digits}{positive number or \code{NULL} or \code{TRUE} (default): minimal number of significant digits, see \code{\link[base:print.default]{base::print.default()}}. If value is \code{TRUE}, then the significant digits for elements \verb{$values} and \verb{$quantiles} are determined from their respective \verb{$values.MCaccuracy} and \verb{$quantiles.MCaccuracy} elements of the "probability" object, see \code{\link[=Pr]{Pr()}}; whereas \verb{$samples} elements use 2 significant digits.}
+\item{digits}{positive integer or \code{NULL} or \code{TRUE} (default): minimal number of significant digits, see \code{\link[base:print.default]{base::print.default()}}. If value is \code{TRUE}, then the significant digits for elements \verb{$values} and \verb{$quantiles} are determined from their respective \verb{$values.MCaccuracy} and \verb{$quantiles.MCaccuracy} elements of the "probability" object (see \code{\link[=Pr]{Pr()}}), according to the rules of the \emph{Guide to the expression of Uncertainty in Measurement}, keeping as many digits as given in parameter \code{edigits}; whereas \verb{$samples} elements uses \code{edigits} significant digits.}
+
+\item{edigits}{positive integer, default 2: number of significant digits for elements \verb{$values.MCaccuracy} and \verb{$quantiles.MCaccuracy}, if \code{digits = TRUE}.}
 
 \item{...}{Other parameters to be passed to \code{\link[base:print]{base::print()}}.}
 }
@@ -42,6 +44,11 @@ print(probs)
 ## diplay 'values' only, and only for the species value 'Gentoo'
 print(probs, elements = 'values', subset = list(species = 'Gentoo'))
 
+}
+\references{
+\itemize{
+\item Joint Committee for Guides in Metrology (2008): \emph{Guide to the expression of uncertainty in measurement}, \url{doi:10.59161/JCGM100-2008E}, \url{https://www.iso.org/sites/JCGM/GUM-JCGM100.htm}.
+}
 }
 \seealso{
 \code{\link[=Pr]{Pr()}} to calculate posterior probabilities and quantiles.

@@ -65,6 +65,10 @@
 #' - `$unit`, `$Y1names`, `$Y1names`: same as the input arguments.
 #'
 #' @seealso
+#' [print.MI()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
+#'
+#' [hist.MI()] to plot the revisability of the mutual information.
+#'
 #' [Pr()] to calculate probabilities and their revisability.
 #'
 #' [learn()], which generates the `learnt` objects required by `mutualinfo()`.
