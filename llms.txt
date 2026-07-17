@@ -96,7 +96,7 @@ for your operating system.
 Then **Prova** can be installed from
 [CRAN](https://CRAN.R-project.org/package=prova) with
 
-    install.packages('prova')`
+    install.packages('prova')
 
 In case of a newer version not yet on CRAN, it can be installed with
 
