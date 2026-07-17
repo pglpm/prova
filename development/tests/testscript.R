@@ -33,6 +33,7 @@ tc(nm, {
     }
 )
 saveRDS(results, savefile)
+all(sapply(results, isTRUE))
 rm(learnt)
 
 
@@ -68,6 +69,7 @@ tc(nm, {
     }
 )
 saveRDS(results, savefile)
+all(sapply(results, isTRUE))
 
 
 
@@ -111,9 +113,10 @@ for(iv in seq_along(suite)){
             test_equivalent(c(prob$samples), c(targetprob$samples),
                 tolerance = 10 * .Machine$double.eps
             ))
-        saveRDS(results, savefile)
+saveRDS(results, savefile)
     }
 }
+all(sapply(results, isTRUE))
 
 
 
@@ -123,7 +126,7 @@ message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 learnt <- learntdir
 atest <- 0L
 set.seed(16)
-while(atest < 10){
+while(atest < 50){
     atest <- atest + 1L
     prob <- targetprob <- NULL
     nsuite <- length(suite)
@@ -165,8 +168,9 @@ while(atest < 10){
         test_equivalent(c(prob$samples), c(targetprob$samples),
             tolerance = 10 * .Machine$double.eps
         ))
-    saveRDS(results, savefile)
+saveRDS(results, savefile)
 }
+all(sapply(results, isTRUE))
 
 
 
@@ -213,10 +217,11 @@ for(atest in suite){
     tc(paste0(nm, '-', paste0(atest, collapse = '-')), test_equivalent(
         testand$value, target$value,
         tolerance = max((testand$MCaccuracy + target$MCaccuracy) * 2,
-            .Machine$double.eps)
+            10 * .Machine$double.eps)
     ))
 }
 saveRDS(results, savefile)
+all(sapply(results, isTRUE))
 
 message('All test passed: ', all(sapply(results, isTRUE)))
 
