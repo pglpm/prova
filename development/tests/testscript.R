@@ -200,7 +200,7 @@ suite <- list(
     list('N', 'R', list(B = 'y')),
     list('N', 'R', list(B = 'n'))
 )
-for(atest in suite[1]){
+for(atest in suite){
     testand <- target <- NULL
     testand <- mutualinfo(
         Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
