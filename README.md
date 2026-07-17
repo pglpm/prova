@@ -1,5 +1,5 @@
 <!-- badges: start -->
-  [![CRAN status](https://www.r-pkg.org/badges/version/Pinference)](https://CRAN.R-project.org/package=prova)
+  [![CRAN status](https://www.r-pkg.org/badges/version/prova)](https://CRAN.R-project.org/package=prova)
   [![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.17226082.svg)](https://doi.org/10.5281/zenodo.17226082)
 <!-- badges: end -->
 
