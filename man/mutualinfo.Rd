@@ -6,7 +6,7 @@
 \usage{
 mutualinfo(
   Y1names,
-  Y2names = NULL,
+  Y2names,
   X = NULL,
   learnt,
   tails = NULL,

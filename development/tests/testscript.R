@@ -215,6 +215,6 @@ for(atest in suite){
 }
 saveRDS(results, paste0('tests_',  starttime, '.rds'))
 
-
+message(all(sapply(results, isTRUE)))
 
 message('Done ', format(Sys.time(), '%y%m%dT%H%M%S'))
