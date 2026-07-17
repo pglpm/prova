@@ -180,8 +180,8 @@ message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 learnt <- readRDS('tests_MIlearnt.rds')
 testMI <- readRDS('tests_testMIfunction.rds')
 nn <- 60 * 3600
-ns <- 12
-nv <- nn/ns
+ns <- ncol(learnt$W)
+nv <- nn / ns
 ##
 suite <- list(
     list('B', 'N', NULL),
