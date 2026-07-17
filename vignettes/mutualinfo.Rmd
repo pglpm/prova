@@ -102,7 +102,7 @@ prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'),
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-# 0.003085 0.000061 0.000408 0.001174 0.004149 0.008250
+# 0.003085 0.000061 0.000408 0.001174 0.004149  0.00825
 ```
 
 \
@@ -347,13 +347,13 @@ The resulting object `MIislandspecies` is a list of several quantities; the mutu
 
 ``` r
 MIislandspecies$value
-# [1] 0.621548
+# [1] 0.625043
 
 MIislandspecies$unit
 # [1] "Sh"
 ```
 
-Between variates `island` and `species` there is thus a mutual information of 0.62 Sh. But what does this mean?
+Between variates `island` and `species` there is thus a mutual information of 0.63 Sh. But what does this mean?
 
 ## Understanding mutual-information values
 
@@ -382,13 +382,13 @@ This relationship can be a *rough* guide to get familiar with mutual-information
 ``` r
 MIislandspecies[c('value', 'unit')]
 # $value
-# [1] 0.621548
+# [1] 0.625043
 # 
 # $unit
 # [1] "Sh"
 
 MIislandspecies$rGauss
-# [1] 0.759957
+# [1] 0.7613
 ```
 
 ## Mutual information for previous examples
@@ -600,10 +600,10 @@ Let's see for example how much variation we can expect in the case of the [assoc
 ``` r
 print(MIislandspecies)
 # value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#     0.62     0.15     0.47     0.82     1.00
+#   0.6250     0.16     0.47     0.82      1.0
 ```
 
-which shows that, acquiring more data, we can expect with 89% probability a mutual information between 0.15 Sh and 1 Sh. We can also visualize our uncertainty about this "long-run" mutual information by means of a probability distribution, using the `hist()` function:
+which shows that, acquiring more data, we can expect with 89% probability a mutual information between 0.16 Sh and 1 Sh. We can also visualize our uncertainty about this "long-run" mutual information by means of a probability distribution, using the `hist()` function:
 
 
 ``` r
