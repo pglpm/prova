@@ -1,20 +1,25 @@
-library('tinytest')
 library('prova')
 
 parallel <- 8
 
-results <- list()
-tc <- function(x, nm = ''){results <<- c(results, setNames(list(tryCatch(x, error = identity)), nm))}
+expect_equivalent <- function(x, y, tolerance = sqrt(.Machine$double.eps)){
+    all.equal(x, y, tolerance = tolerance, scale = 1, check.attributes = FALSE)
+}
 
+
+tc <- function(nm = '', x){results <<- c(results, setNames(list(tryCatch(x, error = identity)), nm))}
+
+
+results <- list()
 starttime <- format(Sys.time(), '%y%m%dT%H%M%S')
 message('Starting tests ', starttime)
 
 
-
-message('Quick learn ', format(Sys.time(), '%y%m%dT%H%M%S'))
+nm <- 'Quick learn'
+message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
-tc(expect_silent(
+tc(nm, expect_silent(
     learnt <- learn(
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
@@ -29,10 +34,11 @@ rm(learnt)
 
 
 
-message('Full base learn ', format(Sys.time(), '%y%m%dT%H%M%S'))
+nm <- 'Full base learn'
+message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 outputdir <- '__testbase_full'
 parallel <- 8
-tc(expect_silent(
+tc(nm, expect_silent(
     learntdir <- learn(
     data = 'data_basetest.csv',
     metadata = 'metadata_basetest.csv',
@@ -84,7 +90,8 @@ rm(learnt)
 
 
 
-message('Simple MIs ', format(Sys.time(), '%y%m%dT%H%M%S'))
+nm <- 'Simple MIs'
+message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 learnt <- readRDS('MIlearnt.rds')
 testMI <- readRDS('mitest_testMI.rds')
 nn <- 60 * 3600
@@ -105,7 +112,7 @@ suite <- list(
     list('N', 'R', list(B = 'y')),
     list('N', 'R', list(B = 'n'))
 )
-for(atest in suite[7]){
+for(atest in suite){
     testand <- mutualinfo(
         Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
         learnt = learnt, nv = nv, ns = ns, parallel = parallel
@@ -114,12 +121,22 @@ for(atest in suite[7]){
         Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
         nn = nn, learnt = learnt
     )
-    tc(expect_equivalent(testand$value, target$value,
+    tc(paste0(nm, paste0(atest, collapse = '-')), expect_equivalent(
+        testand$value, target$value,
         tolerance = (testand$MCaccuracy + target$MCaccuracy) * 2
     ))
 }
 
 saveRDS(results, paste0('tests_',  starttime, '.rds'))
+
+
+
+nm <- 'Simple Pr'
+message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
+learnt <- readRDS('MIlearnt.rds')
+testMI <- readRDS('mitest_testMI.rds')
+
+
 
 
 
