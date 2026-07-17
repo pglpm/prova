@@ -117,7 +117,7 @@ for(iv in seq_along(suite)){
 
 
 
-nm <- 'various Pr'
+nm <- 'Various Pr'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 learnt <- learntdir
 atest <- 0L
