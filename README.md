@@ -40,7 +40,10 @@ The package internally does the computations necessary for Bayesian inference by
 
 **You need to have installed the package [**Nimble**](https://r-nimble.org/), *at least version 1.4.2*.** Please follow its [installation instructions](https://r-nimble.org/manual/cha-installing-nimble.html) for your operating system.
 
-Then **Prova** can be installed from [CRAN](https://CRAN.R-project.org/package=prova) with `install.packages('prova')`.
+Then **Prova** can be installed from [CRAN](https://CRAN.R-project.org/package=prova) with
+```
+install.packages('prova')`
+```
 
 In case of a newer version not yet on CRAN, it can be installed with
 ```
