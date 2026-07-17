@@ -50,6 +50,7 @@ tc(nm, {
     ## minMCiterations = 3600 * 3,
     prior = FALSE,
     outputdir = outputdir,
+    valueislearnt = FALSE,
     appendinfo = TRUE,
     cleanup = TRUE,
     parallel = parallel,
