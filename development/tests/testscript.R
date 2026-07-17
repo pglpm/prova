@@ -222,7 +222,11 @@ for(atest in suite){
     ))
 }
 saveRDS(results, savefile)
-all(sapply(results, isTRUE))
+final <- all(sapply(results, isTRUE))
+final
+if(!final){
+    results[!sapply(results, isTRUE)]
+}
 
 message('All test passed: ', all(sapply(results, isTRUE)))
 
