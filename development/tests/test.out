@@ -1,10 +1,13 @@
-Starting tests 260717T090949
-Quick learn 260717T090949
-Full base learn 260717T091007
-Warning message:
-In dir.create(dirname) : 'testbase_test' already exists
-Simple Pr 260717T091757
-Various Pr 260717T091820
-Simple MIs 260717T091826
-All test passed: FALSE
-Done 260717T091927
+Starting tests 260717T100657
+Quick learn 260717T100657
+[1] TRUE
+Full base learn 260717T100714
+[1] TRUE
+Simple Pr 260717T101503
+[1] TRUE
+Various Pr 260717T101606
+[1] TRUE
+Simple MIs 260717T101656
+[1] TRUE
+All test passed: TRUE
+Done 260717T101932
