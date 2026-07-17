@@ -17,7 +17,7 @@
 
 This repository provides an R package and some theoretical background to perform probabilistic and statistical data analysis and inference. These are its main features:
 
-- Any combination of **binary**, **nominal**, **ordinal**, **continuous** variates. Continuous variates can be bounded or unbounded, and also rounded or discretized.
+- Any combination of **binary**, **nominal**, **ordinal**, **continuous**, **discrete** variates. Continuous variates can be bounded or unbounded, and also rounded.
 - **No modelling assumptions** such as gaussianity, linearity, or any other kind of model. The analysis and inferences are fully [non-parametric](https://dictionary.apa.org/nonparametric).
 - **No assumptions about functional dependence** between variates. The analysis and inferences are therefore more general than those by neural networks, random forests, or similar machine-learning algorithms.
 - **Automatic [imputation](https://dictionary.apa.org/imputation)** of missing data: all sample data are used, even those that lacks some variate values. The imputation is done with a principled method (the marginalization rule of probability theory), rather than ad-hoc procedures.
