@@ -1,4 +1,4 @@
-# Prova v1.7.0
+# Prova v1.8.0
 
 * The package does not require the package 'extraDistr' any longer.
 
@@ -11,6 +11,8 @@
 * Introduced a print() method for mutual-information objects.
 
 * Improved print() display for probability and mutual-information objects.
+
+* Re-tested some functions
 
 # Prova v1.2.0
 
