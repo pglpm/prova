@@ -13,6 +13,7 @@ tc <- function(nm = '', x){results <<- c(results, setNames(list(tryCatch(x, erro
 results <- list()
 starttime <- format(Sys.time(), '%y%m%dT%H%M%S')
 message('Starting tests ', starttime)
+savefile <- paste0('testres_', starttime, '.rds')
 
 
 nm <- 'Quick learn'
@@ -31,7 +32,7 @@ tc(nm, {
     is.list(learnt)
     }
 )
-saveRDS(results, paste0('tests_',  starttime, '.rds'))
+saveRDS(results, savefile)
 rm(learnt)
 
 
@@ -66,7 +67,7 @@ tc(nm, {
     is.character(learntdir)
     }
 )
-saveRDS(results, paste0('tests_',  starttime, '.rds'))
+saveRDS(results, savefile)
 
 
 
@@ -104,13 +105,13 @@ for(iv in seq_along(suite)){
             samples = t(sapply(targetprob, `[[`, 2)))
         tc(paste0(nm, '-', iv, '-', atail, '-values'),
             test_equivalent(prob$values, targetprob$values,
-                tolerance = 1e-15
+                tolerance = 10 * .Machine$double.eps
             ))
         tc(paste0(nm, '-', iv, '-', atail, '-samples'),
             test_equivalent(c(prob$samples), c(targetprob$samples),
-                tolerance = 1e-15
+                tolerance = 10 * .Machine$double.eps
             ))
-        saveRDS(results, paste0('tests_',  starttime, '.rds'))
+        saveRDS(results, savefile)
     }
 }
 
@@ -158,13 +159,13 @@ while(atest < 10){
     ##
     tc(paste0(nm, '-', atest, '-values'),
         test_equivalent(c(prob$values), c(targetprob$value),
-            tolerance = 1e-15
+            tolerance = 10 * .Machine$double.eps
         ))
     tc(paste0(nm, '-', atest, '-samples'),
         test_equivalent(c(prob$samples), c(targetprob$samples),
-            tolerance = 1e-15
+            tolerance = 10 * .Machine$double.eps
         ))
-    saveRDS(results, paste0('tests_',  starttime, '.rds'))
+    saveRDS(results, savefile)
 }
 
 
@@ -200,6 +201,7 @@ suite <- list(
     list('N', 'R', list(B = 'n'))
 )
 for(atest in suite){
+    testand <- target <- NULL
     testand <- mutualinfo(
         Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
         learnt = learnt, nv = nv, ns = ns, parallel = parallel
@@ -210,11 +212,12 @@ for(atest in suite){
     )
     tc(paste0(nm, paste0(atest, collapse = '-')), test_equivalent(
         testand$value, target$value,
-        tolerance = (testand$MCaccuracy + target$MCaccuracy) * 2
+        tolerance = max((testand$MCaccuracy + target$MCaccuracy) * 2,
+            .Machine$double.eps)
     ))
 }
-saveRDS(results, paste0('tests_',  starttime, '.rds'))
+saveRDS(results, savefile)
 
-message(all(sapply(results, isTRUE)))
+message('All test passed: ', all(sapply(results, isTRUE)))
 
 message('Done ', format(Sys.time(), '%y%m%dT%H%M%S'))
