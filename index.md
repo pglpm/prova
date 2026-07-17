@@ -23,7 +23,7 @@ are its main features:
   bounded or unbounded, and also rounded.
 - **No modelling assumptions** such as gaussianity, linearity, or any
   other kind of model. The analysis and inferences are fully
-  [non-parametric](https://dictionary.apa.org/nonparametric).
+  [nonparametric](https://dictionary.apa.org/nonparametric).
 - **No assumptions about functional dependence** between variates. The
   analysis and inferences are therefore more general than those by
   neural networks, random forests, or similar machine-learning
@@ -36,6 +36,11 @@ are its main features:
 - Easy and straightforward **subgroup analyses** and **stratified
   analyses**, for any division of variates, with full statistical
   details.
+- **No hard-coded distinction between “predictor” and
+  “predictand”/target variates** during learning. Any group of variates
+  can be chosen as predictors, and any other group as targets, *on the
+  fly* in each application, without need to re-learn from the training
+  data.
 - **Quantification of
   [generalizability](https://dictionary.apa.org/generalizability)**
   beyond the finite sample size. In other words, quantification of
