@@ -38,7 +38,7 @@ rm(learnt)
 
 nm <- 'Full base learn'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-outputdir <- '__testbase_test'
+outputdir <- 'testbase_test'
 tc(nm, {
     learntdir <- learn(
     data = 'data_basetest.csv',
@@ -117,7 +117,7 @@ for(iv in seq_along(suite)){
 
 
 
-nm <- 'various Pr'
+nm <- 'Various Pr'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 learnt <- learntdir
 atest <- 0L
