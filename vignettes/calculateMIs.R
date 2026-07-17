@@ -2,7 +2,7 @@ library('prova')
 
 learnt <- 'learntall.rds'
 
-parallel <- 12
+parallel <- 18
 
 temp <- mutualinfo(
     Y1names = 'island', Y2names = 'species',
