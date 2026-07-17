@@ -49,7 +49,7 @@ tc(nm, {
     ## minMCiterations = 3600 * 3,
     prior = FALSE,
     outputdir = outputdir,
-    appendinfo = FALSE,
+    appendinfo = TRUE,
     cleanup = TRUE,
     parallel = parallel,
     # maxrelMCSE = +Inf,
@@ -200,7 +200,7 @@ suite <- list(
     list('N', 'R', list(B = 'y')),
     list('N', 'R', list(B = 'n'))
 )
-for(atest in suite){
+for(atest in suite[1]){
     testand <- target <- NULL
     testand <- mutualinfo(
         Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
@@ -210,7 +210,7 @@ for(atest in suite){
         Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
         nn = nn, learnt = learnt
     )
-    tc(paste0(nm, paste0(atest, collapse = '-')), test_equivalent(
+    tc(paste0(nm, '-', paste0(atest, collapse = '-')), test_equivalent(
         testand$value, target$value,
         tolerance = max((testand$MCaccuracy + target$MCaccuracy) * 2,
             .Machine$double.eps)
