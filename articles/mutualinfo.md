@@ -160,7 +160,7 @@ prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'),
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-# 0.003085 0.000061 0.000408 0.001174 0.004149 0.008250
+# 0.003085 0.000061 0.000408 0.001174 0.004149  0.00825
 ```
 
   
@@ -526,14 +526,14 @@ the `$unit` element:
 ``` r
 
 MIislandspecies$value
-# [1] 0.621548
+# [1] 0.625043
 
 MIislandspecies$unit
 # [1] "Sh"
 ```
 
 Between variates `island` and `species` there is thus a mutual
-information of 0.62 Sh. But what does this mean?
+information of 0.63 Sh. But what does this mean?
 
 ### Understanding mutual-information values
 
@@ -591,13 +591,13 @@ corresponding \\\lvert r \rvert\\ value. In the previous case of the
 
 MIislandspecies[c('value', 'unit')]
 # $value
-# [1] 0.621548
+# [1] 0.625043
 # 
 # $unit
 # [1] "Sh"
 
 MIislandspecies$rGauss
-# [1] 0.759957
+# [1] 0.7613
 ```
 
 ### Mutual information for previous examples
@@ -828,11 +828,11 @@ and can be seen with the utility function
 
 print(MIislandspecies)
 # value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#     0.62     0.15     0.47     0.82     1.00
+#   0.6250     0.16     0.47     0.82      1.0
 ```
 
 which shows that, acquiring more data, we can expect with 89%
-probability a mutual information between 0.15 Sh and 1 Sh. We can also
+probability a mutual information between 0.16 Sh and 1 Sh. We can also
 visualize our uncertainty about this “long-run” mutual information by
 means of a probability distribution, using the
 [`hist()`](https://rdrr.io/r/graphics/hist.html) function:

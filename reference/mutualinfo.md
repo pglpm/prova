@@ -9,7 +9,7 @@ entropies, and the entropies.
 ``` r
 mutualinfo(
   Y1names,
-  Y2names = NULL,
+  Y2names,
   X = NULL,
   learnt,
   tails = NULL,

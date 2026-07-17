@@ -91,7 +91,11 @@ follow its [installation
 instructions](https://r-nimble.org/manual/cha-installing-nimble.html)
 for your operating system.
 
-Newer versions of **Prova** can be installed with
+Then **Prova** can be installed from
+[CRAN](https://CRAN.R-project.org/package=prova) with
+`install.packages('prova')`.
+
+In case of a newer version not yet on CRAN, it can be installed with
 
     remotes::install_github('pglpm/prova')
 

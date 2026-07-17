@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,39 +44,33 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.7.0" id="prova-v170">Prova v1.7.0<a class="anchor" aria-label="anchor" href="#prova-v170"></a></h2>
-<ul><li><p>The package does not require the package ‘extraDistr’ any longer.</p></li>
-<li><p>Internal changes to some functions.</p></li>
-<li><p>Improved and more consistent digit-rounding system for print() output of “probability” objects.</p></li>
-<li><p>Fixed some bugs in the use of Pr() with base-rate correction.</p></li>
-<li><p>Introduced a print() method for mutual-information objects.</p></li>
-<li><p>Improved print() display for probability and mutual-information objects.</p></li>
+<h2 class="pkg-version" data-toc-text="1.8.0" id="prova-v180">Prova v1.8.0<a class="anchor" aria-label="anchor" href="#prova-v180"></a></h2>
+<ul><li>The package does not require the package ‘extraDistr’ any longer.</li>
+<li>Internal changes to some functions.</li>
+<li>Improved and more consistent digit-rounding system for print() output of probabilities.</li>
+<li>Fixed some bugs in the use of Pr() with base-rate correction (non-null argument ‘priorY’).</li>
+<li>Introduced a print() method for mutual-information objects.</li>
+<li>Improved print() display for probability and mutual-information objects.</li>
+<li>Re-tested some functions.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="prova-v120">Prova v1.2.0<a class="anchor" aria-label="anchor" href="#prova-v120"></a></h2>
-<ul><li><p>The function <code><a href="../reference/mutualinfo.html">mutualinfo()</a></code> now only outputs the mutual information (and not conditional entropies or entropies), but it also outputs the “revisability” of the values in view of a much larger dataset.</p></li>
-<li><p>New functions <code>plot.MI()</code> and <code><a href="../reference/print.MI.html">print.MI()</a></code> for plotting and printing mutual information and its revisability.</p></li>
-<li><p>Slight changes in plotting and printing outputs.</p></li>
-<li><p>The vignette about mutual information now has an additional section about the revisability of mutual information.</p></li>
-<li><p>Small internal changes in how synthetic datapoints are generated.</p></li>
+<ul><li>The function <code><a href="../reference/mutualinfo.html">mutualinfo()</a></code> now only outputs the mutual information (and not conditional entropies or entropies), but it also outputs the “revisability” of the values in view of a much larger dataset.</li>
+<li>New functions <code>plot.MI()</code> and <code><a href="../reference/print.MI.html">print.MI()</a></code> for plotting and printing mutual information and its revisability.</li>
+<li>Slight changes in plotting and printing outputs.</li>
+<li>The vignette about mutual information now has an additional section about the revisability of mutual information.</li>
+<li>Small internal changes in how synthetic datapoints are generated.</li>
+<li>Corrected a bug affecting computation of probabilities for censored, non-rounded variates.</li>
+<li>Corrected a bug affecting computation of cumulative probabilities (‘tails =’ argument) of ordinal variates.</li>
+<li>Corrected typos in documentation.</li>
 </ul></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.5" id="prova-v105">Prova v1.0.5<a class="anchor" aria-label="anchor" href="#prova-v105"></a></h2>
-<ul><li><p>Corrected a bug affecting computation of probabilities for censored, non-rounded variates.</p></li>
-<li><p>Corrected a bug affecting computation of cumulative probabilities (‘tails =’ argument) of ordinal variates.</p></li>
-<li><p>Corrected typos in documentation.</p></li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.0" id="prova-v100">Prova v1.0.0<a class="anchor" aria-label="anchor" href="#prova-v100"></a></h2>
-<ul><li>Improved documentation, also of internal functions.</li>
+<h2 class="pkg-version" data-toc-text="1.0.0" id="prova-v100">Prova v1.0.0<a class="anchor" aria-label="anchor" href="#prova-v100"></a></h2><p class="text-muted">CRAN release: 2026-07-16</p>
+<ul><li>First CRAN release</li>
+<li>Improved documentation, also of internal functions.</li>
 <li>Introduced argument <code>verbose =</code> in several function, so as to show information to console only if the user so desires. This argument is <code>FALSE</code> for all functions except <code><a href="../reference/learn.html">learn()</a></code>.</li>
 <li>Added example of imputation in vignette.</li>
 <li>Rewritten README with description of the package’s main features.</li>
-<li>Cleaned up code.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.0" id="prova-v090">Prova v0.9.0<a class="anchor" aria-label="anchor" href="#prova-v090"></a></h2>
-<ul><li>Improved documentation, also of internal functions.</li>
 <li>Removed unused functions.</li>
 <li>Cleaned up code.</li>
 </ul></div>
@@ -87,17 +81,14 @@
 <li>Slightly modified output of <code><a href="../reference/Pr.html">Pr()</a></code> and related functions.</li>
 <li>Added references.</li>
 <li>Modified vignettes.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.5" id="prova-v065">Prova v0.6.5<a class="anchor" aria-label="anchor" href="#prova-v065"></a></h2>
-<ul><li>Added examples to all functions visible to the user.</li>
+<li>Added examples to all functions visible to the user.</li>
 <li>Fixed some bugs (in particular a bug that would allow the input of a non-existent nominal value giving erroneous probabilities).</li>
 <li>Corrected typos.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.0" id="prova-v060">Prova v0.6.0<a class="anchor" aria-label="anchor" href="#prova-v060"></a></h2>
-<p>Renamed the package from <strong>inferno</strong> to <strong>Prova</strong>. It turns out, unsurprisingly, that the name “inferno” was already in use for several inference-related software packages of various kinds.</p>
-</div>
+<ul><li>Renamed the package from <strong>inferno</strong> to <strong>Prova</strong>. It turns out, unsurprisingly, that the name “inferno” was already in use for several inference-related software packages of various kinds.</li>
+</ul></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
