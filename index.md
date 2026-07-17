@@ -1,8 +1,5 @@
 # ***Prova***: probabilistic-statistical variate analysis, nonparametric and with automated Markov-chain Monte Carlo
 
-*\[Looking for the R package “inferno”? you came to the right place!
-It’s been renamed “Prova”\]*
-
 ![Ensemble of
 densities](https://github.com/pglpm/prova/raw/main/man/figures/prova_symbol.jpg)
 
