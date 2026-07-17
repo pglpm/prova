@@ -114,6 +114,8 @@ testMI <- function(Y1names, Y2names, X = NULL, nn, learnt){
 }
 saveRDS(testMI, '~/repos/prova/development/tests/mitest_testMI.rds')
 
+if(FALSE){
+#### Old tests
 
 #### Tests
 nn <- 60 * 3600 # values in comments
@@ -480,3 +482,4 @@ while(nn < 1e6 + 1){
 }
 cat('\n')
 mi/log(2)/nn
+}

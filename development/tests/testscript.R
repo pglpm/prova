@@ -2,7 +2,7 @@ library('prova')
 
 parallel <- 8
 
-expect_equivalent <- function(x, y, tolerance = sqrt(.Machine$double.eps)){
+test_equivalent <- function(x, y, tolerance = sqrt(.Machine$double.eps)){
     all.equal(x, y, tolerance = tolerance, scale = 1, check.attributes = FALSE)
 }
 
@@ -39,7 +39,6 @@ rm(learnt)
 nm <- 'Full base learn'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 outputdir <- '__testbase_test'
-parallel <- 8
 tc(nm, {
     learntdir <- learn(
     data = 'data_basetest.csv',
@@ -104,11 +103,11 @@ for(iv in seq_along(suite)){
         targetprob = list(values = cbind(sapply(targetprob, `[[`, 1)),
             samples = t(sapply(targetprob, `[[`, 2)))
         tc(paste0(nm, '-', iv, '-', atail, '-values'),
-            expect_equivalent(prob$values, targetprob$values,
+            test_equivalent(prob$values, targetprob$values,
                 tolerance = 1e-15
             ))
         tc(paste0(nm, '-', iv, '-', atail, '-samples'),
-            expect_equivalent(c(prob$samples), c(targetprob$samples),
+            test_equivalent(c(prob$samples), c(targetprob$samples),
                 tolerance = 1e-15
             ))
         saveRDS(results, paste0('tests_',  starttime, '.rds'))
@@ -152,16 +151,17 @@ while(atest < 10){
     }
     ##
     prob <- Pr(Y = as.data.frame(inY), X = as.data.frame(inX),
-        tails = intails, learnt = learnt, parallel = FALSE)
+        tails = intails, learnt = learnt, parallel = 1)
     ##
-    targetprob <- prova:::testPr(Y = inY, X = inX, tails = intails, learnt = learnt)
+    targetprob <- prova:::testPr(Y = inY, X = inX, tails = intails,
+        learnt = learnt)
     ##
     tc(paste0(nm, '-', atest, '-values'),
-        expect_equivalent(c(prob$values), c(targetprob$value),
+        test_equivalent(c(prob$values), c(targetprob$value),
             tolerance = 1e-15
         ))
     tc(paste0(nm, '-', atest, '-samples'),
-        expect_equivalent(c(prob$samples), c(targetprob$samples),
+        test_equivalent(c(prob$samples), c(targetprob$samples),
             tolerance = 1e-15
         ))
     saveRDS(results, paste0('tests_',  starttime, '.rds'))
@@ -171,8 +171,8 @@ while(atest < 10){
 
 nm <- 'Simple MIs'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-learnt <- readRDS('MIlearnt.rds')
-testMI <- readRDS('mitest_testMI.rds')
+learnt <- readRDS('tests_MIlearnt.rds')
+testMI <- readRDS('tests_testMIfunction.rds')
 nn <- 60 * 3600
 ns <- 12
 nv <- nn/ns
@@ -185,9 +185,17 @@ suite <- list(
     list(c('B', 'R'), 'N', NULL),
     list(c('N', 'R'), 'B', NULL),
     list('B', 'N', list(R = -8)),
+    list('B', 'N', list(R = -4)),
+    list('B', 'N', list(R = -2)),
     list('B', 'N', list(R = 0)),
+    list('B', 'N', list(R = 2)),
+    list('B', 'N', list(R = 4)),
+    list('B', 'N', list(R = 8)),
     list('B', 'R', list(N = 'a')),
+    list('B', 'R', list(N = 'b')),
     list('B', 'R', list(N = 'c')),
+    list('B', 'R', list(N = 'd')),
+    list('B', 'R', list(N = 'e')),
     list('N', 'R', list(B = 'y')),
     list('N', 'R', list(B = 'n'))
 )
@@ -200,7 +208,7 @@ for(atest in suite){
         Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
         nn = nn, learnt = learnt
     )
-    tc(paste0(nm, paste0(atest, collapse = '-')), expect_equivalent(
+    tc(paste0(nm, paste0(atest, collapse = '-')), test_equivalent(
         testand$value, target$value,
         tolerance = (testand$MCaccuracy + target$MCaccuracy) * 2
     ))
