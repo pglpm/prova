@@ -19,7 +19,7 @@ nm <- 'Quick learn'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
-tc(nm, expect_silent(
+tc(nm, {
     learnt <- learn(
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
@@ -28,7 +28,9 @@ tc(nm, expect_silent(
     startupMCiterations = 10, maxMCiterations = 10,
     minESS = 0, initES = 0, verbose = FALSE
     )
-))
+    is.list(learnt)
+    }
+)
 saveRDS(results, paste0('tests_',  starttime, '.rds'))
 rm(learnt)
 
@@ -36,9 +38,9 @@ rm(learnt)
 
 nm <- 'Full base learn'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-outputdir <- '__testbase_full'
+outputdir <- '__testbase_test'
 parallel <- 8
-tc(nm, expect_silent(
+tc(nm, {
     learntdir <- learn(
     data = 'data_basetest.csv',
     metadata = 'metadata_basetest.csv',
@@ -47,7 +49,7 @@ tc(nm, expect_silent(
     ## minMCiterations = 3600 * 3,
     prior = FALSE,
     outputdir = outputdir,
-    appendinfo = TRUE,
+    appendinfo = FALSE,
     cleanup = TRUE,
     parallel = parallel,
     # maxrelMCSE = +Inf,
@@ -61,32 +63,109 @@ tc(nm, expect_silent(
     ## nsamplesperchain = 60,
     ## nchains = parallel + 1,
     ##
-    hyperparams = list(
-        ## ncomponents = 64,
-        ## minalpha = -4,
-        ## maxalpha = 4,
-        ## byalpha = 1,
-        ## Rshapelo = 0.5,
-        ## Rshapehi = 0.5,
-        ## Rvarm1 = 8^2,
-        ## Cshapelo = 0.5,
-        ## Cshapehi = 0.5,
-        ## Cvarm1 = 8^2,
-        ## Dshapelo = 0.5,
-        ## Dshapehi = 0.5,
-        ## Dvarm1 = 8^2,
-        ## Bshapelo = 1,
-        ## Bshapehi = 1,
-        ## Dthreshold = 1,
-        ## tscalefactor = 1,
-        ## initmethod = 'allinone',
-        ## avoidzeroW = TRUE
-        ## precluster, prior
     )
+    is.character(learntdir)
+    }
 )
-))
 saveRDS(results, paste0('tests_',  starttime, '.rds'))
-rm(learnt)
+
+
+
+nm <- 'Simple Pr'
+message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
+learnt <- learntdir
+suite <- list(
+    Rvrt = seq(-3, 3, length.out = 9),
+    RPvrt = seq(0, 3, length.out = 9),
+    RFvrt = seq(0, 1, length.out = 9),
+    Cvrt = seq(0, 1, length.out = 9),
+    Dvrt = seq(-3, 3, length.out = 9),
+    DPvrt = seq(0, 3, length.out = 9),
+    Bvrt = c('no', 'yes'),
+    Nvrt = paste0('N', letters[1:4]),
+    Ovrt = paste0('', LETTERS[1:5])
+)
+for(iv in seq_along(suite)){
+    for(atail in c(0, 'left', 'right')){
+        atest <- suite[iv]
+        vrt <- names(atest)
+        tail <- setNames(list(atail), vrt)
+        prob <- targetprob <- NULL
+        ##
+        prob <- Pr(Y = as.data.frame(atest), X = NULL,
+            tails = tail,
+            learnt = learnt, parallel = 1)
+        ##
+        vals <- atest[[1]]
+        targetprob <- lapply(vals, function(x){
+                prova:::testPr(Y = setNames(list(x), vrt), X = NULL,
+                    tails = tail, learnt = learnt)
+        })
+        targetprob = list(values = cbind(sapply(targetprob, `[[`, 1)),
+            samples = t(sapply(targetprob, `[[`, 2)))
+        tc(paste0(nm, '-', iv, '-', atail, '-values'),
+            expect_equivalent(prob$values, targetprob$values,
+                tolerance = 1e-15
+            ))
+        tc(paste0(nm, '-', iv, '-', atail, '-samples'),
+            expect_equivalent(c(prob$samples), c(targetprob$samples),
+                tolerance = 1e-15
+            ))
+        saveRDS(results, paste0('tests_',  starttime, '.rds'))
+    }
+}
+
+
+
+
+nm <- 'various Pr'
+message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
+learnt <- learntdir
+atest <- 0L
+set.seed(16)
+while(atest < 10){
+    atest <- atest + 1L
+    prob <- targetprob <- NULL
+    nsuite <- length(suite)
+    nY <- sample(1:nsuite, 1)
+    ninY <- sample(1:nsuite, nY, replace = FALSE)
+    ninX <- (1:nsuite)[-ninY]
+    inY <- suite[ninY]
+    inY <- lapply(inY, function(x)sample(unlist(x), 1))
+    inX <- suite[ninX]
+    if(length(inX) > 0){
+        inX <- lapply(inX, function(x)sample(unlist(x), 1))
+    } else {
+        inX <- NULL
+    }
+    intails <- setNames(sample(c(-1, 0, 1), nsuite - 2, replace = TRUE),
+        c('Rvrt', 'RPvrt', 'RFvrt', 'Cvrt', 'Dvrt', 'DPvrt', 'Ovrt'))
+    intails <- as.list(intails)
+    if(c(inY, inX)[['RPvrt']] == 0 && intails[['RPvrt']] != 1){
+        intails[['RPvrt']] <- 1
+    }
+    if(c(inY, inX)[['RFvrt']] == 0 && intails[['RFvrt']] != 1){
+        intails[['RFvrt']] <- 1
+    }
+    if(c(inY, inX)[['RFvrt']] == 1 && intails[['RFvrt']] != -1){
+        intails[['RFvrt']] <- -1
+    }
+    ##
+    prob <- Pr(Y = as.data.frame(inY), X = as.data.frame(inX),
+        tails = intails, learnt = learnt, parallel = FALSE)
+    ##
+    targetprob <- prova:::testPr(Y = inY, X = inX, tails = intails, learnt = learnt)
+    ##
+    tc(paste0(nm, '-', atest, '-values'),
+        expect_equivalent(c(prob$values), c(targetprob$value),
+            tolerance = 1e-15
+        ))
+    tc(paste0(nm, '-', atest, '-samples'),
+        expect_equivalent(c(prob$samples), c(targetprob$samples),
+            tolerance = 1e-15
+        ))
+    saveRDS(results, paste0('tests_',  starttime, '.rds'))
+}
 
 
 
@@ -126,18 +205,7 @@ for(atest in suite){
         tolerance = (testand$MCaccuracy + target$MCaccuracy) * 2
     ))
 }
-
 saveRDS(results, paste0('tests_',  starttime, '.rds'))
-
-
-
-nm <- 'Simple Pr'
-message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-learnt <- readRDS('MIlearnt.rds')
-testMI <- readRDS('mitest_testMI.rds')
-
-
-
 
 
 
