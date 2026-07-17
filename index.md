@@ -19,8 +19,8 @@ perform probabilistic and statistical data analysis and inference. These
 are its main features:
 
 - Any combination of **binary**, **nominal**, **ordinal**,
-  **continuous** variates. Continuous variates can be bounded or
-  unbounded, and also rounded or discretized.
+  **continuous**, **discrete** variates. Continuous variates can be
+  bounded or unbounded, and also rounded.
 - **No modelling assumptions** such as gaussianity, linearity, or any
   other kind of model. The analysis and inferences are fully
   [non-parametric](https://dictionary.apa.org/nonparametric).
@@ -93,7 +93,8 @@ for your operating system.
 
 Then **Prova** can be installed from
 [CRAN](https://CRAN.R-project.org/package=prova) with
-`install.packages('prova')`.
+
+    install.packages('prova')`
 
 In case of a newer version not yet on CRAN, it can be installed with
 
