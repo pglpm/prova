@@ -89,7 +89,7 @@ computation hyperparameters.
 
 **You need to have installed the package
 [**Nimble**](https://r-nimble.org/), *at least version 1.4.2*.** Please
-follow its [installation
+follow [Nimble’s installation
 instructions](https://r-nimble.org/manual/cha-installing-nimble.html)
 for your operating system.
 
