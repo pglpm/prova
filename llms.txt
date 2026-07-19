@@ -17,7 +17,7 @@ are its main features:
 
 - Any combination of **binary**, **nominal**, **ordinal**,
   **continuous**, **discrete** variates. Continuous variates can be
-  bounded or unbounded, and also rounded.
+  bounded or unbounded or **censored**, and also rounded.
 - **No modelling assumptions** such as gaussianity, linearity, or any
   other kind of model. The analysis and inferences are fully
   [nonparametric](https://dictionary.apa.org/nonparametric).
