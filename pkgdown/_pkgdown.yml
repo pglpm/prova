@@ -15,15 +15,15 @@ reference:
 - title: "Generate synthetic datapoints"
   contents:
   - has_concept("generate")
-- title: "Plot & print probability distributions"
+- title: "Quantify associations between variate groups"
+  contents:
+  - has_concept("association")
+- title: "Plot & print"
   contents:
   - has_concept("display")
 - title: "Handle metadata and data files"
   contents:
   - has_concept("data")
-- title: "Quantify associations between variate groups"
-  contents:
-  - has_concept("association")
 - title: "Internal functions"
   desc: "For developers (beware!)"
   contents:
