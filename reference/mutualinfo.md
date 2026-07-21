@@ -1,8 +1,7 @@
 # Calculate mutual information between groups of joint variates
 
-This function calculates various entropic information measures between
-two grops of joint variates: the mutual information, the conditional
-entropies, and the entropies.
+Calculate the mutual information between two grops of joint variates, as
+well as its revisability.
 
 ## Usage
 
@@ -128,45 +127,33 @@ is given by \$\$\mathit{MI}(Y_1, Y_2 \vert X = x) \mathrel{:=}
 \text{data}) }{ \mathrm{Pr}(Y_1 = y_1 \vert X = x, \text{data}) \cdot
 \mathrm{Pr}(Y_2 = y_2 \vert X = x, \text{data}) } \\ \mathrm{Sh} \$\$ an
 expression which can also be written in several other equivalent ways.
-It is an information-theoretic measure of association that is
-model-free, that is, does not depend on assumptions such as linearity,
-gaussianity, and similar. See
+It is a model-free information-theoretic measure of association, that
+is, it does not depend on assumptions such as linearity, gaussianity,
+and similar. See
 [`vignette('mutualinfo')`](https://pglpm.github.io/prova/articles/mutualinfo.md)
 for discussion and example uses, and also the "References" section. If
 \\Y_1, Y_2\\ are *jointly gaussian variates*, then there is a
 mathematical correspondence between their mutual information and their
-Pearson correlation coefficient; see output `MI.rGauss` in the "Value"
+Pearson correlation coefficient; see output `rGauss` in the "Value"
 section.
 
-The conditional entropy of \\Y_1\\ with respect to \\Y_2\\, conditional
-on \\X = x\\, is given by \$\$\mathit{CondEn12}(Y_1, Y_2 \vert X = x)
-\mathrel{:=} -\sum\_{y_1, y_2} \mathrm{Pr}(Y_1 = y_1 \vert Y_2 = y_2, X
-= x, \text{data}) \log_2 \mathrm{Pr}(Y_1 = y_1 \vert Y_2 = y_2, X = x,
-\text{data}) \cdot \mathrm{Pr}(Y_2 = y_2 \vert X = x, \text{data}) \\
-\mathrm{Sh} \$\$
-
-The (differential) entropy of \\Y_1\\, conditional on \\X = x\\, is
-given by \$\$\mathit{En1}(Y_1 \vert X = x) \mathrel{:=} -\sum\_{y_1}
-\mathrm{Pr}(Y_1 = y_1 \vert X = x, \text{data}) \log_2 \mathrm{Pr}(Y_1 =
-y_1 \vert X = x, \text{data}) \\ \mathrm{Sh} \$\$
-
-see "References" section for discussions about entropy and conditional
-entropy.
-
-The function `mutualinfo()` calculates the quantities above for the
-joint variates specified in the arguments `Y1names` and `Y2names`,
-conditional on the values of the variates specified in the data frame
-`X`. If `X` is omitted or `NULL`, then the posterior probabilities
-\\\mathrm{Pr}(Y_1 \| \text{data})\\ etc. are used. Each variate in the
-argument `X` can be specified either as a point-value \\X = x\\ or as a
-left-open interval \\X \le x\\ or as a right-open interval \\X \ge x\\,
-through the argument `tails`.
+The function `mutualinfo()` calculates the mutual information above for
+the joint variates specified in the arguments `Y1names` and `Y2names`,
+conditional on the values of the variates specified in the [data
+frame](https://rdrr.io/r/base/data.frame.html) `X`. If `X` is omitted or
+`NULL`, then the posterior probabilities \\\mathrm{Pr}(Y_1 \|
+\text{data})\\ etc. are used. Each variate in the argument `X` can be
+specified either as a point-value \\X = x\\ or as a left-open interval
+\\X \le x\\ or as a right-open interval \\X \ge x\\, through the
+argument `tails`.
 
 The computation of these quantities is done via Monte Carlo integration,
 using the samples produced by the
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function.
 The present function also output the numerical error associated with
-this computation.
+this computation. Note that the computation can take tens of minutes; it
+can be sped up by using more cores (if available) in parallel, through
+the argument `parallel =`.
 
 ## See also
 
@@ -191,15 +178,15 @@ learnt <- learntExample
 
 ## mutual information between variates 'species' and 'bill_len'
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-  learnt = learnt, nv = 2, parallel = 1)
+  learnt = learnt, nv = 4, parallel = 1)
 
-## The value:
-MI$value
-#> [1] 0.7155356
+## The value and its numerical Monte Carlo error
+c(MI$value, MI$MCaccuracy)
+#> [1] 0.72036728 0.02950749
 
 ## If we had many more data, we could instead expect to obtain values
-## within the following ranges, with corresponding probabilities:
-MI$quantiles
-#>      5.5%       25%       75%     94.5% 
-#> 0.0000000 0.7148847 1.0244033 1.1872572 
+## within the following probable ranges:
+signif(MI$quantiles, 3)
+#>  5.5%   25%   75% 94.5% 
+#> 0.000 0.674 0.992 1.160 
 ```

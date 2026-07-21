@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calculate mutual information between groups of joint variates — mutualinfo"><meta name="description" content="This function calculates various entropic information measures between two grops of joint variates: the mutual information, the conditional entropies, and the entropies."><meta property="og:description" content="This function calculates various entropic information measures between two grops of joint variates: the mutual information, the conditional entropies, and the entropies."></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calculate mutual information between groups of joint variates — mutualinfo"><meta name="description" content="Calculate the mutual information between two grops of joint variates, as well as its revisability."><meta property="og:description" content="Calculate the mutual information between two grops of joint variates, as well as its revisability."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@
     </div>
 
     <div class="ref-description section level2">
-    <p>This function calculates various entropic information measures between two grops of joint variates: the mutual information, the conditional entropies, and the entropies.</p>
+    <p>Calculate the mutual information between two grops of joint variates, as well as its revisability.</p>
     </div>
 
     <div class="section level2">
@@ -137,28 +137,9 @@ $$\mathit{MI}(Y_1, Y_2 \vert X = x) \mathrel{:=}
 \mathrm{Pr}(Y_2 = y_2 \vert X = x, \text{data})
 } \, \mathrm{Sh}
 $$
-an expression which can also be written in several other equivalent ways. It is an information-theoretic measure of association that is model-free, that is, does not depend on assumptions such as linearity, gaussianity, and similar. See <code><a href="../articles/mutualinfo.html">vignette('mutualinfo')</a></code> for discussion and example uses, and also the "References" section.  If \(Y_1, Y_2\) are <em>jointly gaussian variates</em>, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output <code>MI.rGauss</code> in the "Value" section.</p>
-<p>The conditional entropy of \(Y_1\) with respect to \(Y_2\), conditional on \(X = x\), is given by
-$$\mathit{CondEn12}(Y_1, Y_2 \vert X = x) \mathrel{:=}
--\sum_{y_1, y_2}
-\mathrm{Pr}(Y_1 = y_1 \vert Y_2 = y_2, X = x, \text{data})
-\log_2
-\mathrm{Pr}(Y_1 = y_1 \vert Y_2 = y_2, X = x, \text{data})
-\cdot
-\mathrm{Pr}(Y_2 = y_2 \vert X = x, \text{data})
-\, \mathrm{Sh}
-$$</p>
-<p>The (differential) entropy of \(Y_1\), conditional on \(X = x\), is given by
-$$\mathit{En1}(Y_1 \vert X = x) \mathrel{:=}
--\sum_{y_1}
-\mathrm{Pr}(Y_1 = y_1 \vert X = x, \text{data})
-\log_2
-\mathrm{Pr}(Y_1 = y_1 \vert  X = x, \text{data})
-\, \mathrm{Sh}
-$$</p>
-<p>see "References" section for discussions about entropy and conditional entropy.</p>
-<p>The function <code>mutualinfo()</code> calculates the quantities above for the joint variates specified in the arguments <code>Y1names</code> and <code>Y2names</code>, conditional on the values of the variates specified in the data frame <code>X</code>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probabilities \(\mathrm{Pr}(Y_1 | \text{data})\) etc. are used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
-<p>The computation of these quantities is done via Monte Carlo integration, using the samples produced by the <code><a href="learn.html">learn()</a></code> function. The present function also output the numerical error associated with this computation.</p>
+an expression which can also be written in several other equivalent ways. It is a model-free information-theoretic measure of association, that is, it does not depend on assumptions such as linearity, gaussianity, and similar. See <code><a href="../articles/mutualinfo.html">vignette('mutualinfo')</a></code> for discussion and example uses, and also the "References" section.  If \(Y_1, Y_2\) are <em>jointly gaussian variates</em>, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output <code>rGauss</code> in the "Value" section.</p>
+<p>The function <code>mutualinfo()</code> calculates the mutual information above for the joint variates specified in the arguments <code>Y1names</code> and <code>Y2names</code>, conditional on the values of the variates specified in the <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> <code>X</code>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probabilities \(\mathrm{Pr}(Y_1 | \text{data})\) etc. are used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
+<p>The computation of these quantities is done via Monte Carlo integration, using the samples produced by the <code><a href="learn.html">learn()</a></code> function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more cores (if available) in parallel, through the argument <code>parallel =</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -176,17 +157,17 @@ $$</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## mutual information between variates 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span><span class="va">MI</span> <span class="op">&lt;-</span> <span class="fu">mutualinfo</span><span class="op">(</span>Y1names <span class="op">=</span> <span class="st">'species'</span>, Y2names <span class="op">=</span> <span class="st">'bill_len'</span>,</span></span>
-<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span>, nv <span class="op">=</span> <span class="fl">2</span>, parallel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span>, nv <span class="op">=</span> <span class="fl">4</span>, parallel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## The value:</span></span></span>
-<span class="r-in"><span><span class="va">MI</span><span class="op">$</span><span class="va">value</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7155356</span>
+<span class="r-in"><span><span class="co">## The value and its numerical Monte Carlo error</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">MI</span><span class="op">$</span><span class="va">value</span>, <span class="va">MI</span><span class="op">$</span><span class="va">MCaccuracy</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.72036728 0.02950749</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## If we had many more data, we could instead expect to obtain values</span></span></span>
-<span class="r-in"><span><span class="co">## within the following ranges, with corresponding probabilities:</span></span></span>
-<span class="r-in"><span><span class="va">MI</span><span class="op">$</span><span class="va">quantiles</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%       25%       75%     94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.0000000 0.7148847 1.0244033 1.1872572 </span>
+<span class="r-in"><span><span class="co">## within the following probable ranges:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">MI</span><span class="op">$</span><span class="va">quantiles</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5.5%   25%   75% 94.5% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.000 0.674 0.992 1.160 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

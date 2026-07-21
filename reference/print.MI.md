@@ -82,11 +82,11 @@ MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
 ## display the value and revisability of the mutual information
 print(MI)
 #> value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#>    0.767     0.35     0.71     0.92      1.0 
+#>    0.742     0.35     0.64     0.92      1.0 
 
 ## convert to hartleys (base-10 logarithms):
 print(MI, unit = 'Hart')
 #> value/Hart      Q5.5%       Q25%       Q75%     Q94.5% 
-#>     0.2309       0.11       0.21       0.28       0.31 
+#>     0.2234       0.11       0.19       0.28       0.31 
 # }
 ```

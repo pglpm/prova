@@ -16,13 +16,13 @@ perform probabilistic and statistical data analysis and inference. These
 are its main features:
 
 - Any combination of **binary**, **nominal**, **ordinal**,
-  **continuous**, **discrete** variates. Continuous variates can be
-  bounded or unbounded or **censored**, and also rounded.
+  **continuous**, **discrete** data. Continuous data can be bounded,
+  unbounded, **censored**, and rounded.
 - **No modelling assumptions** such as gaussianity, linearity, or any
   other kind of model. The analysis and inferences are fully
   [nonparametric](https://dictionary.apa.org/nonparametric).
-- **No assumptions about functional dependence** between variates. The
-  analysis and inferences are therefore more general than those by
+- **No assumptions about functional dependence** between data variates.
+  The analysis and inferences are therefore more general than those by
   neural networks, random forests, or similar machine-learning
   algorithms.
 - **Automatic [imputation](https://dictionary.apa.org/imputation)** of

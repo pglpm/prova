@@ -438,8 +438,8 @@ learnt <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpjUz6yU/prova-V1_D3_S10_260719T093856_19605f39f7ba
-#> Prova v1.8.0.
+#> /tmp/RtmpRRzxHv/prova-V1_D3_S10_260721T085616_19fa69fd5cd9
+#> Prova v1.8.1.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
@@ -461,9 +461,9 @@ learnt <- learn(
 #> quantile width: 0.143 to 0.998
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 31 secs
-#> Average preparation & finalization time: 30 secs.
-#> Average Monte Carlo time per chain: 0.69 secs.
+#> Total computation time: 33 secs
+#> Average preparation & finalization time: 32 secs.
+#> Average Monte Carlo time per chain: 0.53 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -471,7 +471,7 @@ learnt <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpjUz6yU/prova-V1_D3_S10_260719T093856_19605f39f7ba
+#> /tmp/RtmpRRzxHv/prova-V1_D3_S10_260721T085616_19fa69fd5cd9
 #> **********************************************************
 
 ## Check structure of `learnt` object:
