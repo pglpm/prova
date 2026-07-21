@@ -157,7 +157,8 @@ age or distance or temperature, are naturally positive, and therefore
 have `domainmin` equal `0`. But in other contexts the minimum value
 could be different. For instance, if a given inference problem only
 involves people of age 18 or more, then `domainmin` would be set to
-`18`.
+`18`. The `domainmin` field can also be used for a *left-censored* or
+(together with `domainmax`) *interval-censored* variate.
 
 **`domainmax`**: The maximum value that the variate (ordinal or
 continuous) can take on. Possible values are a real number, or an empty
@@ -166,7 +167,9 @@ value, which is then interpreted as `+Inf` (explicit values like `Inf`,
 value depends on the context. An age-related variate could theoretically
 have `domainmax` equal to infinity (empty value in the metadata file);
 but if a given study categorizes some people as "90 years old or older",
-then `domainmax` should be set to `90`.
+then `domainmax` should be set to `90`. The `domainmax` field can also
+be used for a *right-censored* or (together with `domainmin`)
+*interval-censored* variate.
 
 **`datastep`**: The minimum distance between the values of a variate
 (ordinal or continuous). Possible values are a positive real number or
