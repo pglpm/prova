@@ -15,7 +15,7 @@ reference:
 - title: "Generate synthetic datapoints"
   contents:
   - has_concept("generate")
-- title: "Quantify associations between variate groups"
+- title: "Quantify associations between variates"
   contents:
   - has_concept("association")
 - title: "Plot & print"
