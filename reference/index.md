@@ -24,7 +24,12 @@
 - [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md) : Generate
   datapoints
 
-## Plot & print probability distributions
+## Quantify associations between variate groups
+
+- [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+  : Calculate mutual information between groups of joint variates
+
+## Plot & print
 
 - [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
   : Plot numeric or character values
@@ -55,11 +60,6 @@
   :
 
   Write and read CSV files in **Prova**
-
-## Quantify associations between variate groups
-
-- [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
-  : Calculate mutual information between groups of joint variates
 
 ## Internal functions
 
