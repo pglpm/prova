@@ -519,14 +519,14 @@ plot.probability <- function(
 
     if(is.null(xlab)){xlab <- tempxlab}
     if(missing(main)){
-        main <- paste0('prob.  ',
+        main <- paste0('P(',
             paste0(names(x$Y), collapse = ', '),
-            if(!is.null(x$X)){paste0(' | ', paste0(names(x$X), collapse = ', '))}
-        )
+            if(!is.null(x$X)){
+                paste0(' | ', paste0(names(x$X), collapse = ', '))
+            }, ')')
         if(spread == 'quantiles'){
-            main <- paste0(main, '  [',
-                paste0(round(qnames, 1), '%', collapse = ', '),
-                ']')
+            main <- paste0(main, '\nquantiles: ',
+                paste0(round(qnames, 1), '%', collapse = ', '))
         }
     }
     if(is.null(ylab)){
