@@ -24,7 +24,7 @@
 - [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md) : Generate
   datapoints
 
-## Quantify associations between variate groups
+## Quantify associations between variates
 
 - [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
   : Calculate mutual information between groups of joint variates
