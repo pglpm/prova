@@ -44,7 +44,7 @@ learn(
 
 \item{metadata}{\link{metadata} about the dataset's variates, given either as a \link[base:data.frame]{data frame} or as a file path to a CSV file.}
 
-\item{auxdata}{A larger dataset, given as a data frame or as a file path to a CSV file. Such a dataset would be too large to use in the Monte Carlo sampling, but can still be used to help estimate some hyperparameters.}
+\item{auxdata}{An \emph{additional}, larger dataset, given as a data frame or as a file path to a CSV file. Such a dataset would be too large to use in the Monte Carlo sampling, but is used to help estimate some hyperparameters. Note that the \code{auxdata} and \code{data} datasets should \emph{not} have datapoints in common.}
 
 \item{outputdir}{\code{NULL} (default) or \code{NA} or character: path to folder where output information and diagnostics should be saved. If \code{NULL}, a directory is created in the temporary-directory space given by \code{\link[base:tempdir]{base::tempdir()}}. If \code{NA}, a directory is created in the current working directory given by \code{\link[base:getwd]{base::getwd()}}. If character, this is taken to be the output directory; it should of course be writable by the user.}
 
