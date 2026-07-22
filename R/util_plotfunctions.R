@@ -1182,7 +1182,9 @@ print.MI <- function(
 #' @return A *character* vector, matrix, or array of the elements of `x`, appropriately rounded and truncated.
 #' @keywords internal
 signifC <- function(x, digits = 2){
-    mapply(FUN = function(xx, dd){formatC(
-        x = signif(x = xx, digits = dd),
-        digits = dd, format = 'fg', flag = '#'
-    )}, x, digits)}
+    mapply(FUN = function(xx, dd){
+        dd <- min(dd, getOption('digits'))
+        formatC(x = signif(x = xx, digits = dd),
+            digits = dd, format = 'fg', flag = '#')
+    }, x, digits)
+}
