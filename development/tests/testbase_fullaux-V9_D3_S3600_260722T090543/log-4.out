@@ -1,0 +1,1335 @@
+Log core 4 - Current time: 2026-07-22 09:05:43 
+nimble version 1.4.2 is loaded.
+For more information on NIMBLE and a User Manual,
+please visit https://R-nimble.org.
+
+Attaching package: ‘nimble’
+
+The following object is masked from ‘package:stats’:
+
+    simulate
+
+The following object is masked from ‘package:base’:
+
+    declare
+
+Loaded Nimble v1.4.2 
+Defining model
+  [Note] 'Ocards' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Clatinit' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Ncards' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Dlatinit' is provided in 'constants' but not used in the model code and is being ignored.
+Building model
+Setting data and initial values
+Running calculate on model
+  [Note] Any error reports that follow may simply reflect missing values in model variables.
+Checking model sizes and dimensions
+  [Note] This model is not fully initialized. This is not an error.
+         To see which variables are not initialized, use model$initializeInfo().
+         For more information on model initialization, see help(modelInitialization).
+Compiling
+  [Note] This may take a minute.
+  [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+===== Monitors =====
+thin = 1: Bprob, Cmean, Cvar, Dmean, Dvar, Nprob, Oprob, Rmean, Rvar, W
+thin2 = 1: K
+===== Samplers =====
+posterior_predictive sampler (9)
+  - Ndata[]  (1 element)
+  - Bdata[]  (1 element)
+  - Odata[]  (1 element)
+  - Rdata[]  (3 elements)
+  - Clat[]  (1 element)
+  - Dlat[]  (2 elements)
+conjugate sampler (1345)
+  - Rmean[]  (192 elements)
+  - Rrate[]  (192 elements)
+  - Cmean[]  (64 elements)
+  - Crate[]  (64 elements)
+  - Dmean[]  (128 elements)
+  - Drate[]  (128 elements)
+  - Bprob[]  (64 elements)
+  - Rvar[]  (192 elements)
+  - Cvar[]  (64 elements)
+  - Dvar[]  (128 elements)
+  - Oprob[]  (64 multivariate elements)
+  - Nprob[]  (64 multivariate elements)
+  - W[1:64] 
+categorical sampler (4)
+  - Alpha
+  - K[]  (3 elements)
+RW sampler (5)
+  - Dlat[]  (4 elements)
+  - Clat[]  (1 element)
+===== Comments =====
+  [Note] Additional downstream predictive nodes are also being sampled by posterior_predictive sampler.
+  [Note] Reordering posterior_predictive samplers to execute last
+===== Monitors =====
+thin = 1: Bprob, Cmean, Cvar, Dmean, Dvar, Nprob, Oprob, Rmean, Rvar, W
+thin2 = 1: K
+===== Samplers =====
+posterior_predictive sampler (9)
+  - Ndata[]  (1 element)
+  - Bdata[]  (1 element)
+  - Odata[]  (1 element)
+  - Rdata[]  (3 elements)
+  - Clat[]  (1 element)
+  - Dlat[]  (2 elements)
+conjugate sampler (1345)
+  - Rmean[]  (192 elements)
+  - Rrate[]  (192 elements)
+  - Cmean[]  (64 elements)
+  - Crate[]  (64 elements)
+  - Dmean[]  (128 elements)
+  - Drate[]  (128 elements)
+  - Bprob[]  (64 elements)
+  - Rvar[]  (192 elements)
+  - Cvar[]  (64 elements)
+  - Dvar[]  (128 elements)
+  - W
+  - Oprob[]  (64 multivariate elements)
+  - Nprob[]  (64 multivariate elements)
+categorical sampler (4)
+  - Alpha
+  - K[]  (3 elements)
+RW sampler (5)
+  - Dlat[]  (4 elements)
+  - Clat[]  (1 element)
+===== Comments =====
+  [Note] Additional downstream predictive nodes are also being sampled by posterior_predictive sampler.
+Compiling
+  [Note] This may take a minute.
+  [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+
+Setup time 40 secs 
+
+###########################################################
+Chain # 4 (chain 1 of 1 for this core)
+
+Datapoints for testing chain behaviour:
+ #1 #2 #3 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:06:29
+MCMC time 6 secs 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.335
+ESS from rel. qt. error: 8.92
+ESS: 345
+needed thinning: 404
+average: 0.00141
+quantile width: 0.00502
+Diagnostics time 1.3 secs 
+
+Total iterations 3600 - require further 178799 - continue for 178799 
+
+Chain # 4 - chunk 2 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:06:40
+MCMC time 17 secs 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.308
+ESS from rel. qt. error: 10.6
+ESS: 438
+needed thinning: 682
+average: 0.00179
+quantile width: 0.00656
+Diagnostics time 0.85 secs 
+
+Total iterations 7200 - require further 301268 - continue for 301268 
+
+Chain # 4 - chunk 3 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:06:48
+MCMC time 25 secs 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.227
+ESS from rel. qt. error: 19.5
+ESS: 712
+needed thinning: 555
+average: 0.00181
+quantile width: 0.00653
+Diagnostics time 0.7 secs 
+
+Total iterations 10800 - require further 240095 - continue for 240095 
+
+Chain # 4 - chunk 4 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:06:55
+MCMC time 32 secs 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.216
+ESS from rel. qt. error: 21.3
+ESS: 881
+needed thinning: 675
+average: 0.0021
+quantile width: 0.00701
+Diagnostics time 0.72 secs 
+
+Total iterations 14400 - require further 290558 - continue for 290558 
+
+Chain # 4 - chunk 5 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:07:02
+MCMC time 39 secs 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.209
+ESS from rel. qt. error: 22.9
+ESS: 1120
+needed thinning: 786
+average: 0.00223
+quantile width: 0.00737
+Diagnostics time 0.73 secs 
+
+Total iterations 18000 - require further 337492 - continue for 337492 
+
+Chain # 4 - chunk 6 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:07:09
+MCMC time 46 secs 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.172
+ESS from rel. qt. error: 33.8
+ESS: 1490
+needed thinning: 639
+average: 0.00218
+quantile width: 0.00727
+Diagnostics time 0.72 secs 
+
+Total iterations 21600 - require further 267136 - continue for 267136 
+
+Chain # 4 - chunk 7 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:07:17
+MCMC time 54 secs 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.179
+ESS from rel. qt. error: 31.1
+ESS: 1480
+needed thinning: 810
+average: 0.00223
+quantile width: 0.00737
+Diagnostics time 0.77 secs 
+
+Total iterations 25200 - require further 340698 - continue for 340698 
+
+Chain # 4 - chunk 8 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:07:24
+MCMC time 1 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.167
+ESS from rel. qt. error: 35.8
+ESS: 1650
+needed thinning: 804
+average: 0.00228
+quantile width: 0.00736
+Diagnostics time 0.8 secs 
+
+Total iterations 28800 - require further 334465 - continue for 334465 
+
+Chain # 4 - chunk 9 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:07:32
+MCMC time 1.1 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.141
+ESS from rel. qt. error: 50.6
+ESS: 1900
+needed thinning: 640
+average: 0.0022
+quantile width: 0.00715
+Diagnostics time 0.74 secs 
+
+Total iterations 32400 - require further 256970 - continue for 256970 
+
+Chain # 4 - chunk 10 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:07:39
+MCMC time 1.3 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.13
+ESS from rel. qt. error: 59
+ESS: 2080
+needed thinning: 610
+average: 0.00217
+quantile width: 0.00716
+Diagnostics time 0.69 secs 
+
+Total iterations 36000 - require further 239735 - continue for 239735 
+
+Chain # 4 - chunk 11 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:07:47
+MCMC time 1.4 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.118
+ESS from rel. qt. error: 71.9
+ESS: 2240
+needed thinning: 551
+average: 0.00212
+quantile width: 0.00697
+Diagnostics time 0.74 secs 
+
+Total iterations 39600 - require further 209406 - continue for 209406 
+
+Chain # 4 - chunk 12 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:07:55
+MCMC time 1.5 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.12
+ESS from rel. qt. error: 69.8
+ESS: 2330
+needed thinning: 619
+average: 0.00216
+quantile width: 0.00723
+Diagnostics time 0.8 secs 
+
+Total iterations 43200 - require further 236416 - continue for 236416 
+
+Chain # 4 - chunk 13 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:08:04
+MCMC time 1.7 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.111
+ESS from rel. qt. error: 80.7
+ESS: 2480
+needed thinning: 580
+average: 0.00212
+quantile width: 0.00711
+Diagnostics time 0.74 secs 
+
+Total iterations 46800 - require further 215414 - continue for 215414 
+
+Chain # 4 - chunk 14 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:08:12
+MCMC time 1.8 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.103
+ESS from rel. qt. error: 95
+ESS: 2690
+needed thinning: 530
+average: 0.00211
+quantile width: 0.00708
+Diagnostics time 0.75 secs 
+
+Total iterations 50400 - require further 189319 - continue for 189319 
+
+Chain # 4 - chunk 15 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:08:20
+MCMC time 1.9 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0996
+ESS from rel. qt. error: 101
+ESS: 2870
+needed thinning: 535
+average: 0.00211
+quantile width: 0.00711
+Diagnostics time 0.79 secs 
+
+Total iterations 54000 - require further 187911 - continue for 187911 
+
+Chain # 4 - chunk 16 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:08:28
+MCMC time 2.1 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.096
+ESS from rel. qt. error: 108
+ESS: 3070
+needed thinning: 531
+average: 0.00209
+quantile width: 0.00702
+Diagnostics time 0.76 secs 
+
+Total iterations 57600 - require further 182549 - continue for 182549 
+
+Chain # 4 - chunk 17 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:08:35
+MCMC time 2.2 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0904
+ESS from rel. qt. error: 122
+ESS: 3250
+needed thinning: 500
+average: 0.00207
+quantile width: 0.00696
+Diagnostics time 0.8 secs 
+
+Total iterations 61200 - require further 164773 - continue for 164773 
+
+Chain # 4 - chunk 18 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:08:43
+MCMC time 2.3 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0956
+ESS from rel. qt. error: 109
+ESS: 3360
+needed thinning: 592
+average: 0.00215
+quantile width: 0.00705
+Diagnostics time 0.82 secs 
+
+Total iterations 64800 - require further 202726 - continue for 202726 
+
+Chain # 4 - chunk 19 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:08:50
+MCMC time 2.5 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0922
+ESS from rel. qt. error: 118
+ESS: 3580
+needed thinning: 582
+average: 0.00216
+quantile width: 0.00705
+Diagnostics time 0.79 secs 
+
+Total iterations 68400 - require further 194690 - continue for 194690 
+
+Chain # 4 - chunk 20 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:08:58
+MCMC time 2.6 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0885
+ESS from rel. qt. error: 128
+ESS: 3600
+needed thinning: 564
+average: 0.00213
+quantile width: 0.00698
+Diagnostics time 0.79 secs 
+
+Total iterations 72000 - require further 182989 - continue for 182989 
+
+Chain # 4 - chunk 21 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:09:05
+MCMC time 2.7 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.09
+ESS from rel. qt. error: 123
+ESS: 3750
+needed thinning: 613
+average: 0.00214
+quantile width: 0.00701
+Diagnostics time 0.79 secs 
+
+Total iterations 75600 - require further 201287 - continue for 201287 
+
+Chain # 4 - chunk 22 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:09:12
+MCMC time 2.8 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0886
+ESS from rel. qt. error: 127
+ESS: 3850
+needed thinning: 621
+average: 0.00217
+quantile width: 0.00708
+Diagnostics time 0.79 secs 
+
+Total iterations 79200 - require further 201698 - continue for 201698 
+
+Chain # 4 - chunk 23 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:09:20
+MCMC time 3 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0864
+ESS from rel. qt. error: 134
+ESS: 4120
+needed thinning: 618
+average: 0.00217
+quantile width: 0.00707
+Diagnostics time 0.79 secs 
+
+Total iterations 82800 - require further 196415 - continue for 196415 
+
+Chain # 4 - chunk 24 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:09:28
+MCMC time 3.1 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0814
+ESS from rel. qt. error: 151
+ESS: 4360
+needed thinning: 572
+average: 0.00217
+quantile width: 0.00701
+Diagnostics time 0.73 secs 
+
+Total iterations 86400 - require further 172365 - continue for 172365 
+
+Chain # 4 - chunk 25 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:09:36
+MCMC time 3.2 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0813
+ESS from rel. qt. error: 151
+ESS: 4570
+needed thinning: 595
+average: 0.00218
+quantile width: 0.00704
+Diagnostics time 0.77 secs 
+
+Total iterations 90000 - require further 178843 - continue for 178843 
+
+Chain # 4 - chunk 26 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:09:44
+MCMC time 3.3 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0764
+ESS from rel. qt. error: 172
+ESS: 4840
+needed thinning: 546
+average: 0.00215
+quantile width: 0.00698
+Diagnostics time 0.81 secs 
+
+Total iterations 93600 - require further 153052 - continue for 153052 
+
+Chain # 4 - chunk 27 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:09:52
+MCMC time 3.5 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0724
+ESS from rel. qt. error: 191
+ESS: 5110
+needed thinning: 510
+average: 0.00213
+quantile width: 0.00692
+Diagnostics time 0.78 secs 
+
+Total iterations 97200 - require further 133131 - continue for 133131 
+
+Chain # 4 - chunk 28 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:10:00
+MCMC time 3.6 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0719
+ESS from rel. qt. error: 193
+ESS: 5300
+needed thinning: 521
+average: 0.00212
+quantile width: 0.00692
+Diagnostics time 0.76 secs 
+
+Total iterations 100800 - require further 134905 - continue for 134905 
+
+Chain # 4 - chunk 29 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:10:08
+MCMC time 3.8 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0712
+ESS from rel. qt. error: 197
+ESS: 5390
+needed thinning: 530
+average: 0.00214
+quantile width: 0.007
+Diagnostics time 0.75 secs 
+
+Total iterations 104400 - require further 134971 - continue for 134971 
+
+Chain # 4 - chunk 30 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:10:16
+MCMC time 3.9 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0683
+ESS from rel. qt. error: 215
+ESS: 5620
+needed thinning: 503
+average: 0.00213
+quantile width: 0.00696
+Diagnostics time 0.81 secs 
+
+Total iterations 108000 - require further 119394 - continue for 119394 
+
+Chain # 4 - chunk 31 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:10:24
+MCMC time 4 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0666
+ESS from rel. qt. error: 225
+ESS: 5860
+needed thinning: 495
+average: 0.00213
+quantile width: 0.00695
+Diagnostics time 0.8 secs 
+
+Total iterations 111600 - require further 112129 - continue for 112129 
+
+Chain # 4 - chunk 32 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:10:32
+MCMC time 4.2 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0659
+ESS from rel. qt. error: 231
+ESS: 6050
+needed thinning: 500
+average: 0.00214
+quantile width: 0.00697
+Diagnostics time 0.76 secs 
+
+Total iterations 115200 - require further 110695 - continue for 110695 
+
+Chain # 4 - chunk 33 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:10:40
+MCMC time 4.3 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0657
+ESS from rel. qt. error: 232
+ESS: 6270
+needed thinning: 513
+average: 0.00213
+quantile width: 0.00695
+Diagnostics time 0.76 secs 
+
+Total iterations 118800 - require further 112853 - continue for 112853 
+
+Chain # 4 - chunk 34 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:10:48
+MCMC time 4.4 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0649
+ESS from rel. qt. error: 238
+ESS: 6480
+needed thinning: 515
+average: 0.00211
+quantile width: 0.00691
+Diagnostics time 0.64 secs 
+
+Total iterations 122400 - require further 110297 - continue for 110297 
+
+Chain # 4 - chunk 35 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:10:55
+MCMC time 4.5 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0615
+ESS from rel. qt. error: 264
+ESS: 6780
+needed thinning: 477
+average: 0.0021
+quantile width: 0.00687
+Diagnostics time 0.79 secs 
+
+Total iterations 126000 - require further 89451 - continue for 89451 
+
+Chain # 4 - chunk 36 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:11:03
+MCMC time 4.7 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0607
+ESS from rel. qt. error: 272
+ESS: 6980
+needed thinning: 477
+average: 0.00211
+quantile width: 0.00687
+Diagnostics time 0.78 secs 
+
+Total iterations 129600 - require further 86067 - continue for 86067 
+
+Chain # 4 - chunk 37 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:11:10
+MCMC time 4.8 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.062
+ESS from rel. qt. error: 260
+ESS: 7230
+needed thinning: 513
+average: 0.00214
+quantile width: 0.0069
+Diagnostics time 0.78 secs 
+
+Total iterations 133200 - require further 98468 - continue for 98468 
+
+Chain # 4 - chunk 38 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:11:17
+MCMC time 4.9 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0614
+ESS from rel. qt. error: 266
+ESS: 7440
+needed thinning: 515
+average: 0.00214
+quantile width: 0.0069
+Diagnostics time 0.8 secs 
+
+Total iterations 136800 - require further 95947 - continue for 95947 
+
+Chain # 4 - chunk 39 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:11:25
+MCMC time 5 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0582
+ESS from rel. qt. error: 295
+ESS: 7710
+needed thinning: 476
+average: 0.00213
+quantile width: 0.00687
+Diagnostics time 0.79 secs 
+
+Total iterations 140400 - require further 74729 - continue for 74729 
+
+Chain # 4 - chunk 40 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:11:32
+MCMC time 5.2 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0574
+ESS from rel. qt. error: 303
+ESS: 7880
+needed thinning: 475
+average: 0.00213
+quantile width: 0.00689
+Diagnostics time 0.83 secs 
+
+Total iterations 144000 - require further 70800 - continue for 70800 
+
+Chain # 4 - chunk 41 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:11:40
+MCMC time 5.3 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0575
+ESS from rel. qt. error: 302
+ESS: 7980
+needed thinning: 488
+average: 0.00213
+quantile width: 0.0069
+Diagnostics time 0.79 secs 
+
+Total iterations 147600 - require further 72960 - continue for 72960 
+
+Chain # 4 - chunk 42 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:11:48
+MCMC time 5.4 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0551
+ESS from rel. qt. error: 329
+ESS: 8220
+needed thinning: 460
+average: 0.00212
+quantile width: 0.0069
+Diagnostics time 0.81 secs 
+
+Total iterations 151200 - require further 56641 - continue for 56641 
+
+Chain # 4 - chunk 43 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:11:56
+MCMC time 5.6 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0539
+ESS from rel. qt. error: 344
+ESS: 8370
+needed thinning: 450
+average: 0.00211
+quantile width: 0.00687
+Diagnostics time 0.85 secs 
+
+Total iterations 154800 - require further 48803 - continue for 48803 
+
+Chain # 4 - chunk 44 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:12:05
+MCMC time 5.7 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0502
+ESS from rel. qt. error: 396
+ESS: 8500
+needed thinning: 400
+average: 0.0021
+quantile width: 0.00685
+Diagnostics time 0.89 secs 
+
+Total iterations 158400 - require further 22227 - continue for 22227 
+
+Chain # 4 - chunk 45 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:12:13
+MCMC time 5.8 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0504
+ESS from rel. qt. error: 394
+ESS: 8520
+needed thinning: 411
+average: 0.0021
+quantile width: 0.00685
+Diagnostics time 0.89 secs 
+
+Total iterations 162000 - require further 23865 - continue for 23865 
+
+Chain # 4 - chunk 46 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:12:20
+MCMC time 5.9 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0511
+ESS from rel. qt. error: 383
+ESS: 8740
+needed thinning: 433
+average: 0.00208
+quantile width: 0.00683
+Diagnostics time 0.84 secs 
+
+Total iterations 165600 - require further 30027 - continue for 30027 
+
+Chain # 4 - chunk 47 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:12:27
+MCMC time 6.1 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0495
+ESS from rel. qt. error: 408
+ESS: 8920
+needed thinning: 415
+average: 0.0021
+quantile width: 0.00684
+Diagnostics time 0.58 secs 
+
+Total iterations 169200 - require further 18161 - continue for 18161 
+
+Chain # 4 - chunk 48 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:12:33
+MCMC time 6.2 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0494
+ESS from rel. qt. error: 409
+ESS: 9090
+needed thinning: 422
+average: 0.00209
+quantile width: 0.00684
+Diagnostics time 0.55 secs 
+
+Total iterations 172800 - require further 17937 - continue for 17937 
+
+Chain # 4 - chunk 49 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:12:39
+MCMC time 6.3 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0499
+ESS from rel. qt. error: 402
+ESS: 9370
+needed thinning: 439
+average: 0.00208
+quantile width: 0.00684
+Diagnostics time 0.78 secs 
+
+Total iterations 176400 - require further 22100 - continue for 22100 
+
+Chain # 4 - chunk 50 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:12:45
+MCMC time 6.4 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0488
+ESS from rel. qt. error: 420
+ESS: 9640
+needed thinning: 429
+average: 0.00207
+quantile width: 0.00681
+Diagnostics time 0.54 secs 
+
+Total iterations 180000 - require further 13784 - continue for 13784 
+
+Chain # 4 - chunk 51 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:12:51
+MCMC time 6.5 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0482
+ESS from rel. qt. error: 431
+ESS: 9880
+needed thinning: 426
+average: 0.00207
+quantile width: 0.00681
+Diagnostics time 0.56 secs 
+
+Total iterations 183600 - require further 8948 - continue for 8948 
+
+Chain # 4 - chunk 52 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:12:57
+MCMC time 6.6 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+rel. quantile error: 0.0478
+ESS from rel. qt. error: 437
+ESS: 10200
+needed thinning: 428
+average: 0.00206
+quantile width: 0.00679
+Diagnostics time 0.52 secs 
+
+Total iterations 187200 - require further 6393 - continue for 6393 
+
+Chain # 4 - chunk 53 (chain 1 of 1 for this core): increasing by 3600 
+
+Plotting traces and samples.
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-07-22 09:13:02
+MCMC time 6.7 mins 
+
+USED COMPONENTS: 2 OF 64 
+
+rel. quantile error: 0.0461
+ESS from rel. qt. error: 470
+ESS: 10400
+needed thinning: 406
+average: 0.00205
+quantile width: 0.00677
+Diagnostics time 0.72 secs 
+
+Total iterations 190800 - require further 0 - continue for 0 
+
+Plotting traces and samples.
+
+Keeping  450 
+
+Current time: 2026-07-22 09:13:16
+MCMC + diagnostics time 6.9 mins 
+
+Current time: 2026-07-22 09:13:16
+Total time 7.5 mins 
