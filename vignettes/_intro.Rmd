@@ -1066,7 +1066,7 @@ learntall <- 'learntall.rds'
 Our final results about the overall relative frequencies of the three species are computed in the usual way:
 
 ```{r prob_speciesall, eval = TRUE}
-## 'Y' and 'X' were previously defined with:
+## 'Y' was previously defined with:
 ## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
 Fspeciesall <- Pr(

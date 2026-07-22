@@ -11,13 +11,16 @@
   PvsY = NULL,
   legend = "top",
   lty = c(1, 2, 4, 3, 6, 5),
+  pch = c(1, 2, 0, 5, 6, 3),
   lwd = 2,
   col = palette(),
   type = NULL,
   alpha.f = 1,
   var.alpha.f = NULL,
+  var.nsamples = 360,
   xlab = NULL,
   ylab = NULL,
+  ylab2 = NULL,
   main = NULL,
   ylim = c(0, NA),
   grid = TRUE,
@@ -41,6 +44,10 @@
 \item{alpha.f}{Numeric, default 0.25: opacity of the colours, \code{0} being completely invisible and \code{1} completely opaque.}
 
 \item{var.alpha.f}{Numeric: opacity of the quantile bands or of the samples, \code{0} being completely invisible and \code{1} completely opaque.}
+
+\item{var.nsamples}{Integer, default 360: number of samples of long-run frequencies to display}
+
+\item{ylab2}{A title for the y-axis on the right side of the plot, if displayed.}
 
 \item{...}{Other parameters to be passed to \code{\link[=flexiplot]{flexiplot()}}.}
 }

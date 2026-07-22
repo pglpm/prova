@@ -10,6 +10,7 @@ plotquantiles(
   xdomain = NULL,
   alpha.f = 0.25,
   col = palette(),
+  lwd = 1,
   border = NA,
   type = "n",
   ...
@@ -26,7 +27,9 @@ plotquantiles(
 
 \item{col}{Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}. Default \verb{#4477AA}.}
 
-\item{border}{Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}. If \code{NA} (default), no border is drawn.}
+\item{lwd}{Width of the border of the quantile bands.}
+
+\item{border}{Border colour of the quantile bands. Can be specified in any of the usual ways, see for instance \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}. If \code{NA} (default), no border is drawn.}
 
 \item{type}{See analogous argument in \code{\link[graphics:matplot]{graphics::matplot()}}. Default is \code{'n'}, so the quantile bands do not have demarcation lines.}
 

@@ -243,6 +243,7 @@ flexiplot <- function(
 #' @param xdomain Character or numeric or `NULL` (default): vector of possible values of the variate represented in the x-axis, if the `x` argument is a character vector. The ordering of the values is respected. If `NULL`, then [`unique(x)`][base::unique()] is used.
 #' @param alpha.f Numeric, default 0.25: opacity of the quantile bands, `0` being completely invisible and `1` completely opaque.
 #' @param col Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. Default `#4477AA`.
+#' @param lwd Width of the border of the quantile bands.
 #' @param border Border colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
 #' @param type See analogous argument in [graphics::matplot()]. Default is `'n'`, so the quantile bands do not have demarcation lines.
 #' @param ... Other parameters to be passed to [flexiplot()].
@@ -284,7 +285,7 @@ plotquantiles <- function(
     xdomain = NULL,
     alpha.f = 0.25,
     col = palette(),
-    lwd = NULL,
+    lwd = 1,
     ##     c( ## Tol's colour-blind-safe scheme
     ##     '#4477AA',
     ##     '#EE6677',
@@ -348,9 +349,11 @@ plotquantiles <- function(
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
 #'
 #' @param PvsY Logical or `NULL`: should probabilities be plotted against their `Y` argument? If `NULL`, the argument between `Y` and `X` having larger number of values is chosen. As many probability curves will be plotted as the number of values of the other argument.
+#' @param ylab2 A title for the y-axis on the right side of the plot, if displayed.
 #' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'top'`.
 #' @param alpha.f Numeric, default 0.25: opacity of the colours, `0` being completely invisible and `1` completely opaque.
 #' @param var.alpha.f Numeric: opacity of the quantile bands or of the samples, `0` being completely invisible and `1` completely opaque.
+#' @param var.nsamples Integer, default 360: number of samples of long-run frequencies to display
 #' @param lty,lwd,col,type,xlab,ylab,main,ylim,grid,add see analogous arguments in [graphics::matplot()]
 #' @param ... Other parameters to be passed to [flexiplot()].
 #'
@@ -405,6 +408,7 @@ plot.probability <- function(
     ## ),
     alpha.f = 1,
     var.alpha.f = NULL,
+    var.nsamples = 360,
     xlab = NULL,
     ylab = NULL,
     ylab2 = NULL,
@@ -462,6 +466,7 @@ plot.probability <- function(
     if(spread == 'quantiles'){
         mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
         pvar <- x[['quantiles']]
+        maxvar <- max(pvar, na.rm = TRUE)
         ## if we are plotting more than one curve, keep only the 89% band
         if(Xlen > 1 && Ylen > 1){
             qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
@@ -473,10 +478,18 @@ plot.probability <- function(
         qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
         if(is.null(var.alpha.f)){var.alpha.f <- 0.25}
     } else if(spread == 'samples'){
-        pvar <- x[['samples']]
+        maxvar <- max(apply(
+            X = x[['samples']], MARGIN = c(1, 2), FUN = quantile,
+            probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
+        ))
+        temp <- dim(x[['samples']])[3]
+        pvar <<- x[['samples']][, , round(seq(from = 1, to = temp,
+                length.out = min(var.nsamples, temp))), drop = FALSE]
         if(is.null(var.alpha.f)){var.alpha.f <- 1/ceiling(sqrt(dim(pvar)[3]))}
+        ## if(is.null(var.alpha.f)){var.alpha.f <- 1/10}
     } else {
         pvar <- NULL
+        maxvar <- -Inf
     }
 
     ## Handle the case of missing Y and X items in 'x'
@@ -498,15 +511,14 @@ plot.probability <- function(
         xxx <- x$Y
         leg <- x$X
         tempxlab <- 'Y'
-        xdeltas <- which(x$densities < max(x$densities))
-        if(length(xdeltas) == 0){xdeltas <- NULL}
+        xdeltas <- (x$densities < max(x$densities))
     } else {
         xxx <- x$X
         leg <- x$Y
         tempxlab <- 'X'
         x[['values']] <- t(x[['values']])
         if(!is.null(pvar)){ pvar <- aperm(pvar, c(2, 1, 3)) }
-        xdeltas <- NULL
+        xdeltas <- FALSE
     }
 
     ## If the abscissa has more than one variate,
@@ -547,7 +559,7 @@ plot.probability <- function(
         if(is.character(xxx)){type <- 'b'} else {type <- 'l'}
     }
 
-    if(!is.null(xdeltas)){
+    if(any(xdeltas)){
         if(is.null(ylab2)){
             ylab2 <- paste0('probability',
                 if(max(x$densities[-which.max(x$densities)]) == 0){' density'},
@@ -561,12 +573,14 @@ plot.probability <- function(
     ## Plot the revisability first
     ## find maximum and minimum y-value first, if needed
     if(is.na(ylim[2])){
-        ylim[2] <- max(pvar, x[['values']])
+        ylim[2] <- max(maxvar, x[['values']])
     }
     if(is.na(ylim[1])){
-        ylim[1] <- min(pvar, x[['values']])
+        ylim[1] <- min(maxvar, x[['values']])
     }
-    if(spread == 'quantiles'){
+
+    if(!is.null(pvar)){
+        ## prepare window
         flexiplot(x = xxx,
             y = matrix(pvar, nrow = dim(pvar)[1]),
             type = 'n',
@@ -578,54 +592,39 @@ plot.probability <- function(
             add = add,
             ...)
         add <- TRUE
-    if(is.null(xdeltas)){
-        for(i in seq_len(dim(pvar)[2])){
-            plotquantiles(x = unlist(xxx), y = pvar[, i, ],
-                col = col[(i - 1) %% length(col) + 1],
-                alpha.f = var.alpha.f,
-                lty =  lty[(i - 1) %% length(lty) + 1],
-                xlab = xlab,
-                ylab = ylab,
-                ylim = ylim,
-                main = main,
-                grid = grid,
-                add = (add || i > 1),
-                ...)
-            add <- TRUE
+    }
+
+    if(any(xdeltas)){
+        if(is.null(pvar)){
+            mpvar <- max(x[['values']][xdeltas,], na.rm = TRUE)
+        } else {
+            mpvar <- maxvar
         }
-    } else {
-
-        ## compute max probability of singular points, and find conversion scale
+        ## compute max probability of singular points,
+        ## and find conversion scale
+        test <- max(pvar[!xdeltas,,])
+        testd <- max(pvar[xdeltas,,])
         yticks <- axTicks(4)
-        yscale <- signif(x = min(yticks[yticks > 0]) / (max(pvar[xdeltas,,], na.rm = TRUE) / (length(yticks) - 1)),
-            digits = 1) * (length(yticks) - 1)
+        ydivs <- length(yticks) - 1
+        yscale <- (mpvar / ydivs) / min(yticks[yticks > 0])
+        yscale <- max(yticks) / (
+            ceiling(yscale * 10^(-floor(log10(yscale)) + 1)) *
+                10^(floor(log10(yscale)) - 1) * ydivs
+        )
+        yticks <- yticks[yticks / yscale <= 1]
         ## add axis for singular probability values
-        graphics::axis(4, at = axTicks(4), labels = axTicks(4) / yscale,
-                tick = !grid, col = 'black', lwd = 1, lty = 1)
+        graphics::axis(4, at = yticks, labels = yticks / yscale,
+            tick = !grid, col = 'black', lwd = 1, lty = 1)
+    }
 
+
+    if(spread == 'quantiles'){
         for(i in seq_len(dim(pvar)[2])){
-            plotquantiles(x = unlist(xxx)[-xdeltas],
-                y = pvar[-xdeltas, i, ],
+            plotquantiles(x = unlist(xxx)[!xdeltas],
+                y = pvar[!xdeltas, i, ],
                 col = col[(i - 1) %% length(col) + 1],
                 alpha.f = var.alpha.f,
                 lty =  lty[(i - 1) %% length(lty) + 1],
-                xlab = xlab,
-                ylab = ylab,
-                ylim = ylim,
-                main = main,
-                grid = grid,
-                add = (add || i > 1),
-                ...)
-
-            for(xd in xdeltas){
-                plotquantiles(x = unlist(xxx)[xd],
-                y = yscale * pvar[, i, ][xd, , drop=FALSE],
-                col = col[(i - 1) %% length(col) + 1],
-                border = adjustcolor(col[(i - 1) %% length(col) + 1],
-                    alpha.f = var.alpha.f),
-                alpha.f = var.alpha.f,
-                lty =  lty[(i - 1) %% length(lty) + 1],
-                lwd = 10,
                 xlab = xlab,
                 ylab = ylab,
                 ylim = ylim,
@@ -633,10 +632,27 @@ plot.probability <- function(
                 grid = grid,
                 add = TRUE,
                 ...)
+
+            if(any(xdeltas)){
+                for(xd in which(xdeltas)){
+                    plotquantiles(x = unlist(xxx)[xd],
+                        y = yscale * pvar[, i, ][xd, , drop = FALSE],
+                        col = col[(i - 1) %% length(col) + 1],
+                        border = adjustcolor(col[(i - 1) %% length(col) + 1],
+                            alpha.f = var.alpha.f),
+                        alpha.f = var.alpha.f,
+                        lty =  lty[(i - 1) %% length(lty) + 1],
+                        lwd = 10,
+                        xlab = xlab,
+                        ylab = ylab,
+                        ylim = ylim,
+                        main = main,
+                        grid = grid,
+                        add = TRUE,
+                        ...)
                 }
-            add <- TRUE
-        }
             }
+        }
 
     } else if(spread == 'samples'){
         ## the samples are plotted alternating between the different subgroups,
@@ -644,7 +660,7 @@ plot.probability <- function(
         ## the samples of the last subgroup cover the previous ones
         nx <- dim(pvar)[2]
         dim(pvar) <- c(dim(pvar)[1], prod(dim(pvar)[-1]))
-        flexiplot(x = xxx, y = pvar,
+        flexiplot(x = xxx[!xdeltas], y = pvar[!xdeltas, , drop = FALSE],
             type = type,
             col = col[(seq_len(nx) - 1) %% length(col) + 1],
             alpha.f = var.alpha.f,
@@ -657,30 +673,34 @@ plot.probability <- function(
             grid = grid,
             xjitter = FALSE,
             yjitter = FALSE,
-            add = add,
+            add = TRUE,
             ...)
-        add <- TRUE
+
+            if(any(xdeltas)){
+                for(xd in which(xdeltas)){
+        flexiplot(x = xxx[xd], y = yscale * pvar[xd, , drop = FALSE],
+            type = 'p',
+            col = col[(seq_len(nx) - 1) %% length(col) + 1],
+            alpha.f = var.alpha.f,
+            pch = '-',
+            lty =  1, #lty[(seq_len(nx) - 1) %% length(lty) + 1],
+            lwd = 0.5, #lwd[(seq_len(nx) - 1) %% length(lwd) + 1] / 4,
+            xlab = xlab,
+            ylab = ylab,
+            ylim = ylim,
+            main = main,
+            grid = grid,
+            xjitter = FALSE,
+            yjitter = FALSE,
+            add = TRUE,
+            ...)
+                }
+            }
     }
 
     ## Plot the probabilities
-    if(is.null(xdeltas)){
-    flexiplot(x = xxx, y = x[['values']],
-        type = type,
-        col = col,
-        alpha.f = alpha.f,
-        lty = lty,
-        lwd = lwd,
-        xlab = xlab,
-        ylab = ylab,
-        ylim = ylim,
-        main = main,
-        grid = grid,
-        xjitter = FALSE,
-        yjitter = FALSE,
-        add = add,
-        ...)
-    } else {
-    flexiplot(x = xxx[-xdeltas], y = x[['values']][-xdeltas, , drop = FALSE],
+    flexiplot(x = xxx[!xdeltas],
+        y = x[['values']][!xdeltas, , drop = FALSE],
         type = type,
         col = col,
         alpha.f = alpha.f,
@@ -696,6 +716,7 @@ plot.probability <- function(
         add = add,
         ...)
 
+    if(any(xdeltas)){
     flexiplot(x = xxx[xdeltas],
         y = yscale * x[['values']][xdeltas, , drop = FALSE],
         type = 'p',

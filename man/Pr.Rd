@@ -52,7 +52,7 @@ An object of class "probability", which is a list consisting of the following el
 \item \verb{$quantiles} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
 \item \verb{$samples} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such probabilities.
 \item \verb{$values.MCaccuracy}, \code{quantiles.MCaccuracy}: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the \code{values} and \code{quantiles} elements.
-\item \verb{$densities}: numerical vector equal to the number of rows in \code{Y}, used mainly for \code{\link[=plot.probability]{plot.probability()}}. It is the order of the probability density the \code{Y}-values: values with \code{0} are actual probabilities; values with \code{1} are linear probability densities (\eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}); values with \code{2} are areic probability densities (\eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}); and so on.
+\item \verb{$densities}: numerical vector as long as number of rows in \code{Y}, used mainly for \code{\link[=plot.probability]{plot.probability()}}. It is the order of the probability density the \code{Y}-values: values with \code{0} are actual probabilities; values with \code{1} are linear probability densities (\eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}); values with \code{2} are areic probability densities (\eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}); and so on.
 \item \verb{$Y}, \verb{$X}, \verb{$tails}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
 }
 }
