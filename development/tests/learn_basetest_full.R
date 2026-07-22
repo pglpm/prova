@@ -4,7 +4,7 @@ library('prova')
 set.seed(16)
 parallel <- 8
 
-outputdir <- '__testbase_full'
+outputdir <- 'testbase_full'
 learntdir <- learn(
     data = 'data_basetest.csv',
     metadata = 'metadata_basetest.csv',
