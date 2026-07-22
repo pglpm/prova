@@ -483,7 +483,7 @@ plot.probability <- function(
             probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
         ))
         temp <- dim(x[['samples']])[3]
-        pvar <<- x[['samples']][, , round(seq(from = 1, to = temp,
+        pvar <- x[['samples']][, , round(seq(from = 1, to = temp,
                 length.out = min(var.nsamples, temp))), drop = FALSE]
         if(is.null(var.alpha.f)){var.alpha.f <- 1/ceiling(sqrt(dim(pvar)[3]))}
         ## if(is.null(var.alpha.f)){var.alpha.f <- 1/10}
@@ -602,8 +602,6 @@ plot.probability <- function(
         }
         ## compute max probability of singular points,
         ## and find conversion scale
-        test <- max(pvar[!xdeltas,,])
-        testd <- max(pvar[xdeltas,,])
         yticks <- axTicks(4)
         ydivs <- length(yticks) - 1
         yscale <- (mpvar / ydivs) / min(yticks[yticks > 0])
