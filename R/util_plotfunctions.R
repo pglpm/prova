@@ -284,6 +284,7 @@ plotquantiles <- function(
     xdomain = NULL,
     alpha.f = 0.25,
     col = palette(),
+    lwd = NULL,
     ##     c( ## Tol's colour-blind-safe scheme
     ##     '#4477AA',
     ##     '#EE6677',
@@ -331,7 +332,7 @@ plotquantiles <- function(
     for(ii in seq_len(nquant/2)) {
         graphics::polygon(x = c(x, rev(x)),
             y = c(y[, ii], rev(y[, nquant + 1 - ii])),
-            col = col, border = border, lwd = 10, xpd = TRUE)
+            col = col, border = border, xpd = TRUE, lwd = lwd)
     }
     invisible()
 }
@@ -390,6 +391,7 @@ plot.probability <- function(
     PvsY = NULL,
     legend = 'top',
     lty = c(1, 2, 4, 3, 6, 5),
+    pch = c(1, 2, 0, 5, 6, 3), #, 4,
     lwd = 2,
     col = palette(),
     type = NULL,
@@ -405,6 +407,7 @@ plot.probability <- function(
     var.alpha.f = NULL,
     xlab = NULL,
     ylab = NULL,
+    ylab2 = NULL,
     main = NULL,
     ylim = c(0, NA),
     grid = TRUE,
@@ -544,6 +547,17 @@ plot.probability <- function(
         if(is.character(xxx)){type <- 'b'} else {type <- 'l'}
     }
 
+    if(!is.null(xdeltas)){
+        if(is.null(ylab2)){
+            ylab2 <- paste0('probability',
+                if(max(x$densities[-which.max(x$densities)]) == 0){' density'},
+                ' at singular points')
+        }
+        oldpar <- par(mar = par('mar') + c(0, 0, 0, 1.5))
+        on.exit(par(oldpar))
+    }
+
+
     ## Plot the revisability first
     ## find maximum and minimum y-value first, if needed
     if(is.na(ylim[2])){
@@ -579,7 +593,16 @@ plot.probability <- function(
                 ...)
             add <- TRUE
         }
-        } else {
+    } else {
+
+        ## compute max probability of singular points, and find conversion scale
+        yticks <- axTicks(4)
+        yscale <- signif(x = min(yticks[yticks > 0]) / (max(pvar[xdeltas,,], na.rm = TRUE) / (length(yticks) - 1)),
+            digits = 1) * (length(yticks) - 1)
+        ## add axis for singular probability values
+        graphics::axis(4, at = axTicks(4), labels = axTicks(4) / yscale,
+                tick = !grid, col = 'black', lwd = 1, lty = 1)
+
         for(i in seq_len(dim(pvar)[2])){
             plotquantiles(x = unlist(xxx)[-xdeltas],
                 y = pvar[-xdeltas, i, ],
@@ -593,13 +616,16 @@ plot.probability <- function(
                 grid = grid,
                 add = (add || i > 1),
                 ...)
-            plotquantiles(x = unlist(xxx)[xdeltas],
-                y = pvar[, i, ][xdeltas, , drop=FALSE],
+
+            for(xd in xdeltas){
+                plotquantiles(x = unlist(xxx)[xd],
+                y = yscale * pvar[, i, ][xd, , drop=FALSE],
                 col = col[(i - 1) %% length(col) + 1],
                 border = adjustcolor(col[(i - 1) %% length(col) + 1],
                     alpha.f = var.alpha.f),
                 alpha.f = var.alpha.f,
                 lty =  lty[(i - 1) %% length(lty) + 1],
+                lwd = 10,
                 xlab = xlab,
                 ylab = ylab,
                 ylim = ylim,
@@ -607,6 +633,7 @@ plot.probability <- function(
                 grid = grid,
                 add = TRUE,
                 ...)
+                }
             add <- TRUE
         }
             }
@@ -636,6 +663,7 @@ plot.probability <- function(
     }
 
     ## Plot the probabilities
+    if(is.null(xdeltas)){
     flexiplot(x = xxx, y = x[['values']],
         type = type,
         col = col,
@@ -651,7 +679,44 @@ plot.probability <- function(
         yjitter = FALSE,
         add = add,
         ...)
+    } else {
+    flexiplot(x = xxx[-xdeltas], y = x[['values']][-xdeltas, , drop = FALSE],
+        type = type,
+        col = col,
+        alpha.f = alpha.f,
+        lty = lty,
+        lwd = lwd,
+        xlab = xlab,
+        ylab = ylab,
+        ylim = ylim,
+        main = main,
+        grid = grid,
+        xjitter = FALSE,
+        yjitter = FALSE,
+        add = add,
+        ...)
 
+    flexiplot(x = xxx[xdeltas],
+        y = yscale * x[['values']][xdeltas, , drop = FALSE],
+        type = 'p',
+        col = col,
+        alpha.f = alpha.f,
+        lty = lty,
+        pch = pch,
+        lwd = lwd,
+        xlab = xlab,
+        ylab = ylab,
+        ylim = ylim,
+        main = main,
+        grid = grid,
+        xjitter = FALSE,
+        yjitter = FALSE,
+        add = TRUE,
+        ...)
+
+    mtext(ylab2, side = 4, line = 2.25)
+
+}
     ## Plot legends
     if(!is.null(leg)){
         ##  && is.character(legend) &&
