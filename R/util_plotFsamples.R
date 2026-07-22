@@ -132,7 +132,7 @@ plotFsamples <- function(
         {
 
             if(mcmctype == 'R') {
-                Xgrid <- cbind(seq(plotmin, plotmax, length.out = 256))
+                Xgrid <- cbind(seq(plotmin, plotmax, length.out = 129))
                 colnames(Xgrid) <- name
                 probabilities <- Pr(Y = Xgrid, X = NULL,
                     learnt = learnt,
@@ -185,15 +185,6 @@ plotFsamples <- function(
 
                 ## If required, plot frequency samples
                 if (plotvariability == 'samples') {
-                    ## tplot(
-                    ##     x = Xgrid, y = probabilities$samples,
-                    ##     xlim = range(Xgrid), ylim = c(0, ymax),
-                    ##     type = 'l', lty = 1, lwd = 2,
-                    ##     col = , alpha = 1/8,
-                    ##     xlab = name,
-                    ##     ylab = paste0('probability density', addylab),
-                    ##     family = fontfamily
-                    ## )
                     flexiplot(
                         x = Xgrid, y = probabilities$samples,
                         xlim = range(Xgrid), ylim = c(0, ymax),
@@ -225,18 +216,6 @@ plotFsamples <- function(
 
                 ## If required, plot probability
                 if (plotprobability) {
-                    ## tplot(
-                    ##     x = Xgrid,
-                    ##     y = probabilities$values,
-                    ##     ## y = rowMeans(probabilities[, , drop = FALSE], na.rm = TRUE),
-                    ##     xlim = range(Xgrid), ylim = c(0, ymax),
-                    ##     type = 'l', cex = 0.5, lty = 1, lwd = 4,
-                    ##     col = 1, alpha = 0.75,
-                    ##     xlab = name,
-                    ##     ylab = paste0('probability density', addylab),
-                    ##     family = fontfamily,
-                    ##     add = addplot
-                    ## )
                     flexiplot(
                         x = Xgrid,
                         y = probabilities$values,
@@ -253,17 +232,6 @@ plotFsamples <- function(
 
                 ## If required and possible, plot data histogram
                 if (datahistogram && theresdata) {
-                    ## tplot(
-                    ##     x = histo$mids, y = histo$density,
-                    ##     xlim = range(Xgrid), ylim = c(0, ymax),
-                    ##     type = 'l', cex = 0.5, lty = 1, lwd = 2,
-                    ##     col = 4, alpha = 0.5,
-                    ##     border = '#555555', border.alpha = 1 / 4,
-                    ##     xlab = name,
-                    ##     ylab = paste0('probability density', addylab),
-                    ##     family = fontfamily,
-                    ##     add = addplot
-                    ## )
                     flexiplot(
                         x = histo$mids, y = histo$density,
                         xlim = range(Xgrid), ylim = c(0, ymax),
@@ -283,8 +251,7 @@ plotFsamples <- function(
                 ## not a probability density.
                 ## These values need different handling and representation
 
-                Xgrid <- cbind(seq(plotmin, plotmax, length.out = 256))
-                ## }
+                Xgrid <- cbind(seq(plotmin, plotmax, length.out = 129))
                 colnames(Xgrid) <- name
 
                 xin <- Xgrid > domainminplushs & Xgrid < domainmaxminushs
@@ -353,16 +320,6 @@ plotFsamples <- function(
                 ## If required, plot frequency samples
                 if (plotvariability == 'samples') {
                     if (any(xin)) {
-                        ## tplot(
-                        ##     x = Xgrid[xin],
-                        ##     y = probabilities$samples[xin, , drop = FALSE],
-                        ##     xlim = range(Xgrid), ylim = c(0, ymax),
-                        ##     type = 'l', lty = 1, lwd = 2,
-                        ##     col = 5, alpha = 1/8,
-                        ##     xlab = name,
-                        ##     ylab = paste0('probability density', addylab),
-                        ##     family = fontfamily
-                        ## )
                         flexiplot(
                             x = Xgrid[xin],
                             y = probabilities$samples[xin, , drop = FALSE],
@@ -378,14 +335,6 @@ plotFsamples <- function(
 
                     ## Boundary points
                     if (any(!xin)) {
-                        ## tplot(
-                        ##     x = Xgrid[!xin],
-                        ##     y = probabilities$values[!xin] * ymax,
-                        ##     type = 'p', pch = 2, cex = 2,
-                        ##     col = 5, alpha = 1/8,
-                        ##     family = fontfamily,
-                        ##     add = addplot
-                        ## )
                         flexiplot(
                             x = Xgrid[!xin],
                             y = probabilities$values[!xin] * ymax,
@@ -398,10 +347,6 @@ plotFsamples <- function(
                     }
 
                 } else if (plotvariability == 'quantiles') {
-                    ## marguncertainty <- t(apply(probabilities, 1, function(x) {
-                    ##     quantile(x, quants, type = 6, na.rm = TRUE)
-                    ## }))
-
                     if (any(xin)) {
                         plotquantiles(
                             x = Xgrid[xin],
@@ -418,19 +363,10 @@ plotFsamples <- function(
 
                     ## Boundary points
                     if (any(!xin)) {
-                        ## tplot(
-                        ##     x = matrix(Xgrid[!xin],
-                        ##         nrow = 2, ncol = sum(!xin), byrow = TRUE),
-                        ##     y = t(probabilities$quantiles[!xin, , drop = FALSE]) * ymax,
-                        ##     type = 'l', pch = 2, cex = 2,
-                        ##     col = 5, alpha = 0.25,
-                        ##     lty = 1, lwd = 16,
-                        ##     add = addplot
-                        ## )
                         flexiplot(
                             x = matrix(Xgrid[!xin],
                                 nrow = 2, ncol = sum(!xin), byrow = TRUE),
-                            y = probabilities$quantiles[!xin, , drop = FALSE] *
+                            y = t(probabilities$quantiles[!xin, , drop = FALSE]) *
                                 ymax,
                             type = 'l', pch = 2, cex = 2,
                             col = adjustcolor(cyan, 0.25),
@@ -444,17 +380,6 @@ plotFsamples <- function(
                 ## If required, plot probability
                 if (plotprobability) {
                     if (any(xin)) {
-                        ## tplot(
-                        ##     x = Xgrid[xin],
-                        ##     y = probabilities$values[xin],
-                        ##     xlim = range(Xgrid), ylim = c(0, ymax),
-                        ##     type = 'l', cex = 0.5, lty = 1, lwd = 4,
-                        ##     col = 1, alpha = 0.75,
-                        ##     xlab = name,
-                        ##     ylab = paste0('probability density', addylab),
-                        ##     family = fontfamily,
-                        ##     add = addplot
-                        ## )
                         flexiplot(
                             x = Xgrid[xin],
                             y = probabilities$values[xin],
@@ -471,14 +396,6 @@ plotFsamples <- function(
 
                     ## Boundary points
                     if (any(!xin)) {
-                        ## tplot(
-                        ##     x = Xgrid[!xin],
-                        ##     y = probabilities$values[!xin] * ymax,
-                        ##     type = 'p', pch = 2, cex = 2,
-                        ##     col = 1, alpha = 0.75,
-                        ##     lty = 1, lwd = 3,
-                        ##     add = addplot
-                        ## )
                         flexiplot(
                             x = Xgrid[!xin],
                             y = probabilities$values[!xin] * ymax,
@@ -494,16 +411,6 @@ plotFsamples <- function(
                 ## If required and possible, plot data histogram
                 if (datahistogram && theresdata) {
                     if(hleft + hright < 1) {
-                        ## tplot(
-                        ##     x = histo$mids, y = histo$density,
-                        ##     xlim = range(Xgrid), ylim = c(0, ymax),
-                        ##     type = 'l', col = 4, alpha = 0.5,
-                        ##     border = '#555555', border.alpha = 1/4,
-                        ##     xlab = name,
-                        ##     ylab = paste0('probability density', addylab),
-                        ##     family = fontfamily,
-                        ##     add = addplot
-                        ## )
                         flexiplot(
                             x = histo$mids, y = histo$density,
                             xlim = range(Xgrid), ylim = c(0, ymax),
@@ -520,17 +427,6 @@ plotFsamples <- function(
 
                     ## Boundary points
                     if (hleft + hright > 0) {
-                        ## tplot(
-                        ##     x = c(if(hleft > 0){domainminplushs},
-                        ##         if(hright > 0){domainmaxminushs}),
-                        ##     y = c(if(hleft > 0){hleft},
-                        ##         if(hright > 0){hright}) * ymax,
-                        ##     type = 'p', pch = 0, cex = 2,
-                        ##     col = 4, alpha = 0.5,
-                        ##     lty = 1, lwd = 5,
-                        ##     family = fontfamily,
-                        ##     add = addplot
-                        ## )
                         flexiplot(
                             x = c(if(hleft > 0){domainminplushs},
                                 if(hright > 0){domainmaxminushs}),
@@ -631,17 +527,6 @@ plotFsamples <- function(
 
                 ## If required, plot frequency samples
                 if (plotvariability == 'samples') {
-                    ## tplot(
-                    ##     x = Xgrid,
-                    ##     y = probabilities$samples,
-                    ##     xlim = range(Xgrid), ylim = c(0, ymax),
-                    ##     xticks = Xticks, xlabels = rownames(Xgrid),
-                    ##     type = 'l', lty = 1, lwd = 2,
-                    ##     col = 5, alpha = 1/8,
-                    ##     xlab = name,
-                    ##     ylab = paste0('probability', addylab),
-                    ##     family = fontfamily
-                    ## )
                     flexiplot(
                         x = Xgrid,
                         y = probabilities$samples,
@@ -677,18 +562,6 @@ plotFsamples <- function(
 
                 ## If required, plot probability
                 if (plotprobability) {
-                    ## tplot(
-                    ##     x = Xgrid,
-                    ##     y = probabilities$values,
-                    ##     xlim = range(Xgrid), ylim = c(0, ymax),
-                    ##     xticks = Xticks, xlabels = rownames(Xgrid),
-                    ##     type = 'b', cex = 0.5, lty = 1, lwd = 4,
-                    ##     col = 1, alpha = 0.75,
-                    ##     xlab = name,
-                    ##     ylab = paste0('probability', addylab),
-                    ##     family = fontfamily,
-                    ##     add = addplot
-                    ## )
                     flexiplot(
                         x = Xgrid,
                         y = probabilities$values,
@@ -706,17 +579,6 @@ plotFsamples <- function(
 
                 ## If required and possible, plot data histogram
                 if (datahistogram && theresdata) {
-                    ## tplot(
-                    ##     x = Xgrid, y = histo,
-                    ##     xlim = range(Xgrid), ylim = c(0, ymax),
-                    ##     xticks = Xticks, xlabels = rownames(Xgrid),
-                    ##     type = 'l', col = 4, alpha = 0.5,
-                    ##     border = '#555555', border.alpha = 1/4,
-                    ##     xlab = name,
-                    ##     ylab = paste0('probability', addylab),
-                    ##     family = fontfamily,
-                    ##     add = addplot
-                    ## )
                     flexiplot(
                         x = Xgrid, y = histo,
                         xlim = range(Xgrid), ylim = c(0, ymax),
