@@ -50,6 +50,7 @@
 #' - `$quantiles` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
 #' - `$samples` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such probabilities.
 #' - `$values.MCaccuracy`, `quantiles.MCaccuracy`: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the `values` and `quantiles` elements.
+#' - `$densities`: numerical vector equal to the number of rows in `Y`, used mainly for [plot.probability()]. It is the order of the probability density the `Y`-values: values with `0` are actual probabilities; values with `1` are linear probability densities (\eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}); values with `2` are areic probability densities (\eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}); and so on.
 #' - `$Y`, `$X`, `$tails`: copies of the `Y`, `X`, `tails` arguments.
 #'
 #' @references
@@ -651,23 +652,21 @@ Pr <- function(
         outtails[c(colnames(Y), colnames(X))] <- ''
         outtails[names(tails == -1)] <- '>'
         outtails[names(tails == 1)] <- '<'
-
-        ismass <- sapply(outtails[colnames(Y)], `%in%`, c('<', '>'))
     } else {
         outtails <- NULL
-        ismass <- FALSE
     }
 
     ## report whether the probabilities are densities
-    ismass <- sapply(outtails, `%in%`, c('<', '>'))
-    temp <- auxmetadata$name %in% colnames(Y) &
-        auxmetadata$mcmctype %in% c('R', 'C') &
-        (auxmetadata$minincluded | auxmetadata$maxincluded)
-    isdelta <- apply(X = Y[, auxmetadata[temp, 'name'], drop = FALSE],
+    temp <- (auxmetadata$name %in% colnames(Y)) &
+        (auxmetadata$mcmctype %in% c('R', 'C'))
+    if(!is.null(tails)){
+        temp <- temp & unname(outtails[auxmetadata$name] == '')
+    }
+    out$densities <- apply(X = Y[, auxmetadata[temp, 'name'], drop = FALSE],
         MARGIN = 1,
         FUN = function(xx){
-            any(xx <= auxmetadata[temp ,'domainmin'] |
-                    xx >= auxmetadata[temp ,'domainmax'])
+            sum(xx > auxmetadata[temp ,'domainmin'] &
+                    xx < auxmetadata[temp ,'domainmax'])
         }, simplify = TRUE)
 
     ## Dimension & value names for variates
@@ -714,7 +713,7 @@ Pr <- function(
         out$Y <- Y
         out$X <- X
     }
-    if(!is.null(tails)){
+    if(!is.null(outtails)){
         out$tails <- outtails[!(outtails == '')]
     }
 

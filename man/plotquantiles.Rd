@@ -20,7 +20,7 @@ plotquantiles(
 
 \item{y}{Numeric: a matrix having as many rows as \code{x} and an even number of columns, with one column per quantile. Typically these quantiles have been obtained with \code{\link[=Pr]{Pr()}}, as their \verb{$quantiles} value. This value is a three-dimensional array, and one of its columns (corresponding to the possible values of the \code{X} argument of \code{\link[=Pr]{Pr()}}) or one of its rows (corresponding to the possible values of the \code{Y} argument of \code{\link[=Pr]{Pr()}}) should be selected before being used as \code{y} input.}
 
-\item{xdomain}{Character or numeric or \code{NULL} (default): vector of possible values of the variate represented in the x-axis, if the \code{x} argument is a character vector. The ordering of the values is respected. If \code{NULL}, then \code{unique(x)} is used.}
+\item{xdomain}{Character or numeric or \code{NULL} (default): vector of possible values of the variate represented in the x-axis, if the \code{x} argument is a character vector. The ordering of the values is respected. If \code{NULL}, then \code{\link[base:unique]{unique(x)}} is used.}
 
 \item{alpha.f}{Numeric, default 0.25: opacity of the quantile bands, \code{0} being completely invisible and \code{1} completely opaque.}
 
@@ -28,7 +28,7 @@ plotquantiles(
 
 \item{border}{Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}. If \code{NA} (default), no border is drawn.}
 
-\item{type}{see analogous argument in \code{\link[=flexiplot]{flexiplot()}}.}
+\item{type}{See analogous argument in \code{\link[graphics:matplot]{graphics::matplot()}}. Default is \code{'n'}, so the quantile bands do not have demarcation lines.}
 
 \item{...}{Other parameters to be passed to \code{\link[=flexiplot]{flexiplot()}}.}
 }
