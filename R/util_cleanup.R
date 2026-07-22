@@ -13,7 +13,8 @@ util_cleanup <- function(path){
         'learnt.rds',
         'MCtraces.rds',
         'MCtraces.pdf',
-        'log-1.log',
+        'log-1.out',
+        'main.out',
         'plotquantiles_learnt.pdf',
         'plotsamples_learnt.pdf'
     ))))){

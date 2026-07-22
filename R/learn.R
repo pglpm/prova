@@ -36,10 +36,10 @@
 #' and then be called on a bash terminal with
 #'
 #' ```
-#' $ Rscript myscript.R > learnoutput.log 2>&1 &
+#' $ Rscript myscript.R > learnoutput.out 2>&1 &
 #' ```
 #'
-#' with such a call, the file 'learnoutput.log' will contain information about how the computation is proceeding and the estimated end time.
+#' with such a call, the file 'learnoutput.out' will contain information about how the computation is proceeding and the estimated end time.
 #'
 #' @param data A dataset, given as a [base::data.frame()] or as a file path to a CSV file. If missing or `NULL`, then the prior probability distribution is calculated.
 #' @param metadata [metadata] about the dataset's variates, given either as a [data frame][base::data.frame()] or as a file path to a CSV file.
@@ -64,7 +64,7 @@
 #' @param minESS Numeric positive or `NULL`, default 450: desired minimal Monte Carlo *Expected Sample Size*. If `NULL`, it is equal to the final `nsamplesperchain`. `minESS` is related to `maxrelMCSE` by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}}.
 #' @param initES Numeric positive, default 2: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.
 #' @param thinning Integer or `NULL` (default): thin out the Monte Carlo samples by this value. If `NULL`: let the diagnostics decide the thinning value.
-#' @param verbose Logical, default `TRUE`: output the progress to terminal? If `FALSE`, the progress is outputted to the file `'main.log'` in the `outputdir` directory.
+#' @param verbose Logical, default `TRUE`: output the progress to terminal? If `FALSE`, the progress is outputted to the file `'main.out'` in the `outputdir` directory.
 #' @param plottraces Logical, default `TRUE`: save plots of the Monte Carlo traces of diagnostic values?
 #' @param showKtraces Logical, default `FALSE`: save plots of the Monte Carlo traces of the K parameter?
 #' @param showAlphatraces Logical, default `FALSE`: save plots of the Monte Carlo traces of the Alpha parameter?
@@ -76,7 +76,7 @@
 #'
 #' - `MCtraces.pdf`: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file `MCtraces.rds`.
 #' - `plotsamples_learnt.pdf`, `plotquantiles_learnt.pdf`: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
-#' - `log-1.log`, `log-2.log`, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.
+#' - `log-1.out`, `log-2.out`, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.
 #' - `rng_seed.rds`: the state of the pseudorandom seed (see [base::Random]) when `learn()` was called.
 #' - `metadata.csv`: a copy of the metadata.
 #'
@@ -622,7 +622,7 @@ learn <- function(
 
     ## Create main log file in output directory
     ## also keep printing to terminal if verbose = TRUE
-    mainlog <- file.path(dirname, 'main.log')
+    mainlog <- file.path(dirname, 'main.out')
     maincon0 <- file(mainlog, open = 'w')
     closecons0 <- function(){
         ## Close output to main log file
@@ -1582,7 +1582,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
     ## Redirect diagnostics and service messages there
     outcon <- file(file.path(dirname,
         paste0('log', dashnameroot,
-            '-', acore, '.log')
+            '-', acore, '.out')
     ), open = 'w')
     sink(file = outcon, type = 'output', split = FALSE)
     sink(file = outcon, type = 'message', split = FALSE)
