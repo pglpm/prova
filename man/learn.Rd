@@ -86,7 +86,7 @@ learn(
 
 \item{thinning}{Integer or \code{NULL} (default): thin out the Monte Carlo samples by this value. If \code{NULL}: let the diagnostics decide the thinning value.}
 
-\item{verbose}{Logical, default \code{TRUE}: output the progress to terminal? If \code{FALSE}, the progress is outputted to the file \code{'main.log'} in the \code{outputdir} directory.}
+\item{verbose}{Logical, default \code{TRUE}: output the progress to terminal? If \code{FALSE}, the progress is outputted to the file \code{'main.out'} in the \code{outputdir} directory.}
 
 \item{plottraces}{Logical, default \code{TRUE}: save plots of the Monte Carlo traces of diagnostic values?}
 
@@ -103,7 +103,7 @@ A "learnt" object, or name of directory containing such an object and other outp
 \itemize{
 \item \code{MCtraces.pdf}: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file \code{MCtraces.rds}.
 \item \code{plotsamples_learnt.pdf}, \code{plotquantiles_learnt.pdf}: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
-\item \verb{log-1.log}, \verb{log-2.log}, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.
+\item \verb{log-1.out}, \verb{log-2.out}, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.
 \item \code{rng_seed.rds}: the state of the pseudorandom seed (see \link[base:Random]{base::Random}) when \code{learn()} was called.
 \item \code{metadata.csv}: a copy of the metadata.
 }
@@ -145,10 +145,10 @@ learn(
 
 and then be called on a bash terminal with
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{$ Rscript myscript.R > learnoutput.log 2>&1 &
+\if{html}{\out{<div class="sourceCode">}}\preformatted{$ Rscript myscript.R > learnoutput.out 2>&1 &
 }\if{html}{\out{</div>}}
 
-with such a call, the file 'learnoutput.log' will contain information about how the computation is proceeding and the estimated end time.
+with such a call, the file 'learnoutput.out' will contain information about how the computation is proceeding and the estimated end time.
 }
 \examples{
 \donttest{
