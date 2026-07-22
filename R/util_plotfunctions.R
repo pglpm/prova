@@ -243,7 +243,7 @@ flexiplot <- function(
 #' @param xdomain Character or numeric or `NULL` (default): vector of possible values of the variate represented in the x-axis, if the `x` argument is a character vector. The ordering of the values is respected. If `NULL`, then [`unique(x)`][base::unique()] is used.
 #' @param alpha.f Numeric, default 0.25: opacity of the quantile bands, `0` being completely invisible and `1` completely opaque.
 #' @param col Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. Default `#4477AA`.
-#' @param border Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
+#' @param border Border colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
 #' @param type See analogous argument in [graphics::matplot()]. Default is `'n'`, so the quantile bands do not have demarcation lines.
 #' @param ... Other parameters to be passed to [flexiplot()].
 #'
@@ -329,8 +329,9 @@ plotquantiles <- function(
     if(is.na(alpha.f)){alpha.f <- 1}
     col <- adjustcolor(col, alpha.f = alpha.f)
     for(ii in seq_len(nquant/2)) {
-        graphics::polygon(x=c(x, rev(x)), y=c(y[,ii], rev(y[, nquant + 1 - ii])),
-            col = col, border = border)
+        graphics::polygon(x = c(x, rev(x)),
+            y = c(y[, ii], rev(y[, nquant + 1 - ii])),
+            col = col, border = border, lwd = 10, xpd = TRUE)
     }
     invisible()
 }
@@ -483,6 +484,9 @@ plot.probability <- function(
         }
     }
 
+    ## Check for singular-probability values
+    isdensity <- any(x$densities > 0)
+
     ## If 'PvsY' is NULL, then we guess that the longest between Y and X
     ## is meant to be abscissa
     if(is.null(PvsY)){ PvsY <- (Ylen >= Xlen) }
@@ -491,12 +495,15 @@ plot.probability <- function(
         xxx <- x$Y
         leg <- x$X
         tempxlab <- 'Y'
+        xdeltas <- which(x$densities < max(x$densities))
+        if(length(xdeltas) == 0){xdeltas <- NULL}
     } else {
         xxx <- x$X
         leg <- x$Y
         tempxlab <- 'X'
         x[['values']] <- t(x[['values']])
         if(!is.null(pvar)){ pvar <- aperm(pvar, c(2, 1, 3)) }
+        xdeltas <- NULL
     }
 
     ## If the abscissa has more than one variate,
@@ -530,7 +537,7 @@ plot.probability <- function(
         }
     }
     if(is.null(ylab)){
-        ylab <- 'probability'
+        ylab <- paste0('probability', if(isdensity){' density'})
     }
 
     if(is.null(type)){
@@ -546,6 +553,18 @@ plot.probability <- function(
         ylim[1] <- min(pvar, x[['values']])
     }
     if(spread == 'quantiles'){
+        flexiplot(x = xxx,
+            y = matrix(pvar, nrow = dim(pvar)[1]),
+            type = 'n',
+            xlab = xlab,
+            ylab = ylab,
+            ylim = ylim,
+            main = main,
+            grid = grid,
+            add = add,
+            ...)
+        add <- TRUE
+    if(is.null(xdeltas)){
         for(i in seq_len(dim(pvar)[2])){
             plotquantiles(x = unlist(xxx), y = pvar[, i, ],
                 col = col[(i - 1) %% length(col) + 1],
@@ -560,6 +579,37 @@ plot.probability <- function(
                 ...)
             add <- TRUE
         }
+        } else {
+        for(i in seq_len(dim(pvar)[2])){
+            plotquantiles(x = unlist(xxx)[-xdeltas],
+                y = pvar[-xdeltas, i, ],
+                col = col[(i - 1) %% length(col) + 1],
+                alpha.f = var.alpha.f,
+                lty =  lty[(i - 1) %% length(lty) + 1],
+                xlab = xlab,
+                ylab = ylab,
+                ylim = ylim,
+                main = main,
+                grid = grid,
+                add = (add || i > 1),
+                ...)
+            plotquantiles(x = unlist(xxx)[xdeltas],
+                y = pvar[, i, ][xdeltas, , drop=FALSE],
+                col = col[(i - 1) %% length(col) + 1],
+                border = adjustcolor(col[(i - 1) %% length(col) + 1],
+                    alpha.f = var.alpha.f),
+                alpha.f = var.alpha.f,
+                lty =  lty[(i - 1) %% length(lty) + 1],
+                xlab = xlab,
+                ylab = ylab,
+                ylim = ylim,
+                main = main,
+                grid = grid,
+                add = TRUE,
+                ...)
+            add <- TRUE
+        }
+            }
 
     } else if(spread == 'samples'){
         ## the samples are plotted alternating between the different subgroups,
