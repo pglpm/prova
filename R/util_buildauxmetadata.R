@@ -61,7 +61,7 @@ buildauxmetadata <- function(data, metadata, Dthreshold = 1, tscalefactor = 4.26
         if(is.null(metadata[[column]])){ metadata[[column]] <- NA }
     }
 
-    for (name in metadata$name) {
+    for (name in metadata$name) {print(name)
         minfo <- as.list(metadata[metadata$name == name, ])
         ## make sure 'type' is lowercase
         minfo$type <- tolower(minfo$type)

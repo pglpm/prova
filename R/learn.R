@@ -555,10 +555,10 @@ learn <- function(
         ## Remove empty datapoints
         tokeep <- which(apply(auxdata, 1, function(xx) { !all(is.na(xx)) }))
         if(length(tokeep) == 0 && !prior) {
-            stop('Auxdata are given but empty')
+            stop("'auxdata' is given but empty")
         } else if(length(tokeep) < nrow(auxdata)) {
             predirmsgs <- c(predirmsgs, list(
-                '"auxdata" contain empty datapoints. Dropping them.'
+                "'auxdata' contain empty datapoints. Dropping them."
             ))
             auxdata <- auxdata[tokeep, , drop = FALSE]
         }
@@ -572,7 +572,7 @@ learn <- function(
     ## Build auxiliary metadata object; we'll save it later
     ## message('Calculating auxiliary metadata.')
     auxmetadata <- buildauxmetadata(
-        data = (if (is.null(auxdata)) {data} else {auxdata}),
+        data = if(is.null(auxdata)){data}else{rbind(data, auxdata)},
         metadata = metadata,
         Dthreshold = Dthreshold,
         tscalefactor = tscalefactor
