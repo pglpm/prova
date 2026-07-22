@@ -240,11 +240,11 @@ flexiplot <- function(
 #'
 #' @param x Numeric or character: vector of x-coordinates. See [flexiplot()].
 #' @param y Numeric: a matrix having as many rows as `x` and an even number of columns, with one column per quantile. Typically these quantiles have been obtained with [Pr()], as their `$quantiles` value. This value is a three-dimensional array, and one of its columns (corresponding to the possible values of the `X` argument of [Pr()]) or one of its rows (corresponding to the possible values of the `Y` argument of [Pr()]) should be selected before being used as `y` input.
-#' @param xdomain Character or numeric or `NULL` (default): vector of possible values of the variate represented in the x-axis, if the `x` argument is a character vector. The ordering of the values is respected. If `NULL`, then `unique(x)` is used.
+#' @param xdomain Character or numeric or `NULL` (default): vector of possible values of the variate represented in the x-axis, if the `x` argument is a character vector. The ordering of the values is respected. If `NULL`, then [`unique(x)`][base::unique()] is used.
 #' @param alpha.f Numeric, default 0.25: opacity of the quantile bands, `0` being completely invisible and `1` completely opaque.
 #' @param col Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. Default `#4477AA`.
 #' @param border Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
-#' @param type see analogous argument in [flexiplot()].
+#' @param type See analogous argument in [graphics::matplot()]. Default is `'n'`, so the quantile bands do not have demarcation lines.
 #' @param ... Other parameters to be passed to [flexiplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].

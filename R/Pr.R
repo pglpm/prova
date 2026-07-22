@@ -645,13 +645,30 @@ Pr <- function(
     gc(full = TRUE)
 
 
-    ## report also whether the probabilities are 'tails' or not
+    ## report whether the probabilities are 'tails' or not
     if(!is.null(tails)){
         outtails <- list()
         outtails[c(colnames(Y), colnames(X))] <- ''
         outtails[names(tails == -1)] <- '>'
         outtails[names(tails == 1)] <- '<'
-    } else {outtails <- NULL}
+
+        ismass <- sapply(outtails[colnames(Y)], `%in%`, c('<', '>'))
+    } else {
+        outtails <- NULL
+        ismass <- FALSE
+    }
+
+    ## report whether the probabilities are densities
+    ismass <- sapply(outtails, `%in%`, c('<', '>'))
+    temp <- auxmetadata$name %in% colnames(Y) &
+        auxmetadata$mcmctype %in% c('R', 'C') &
+        (auxmetadata$minincluded | auxmetadata$maxincluded)
+    isdelta <- apply(X = Y[, auxmetadata[temp, 'name'], drop = FALSE],
+        MARGIN = 1,
+        FUN = function(xx){
+            any(xx <= auxmetadata[temp ,'domainmin'] |
+                    xx >= auxmetadata[temp ,'domainmax'])
+        }, simplify = TRUE)
 
     ## Dimension & value names for variates
     Ynames <- setNames(object = list(
