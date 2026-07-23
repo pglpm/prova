@@ -58,7 +58,7 @@
 #'
 #' ## mutual information between variates 'species' and 'bill_len'
 #' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-#'   learnt = learnt, nv = 4, parallel = 1)
+#'   learnt = learnt, nv = 2, parallel = 1)
 #'
 #' ## The value and its numerical Monte Carlo error
 #' c(MI$value, MI$MCaccuracy)
