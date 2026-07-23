@@ -61,7 +61,7 @@
         if(is.null(metadata[[column]])){ metadata[[column]] <- NA }
     }
 
-    for (name in metadata$name) {print(name)
+    for (name in metadata$name) {
         minfo <- as.list(metadata[metadata$name == name, ])
         ## make sure 'type' is lowercase
         minfo$type <- tolower(minfo$type)
