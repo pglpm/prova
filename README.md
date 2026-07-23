@@ -74,7 +74,7 @@ binary classification models*](https://doi.org/10.1088/2632-2153/ae45ed)
 
 ## Projects using **Prova**:
 
-- [InfernoCalibNet](https://m4siko.github.io/InfernoCalibNet/): uncertainty-aware predictions for medical AI using CNN and Bayesian nonparametrics framework
+- [InfernoCalibNet](https://inferno.m4siko.cc/): uncertainty-aware predictions for medical AI using CNN and Bayesian nonparametrics framework
 - [parkinsonbayes](https://github.com/pglpm/parkinsonbayes/): Examples of Bayesian nonparametric inference for studies of Parkinson's Disease
 - [Inferno-App](https://github.com/Myddis/Inferno-App/): PySide6 application that integrates Python and R functionality using the **Inferno** (old version of **Prova**) R package.
 

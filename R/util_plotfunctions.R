@@ -354,7 +354,7 @@ plotquantiles <- function(
 #' @param alpha.f Numeric, default 0.25: opacity of the colours, `0` being completely invisible and `1` completely opaque.
 #' @param var.alpha.f Numeric: opacity of the quantile bands or of the samples, `0` being completely invisible and `1` completely opaque.
 #' @param var.nsamples Integer, default 360: number of samples of long-run frequencies to display
-#' @param lty,lwd,col,type,xlab,ylab,main,ylim,grid,add see analogous arguments in [graphics::matplot()]
+#' @param lty,lwd,pch,col,type,xlab,ylab,main,ylim,grid,add see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
 #' @param ... Other parameters to be passed to [flexiplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
@@ -477,6 +477,7 @@ plot.probability <- function(
         }
         qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
         if(is.null(var.alpha.f)){var.alpha.f <- 0.25}
+
     } else if(spread == 'samples'){
         maxvar <- max(apply(
             X = x[['samples']], MARGIN = c(1, 2), FUN = quantile,
@@ -595,21 +596,25 @@ plot.probability <- function(
     }
 
     if(any(xdeltas)){
-        if(is.null(pvar)){
-            mpvar <- max(x[['values']][xdeltas,], na.rm = TRUE)
+        if(spread == 'quantiles'){
+            mpvar <- max(pvar[xdeltas, , ], na.rm = TRUE)
+        } else if(spread == 'samples'){
+            mpvar <- max(apply(
+                X = x[['samples']][xdeltas, , , drop = FALSE],
+                MARGIN = c(1, 2), FUN = quantile,
+                probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
+            ))
         } else {
-            mpvar <- maxvar
+            mpvar <- max(x[['values']][xdeltas, ], na.rm = TRUE)
         }
         ## compute max probability of singular points,
         ## and find conversion scale
         yticks <- axTicks(4)
         ydivs <- length(yticks) - 1
-        yscale <- (mpvar / ydivs) / min(yticks[yticks > 0])
-        yscale <- max(yticks) / (
-            ceiling(yscale * 10^(-floor(log10(yscale)) + 1)) *
-                10^(floor(log10(yscale)) - 1) * ydivs
-        )
-        yticks <- yticks[yticks / yscale <= 1]
+        yscale <- signif(x = mpvar / ydivs, digits = 1)
+        yscale <- max(yticks) / (yscale * ydivs)
+        ## ceiling(yscale * 10^(-floor(log10(yscale)) + 1)) *
+        ##     10^(floor(log10(yscale)) - 1) * ydivs
         ## add axis for singular probability values
         graphics::axis(4, at = yticks, labels = yticks / yscale,
             tick = !grid, col = 'black', lwd = 1, lty = 1)
@@ -973,7 +978,7 @@ hist.probability <- function(
 #' Print an object of class "probability"
 #'
 #' @description
-#' This [base::print()] method is a utility to display selected elements of a "probability" object obtained with [Pr()]; typically its posterior probabilies (element `$values`) and their revisabilities (element `$quantiles`). If the `Y` or `X` variates are joint variates, this method also allow to display only selected values of them.
+#' This [base::print()] method is a utility to display selected elements of a "probability" object obtained with [Pr()]; typically its posterior probabilies (element `$values`) and their revisabilities (element `$quantiles`). If the `Y` or `X` variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk `*`.
 #'
 #' @param x Object of class "probability", obtained with [Pr()].
 #' @param elements character or integer vector, or `NULL` (default): elements of the "probability" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `$values` and `$quantiles` are displayed together in a special way.
@@ -1051,11 +1056,17 @@ print.probability <- function(
             dim = c(dim(x[['values']]),
                 2 + (if(is.null(x[['quantiles']])){0}else{dim(x[['quantiles']])[3]}) ),
             dimnames = c(dimnames(x[['values']]),
-                list(`probability` = c('value', '+/-',
-                    if(!is.null(x[['quantiles']])){paste0('Q',
-                        dimnames(x[['quantiles']])[[3]])}
-                )))
-        ), perm = c(1,3,2))
+                setNames(object = list(c('value', '+/-',
+                    if(!is.null(x[['quantiles']])){
+                        paste0('Q', dimnames(x[['quantiles']])[[3]])
+                    }
+                )), nm = paste0('probability',
+                    if(any(x[['densities']] > 0)){' density'}))
+                )),
+            perm = c(1,3,2))
+        temp2 <- dimnames(temp)[[1]][x[['densities']] < max(x[['densities']])]
+        dimnames(temp)[[1]][x[['densities']] < max(x[['densities']])] <-
+            paste0(temp2, '*')
 
         if(is.null(x$X)){temp <- temp[,,]}
 

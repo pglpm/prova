@@ -23,7 +23,7 @@
 Its \code{x} argument, \link[base:invisible]{invisibly}; see \code{\link[base:print]{base::print()}}.
 }
 \description{
-This \code{\link[base:print]{base::print()}} method is a utility to display selected elements of a "probability" object obtained with \code{\link[=Pr]{Pr()}}; typically its posterior probabilies (element \verb{$values}) and their revisabilities (element \verb{$quantiles}). If the \code{Y} or \code{X} variates are joint variates, this method also allow to display only selected values of them.
+This \code{\link[base:print]{base::print()}} method is a utility to display selected elements of a "probability" object obtained with \code{\link[=Pr]{Pr()}}; typically its posterior probabilies (element \verb{$values}) and their revisabilities (element \verb{$quantiles}). If the \code{Y} or \code{X} variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk \code{*}.
 }
 \examples{
 ## Load the example `learnt` object calculated from the "penguins" dataset;
