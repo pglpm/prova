@@ -11,7 +11,7 @@
 #' @import graphics
 #' @import stats
 #' @keywords internal
-createQfunction <- function(
+.createQfunction <- function(
     nint = 3600,
     nsamples = 2^24L,
     mean = 0,

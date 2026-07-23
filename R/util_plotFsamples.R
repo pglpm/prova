@@ -26,7 +26,7 @@
 #' @import utils
 #'
 #' @keywords internal
-plotFsamples <- function(
+.plotFsamples <- function(
     filename,
     learnt,
     data,
@@ -447,7 +447,7 @@ plotFsamples <- function(
                 ## These variate types all have finite probabilities
                 if(nvaluelist > 0) {
                     ## Xgrid <-  as.matrix(
-                    ##     vtransform(x = datavalues,
+                    ##     .vtransform(x = datavalues,
                     ##         variates = name,
                     ##         auxmetadata = auxmetadata,
                     ##         Oout = 'numeric',
@@ -604,7 +604,7 @@ plotFsamples <- function(
                 datum <- datum[!is.na(datum)]
                 if (mcmctype %in% c('O', 'N', 'B')) {
                     datum <- as.matrix(
-                        vtransform(x = datum,
+                        .vtransform(x = datum,
                             variates = name,
                             auxmetadata = auxmetadata,
                             Oout = 'numeric',

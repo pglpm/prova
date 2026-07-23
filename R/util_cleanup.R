@@ -8,7 +8,7 @@
 #' @return No return value; called for side effects.
 #'
 #' @keywords internal
-util_cleanup <- function(path){
+.util_cleanup <- function(path){
     if(all(file.exists(file.path(path, c(
         'learnt.rds',
         'MCtraces.rds',
@@ -39,7 +39,7 @@ util_cleanup <- function(path){
 #' @return A [data frame][base::data.frame()] of MCMC traces.
 #'
 #' @keywords internal
-util_joinPtraces <- function(path){
+.util_joinPtraces <- function(path){
     Plist <- list.files(path = path, pattern = '^____tempPtraces-.*\\.rds$')
     chainlist <- unique(sub(
         pattern = '^____tempPtraces-([0-9]+)-.*',

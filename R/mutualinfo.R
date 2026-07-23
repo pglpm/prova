@@ -450,7 +450,7 @@ mutualinfo <- function(
     Yout <- Yout[, match(Ynames, vYout), drop = FALSE]
     colnames(Yout) <- Ynames
 
-    Yout <- vtransform(Yout,
+    Yout <- .vtransform(Yout,
         auxmetadata = auxmetadata,
         Rout = 'original',
         Cout = 'original',
@@ -516,13 +516,13 @@ mutualinfo <- function(
 
     ## ## Jacobian factors unneeded because we only output the MI
     ## logjacobians1 <- rowSums(
-    ##     as.matrix(vtransform(Y1transf,
+    ##     as.matrix(.vtransform(Y1transf,
     ##         auxmetadata = auxmetadata,
     ##         logjacobianOr = FALSE)),
     ##     na.rm = TRUE)
     ##
     ## logjacobians2 <- rowSums(
-    ##     as.matrix(vtransform(Y2transf,
+    ##     as.matrix(.vtransform(Y2transf,
     ##         auxmetadata = auxmetadata,
     ##         logjacobianOr = FALSE)),
     ##     na.rm = TRUE)

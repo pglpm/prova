@@ -571,7 +571,7 @@ learn <- function(
 
     ## Build auxiliary metadata object; we'll save it later
     ## message('Calculating auxiliary metadata.')
-    auxmetadata <- buildauxmetadata(
+    auxmetadata <- .buildauxmetadata(
         data = if(is.null(auxdata)){data}else{rbind(data, auxdata)},
         metadata = metadata,
         Dthreshold = Dthreshold,
@@ -683,7 +683,7 @@ learn <- function(
         for(achain in 0:nchains) {
             pointsid <- sort(sample.int(n = npoints,
                 size = min(ncheckpoints, npoints), replace = FALSE))
-            testdata <- util_prepPcheckpoints(
+            testdata <- .util_prepPcheckpoints(
                 x = data[pointsid, , drop = FALSE],
                 auxmetadata = auxmetadata,
                 pointsid = pointsid
@@ -783,13 +783,13 @@ learn <- function(
 
     ## Load auxiliary functions from external files
     ## source('samplesFDistribution.R')
-    ## source('plotFsamples.R')
+    ## source('.plotFsamples.R')
     ## source('tplotfunctions.R')
-    ## source('vtransform.R')
+    ## source('.vtransform.R')
     ## ## These are used within the foreach core loop
     ## source('proposeburnin.R')
     ## source('proposethinning.R')
-    ## source('mcsubset.R')
+    ## source('.mcsubset.R')
 
 
 
@@ -854,13 +854,13 @@ learn <- function(
                 Cvar1 = rep(1, 1),
                 Cshapelo = rep(Cshapelo, 1),
                 Cshapehi = rep(Cshapehi, 1),
-                Cleft = as.matrix(vtransform(data[, vnames$C, drop = FALSE],
+                Cleft = as.matrix(.vtransform(data[, vnames$C, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Cout = 'left', logjacobianOr = NULL)),
-                Cright = as.matrix(vtransform(data[, vnames$C, drop = FALSE],
+                Cright = as.matrix(.vtransform(data[, vnames$C, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Cout = 'right', logjacobianOr = NULL)),
-                Clatinit = as.matrix(vtransform(data[, vnames$C, drop = FALSE],
+                Clatinit = as.matrix(.vtransform(data[, vnames$C, drop = FALSE],
                     auxmetadata,
                     Cout = 'init', logjacobianOr = NULL))
             )
@@ -876,13 +876,13 @@ learn <- function(
                 Dvar1 = rep(1, 1),
                 Dshapelo = rep(Dshapelo, 1),
                 Dshapehi = rep(Dshapehi, 1),
-                Dleft = as.matrix(vtransform(data[, vnames$D, drop = FALSE],
+                Dleft = as.matrix(.vtransform(data[, vnames$D, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Dout = 'left', logjacobianOr = NULL)),
-                Dright = as.matrix(vtransform(data[, vnames$D, drop = FALSE],
+                Dright = as.matrix(.vtransform(data[, vnames$D, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Dout = 'right', logjacobianOr = NULL)),
-                Dlatinit = as.matrix(vtransform(data[, vnames$D, drop = FALSE],
+                Dlatinit = as.matrix(.vtransform(data[, vnames$D, drop = FALSE],
                     auxmetadata,
                     Dout = 'init', logjacobianOr = NULL))
             )
@@ -895,13 +895,13 @@ learn <- function(
         ##         Lvar1 = rep(1, 1),
         ##         Lshapelo = rep(Lshapelo, 1),
         ##         Lshapehi = rep(Lshapehi, 1),
-        ##         Lleft = as.matrix(vtransform(data[, vnames$L, drop = FALSE],
+        ##         Lleft = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
         ##             auxmetadata = auxmetadata,
         ##             Lout = 'left')),
-        ##         Lright = as.matrix(vtransform(data[, vnames$L, drop = FALSE],
+        ##         Lright = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
         ##             auxmetadata = auxmetadata,
         ##             Lout = 'right')),
-        ##         Llatinit = as.matrix(vtransform(data[, vnames$L, drop = FALSE],
+        ##         Llatinit = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
         ##             auxmetadata,
         ##             Lout = 'init'))
         ##     )
@@ -978,52 +978,52 @@ learn <- function(
     datapoints <- c(
         if (vn$R > 0) { # continuous open domain
             list(
-                Rdata = as.matrix(vtransform(data[, vnames$R, drop = FALSE],
+                Rdata = as.matrix(.vtransform(data[, vnames$R, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Rout = 'normalized', logjacobianOr = NULL))
             )
         },
         if (vn$C > 0) { # continuous closed domain
             list(
-                Caux = as.matrix(vtransform(data[, vnames$C, drop = FALSE],
+                Caux = as.matrix(.vtransform(data[, vnames$C, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Cout = 'aux', logjacobianOr = NULL)),
-                Clat = as.matrix(vtransform(data[, vnames$C, drop = FALSE],
+                Clat = as.matrix(.vtransform(data[, vnames$C, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Cout = 'lat', logjacobianOr = NULL))
             )
         },
         if (vn$D > 0) { # continuous rounded
             list(
-                Daux = as.matrix(vtransform(data[, vnames$D, drop = FALSE],
+                Daux = as.matrix(.vtransform(data[, vnames$D, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Dout = 'aux', logjacobianOr = NULL))
             )
         },
         ## if (vn$L > 0) { # latent
         ##     list(
-        ##         Laux = as.matrix(vtransform(data[, vnames$L, drop = FALSE],
+        ##         Laux = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
         ##             auxmetadata = auxmetadata,
         ##             Lout = 'aux'))
         ##     )
         ## },
         if (vn$O > 0) { # nominal
             list(
-                Odata = as.matrix(vtransform(data[, vnames$O, drop = FALSE],
+                Odata = as.matrix(.vtransform(data[, vnames$O, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Oout = 'numeric', logjacobianOr = NULL))
             )
         },
         if (vn$N > 0) { # nominal
             list(
-                Ndata = as.matrix(vtransform(data[, vnames$N, drop = FALSE],
+                Ndata = as.matrix(.vtransform(data[, vnames$N, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Nout = 'numeric', logjacobianOr = NULL))
             )
         },
         if (vn$B > 0) { # binary
             list(
-                Bdata = as.matrix(vtransform(data[, vnames$B, drop = FALSE],
+                Bdata = as.matrix(.vtransform(data[, vnames$B, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Bout = 'numeric', logjacobianOr = NULL))
             )
@@ -1085,8 +1085,8 @@ learn <- function(
     chaininfo <- parallel::parLapply(
         cl = cl,
         X = 1:ncores,
-        fun = workerfun,
-        ## arguments to workerfun
+        fun = .workerfun,
+        ## arguments to .workerfun
         dirname = dirname,
         dashnameroot = dashnameroot,
         avoidzeroW = avoidzeroW,
@@ -1282,7 +1282,7 @@ learn <- function(
     print2user('\nChecking test data\n(',
         paste0('#', testdata$pointsid, collapse = ' '), '):')
 
-    oktraces <- util_Pcheckpoints(
+    oktraces <- .util_Pcheckpoints(
         testdata = testdata,
         learnt = learnt
     )
@@ -1342,7 +1342,7 @@ learn <- function(
         ## Calculate credibility intervals (proxy for MCSE)
         ## for the empirical quantiles above
         ## as in Vehtari et al. 2021
-        temp <- funMCEQ(x = atrace, prob = c(Qlo, Qhi), Qpair = Qerror)
+        temp <- .funMCEQ(x = atrace, prob = c(Qlo, Qhi), Qpair = Qerror)
         wXlo <- temp[2, 1] - temp[1, 1]
         wXhi <- temp[2, 2] - temp[1, 2]
 
@@ -1353,7 +1353,7 @@ learn <- function(
         ## and Blom 1958 sect 6.10 eqn (6.10.5)
         ## (alternative (6.10.3) gives roughly same results
         ## but is computationally slightly more expensive)
-        essnrmean <- funESS3(qnorm(
+        essnrmean <- .funESS3(qnorm(
         (rank(atrace, na.last = NA, ties.method = 'average') - 0.5) / N
         ))
 
@@ -1436,7 +1436,7 @@ learn <- function(
             lty = 2, col = 2, lwd = 1)
     }
 
-    plotFsamples(
+    .plotFsamples(
         filename = file.path(dirname,
             paste0('plotsamples_learnt', dashnameroot)),
         learnt = learnt,
@@ -1447,7 +1447,7 @@ learn <- function(
         parallel = cl
     )
 
-    plotFsamples(
+    .plotFsamples(
         filename = file.path(dirname,
             paste0('plotquantiles_learnt', dashnameroot)),
         learnt = learnt,
@@ -1516,7 +1516,7 @@ learn <- function(
 #' @import utils
 #'
 #' @keywords internal
-workerfun <- function(
+.workerfun <- function(
     acore,
     dirname,
     dashnameroot,
@@ -2020,7 +2020,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                         Cvar = Cvars,
                         ## for data with boundary values
                         Clat = constants$Clatinit
-                        ## Clat = vtransform(data[, vnames$C, with = FALSE],
+                        ## Clat = .vtransform(data[, vnames$C, with = FALSE],
                         ##   auxmetadata, Cout = 'init')
                     )
                 )
@@ -2039,7 +2039,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                         Dvar = Dvars,
                         ## for data with boundary values
                         Dlat = constants$Dlatinit
-                        ## Dlat = vtransform(data[, vnames$D, with = FALSE],
+                        ## Dlat = .vtransform(data[, vnames$D, with = FALSE],
                         ##   auxmetadata, Dout = 'init')
                     )
                 )
@@ -2059,7 +2059,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             ##                 nrow = vn$L, ncol = constants$ncomponents),
             ##             ## for data with boundary values
             ##             Llat = constants$Llatinit
-            ##             ## Llat = vtransform(data[, vnames$L, with = FALSE],
+            ##             ## Llat = .vtransform(data[, vnames$L, with = FALSE],
             ##             ##   auxmetadata, Lout = 'init')
             ##         )
             ##     )
@@ -2261,8 +2261,6 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                             nrow = vn$C, ncol = constants$ncomponents),
                         ## for data with boundary values
                         Clat = constants$Clatinit
-                        ## Clat = inferno:::vtransform(data[, vnames$C, with = FALSE],
-                        ##   auxmetadata, Cout = 'init')
                     )
                 )
             }
@@ -2281,8 +2279,6 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                             nrow = vn$D, ncol = constants$ncomponents),
                         ## for data with boundary values
                         Dlat = constants$Dlatinit
-                        ## Dlat = inferno:::vtransform(data[, vnames$D, with = FALSE],
-                        ##   auxmetadata, Dout = 'init')
                     )
                 )
             }
@@ -2301,8 +2297,6 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             ##                 nrow = vn$L, ncol = constants$ncomponents),
             ##             ## for data with boundary values
             ##             Llat = constants$Llatinit
-            ##             ## Llat = inferno:::vtransform(data[, vnames$L, with = FALSE],
-            ##             ##   auxmetadata, Lout = 'init')
             ##         )
             ##     )
             ## }
@@ -3063,7 +3057,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                     mcsamples <- NULL
                     niter <- 0
                 } else {
-                    mcsamples <- mcsubset(mcsamples, -toRemove)
+                    mcsamples <- .mcsubset(mcsamples, -toRemove)
                     niter <- niter - length(toRemove)
                 }
             }
@@ -3098,7 +3092,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             diagntime <- Sys.time()
             ##
 
-            ll <- util_Pcheckpoints(
+            ll <- .util_Pcheckpoints(
                 testdata = testdata,
                 learnt = mcsamples
             )
@@ -3170,7 +3164,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             ## Calculate credibility intervals (proxy for MCSE)
             ## for the empirical quantiles above
             ## as in Vehtari et al. 2021
-            temp <- funMCEQ(x = oktraces, prob = c(Qlo, Qhi), Qpair = Qerror)
+            temp <- .funMCEQ(x = oktraces, prob = c(Qlo, Qhi), Qpair = Qerror)
             wXlo <- temp[2, 1] - temp[1, 1]
             wXhi <- temp[2, 2] - temp[1, 2]
 
@@ -3181,7 +3175,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             ## and Blom 1958 sect 6.10 eqn (6.10.5)
             ## (alternative (6.10.3) gives roughly same results
             ## but is computationally slightly more expensive)
-            essnrmean <- funESS3(qnorm(
+            essnrmean <- .funESS3(qnorm(
             (rank(oktraces, na.last = NA, ties.method = 'average') - 0.5) / N
             ))
 
@@ -3229,11 +3223,11 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             ## add overall iteration index `MCindex` to mcsamples
             mcsamples$MCindex <- seq(to = nitertot,
                 length.out = ncol(mcsamples$W))
-            ## need to add 1D to behave well with mcsubset()
+            ## need to add 1D to behave well with .mcsubset()
             dim(mcsamples$MCindex) <- ncol(mcsamples$W)
 
             ## concatenate samples
-                allmcsamples <- mcjoin(allmcsamples, mcsamples)
+                allmcsamples <- .mcjoin(allmcsamples, mcsamples)
 
             if (is.null(allmcsamplesKA)) {
                 allmcsamplesKA <- mcsamplesKA
@@ -3474,11 +3468,11 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                     padchainnumber, '-',
                     chunk, '.rds')
             ))
-            tempmcsamples <- mcsubset(tempmcsamples,
+            tempmcsamples <- .mcsubset(tempmcsamples,
                 which(tempmcsamples$MCindex %in% tokeep)
             )
 
-                allmcsamples <- mcjoin(allmcsamples, tempmcsamples)
+                allmcsamples <- .mcjoin(allmcsamples, tempmcsamples)
         }
 
         ## Save thinned total chain

@@ -367,7 +367,7 @@ rPr <- function(
     Yout <- Yout[, match(Ynames, vYout), drop = FALSE]
     colnames(Yout) <- Ynames
 
-    Yout <- vtransform(Yout,
+    Yout <- .vtransform(Yout,
         auxmetadata = auxmetadata,
         Rout = 'original',
         Cout = 'original',

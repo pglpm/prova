@@ -474,7 +474,7 @@ Pr <- function(
 
     ## Construction of the arguments for util_lprobs, Y argument
     ## jacobians <- exp(-rowSums(
-    ##     log(vtransform(Y,
+    ##     log(.vtransform(Y,
     ##         auxmetadata = auxmetadata,
     ##         invjacobian = TRUE)),
     ##     na.rm = TRUE
@@ -601,7 +601,7 @@ Pr <- function(
                     a = apply(
                         X = out$samples, MARGIN = c(1, 2),
                         FUN = function(FF){
-                            temp <- funMCEQ(x = FF, prob = quantiles,
+                            temp <- .funMCEQ(x = FF, prob = quantiles,
                                 Qpair = Qerror)
                             c(
                                 quantile(x = FF, probs = quantiles, type = 6,
@@ -637,7 +637,7 @@ Pr <- function(
     y <- Y
     y[, colnames(y) %in% tailsv] <- NA
     jacobians <- exp(rowSums(
-        as.matrix(vtransform(y,
+        as.matrix(.vtransform(y,
             auxmetadata = auxmetadata,
             logjacobianOr = TRUE)),
         na.rm = TRUE

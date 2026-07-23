@@ -10,6 +10,6 @@ util_lprobsbase(xVs, params, logW, temporarydir = NULL, lab = "")
 Matrix of log-probabilities, with as many rows as components and as many cols as samples.
 }
 \description{
-Used in \code{\link[=Pr]{Pr()}}, \code{\link[=qPr]{qPr()}}, \code{\link[=rPr]{rPr()}}, \code{\link[=mutualinfo]{mutualinfo()}}, \code{\link[=util_Pcheckpoints]{util_Pcheckpoints()}}.
+Used in \code{\link[=Pr]{Pr()}}, \code{\link[=qPr]{qPr()}}, \code{\link[=rPr]{rPr()}}, \code{\link[=mutualinfo]{mutualinfo()}}, \code{\link[=.util_Pcheckpoints]{.util_Pcheckpoints()}}.
 }
 \keyword{internal}

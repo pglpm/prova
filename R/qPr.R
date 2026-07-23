@@ -410,7 +410,7 @@ qPr <- function(
     ##     y <- Y
     ##     y[, colnames(Y) %in% tailsv] <- NA
     ##     jacobians <- exp(rowSums(
-    ##         as.matrix(vtransform(y,
+    ##         as.matrix(.vtransform(y,
     ##             auxmetadata = auxmetadata,
     ##             logjacobianOr = TRUE)),
     ##         na.rm = TRUE

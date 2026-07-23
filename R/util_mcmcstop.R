@@ -6,7 +6,7 @@
 #'
 #' Tested also on t-distributions with df=1.1 and Pareto with a=1.5 (mean exists, variance infinite).
 #'
-#' Used in 'workerfun()' in 'learn()'
+#' Used in '.workerfun()' in 'learn()'
 #'
 #' @param x A vector of MC samples
 #' @param prob numeric vector of probabilities: quantiles whose error interval is being estimated.
@@ -17,14 +17,14 @@
 #' @import stats
 #'
 #' @keywords internal
-funMCEQ <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
+.funMCEQ <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
     N <- length(x)
     straces <- sort(x)
     sapply(prob, function(aprob) {
         Xlo <- quantile(x = x, probs = aprob,
             na.rm = TRUE, names = FALSE, type = 6)
         ##
-        essXlo <- funESS3(x <= Xlo)
+        essXlo <- .funESS3(x <= Xlo)
         ##
         a <- qbeta(Qpair, essXlo * aprob + 1, essXlo * (1 - aprob) + 1)
         c(straces[max(round(a[1] * N), 1)], straces[min(round(a[2] * N), N)])
@@ -35,19 +35,19 @@ funMCEQ <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
 #'
 #' Modified from 'rstan' <https://github.com/stan-dev/rstan/blob/develop/rstan/rstan/R/monitor.R>
 #'
-#' Used in 'workerfun()' in 'learn()', and in 'funMCEQ()'.
+#' Used in '.workerfun()' in 'learn()', and in '.funMCEQ()'.
 #'
 #' @param x Vector of MC samples.
 #'
 #' @return Effective Sample Size.
 #'
 #' @keywords internal
-funESS3 <- function(x){
+.funESS3 <- function(x){
   N <- length(x)
   if (N < 3L || any(!is.finite(x))) {
     return(NA_real_)
   }
-  acov <- funAC(x)
+  acov <- .funAC(x)
   chain_mean <- mean(x)
   var_plus <- acov[1]
   mean_var <- var_plus * N / (N - 1)
@@ -103,7 +103,7 @@ funESS3 <- function(x){
 #'
 #' Tested also on t-distributions with df=1.1 and Pareto with a=1.5 (mean exists, variance infinite).
 #'
-#' `sd() / sqrt(funESS3()` gives essentially identical results to `funMCSELD()`, but it's 20 times slower.
+#' `sd() / sqrt(.funESS3()` gives essentially identical results to `.funMCSELD()`, but it's 20 times slower.
 #'
 #' Used in 'util_combineYX()' in 'Pr()'.
 #'
@@ -112,7 +112,7 @@ funESS3 <- function(x){
 #' @return MCSE estimates, one for each trace. Division by sqrt(N) is already performed.
 #'
 #' @keywords internal
-funMCSELD <- function(x) {
+.funMCSELD <- function(x) {
     x <- as.matrix(x)
     N <- nrow(x)
     b <- floor(sqrt(N))
@@ -130,7 +130,7 @@ funMCSELD <- function(x) {
 #'
 #' Modified from rstan <https://github.com/stan-dev/rstan/blob/develop/rstan/rstan/R/monitor.R>.
 #'
-#' Used in 'funESS3()'.
+#' Used in '.funESS3()'.
 #'
 #' @param y Time series
 #'
@@ -139,9 +139,9 @@ funMCSELD <- function(x) {
 #' @import stats
 #'
 #' @keywords internal
-funAC <- function(y) {
+.funAC <- function(y) {
   N <- length(y)
-  Mt2 <- 2 * fftNGS(N)
+  Mt2 <- 2 * .fftNGS(N)
   yc <- y - mean(y)
   yc <- c(yc, rep.int(x = 0, times = Mt2 - N))
   transform <- fft(yc)
@@ -156,14 +156,14 @@ funAC <- function(y) {
 #'
 #' Modified from rstan <https://github.com/stan-dev/rstan/blob/develop/rstan/rstan/R/monitor.R>.
 #'
-#' Used in 'funAC()'.
+#' Used in '.funAC()'.
 #'
 #' @param N Integer.
 #'
 #' @return Optimal FFT size
 #'
 #' @keywords internal
-fftNGS <- function(N) {
+.fftNGS <- function(N) {
   # Find the optimal next size for the FFT so that
   # a minimum number of zeros are padded.
   if (N <= 2)

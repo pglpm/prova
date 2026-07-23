@@ -16,7 +16,7 @@
 #' @return A [data frame][base::data.frame()] with auxmetadata.
 #' @import stats
 #' @keywords internal
-buildauxmetadata <- function(data, metadata, Dthreshold = 1, tscalefactor = 4.266) {
+.buildauxmetadata <- function(data, metadata, Dthreshold = 1, tscalefactor = 4.266) {
 
     ## In the internal, rescaled representation,
     ## with the SD of the means equal to 3 and

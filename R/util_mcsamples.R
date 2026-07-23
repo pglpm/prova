@@ -3,7 +3,7 @@
 #' Used in 'learn()'.
 #'
 #' @keywords internal
-mcsubset <- function(learnt, subsamples) {
+.mcsubset <- function(learnt, subsamples) {
     lapply(learnt, function(xx) {
         do.call('[', c(
             list(xx),
@@ -20,7 +20,7 @@ mcsubset <- function(learnt, subsamples) {
 #' Used in 'learn()'.
 #'
 #' @keywords internal
-mcjoin <- function(x, y){
+.mcjoin <- function(x, y){
     if(is.null(x)){
         y
     } else {

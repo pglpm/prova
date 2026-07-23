@@ -32,7 +32,7 @@
 ## #'
 ## #' ## Subset by retaining the values 'Adelie' and 'Gentoo' for species,
 ## #' ## and 44 for bill length
-## #' newprobs <- prsubset(
+## #' newprobs <- .prsubset(
 ## #'   probs,
 ## #'   subset = list(species = c('Adelie', 'Gentoo'), bill_len = 43)
 ## #' )
@@ -45,7 +45,7 @@
 ## #' hist(newprobs)
 ## #'
 #' @keywords internal
-prsubset <- function(
+.prsubset <- function(
     x,
     subset
 ){

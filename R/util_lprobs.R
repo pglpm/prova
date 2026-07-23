@@ -30,7 +30,7 @@ util_lprobsargsyx <- function(
         V0sd <- learnbind(V0sd,
             learnt$Rsd[aux$id, , , drop = FALSE])
         xV0 <- rbind(xV0,
-            t(as.matrix(vtransform(
+            t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
                 auxmetadata = auxmetadata,
                 Rout = 'normalized',
@@ -58,7 +58,7 @@ util_lprobsargsyx <- function(
         V0sd <- learnbind(V0sd,
             learnt$Csd[aux$id, , , drop = FALSE])
         xV0 <- rbind(xV0,
-            t(as.matrix(vtransform(
+            t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
                 auxmetadata = auxmetadata,
                 Cout = 'boundisna',
@@ -87,7 +87,7 @@ util_lprobsargsyx <- function(
             learnt$Rsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
             tails[aux$name] *
-                t(as.matrix(vtransform(
+                t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Rout = 'normalized',
@@ -107,7 +107,7 @@ util_lprobsargsyx <- function(
         V1mean <- learnbind(V1mean, learnt$Cmean[aux$id, , , drop = FALSE])
         V1sd <- learnbind(V1sd, learnt$Csd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
-            t(as.matrix(vtransform(
+            t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
                 auxmetadata = auxmetadata,
                 Cout = '1',
@@ -129,7 +129,7 @@ util_lprobsargsyx <- function(
         V1sd <- learnbind(V1sd, learnt$Csd[aux$id, , , drop = FALSE])
         ## note the minus!
         xV1 <- rbind(xV1,
-            - t(as.matrix(vtransform(
+            - t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
                 auxmetadata = auxmetadata,
                 Cout = '-1',
@@ -149,7 +149,7 @@ util_lprobsargsyx <- function(
         V1mean <- learnbind(V1mean, learnt$Dmean[aux$id, , , drop = FALSE])
         V1sd <- learnbind(V1sd, learnt$Dsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
-            t(as.matrix(vtransform(
+            t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
                 auxmetadata = auxmetadata,
                 Dout = '1',
@@ -172,7 +172,7 @@ util_lprobsargsyx <- function(
         V1sd <- learnbind(V1sd, learnt$Dsd[aux$id, , , drop = FALSE])
         ## note the minus!
         xV1 <- rbind(xV1,
-            - t(as.matrix(vtransform(
+            - t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
                 auxmetadata = auxmetadata,
                 Dout = '-1',
@@ -200,7 +200,7 @@ util_lprobsargsyx <- function(
         V1sd <- learnbind(V1sd,
             learnt$Csd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
-                t(as.matrix(vtransform(
+                t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Cout = 'leftbound',
@@ -227,7 +227,7 @@ util_lprobsargsyx <- function(
         V1sd <- learnbind(V1sd,
             learnt$Csd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
-               - t(as.matrix(vtransform( # minus sign
+               - t(as.matrix(.vtransform( # minus sign
                     x[, aux$name, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Cout = 'rightbound',
@@ -254,7 +254,7 @@ util_lprobsargsyx <- function(
         V1sd <- learnbind(V1sd,
             learnt$Dsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
-                t(as.matrix(vtransform(
+                t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Dout = 'leftbound',
@@ -282,7 +282,7 @@ util_lprobsargsyx <- function(
         V1sd <- learnbind(V1sd,
             learnt$Dsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
-               - t(as.matrix(vtransform( # minus sign
+               - t(as.matrix(.vtransform( # minus sign
                     x[, aux$name, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Dout = 'rightbound',
@@ -320,7 +320,7 @@ util_lprobsargsyx <- function(
             learnt$Dsd[aux$id, , , drop = FALSE])
         V2steps <- aux$halfstep / aux$tscale
         xV2 <- rbind(xV2,
-                t(as.matrix(vtransform(
+                t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Dout = 'boundisna',
@@ -352,7 +352,7 @@ util_lprobsargsyx <- function(
         VNprobs <- learnbind(VNprobs,
             learnt$Oprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
-                t(as.matrix(vtransform(
+                t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Oout = 'numeric',
@@ -377,7 +377,7 @@ util_lprobsargsyx <- function(
         VNprobs <- learnbind(VNprobs,
             learnt$Nprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
-                t(as.matrix(vtransform(
+                t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
                     auxmetadata = auxmetadata,
                     Nout = 'numeric',
@@ -409,7 +409,7 @@ util_lprobsargsyx <- function(
             )
         }
         xVN <- rbind(xVN,
-            t(as.matrix(vtransform(
+            t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
                 auxmetadata = auxmetadata,
                 Oout = 'numeric',
@@ -434,7 +434,7 @@ util_lprobsargsyx <- function(
         VBprobs <- learnbind(VBprobs,
             learnt$Bprob[aux$id, , , drop = FALSE])
         xVB <- rbind(xVB,
-            t(as.matrix(vtransform(
+            t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
                 auxmetadata = auxmetadata,
                 Bout = 'numeric',
@@ -470,7 +470,7 @@ util_lprobsargsyx <- function(
 
 #' Calculate collection of log-probabilities for different components and samples
 #'
-#' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()], [util_Pcheckpoints()].
+#' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()], [.util_Pcheckpoints()].
 #'
 #' @return Matrix of log-probabilities, with as many rows as components and as many cols as samples.
 #' @keywords internal
@@ -587,10 +587,10 @@ util_combineYX <- function(
             FF[round(seq(1, length(FF), length.out = nsamples))]
         },
         ##
-        values.MCaccuracy = funMCSELD(x = FF),
+        values.MCaccuracy = .funMCSELD(x = FF),
         ##
         quantiles.MCaccuracy = if(!is.null(quantiles)){
-            temp <- funMCEQ(x = FF, prob = quantiles, Qpair = Qerror)
+            temp <- .funMCEQ(x = FF, prob = quantiles, Qpair = Qerror)
             (temp[2, ] - temp[1, ]) / 2
         }
         ##
@@ -687,7 +687,7 @@ util_qYXcont <- function(
         ), na.rm = TRUE) / sumlpX) - pY
     }
 
-    values <- unname(unlist(vtransform(values,
+    values <- unname(unlist(.vtransform(values,
         auxmetadata = auxmetadata,
         Rout = 'original',
         Cout = 'original',
@@ -736,7 +736,7 @@ util_qYXcont <- function(
             ), na.rm = TRUE) / sumlpX - pY
         tocheck <- abs(FF) > tol & Yvals[, 2] - Yvals[, 1] > tol
         }
-        samples <- unname(unlist(vtransform(samples,
+        samples <- unname(unlist(.vtransform(samples,
             auxmetadata = auxmetadata,
             Rout = 'original',
             Cout = 'original',
@@ -809,7 +809,7 @@ util_qYXdiscr <- function(
             lprobX + params1[values, ,]
         ), na.rm = TRUE) / sumlpX)
     }
-    values <- unname(unlist(vtransform(values,
+    values <- unname(unlist(.vtransform(values,
         auxmetadata = auxmetadata,
         Rout = 'original',
         Cout = 'original',
@@ -850,7 +850,7 @@ util_qYXdiscr <- function(
             ), na.rm = TRUE) / sumlpX
             tocheck <- FF < pY
         }
-        samples <- unname(unlist(vtransform(samples,
+        samples <- unname(unlist(.vtransform(samples,
             auxmetadata = auxmetadata,
             Rout = 'original',
             Cout = 'original',

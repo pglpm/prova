@@ -420,7 +420,7 @@ plot.probability <- function(
 ){
     ## Replace object x keeping only values given in 'subset'
     if(!is.null(subset)){
-        x <- prsubset(x, subset = subset)
+        x <- .prsubset(x, subset = subset)
     }
 
     ## If there's only one probability it doesn't make sense to plot anything:
@@ -845,7 +845,7 @@ hist.probability <- function(
 ){
     ## Replace object x keeping only values given in 'subset'
     if(!is.null(subset)){
-        x <- prsubset(x, subset = subset)
+        x <- .prsubset(x, subset = subset)
     }
 
     ## Check that samples are available in the probability object
@@ -1029,7 +1029,7 @@ print.probability <- function(
 ){
     ## Replace object x keeping only values given in 'subset'
     if(!is.null(subset)){
-        x <- prsubset(x, subset = subset)
+        x <- .prsubset(x, subset = subset)
     }
 
     if(isTRUE(digits) && is.null(elements)){
@@ -1050,7 +1050,7 @@ print.probability <- function(
     if(is.null(elements)){
         totake <- c('values', 'values.MCaccuracy', 'quantiles')
         ## rearrange and combine values and quantiles in a special way
-        temp <- aperm(a = array(data = signifC(
+        temp <- aperm(a = array(data = .signifC(
             x = unname(unlist(x[totake])),
             digits = c(vdigits, adigits, qdigits) ),
             dim = c(dim(x[['values']]),
@@ -1310,7 +1310,7 @@ print.MI <- function(
         vdigits <- adigits <- qdigits <- digits
     }
 
-    temp <- signifC(x = c(xvalue, xquants),
+    temp <- .signifC(x = c(xvalue, xquants),
         digits = c(vdigits, qdigits))
     names(temp) <- c(paste0('value/', unit), paste0('Q', names(xquants)))
     print(x = noquote(temp), ...)
@@ -1326,7 +1326,7 @@ print.MI <- function(
 #'
 #' @return A *character* vector, matrix, or array of the elements of `x`, appropriately rounded and truncated.
 #' @keywords internal
-signifC <- function(x, digits = 2){
+.signifC <- function(x, digits = 2){
     mapply(FUN = function(xx, dd){
         dd <- min(dd, getOption('digits'))
         formatC(x = signif(x = xx, digits = dd),

@@ -40,7 +40,7 @@
 #' @return A [data frame][base::data.frame()] of transformed variates, or their log-Jacobians.
 #'
 #' @keywords internal
-vtransform <- function(
+.vtransform <- function(
     x,
     auxmetadata,
     Rout = NULL,

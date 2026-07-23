@@ -1,15 +1,15 @@
 #' Format datapoints used for MCMC monitoring
 #'
-#' Used in 'util_Pcheckpoints()' within 'learn()'.
+#' Used in '.util_Pcheckpoints()' within 'learn()'.
 #'
 #' @param x Datapoints to be used for checking MCMC progress
 #' @param auxmetadata auxmetadata object
 #' @param pointsid Id of datapoints
 #'
-#' @return some arguments to be repeatedly used in util_Pcheckpoints
+#' @return some arguments to be repeatedly used in .util_Pcheckpoints
 #'
 #' @keywords internal
-util_prepPcheckpoints <- function(
+.util_prepPcheckpoints <- function(
     x, auxmetadata, pointsid = NULL
 ){
     ## Use util_lprobsargsyx() as done in Pr(), but throw away some elements
@@ -177,13 +177,13 @@ util_prepPcheckpoints <- function(
 #'
 #' Used in 'learn()'.
 #'
-#' @param testdata List of objects calculated with util_prepPcheckpoints
+#' @param testdata List of objects calculated with .util_prepPcheckpoints
 #' @param learnt mcsamples object
 #'
 #' @keywords internal
 #'
 #' @return The joint frequencies of Y corresponding to the Monte Carlo samples
-util_Pcheckpoints <- function(
+.util_Pcheckpoints <- function(
     testdata, learnt
 ) {
     with(c(testdata, learnt), {
