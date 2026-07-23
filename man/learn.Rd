@@ -54,7 +54,7 @@ learn(
 
 \item{nsamplesperchain}{Integer, default 450: number of \emph{approximately independent} Monte Carlo samples per chain. If this argument is changed, the user is also required to explicitly give either \code{nsamples} or \code{nchains}, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.}
 
-\item{parallel}{Logical or positive integer or cluster object. \code{TRUE} (default): use roughly half of available cores; \code{FALSE} (default): use serial computation; integer: use this many cores. It can also be a cluster object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}; in this case the parallel computation will use this object.}
+\item{parallel}{Logical or positive integer or cluster object. \code{TRUE} (default): use as many cores as in user's \link[base:getOption]{option} "nc.cores", or 2 if that is \code{NULL}. \code{FALSE}: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}; in this case the parallel computation will use this object.}
 
 \item{seed}{Integer or \code{NULL} (default): use this seed for the random number generator. If \code{NULL}, do not set the seed.}
 

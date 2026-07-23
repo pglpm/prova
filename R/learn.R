@@ -49,7 +49,7 @@
 #' @param nsamples Integer, default 3600: number of desired, *approximately independent* Monte Carlo samples. If this argument is changed, the user is also required to explicitly give either `nchains` or `nsamplesperchain`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
 #' @param nchains Integer, default 8: number of Monte Carlo chains. If this argument is changed, the user is also required to explicitly give either `nsamples` or `nsamplesperchain`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
 #' @param nsamplesperchain Integer, default 450: number of *approximately independent* Monte Carlo samples per chain. If this argument is changed, the user is also required to explicitly give either `nsamples` or `nchains`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
-#' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use roughly half of available cores; `FALSE` (default): use serial computation; integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
+#' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use as many cores as in user's [option][base::getOption()] "nc.cores", or 2 if that is `NULL`. `FALSE`: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
 #' @param seed Integer or `NULL` (default): use this seed for the random number generator. If `NULL`, do not set the seed.
 #' @param cleanup Logical, default `TRUE`: remove diagnostic files at the end of the computation?
 #' @param appendinfo Logical, default `TRUE`: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory `outputdir`? The appended string has the format 'Vn_Dn_Sn_YYMMDDTHHMMSS'.
@@ -356,8 +356,7 @@ learn <- function(
     } else if (isTRUE(parallel)) {
         ## user wants us to register a parallel backend
         ## and to choose number of cores
-        ncores <- max(1,
-            min(nchains, floor(parallel::detectCores() / 2)))
+        ncores <- min(nchains, getOption("cl.cores", 2))
         cl <- parallel::makeCluster(ncores)
         closeexit <- TRUE
         predirmsgs <- c(predirmsgs, list(

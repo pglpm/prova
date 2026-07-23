@@ -30,7 +30,7 @@
 #' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "learnt" object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "learnt" object.
 #' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "learnt" object to use for calculating the revisability of the mutual information.
 #' @param unit Either one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used.
-#' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use roughly half of available cores; `FALSE`: use serial computation; integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
+#' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use as many cores as in user's [option][base::getOption()] "nc.cores", or 2 if that is `NULL`. `FALSE`: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #'
 #' @return An object of class "MI", which is a list consisting of the following elements:
@@ -114,8 +114,7 @@ mutualinfo <- function(
     } else if (isTRUE(parallel)) {
         ## user wants us to register a parallel backend
         ## and to choose number of cores
-        ncores <- max(1,
-            floor(parallel::detectCores() / 2))
+        ncores <- min(nchains, getOption("cl.cores", 2))
         cl <- parallel::makeCluster(ncores)
         closeexit <- TRUE
         if(verbose){message('Registered ', capture.output(print(cl)), '.')}

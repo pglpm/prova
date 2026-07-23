@@ -38,7 +38,7 @@ for an 'learnt.rds' object, or such an object itself.}
 
 \item{unit}{Either one of 'Sh' for \emph{shannon} (default), 'Hart' for \emph{hartley}, 'nat' for \emph{natural unit}, or a positive real indicating the base of the logarithms to be used.}
 
-\item{parallel}{Logical or positive integer or cluster object. \code{TRUE} (default): use roughly half of available cores; \code{FALSE}: use serial computation; integer: use this many cores. It can also be a cluster object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}; in this case the parallel computation will use this object.}
+\item{parallel}{Logical or positive integer or cluster object. \code{TRUE} (default): use as many cores as in user's \link[base:getOption]{option} "nc.cores", or 2 if that is \code{NULL}. \code{FALSE}: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}; in this case the parallel computation will use this object.}
 
 \item{verbose}{Logical, default \code{FALSE}: give messages about parallel processing?}
 }

@@ -38,7 +38,7 @@
 #' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
 #' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the probability for `Y`. If `NULL` or 0, no samples are reported. If `'all'` or `Inf`, all samples obtained by the [learn()] function are used.
 #' @param quantiles Numeric vector, between 0 and 1, or `NULL`: desired quantiles of the revisability of the probability for `Y`. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. These are typical quantile values in the Bayesian literature: they give 50% and 89% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty (see <doi:10.5281/zenodo.17072199>). If `NULL`, no quantiles are calculated.
-#' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use roughly half of available cores; `FALSE`: use serial computation; integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
+#' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use as many cores as in user's [option][base::getOption()] "nc.cores", or 2 if that is `NULL`. `FALSE`: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
 #' @param sep character, default `','`: character to separate variate names and values
 #' @param solidus character, default `'|'`: character prepended to names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
@@ -236,8 +236,7 @@ Pr <- function(
     } else if (isTRUE(parallel)) {
         ## user wants us to register a parallel backend
         ## and to choose number of cores
-        ncores <- max(1,
-            floor(parallel::detectCores() / 2))
+        ncores <- min(nchains, getOption("cl.cores", 2))
         cl <- parallel::makeCluster(ncores)
         closeexit <- TRUE
         if(verbose){message('Registered ', capture.output(print(cl)), '.')}
