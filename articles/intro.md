@@ -867,8 +867,6 @@ function to display values and quantiles together:
 ``` r
 
 print(Fspecies10)
-# , , 1
-# 
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
 #   Adelie    0.2987 0.0018 0.1218 0.2072 0.3763 0.5068
@@ -1007,8 +1005,6 @@ Fspeciessex10 <- Pr(
 ## Display the estimated frequencies of all six combinations,
 ## as well as their credibility intervals
 print(Fspeciessex10)
-# , , 1
-# 
 #                   probability
 # species,sex        value  +/-    Q5.5%   Q25%    Q75%   Q94.5%
 #   Adelie,female    0.1634 0.0013 0.0508  0.0984  0.2153 0.3193
@@ -1550,8 +1546,6 @@ is as follows:
 ``` r
 
 print(Fspecies60)
-# , , 1
-# 
 #            probability
 # species     value   +/-     Q5.5%  Q25%   Q75%   Q94.5%
 #   Adelie    0.3950  0.0010  0.2960 0.3522 0.4357 0.4976
@@ -1862,8 +1856,6 @@ be extracted from the `Fspeciesall` in the usual way:
 ``` r
 
 print(Fspeciesall)
-# , , 1
-# 
 #            probability
 # species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
 #   Adelie    0.44171 0.00041 0.39809 0.42309 0.46035 0.48378

@@ -2,10 +2,11 @@
 
 Calculate posterior joint and conditional probabilities, probability
 distributions of population frequencies, and information-theoretic
-measures, by means of Bayesian nonparametric methods. Data imputation is
-automatic and done in a principled way. Markov-chain Monte Carlo
-calculations are automatically handled and do not require user
-supervision. Applications range from statistical estimation and
+measures, by means of Bayesian nonparametric methods. Data can be any
+combination of nominal, ordinal, continuous, censored, rounded types.
+Data imputation is automatic and done in a principled way. Markov-chain
+Monte Carlo calculations are automatically handled and do not require
+user supervision. Applications range from statistical estimation and
 probabilistic hypothesis testing to evidence-based inference and
 decision making, in a wide range of disciplines from astrophysics to
 medicine. For more details and examples see for instance Porta Mana et
@@ -19,7 +20,7 @@ Bernardo & Smith (2000)
 [doi:10.1002/9780470316870](https://doi.org/10.1002/9780470316870) ,
 Müller et al. (2015)
 [doi:10.1007/978-3-319-18968-0](https://doi.org/10.1007/978-3-319-18968-0)
-. Requires the packages 'Nimble' and 'parallel'.
+. Requires the package 'Nimble'.
 
 ## See also
 

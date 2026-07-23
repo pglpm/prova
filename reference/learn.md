@@ -107,9 +107,10 @@ learn(
 - parallel:
 
   Logical or positive integer or cluster object. `TRUE` (default): use
-  roughly half of available cores; `FALSE` (default): use serial
-  computation; integer: use this many cores. It can also be a cluster
-  object previously created with
+  as many cores as in user's
+  [option](https://rdrr.io/r/base/options.html) "nc.cores", or 2 if that
+  is `NULL`. `FALSE`: use serial computation. Integer: use this many
+  cores. It can also be a cluster object previously created with
   [`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
   in this case the parallel computation will use this object.
 
@@ -438,11 +439,10 @@ learnt <- learn(
   startupMCiterations = 10, maxMCiterations = 10,
   minESS = 0, initES = 0
 )
-#> [1] "V"
 #> 
 #> Saving output in directory
-#> /tmp/RtmpFq7npf/prova-V1_D3_S10_260723T084103_1a3912b18e7d
-#> Prova v1.8.5.
+#> /tmp/Rtmpo1n1ij/prova-V1_D3_S10_260723T121155_1a5e27474d5d
+#> Prova v1.9.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
@@ -464,9 +464,9 @@ learnt <- learn(
 #> quantile width: 0.143 to 0.998
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 34 secs
-#> Average preparation & finalization time: 32 secs.
-#> Average Monte Carlo time per chain: 0.52 secs.
+#> Total computation time: 37 secs
+#> Average preparation & finalization time: 36 secs.
+#> Average Monte Carlo time per chain: 0.61 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -474,7 +474,7 @@ learnt <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpFq7npf/prova-V1_D3_S10_260723T084103_1a3912b18e7d
+#> /tmp/Rtmpo1n1ij/prova-V1_D3_S10_260723T121155_1a5e27474d5d
 #> **********************************************************
 
 ## Check structure of `learnt` object:

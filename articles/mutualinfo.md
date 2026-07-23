@@ -159,11 +159,8 @@ prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'),
     learnt = learnt)
 
 print(prob)
-# , , 1
-# 
-#                      probability
-# island,species        value    +/-      Q5.5%    Q25%     Q75%     Q94.5% 
-#   Torgersen,Chinstrap 0.003085 0.000061 0.000408 0.001174 0.004149 0.00825
+#    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
+# 0.003085 0.000061 0.000408 0.001174 0.004149  0.00825
 ```
 
   

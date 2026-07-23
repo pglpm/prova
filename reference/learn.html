@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -119,7 +119,7 @@
 
 
 <dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
-<dd><p>Logical or positive integer or cluster object. <code>TRUE</code> (default): use roughly half of available cores; <code>FALSE</code> (default): use serial computation; integer: use this many cores. It can also be a cluster object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>; in this case the parallel computation will use this object.</p></dd>
+<dd><p>Logical or positive integer or cluster object. <code>TRUE</code> (default): use as many cores as in user's <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores", or 2 if that is <code>NULL</code>. <code>FALSE</code>: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>; in this case the parallel computation will use this object.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
@@ -283,11 +283,10 @@
 <span class="r-in"><span>  startupMCiterations <span class="op">=</span> <span class="fl">10</span>, maxMCiterations <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>  minESS <span class="op">=</span> <span class="fl">0</span>, initES <span class="op">=</span> <span class="fl">0</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "V"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpFq7npf/prova-V1_D3_S10_260723T084103_1a3912b18e7d</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v1.8.5.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmpo1n1ij/prova-V1_D3_S10_260723T121155_1a5e27474d5d</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v1.9.0.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Registered socket cluster with 1 nodes on host ‘localhost’.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Learning from 3 datapoints, 1 variates.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Monte Carlo sampling of 10 samples by 1 chains</span>
@@ -309,9 +308,9 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> quantile width: 0.143 to 0.998</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting final Monte Carlo traces and marginal samples...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 34 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 32 secs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.52 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 37 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 36 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.61 secs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max total memory used: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max memory used per core: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Removing temporary output files.</span>
@@ -319,7 +318,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Output saved in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpFq7npf/prova-V1_D3_S10_260723T084103_1a3912b18e7d</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmpo1n1ij/prova-V1_D3_S10_260723T121155_1a5e27474d5d</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Check structure of `learnt` object:</span></span></span>

@@ -203,7 +203,7 @@ and of its documents.
 
 - [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
   : Plot numeric or character values
-- [`hist(`*`<MI>`*`)`](https://pglpm.github.io/prova/reference/hist.MI.md)
+- [`hist(`*`<mi>`*`)`](https://pglpm.github.io/prova/reference/hist.mi.md)
   : Plot the revisability of an object of class "MI" as a histogram
 - [`hist(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/hist.probability.md)
   : Plot the revisability of an object of class "probability" as a
@@ -212,7 +212,7 @@ and of its documents.
   : Plot an object of class "probability"
 - [`plotquantiles()`](https://pglpm.github.io/prova/reference/plotquantiles.md)
   : Plot pairs of quantiles
-- [`print(`*`<MI>`*`)`](https://pglpm.github.io/prova/reference/print.MI.md)
+- [`print(`*`<mi>`*`)`](https://pglpm.github.io/prova/reference/print.mi.md)
   : Print an object of class "MI" (mutual information)
 - [`print(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/print.probability.md)
   : Print an object of class "probability"
@@ -235,70 +235,70 @@ and of its documents.
 
 For developers (beware!)
 
-- [`buildauxmetadata()`](https://pglpm.github.io/prova/reference/buildauxmetadata.md)
+- [`.Pcheckpoints()`](https://pglpm.github.io/prova/reference/dot-Pcheckpoints.md)
+  : Calculate joint frequencies for MCMC-monitoring checkpoints
+- [`.buildauxmetadata()`](https://pglpm.github.io/prova/reference/dot-buildauxmetadata.md)
   : Build augmented metadata file
-- [`createQfunction()`](https://pglpm.github.io/prova/reference/createQfunction.md)
+- [`.cleanup()`](https://pglpm.github.io/prova/reference/dot-cleanup.md)
+  : Cleanup a learn()-output directory
+- [`.combineYX()`](https://pglpm.github.io/prova/reference/dot-combineYX.md)
+  : Calculate probabilities, quantiles, etc, for all Y and X
+  combinations
+- [`.createQfunction()`](https://pglpm.github.io/prova/reference/dot-createQfunction.md)
   : Calculate and save transformation function for ordinal variates
-- [`fftNGS()`](https://pglpm.github.io/prova/reference/fftNGS.md) : Find
-  optimal FFT size
-- [`funAC()`](https://pglpm.github.io/prova/reference/funAC.md) :
+- [`.denorm()`](https://pglpm.github.io/prova/reference/dot-denorm.md) :
+  Utility function to improve accuracy
+- [`.fftNGS()`](https://pglpm.github.io/prova/reference/dot-fftNGS.md) :
+  Find optimal FFT size
+- [`.funAC()`](https://pglpm.github.io/prova/reference/dot-funAC.md) :
   Compute autocovariance
-- [`funESS3()`](https://pglpm.github.io/prova/reference/funESS3.md) :
-  Compute ESS
-- [`funMCEQ()`](https://pglpm.github.io/prova/reference/funMCEQ.md) :
-  Calculate credibility quantiles on estimated quantile
-- [`funMCSELD()`](https://pglpm.github.io/prova/reference/funMCSELD.md)
+- [`.funESS3()`](https://pglpm.github.io/prova/reference/dot-funESS3.md)
+  : Compute ESS
+- [`.funMCEQ()`](https://pglpm.github.io/prova/reference/dot-funMCEQ.md)
+  : Calculate credibility quantiles on estimated quantile
+- [`.funMCSELD()`](https://pglpm.github.io/prova/reference/dot-funMCSELD.md)
   : Calculate MC standard error using LaplacesDemon's batch means
-- [`learnbind()`](https://pglpm.github.io/prova/reference/learnbind.md)
+- [`.joinPtraces()`](https://pglpm.github.io/prova/reference/dot-joinPtraces.md)
+  : Join '\_\_\_\_tempPtraces-' files
+- [`.learnbind()`](https://pglpm.github.io/prova/reference/dot-learnbind.md)
   : Bind 3D arrays by first dimension
-- [`mcjoin()`](https://pglpm.github.io/prova/reference/mcjoin.md) :
+- [`.lprobsargsyx()`](https://pglpm.github.io/prova/reference/dot-lprobsargsyx.md)
+  : Prepare arguments for util_lprobsyx from data
+- [`.lprobsbase()`](https://pglpm.github.io/prova/reference/dot-lprobsbase.md)
+  : Calculate collection of log-probabilities for different components
+  and samples
+- [`.lprobsmi()`](https://pglpm.github.io/prova/reference/dot-lprobsmi.md)
+  : Calculate and combine log-probabilities to compute entropies
+- [`.mcjoin()`](https://pglpm.github.io/prova/reference/dot-mcjoin.md) :
   Concatenate mcsample objects
-- [`mcsubset()`](https://pglpm.github.io/prova/reference/mcsubset.md) :
-  Eliminate samples from mcsamples object
-- [`plotFsamples()`](https://pglpm.github.io/prova/reference/plotFsamples.md)
+- [`.mcsubset()`](https://pglpm.github.io/prova/reference/dot-mcsubset.md)
+  : Eliminate samples from mcsamples object
+- [`.plotFsamples()`](https://pglpm.github.io/prova/reference/dot-plotFsamples.md)
   : Plot one-dimensional posterior probabilities
+- [`.prepPcheckpoints()`](https://pglpm.github.io/prova/reference/dot-prepPcheckpoints.md)
+  : Format datapoints used for MCMC monitoring
+- [`.prsubset()`](https://pglpm.github.io/prova/reference/dot-prsubset.md)
+  : Subset variates of an object of class "probability"
+- [`.qYXcont()`](https://pglpm.github.io/prova/reference/dot-qYXcont.md)
+  : Calculate quantiles for continuous Y by bisection
+- [`.qYXdiscr()`](https://pglpm.github.io/prova/reference/dot-qYXdiscr.md)
+  : Calculate quantiles for discrete Y by bisection
+- [`.rowcumsum()`](https://pglpm.github.io/prova/reference/dot-rowcumsum.md)
+  : Cumulative sum along first dimension
+- [`.rowinvcumsum()`](https://pglpm.github.io/prova/reference/dot-rowinvcumsum.md)
+  : Inverse cumulative sum along first dimension
+- [`.signifC()`](https://pglpm.github.io/prova/reference/dot-signifC.md)
+  : Format numbers respecting significant digits
+- [`.testPr()`](https://pglpm.github.io/prova/reference/dot-testPr.md) :
+  Test posterior probabilities
+- [`.vtransform()`](https://pglpm.github.io/prova/reference/dot-vtransform.md)
+  : Transforms variates to different representations
+- [`.workerfun()`](https://pglpm.github.io/prova/reference/dot-workerfun.md)
+  : Worker function called by learn()
 - [`prova`](https://pglpm.github.io/prova/reference/prova-package.md)
   [`prova-package`](https://pglpm.github.io/prova/reference/prova-package.md)
   : prova: Nonparametric Probabilistic-Statistical Variate Analysis with
   Automated Markov-Chain Monte Carlo
-- [`prsubset()`](https://pglpm.github.io/prova/reference/prsubset.md) :
-  Subset variates of an object of class "probability"
-- [`rowcumsum()`](https://pglpm.github.io/prova/reference/rowcumsum.md)
-  : Cumulative sum along first dimension
-- [`rowinvcumsum()`](https://pglpm.github.io/prova/reference/rowinvcumsum.md)
-  : Inverse cumulative sum along first dimension
-- [`signifC()`](https://pglpm.github.io/prova/reference/signifC.md) :
-  Format numbers respecting significant digits
-- [`testPr()`](https://pglpm.github.io/prova/reference/testPr.md) : Test
-  posterior probabilities
-- [`util_Pcheckpoints()`](https://pglpm.github.io/prova/reference/util_Pcheckpoints.md)
-  : Calculate joint frequencies for MCMC-monitoring checkpoints
-- [`util_cleanup()`](https://pglpm.github.io/prova/reference/util_cleanup.md)
-  : Cleanup a learn()-output directory
-- [`util_combineYX()`](https://pglpm.github.io/prova/reference/util_combineYX.md)
-  : Calculate probabilities, quantiles, etc, for all Y and X
-  combinations
-- [`util_denorm()`](https://pglpm.github.io/prova/reference/util_denorm.md)
-  : Utility function to improve accuracy
-- [`util_joinPtraces()`](https://pglpm.github.io/prova/reference/util_joinPtraces.md)
-  : Join '\_\_\_\_tempPtraces-' files
-- [`util_lprobsargsyx()`](https://pglpm.github.io/prova/reference/util_lprobsargsyx.md)
-  : Prepare arguments for util_lprobsyx from data
-- [`util_lprobsbase()`](https://pglpm.github.io/prova/reference/util_lprobsbase.md)
-  : Calculate collection of log-probabilities for different components
-  and samples
-- [`util_lprobsmi()`](https://pglpm.github.io/prova/reference/util_lprobsmi.md)
-  : Calculate and combine log-probabilities to compute entropies
-- [`util_prepPcheckpoints()`](https://pglpm.github.io/prova/reference/util_prepPcheckpoints.md)
-  : Format datapoints used for MCMC monitoring
-- [`util_qYXcont()`](https://pglpm.github.io/prova/reference/util_qYXcont.md)
-  : Calculate quantiles for continuous Y by bisection
-- [`util_qYXdiscr()`](https://pglpm.github.io/prova/reference/util_qYXdiscr.md)
-  : Calculate quantiles for discrete Y by bisection
-- [`vtransform()`](https://pglpm.github.io/prova/reference/vtransform.md)
-  : Transforms variates to different representations
-- [`workerfun()`](https://pglpm.github.io/prova/reference/workerfun.md)
-  : Worker function called by learn()
 
 # Articles
 

@@ -78,9 +78,10 @@ mutualinfo(
 - parallel:
 
   Logical or positive integer or cluster object. `TRUE` (default): use
-  roughly half of available cores; `FALSE`: use serial computation;
-  integer: use this many cores. It can also be a cluster object
-  previously created with
+  as many cores as in user's
+  [option](https://rdrr.io/r/base/options.html) "nc.cores", or 2 if that
+  is `NULL`. `FALSE`: use serial computation. Integer: use this many
+  cores. It can also be a cluster object previously created with
   [`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
   in this case the parallel computation will use this object.
 
@@ -157,10 +158,10 @@ the argument `parallel =`.
 
 ## See also
 
-[`print.MI()`](https://pglpm.github.io/prova/reference/print.MI.md) \]
+[`print.mi()`](https://pglpm.github.io/prova/reference/print.mi.md) \]
 to plot mutual information and quantiles calculated by `mutualinfo()`
 
-[`hist.MI()`](https://pglpm.github.io/prova/reference/hist.MI.md) to
+[`hist.mi()`](https://pglpm.github.io/prova/reference/hist.mi.md) to
 plot the revisability of the mutual information.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,21 +44,24 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.8.5" id="prova-v185">Prova v1.8.5<a class="anchor" aria-label="anchor" href="#prova-v185"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.9.0" id="prova-v190">Prova v1.9.0<a class="anchor" aria-label="anchor" href="#prova-v190"></a></h2>
 <ul><li>The package does not require the package ‘extraDistr’ any longer.</li>
 <li>Internal changes to some functions.</li>
 <li>Improved and more consistent digit-rounding system for print() output of probabilities.</li>
 <li>Fixed some bugs in the use of Pr() with base-rate correction (non-null argument ‘priorY’).</li>
+<li>Changed the <code>class</code> of mutual information objects to “mi”.</li>
 <li>Introduced a print() method for mutual-information objects.</li>
 <li>Improved print() display for probability and mutual-information objects.</li>
 <li>Improved plot.probability(); singular probability (e.g. at censored values) are now displayed on a separate scale.</li>
+<li>Changed the behaviour of the <code>TRUE</code> value of argument <code>parallel =</code>: now it queries the value of the user’s option “cl.cores”, via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption()</a></code>, or uses 2 if that value is <code>NULL</code> (this is the same behaviour as in R’s documentation for the <code>clusterApply</code> functions).</li>
 <li>Updated documentation.</li>
 <li>Re-tested some functions.</li>
+<li>Cleaned some code.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="prova-v120">Prova v1.2.0<a class="anchor" aria-label="anchor" href="#prova-v120"></a></h2>
 <ul><li>The function <code><a href="../reference/mutualinfo.html">mutualinfo()</a></code> now only outputs the mutual information (and not conditional entropies or entropies), but it also outputs the “revisability” of the values in view of a much larger dataset.</li>
-<li>New functions <code>plot.MI()</code> and <code><a href="../reference/print.MI.html">print.MI()</a></code> for plotting and printing mutual information and its revisability.</li>
+<li>New functions <code>plot.MI()</code> and <code>print.MI()</code> for plotting and printing mutual information and its revisability.</li>
 <li>Slight changes in plotting and printing outputs.</li>
 <li>The vignette about mutual information now has an additional section about the revisability of mutual information.</li>
 <li>Small internal changes in how synthetic datapoints are generated.</li>

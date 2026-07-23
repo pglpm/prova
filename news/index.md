@@ -1,6 +1,6 @@
 # Changelog
 
-## Prova v1.8.5
+## Prova v1.9.0
 
 - The package does not require the package ‘extraDistr’ any longer.
 - Internal changes to some functions.
@@ -8,13 +8,20 @@
   of probabilities.
 - Fixed some bugs in the use of Pr() with base-rate correction (non-null
   argument ‘priorY’).
+- Changed the `class` of mutual information objects to “mi”.
 - Introduced a print() method for mutual-information objects.
 - Improved print() display for probability and mutual-information
   objects.
 - Improved plot.probability(); singular probability (e.g. at censored
   values) are now displayed on a separate scale.
+- Changed the behaviour of the `TRUE` value of argument `parallel =`:
+  now it queries the value of the user’s option “cl.cores”, via
+  [`getOption()`](https://rdrr.io/r/base/options.html), or uses 2 if
+  that value is `NULL` (this is the same behaviour as in R’s
+  documentation for the `clusterApply` functions).
 - Updated documentation.
 - Re-tested some functions.
+- Cleaned some code.
 
 ## Prova v1.2.0
 
@@ -23,9 +30,8 @@
   now only outputs the mutual information (and not conditional entropies
   or entropies), but it also outputs the “revisability” of the values in
   view of a much larger dataset.
-- New functions `plot.MI()` and
-  [`print.MI()`](https://pglpm.github.io/prova/reference/print.MI.md)
-  for plotting and printing mutual information and its revisability.
+- New functions `plot.MI()` and `print.MI()` for plotting and printing
+  mutual information and its revisability.
 - Slight changes in plotting and printing outputs.
 - The vignette about mutual information now has an additional section
   about the revisability of mutual information.

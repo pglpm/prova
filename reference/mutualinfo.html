@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,7 +107,7 @@ for an 'learnt.rds' object, or such an object itself.</p></dd>
 
 
 <dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
-<dd><p>Logical or positive integer or cluster object. <code>TRUE</code> (default): use roughly half of available cores; <code>FALSE</code>: use serial computation; integer: use this many cores. It can also be a cluster object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>; in this case the parallel computation will use this object.</p></dd>
+<dd><p>Logical or positive integer or cluster object. <code>TRUE</code> (default): use as many cores as in user's <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores", or 2 if that is <code>NULL</code>. <code>FALSE</code>: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>; in this case the parallel computation will use this object.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -143,8 +143,8 @@ an expression which can also be written in several other equivalent ways. It is 
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="print.MI.html">print.MI()</a></code> ] to plot mutual information and quantiles calculated by <code>mutualinfo()</code></p>
-<p><code><a href="hist.MI.html">hist.MI()</a></code> to plot the revisability of the mutual information.</p>
+    <div class="dont-index"><p><code><a href="print.mi.html">print.mi()</a></code> ] to plot mutual information and quantiles calculated by <code>mutualinfo()</code></p>
+<p><code><a href="hist.mi.html">hist.mi()</a></code> to plot the revisability of the mutual information.</p>
 <p><code><a href="Pr.html">Pr()</a></code> to calculate probabilities and their revisability.</p>
 <p><code><a href="learn.html">learn()</a></code>, which generates the <code>learnt</code> objects required by <code>mutualinfo()</code>.</p></div>
     </div>
