@@ -441,8 +441,8 @@ learnt <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpUuJpsJ/prova-V1_D3_S10_260723T122330_1a3220a9cab9
-#> Prova v1.9.0.
+#> /tmp/Rtmpjgq58Z/prova-V1_D3_S10_260723T160254_19fb3b9ca8df
+#> Prova v1.9.1.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
@@ -464,89 +464,10 @@ learnt <- learn(
 #> quantile width: 0.143 to 0.998
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 36 secs
-#> Average preparation & finalization time: 35 secs.
-#> Average Monte Carlo time per chain: 0.53 secs.
-#> Max total memory used: approx 340MB.
-#> Max memory used per core: approx 340MB.
-#> Removing temporary output files.
-#> Finished.
-#> 
-#> **********************************************************
-#> Output saved in directory
-#> /tmp/RtmpUuJpsJ/prova-V1_D3_S10_260723T122330_1a3220a9cab9
-#> **********************************************************
+#> Error in learn(data = dataset, metadata = metadata, nsamples = 10, nchains = 1,     startupMCiterations = 10, maxMCiterations = 10, minESS = 0,     initES = 0): object 'cl0' not found
 
 ## Check structure of `learnt` object:
 str(learnt)
-#> List of 6
-#>  $ Rmean      : num [1, 1:64, 1:9] -1.047 3.247 2.547 -2.543 -0.296 ...
-#>  $ Rsd        : num [1, 1:64, 1:9] 8.224 0.227 1.145 0.638 7.141 ...
-#>  $ W          : num [1:64, 1:9] 4.10e-13 4.32e-10 6.51e-28 1.31e-262 2.73e-28 ...
-#>  $ MCindex    : num [1:9(1d)] 1 2 3 4 6 7 8 9 10
-#>  $ auxmetadata:'data.frame': 1 obs. of  24 variables:
-#>   ..$ name             : chr "V"
-#>   ..$ type             : chr "continuous"
-#>   ..$ mcmctype         : chr "R"
-#>   ..$ id               : int 1
-#>   ..$ transform        : chr "identity"
-#>   ..$ Nvalues          : int NA
-#>   ..$ indexpos         : int NA
-#>   ..$ halfstep         : num 0
-#>   ..$ domainmin        : num -Inf
-#>   ..$ domainmax        : num Inf
-#>   ..$ minincluded      : logi FALSE
-#>   ..$ maxincluded      : logi FALSE
-#>   ..$ tdomainmin       : num -Inf
-#>   ..$ tdomainmax       : num Inf
-#>   ..$ domainminplushs  : num -Inf
-#>   ..$ domainmaxminushs : num Inf
-#>   ..$ tdomainminplushs : num -Inf
-#>   ..$ tdomainmaxminushs: num Inf
-#>   ..$ tlocation        : num 0.523
-#>   ..$ tscale           : num 0.251
-#>   ..$ plotmin          : num -0.988
-#>   ..$ plotmax          : num 1.15
-#>   ..$ V1               : logi NA
-#>   ..$ V2               : logi NA
-#>  $ auxinfo    :List of 12
-#>   ..$ nchains            : num 1
-#>   ..$ npoints            : int 3
-#>   ..$ hyperparams        :List of 21
-#>   .. ..$ ncomponents : num 64
-#>   .. ..$ minalpha    : num -4
-#>   .. ..$ maxalpha    : num 4
-#>   .. ..$ byalpha     : num 1
-#>   .. ..$ Rshapelo    : num 0.5
-#>   .. ..$ Rshapehi    : num 0.5
-#>   .. ..$ Rvarm1      : num 9
-#>   .. ..$ Cshapelo    : num 0.5
-#>   .. ..$ Cshapehi    : num 0.5
-#>   .. ..$ Cvarm1      : num 9
-#>   .. ..$ Dshapelo    : num 0.5
-#>   .. ..$ Dshapehi    : num 0.5
-#>   .. ..$ Dvarm1      : num 9
-#>   .. ..$ Bshapelo    : num 1
-#>   .. ..$ Bshapehi    : num 1
-#>   .. ..$ Dthreshold  : num 1
-#>   .. ..$ tscalefactor: num 4.27
-#>   .. ..$ Oprior      : chr "Hadamard"
-#>   .. ..$ Nprior      : chr "Hadamard"
-#>   .. ..$ initmethod  : chr "datacentre"
-#>   .. ..$ Qerror      : num [1:2] 0.159 0.841
-#>   ..$ maxiterations      : num 10
-#>   ..$ maxusedcomponents  : num 2
-#>   ..$ nonfinitechains    : num 0
-#>   ..$ stoppedchains      : num 0
-#>   ..$ rel. quantile error: Named num [1:4] 0.468 0.751 0.71 0.324
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ ESS                : Named num [1:4] 8.59 8.59 8.05 8.59
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ needed thinning    : Named num [1:4] 1.97 5.07 4.53 1.05
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ average            : Named num [1:4] 0.1442 0.3919 0.0546 0.2606
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ quantile width     : Named num [1:4] 0.226 0.998 0.143 0.327
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
+#> Error: object 'learnt' not found
 # }
 ```

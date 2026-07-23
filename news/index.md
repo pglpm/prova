@@ -1,5 +1,9 @@
 # Changelog
 
+## Prova v1.9.1
+
+- Fixed a bug that prevented use of pre-existing parallel cluster.
+
 ## Prova v1.9.0
 
 - The package does not require the package ‘extraDistr’ any longer.
