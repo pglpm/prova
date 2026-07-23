@@ -101,7 +101,7 @@ for(iv in seq_along(suite)){
         ##
         vals <- atest[[1]]
         targetprob <- lapply(vals, function(x){
-                prova:::testPr(Y = setNames(list(x), vrt), X = NULL,
+                prova:::.testPr(Y = setNames(list(x), vrt), X = NULL,
                     tails = tail, learnt = learnt)
         })
         targetprob = list(values = cbind(sapply(targetprob, `[[`, 1)),
@@ -158,7 +158,7 @@ while(atest < 50){
     prob <- Pr(Y = as.data.frame(inY), X = as.data.frame(inX),
         tails = intails, learnt = learnt, parallel = 1)
     ##
-    targetprob <- prova:::testPr(Y = inY, X = inX, tails = intails,
+    targetprob <- prova:::.testPr(Y = inY, X = inX, tails = intails,
         learnt = learnt)
     ##
     tc(paste0(nm, '-', atest, '-values'),
