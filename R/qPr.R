@@ -126,8 +126,10 @@ qPr <- function(
 #### Requested parallel processing
     ## NB: doesn't make sense to have more cores than chains
     closeexit <- FALSE
-    if ('cluster' %in% class(parallel)){
+    if (inherits(parallel, "cluster")){
         ## user provides a cluster object
+        ## use only as many nodes as necessary
+        ncores <- length(parallel)
         cl <- parallel
     } else if (isTRUE(parallel)) {
         ## user wants us to register a parallel backend

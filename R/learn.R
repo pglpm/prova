@@ -350,9 +350,12 @@ learn <- function(
     ## Number of cores is reduced if larger than 'nchains':
     ## doesn't make sense to have more cores than chains
     closeexit <- FALSE
-    if ('cluster' %in% class(parallel)){
+    if (inherits(parallel, "cluster")){
         ## user provides a cluster object
-        cl <- parallel
+        ## use only as many nodes as necessary
+        cl0 <- parallel # this will be used in plotFsamples
+        ncores <- min(nchains, length(parallel))
+        cl <- parallel[seq_len(ncores)]
     } else if (isTRUE(parallel)) {
         ## user wants us to register a parallel backend
         ## and to choose number of cores
@@ -1443,7 +1446,7 @@ learn <- function(
         plotvariability = 'samples',
         nFsamples = showsamples, plotprobability = TRUE,
         datahistogram = TRUE, datascatter = TRUE,
-        parallel = cl
+        parallel = cl0
     )
 
     .plotFsamples(
@@ -1454,7 +1457,7 @@ learn <- function(
         plotvariability = 'quantiles',
         nFsamples = plotDisplayedQuantiles, plotprobability = TRUE,
         datahistogram = TRUE, datascatter = TRUE,
-        parallel = cl
+        parallel = cl0
     )
 
     totalfinaltime <- difftime(Sys.time(), timestart0, units = 'auto')
