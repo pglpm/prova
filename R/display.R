@@ -1079,14 +1079,14 @@ print.probability <- function(
 }
 
 
-#' Plot the revisability of an object of class "MI" as a histogram
+#' Plot the revisability of an object of class "mi" as a histogram
 #'
 #' @description
-#' The mutual information calculated with the [mutualinfo()] function, and outputted as a "MI" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
+#' The mutual information calculated with the [mutualinfo()] function, and outputted as a "mi" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
 #'
-#' The `hist()` method for a "MI" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
+#' The `hist()` method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
 #'
-#' @param x Object of class "MI", obtained with [mutualinfo()].
+#' @param x Object of class "mi", obtained with [mutualinfo()].
 #' @param breaks `NULL` or as in function [graphics::hist()]. If `NULL` (default), an optimal number of breaks for each probability distribution is computed.
 #' @param fill.alpha.f Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
 #' @param showvalue Logical, default `TRUE`: show the mutual information obtained from the current data sample?
@@ -1218,12 +1218,12 @@ hist.mi <- function(
 }
 
 
-#' Print an object of class "MI" (mutual information)
+#' Print an object of class "mi" (mutual information)
 #'
 #' @description
-#' This [base::print()] method is a utility to display value and revisability of an "MI" object obtained with [mutualinfo()].
+#' This [base::print()] method is a utility to display value and revisability of an "mi" object obtained with [mutualinfo()].
 #'
-#' @param x Object of class "MI", obtained with [mutualinfo()].
+#' @param x Object of class "mi", obtained with [mutualinfo()].
 #' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for element `$value` is determined from is respective `$MCaccuracy`  (see [mutualinfo()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `$quantiles` elements uses `edigits` significant digits.
 #' @param edigits positive integer, default 2: number of significant digits for element `$value` and `$quantiles`, if `digits = TRUE`.
 #' @param unit Either `NULL`, or one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used; see analogous argument in [mutualinfo()]. If `NULL` (default), the same unit as in the object `x` is used. Unit conversion is internally performed if this unit is different from that of the object `x`.

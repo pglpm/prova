@@ -33,7 +33,7 @@
 #' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use as many cores as in user's [option][base::getOption()] "nc.cores", or 2 if that is `NULL`. `FALSE`: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #'
-#' @return An object of class "MI", which is a list consisting of the following elements:
+#' @return An object of class "mi", which is a list consisting of the following elements:
 #'
 #' - `$value`, the mutual information between (joint) variates `Y1names` and (joint) variates `Y2names`.
 #' - `$quantiles`, a vector with the revisability quantiles for the mutual information.
