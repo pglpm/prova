@@ -8,6 +8,7 @@
 * Introduced a print() method for mutual-information objects.
 * Improved print() display for probability and mutual-information objects.
 * Improved plot.probability(); singular probability (e.g. at censored values) are now displayed on a separate scale.
+* Changed the behaviour of the `TRUE` value of argument `parallel =`: now it queries the value of the user's option "cl.cores", via `getOption()`, or uses 2 if that value is `NULL` (this is the same behaviour as in R's documentation for the `clusterApply` functions).
 * Updated documentation.
 * Re-tested some functions.
 * Cleaned some code.
