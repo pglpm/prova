@@ -2,7 +2,7 @@
 % Please edit documentation in R/display.R
 \name{hist.mi}
 \alias{hist.mi}
-\title{Plot the revisability of an object of class "MI" as a histogram}
+\title{Plot the revisability of an object of class "mi" as a histogram}
 \usage{
 \method{hist}{mi}(
   x,
@@ -24,7 +24,7 @@
 )
 }
 \arguments{
-\item{x}{Object of class "MI", obtained with \code{\link[=mutualinfo]{mutualinfo()}}.}
+\item{x}{Object of class "mi", obtained with \code{\link[=mutualinfo]{mutualinfo()}}.}
 
 \item{breaks}{\code{NULL} or as in function \code{\link[graphics:hist]{graphics::hist()}}. If \code{NULL} (default), an optimal number of breaks for each probability distribution is computed.}
 
@@ -40,9 +40,9 @@
 \link[base:invisible]{Invisibly}, an object of class \link[graphics:hist]{"histogram"}.
 }
 \description{
-The mutual information calculated with the \code{\link[=mutualinfo]{mutualinfo()}} function, and outputted as a "MI" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
+The mutual information calculated with the \code{\link[=mutualinfo]{mutualinfo()}} function, and outputted as a "mi" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
 
-The \code{hist()} method for a "MI" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
+The \code{hist()} method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
 }
 \examples{
 ## Load the example `learnt` object calculated from the "penguins" dataset;

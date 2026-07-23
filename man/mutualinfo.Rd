@@ -43,7 +43,7 @@ for an 'learnt.rds' object, or such an object itself.}
 \item{verbose}{Logical, default \code{FALSE}: give messages about parallel processing?}
 }
 \value{
-An object of class "MI", which is a list consisting of the following elements:
+An object of class "mi", which is a list consisting of the following elements:
 \itemize{
 \item \verb{$value}, the mutual information between (joint) variates \code{Y1names} and (joint) variates \code{Y2names}.
 \item \verb{$quantiles}, a vector with the revisability quantiles for the mutual information.

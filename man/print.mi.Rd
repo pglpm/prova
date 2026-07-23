@@ -2,12 +2,12 @@
 % Please edit documentation in R/display.R
 \name{print.mi}
 \alias{print.mi}
-\title{Print an object of class "MI" (mutual information)}
+\title{Print an object of class "mi" (mutual information)}
 \usage{
 \method{print}{mi}(x, digits = TRUE, edigits = 2, unit = NULL, ...)
 }
 \arguments{
-\item{x}{Object of class "MI", obtained with \code{\link[=mutualinfo]{mutualinfo()}}.}
+\item{x}{Object of class "mi", obtained with \code{\link[=mutualinfo]{mutualinfo()}}.}
 
 \item{digits}{positive integer or \code{NULL} or \code{TRUE} (default): minimal number of significant digits, see \code{\link[base:print.default]{base::print.default()}}. If value is \code{TRUE}, then the significant digits for element \verb{$value} is determined from is respective \verb{$MCaccuracy}  (see \code{\link[=mutualinfo]{mutualinfo()}}), according to the rules of the \emph{Guide to the expression of Uncertainty in Measurement}, keeping as many digits as given in parameter \code{edigits}; whereas \verb{$quantiles} elements uses \code{edigits} significant digits.}
 
@@ -21,7 +21,7 @@
 Its \code{x} argument, \link[base:invisible]{invisibly}; see \code{\link[base:print]{base::print()}}.
 }
 \description{
-This \code{\link[base:print]{base::print()}} method is a utility to display value and revisability of an "MI" object obtained with \code{\link[=mutualinfo]{mutualinfo()}}.
+This \code{\link[base:print]{base::print()}} method is a utility to display value and revisability of an "mi" object obtained with \code{\link[=mutualinfo]{mutualinfo()}}.
 }
 \examples{
 \donttest{
