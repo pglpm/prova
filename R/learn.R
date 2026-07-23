@@ -683,7 +683,7 @@ learn <- function(
         for(achain in 0:nchains) {
             pointsid <- sort(sample.int(n = npoints,
                 size = min(ncheckpoints, npoints), replace = FALSE))
-            testdata <- .util_prepPcheckpoints(
+            testdata <- .prepPcheckpoints(
                 x = data[pointsid, , drop = FALSE],
                 auxmetadata = auxmetadata,
                 pointsid = pointsid
@@ -1282,7 +1282,7 @@ learn <- function(
     print2user('\nChecking test data\n(',
         paste0('#', testdata$pointsid, collapse = ' '), '):')
 
-    oktraces <- .util_Pcheckpoints(
+    oktraces <- .Pcheckpoints(
         testdata = testdata,
         learnt = learnt
     )
@@ -3092,7 +3092,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             diagntime <- Sys.time()
             ##
 
-            ll <- .util_Pcheckpoints(
+            ll <- .Pcheckpoints(
                 testdata = testdata,
                 learnt = mcsamples
             )

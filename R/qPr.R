@@ -335,7 +335,7 @@ qPr <- function(
         )
     } else {
         ## Construction of the arguments for util_lprobs, X argument
-        lpargs <- util_lprobsargsyx(
+        lpargs <- .lprobsargsyx(
             x = X,
             auxmetadata = auxmetadata,
             learnt = learnt,
@@ -344,7 +344,7 @@ qPr <- function(
 
         invisible(parallel::parLapply(cl = cl,
             X = lpargs$xVs,
-            fun = util_lprobsbase,
+            fun = .lprobsbase,
             params = lpargs$params,
             logW = c(log(learnt$W)),
             temporarydir = temporarydir,
@@ -359,19 +359,19 @@ qPr <- function(
             c(2, 3), cumsum
         ))
         params2 <- NULL
-        util_qYX <- util_qYXdiscr
+        util_qYX <- .qYXdiscr
     } else if(auxY$mcmctype == 'R'){
         params1 <- learnt$Rmean[auxY$id, ,]
         params2 <- learnt$Rsd[auxY$id, ,]
-        util_qYX <- util_qYXcont
+        util_qYX <- .qYXcont
     } else if(auxY$mcmctype == 'D'){
         params1 <- learnt$Dmean[auxY$id, ,]
         params2 <- learnt$Dsd[auxY$id, ,]
-        util_qYX <- util_qYXcont
+        util_qYX <- .qYXcont
     } else if(auxY$mcmctype == 'C'){
         params1 <- learnt$Cmean[auxY$id, ,]
         params2 <- learnt$Csd[auxY$id, ,]
-        util_qYX <- util_qYXcont
+        util_qYX <- .qYXcont
     } else {
         stop('type of Yname not found')
     }
@@ -531,4 +531,245 @@ qPr <- function(
 
     class(out) <- 'probability'
     out
+}
+
+
+#' Calculate quantiles for continuous Y by bisection
+#'
+#' Used in 'qPr()'.
+#'
+#' @import stats
+#'
+#' @keywords internal
+.qYXcont <- function(
+    iyx,
+    params1, params2,
+    auxmetadata,
+    temporarydir, usememory = TRUE,
+    doquantiles, quantiles,
+    dosamples, nsamples,
+    Qerror,
+    tol = .Machine$double.eps * 3
+){
+    pY <- iyx['pY']
+
+    if(usememory) {
+        lprobX <- readRDS(file.path(temporarydir,
+            paste0('__X', iyx['jx'], '__.rds')
+        ))
+    }
+    sumlpX <- colSums(exp(lprobX), na.rm = TRUE)
+
+    nmaxsamples <- ncol(params1)
+
+#### Calculate quantile for the posterior probability distribution
+
+    Yvals <- .Machine$double.xmax * c(-0.125, 0.125)
+
+    values <- (Yvals[1] + Yvals[2]) / 2
+
+    FF <- mean(colSums(exp(
+        lprobX + pnorm(q = values,
+            mean = params1, sd = params2,
+            lower.tail = TRUE, log.p = TRUE)
+    ), na.rm = TRUE) / sumlpX) - pY
+
+    while(abs(FF) > tol && Yvals[2] - Yvals[1] > tol){
+        Yvals[(FF > 0) + 1L] <- values
+        values <- (Yvals[1] + Yvals[2]) / 2
+        FF <- mean(colSums(exp(
+            lprobX + pnorm(q = values,
+                mean = params1, sd = params2,
+                lower.tail = TRUE, log.p = TRUE)
+        ), na.rm = TRUE) / sumlpX) - pY
+    }
+
+    values <- unname(unlist(.vtransform(values,
+        auxmetadata = auxmetadata,
+        Rout = 'original',
+        Cout = 'original',
+        Dout = 'original',
+        Oout = 'original',
+        Nout = 'original',
+        Bout = 'original',
+        variates <- auxmetadata$name,
+        logjacobianOr = NULL)))
+
+#### Calculate quantile for the frequency samples
+    if(doquantiles){
+        selsamples <- TRUE
+    } else if(dosamples) {
+        nmaxsamples <- nsamples
+        selsamples <- round(seq(1, ncol(params1), length.out = nsamples))
+    }
+
+    if(doquantiles || dosamples) {
+        params1 <- t(params1[, selsamples])
+        params2 <- t(params2[, selsamples])
+        lprobX <- t(lprobX[, selsamples])
+
+        Yvals <- rep.int(x = .Machine$double.xmax * c(-0.125, 0.125),
+            times = rep.int(x = nmaxsamples, times = 2))
+        dim(Yvals) <- c(nmaxsamples, 2)
+        sampleseq <- 1:nmaxsamples
+
+        samples <- (Yvals[, 1] + Yvals[, 2]) / 2
+        FF <- rowSums(exp(
+            lprobX + pnorm(q = samples,
+                mean = params1, sd = params2,
+                lower.tail = TRUE, log.p = TRUE)
+        ), na.rm = TRUE) / sumlpX - pY
+
+        tocheck <- abs(FF) > tol
+        while(any(tocheck)) {
+            choose <- c(sampleseq[tocheck], (FF[tocheck] > 0) + 1L)
+            dim(choose) <- c(sum(tocheck), 2)
+            Yvals[choose] <- samples[tocheck]
+            samples[tocheck] <- (Yvals[tocheck, 1] + Yvals[tocheck, 2]) / 2
+            FF <- rowSums(exp(
+                lprobX + pnorm(q = samples,
+                    mean = params1, sd = params2,
+                    lower.tail = TRUE, log.p = TRUE)
+            ), na.rm = TRUE) / sumlpX - pY
+        tocheck <- abs(FF) > tol & Yvals[, 2] - Yvals[, 1] > tol
+        }
+        samples <- unname(unlist(.vtransform(samples,
+            auxmetadata = auxmetadata,
+            Rout = 'original',
+            Cout = 'original',
+            Dout = 'original',
+            Oout = 'original',
+            Nout = 'original',
+            Bout = 'original',
+            variates <- auxmetadata$name,
+            logjacobianOr = NULL)))
+    }
+
+    list(
+        values = values,
+        ##
+        quantiles = if(doquantiles) {
+            quantile(x = samples, probs = quantiles, type = 6,
+                na.rm = TRUE, names = FALSE)
+        },
+        ##
+        samples = if(dosamples) {
+            samples[round(seq(1, length(samples), length.out = nsamples))]
+        }
+        ## values.MCaccuracy
+        ## quantiles.MCaccuracy
+)
+}
+
+
+#' Calculate quantiles for discrete Y by bisection
+#'
+#' Used in 'qPr()'.
+#'
+#' @import stats
+#'
+#' @keywords internal
+.qYXdiscr <- function(
+    iyx,
+    params1, params2,
+    auxmetadata,
+    temporarydir, usememory = TRUE,
+    doquantiles, quantiles,
+    dosamples, nsamples,
+    Qerror = NULL,
+    tol = NULL
+){
+    pY <- iyx['pY']
+
+    if(usememory) {
+        lprobX <- readRDS(file.path(temporarydir,
+            paste0('__X', iyx['jx'], '__.rds')
+        ))
+    }
+    sumlpX <- colSums(exp(lprobX), na.rm = TRUE)
+
+    nmaxsamples <- dim(params1)[3]
+    Nvalues <- auxmetadata$Nvalues
+
+#### Calculate quantile for the posterior probability distribution
+
+    values <- 1L
+
+    FF <- mean(colSums(exp(
+        lprobX + params1[values, ,]
+    ), na.rm = TRUE) / sumlpX)
+
+    while(FF < pY && values <= Nvalues){
+        values <- values + 1L
+        FF <- mean(colSums(exp(
+            lprobX + params1[values, ,]
+        ), na.rm = TRUE) / sumlpX)
+    }
+    values <- unname(unlist(.vtransform(values,
+        auxmetadata = auxmetadata,
+        Rout = 'original',
+        Cout = 'original',
+        Dout = 'original',
+        Oout = 'original',
+        Nout = 'original',
+        Bout = 'original',
+        variates <- auxmetadata$name,
+        logjacobianOr = NULL)))
+
+#### Calculate quantile for the frequency samples
+    if(doquantiles){
+        selsamples <- TRUE
+    } else if(dosamples) {
+        nmaxsamples <- nsamples
+        selsamples <- round(seq(1, ncol(params1), length.out = nsamples))
+    }
+
+    if(doquantiles || dosamples) {
+        params1 <- aperm(a = params1[, , selsamples],
+            perm = c(1, 3, 2), resize = TRUE)
+        lprobX <- t(lprobX[, selsamples])
+
+        samples <- rep.int(x = 1L, times = nmaxsamples)
+
+        i <- 1L
+
+        FF <- rowSums(exp(
+            lprobX + params1[i, ,]
+        ), na.rm = TRUE) / sumlpX
+
+        tocheck <- FF < pY
+        while(any(tocheck)) {
+            i <-  i + 1L
+            samples[tocheck] <- i
+            FF <- rowSums(exp(
+            lprobX + params1[i, ,]
+            ), na.rm = TRUE) / sumlpX
+            tocheck <- FF < pY
+        }
+        samples <- unname(unlist(.vtransform(samples,
+            auxmetadata = auxmetadata,
+            Rout = 'original',
+            Cout = 'original',
+            Dout = 'original',
+            Oout = 'original',
+            Nout = 'original',
+            Bout = 'original',
+            variates <- auxmetadata$name,
+            logjacobianOr = NULL)))
+    }
+
+    list(
+        values = values,
+        ##
+        quantiles = if(doquantiles) {
+            quantile(x = samples, probs = quantiles, type = 6,
+                na.rm = TRUE, names = FALSE)
+        },
+        ##
+        samples = if(dosamples) {
+            samples[round(seq(1, length(samples), length.out = nsamples))]
+        }
+        ## values.MCaccuracy
+        ## quantiles.MCaccuracy
+)
 }

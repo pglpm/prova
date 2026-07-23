@@ -1576,13 +1576,11 @@ For instance, we can read the 89%-credibility intervals as follows:</p>
 <p>or we can use the <code>print()</code> function to display values and
 quantiles together:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">print</span>(Fspecies10)</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co"># , , 1</span></span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#            probability</span></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co"># species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#   Adelie    0.2987 0.0018 0.1218 0.2072 0.3763 0.5068</span></span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#   Chinstrap 0.3046 0.0018 0.1230 0.2112 0.3889 0.5221</span></span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#   Gentoo    0.3967 0.0021 0.1921 0.2995 0.4894 0.6183</span></span></code></pre></div>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#            probability</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co"># species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#   Adelie    0.2987 0.0018 0.1218 0.2072 0.3763 0.5068</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#   Chinstrap 0.3046 0.0018 0.1230 0.2112 0.3889 0.5221</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#   Gentoo    0.3967 0.0021 0.1921 0.2995 0.4894 0.6183</span></span></code></pre></div>
 <!-- As the name tells, this element actually report the *quantiles* of the probability. For example, look at the `= 25%` output: among other things it says `Adelie 0.227634`. This means that there's a 25% probability that the frequency of Adélie penguins is below $0.227634$, and thus a 75% probability that it's above $0.227634$.
  -->
 </div>
@@ -1716,16 +1714,14 @@ code for such an analysis:</p>
 <span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a><span class="do">## Display the estimated frequencies of all six combinations,</span></span>
 <span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a><span class="do">## as well as their credibility intervals</span></span>
 <span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a><span class="fu">print</span>(Fspeciessex10)</span>
-<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co"># , , 1</span></span>
-<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#                   probability</span></span>
-<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co"># species,sex        value  +/-    Q5.5%   Q25%    Q75%   Q94.5%</span></span>
-<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co">#   Adelie,female    0.1634 0.0013 0.0508  0.0984  0.2153 0.3193</span></span>
-<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#   Chinstrap,female 0.1293 0.0014 0.0340  0.0728  0.1710 0.2719</span></span>
-<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#   Gentoo,female    0.2881 0.0019 0.1239  0.1987  0.3660 0.4954</span></span>
-<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a><span class="co">#   Adelie,male      0.1353 0.0013 0.0376  0.0754  0.1794 0.2804</span></span>
-<span id="cb16-26"><a href="#cb16-26" tabindex="-1"></a><span class="co">#   Chinstrap,male   0.1754 0.0013 0.0556  0.1054  0.2292 0.3505</span></span>
-<span id="cb16-27"><a href="#cb16-27" tabindex="-1"></a><span class="co">#   Gentoo,male      0.1086 0.0012 0.02159 0.05305 0.1459 0.2467</span></span></code></pre></div>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a><span class="co">#                   probability</span></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a><span class="co"># species,sex        value  +/-    Q5.5%   Q25%    Q75%   Q94.5%</span></span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a><span class="co">#   Adelie,female    0.1634 0.0013 0.0508  0.0984  0.2153 0.3193</span></span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a><span class="co">#   Chinstrap,female 0.1293 0.0014 0.0340  0.0728  0.1710 0.2719</span></span>
+<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a><span class="co">#   Gentoo,female    0.2881 0.0019 0.1239  0.1987  0.3660 0.4954</span></span>
+<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a><span class="co">#   Adelie,male      0.1353 0.0013 0.0376  0.0754  0.1794 0.2804</span></span>
+<span id="cb16-24"><a href="#cb16-24" tabindex="-1"></a><span class="co">#   Chinstrap,male   0.1754 0.0013 0.0556  0.1054  0.2292 0.3505</span></span>
+<span id="cb16-25"><a href="#cb16-25" tabindex="-1"></a><span class="co">#   Gentoo,male      0.1086 0.0012 0.02159 0.05305 0.1459 0.2467</span></span></code></pre></div>
 <p>Now let’s continue with our simpler plan.</p>
 <p><br />
 </p>
@@ -2174,13 +2170,11 @@ how to calculate these probabilities exactly.</p>
 overall statistical occurrence of the three species in the whole
 population?</em>” is as follows:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">print</span>(Fspecies60)</span>
-<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="co"># , , 1</span></span>
-<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="co">#            probability</span></span>
-<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="co"># species     value   +/-     Q5.5%  Q25%   Q75%   Q94.5%</span></span>
-<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a><span class="co">#   Adelie    0.3950  0.0010  0.2960 0.3522 0.4357 0.4976</span></span>
-<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a><span class="co">#   Chinstrap 0.20999 0.00081 0.1331 0.1735 0.2424 0.2955</span></span>
-<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a><span class="co">#   Gentoo    0.3950  0.0010  0.2982 0.3528 0.4360 0.4946</span></span></code></pre></div>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="co">#            probability</span></span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="co"># species     value   +/-     Q5.5%  Q25%   Q75%   Q94.5%</span></span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="co">#   Adelie    0.3950  0.0010  0.2960 0.3522 0.4357 0.4976</span></span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="co">#   Chinstrap 0.20999 0.00081 0.1331 0.1735 0.2424 0.2955</span></span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a><span class="co">#   Gentoo    0.3950  0.0010  0.2982 0.3528 0.4360 0.4946</span></span></code></pre></div>
 <blockquote>
 <p>From a sample of 10 penguins, the inference about the relative
 frequencies of the three species in the full population is as
@@ -2436,13 +2430,11 @@ statistical occurrence of the three species in the whole
 population?</em>”. A quantitative summary can be extracted from the
 <code>Fspeciesall</code> in the usual way:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="fu">print</span>(Fspeciesall)</span>
-<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="co"># , , 1</span></span>
-<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="co">#            probability</span></span>
-<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a><span class="co"># species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% </span></span>
-<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a><span class="co">#   Adelie    0.44171 0.00041 0.39809 0.42309 0.46035 0.48378</span></span>
-<span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a><span class="co">#   Chinstrap 0.19884 0.00040 0.16568 0.18395 0.21262 0.23371</span></span>
-<span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a><span class="co">#   Gentoo    0.35945 0.00039 0.31938 0.34128 0.37726 0.40024</span></span></code></pre></div>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="co">#            probability</span></span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="co"># species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% </span></span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="co">#   Adelie    0.44171 0.00041 0.39809 0.42309 0.46035 0.48378</span></span>
+<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a><span class="co">#   Chinstrap 0.19884 0.00040 0.16568 0.18395 0.21262 0.23371</span></span>
+<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a><span class="co">#   Gentoo    0.35945 0.00039 0.31938 0.34128 0.37726 0.40024</span></span></code></pre></div>
 <blockquote>
 <p>From a sample of 344 penguins [add a more thorough specification of
 population and sampling procedure here], the relative frequencies of the

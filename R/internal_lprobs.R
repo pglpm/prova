@@ -3,7 +3,7 @@
 #' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()]
 #'
 #' @keywords internal
-util_lprobsargsyx <- function(
+.lprobsargsyx <- function(
     x, auxmetadata, learnt, tails = NULL, ids = seq_len(nrow(x))
 ) {
     Xv <- colnames(x)
@@ -25,9 +25,9 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV0 <- TRUE
-        V0mean <- learnbind(V0mean,
+        V0mean <- .learnbind(V0mean,
             learnt$Rmean[aux$id, , , drop = FALSE])
-        V0sd <- learnbind(V0sd,
+        V0sd <- .learnbind(V0sd,
             learnt$Rsd[aux$id, , , drop = FALSE])
         xV0 <- rbind(xV0,
             t(as.matrix(.vtransform(
@@ -53,9 +53,9 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV0 <- TRUE
-        V0mean <- learnbind(V0mean,
+        V0mean <- .learnbind(V0mean,
             learnt$Cmean[aux$id, , , drop = FALSE])
-        V0sd <- learnbind(V0sd,
+        V0sd <- .learnbind(V0sd,
             learnt$Csd[aux$id, , , drop = FALSE])
         xV0 <- rbind(xV0,
             t(as.matrix(.vtransform(
@@ -81,9 +81,9 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- learnbind(V1mean,
+        V1mean <- .learnbind(V1mean,
                 tails[aux$name] * learnt$Rmean[aux$id, , , drop = FALSE])
-        V1sd <- learnbind(V1sd,
+        V1sd <- .learnbind(V1sd,
             learnt$Rsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
             tails[aux$name] *
@@ -104,8 +104,8 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- learnbind(V1mean, learnt$Cmean[aux$id, , , drop = FALSE])
-        V1sd <- learnbind(V1sd, learnt$Csd[aux$id, , , drop = FALSE])
+        V1mean <- .learnbind(V1mean, learnt$Cmean[aux$id, , , drop = FALSE])
+        V1sd <- .learnbind(V1sd, learnt$Csd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
             t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
@@ -125,8 +125,8 @@ util_lprobsargsyx <- function(
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
         ## note the minus!
-        V1mean <- learnbind(V1mean, -learnt$Cmean[aux$id, , , drop = FALSE])
-        V1sd <- learnbind(V1sd, learnt$Csd[aux$id, , , drop = FALSE])
+        V1mean <- .learnbind(V1mean, -learnt$Cmean[aux$id, , , drop = FALSE])
+        V1sd <- .learnbind(V1sd, learnt$Csd[aux$id, , , drop = FALSE])
         ## note the minus!
         xV1 <- rbind(xV1,
             - t(as.matrix(.vtransform(
@@ -146,8 +146,8 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- learnbind(V1mean, learnt$Dmean[aux$id, , , drop = FALSE])
-        V1sd <- learnbind(V1sd, learnt$Dsd[aux$id, , , drop = FALSE])
+        V1mean <- .learnbind(V1mean, learnt$Dmean[aux$id, , , drop = FALSE])
+        V1sd <- .learnbind(V1sd, learnt$Dsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
             t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
@@ -168,8 +168,8 @@ util_lprobsargsyx <- function(
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
         ## note the minus!
-        V1mean <- learnbind(V1mean, -learnt$Dmean[aux$id, , , drop = FALSE])
-        V1sd <- learnbind(V1sd, learnt$Dsd[aux$id, , , drop = FALSE])
+        V1mean <- .learnbind(V1mean, -learnt$Dmean[aux$id, , , drop = FALSE])
+        V1sd <- .learnbind(V1sd, learnt$Dsd[aux$id, , , drop = FALSE])
         ## note the minus!
         xV1 <- rbind(xV1,
             - t(as.matrix(.vtransform(
@@ -195,9 +195,9 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- learnbind(V1mean,
+        V1mean <- .learnbind(V1mean,
                 learnt$Cmean[aux$id, , , drop = FALSE])
-        V1sd <- learnbind(V1sd,
+        V1sd <- .learnbind(V1sd,
             learnt$Csd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
                 t(as.matrix(.vtransform(
@@ -222,9 +222,9 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- learnbind(V1mean,
+        V1mean <- .learnbind(V1mean,
                 - learnt$Cmean[aux$id, , , drop = FALSE]) # minus sign
-        V1sd <- learnbind(V1sd,
+        V1sd <- .learnbind(V1sd,
             learnt$Csd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
                - t(as.matrix(.vtransform( # minus sign
@@ -249,9 +249,9 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- learnbind(V1mean,
+        V1mean <- .learnbind(V1mean,
                 learnt$Dmean[aux$id, , , drop = FALSE])
-        V1sd <- learnbind(V1sd,
+        V1sd <- .learnbind(V1sd,
             learnt$Dsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
                 t(as.matrix(.vtransform(
@@ -277,9 +277,9 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- learnbind(V1mean,
+        V1mean <- .learnbind(V1mean,
                 - learnt$Dmean[aux$id, , , drop = FALSE]) # minus sign
-        V1sd <- learnbind(V1sd,
+        V1sd <- .learnbind(V1sd,
             learnt$Dsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
                - t(as.matrix(.vtransform( # minus sign
@@ -314,9 +314,9 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV2 <- TRUE
-        V2mean <- learnbind(V2mean,
+        V2mean <- .learnbind(V2mean,
                 learnt$Dmean[aux$id, , , drop = FALSE])
-        V2sd <- learnbind(V2sd,
+        V2sd <- .learnbind(V2sd,
             learnt$Dsd[aux$id, , , drop = FALSE])
         V2steps <- aux$halfstep / aux$tscale
         xV2 <- rbind(xV2,
@@ -349,7 +349,7 @@ util_lprobsargsyx <- function(
         Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
             aux$indexpos, aux$Nvalues,
             SIMPLIFY = FALSE))
-        VNprobs <- learnbind(VNprobs,
+        VNprobs <- .learnbind(VNprobs,
             learnt$Oprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
                 t(as.matrix(.vtransform(
@@ -374,7 +374,7 @@ util_lprobsargsyx <- function(
         Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
             aux$indexpos, aux$Nvalues,
             SIMPLIFY = FALSE))
-        VNprobs <- learnbind(VNprobs,
+        VNprobs <- .learnbind(VNprobs,
             learnt$Nprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
                 t(as.matrix(.vtransform(
@@ -396,13 +396,13 @@ util_lprobsargsyx <- function(
         aux <- auxmetadata[toselect, ]
         nVN <- TRUE
         for(i in seq_len(nrow(aux))) {
-            VNprobs <- learnbind(VNprobs,
+            VNprobs <- .learnbind(VNprobs,
                 if(tails[aux$name[i]] > 0) {
-                    rowcumsum(learnt$Oprob[
+                    .rowcumsum(learnt$Oprob[
                         aux$indexpos[i] + seq_len(aux$Nvalues[i]), , , drop = FALSE
                     ])
                 } else {
-                    rowinvcumsum(learnt$Oprob[
+                    .rowinvcumsum(learnt$Oprob[
                         aux$indexpos[i] + seq_len(aux$Nvalues[i]), , , drop = FALSE
                     ])
                 }
@@ -431,7 +431,7 @@ util_lprobsargsyx <- function(
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nVB <- TRUE
-        VBprobs <- learnbind(VBprobs,
+        VBprobs <- .learnbind(VBprobs,
             learnt$Bprob[aux$id, , , drop = FALSE])
         xVB <- rbind(xVB,
             t(as.matrix(.vtransform(
@@ -470,11 +470,11 @@ util_lprobsargsyx <- function(
 
 #' Calculate collection of log-probabilities for different components and samples
 #'
-#' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()], [.util_Pcheckpoints()].
+#' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()], [.Pcheckpoints()].
 #'
 #' @return Matrix of log-probabilities, with as many rows as components and as many cols as samples.
 #' @keywords internal
-util_lprobsbase <- function(
+.lprobsbase <- function(
     xVs, params, logW,
     temporarydir = NULL, lab = ''
 ) {
@@ -556,7 +556,7 @@ util_lprobsbase <- function(
 #' @import stats
 #'
 #' @keywords internal
-util_combineYX <- function(
+.combineYX <- function(
     iyx,
     temporarydir, usememory = TRUE,
     quantiles, nsamples,
@@ -605,16 +605,16 @@ util_combineYX <- function(
 #'
 #' @return A vector of two pointwise mutual informations; one calculated from all MC samples, the other from the "limit frequencies" (MC sample corresponding to the input datapoint).
 #' @keywords internal
-util_lprobsmi <- function(xVs, params1, params2, lW){
+.lprobsmi <- function(xVs, params1, params2, lW){
 
     thisid <- xVs[[1]] # MC-sample id of this datapoint
 
-    lprobY1 <- util_lprobsbase(xVs = xVs[1:6], params = params1, logW = 0,
+    lprobY1 <- .lprobsbase(xVs = xVs[1:6], params = params1, logW = 0,
         temporarydir= NULL)
-    lprobY2 <- util_lprobsbase(xVs = xVs[7:12], params = params2, logW = 0,
+    lprobY2 <- .lprobsbase(xVs = xVs[7:12], params = params2, logW = 0,
         temporarydir = NULL)
 
-    lprobnorm <- util_denorm(lW) # subtract max from each prob-col. of lW
+    lprobnorm <- .denorm(lW) # subtract max from each prob-col. of lW
     celprobnorm <- colSums(exp(lprobnorm))
 
 ### Construct log-probabilities from lprobY1, lprobY2
@@ -637,255 +637,13 @@ util_lprobsmi <- function(xVs, params1, params2, lW){
     )
 }
 
-#' Calculate quantiles for continuous Y by bisection
-#'
-#' Used in 'qPr()'.
-#'
-#' @import stats
-#'
-#' @keywords internal
-util_qYXcont <- function(
-    iyx,
-    params1, params2,
-    auxmetadata,
-    temporarydir, usememory = TRUE,
-    doquantiles, quantiles,
-    dosamples, nsamples,
-    Qerror,
-    tol = .Machine$double.eps * 3
-) {
-    pY <- iyx['pY']
-
-    if(usememory) {
-        lprobX <- readRDS(file.path(temporarydir,
-            paste0('__X', iyx['jx'], '__.rds')
-        ))
-    }
-    sumlpX <- colSums(exp(lprobX), na.rm = TRUE)
-
-    nmaxsamples <- ncol(params1)
-
-#### Calculate quantile for the posterior probability distribution
-
-    Yvals <- .Machine$double.xmax * c(-0.125, 0.125)
-
-    values <- (Yvals[1] + Yvals[2]) / 2
-
-    FF <- mean(colSums(exp(
-        lprobX + pnorm(q = values,
-            mean = params1, sd = params2,
-            lower.tail = TRUE, log.p = TRUE)
-    ), na.rm = TRUE) / sumlpX) - pY
-
-    while(abs(FF) > tol && Yvals[2] - Yvals[1] > tol){
-        Yvals[(FF > 0) + 1L] <- values
-        values <- (Yvals[1] + Yvals[2]) / 2
-        FF <- mean(colSums(exp(
-            lprobX + pnorm(q = values,
-                mean = params1, sd = params2,
-                lower.tail = TRUE, log.p = TRUE)
-        ), na.rm = TRUE) / sumlpX) - pY
-    }
-
-    values <- unname(unlist(.vtransform(values,
-        auxmetadata = auxmetadata,
-        Rout = 'original',
-        Cout = 'original',
-        Dout = 'original',
-        Oout = 'original',
-        Nout = 'original',
-        Bout = 'original',
-        variates <- auxmetadata$name,
-        logjacobianOr = NULL)))
-
-#### Calculate quantile for the frequency samples
-    if(doquantiles){
-        selsamples <- TRUE
-    } else if(dosamples) {
-        nmaxsamples <- nsamples
-        selsamples <- round(seq(1, ncol(params1), length.out = nsamples))
-    }
-
-    if(doquantiles || dosamples) {
-        params1 <- t(params1[, selsamples])
-        params2 <- t(params2[, selsamples])
-        lprobX <- t(lprobX[, selsamples])
-
-        Yvals <- rep.int(x = .Machine$double.xmax * c(-0.125, 0.125),
-            times = rep.int(x = nmaxsamples, times = 2))
-        dim(Yvals) <- c(nmaxsamples, 2)
-        sampleseq <- 1:nmaxsamples
-
-        samples <- (Yvals[, 1] + Yvals[, 2]) / 2
-        FF <- rowSums(exp(
-            lprobX + pnorm(q = samples,
-                mean = params1, sd = params2,
-                lower.tail = TRUE, log.p = TRUE)
-        ), na.rm = TRUE) / sumlpX - pY
-
-        tocheck <- abs(FF) > tol
-        while(any(tocheck)) {
-            choose <- c(sampleseq[tocheck], (FF[tocheck] > 0) + 1L)
-            dim(choose) <- c(sum(tocheck), 2)
-            Yvals[choose] <- samples[tocheck]
-            samples[tocheck] <- (Yvals[tocheck, 1] + Yvals[tocheck, 2]) / 2
-            FF <- rowSums(exp(
-                lprobX + pnorm(q = samples,
-                    mean = params1, sd = params2,
-                    lower.tail = TRUE, log.p = TRUE)
-            ), na.rm = TRUE) / sumlpX - pY
-        tocheck <- abs(FF) > tol & Yvals[, 2] - Yvals[, 1] > tol
-        }
-        samples <- unname(unlist(.vtransform(samples,
-            auxmetadata = auxmetadata,
-            Rout = 'original',
-            Cout = 'original',
-            Dout = 'original',
-            Oout = 'original',
-            Nout = 'original',
-            Bout = 'original',
-            variates <- auxmetadata$name,
-            logjacobianOr = NULL)))
-    }
-
-    list(
-        values = values,
-        ##
-        quantiles = if(doquantiles) {
-            quantile(x = samples, probs = quantiles, type = 6,
-                na.rm = TRUE, names = FALSE)
-        },
-        ##
-        samples = if(dosamples) {
-            samples[round(seq(1, length(samples), length.out = nsamples))]
-        }
-        ## values.MCaccuracy
-        ## quantiles.MCaccuracy
-)
-}
-
-
-
-#' Calculate quantiles for discrete Y by bisection
-#'
-#' Used in 'qPr()'.
-#'
-#' @import stats
-#'
-#' @keywords internal
-util_qYXdiscr <- function(
-    iyx,
-    params1, params2,
-    auxmetadata,
-    temporarydir, usememory = TRUE,
-    doquantiles, quantiles,
-    dosamples, nsamples,
-    Qerror = NULL,
-    tol = NULL
-){
-    pY <- iyx['pY']
-
-    if(usememory) {
-        lprobX <- readRDS(file.path(temporarydir,
-            paste0('__X', iyx['jx'], '__.rds')
-        ))
-    }
-    sumlpX <- colSums(exp(lprobX), na.rm = TRUE)
-
-    nmaxsamples <- dim(params1)[3]
-    Nvalues <- auxmetadata$Nvalues
-
-#### Calculate quantile for the posterior probability distribution
-
-    values <- 1L
-
-    FF <- mean(colSums(exp(
-        lprobX + params1[values, ,]
-    ), na.rm = TRUE) / sumlpX)
-
-    while(FF < pY && values <= Nvalues){
-        values <- values + 1L
-        FF <- mean(colSums(exp(
-            lprobX + params1[values, ,]
-        ), na.rm = TRUE) / sumlpX)
-    }
-    values <- unname(unlist(.vtransform(values,
-        auxmetadata = auxmetadata,
-        Rout = 'original',
-        Cout = 'original',
-        Dout = 'original',
-        Oout = 'original',
-        Nout = 'original',
-        Bout = 'original',
-        variates <- auxmetadata$name,
-        logjacobianOr = NULL)))
-
-#### Calculate quantile for the frequency samples
-    if(doquantiles){
-        selsamples <- TRUE
-    } else if(dosamples) {
-        nmaxsamples <- nsamples
-        selsamples <- round(seq(1, ncol(params1), length.out = nsamples))
-    }
-
-    if(doquantiles || dosamples) {
-        params1 <- aperm(a = params1[, , selsamples],
-            perm = c(1, 3, 2), resize = TRUE)
-        lprobX <- t(lprobX[, selsamples])
-
-        samples <- rep.int(x = 1L, times = nmaxsamples)
-
-        i <- 1L
-
-        FF <- rowSums(exp(
-            lprobX + params1[i, ,]
-        ), na.rm = TRUE) / sumlpX
-
-        tocheck <- FF < pY
-        while(any(tocheck)) {
-            i <-  i + 1L
-            samples[tocheck] <- i
-            FF <- rowSums(exp(
-            lprobX + params1[i, ,]
-            ), na.rm = TRUE) / sumlpX
-            tocheck <- FF < pY
-        }
-        samples <- unname(unlist(.vtransform(samples,
-            auxmetadata = auxmetadata,
-            Rout = 'original',
-            Cout = 'original',
-            Dout = 'original',
-            Oout = 'original',
-            Nout = 'original',
-            Bout = 'original',
-            variates <- auxmetadata$name,
-            logjacobianOr = NULL)))
-    }
-
-    list(
-        values = values,
-        ##
-        quantiles = if(doquantiles) {
-            quantile(x = samples, probs = quantiles, type = 6,
-                na.rm = TRUE, names = FALSE)
-        },
-        ##
-        samples = if(dosamples) {
-            samples[round(seq(1, length(samples), length.out = nsamples))]
-        }
-        ## values.MCaccuracy
-        ## quantiles.MCaccuracy
-)
-}
-
-
 
 #' Utility function to improve accuracy
 #'
-#' Used in 'util_lprobsmi()'.
+#' Used in '.lprobsmi()'.
 #'
 #' @keywords internal
-util_denorm <- function(lprob) {
+.denorm <- function(lprob) {
     apply(X = lprob, MARGIN = 2, FUN = function(xx) {
         xx - max(xx[is.finite(xx)])
     }, simplify = TRUE)
@@ -894,10 +652,10 @@ util_denorm <- function(lprob) {
 
 #' Cumulative sum along first dimension
 #'
-#' Used in 'util_lprobsargsyx()'.
+#' Used in '.lprobsargsyx()'.
 #'
 #' @keywords internal
-rowcumsum <- function(x){
+.rowcumsum <- function(x){
     for(i in 2:(dim(x)[1])){
         x[i,,] <- x[i,,] + x[i-1,,]
     }
@@ -907,10 +665,10 @@ rowcumsum <- function(x){
 
 #' Inverse cumulative sum along first dimension
 #'
-#' Used in 'util_lprobsargsyx()'.
+#' Used in '.lprobsargsyx()'.
 #'
 #' @keywords internal
-rowinvcumsum <- function(x){
+.rowinvcumsum <- function(x){
     for(i in (dim(x)[1] - 1):1){
         x[i,,] <- x[i,,] + x[i+1,,]
     }

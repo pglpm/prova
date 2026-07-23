@@ -451,17 +451,17 @@ Pr <- function(
         )
     } else {
         ## Construction of the arguments for util_lprobs, X argument
-        lpargs <- util_lprobsargsyx(
+        lpargs <- .lprobsargsyx(
             x = X,
             auxmetadata = auxmetadata,
             learnt = learnt,
             tails = tails
         )
 
-        ## each instance of util_lprobsbase() takes one datapoint
+        ## each instance of .lprobsbase() takes one datapoint
         invisible(parallel::parLapply(cl = cl,
             X = lpargs$xVs,
-            fun = util_lprobsbase,
+            fun = .lprobsbase,
             params = lpargs$params,
             logW = c(log(learnt$W)),
             temporarydir = temporarydir,
@@ -480,17 +480,17 @@ Pr <- function(
     ##     na.rm = TRUE
     ## ))
 
-    lpargs <- util_lprobsargsyx(
+    lpargs <- .lprobsargsyx(
         x = Y,
         auxmetadata = auxmetadata,
         learnt = learnt,
         tails = tails
     )
 
-    ## each instance of util_lprobsbase() takes one datapoint
+    ## each instance of .lprobsbase() takes one datapoint
     invisible(parallel::parLapply(cl = cl,
         X = lpargs$xVs,
-        fun = util_lprobsbase,
+        fun = .lprobsbase,
         params = lpargs$params,
         logW = 0,
         temporarydir = temporarydir,
@@ -512,7 +512,7 @@ Pr <- function(
                 jx = seq_len(nX),
                 KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
             MARGIN = 1,
-            FUN = util_combineYX,
+            FUN = .combineYX,
             temporarydir = temporarydir, usememory = usememory,
             quantiles = quantiles, nsamples = nsamples,
             Qerror = Qerror
@@ -524,7 +524,7 @@ Pr <- function(
                 jy = seq_len(nY),
                 KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
             MARGIN = 1,
-            FUN = util_combineYX,
+            FUN = .combineYX,
             temporarydir = temporarydir, usememory = usememory,
             quantiles = quantiles, nsamples = nsamples,
             Qerror = Qerror

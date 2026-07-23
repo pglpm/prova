@@ -93,9 +93,9 @@ signif(MI$quantiles, 3)
 
 }
 \seealso{
-\code{\link[=print.MI]{print.MI()}} ] to plot mutual information and quantiles calculated by \code{mutualinfo()}
+\code{\link[=print.mi]{print.mi()}} ] to plot mutual information and quantiles calculated by \code{mutualinfo()}
 
-\code{\link[=hist.MI]{hist.MI()}} to plot the revisability of the mutual information.
+\code{\link[=hist.mi]{hist.mi()}} to plot the revisability of the mutual information.
 
 \code{\link[=Pr]{Pr()}} to calculate probabilities and their revisability.
 

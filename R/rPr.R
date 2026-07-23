@@ -200,14 +200,14 @@ rPr <- function(
     if(is.null(X)){
         lW <- log(learnt$W)
     } else {
-        lpargs <- util_lprobsargsyx(
+        lpargs <- .lprobsargsyx(
             x = X,
             auxmetadata = auxmetadata,
             learnt = learnt,
             tails = tails
         )
 
-        lW <- util_lprobsbase(
+        lW <- .lprobsbase(
             xVs = lpargs$xVs[[1]],
             params = lpargs$params,
             logW =  log(learnt$W)
@@ -225,7 +225,7 @@ rPr <- function(
     ## }
 
 #### Draw samples of Ynames
-    Wdenorm <- exp(util_denorm(lW[, sseq, drop = FALSE]))
+    Wdenorm <- exp(.denorm(lW[, sseq, drop = FALSE]))
     Ws <- c(t(apply(
         X = Wdenorm, MARGIN = 2,
         FUN = function(xx){sample.int(n = ncomponents, size = 1, prob = xx)},
@@ -240,7 +240,7 @@ rPr <- function(
     ##     extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
     ##
     ## ## Old version with extraDistr::cat(), can be 10 times slower
-    ## lWnorm <- util_denorm(lW[, sseq, drop = FALSE])
+    ## lWnorm <- .denorm(lW[, sseq, drop = FALSE])
     ## Ws <- extraDistr::rcat(n = n, prob = t(
     ##     apply(X = lWnorm, MARGIN = 2, FUN = function(xx){
     ##         xx <- exp(xx)

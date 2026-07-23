@@ -1,19 +1,19 @@
 #' Format datapoints used for MCMC monitoring
 #'
-#' Used in '.util_Pcheckpoints()' within 'learn()'.
+#' Used in '.Pcheckpoints()' within 'learn()'.
 #'
 #' @param x Datapoints to be used for checking MCMC progress
 #' @param auxmetadata auxmetadata object
 #' @param pointsid Id of datapoints
 #'
-#' @return some arguments to be repeatedly used in .util_Pcheckpoints
+#' @return some arguments to be repeatedly used in .Pcheckpoints
 #'
 #' @keywords internal
-.util_prepPcheckpoints <- function(
+.prepPcheckpoints <- function(
     x, auxmetadata, pointsid = NULL
 ){
-    ## Use util_lprobsargsyx() as done in Pr(), but throw away some elements
-    temp <- util_lprobsargsyx(
+    ## Use .lprobsargsyx() as done in Pr(), but throw away some elements
+    temp <- .lprobsargsyx(
         x = x, auxmetadata = auxmetadata,
         learnt = list(
             Cmean = array(NA, dim = c(max(auxmetadata$id), 1, 1)),
@@ -177,13 +177,13 @@
 #'
 #' Used in 'learn()'.
 #'
-#' @param testdata List of objects calculated with .util_prepPcheckpoints
+#' @param testdata List of objects calculated with .prepPcheckpoints
 #' @param learnt mcsamples object
 #'
 #' @keywords internal
 #'
 #' @return The joint frequencies of Y corresponding to the Monte Carlo samples
-.util_Pcheckpoints <- function(
+.Pcheckpoints <- function(
     testdata, learnt
 ) {
     with(c(testdata, learnt), {
@@ -199,15 +199,15 @@
 
 ### R-variates not in 'cumul'
         if(length(auxV0a) > 0){
-            V0mean <- learnbind(V0mean, Rmean)
-            V0sd <- learnbind(V0sd, sqrt(Rvar)) # still variance
+            V0mean <- .learnbind(V0mean, Rmean)
+            V0sd <- .learnbind(V0sd, sqrt(Rvar)) # still variance
         }
 
 ### C-variates not in 'cumul' and with some non-boundary value
         if(length(auxV0b) > 0) {
-            V0mean <- learnbind(V0mean,
+            V0mean <- .learnbind(V0mean,
                 Cmean[auxV0b, , , drop = FALSE])
-            V0sd <- learnbind(V0sd,
+            V0sd <- .learnbind(V0sd,
                 sqrt(Cvar[auxV0b, , , drop = FALSE])) # still variance
         }
 
@@ -218,33 +218,33 @@
 
 ### C-variates not in 'cumul' and with left boundary values
         if(length(auxV1a) > 0){
-            V1mean <- learnbind(V1mean,
+            V1mean <- .learnbind(V1mean,
                 Cmean[auxV1a, , , drop = FALSE])
-            V1sd <- learnbind(V1sd,
+            V1sd <- .learnbind(V1sd,
                 sqrt(Cvar[auxV1a, , , drop = FALSE])) # still variance
         }
 
 ### C-variates not in 'cumul' and with right boundary values
         if(length(auxV1b) > 0){
-            V1mean <- learnbind(V1mean,
+            V1mean <- .learnbind(V1mean,
                 - Cmean[auxV1b, , , drop = FALSE]) # minus sign
-            V1sd <- learnbind(V1sd,
+            V1sd <- .learnbind(V1sd,
                 sqrt(Cvar[auxV1b, , , drop = FALSE])) # still variance
         }
 
 ### D-variates not in 'cumul' and with left boundary values
         if(length(auxV1c) > 0){
-            V1mean <- learnbind(V1mean,
+            V1mean <- .learnbind(V1mean,
                 Dmean[auxV1c, , , drop = FALSE])
-            V1sd <- learnbind(V1sd,
+            V1sd <- .learnbind(V1sd,
                 sqrt(Dvar[auxV1c, , , drop = FALSE])) # still variance
         }
 
 ### D-variates not in 'cumul' and with right boundary values
         if(length(auxV1d) > 0){
-            V1mean <- learnbind(V1mean,
+            V1mean <- .learnbind(V1mean,
                 - Dmean[auxV1d, , , drop = FALSE]) # minus sign
-            V1sd <- learnbind(V1sd,
+            V1sd <- .learnbind(V1sd,
                 sqrt(Dvar[auxV1d, , , drop = FALSE])) # still variance
         }
 
@@ -266,12 +266,12 @@
 
 ### O-variates not in 'cumul'
         if(length(auxVNO) > 0){
-            VNprobs <- learnbind(VNprobs,
+            VNprobs <- .learnbind(VNprobs,
                 Oprob)
         }
 ### N-variates
         if(length(auxVNN) > 0){
-            VNprobs <- learnbind(VNprobs,
+            VNprobs <- .learnbind(VNprobs,
                 Nprob)
         }
 
@@ -291,7 +291,7 @@
             lapply(
                 X = xVs,
                 FUN = function(xx){
-                    lprobY <- util_lprobsbase(
+                    lprobY <- .lprobsbase(
                         xVs = xx,
                         params = list(
                             nV0 = nV0,

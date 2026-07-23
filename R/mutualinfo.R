@@ -43,9 +43,9 @@
 #' - `$unit`, `$Y1names`, `$Y1names`: same as the input arguments.
 #'
 #' @seealso
-#' [print.MI()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
+#' [print.mi()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
 #'
-#' [hist.MI()] to plot the revisability of the mutual information.
+#' [hist.mi()] to plot the revisability of the mutual information.
 #'
 #' [Pr()] to calculate probabilities and their revisability.
 #'
@@ -288,14 +288,14 @@ mutualinfo <- function(
     if(is.null(X)){
         lW <- log(learnt$W)
     } else {
-        lpargs <- util_lprobsargsyx(
+        lpargs <- .lprobsargsyx(
             x = X,
             auxmetadata = auxmetadata,
             learnt = learnt,
             tails = tails
         )
 
-        lW <- util_lprobsbase(
+        lW <- .lprobsbase(
             xVs = lpargs$xVs[[1]],
             params = lpargs$params,
             logW =  log(learnt$W)
@@ -307,7 +307,7 @@ mutualinfo <- function(
     Ynames <- c(Y1names, Y2names)
 
 #### STEP 1. Draw samples of Ynames (that is, Y1names,Y2names)
-    Wdenorm <- exp(util_denorm(lW[, sseq, drop = FALSE]))
+    Wdenorm <- exp(.denorm(lW[, sseq, drop = FALSE]))
     Ws <- c(replicate(n = nv, expr = apply(
         X = Wdenorm, MARGIN = 2,
         FUN = function(xx){sample.int(n = ncomponents, size = 1, prob = xx)},
@@ -483,7 +483,7 @@ mutualinfo <- function(
     ## Keep track of the MC-sample id of each datapoint
     ids <- rep.int(x = sseq, times = nv)
 
-    lpargs1 <- util_lprobsargsyx(
+    lpargs1 <- .lprobsargsyx(
         x = Y1transf,
         auxmetadata = auxmetadata,
         learnt = learnt,
@@ -491,7 +491,7 @@ mutualinfo <- function(
         ids = ids
     )
 
-    lpargs2 <- util_lprobsargsyx(
+    lpargs2 <- .lprobsargsyx(
         x = Y2transf,
         auxmetadata = auxmetadata,
         learnt = learnt,
@@ -499,11 +499,11 @@ mutualinfo <- function(
         ids = ids
     )
 
-    ## each instance of util_lprobsmi() takes one datapoint
+    ## each instance of .lprobsmi() takes one datapoint
     out <- do.call(rbind,
         parallel::parLapply(cl = cl,
             X = mapply(c, lpargs1$xVs, lpargs2$xVs, SIMPLIFY = FALSE),
-            fun = util_lprobsmi,
+            fun = .lprobsmi,
             params1 = lpargs1$params,
             params2 = lpargs2$params,
             lW = lW)
@@ -552,6 +552,6 @@ mutualinfo <- function(
         Y2names = Y2names
         ## , ids = rowMeans(ids) # for debugging
         )
-    class(out) <- 'MI'
+    class(out) <- 'mi'
     out
 }
