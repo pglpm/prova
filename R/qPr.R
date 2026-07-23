@@ -132,7 +132,7 @@ qPr <- function(
     } else if (isTRUE(parallel)) {
         ## user wants us to register a parallel backend
         ## and to choose number of cores
-        ncores <- min(nchains, getOption("cl.cores", 2))
+        ncores <- getOption("cl.cores", 2)
         cl <- parallel::makeCluster(ncores)
         closeexit <- TRUE
         if(verbose){message('Registered ', capture.output(print(cl)), '.')}
