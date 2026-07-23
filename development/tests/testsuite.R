@@ -1,5 +1,7 @@
 library('prova')
 
+message(packageVersion('prova'))
+
 parallel <- 8
 
 test_equivalent <- function(x, y, tolerance = sqrt(.Machine$double.eps)){
@@ -227,6 +229,53 @@ final
 if(!final){
     results[!sapply(results, isTRUE)]
 }
+
+
+nm <- 'Quick learn autocluster'
+message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
+dataset <- data.frame(V = rnorm(n = 3))
+metadata <- data.frame(name = 'V', type = 'continuous')
+tc(nm, {
+    learnt <- learn(
+    data = dataset, metadata = metadata,
+    ## the following parameters are unrealistic
+    ## only used to reduce computation time for this example
+    nsamples = 30, nchains = 3,
+    startupMCiterations = 10, maxMCiterations = 10,
+    minESS = 0, initES = 0, verbose = FALSE, parallel = TRUE
+    )
+    is.list(learnt)
+    }
+)
+saveRDS(results, savefile)
+all(sapply(results, isTRUE))
+rm(learnt)
+
+
+
+nm <- 'Quick learn existing cluster'
+message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
+cl <- parallel::makeCluster(6)
+dataset <- data.frame(V = rnorm(n = 3))
+metadata <- data.frame(name = 'V', type = 'continuous')
+tc(nm, {
+    learnt <- learn(
+    data = dataset, metadata = metadata,
+    ## the following parameters are unrealistic
+    ## only used to reduce computation time for this example
+    nsamples = 30, nchains = 3,
+    startupMCiterations = 10, maxMCiterations = 10,
+    minESS = 0, initES = 0, verbose = FALSE, parallel = cl
+    )
+    is.list(learnt)
+    }
+)
+saveRDS(results, savefile)
+all(sapply(results, isTRUE))
+parallel::stopCluster(cl)
+rm(learnt)
+
+
 
 message('All test passed: ', all(sapply(results, isTRUE)))
 
