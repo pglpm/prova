@@ -61,9 +61,11 @@ learn(
 
 - auxdata:
 
-  A larger dataset, given as a data frame or as a file path to a CSV
-  file. Such a dataset would be too large to use in the Monte Carlo
-  sampling, but can still be used to help estimate some hyperparameters.
+  An *additional*, larger dataset, given as a data frame or as a file
+  path to a CSV file. Such a dataset would be too large to use in the
+  Monte Carlo sampling, but is used to help estimate some
+  hyperparameters. Note that the `auxdata` and `data` datasets should
+  *not* have datapoints in common.
 
 - outputdir:
 
@@ -200,7 +202,7 @@ learn(
 - verbose:
 
   Logical, default `TRUE`: output the progress to terminal? If `FALSE`,
-  the progress is outputted to the file `'main.log'` in the `outputdir`
+  the progress is outputted to the file `'main.out'` in the `outputdir`
   directory.
 
 - plottraces:
@@ -241,7 +243,7 @@ computation; in particular:
   marginal posterior distributions of each individual variate, together
   with their "revisability" (as samples or quantiles).
 
-- `log-1.log`, `log-2.log`, ... one for each parallel core; report the
+- `log-1.out`, `log-2.out`, ... one for each parallel core; report the
   progress of each parallel Monte Carlo computation and notes about it.
 
 - `rng_seed.rds`: the state of the pseudorandom seed (see
@@ -326,9 +328,9 @@ example, a script 'myscript.R' could have the following structure:
 
 and then be called on a bash terminal with
 
-    $ Rscript myscript.R > learnoutput.log 2>&1 &
+    $ Rscript myscript.R > learnoutput.out 2>&1 &
 
-with such a call, the file 'learnoutput.log' will contain information
+with such a call, the file 'learnoutput.out' will contain information
 about how the computation is proceeding and the estimated end time.
 
 ## References
@@ -436,10 +438,11 @@ learnt <- learn(
   startupMCiterations = 10, maxMCiterations = 10,
   minESS = 0, initES = 0
 )
+#> [1] "V"
 #> 
 #> Saving output in directory
-#> /tmp/RtmpuyowGH/prova-V1_D3_S10_260721T174016_1a416d8c239a
-#> Prova v1.8.1.
+#> /tmp/RtmpFq7npf/prova-V1_D3_S10_260723T084103_1a3912b18e7d
+#> Prova v1.8.5.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
@@ -461,9 +464,9 @@ learnt <- learn(
 #> quantile width: 0.143 to 0.998
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 35 secs
-#> Average preparation & finalization time: 34 secs.
-#> Average Monte Carlo time per chain: 0.54 secs.
+#> Total computation time: 34 secs
+#> Average preparation & finalization time: 32 secs.
+#> Average Monte Carlo time per chain: 0.52 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -471,7 +474,7 @@ learnt <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpuyowGH/prova-V1_D3_S10_260721T174016_1a416d8c239a
+#> /tmp/RtmpFq7npf/prova-V1_D3_S10_260723T084103_1a3912b18e7d
 #> **********************************************************
 
 ## Check structure of `learnt` object:

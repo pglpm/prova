@@ -140,6 +140,15 @@ following elements:
   numerical accuracies (roughly speaking a standard deviation) of the
   Monte Carlo calculations for the `values` and `quantiles` elements.
 
+- `$densities`: numerical vector as long as number of rows in `Y`, used
+  mainly for
+  [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md).
+  It is the order of the probability density the `Y`-values: values with
+  `0` are actual probabilities; values with `1` are linear probability
+  densities (\\\mathrm{p}(\dotso)\\\mathrm{d}y\\); values with `2` are
+  areic probability densities
+  (\\\mathrm{p}(\dotso)\\\mathrm{d}y_1\\\mathrm{d}y_2\\); and so on.
+
 - `$Y`, `$X`, `$tails`: copies of the `Y`, `X`, `tails` arguments.
 
 ## Details

@@ -5,7 +5,9 @@ utility to display selected elements of a "probability" object obtained
 with [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md); typically
 its posterior probabilies (element `$values`) and their revisabilities
 (element `$quantiles`). If the `Y` or `X` variates are joint variates,
-this method also allow to display only selected values of them.
+this method also allow to display only selected values of them. Singular
+probabilities, such as the probability of a censored value for a
+continuous variate, are indicated with an asterisk `*`.
 
 ## Usage
 

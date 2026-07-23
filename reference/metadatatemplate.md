@@ -157,8 +157,9 @@ age or distance or temperature, are naturally positive, and therefore
 have `domainmin` equal `0`. But in other contexts the minimum value
 could be different. For instance, if a given inference problem only
 involves people of age 18 or more, then `domainmin` would be set to
-`18`. The `domainmin` field can also be used for a *left-censored* or
-(together with `domainmax`) *interval-censored* variate.
+`18`. The `domainmin` field is also used for a *left-censored* or
+*interval-censored* variate, together with the `minincluded` field set
+to `true`.
 
 **`domainmax`**: The maximum value that the variate (ordinal or
 continuous) can take on. Possible values are a real number, or an empty
@@ -167,9 +168,9 @@ value, which is then interpreted as `+Inf` (explicit values like `Inf`,
 value depends on the context. An age-related variate could theoretically
 have `domainmax` equal to infinity (empty value in the metadata file);
 but if a given study categorizes some people as "90 years old or older",
-then `domainmax` should be set to `90`. The `domainmax` field can also
-be used for a *right-censored* or (together with `domainmin`)
-*interval-censored* variate.
+then `domainmax` should be set to `90`. The `domainmax` field is also
+used for a *right-censored* or *interval-censored* variate, together
+with the `maxincluded` field set to `true`.
 
 **`datastep`**: The minimum distance between the values of a variate
 (ordinal or continuous). Possible values are a positive real number or
@@ -186,20 +187,20 @@ and maximum(`domainmax`) values of a *continuous* variate can really
 appear in the data or not. Possible values are `true` (or `t` or `yes`)
 or `false` (or `f`, `no`, or an empty field); upper- or lower-case is
 irrelevant. Here are some examples about the meaning of these fields.
-(a) A continuous *unrounded* variate such as temperature has 0 as a
-minimum possible value `domainmin`, but this value itself is physically
-impossible and can never appear in data; in this case `minincluded` is
-empty (or set to `false` or `no`). (b) A variate related to the
-*unrounded* length, in metres, of some objects may take on any positive
-real value; but suppose that all objects of length 5 or less are grouped
-together under the value `5`. It is then possible for several datapoints
-to have value `5`: one such datapoint could originally have the value
-3.782341...; another the value 4.929673..., and so on. In this case
-`domainmin` is set to `5`, and `minincluded` is set to `true` (or
-`yes`). Similarly for the maximum value of a variate and `maxincluded`.
-Note that if `domainmin` is minus-infinity (empty value in the metadata
-file), then `minincluded` is automatically empty (that is, `false`), and
-similarly for `maxincluded` if `domainmax` is infinity.
+(a) A *censored* variate has values larger than a given amount all
+grouped together, and similarly for values smaller than a given amount;
+for example, the "age" variate in a dataset might group all ages under
+18 into a value "18 or less", and all those above 67 into "67 or more".
+In this case, "18" will go into the `domainmin` field, and `minincluded`
+must be set to `true`; likewise "67" will go into the `domainmax` field,
+and `maxincluded` must be set to `true`. (b) A continuous *unrounded*
+variate such as temperature has 0 as a minimum possible value
+`domainmin`, but this value itself is physically impossible and can
+never appear in data; in this case `minincluded` is empty (or set to
+`false` or `no`). Note that if `domainmin` is minus-infinity (empty
+value in the metadata file), then `minincluded` is automatically empty
+(that is, `false`), and similarly for `maxincluded` if `domainmax` is
+infinity.
 
 ## See also
 

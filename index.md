@@ -146,9 +146,9 @@ Prototyping](https://pglpm.github.io/ADA511/).
 
 ## Projects using **Prova**:
 
-- [InfernoCalibNet](https://m4siko.github.io/InfernoCalibNet/):
-  uncertainty-aware predictions for medical AI using CNN and Bayesian
-  nonparametrics framework
+- [InfernoCalibNet](https://inferno.m4siko.cc/): uncertainty-aware
+  predictions for medical AI using CNN and Bayesian nonparametrics
+  framework
 - [parkinsonbayes](https://github.com/pglpm/parkinsonbayes/): Examples
   of Bayesian nonparametric inference for studies of Parkinson’s Disease
 - [Inferno-App](https://github.com/Myddis/Inferno-App/): PySide6

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,6 +125,7 @@ the joint probability of. One variate per column, one set of values per row.</p>
 <li><p><code>$quantiles</code> (possibly <code>NULL</code>): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.</p></li>
 <li><p><code>$samples</code> (possibly <code>NULL</code>): an array with the revisability samples (3rd dimension of the array) for such probabilities.</p></li>
 <li><p><code>$values.MCaccuracy</code>, <code>quantiles.MCaccuracy</code>: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the <code>values</code> and <code>quantiles</code> elements.</p></li>
+<li><p><code>$densities</code>: numerical vector as long as number of rows in <code>Y</code>, used mainly for <code><a href="plot.probability.html">plot.probability()</a></code>. It is the order of the probability density the <code>Y</code>-values: values with <code>0</code> are actual probabilities; values with <code>1</code> are linear probability densities (\(\mathrm{p}(\dotso)\,\mathrm{d}y\)); values with <code>2</code> are areic probability densities (\(\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2\)); and so on.</p></li>
 <li><p><code>$Y</code>, <code>$X</code>, <code>$tails</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
 </ul></div>
     <div class="section level2">

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,7 +99,7 @@
 
 
 <dt id="arg-auxdata">auxdata<a class="anchor" aria-label="anchor" href="#arg-auxdata"></a></dt>
-<dd><p>A larger dataset, given as a data frame or as a file path to a CSV file. Such a dataset would be too large to use in the Monte Carlo sampling, but can still be used to help estimate some hyperparameters.</p></dd>
+<dd><p>An <em>additional</em>, larger dataset, given as a data frame or as a file path to a CSV file. Such a dataset would be too large to use in the Monte Carlo sampling, but is used to help estimate some hyperparameters. Note that the <code>auxdata</code> and <code>data</code> datasets should <em>not</em> have datapoints in common.</p></dd>
 
 
 <dt id="arg-outputdir">outputdir<a class="anchor" aria-label="anchor" href="#arg-outputdir"></a></dt>
@@ -183,7 +183,7 @@
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical, default <code>TRUE</code>: output the progress to terminal? If <code>FALSE</code>, the progress is outputted to the file <code>'main.log'</code> in the <code>outputdir</code> directory.</p></dd>
+<dd><p>Logical, default <code>TRUE</code>: output the progress to terminal? If <code>FALSE</code>, the progress is outputted to the file <code>'main.out'</code> in the <code>outputdir</code> directory.</p></dd>
 
 
 <dt id="arg-plottraces">plottraces<a class="anchor" aria-label="anchor" href="#arg-plottraces"></a></dt>
@@ -207,7 +207,7 @@
     <p>A "learnt" object, or name of directory containing such an object and other output files, or <code>NULL</code>, depending on argument <code>valueislearnt</code>.</p>
 <p><code>learn()</code> saves several files in a directory. By default this output directory is a temporary directory within the one used by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">base::tempdir()</a></code>, but an alternative one can be chosen with the argument <code>outputdir =</code>. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:</p><ul><li><p><code>MCtraces.pdf</code>: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file <code>MCtraces.rds</code>.</p></li>
 <li><p><code>plotsamples_learnt.pdf</code>, <code>plotquantiles_learnt.pdf</code>: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).</p></li>
-<li><p><code>log-1.log</code>, <code>log-2.log</code>, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.</p></li>
+<li><p><code>log-1.out</code>, <code>log-2.out</code>, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.</p></li>
 <li><p><code>rng_seed.rds</code>: the state of the pseudorandom seed (see <a href="https://rdrr.io/r/base/Random.html" class="external-link">base::Random</a>) when <code>learn()</code> was called.</p></li>
 <li><p><code>metadata.csv</code>: a copy of the metadata.</p></li>
 </ul><p>It is recommended that you give an explicit argument <code>outputdir =</code> and save the directory with the files above for future reference. In particular, the <code>MCtraces.pdf</code> plot and <code>MCtraces.rds</code> data can be useful to report Monte Carlo convergence in any work of yours that used <strong>Prova</strong>.</p>
@@ -232,8 +232,8 @@
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="do">## possibly other arguments to learn()</span></span>
 <span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>)</span></code></pre><p></p></div>
 <p>and then be called on a bash terminal with</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="sc">$</span> Rscript myscript.R <span class="sc">&gt;</span> learnoutput.log <span class="dv">2</span><span class="sc">&gt;</span><span class="er">&amp;</span><span class="dv">1</span> <span class="sc">&amp;</span></span></code></pre><p></p></div>
-<p>with such a call, the file 'learnoutput.log' will contain information about how the computation is proceeding and the estimated end time.</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="sc">$</span> Rscript myscript.R <span class="sc">&gt;</span> learnoutput.out <span class="dv">2</span><span class="sc">&gt;</span><span class="er">&amp;</span><span class="dv">1</span> <span class="sc">&amp;</span></span></code></pre><p></p></div>
+<p>with such a call, the file 'learnoutput.out' will contain information about how the computation is proceeding and the estimated end time.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -283,10 +283,11 @@
 <span class="r-in"><span>  startupMCiterations <span class="op">=</span> <span class="fl">10</span>, maxMCiterations <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>  minESS <span class="op">=</span> <span class="fl">0</span>, initES <span class="op">=</span> <span class="fl">0</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "V"</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpuyowGH/prova-V1_D3_S10_260721T174016_1a416d8c239a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v1.8.1.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpFq7npf/prova-V1_D3_S10_260723T084103_1a3912b18e7d</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v1.8.5.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Registered socket cluster with 1 nodes on host ‘localhost’.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Learning from 3 datapoints, 1 variates.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Monte Carlo sampling of 10 samples by 1 chains</span>
@@ -308,9 +309,9 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> quantile width: 0.143 to 0.998</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting final Monte Carlo traces and marginal samples...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 35 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 34 secs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.54 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 34 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 32 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.52 secs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max total memory used: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max memory used per core: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Removing temporary output files.</span>
@@ -318,7 +319,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Output saved in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpuyowGH/prova-V1_D3_S10_260721T174016_1a416d8c239a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpFq7npf/prova-V1_D3_S10_260723T084103_1a3912b18e7d</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Check structure of `learnt` object:</span></span></span>

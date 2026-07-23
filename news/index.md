@@ -1,6 +1,6 @@
 # Changelog
 
-## Prova v1.8.1
+## Prova v1.8.5
 
 - The package does not require the package ‘extraDistr’ any longer.
 - Internal changes to some functions.
@@ -11,6 +11,8 @@
 - Introduced a print() method for mutual-information objects.
 - Improved print() display for probability and mutual-information
   objects.
+- Improved plot.probability(); singular probability (e.g. at censored
+  values) are now displayed on a separate scale.
 - Updated documentation.
 - Re-tested some functions.
 

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,13 +58,16 @@
 <span>  PvsY <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legend <span class="op">=</span> <span class="st">"top"</span>,</span>
 <span>  lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">5</span><span class="op">)</span>,</span>
+<span>  pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>  lwd <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palette.html" class="external-link">palette</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alpha.f <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  var.alpha.f <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  var.nsamples <span class="op">=</span> <span class="fl">360</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylab2 <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  main <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>  grid <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -97,8 +100,8 @@
 <dd><p>One of the values <code>'bottomright'</code>, <code>'bottom'</code>, <code>'bottomleft'</code>, <code>'left'</code>, <code>'topleft'</code>, <code>'top'</code>, <code>'topright'</code>, <code>'right'</code>, <code>'center'</code> (see <code><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">graphics::legend()</a></code>): plot a legend at that position. A value <code>FALSE</code> or any other does not plot any legend. Default <code>'top'</code>.</p></dd>
 
 
-<dt id="arg-lty-lwd-col-type-xlab-ylab-main-ylim-grid-add">lty, lwd, col, type, xlab, ylab, main, ylim, grid, add<a class="anchor" aria-label="anchor" href="#arg-lty-lwd-col-type-xlab-ylab-main-ylim-grid-add"></a></dt>
-<dd><p>see analogous arguments in <code><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">graphics::matplot()</a></code></p></dd>
+<dt id="arg-lty-lwd-pch-col-type-xlab-ylab-main-ylim-grid-add">lty, lwd, pch, col, type, xlab, ylab, main, ylim, grid, add<a class="anchor" aria-label="anchor" href="#arg-lty-lwd-pch-col-type-xlab-ylab-main-ylim-grid-add"></a></dt>
+<dd><p>see analogous arguments in <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">graphics::plot.default()</a></code> and <code><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">graphics::matplot()</a></code>.</p></dd>
 
 
 <dt id="arg-alpha-f">alpha.f<a class="anchor" aria-label="anchor" href="#arg-alpha-f"></a></dt>
@@ -107,6 +110,14 @@
 
 <dt id="arg-var-alpha-f">var.alpha.f<a class="anchor" aria-label="anchor" href="#arg-var-alpha-f"></a></dt>
 <dd><p>Numeric: opacity of the quantile bands or of the samples, <code>0</code> being completely invisible and <code>1</code> completely opaque.</p></dd>
+
+
+<dt id="arg-var-nsamples">var.nsamples<a class="anchor" aria-label="anchor" href="#arg-var-nsamples"></a></dt>
+<dd><p>Integer, default 360: number of samples of long-run frequencies to display</p></dd>
+
+
+<dt id="arg-ylab-">ylab2<a class="anchor" aria-label="anchor" href="#arg-ylab-"></a></dt>
+<dd><p>A title for the y-axis on the right side of the plot, if displayed.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

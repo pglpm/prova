@@ -12,6 +12,7 @@ plotquantiles(
   xdomain = NULL,
   alpha.f = 0.25,
   col = palette(),
+  lwd = 1,
   border = NA,
   type = "n",
   ...
@@ -43,7 +44,7 @@ plotquantiles(
   Character or numeric or `NULL` (default): vector of possible values of
   the variate represented in the x-axis, if the `x` argument is a
   character vector. The ordering of the values is respected. If `NULL`,
-  then `unique(x)` is used.
+  then [`unique(x)`](https://rdrr.io/r/base/unique.html) is used.
 
 - alpha.f:
 
@@ -57,17 +58,22 @@ plotquantiles(
   [`grDevices::col2rgb()`](https://rdrr.io/r/grDevices/col2rgb.html).
   Default `#4477AA`.
 
+- lwd:
+
+  Width of the border of the quantile bands.
+
 - border:
 
-  Fill colour of the quantile bands. Can be specified in any of the
+  Border colour of the quantile bands. Can be specified in any of the
   usual ways, see for instance
   [`grDevices::col2rgb()`](https://rdrr.io/r/grDevices/col2rgb.html). If
   `NA` (default), no border is drawn.
 
 - type:
 
-  see analogous argument in
-  [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md).
+  See analogous argument in
+  [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html).
+  Default is `'n'`, so the quantile bands do not have demarcation lines.
 
 - ...:
 

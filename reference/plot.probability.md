@@ -17,13 +17,16 @@ plot(
   PvsY = NULL,
   legend = "top",
   lty = c(1, 2, 4, 3, 6, 5),
+  pch = c(1, 2, 0, 5, 6, 3),
   lwd = 2,
   col = palette(),
   type = NULL,
   alpha.f = 1,
   var.alpha.f = NULL,
+  var.nsamples = 360,
   xlab = NULL,
   ylab = NULL,
+  ylab2 = NULL,
   main = NULL,
   ylim = c(0, NA),
   grid = TRUE,
@@ -70,10 +73,11 @@ plot(
   plot a legend at that position. A value `FALSE` or any other does not
   plot any legend. Default `'top'`.
 
-- lty, lwd, col, type, xlab, ylab, main, ylim, grid, add:
+- lty, lwd, pch, col, type, xlab, ylab, main, ylim, grid, add:
 
   see analogous arguments in
-  [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html)
+  [`graphics::plot.default()`](https://rdrr.io/r/graphics/plot.default.html)
+  and [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html).
 
 - alpha.f:
 
@@ -84,6 +88,15 @@ plot(
 
   Numeric: opacity of the quantile bands or of the samples, `0` being
   completely invisible and `1` completely opaque.
+
+- var.nsamples:
+
+  Integer, default 360: number of samples of long-run frequencies to
+  display
+
+- ylab2:
+
+  A title for the y-axis on the right side of the plot, if displayed.
 
 - ...:
 

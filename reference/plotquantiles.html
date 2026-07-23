@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.8.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,7 @@
 <span>  xdomain <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alpha.f <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palette.html" class="external-link">palette</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  lwd <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  border <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -75,7 +76,7 @@
 
 
 <dt id="arg-xdomain">xdomain<a class="anchor" aria-label="anchor" href="#arg-xdomain"></a></dt>
-<dd><p>Character or numeric or <code>NULL</code> (default): vector of possible values of the variate represented in the x-axis, if the <code>x</code> argument is a character vector. The ordering of the values is respected. If <code>NULL</code>, then <code>unique(x)</code> is used.</p></dd>
+<dd><p>Character or numeric or <code>NULL</code> (default): vector of possible values of the variate represented in the x-axis, if the <code>x</code> argument is a character vector. The ordering of the values is respected. If <code>NULL</code>, then <code><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique(x)</a></code> is used.</p></dd>
 
 
 <dt id="arg-alpha-f">alpha.f<a class="anchor" aria-label="anchor" href="#arg-alpha-f"></a></dt>
@@ -86,12 +87,16 @@
 <dd><p>Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance <code><a href="https://rdrr.io/r/grDevices/col2rgb.html" class="external-link">grDevices::col2rgb()</a></code>. Default <code>#4477AA</code>.</p></dd>
 
 
+<dt id="arg-lwd">lwd<a class="anchor" aria-label="anchor" href="#arg-lwd"></a></dt>
+<dd><p>Width of the border of the quantile bands.</p></dd>
+
+
 <dt id="arg-border">border<a class="anchor" aria-label="anchor" href="#arg-border"></a></dt>
-<dd><p>Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance <code><a href="https://rdrr.io/r/grDevices/col2rgb.html" class="external-link">grDevices::col2rgb()</a></code>. If <code>NA</code> (default), no border is drawn.</p></dd>
+<dd><p>Border colour of the quantile bands. Can be specified in any of the usual ways, see for instance <code><a href="https://rdrr.io/r/grDevices/col2rgb.html" class="external-link">grDevices::col2rgb()</a></code>. If <code>NA</code> (default), no border is drawn.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>see analogous argument in <code><a href="flexiplot.html">flexiplot()</a></code>.</p></dd>
+<dd><p>See analogous argument in <code><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">graphics::matplot()</a></code>. Default is <code>'n'</code>, so the quantile bands do not have demarcation lines.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

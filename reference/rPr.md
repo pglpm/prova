@@ -115,8 +115,8 @@ datapoints <- rPr(
 
 c(datapoints)
 #> $species
-#>  [1] "Adelie" "Gentoo" "Gentoo" "Adelie" "Adelie" "Adelie" "Gentoo" "Adelie"
-#>  [9] "Gentoo" "Adelie"
+#>  [1] "Gentoo"    "Chinstrap" "Adelie"    "Adelie"    "Adelie"    "Gentoo"   
+#>  [7] "Adelie"    "Gentoo"    "Adelie"    "Gentoo"   
 #> 
 
 
@@ -131,11 +131,11 @@ datapoints <- rPr(
 
 print(datapoints, row.names = FALSE) ## row names give MCMC information
 #>    species bill_len
-#>     Gentoo     47.9
-#>  Chinstrap     46.1
-#>     Adelie     37.5
-#>     Adelie     42.8
-#>     Gentoo     50.9
+#>     Adelie     38.0
+#>  Chinstrap     51.2
+#>     Adelie     40.3
+#>  Chinstrap     47.2
+#>     Gentoo     46.4
 
 
 ## ## Example 3:
