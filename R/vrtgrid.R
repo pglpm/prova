@@ -1,13 +1,23 @@
 #' Create a grid of values for a variate
 #'
-#' This function creates a set of values for a variate, based on the information from data and metadata stored in a `learnt` object, created by the [learn()] function. The set of values depends on the type of variate (nominal or continuous, rounded, and so on, see [metadata]). The range of values is chosen to include, and extend slightly beyond, the range observed in the data used in the [learn()] function. Variate domains are always respected. The output can be used directly in functions like [Pr()] or together with [base::expand.grid()] to create combinations of values of joint variates.
+#' @description This function creates a data frame of values for one variate, or a combination of values for several variates.
 #'
-#' @param vrt Character: name of the variate, must match one of the names in the `metadata` file provided to the [learn()] function.
+#' @details The value ranges are based on the information from data and metadata stored in the `learnt` object (see [learn()]) provided in the `learnt =` argument; they include, and extend slightly beyond, the ranges observed in the data used in the [learn()] function. Variate domains are always respected.
+#'
+#' The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see [metadata]):
+#'
+#' - For a discrete (nominal or ordinal) variate, all possible values are chosen.
+#' - For a continuous, *non-rounded* variate, a number of values as specified in the `length.out` argument; or 129 values if `length.out` is missing or `NA`.
+#' - For a continuous, *rounded* variate, a number of values as specified in the `length.out` argument; or, if `length.out` is missing or `NA`, the output values are separated by the variates's rounding interval (field `datastep` in the [`metadata`]).
+#'
+#' The output is a [data frame][base::data.frame()] that can be used directly in functions like [Pr()].
+#'
+#' @param vrt Character vector: names of the variates; they must match variate names in the `metadata` file provided to the [learn()] function.
 #' @param learnt Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the [learn()] function, or such an object itself.
-#' @param length.out Numeric positive, or `NULL` (default): number of values to be created; used only for continuous variates (see [`metadata`]). If this argument is `NULL` and the variate is not rounded, then the number of output values is 129; if the variate is rounded, then the output values are separated by the variates's rounding interval (field `datastep` in the [`metadata`]).
+#' @param length.out Vector or list with positive integer values, or `NA` (default): number of values to be created; used only for continuous variates; see "Details". If `length.out` has names, the value under the corresponding name is used for each variate; otherwise, the values in `length.out` are used in the order given and recycled if necessary.
 #' @param out Desired class of the returned value, entered directly or as character; default `list`. Other useful choices could be [`data.frame`][base::data.frame()], [`c`][base::c()], [`cbind`][base::cbind()], [`rbind`][base::rbind()].
 #'
-#' @return By default, a named list of values of the `vrt` variate, having that variate name. More generally, a collection of values of class indicated by the `out =` argument, named by the requested variate if naming makes sense for that class.
+#' @return A [data frame][base::data.frame()] with columns corresponding to the `vrt` argument, and one row for each combination of the variate values.
 #'
 #' @seealso
 #' [learn()], which generates the `learnt` objects required by `vrtgrid()`.
@@ -31,9 +41,9 @@
 #'
 #' ## create a small set of values for the variate "bill length";
 #' ## this variate is continuous and rounded
-#' valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 65)
+#' valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 5)
 #'
-#' range(valuesBill)
+#' print(valuesBill)
 #'
 #' ## calculate the conditional probabilities for the 'bill_len' values above,
 #' ## given the values of 'species'
@@ -49,8 +59,7 @@
 vrtgrid <- function(
     vrt,
     learnt,
-    length.out = NULL,
-    out = list
+    length.out = NA
 ){
     ## Extract auxmetadata
     ## If learnt is a string, check if it's a folder name or file name
@@ -72,22 +81,31 @@ vrtgrid <- function(
     }
 
     ## Consistency checks
-    if(!(vrt %in% learnt$auxmetadata$name)){
-        stop("Variate '", vrt, "' not present in the list of variates.")
+    if(!all(vrt %in% learnt$auxmetadata$name)){
+        stop("'vrt' contains unknown variate names.")
     }
 
-    adata <- as.list(learnt$auxmetadata[learnt$auxmetadata$name == vrt, ])
+    if(is.null(names(length.out))){
+        if(length(length.out) != length(vrt)){
+            length.out <- rep(x = length.out, length.out = length(vrt))
+        }
+        names(length.out) <- vrt
+    } else if(!all(names(length.out) %in% vrt)){
+                stop("Missing variates in 'length.out'.")
+    }
+
+    expand.grid(setNames(
+        object = lapply(X = vrt, FUN = function(avrt){
+    adata <- as.list(learnt$auxmetadata[learnt$auxmetadata$name == avrt, ])
 
     if(adata$mcmctype %in% c('R', 'C')){
-        if(is.null(length.out)){length.out <- 129}
-        temp <- list(seq(adata$plotmin, adata$plotmax, length.out = length.out))
+        if(is.na(length.out[avrt])){length.out[avrt] <- 129}
+        temp <- seq(adata$plotmin, adata$plotmax, length.out = length.out[avrt])
     } else if(adata$mcmctype == 'D'){
-        if(is.null(length.out)){
-            temp <- list(seq(adata$plotmin, adata$plotmax,
-                by = 2 * adata$halfstep))
+        if(is.na(length.out[avrt])){
+            temp <- seq(adata$plotmin, adata$plotmax, by = 2 * adata$halfstep)
         } else {
-            temp <- list(seq(adata$plotmin, adata$plotmax,
-                length.out = length.out))
+            temp <- seq(adata$plotmin, adata$plotmax, length.out = length.out[avrt])
         }
         ## step <- as.integer(ceiling((adata$plotmax - adata$plotmin) /
         ##                                (2 * adata$halfstep)))
@@ -98,15 +116,10 @@ vrtgrid <- function(
         ## temp <- seq(adata$plotmin, adata$plotmax,
         ##     length.out = 1 + round((adata$plotmax - adata$plotmin)/step))
     } else if(adata$mcmctype %in% c('B', 'O', 'N')){
-        temp <- list(unname(unlist(adata[paste0('V', seq_len(adata$Nvalues))])))
-    } else {
-        stop('Unknown variate type for "', vrt, '".')
+        temp <- unname(unlist(adata[paste0('V', seq_len(adata$Nvalues))]))
     }
-
-    if(!(identical(out, `c`) || identical(out, 'c'))){
-        names(temp) <- vrt
-    }
-    do.call(out, temp)
+        }),
+    nm = vrt), KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
 }
 
 
