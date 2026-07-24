@@ -19,6 +19,7 @@
   ylim = c(0, NA),
   main = NULL,
   grid = TRUE,
+  axes = FALSE,
   add = FALSE,
   ...
 )
@@ -28,7 +29,7 @@
 
 \item{breaks}{\code{NULL} or as in function \code{\link[graphics:hist]{graphics::hist()}}. If \code{NULL} (default), an optimal number of breaks for each probability distribution is computed.}
 
-\item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
+\item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
 
 \item{fill.alpha.f}{Numeric, default 0.125: opacity of the histogram filling. \code{0} means no filling.}
 

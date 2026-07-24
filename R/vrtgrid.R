@@ -14,8 +14,7 @@
 #'
 #' @param vrt Character vector: names of the variates; they must match variate names in the `metadata` file provided to the [learn()] function.
 #' @param learnt Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the [learn()] function, or such an object itself.
-#' @param length.out Vector or list with positive integer values, or `NA` (default): number of values to be created; used only for continuous variates; see "Details". If `length.out` has names, the value under the corresponding name is used for each variate; otherwise, the values in `length.out` are used in the order given and recycled if necessary.
-#' @param out Desired class of the returned value, entered directly or as character; default `list`. Other useful choices could be [`data.frame`][base::data.frame()], [`c`][base::c()], [`cbind`][base::cbind()], [`rbind`][base::rbind()].
+#' @param length.out Vector or list of positive integer or `NA` values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in `vrt`. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of `NA` values. Default `NA`.
 #'
 #' @return A [data frame][base::data.frame()] with columns corresponding to the `vrt` argument, and one row for each combination of the variate values.
 #'
@@ -24,7 +23,7 @@
 #'
 #' [Pr()] to calculate probabilities and their revisabilities.
 #'
-#' [pexpand.grid()] to create a data frame with combination of values of several variates.
+#' [base::expand.grid()] to create a data frame with combination of specified values of several variates.
 #'
 #' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()`.
 #'
@@ -41,7 +40,7 @@
 #'
 #' ## create a small set of values for the variate "bill length";
 #' ## this variate is continuous and rounded
-#' valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 5)
+#' valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 4)
 #'
 #' print(valuesBill)
 #'
@@ -49,8 +48,17 @@
 #' ## given the values of 'species'
 #' probs <- Pr(Y = valuesBill, X = valuesSpecies, learnt = learnt, parallel = 1)
 #'
-#' ## plot the conditional probability distributions, and their revisabilities
-#' plot(probs)
+#'
+#' ## Create a data frame with all possible combinations of the values above;
+#' ## the 'length.out' argument does not apply to the discrete variate 'species'
+#' valuesAll <- vrtgrid(vrt = c('species', 'bill_len'), learnt = learnt, length.out = 4)
+#'
+#' print(valuesAll)
+#'
+#' ## base::expand.grid() would give a similar result
+#' valuesAll2 <- expand.grid(species = unlist(valuesSpecies), bill_len = unlist(valuesBill))
+#'
+#' print(valuesAll2)
 #'
 #' @import utils
 #'
@@ -85,14 +93,14 @@ vrtgrid <- function(
         stop("'vrt' contains unknown variate names.")
     }
 
-    if(is.null(names(length.out))){
-        if(length(length.out) != length(vrt)){
-            length.out <- rep(x = length.out, length.out = length(vrt))
-        }
-        names(length.out) <- vrt
-    } else if(!all(names(length.out) %in% vrt)){
-                stop("Missing variates in 'length.out'.")
-    }
+    if(is.null(names(length.out))){names(length.out) <- ''}
+    inlo <- names(length.out)[names(length.out) %in% vrt]
+    outlo <- vrt[!(vrt %in% inlo)]
+    lo <- length.out[names(length.out) == '']
+    length.out = c(length.out[inlo],
+        setNames(object = rep(x = lo, length.out = length(outlo)),
+            nm = outlo)
+    )
 
     expand.grid(setNames(
         object = lapply(X = vrt, FUN = function(avrt){
@@ -120,58 +128,4 @@ vrtgrid <- function(
     }
         }),
     nm = vrt), KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-}
-
-
-
-#' Create a data frame from all combinations of variate values
-#'
-#' This convenience function is just a wrapper around [base::expand.grid()], with its arguments `KEEP.OUT.ATTRS` and `stringsAsFactors` set to `FALSE`, so as to create a data frame that can be used with **Prova** functions like [Pr()]. It creates a data frame from all combinations of the supplied variates. See [base::expand.grid()] for further details.
-#'
-#' @param ... Character: name of the variate, must match one of the names in the `metadata` file provided to the [learn()] function.
-#' @param learnt Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the [learn()] function, or such an object itself.
-#' @param length.out Numeric positive, or `NULL` (default): number of values to be created; used only for continuous variates (see [`metadata`]). If this argument is `NULL` and the variate is not rounded, then the number of output values is 129; if the variate is rounded, then the output values are separated by the variates's rounding interval (field `datastep` in the [`metadata`]).
-#' @param out Desired class of the returned value, entered directly or as character; default `list`. Other useful choices could be [`data.frame`][base::data.frame()], [`c`][base::c()], [`cbind`][base::cbind()], [`rbind`][base::rbind()].
-#'
-#' @return By default, a named list of values of the `vrt` variate, having that variate name. More generally, a collection of values of class indicated by the `out =` argument, named by the requested variate if naming makes sense for that class.
-#'
-#' @seealso
-#' [learn()], which generates the `learnt` objects required by `vrtgrid()`.
-#'
-#' [Pr()] to calculate probabilities and their revisabilities.
-#'
-#' [pexpand.grid()] to create a data frame with combination of values of several variates.
-#'
-#' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()`.
-#'
-#' @examples
-#' ## Load the example `learnt` object calculated from the "penguins" dataset;
-#' ## variates: 'species' and 'bill_len'
-#' learnt <- learntExample
-#'
-#' ## set of values for the variate "species";
-#' ## since this variate is of a nominal kind, all values are included
-#' valuesSpecies <- vrtgrid(vrt = 'species', learnt = learnt)
-#'
-#' print(valuesSpecies)
-#'
-#' ## create a small set of values for the variate "bill length";
-#' ## this variate is continuous and rounded
-#' valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 65)
-#'
-#' range(valuesBill)
-#'
-#' ## calculate the conditional probabilities for the 'bill_len' values above,
-#' ## given the values of 'species'
-#' probs <- Pr(Y = valuesBill, X = valuesSpecies, learnt = learnt, parallel = 1)
-#'
-#' ## plot the conditional probability distributions, and their revisabilities
-#' plot(probs)
-#'
-#' @import utils
-#'
-#' @concept probability
-#' @export
-pexpand.grid <- function(...){
-    expand.grid(..., KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
 }

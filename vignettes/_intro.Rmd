@@ -509,7 +509,7 @@ Now let's take datapoint #6 and infer the value of `bill_len`. We can use the fu
 
 ```{r imputation6, eval = TRUE, fig.cap=''}
 ## Generate grid of realistic values for 'bill_len' using vrtgrid()
-Yimp <- data.frame(bill_len = vrtgrid(vrt = 'bill_len', learnt = learnt10))
+Yimp <- vrtgrid(vrt = 'bill_len', learnt = learnt10)
 
 ## Extract data from datapoint #6 of our shuffled dataset 'penguin'
 X <- penguin[6, ]
@@ -1117,13 +1117,11 @@ Each question can be answered by means of the `Pr()` function, and visualized wi
 
 ### **Q2a**: species on Biscoe
 
-We define an object `Y` for the variate we want to know the frequency about, and an object `X` for the *subpopulation* we're restricting our analysis to. Recall that we can use the function `vrtgrid()` to form a grid of all possible realistic values:
+We define an object `Y` for the variate we want to know the frequency about, and an object `X` for the *subpopulation* we're restricting our analysis to. Recall that we can use the function `vrtgrid()` to generate a grid of all possible realistic values:
 
 ```{r speciesBiscoeF, eval = TRUE}
 ## All values for the variate of interest
-Yvls <- vrtgrid(vrt = 'species', learnt = learntall)
-## build Y object
-Y <- data.frame(species = Yvls)
+Y <- vrtgrid(vrt = 'species', learnt = learntall)
 
 Xvrt <- 'island' ## subpopulation variate
 Xvls <- 'Biscoe' ## subpopulation value or values
@@ -1166,9 +1164,7 @@ Note how our [previous estimates from 60 samples](#surprise) were already quite
 In this case, `Adelie` penguins are our subpopulation:
 
 ```{r islandAdelieF, eval = TRUE}
-Yvls <- vrtgrid(vrt = 'island', learnt = learntall)
-## build Y object
-Y <- data.frame(island = Yvls)
+Y <- vrtgrid(vrt = 'island', learnt = learntall)
 
 Xvrt <- 'species' ## subpopulation variate
 Xvls <- 'Adelie' ## subpopulation value or values
@@ -1212,14 +1208,10 @@ In this case we are interested in the (continuous) distribution of body mass in 
 
 ```{r bodyspeciesF, eval = TRUE}
 ## Grid of realistic values for 'body_mass'
-Yvls <- vrtgrid(vrt = 'body_mass', learnt = learntall)
-## build Y object
-Y <- data.frame(body_mass = Yvls)
+Y <- vrtgrid(vrt = 'body_mass', learnt = learntall)
 
 ## Grid of values for 'species', the subpopulation variate
-Xvls <- vrtgrid(vrt = 'species', learnt = learntall)
-## build X object
-X <- data.frame(species = Xvls)
+X <- vrtgrid(vrt = 'species', learnt = learntall)
 
 ## NB: rewriting the previous 'Fanalysis' object
 Fanalysis <- Pr(Y = Y, X = X, learnt = learntall, parallel = 4)

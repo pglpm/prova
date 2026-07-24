@@ -4,22 +4,32 @@
 \alias{vrtgrid}
 \title{Create a grid of values for a variate}
 \usage{
-vrtgrid(vrt, learnt, length.out = NULL, out = list)
+vrtgrid(vrt, learnt, length.out = NA)
 }
 \arguments{
-\item{vrt}{Character: name of the variate, must match one of the names in the \code{metadata} file provided to the \code{\link[=learn]{learn()}} function.}
+\item{vrt}{Character vector: names of the variates; they must match variate names in the \code{metadata} file provided to the \code{\link[=learn]{learn()}} function.}
 
 \item{learnt}{Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
 
-\item{length.out}{Numeric positive, or \code{NULL} (default): number of values to be created; used only for continuous variates (see \code{\link{metadata}}). If this argument is \code{NULL} and the variate is not rounded, then the number of output values is 129; if the variate is rounded, then the output values are separated by the variates's rounding interval (field \code{datastep} in the \code{\link{metadata}}).}
-
-\item{out}{Desired class of the returned value, entered directly or as character; default \code{list}. Other useful choices could be \code{\link[base:data.frame]{data.frame}}, \code{\link[base:c]{c}}, \code{\link[base:cbind]{cbind}}, \code{\link[base:rbind]{rbind}}.}
+\item{length.out}{Vector or list of positive integer or \code{NA} values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in \code{vrt}. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of \code{NA} values. Default \code{NA}.}
 }
 \value{
-By default, a named list of values of the \code{vrt} variate, having that variate name. More generally, a collection of values of class indicated by the \verb{out =} argument, named by the requested variate if naming makes sense for that class.
+A \link[base:data.frame]{data frame} with columns corresponding to the \code{vrt} argument, and one row for each combination of the variate values.
 }
 \description{
-This function creates a set of values for a variate, based on the information from data and metadata stored in a \code{learnt} object, created by the \code{\link[=learn]{learn()}} function. The set of values depends on the type of variate (nominal or continuous, rounded, and so on, see \link{metadata}). The range of values is chosen to include, and extend slightly beyond, the range observed in the data used in the \code{\link[=learn]{learn()}} function. Variate domains are always respected.
+This function creates a data frame of values for one variate, or a combination of values for several variates.
+}
+\details{
+The value ranges are based on the information from data and metadata stored in the \code{learnt} object (see \code{\link[=learn]{learn()}}) provided in the \verb{learnt =} argument; they include, and extend slightly beyond, the ranges observed in the data used in the \code{\link[=learn]{learn()}} function. Variate domains are always respected.
+
+The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see \link{metadata}):
+\itemize{
+\item For a discrete (nominal or ordinal) variate, all possible values are chosen.
+\item For a continuous, \emph{non-rounded} variate, a number of values as specified in the \code{length.out} argument; or 129 values if \code{length.out} is missing or \code{NA}.
+\item For a continuous, \emph{rounded} variate, a number of values as specified in the \code{length.out} argument; or, if \code{length.out} is missing or \code{NA}, the output values are separated by the variates's rounding interval (field \code{datastep} in the \code{\link{metadata}}).
+}
+
+The output is a \link[base:data.frame]{data frame} that can be used directly in functions like \code{\link[=Pr]{Pr()}}.
 }
 \examples{
 ## Load the example `learnt` object calculated from the "penguins" dataset;
@@ -34,22 +44,33 @@ print(valuesSpecies)
 
 ## create a small set of values for the variate "bill length";
 ## this variate is continuous and rounded
-valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 65)
+valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 4)
 
-range(valuesBill)
+print(valuesBill)
 
 ## calculate the conditional probabilities for the 'bill_len' values above,
 ## given the values of 'species'
 probs <- Pr(Y = valuesBill, X = valuesSpecies, learnt = learnt, parallel = 1)
 
-## plot the conditional probability distributions, and their revisabilities
-plot(probs)
+
+## Create a data frame with all possible combinations of the values above;
+## the 'length.out' argument does not apply to the discrete variate 'species'
+valuesAll <- vrtgrid(vrt = c('species', 'bill_len'), learnt = learnt, length.out = 4)
+
+print(valuesAll)
+
+## base::expand.grid() would give a similar result
+valuesAll2 <- expand.grid(species = unlist(valuesSpecies), bill_len = unlist(valuesBill))
+
+print(valuesAll2)
 
 }
 \seealso{
 \code{\link[=learn]{learn()}}, which generates the \code{learnt} objects required by \code{vrtgrid()}.
 
 \code{\link[=Pr]{Pr()}} to calculate probabilities and their revisabilities.
+
+\code{\link[base:expand.grid]{base::expand.grid()}} to create a data frame with combination of specified values of several variates.
 
 \code{\link[=plot.probability]{plot.probability()}} to plot probabilities and quantiles calculated by \code{Pr()}.
 }

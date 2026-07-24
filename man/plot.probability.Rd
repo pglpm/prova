@@ -24,6 +24,7 @@
   main = NULL,
   ylim = c(0, NA),
   grid = TRUE,
+  axes = FALSE,
   add = FALSE,
   ...
 )
@@ -39,7 +40,7 @@
 
 \item{legend}{One of the values \code{'bottomright'}, \code{'bottom'}, \code{'bottomleft'}, \code{'left'}, \code{'topleft'}, \code{'top'}, \code{'topright'}, \code{'right'}, \code{'center'} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{'top'}.}
 
-\item{lty, lwd, pch, col, type, xlab, ylab, main, ylim, grid, add}{see analogous arguments in \code{\link[graphics:plot.default]{graphics::plot.default()}} and \code{\link[graphics:matplot]{graphics::matplot()}}.}
+\item{lty, lwd, pch, col, type, xlab, ylab, main, ylim, grid, axes, add}{see analogous arguments in \code{\link[graphics:plot.default]{graphics::plot.default()}} and \code{\link[graphics:matplot]{graphics::matplot()}}.}
 
 \item{alpha.f}{Numeric, default 0.25: opacity of the colours, \code{0} being completely invisible and \code{1} completely opaque.}
 
@@ -64,10 +65,10 @@ learnt <- learntExample
 
 ## create a grid of values for variate "bill length",
 ## based on the information in the dataset and metadata:
-values <- vrtgrid(vrt = 'bill_len', learnt = learnt)
+valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt)
 
 ## calculate the probabilities and quantiles
-probs <- Pr(Y = data.frame(bill_len = values), learnt = learnt, parallel = 1)
+probs <- Pr(Y = valuesBill, learnt = learnt, parallel = 1)
 
 ## plot the probabilities and quantiles
 plot(probs)

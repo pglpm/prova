@@ -23,6 +23,7 @@ flexiplot(
   xjitter = NULL,
   yjitter = NULL,
   grid = TRUE,
+  axes = FALSE,
   cex.main = 1,
   ...
 )
@@ -32,7 +33,7 @@ flexiplot(
 
 \item{y}{Numeric or character: vector of y coordinates. If missing, a numeric vector \code{1:...} is created having as many values as the rows of \code{x}.}
 
-\item{type, lty, lwd, pch, col, xlab, ylab, add, cex.main}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}.}
+\item{type, lty, lwd, pch, col, xlab, ylab, add, axes, cex.main}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}} and \code{\link[graphics:plot.default]{graphics::plot.default()}}.}
 
 \item{xlim, ylim}{\code{NULL} (default) or a vector of two values. In the latter case, if any of the two values is not finite (including \code{NA} or \code{NULL}), then the \code{min} or \code{max} \code{x}- or \code{y}-coordinates of the plotted points are used.}
 

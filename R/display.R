@@ -21,7 +21,7 @@
 #' @param grid Logical: whether to plot a light grid. Default `TRUE`.
 #' @param alpha.f Numeric, default 1: opacity of the colours, `0` being completely invisible and `1` completely opaque.
 #' @param xjitter,yjitter Logical or `NULL` (default): add [base::jitter()] to `x`- or `y`-values? Useful when plotting discrete variates. If `NULL`, jitter is added if the values are of character (or factor) class.
-#' @param type,lty,lwd,pch,col,xlab,ylab,add,cex.main see analogous arguments in [graphics::matplot()].
+#' @param type,lty,lwd,pch,col,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()].
 #' @param ... Other parameters to be passed to [graphics::matplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
@@ -87,6 +87,7 @@ flexiplot <- function(
     ##     '#AA3377' #, '#BBBBBB'
     ## ),
     grid = TRUE,
+    axes = FALSE,
     cex.main = 1,
     ...
 ){
@@ -211,24 +212,24 @@ flexiplot <- function(
     graphics::matplot(x, y, xlim = xlim, ylim = ylim, type = type, axes = FALSE,
         col = col, lty = lty, lwd = lwd, pch = pch, cex.main = cex.main,
         add = add, xlab = xlab, ylab = ylab, ...)
-    if(!add){
-        graphics::axis(1, at = xat, labels = xdomain, tick = !grid,
+    if(!add || axes){
+        graphics::axis(1, at = xat, labels = xdomain, tick = axes,
             col = 'black', lwd = 1, lty = 1, ...)
-        graphics::axis(2, at = yat, labels = ydomain, tick = !grid,
+        graphics::axis(2, at = yat, labels = ydomain, tick = axes,
             col = 'black', lwd = 1, lty = 1, ...)
-        if(grid){
-            ## Save and restore user's par()
-            if(!is.null('xaxp')){
-                oldparx <- par(xaxp = xaxp)
-                on.exit(par(oldparx))
-            }
-            if(!is.null('yaxp')){
-                oldpary <- par(yaxp = yaxp)
-                on.exit(par(oldpary), add = TRUE)
-            }
-            graphics::grid(nx = NULL, ny = NULL, lty = 1, col = '#BBBBBB80')
-        }
     }
+    if(grid){
+        ## Save and restore user's par()
+        if(!is.null('xaxp')){
+            oldparx <- par(xaxp = xaxp)
+            on.exit(par(oldparx))
+        }
+        if(!is.null('yaxp')){
+            oldpary <- par(yaxp = yaxp)
+            on.exit(par(oldpary), add = TRUE)
+        }
+        graphics::grid(nx = NULL, ny = NULL, lty = 1, col = '#BBBBBB80')
+        }
     invisible()
 }
 
@@ -245,8 +246,7 @@ flexiplot <- function(
 #' @param col Fill colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. Default `#4477AA`.
 #' @param lwd Width of the border of the quantile bands.
 #' @param border Border colour of the quantile bands. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
-#' @param type See analogous argument in [graphics::matplot()]. Default is `'n'`, so the quantile bands do not have demarcation lines.
-#' @param ... Other parameters to be passed to [flexiplot()].
+#' @param type,grid,axes,... Other parameters to be passed to [flexiplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
 #'
@@ -264,17 +264,17 @@ flexiplot <- function(
 #'
 #' ## create a grid of values for variate "bill length",
 #' ## based on the information in the dataset and metadata:
-#' values <- vrtgrid(vrt = 'bill_len', learnt = learnt)
+#' valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt)
 #'
 #' ## calculate the probabilities and quantiles
-#' probs <- Pr(Y = data.frame(bill_len = values), learnt = learnt, parallel = 1)
+#' probs <- Pr(Y = valuesBill, learnt = learnt, parallel = 1)
 #'
 #' ## plot the quantiles, setting lower plot range to zero
-#' plotquantiles(x = values, y = probs$quantiles[, 1, ], ylim = c(0, NA),
+#' plotquantiles(x = valuesBill, y = probs$quantiles[, 1, ], ylim = c(0, NA),
 #'   xlab = 'bill length', ylab = 'probability')
 #'
 #' ## add a plot of the probabilities in thick dashed red
-#' flexiplot(x = values, y = probs$values, lwd = 5, lty = 2, col = 2, add = TRUE)
+#' flexiplot(x = valuesBill, y = probs$values, lwd = 5, lty = 2, col = 2, add = TRUE)
 #'
 #' @import grDevices
 #'
@@ -296,6 +296,8 @@ plotquantiles <- function(
     ## ),
     border = NA,
     type = 'n',
+    grid = TRUE,
+    axes = FALSE,
     ...
 ){
     ## ## TODO: modify so that a vertical plot is also possible
@@ -318,7 +320,7 @@ plotquantiles <- function(
     ## if(!(is.na(col) | nchar(col)>7)){col <- paste0(col, alpha)}
     ##
     flexiplot(x = x, y = y, xdomain = xdomain, type = 'n',
-        xjitter = FALSE, yjitter = FALSE, ...)
+        xjitter = FALSE, yjitter = FALSE, grid = FALSE, axes = axes, ...)
 
     ## if x is character, convert to numeric
     if(is.character(x)){
@@ -335,6 +337,18 @@ plotquantiles <- function(
             y = c(y[, ii], rev(y[, nquant + 1 - ii])),
             col = col, border = border, xpd = TRUE, lwd = lwd)
     }
+    if(grid){
+        ## Save and restore user's par()
+        if(!is.null('xaxp')){
+            oldparx <- par(xaxp = xaxp)
+            on.exit(par(oldparx))
+        }
+        if(!is.null('yaxp')){
+            oldpary <- par(yaxp = yaxp)
+            on.exit(par(oldpary), add = TRUE)
+        }
+        graphics::grid(nx = NULL, ny = NULL, lty = 1, col = '#BBBBBB80')
+        }
     invisible()
 }
 
@@ -354,7 +368,7 @@ plotquantiles <- function(
 #' @param alpha.f Numeric, default 0.25: opacity of the colours, `0` being completely invisible and `1` completely opaque.
 #' @param var.alpha.f Numeric: opacity of the quantile bands or of the samples, `0` being completely invisible and `1` completely opaque.
 #' @param var.nsamples Integer, default 360: number of samples of long-run frequencies to display
-#' @param lty,lwd,pch,col,type,xlab,ylab,main,ylim,grid,add see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
+#' @param lty,lwd,pch,col,type,xlab,ylab,main,ylim,grid,axes,add see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
 #' @param ... Other parameters to be passed to [flexiplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
@@ -375,10 +389,10 @@ plotquantiles <- function(
 #'
 #' ## create a grid of values for variate "bill length",
 #' ## based on the information in the dataset and metadata:
-#' values <- vrtgrid(vrt = 'bill_len', learnt = learnt)
+#' valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt)
 #'
 #' ## calculate the probabilities and quantiles
-#' probs <- Pr(Y = data.frame(bill_len = values), learnt = learnt, parallel = 1)
+#' probs <- Pr(Y = valuesBill, learnt = learnt, parallel = 1)
 #'
 #' ## plot the probabilities and quantiles
 #' plot(probs)
@@ -415,6 +429,7 @@ plot.probability <- function(
     main = NULL,
     ylim = c(0, NA),
     grid = TRUE,
+    axes = FALSE,
     add = FALSE,
     ...
 ){
@@ -589,7 +604,8 @@ plot.probability <- function(
             ylab = ylab,
             ylim = ylim,
             main = main,
-            grid = grid,
+            grid = FALSE,
+            axes = axes,
             add = add,
             ...)
         add <- TRUE
@@ -611,12 +627,13 @@ plot.probability <- function(
         ## and find conversion scale
         yticks <- axTicks(4)
         ydivs <- length(yticks) - 1
+        yloc <- min(yticks)
         yscale <- signif(x = mpvar / ydivs, digits = 1)
-        yscale <- max(yticks) / (yscale * ydivs)
+        yscale <- (max(yticks) - yloc) / (yscale * ydivs)
         ## ceiling(yscale * 10^(-floor(log10(yscale)) + 1)) *
         ##     10^(floor(log10(yscale)) - 1) * ydivs
         ## add axis for singular probability values
-        graphics::axis(4, at = yticks, labels = yticks / yscale,
+        graphics::axis(4, at = yticks, labels = (yticks - yloc) / yscale,
             tick = !grid, col = 'black', lwd = 1, lty = 1)
     }
 
@@ -628,29 +645,23 @@ plot.probability <- function(
                 col = col[(i - 1) %% length(col) + 1],
                 alpha.f = var.alpha.f,
                 lty =  lty[(i - 1) %% length(lty) + 1],
-                xlab = xlab,
-                ylab = ylab,
-                ylim = ylim,
-                main = main,
-                grid = grid,
+                grid = FALSE,
+                axes = FALSE,
                 add = TRUE,
                 ...)
 
             if(any(xdeltas)){
                 for(xd in which(xdeltas)){
                     plotquantiles(x = unlist(xxx)[xd],
-                        y = yscale * pvar[, i, ][xd, , drop = FALSE],
+                        y = yscale * pvar[, i, ][xd, , drop = FALSE] + yloc,
                         col = col[(i - 1) %% length(col) + 1],
                         border = adjustcolor(col[(i - 1) %% length(col) + 1],
                             alpha.f = var.alpha.f),
                         alpha.f = var.alpha.f,
                         lty =  lty[(i - 1) %% length(lty) + 1],
                         lwd = 10,
-                        xlab = xlab,
-                        ylab = ylab,
-                        ylim = ylim,
-                        main = main,
-                        grid = grid,
+                        grid = FALSE,
+                        axes = FALSE,
                         add = TRUE,
                         ...)
                 }
@@ -669,32 +680,24 @@ plot.probability <- function(
             alpha.f = var.alpha.f,
             lty =  1, #lty[(seq_len(nx) - 1) %% length(lty) + 1],
             lwd = 0.5, #lwd[(seq_len(nx) - 1) %% length(lwd) + 1] / 4,
-            xlab = xlab,
-            ylab = ylab,
-            ylim = ylim,
-            main = main,
-            grid = grid,
-            xjitter = FALSE,
-            yjitter = FALSE,
+            grid = FALSE,
+            axes = FALSE,
             add = TRUE,
             ...)
 
             if(any(xdeltas)){
                 for(xd in which(xdeltas)){
-        flexiplot(x = xxx[xd], y = yscale * pvar[xd, , drop = FALSE],
+        flexiplot(x = xxx[xd], y = yscale * pvar[xd, , drop = FALSE] + yloc,
             type = 'p',
             col = col[(seq_len(nx) - 1) %% length(col) + 1],
             alpha.f = var.alpha.f,
             pch = '-',
             lty =  1, #lty[(seq_len(nx) - 1) %% length(lty) + 1],
             lwd = 0.5, #lwd[(seq_len(nx) - 1) %% length(lwd) + 1] / 4,
-            xlab = xlab,
-            ylab = ylab,
-            ylim = ylim,
-            main = main,
-            grid = grid,
             xjitter = FALSE,
             yjitter = FALSE,
+            grid = FALSE,
+            axes = FALSE,
             add = TRUE,
             ...)
                 }
@@ -714,6 +717,7 @@ plot.probability <- function(
         ylim = ylim,
         main = main,
         grid = grid,
+        axes = axes,
         xjitter = FALSE,
         yjitter = FALSE,
         add = add,
@@ -721,7 +725,7 @@ plot.probability <- function(
 
     if(any(xdeltas)){
     flexiplot(x = xxx[xdeltas],
-        y = yscale * x[['values']][xdeltas, , drop = FALSE],
+        y = yscale * x[['values']][xdeltas, , drop = FALSE] + yloc,
         type = 'p',
         col = col,
         alpha.f = alpha.f,
@@ -733,6 +737,7 @@ plot.probability <- function(
         ylim = ylim,
         main = main,
         grid = grid,
+        axes = axes,
         xjitter = FALSE,
         yjitter = FALSE,
         add = TRUE,
@@ -782,7 +787,7 @@ plot.probability <- function(
 #' @param fill.alpha.f Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
 #' @param legend One of the values `"bottomright"`, `"bottom"`, `"bottomleft"`, `"left"`, `"topleft"`, `"top"`, `"topright"`, `"right"`, `"center"` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `"top"`.
 #' @param showmean Logical, default `TRUE`: show the means of the probability distributions? The means correspond to the probabilities about the next observed unit.
-#' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,add see analogous arguments in [graphics::matplot()]
+#' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,axes,add see analogous arguments in [graphics::matplot()]
 #' @param ... Other parameters to be passed to [flexiplot()].
 #'
 #' @return [Invisibly][base::invisible()], an object of class ["histogram"][graphics::hist()].
@@ -840,6 +845,7 @@ hist.probability <- function(
     ylim = c(0, NA),
     main = NULL,
     grid = TRUE,
+    axes = FALSE,
     add = FALSE,
     ...
 ){
@@ -899,6 +905,7 @@ hist.probability <- function(
                 xlim = xlim, ylim = ylim,
                 main = main,
                 grid = grid,
+                axes = axes,
                 lty = 0,
                 add = (add || i > 1),
                 ...)
@@ -913,6 +920,7 @@ hist.probability <- function(
             lty = thislty,
             lwd = lwd,
             grid = grid,
+            axes = axes,
             xjitter = FALSE,
             yjitter = FALSE,
             add = (add || alpha.f >0 || i > 1),
@@ -1090,7 +1098,7 @@ print.probability <- function(
 #' @param breaks `NULL` or as in function [graphics::hist()]. If `NULL` (default), an optimal number of breaks for each probability distribution is computed.
 #' @param fill.alpha.f Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
 #' @param showvalue Logical, default `TRUE`: show the mutual information obtained from the current data sample?
-#' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,add see analogous arguments in [graphics::matplot()]
+#' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,axes,add see analogous arguments in [graphics::matplot()]
 #' @param ... Other parameters to be passed to [flexiplot()].
 #'
 #' @return [Invisibly][base::invisible()], an object of class ["histogram"][graphics::hist()].
@@ -1142,6 +1150,7 @@ hist.mi <- function(
     ylim = c(0, NA),
     main = NULL,
     grid = TRUE,
+    axes = FALSE,
     add = FALSE,
     ...
 ){
@@ -1188,6 +1197,7 @@ hist.mi <- function(
             xlim = xlim, ylim = ylim,
             main = main,
             grid = grid,
+            axes = axes,
             lty = 0,
             add = add,
             ...)
@@ -1202,6 +1212,7 @@ hist.mi <- function(
         lty = lty,
         lwd = lwd,
         grid = grid,
+        axes = axes,
         xjitter = FALSE,
         yjitter = FALSE,
         add = (add || alpha.f >0),

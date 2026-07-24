@@ -21,6 +21,7 @@
   ylim = c(0, NA),
   main = NULL,
   grid = TRUE,
+  axes = FALSE,
   add = FALSE,
   ...
 )
@@ -34,7 +35,7 @@
 
 \item{legend}{One of the values \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"}, \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"}, \code{"right"}, \code{"center"} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{"top"}.}
 
-\item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
+\item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
 
 \item{fill.alpha.f}{Numeric, default 0.125: opacity of the histogram filling. \code{0} means no filling.}
 

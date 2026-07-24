@@ -13,6 +13,8 @@ plotquantiles(
   lwd = 1,
   border = NA,
   type = "n",
+  grid = TRUE,
+  axes = FALSE,
   ...
 )
 }
@@ -31,9 +33,7 @@ plotquantiles(
 
 \item{border}{Border colour of the quantile bands. Can be specified in any of the usual ways, see for instance \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}. If \code{NA} (default), no border is drawn.}
 
-\item{type}{See analogous argument in \code{\link[graphics:matplot]{graphics::matplot()}}. Default is \code{'n'}, so the quantile bands do not have demarcation lines.}
-
-\item{...}{Other parameters to be passed to \code{\link[=flexiplot]{flexiplot()}}.}
+\item{type, grid, axes, ...}{Other parameters to be passed to \code{\link[=flexiplot]{flexiplot()}}.}
 }
 \value{
 \code{NULL}, \link[base:invisible]{invisibly}; produces a plot, see \code{\link[graphics:matplot]{graphics::matplot()}}.
@@ -48,17 +48,17 @@ learnt <- learntExample
 
 ## create a grid of values for variate "bill length",
 ## based on the information in the dataset and metadata:
-values <- vrtgrid(vrt = 'bill_len', learnt = learnt)
+valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt)
 
 ## calculate the probabilities and quantiles
-probs <- Pr(Y = data.frame(bill_len = values), learnt = learnt, parallel = 1)
+probs <- Pr(Y = valuesBill, learnt = learnt, parallel = 1)
 
 ## plot the quantiles, setting lower plot range to zero
-plotquantiles(x = values, y = probs$quantiles[, 1, ], ylim = c(0, NA),
+plotquantiles(x = valuesBill, y = probs$quantiles[, 1, ], ylim = c(0, NA),
   xlab = 'bill length', ylab = 'probability')
 
 ## add a plot of the probabilities in thick dashed red
-flexiplot(x = values, y = probs$values, lwd = 5, lty = 2, col = 2, add = TRUE)
+flexiplot(x = valuesBill, y = probs$values, lwd = 5, lty = 2, col = 2, add = TRUE)
 
 }
 \seealso{

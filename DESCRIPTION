@@ -1,5 +1,5 @@
 Package: prova
-Title: Nonparametric Probabilistic-Statistical Variate Analysis with Automated Markov-Chain Monte Carlo
+Title: Nonparametric Probabilistic-Statistical Variate Analysis
 Version: 1.9.1
 Authors@R: c(
   person("PierGianLuca", "Porta Mana", ,
