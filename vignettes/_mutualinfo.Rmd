@@ -85,7 +85,7 @@ set.seed(10)
 
 As in the `vignette('start')`, we work with a specific population of penguins, of which we have 344 sample data stored in the [`datasets::penguins`] dataset, included in R version 4.5.0 and above. For your convenience you can download the shuffled dataset as the CSV file [`penguin_data.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguin_data.csv), then load it with the `pread.csv()` function as follows:
 
-```{r loadpenguin, echo = FALSE}
+```{r loadpenguin, eval = TRUE, echo = TRUE}
 datafile <- 'penguin_data.csv'
 penguin <- pread.csv(datafile)
 ```
@@ -102,22 +102,22 @@ in this case `learnt` is just a character string pointing to the file containing
 Let's focus on the `island` and `species` variates. Each variate has three possible values; **Prova**'s utility function `vrtgrid()` allows us to create a vector of all possible values of each variate, which are stored in the metadata of the `learnt` object:
 
 ```{r valuessample, eval = TRUE}
-islandvalues <- vrtgrid(vrt = 'island', learnt = learnt)
+islandvalues <- unlist(vrtgrid(vrt = 'island', learnt = learnt))
 # [1] "Biscoe"    "Dream"     "Torgersen"
 
-speciesvalues <- vrtgrid(vrt = 'species', learnt = learnt)
+speciesvalues <- unlist(vrtgrid(vrt = 'species', learnt = learnt))
 # [1] "Adelie"    "Chinstrap" "Gentoo"
 ```
 
-The `flexiplot()` function allows us to display the `island` and `species` variates against each other, for all *sample* data, as a scatter plot:
+The function `pplot()` allows us to display the `island` and `species` variates against each other, for all *sample* data, as a scatter plot:
 
 ```{r vissample, eval = TRUE, fig.cap='**Scatter plot of sample data**'}
-flexiplot(x = penguin$island, y = penguin$species,
+pplot(x = penguin$island, y = penguin$species,
     type = 'p', xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues)
 ```
 
-Note how `flexiplot()` automatically add a slight jitter (by means of `base::jitter()`) to the discrete variates, so that the points don't just overlap rendering the plot otherwise incomprehensible.
+Note how `pplot()` automatically add a slight jitter (by means of `base::jitter()`) to the discrete variates, so that the points don't just overlap rendering the plot otherwise incomprehensible.
 
 We immediately see some basic features of these variates in this sample. For example:
 
@@ -160,7 +160,7 @@ Now let's generate 2000 samples, and then plot them in a scatter plot:
 ```{r gensamplesplot, eval = TRUE, fig.cap='**Scatter plot for *whole* population**'}
 samples <- rPr(n = 2000, Ynames = c('island', 'species'), learnt = learnt)
 
-flexiplot(x = samples$island, y = samples$species,
+pplot(x = samples$island, y = samples$species,
     type = 'p', xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues)
 ```
@@ -171,19 +171,19 @@ The scatter plot above correctly reflects the *estimated* features of the *whole
 
 The sampling and plotting from the previous example is easily extended to any other pair or variates, or even to pairs of sets of variates. Let us visualize for instance the joint probability of `body_mass` and `species` with another scatter plot.
 
-We generate 2000 whole-population samples of the two variates with `rPr()`, and then scatter-plot them with `flexiplot()`. First we select an appropriate plot range for the continuous variate `body_mass` by means of **Prova**'s utility function `vrtgrid()`: this function chooses an optimal value based on, and including, the range of data previously observed:
+We generate 2000 whole-population samples of the two variates with `rPr()`, and then scatter-plot them with `pplot()`. First we select an appropriate plot range for the continuous variate `body_mass` by means of **Prova**'s utility function `vrtgrid()`: this function chooses an optimal value based on, and including, the range of data previously observed:
 
 ```{r gensamplesplotbodymassspecies, eval = TRUE, fig.cap='**Scatter plot for body mass and species**'}
 body_massrange <- range(vrtgrid(vrt = 'body_mass', learnt = learnt))
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), learnt = learnt)
 
-flexiplot(x = samples$body_mass, y = samples$species,
+pplot(x = samples$body_mass, y = samples$species,
     type = 'p', xlab = 'body mass / g', ylab = 'species',
     xlim = body_massrange, ydomain = speciesvalues)
 ```
 
-Note again how `flexiplot()` automatically add a jitter to the discrete variate `species`, but not to the continuous `body_mass`.
+Note again how `pplot()` automatically add a jitter to the discrete variate `species`, but not to the continuous `body_mass`.
 
 From the plot we see that there is an association between the Adélie and Chinstrap species and lighter body mass, around 3500 g; and between the Gentoo species and heavier body mass, around 5000 g. Incidentally, this reflects the probability plot at the end of the `vignette('start')`.
 
@@ -196,7 +196,7 @@ bill_lenrange <- range(vrtgrid(vrt = 'bill_len', learnt = learnt))
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), learnt = learnt)
 
-flexiplot(x = samples$body_mass, y = samples$bill_len,
+pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
     xlim = body_massrange, ylim = bill_lenrange)
 ```
@@ -205,7 +205,7 @@ The scatter plot shows that there is a partly linear relationship between body m
 
 This observation leads to another interesting question: is the association between `body_mass` and `bill_len` different for different species? Perhaps the additional cluster is characteristic of one species only. We are therefore interested in studying this association for different **subpopulations**.
 
-Subpopulation sampling and plots can also be easily done with the `rPr()` and `flexiplot()` functions. In the `rPr()` function we can specify the requested subpopulation via the `X` argument, analogously to the `Pr()` function.
+Subpopulation sampling and plots can also be easily done with the `rPr()` and `pplot()` functions. In the `rPr()` function we can specify the requested subpopulation via the `X` argument, analogously to the `Pr()` function.
 
 Let's generate sets of samples separately for the species `'Adelie'`, `'Chinstrap'`, `'Gentoo'`:
 
@@ -229,14 +229,14 @@ samplesGentoo <- rPr(
     learnt = learnt)
 ```
 
-Now we plot these samples together with `flexiplot()`, choosing different colours and shapes for the three subpopulations. We also use the `alpha.f` argument to make sure that the plot points don't completely cover one another:
+Now we plot these samples together with `pplot()`, choosing different colours and shapes for the three subpopulations. We also use the `alpha.f` argument to make sure that the plot points don't completely cover one another:
 
 ```{r plotbodybilllen3, eval = TRUE, fig.cap='**Scatter plot for species subpopulations**'}
-flexiplot(
-    x = cbind(samplesAdelie$body_mass,
+pplot(
+    x = list(samplesAdelie$body_mass,
         samplesChinstrap$body_mass,
         samplesGentoo$body_mass),
-    y = cbind(samplesAdelie$bill_len,
+    y = list(samplesAdelie$bill_len,
         samplesChinstrap$bill_len,
         samplesGentoo$bill_len),
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
@@ -269,7 +269,7 @@ Y2 <- sqrt(1 - Y1^2) ## Y2 values: function of Y1
 r <- cor(Y1, Y2, method = 'pearson')
 print(r)
 
-flexiplot(x = Y1, y = Y2, type = 'p',
+pplot(x = Y1, y = Y2, type = 'p',
     xlab = 'Y1', ylab = 'Y2',
     main = paste0('Pearson correlation: ', signif(r, 2)))
 ```
@@ -359,7 +359,7 @@ $$
 ```{r Ivsr, eval = TRUE, echo = FALSE, fig.cap='**$I$ vs $\\lvert r\\rvert$ for jointly Gaussian variates**', out.width = '75%'}
 x <- seq(0, 1, length.out = 129)
 y <- -0.5 * log2(1-x^2)
-flexiplot(x = x, y = y,
+pplot(x = x, y = y,
     xlab = bquote('Pearson'~group('|', italic(r), '|')),
     ylab = bquote('mutual information'~italic(I))
     )
@@ -388,7 +388,7 @@ r <- signif(MIislandspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('island', 'species'), learnt = learnt)
 
-flexiplot(x = samples$island, y = samples$species,
+pplot(x = samples$island, y = samples$species,
     type = 'p', xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues,
     main = paste0('mutual info: ', mi, ' Sh',
@@ -417,7 +417,7 @@ r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), learnt = learnt)
 
-flexiplot(x = samples$body_mass, y = samples$species,
+pplot(x = samples$body_mass, y = samples$species,
     type = 'p', xlab = 'body mass / g', ylab = 'species',
     xlim = body_massrange, ydomain = speciesvalues,
     main = paste0('mutual info: ', mi, ' Sh',
@@ -446,7 +446,7 @@ r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), learnt = learnt)
 
-flexiplot(x = samples$body_mass, y = samples$bill_len,
+pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
     xlim = body_massrange, ylim = bill_lenrange,
     main = paste0('mutual info: ', mi, ' Sh',
@@ -499,11 +499,11 @@ mispecies <- signif(c(
     MIgentoo$value
 ), digits = 2)
 
-flexiplot(
-    x = cbind(samplesAdelie$body_mass,
+pplot(
+    x = list(samplesAdelie$body_mass,
         samplesChinstrap$body_mass,
         samplesGentoo$body_mass),
-    y = cbind(samplesAdelie$bill_len,
+    y = list(samplesAdelie$bill_len,
         samplesChinstrap$bill_len,
         samplesGentoo$bill_len),
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',

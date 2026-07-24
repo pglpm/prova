@@ -20,6 +20,332 @@
 #' @param xlim,ylim `NULL` (default) or a vector of two values. In the latter case, if any of the two values is not finite (including `NA` or `NULL`), then the `min` or `max` `x`- or `y`-coordinates of the plotted points are used.
 #' @param grid Logical: whether to plot a light grid. Default `TRUE`.
 #' @param alpha.f Numeric, default 1: opacity of the colours, `0` being completely invisible and `1` completely opaque.
+#' @param border Border colour for bands in plots of `type = 'q'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
+#' @param xjitter,yjitter Logical or `NULL` (default): add [base::jitter()] to `x`- or `y`-values? Useful when plotting discrete variates. If `NULL`, jitter is added if the values are of character (or factor) class.
+#' @param type,lty,lwd,pch,lend,col,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()].
+#' @param ... Other parameters to be passed to [graphics::matplot()].
+#'
+#' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
+#'
+#' @seealso
+#' [Pr()] to calculate posterior probabilities and quantiles.
+#'
+#' [plot.probability()] to directly plot posterior probabilities and quantiles contained in a probability object.
+#'
+#' [plotquantiles()] to plot quantile ranges.
+#'
+#' @examples
+#' ## Scatter plot of the 'island' vs 'species' nominal variates of the penguins dataset;
+#' ## note how jitter is automatically added:
+#' flexiplot(x = penguins[, 'species'], y = penguins[, 'island'])
+#'
+#'
+#' ## Scatter plot of the 'bill_len' vs 'species' variates of the penguins dataset:
+#' flexiplot(x = penguins[, 'species'], y = penguins[, 'bill_len'])
+#'
+#' ## We can add jitter to separate the nominal values:
+#' flexiplot(x = penguins[, 'species'], y = penguins[, 'bill_len'],
+#'   xjitter = TRUE)
+#'
+#'
+#' ## Scatter plot of the 'bill_len' vs 'body_mass' variates;
+#' ## in this case we must specify the scatter-plot option `type = 'p'`:
+#' flexiplot(x = penguins[, 'body_mass'], y = penguins[, 'bill_len'],
+#'   type = 'p')
+#'
+#' ## Calculate the values of a normal distribution in a restricted range
+#' x <- seq(from = -2, to = 2, length.out = 127)
+#' y <- dnorm(x, mean = 0, sd = 1)
+#'
+#' ## plot the distribution, with 0 as the lower plot range:
+#' flexiplot(x = x, y = y, ylim = c(0, NA))
+#'
+#' @import grDevices
+#' @import graphics
+#'
+#' @concept display
+#' @export
+pplot <- function(
+    x, y,
+    type = NA,
+    lty = c(1, 2, 4, 3, 6, 5),
+    lwd = 2,
+    lend = par('lend'),
+    pch = c(1, 2, 0, 5, 6, 3), #, 4,
+    col = palette(),
+    xlab = NA, ylab = NA,
+    xlim = NA, ylim = NA,
+    add = FALSE,
+    xdomain = NULL, ydomain = NULL,
+    alpha.f = NA,
+    xjitter = NA,
+    yjitter = NA,
+    border = NA,
+    ## c( ## Tol's colour-blind-safe scheme
+    ##     '#4477AA',
+    ##     '#EE6677',
+    ##     '#228833',
+    ##     '#CCBB44',
+    ##     '#66CCEE',
+    ##     '#AA3377' #, '#BBBBBB'
+    ## ),
+    grid = TRUE,
+    axes = FALSE,
+    cex.main = 1,
+    ...
+){
+    if(!is.list(x)){x <- list(x)}
+    if(!is.list(y)){y <- list(y)}
+
+    ## Transform all factors to character
+    for(ii in seq_along(x)){
+        if(is.factor(x[[ii]])){x[[ii]] <- as.character(x[[i]])}
+    }
+    for(ii in seq_along(y)){
+        if(is.factor(y[[ii]])){y[[ii]] <- as.character(y[[i]])}
+    }
+
+    if(!is.null(xdomain)){ xdomain <- unlist(xdomain) }
+    if(!is.null(ydomain)){ ydomain <- unlist(ydomain) }
+
+    ## Find NULL elements for special handling later
+    xnull <- vapply(X = x, FUN = is.null, FUN.VALUE = FALSE, USE.NAMES = FALSE)
+    ynull <- vapply(X = y, FUN = is.null, FUN.VALUE = FALSE, USE.NAMES = FALSE)
+
+    ## Check consistency of x, y args; find ranges
+    if(all(vapply(X = x[!xnull], FUN = is.numeric,
+        FUN.VALUE = FALSE, USE.NAMES = FALSE))){
+        ## all x are numeric, find common min max
+        xcha <- FALSE
+        temp <- unlist(x)
+        temp <- temp[is.finite(temp)]
+        if(!is.finite(xlim[1])){ xlim[1] <- min(temp) }
+        if(!is.finite(xlim[2])){ xlim[2] <- max(temp) }
+    } else if(all(vapply(X = x[!xnull], FUN = is.character,
+        FUN.VALUE = FALSE, USE.NAMES = FALSE))){
+        ## all x are character, find domain
+        xcha <- TRUE
+        temp <- unlist(x)
+        temp <- temp[!is.na(temp)]
+        if(is.null(xdomain)){ xdomain <- unique(temp) }
+        if(!is.finite(xlim[1])){ xlim[1] <- 0.5 }
+        if(!is.finite(xlim[2])){ xlim[2] <- length(xdomain) + 0.5 }
+    } else {
+        stop("Elements in 'x' must be all numeric or all character.")
+    }
+
+    if(all(vapply(X = y[!ynull], FUN = is.numeric,
+        FUN.VALUE = FALSE, USE.NAMES = FALSE))){
+        ## all y are numeric, find common min max
+        ycha <- FALSE
+        temp <- unlist(y)
+        temp <- temp[is.finite(temp)]
+        if(!is.finite(ylim[1])){ ylim[1] <- min(temp) }
+        if(!is.finite(ylim[2])){ ylim[2] <- max(temp) }
+    } else if(all(vapply(X = y[!ynull], FUN = is.character,
+        FUN.VALUE = FALSE, USE.NAMES = FALSE))){
+        ## all y are character, find domain
+        ycha <- TRUE
+        temp <- unlist(y)
+        temp <- temp[!is.na(temp)]
+        if(is.null(ydomain)){ ydomain <- unique(temp) }
+        if(!is.finite(ylim[1])){ ylim[1] <- 2/3 }
+        if(!is.finite(ylim[2])){ ylim[2] <- length(ydomain) + 1/3 }
+    } else {
+        stop("Elements in 'y' must be all numeric or all character.")
+    }
+
+    ## Recycle if necessary; don't forget NULL flags
+    if(length(x) < length(y)){
+        x <- rep(x, length.out = length(y))
+        xnull <- rep(xnull, length.out = length(y))
+    }
+    if(length(y) < length(x)){
+        y <- rep(y, length.out = length(x))
+        ynull <- rep(ynull, length.out = length(x))
+    }
+
+    ## Discard common NULLs
+    temp <- (xnull & ynull)
+    if(any(temp)){
+        x <- x[!temp]
+        xnull <- xnull[!temp]
+        y <- y[!temp]
+        ynull <- ynull[!temp]
+    }
+
+    ## Check if jitter is needed
+    if(xcha && ycha) {
+        xjitter[is.na(xjitter)] <- TRUE
+        yjitter[is.na(yjitter)] <- TRUE
+        type[is.na(type)] <- 'p'
+    }
+
+    ## Other NAs
+    type[is.na(type)] <- 'l'
+    xjitter[is.na(xjitter)] <- FALSE
+    yjitter[is.na(yjitter)] <- FALSE
+    alpha.f[is.na(alpha.f) & (type == 'q')] <- 0.25
+    alpha.f[is.na(alpha.f)] <- 1
+
+    nplots <- length(x)
+
+    ## Recycle type, lty, lwd, etc
+    type <- rep(type, length.out = nplots)
+    lty <- rep(lty, length.out = nplots)
+    lwd <- rep(lwd, length.out = nplots)
+    lend <- rep(lend, length.out = nplots)
+    pch <- rep(pch, length.out = nplots)
+    col <- rep(col, length.out = nplots)
+    alpha.f <- rep(alpha.f, length.out = nplots)
+    xjitter <- rep(xjitter, length.out = nplots)
+    yjitter <- rep(yjitter, length.out = nplots)
+
+    ## First plot window
+    graphics::matplot(x = NA, y = NA, type = 'n',
+        xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim,
+        cex.main = cex.main, add = add, axes = FALSE, ...)
+
+### List plots
+    for(aplot in seq_len(nplots)){
+        thisx <- x[[aplot]]
+        thisy <- y[[aplot]]
+
+        ## Replace NULL values
+        if(is.null(thisx)){
+            thisx <- seq_len(NROW(thisy))
+            if(xcha){thisx <- xdomain[thisx] }
+        }
+        if(is.null(thisy)){
+            thisy <- seq_len(NROW(thisx))
+            if(ycha){thisy <- ydomain[thisy] }
+        }
+
+        ## convert characters to integers, according to domains
+        if(xcha){
+            temp <- dim(thisx)
+            thisx <- as.numeric(factor(thisx, levels = xdomain))
+            dim(thisx) <- temp
+        }
+        if(ycha){
+            temp <- dim(thisy)
+            thisy <- as.numeric(factor(thisy, levels = ydomain))
+            dim(thisy) <- temp
+        }
+
+        col[[aplot]] <- adjustcolor(col[[aplot]], alpha.f = alpha.f[[aplot]])
+
+        ## Check if jitter needed
+        if(isTRUE(xjitter[[aplot]])){ thisx <- jitter(thisx, factor = 5/3) }
+        if(isTRUE(yjitter[[aplot]])){ thisy <- jitter(thisy, factor = 5/3) }
+
+        ## Plot
+        ## checks for type = 'q'
+        if(!(type[[aplot]] == 'q')){
+
+            ## Plot
+            graphics::matplot(x = thisx, y = thisy,
+                type = type[[aplot]], lty = lty[[aplot]], lwd = lwd[[aplot]],
+                lend = lend[[aplot]], pch = pch[[aplot]], col = col[[aplot]],
+                add = TRUE, ...)
+
+        } else {
+            ## type is 'q'
+            ## drop unneeded dimensions
+            thisx <- drop(thisx)
+            thisy <- drop(thisy)
+            if(NCOL(thisx) == 1 && NCOL(thisy) > 1){
+                nquant <- ncol(thisy)
+                for(ii in seq_len(floor(nquant / 2))){
+                    graphics::polygon(
+                        x = c(thisx, rev(thisx)),
+                        y = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
+                        col = col[[aplot]], lwd = lwd[[aplot]],
+                        border = border, xpd = TRUE)
+                }
+            } else if(NCOL(thisy) == 1 && NCOL(thisx) > 1){
+                nquant <- ncol(thisx)
+                for(ii in seq_len(ceiling(nquant / 2))){
+                    graphics::polygon(
+                        x = c(thisx[, ii], rev(thisx[, nquant + 1 - ii])),
+                        y = c(thisy, rev(thisy)),
+                        col = col[[aplot]], lwd = lwd[[aplot]],
+                        border = border, xpd = TRUE)
+                }
+            } else {
+                warning("type = 'q' requires 'x' to have one column and 'y' several, or vice versa.")
+                next
+            }
+            ## end type 'q'
+        }
+    }
+
+    xat <- yat <- xaxp <- yaxp <- NULL
+
+    if(xcha){
+        xat <- seq_along(xdomain)
+        if(any(xjitter)){
+            xaxp <- c(range(xat) + c(-0.5, 0.5), length(xat))
+        } else {
+            xaxp <- c(range(xat), length(xat) - 1)
+        }
+    }
+    if(ycha){
+        yat <- seq_along(ydomain)
+        if(any(yjitter)){
+            yaxp <- c(range(yat) + c(-0.5, 0.5), length(yat))
+        } else {
+            yaxp <- c(range(yat), length(yat) - 1)
+        }
+    }
+
+    ## Final axes
+    if(!add || axes){
+        graphics::axis(side = 1, at = xat, labels = xdomain, tick = axes,
+            col = 'black', lwd = 1, lty = 1, ...)
+        graphics::axis(side = 2, at = yat, labels = ydomain, tick = axes,
+            col = 'black', lwd = 1, lty = 1, ...)
+    }
+
+    ## Final grid
+    if(grid){
+        ## Save and restore user's par()
+        if(!is.null('xaxp')){
+            oldparx <- par(xaxp = xaxp)
+            on.exit(par(oldparx))
+        }
+        if(!is.null('yaxp')){
+            oldpary <- par(yaxp = yaxp)
+            on.exit(par(oldpary), add = TRUE)
+        }
+        graphics::grid(nx = NULL, ny = NULL, lty = 1, col = '#BBBBBB80')
+    }
+    invisible()
+}
+
+
+#' Plot numeric or character values
+#'
+#' @description
+#' Plot function that modifies and expands the **graphics** package's [graphics::matplot()] function in several ways.
+#'
+#' @details
+#' This function is essentially a wrapper around [graphics::matplot()], augmenting the latter with some additional features useful for plotting data and results handled by **Prova**. Some of the additional features provided by `flexiplot` are the following:
+#'
+#' - Either or both `x` and `y` arguments can be of class [`base::character`]. In this case, axes labels corresponding to the unique values are used (see arguments `xdomain` and `ydomain`). This makes it easier to plot nominal and ordinal variates.
+#' - A jitter can also be added to the generated points, via the `xjitter` and `yjitter` switches. This makes it easier to generate scatter plots of nominal and ordinal variates.
+#' - It is possible to specify only a lower or upper limit in the `xlim` and `ylim` arguments, letting the other limit to be found automatically. This can be useful in plotting probabilities, in cases where we want to specify the lower, `0` limit, but want the upper limit to simply be the the maximum probability.
+#' - Transparency of lines or markers can be specified through argument `alpha.f`.
+#' - The plotting style is different, and default argument `type = 'l'` (line plot) rather than `type = 'p'` (point plot).
+#'
+#' See the package's vignettes for more examples.
+#'
+#' @param x Numeric or character: vector of x-coordinates. If missing, a numeric vector `1:...` is created having as many values as the rows of `y`.
+#' @param y Numeric or character: vector of y coordinates. If missing, a numeric vector `1:...` is created having as many values as the rows of `x`.
+#' @param xdomain,ydomain Character or numeric or `NULL` (default): vector of possible values of the variates represented in the `x`- and `y`-axes, in case the `x` or `y` argument is a character vector. The ordering of the values is respected. If `NULL`, then `unique(x)` or `unique(y)` is used.
+#' @param xlim,ylim `NULL` (default) or a vector of two values. In the latter case, if any of the two values is not finite (including `NA` or `NULL`), then the `min` or `max` `x`- or `y`-coordinates of the plotted points are used.
+#' @param grid Logical: whether to plot a light grid. Default `TRUE`.
+#' @param alpha.f Numeric, default 1: opacity of the colours, `0` being completely invisible and `1` completely opaque.
 #' @param xjitter,yjitter Logical or `NULL` (default): add [base::jitter()] to `x`- or `y`-values? Useful when plotting discrete variates. If `NULL`, jitter is added if the values are of character (or factor) class.
 #' @param type,lty,lwd,pch,col,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()].
 #' @param ... Other parameters to be passed to [graphics::matplot()].
