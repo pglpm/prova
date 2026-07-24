@@ -4,17 +4,19 @@
 \alias{vrtgrid}
 \title{Create a grid of values for a variate}
 \usage{
-vrtgrid(vrt, learnt, length.out = 129)
+vrtgrid(vrt, learnt, length.out = NULL, out = list)
 }
 \arguments{
 \item{vrt}{Character: name of the variate, must match one of the names in the \code{metadata} file provided to the \code{\link[=learn]{learn()}} function.}
 
 \item{learnt}{Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
 
-\item{length.out}{Numeric, positive (default 129): number of values to be created; used only for continuous, non-rounded variates (see \code{\link{metadata}}).}
+\item{length.out}{Numeric positive, or \code{NULL} (default): number of values to be created; used only for continuous variates (see \code{\link{metadata}}). If this argument is \code{NULL} and the variate is not rounded, then the number of output values is 129; if the variate is rounded, then the output values are separated by the variates's rounding interval (field \code{datastep} in the \code{\link{metadata}}).}
+
+\item{out}{Desired class of the returned value, entered directly or as character; default \code{list}. Other useful choices could be \code{\link[base:data.frame]{data.frame}}, \code{\link[base:c]{c}}, \code{\link[base:cbind]{cbind}}, \code{\link[base:rbind]{rbind}}.}
 }
 \value{
-A numeric or character vector of values.
+By default, a named list of values of the \code{vrt} variate, having that variate name. More generally, a collection of values of class indicated by the \verb{out =} argument, named by the requested variate if naming makes sense for that class.
 }
 \description{
 This function creates a set of values for a variate, based on the information from data and metadata stored in a \code{learnt} object, created by the \code{\link[=learn]{learn()}} function. The set of values depends on the type of variate (nominal or continuous, rounded, and so on, see \link{metadata}). The range of values is chosen to include, and extend slightly beyond, the range observed in the data used in the \code{\link[=learn]{learn()}} function. Variate domains are always respected.
@@ -30,22 +32,15 @@ valuesSpecies <- vrtgrid(vrt = 'species', learnt = learnt)
 
 print(valuesSpecies)
 
-## create a set of values for the variate "bill length";
-## this variate is continuous and rounded, only realistic values are included
-valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt)
+## create a small set of values for the variate "bill length";
+## this variate is continuous and rounded
+valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 65)
 
 range(valuesBill)
 
-## let's take a subset of these values, to speed up computation
-valuesBill <- valuesBill[seq(to = length(valuesBill), length.out = 65)]
-
 ## calculate the conditional probabilities for the 'bill_len' values above,
 ## given the values of 'species'
-probs <- Pr(
-  Y = data.frame(bill_len = valuesBill),
-  X = data.frame(species = valuesSpecies),
-  learnt = learnt, parallel = 1
-)
+probs <- Pr(Y = valuesBill, X = valuesSpecies, learnt = learnt, parallel = 1)
 
 ## plot the conditional probability distributions, and their revisabilities
 plot(probs)
