@@ -74,7 +74,7 @@ pplot <- function(
     pch = c(1, 2, 0, 5, 6, 3), #, 4,
     col = palette(),
     xlab = NA, ylab = NA,
-    xlim = NA, ylim = NA,
+    xlim = NULL, ylim = NULL,
     add = FALSE,
     xdomain = NULL, ydomain = NULL,
     alpha.f = NA,
@@ -119,8 +119,9 @@ pplot <- function(
         xcha <- FALSE
         temp <- unlist(x)
         temp <- temp[is.finite(temp)]
-        if(!is.finite(xlim[1])){ xlim[1] <- min(temp) }
-        if(!is.finite(xlim[2])){ xlim[2] <- max(temp) }
+        rgx <- range(temp)
+        if(isFALSE(is.finite(xlim[1]))){ xlim[1] <- min(temp) }
+        if(isFALSE(is.finite(xlim[2]))){ xlim[2] <- max(temp) }
     } else if(all(vapply(X = x[!xnull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all x are character, find domain
@@ -128,8 +129,9 @@ pplot <- function(
         temp <- unlist(x)
         temp <- temp[!is.na(temp)]
         if(is.null(xdomain)){ xdomain <- unique(temp) }
-        if(!is.finite(xlim[1])){ xlim[1] <- 0.5 }
-        if(!is.finite(xlim[2])){ xlim[2] <- length(xdomain) + 0.5 }
+        rgx <- c(1, length(xdomain))
+        if(isFALSE(is.finite(xlim[1]))){ xlim[1] <- 0.5 }
+        if(isFALSE(is.finite(xlim[2]))){ xlim[2] <- length(xdomain) + 0.5 }
     } else {
         stop("Elements in 'x' must be all numeric or all character.")
     }
@@ -140,8 +142,9 @@ pplot <- function(
         ycha <- FALSE
         temp <- unlist(y)
         temp <- temp[is.finite(temp)]
-        if(!is.finite(ylim[1])){ ylim[1] <- min(temp) }
-        if(!is.finite(ylim[2])){ ylim[2] <- max(temp) }
+        rgy <- range(temp)
+        if(isFALSE(is.finite(ylim[1]))){ ylim[1] <- min(temp) }
+        if(isFALSE(is.finite(ylim[2]))){ ylim[2] <- max(temp) }
     } else if(all(vapply(X = y[!ynull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all y are character, find domain
@@ -149,8 +152,9 @@ pplot <- function(
         temp <- unlist(y)
         temp <- temp[!is.na(temp)]
         if(is.null(ydomain)){ ydomain <- unique(temp) }
-        if(!is.finite(ylim[1])){ ylim[1] <- 2/3 }
-        if(!is.finite(ylim[2])){ ylim[2] <- length(ydomain) + 1/3 }
+        rgy <- c(1, length(ydomain))
+        if(isFALSE(is.finite(ylim[1]))){ ylim[1] <- 2/3 }
+        if(isFALSE(is.finite(ylim[2]))){ ylim[2] <- length(ydomain) + 1/3 }
     } else {
         stop("Elements in 'y' must be all numeric or all character.")
     }
@@ -201,15 +205,20 @@ pplot <- function(
     xjitter <- rep(xjitter, length.out = nplots)
     yjitter <- rep(yjitter, length.out = nplots)
 
+    ## ***
+    if(any(xjitter)){ rgx <- rgx + c(-1, 1)/3 }
+    if(any(yjitter)){ rgy <- rgy + c(-1, 1)/3 }
+
     ## First plot window
-    graphics::matplot(x = NA, y = NA, type = 'n',
+    graphics::matplot(x = rgx, y = rgy, type = 'n',
         xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim,
         cex.main = cex.main, add = add, axes = FALSE, ...)
 
 ### List plots
     for(aplot in seq_len(nplots)){
-        thisx <- x[[aplot]]
-        thisy <- y[[aplot]]
+        ## drop unneeded dimensions
+        thisx <- drop(x[[aplot]])
+        thisy <- drop(y[[aplot]])
 
         ## Replace NULL values
         if(is.null(thisx)){
@@ -251,9 +260,6 @@ pplot <- function(
 
         } else {
             ## type is 'q'
-            ## drop unneeded dimensions
-            thisx <- drop(thisx)
-            thisy <- drop(thisy)
             if(NCOL(thisx) == 1 && NCOL(thisy) > 1){
                 nquant <- ncol(thisy)
                 for(ii in seq_len(floor(nquant / 2))){
