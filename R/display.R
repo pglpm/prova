@@ -90,6 +90,8 @@ pplot <- function(
     ##     '#AA3377' #, '#BBBBBB'
     ## ),
     grid = TRUE,
+    lwd.grid = NULL,
+    col.grid = '#BBBBBB80',
     axes = FALSE,
     cex.main = 1,
     ...
@@ -120,8 +122,6 @@ pplot <- function(
         temp <- unlist(x)
         temp <- temp[is.finite(temp)]
         rgx <- range(temp)
-        if(isFALSE(is.finite(xlim[1]))){ xlim[1] <- min(temp) }
-        if(isFALSE(is.finite(xlim[2]))){ xlim[2] <- max(temp) }
     } else if(all(vapply(X = x[!xnull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all x are character, find domain
@@ -130,8 +130,6 @@ pplot <- function(
         temp <- temp[!is.na(temp)]
         if(is.null(xdomain)){ xdomain <- unique(temp) }
         rgx <- c(1, length(xdomain))
-        if(isFALSE(is.finite(xlim[1]))){ xlim[1] <- 0.5 }
-        if(isFALSE(is.finite(xlim[2]))){ xlim[2] <- length(xdomain) + 0.5 }
     } else {
         stop("Elements in 'x' must be all numeric or all character.")
     }
@@ -143,8 +141,6 @@ pplot <- function(
         temp <- unlist(y)
         temp <- temp[is.finite(temp)]
         rgy <- range(temp)
-        if(isFALSE(is.finite(ylim[1]))){ ylim[1] <- min(temp) }
-        if(isFALSE(is.finite(ylim[2]))){ ylim[2] <- max(temp) }
     } else if(all(vapply(X = y[!ynull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all y are character, find domain
@@ -153,8 +149,6 @@ pplot <- function(
         temp <- temp[!is.na(temp)]
         if(is.null(ydomain)){ ydomain <- unique(temp) }
         rgy <- c(1, length(ydomain))
-        if(isFALSE(is.finite(ylim[1]))){ ylim[1] <- 2/3 }
-        if(isFALSE(is.finite(ylim[2]))){ ylim[2] <- length(ydomain) + 1/3 }
     } else {
         stop("Elements in 'y' must be all numeric or all character.")
     }
@@ -189,7 +183,7 @@ pplot <- function(
     type[is.na(type)] <- 'l'
     xjitter[is.na(xjitter)] <- FALSE
     yjitter[is.na(yjitter)] <- FALSE
-    alpha.f[is.na(alpha.f) & (type == 'q')] <- 0.25
+    alpha.f[is.na(alpha.f) & (type %in% c('qx', 'hx', 'qy', 'hy'))] <- 0.25
     alpha.f[is.na(alpha.f)] <- 1
 
     nplots <- length(x)
@@ -205,15 +199,31 @@ pplot <- function(
     xjitter <- rep(xjitter, length.out = nplots)
     yjitter <- rep(yjitter, length.out = nplots)
 
-    ## ***
-    if(any(xjitter)){ rgx <- rgx + c(-1, 1)/3 }
-    if(any(yjitter)){ rgy <- rgy + c(-1, 1)/3 }
+    ## Plot ranges
+    if(!isTRUE(is.finite(xlim[1]))){
+        if(any(xjitter)){ rgx[1] <- rgx[1] - 1/3 }
+        if(any(type == 'hx')){ rgx[1] <- min(rgx[1], 0) }
+        xlim[1] <- min(rgx)
+    }
+    if(!isTRUE(is.finite(xlim[2]))){
+        if(any(xjitter)){ rgx[2] <- rgx[2] + 1/3 }
+        xlim[2] <- max(rgx)
+    }
+
+    if(!isTRUE(is.finite(ylim[1]))){
+        if(any(yjitter)){ rgy[1] <- rgy[1] - 1/3 }
+        if(any(type == 'hy')){ rgy[1] <- min(rgy[1], 0) }
+        ylim[1] <- min(rgy)
+    }
+    if(!isTRUE(is.finite(ylim[2]))){
+        if(any(yjitter)){ rgy[2] <- rgy[2] + 1/3 }
+        ylim[2] <- max(rgy)
+    }
 
     ## First plot window
-    graphics::matplot(x = rgx, y = rgy, type = 'n',
-        xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim,
+    graphics::matplot(x = xlim, y = ylim, type = 'n',
+        xlab = xlab, ylab = ylab, xlim = NULL, ylim = NULL,
         cex.main = cex.main, add = add, axes = FALSE, ...)
-
 ### List plots
     for(aplot in seq_len(nplots)){
         ## drop unneeded dimensions
@@ -250,7 +260,7 @@ pplot <- function(
 
         ## Plot
         ## checks for type = 'q'
-        if(!(type[[aplot]] == 'q')){
+        if(!(type[[aplot]] %in% c('qx', 'qy', 'hx', 'hy'))){
 
             ## Plot
             graphics::matplot(x = thisx, y = thisy,
@@ -258,31 +268,44 @@ pplot <- function(
                 lend = lend[[aplot]], pch = pch[[aplot]], col = col[[aplot]],
                 add = TRUE, ...)
 
-        } else {
-            ## type is 'q'
-            if(NCOL(thisx) == 1 && NCOL(thisy) > 1){
-                nquant <- ncol(thisy)
-                for(ii in seq_len(floor(nquant / 2))){
-                    graphics::polygon(
-                        x = c(thisx, rev(thisx)),
-                        y = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
-                        col = col[[aplot]], lwd = lwd[[aplot]],
-                        border = border, xpd = TRUE)
-                }
-            } else if(NCOL(thisy) == 1 && NCOL(thisx) > 1){
-                nquant <- ncol(thisx)
-                for(ii in seq_len(ceiling(nquant / 2))){
-                    graphics::polygon(
-                        x = c(thisx[, ii], rev(thisx[, nquant + 1 - ii])),
-                        y = c(thisy, rev(thisy)),
-                        col = col[[aplot]], lwd = lwd[[aplot]],
-                        border = border, xpd = TRUE)
-                }
-            } else {
-                warning("type = 'q' requires 'x' to have one column and 'y' several, or vice versa.")
-                next
+        } else if(type[[aplot]] %in% c('qx', 'hx')){
+            if(type[[aplot]] == 'hx'){
+                temp <- c(NROW(thisy), 2 * NCOL(thisy))
+                thisy <- c(thisy, rep.int(x = 0, times = length(thisy)))
+                dim(thisy) <- temp
             }
-            ## end type 'q'
+            if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
+            if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
+
+            nquant <- ncol(thisy)
+            temp <- ncol(thisx)
+            for(ii in seq_len(floor(nquant / 2))){
+                graphics::polygon(
+                    x = c(thisx[,(ii - 1) %% temp + 1],
+                        rev(thisx[,(ii - 1) %% temp + 1])),
+                    y = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
+                    col = col[[aplot]], lwd = lwd[[aplot]],
+                    border = border, xpd = TRUE)
+            }
+        } else if(type[[aplot]] %in% c('qy', 'hy')){
+            if(type[[aplot]] == 'hy'){
+                temp <- c(NROW(thisx), 2 * NCOL(thisx))
+                thisx <- c(thisx, rep.int(x = 0, times = length(thisx)))
+                dim(thisx) <- temp
+            }
+            if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
+            if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
+
+            nquant <- ncol(thisx)
+            temp <- ncol(thisy)
+            for(ii in seq_len(floor(nquant / 2))){
+                graphics::polygon(
+                    x = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
+                    y = c(thisx[,(ii - 1) %% temp + 1],
+                        rev(thisx[,(ii - 1) %% temp + 1])),
+                    col = col[[aplot]], lwd = lwd[[aplot]],
+                    border = border, xpd = TRUE)
+            }
         }
     }
 
@@ -324,7 +347,8 @@ pplot <- function(
             oldpary <- par(yaxp = yaxp)
             on.exit(par(oldpary), add = TRUE)
         }
-        graphics::grid(nx = NULL, ny = NULL, lty = 1, col = '#BBBBBB80')
+        graphics::grid(nx = NULL, ny = NULL, lty = 1,
+            lwd = lwd.grid, col = col.grid)
     }
     invisible()
 }
