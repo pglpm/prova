@@ -79,7 +79,7 @@ Let's load the **Prova** package, if we haven't already done so, and set a rando
 
 ```{r, eval = TRUE}
 library('prova')
-
+devtools::load_all()
 set.seed(10)
 ```
 

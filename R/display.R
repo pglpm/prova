@@ -4,25 +4,30 @@
 #' Plot function that modifies and expands the **graphics** package's [graphics::matplot()] function in several ways.
 #'
 #' @details
-#' This function is essentially a wrapper around [graphics::matplot()], augmenting the latter with some additional features useful for plotting data and results handled by **Prova**. Some of the additional features provided by `flexiplot` are the following:
+#' This function is essentially a wrapper around [graphics::matplot()], augmenting the latter with some features useful for plotting data and probabilities handled by **Prova**. Some of the additional features provided by `pplot` are the following:
 #'
-#' - Either or both `x` and `y` arguments can be of class [`base::character`]. In this case, axes labels corresponding to the unique values are used (see arguments `xdomain` and `ydomain`). This makes it easier to plot nominal and ordinal variates.
-#' - A jitter can also be added to the generated points, via the `xjitter` and `yjitter` switches. This makes it easier to generate scatter plots of nominal and ordinal variates.
-#' - It is possible to specify only a lower or upper limit in the `xlim` and `ylim` arguments, letting the other limit to be found automatically. This can be useful in plotting probabilities, in cases where we want to specify the lower, `0` limit, but want the upper limit to simply be the the maximum probability.
+#' - Either or both `x` and `y` arguments can be [list][base::list()]s. In this case, the first element of `x` is plotted against the first element of `y`, and so on, recycling as necessary. This allows for plots having different numbers of base points. The specifications in arguments like `type`, `lty`, `col`, and similar apply to each list element in turn.
+#' - Argument `x`, or each element in `x` if it is a list, can be of class [`base::character`]. In this case, x-axis labels as given in `xdomain` are used, or the unique values in `x` if `xdomain` is `NULL`. Similarly for `y` and `ydomain`. This feature makes it easier to plot nominal and ordinal non-numeric variates.
+#' - 
+#' - A jitter can be added to the generated points, via the `xjitter` and `yjitter` switches. This feature makes it easier to generate scatter plots of nominal, ordinal, or rounded-continuous variates.
+#' - It is possible to specify only a lower or upper limit in the `xlim` and `ylim` arguments, letting the other limit to be found automatically. This feature is useful in plotting probabilities and histograms, when we want to specify the lower as `0` but want the upper limit to be the the maximum probability.
 #' - Transparency of lines or markers can be specified through argument `alpha.f`.
 #' - The plotting style is different, and default argument `type = 'l'` (line plot) rather than `type = 'p'` (point plot).
 #'
 #' See the package's vignettes for more examples.
 #'
-#' @param x Numeric or character: vector of x-coordinates. If missing, a numeric vector `1:...` is created having as many values as the rows of `y`.
-#' @param y Numeric or character: vector of y coordinates. If missing, a numeric vector `1:...` is created having as many values as the rows of `x`.
+#' @param x Numeric or character or list: vectors of x-coordinates. If an element of `x` is missing, a numeric vector `1:...` is created having as many values as the rows of the corresponding element in `y`.
+#' @param y Numeric or character or list: vectors of y-coordinates. If an element of `y` is missing, a numeric vector `1:...` is created having as many values as the rows of the corresponding element in `x`.
+#' @param type Character string or vector or list of 1-character strings indicating the type of plot for each element of `y`. The types of plot are the same as in [base::plot()], in particular `'p'` for points, `'l'` for lines, `'b'` for both points and lines, `'c'` for empty points joined by lines, `'o'` for overplotted points and lines, ``n'` for empty plot. Additional special types `'hx'`, `'qx'`, `'hy'`, `'qy'` are available for plotting histograms and quantile bands; see "Details".
 #' @param xdomain,ydomain Character or numeric or `NULL` (default): vector of possible values of the variates represented in the `x`- and `y`-axes, in case the `x` or `y` argument is a character vector. The ordering of the values is respected. If `NULL`, then `unique(x)` or `unique(y)` is used.
-#' @param xlim,ylim `NULL` (default) or a vector of two values. In the latter case, if any of the two values is not finite (including `NA` or `NULL`), then the `min` or `max` `x`- or `y`-coordinates of the plotted points are used.
-#' @param grid Logical: whether to plot a light grid. Default `TRUE`.
-#' @param alpha.f Numeric, default 1: opacity of the colours, `0` being completely invisible and `1` completely opaque.
+#' @param xlim,ylim `NULL` (default) or a vector of two values. If non-`NULL` and any of the two values is not finite (including `NA` or `NULL`), then the `min` or `max` `x`- or `y`-coordinates of the plotted points are used.
+#' @param alpha.f Numeric, default 1: opacity of the colours specified with the `col` argument, `0` being completely invisible and `1` completely opaque. Default to 1, except for shaded plots of `type` `'hx'`, `'qx'`, `'hy'`, `'qy'`, for which it defaults to 0.25.
 #' @param border Border colour for bands in plots of `type = 'q'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
 #' @param xjitter,yjitter Logical or `NULL` (default): add [base::jitter()] to `x`- or `y`-values? Useful when plotting discrete variates. If `NULL`, jitter is added if the values are of character (or factor) class.
-#' @param type,lty,lwd,pch,lend,col,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()].
+#' @param grid Logical, default `TRUE`: plot a light grid?
+#' @param lwd.grid Numeric, default 1: width of grid lines.
+#' @param col.grid Color of grid lines, default `'#BBBBBB80'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()].
+#' @param lty,lwd,pch,lend,col,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()]; defaults are different (see "Usage").
 #' @param ... Other parameters to be passed to [graphics::matplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
@@ -269,13 +274,13 @@ pplot <- function(
                 add = TRUE, ...)
 
         } else if(type[[aplot]] %in% c('qx', 'hx')){
+            if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
+            if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
             if(type[[aplot]] == 'hx'){
-                temp <- c(NROW(thisy), 2 * NCOL(thisy))
+                temp <- dim(thisy) * c(1, 2)
                 thisy <- c(thisy, rep.int(x = 0, times = length(thisy)))
                 dim(thisy) <- temp
             }
-            if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
-            if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
 
             nquant <- ncol(thisy)
             temp <- ncol(thisx)
@@ -288,21 +293,21 @@ pplot <- function(
                     border = border, xpd = TRUE)
             }
         } else if(type[[aplot]] %in% c('qy', 'hy')){
+            if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
+            if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
             if(type[[aplot]] == 'hy'){
-                temp <- c(NROW(thisx), 2 * NCOL(thisx))
+                temp <- dim(thisx) * c(1, 2)
                 thisx <- c(thisx, rep.int(x = 0, times = length(thisx)))
                 dim(thisx) <- temp
             }
-            if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
-            if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
 
             nquant <- ncol(thisx)
             temp <- ncol(thisy)
             for(ii in seq_len(floor(nquant / 2))){
                 graphics::polygon(
-                    x = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
-                    y = c(thisx[,(ii - 1) %% temp + 1],
-                        rev(thisx[,(ii - 1) %% temp + 1])),
+                    x = c(thisx[, ii], rev(thisx[, nquant + 1 - ii])),
+                    y = c(thisy[,(ii - 1) %% temp + 1],
+                        rev(thisy[,(ii - 1) %% temp + 1])),
                     col = col[[aplot]], lwd = lwd[[aplot]],
                     border = border, xpd = TRUE)
             }
