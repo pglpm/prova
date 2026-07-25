@@ -534,7 +534,7 @@ plot.probability <- function(
     ## Check for singular-probability values
     isdensity <- any(x$densities > 0)
 
-    ## If 'PvsY' is NULL, then we guess that the longest between Y and X
+    ## If 'PvsY' is NULL, then guess that the longest between Y and X
     ## is meant to be abscissa
     if(is.null(PvsY)){ PvsY <- (Ylen >= Xlen) }
 
@@ -553,7 +553,7 @@ plot.probability <- function(
     }
 
     ## If the abscissa has more than one variate,
-    ## then it becomes tricky to understand which of these we must plot against
+    ## then it's tricky to understand which of these we must plot against.
     ## Heuristic: if there's one variate with as many unique elements as xxx,
     ## then use that one. Otherwise use a generic 'Y...'
     if(ncol(xxx) == 1){
@@ -570,6 +570,7 @@ plot.probability <- function(
         }
     }
 
+    ## Prepare axes labels and title
     if(is.null(xlab)){xlab <- tempxlab}
     if(missing(main)){
         main <- paste0('P(',
@@ -586,10 +587,7 @@ plot.probability <- function(
         ylab <- paste0('probability', if(isdensity){' density'})
     }
 
-    if(is.null(type)){
-        if(is.character(xxx)){type <- 'b'} else {type <- 'l'}
-    }
-
+    ## Different denominations if there are singular-probability points
     if(any(xdeltas)){
         if(is.null(ylab2)){
             ylab2 <- paste0('probability',
@@ -600,6 +598,12 @@ plot.probability <- function(
         on.exit(par(oldpar))
     }
 
+    ## Choose plot type: 'b' for discrete, 'l' for continuous
+    if(is.null(type)){
+        if(is.character(xxx)){type <- 'b'} else {type <- 'l'}
+    }
+
+    ## Plot range
     if(any(xdeltas)){
         if(spread == 'quantiles'){
             mpvar <- max(pvar[xdeltas, , ], na.rm = TRUE)
