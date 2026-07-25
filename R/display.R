@@ -484,7 +484,7 @@ plot.probability <- function(
         (spread == 'quantiles' && is.null(x[['quantiles']])) ||
             (spread == 'samples' && is.null(x[['samples']]))
         ) {
-            message('Requested spread not available. Omitting its plot.')
+            warning("Requested 'spread' not available in this 'probability' object.")
             spread <- 'none'
         }
     }
@@ -492,26 +492,98 @@ plot.probability <- function(
     Ylen <- nrow(x[['values']])
     Xlen <- ncol(x[['values']])
 
+    ## Handle the case of missing Y and X items in 'x'
+    if(is.null(x$Y)){
+        x$Y <- data.frame(Y = paste0('Y', seq_len(Ylen)))
+        if(Xlen > 1){
+            x$X <- data.frame(X = paste0('X', seq_len(Xlen)))
+        }
+    }
+
+    ## Check for singular-probability values
+    isdensity <- any(x$densities > 0)
+
     ## If 'PvsY' is NULL, then guess that the longest between Y and X
     ## is meant to be abscissa
     if(is.null(PvsY)){ PvsY <- (Ylen >= Xlen) }
 
     if(isTRUE(PvsY)){
         ## Y is x-axis, one plot for each X
-        xxx <- x$Y
-        leg <- x$X
+        vals <- x$Y
+        lgnd <- x$X
         tempxlab <- 'Y'
-        xdeltas <- (x$densities < max(x$densities))
+        pdeltas <- (x$densities < max(x$densities))
+        pvsyi <- 1
     } else {
         ## X is x-axis, one plot for each Y
-        xxx <- x$X
-        leg <- x$Y
+        vals <- x$X
+        lgnd <- x$Y
         tempxlab <- 'X'
-        x[['values']] <- t(x[['values']])
         if(!is.null(pvar)){ pvar <- aperm(pvar, c(2, 1, 3)) }
-        xdeltas <- FALSE
+        ## It's unusual to plot probabilities of a continous variate against X
+        pdeltas <- FALSE
+        pvsyi <- 2
     }
 
+    ## If the abscissa has more than one variate,
+    ## then it's tricky to understand which of these we must plot against.
+    ## Heuristic: if there's one variate with as many unique elements as vals,
+    ## then use that one. Otherwise use a generic 'Y...'
+    if(ncol(vals) == 1){
+        tempxlab <- colnames(vals)
+        vals <- unlist(vals)
+    } else {
+        uniquevrts <- apply(vals, 2, function(xx){length(unique(xx))})
+        toselect <- which(uniquevrts == nrow(vals))[1]
+        if(is.na(toselect)){
+            vals <- seq_len(nrow(vals))
+        } else {
+            tempxlab <- colnames(vals)[toselect]
+            vals <- vals[, toselect]
+        }
+    }
+
+    ## Prepare axes labels and title
+    if(is.null(xlab)){xlab <- tempxlab}
+    if(missing(main)){
+        main <- paste0('P(',
+            paste0(names(x$Y), collapse = ', '),
+            if(!is.null(x$X)){
+                paste0(' | ', paste0(names(x$X), collapse = ', '))
+            }, ')')
+        if(spread == 'quantiles'){
+            main <- paste0(main, '\nquantiles: ',
+                paste0(round(qnames, 1), '%', collapse = ', '))
+        }
+    }
+    if(is.null(ylab)){
+        ylab <- paste0('probability', if(isdensity){' density'})
+    }
+
+    ## Different denominations if there are singular-probability points
+    if(any(pdeltas)){
+        if(is.null(ylab2)){
+            ylab2 <- paste0('probability',
+                if(max(x$densities[-which.max(x$densities)]) == 0){' density'},
+                ' at singular points')
+        }
+        oldpar <- par(mar = par('mar') + c(0, 0, 0, 1.5))
+        on.exit(par(oldpar))
+    }
+
+    ## Choose plot type: 'b' for discrete, 'l' for continuous
+    if(is.null(type)){
+        if(is.character(vals)){type <- 'b'} else {type <- 'l'}
+    }
+
+
+
+
+
+
+
+
+    
     ## Rename the revisability object so as to avoid if-else below
     if(spread == 'quantiles'){
         mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
@@ -543,147 +615,75 @@ plot.probability <- function(
         maxvar <- -Inf
     }
 
-    ## Handle the case of missing Y and X items in 'x'
-    if(is.null(x$Y)){
-        x$Y <- data.frame(Y = paste0('Y', seq_len(Ylen)))
-        if(Xlen > 1){
-            x$X <- data.frame(X = paste0('X', seq_len(Xlen)))
-        }
-    }
 
-    ## Check for singular-probability values
-    isdensity <- any(x$densities > 0)
 
-    ## If 'PvsY' is NULL, then guess that the longest between Y and X
-    ## is meant to be abscissa
-    if(is.null(PvsY)){ PvsY <- (Ylen >= Xlen) }
 
-    if(isTRUE(PvsY)){
-        xxx <- x$Y
-        leg <- x$X
-        tempxlab <- 'Y'
-        xdeltas <- (x$densities < max(x$densities))
+    ## y-range
+    if(any(!pdeltas)){
+            pmax <- max(x[['values']][!pdeltas, ], na.rm = TRUE)
     } else {
-        xxx <- x$X
-        leg <- x$Y
-        tempxlab <- 'X'
-        x[['values']] <- t(x[['values']])
-        if(!is.null(pvar)){ pvar <- aperm(pvar, c(2, 1, 3)) }
-        xdeltas <- FALSE
+        pmax <- max(x[['values']][pdeltas, ], na.rm = TRUE)
     }
-
-    ## If the abscissa has more than one variate,
-    ## then it's tricky to understand which of these we must plot against.
-    ## Heuristic: if there's one variate with as many unique elements as xxx,
-    ## then use that one. Otherwise use a generic 'Y...'
-    if(ncol(xxx) == 1){
-        tempxlab <- colnames(xxx)
-        xxx <- unlist(xxx)
-    } else {
-        uniquevrts <- apply(xxx, 2, function(xx){length(unique(xx))})
-        toselect <- which(uniquevrts == nrow(xxx))[1]
-        if(is.na(toselect)){
-            xxx <- seq_len(nrow(xxx))
+    if(spread == 'quantiles'){
+        if(any(!pdeltas)){
+            pmax <- max(pmax, x[[spread]][!pdeltas, , ], na.rm = TRUE)
         } else {
-            tempxlab <- colnames(xxx)[toselect]
-            xxx <- xxx[, toselect]
+            pmax <- max(pmax, x[[spread]][pdeltas, , ], na.rm = TRUE)
         }
+    } else if(spread == 'samples'){
+        ## Some samples can have very high peaks; choose those within 95.4%
+        pmax <- max(pmax, apply(
+            X = if(any(!pdeltas)){
+                x[['samples']][!pdeltas, , , drop = FALSE]
+            } else {
+                x[['samples']][pdeltas, , , drop = FALSE]
+            },
+            MARGIN = c(1, 2), FUN = quantile,
+            probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
+        ))
     }
 
-    ## Prepare axes labels and title
-    if(is.null(xlab)){xlab <- tempxlab}
-    if(missing(main)){
-        main <- paste0('P(',
-            paste0(names(x$Y), collapse = ', '),
-            if(!is.null(x$X)){
-                paste0(' | ', paste0(names(x$X), collapse = ', '))
-            }, ')')
-        if(spread == 'quantiles'){
-            main <- paste0(main, '\nquantiles: ',
-                paste0(round(qnames, 1), '%', collapse = ', '))
-        }
-    }
-    if(is.null(ylab)){
-        ylab <- paste0('probability', if(isdensity){' density'})
-    }
+    if(!is.finite(ylim[2])){ ylim[2] <- pmax }
+    if(!is.finite(ylim[1])){ ylim[1] <- 0 }
 
-    ## Different denominations if there are singular-probability points
-    if(any(xdeltas)){
-        if(is.null(ylab2)){
-            ylab2 <- paste0('probability',
-                if(max(x$densities[-which.max(x$densities)]) == 0){' density'},
-                ' at singular points')
-        }
-        oldpar <- par(mar = par('mar') + c(0, 0, 0, 1.5))
-        on.exit(par(oldpar))
+    ## compute max probability of singular points, if any,
+    ## and find conversion scale
+    if(any(pdeltas)){
+        pticks <- axisTicks(usr = ylim, log = FALSE)
+        pdivs <- length(pticks) - 1
+        ploc <- min(pticks)
+        pscale <- signif(x = mpvar / pdivs, digits = 1)
+        pscale <- (max(pticks) - ploc) / (pscale * pdivs)
+        ## ceiling(pscale * 10^(-floor(log10(pscale)) + 1)) *
+        ##     10^(floor(log10(pscale)) - 1) * pdivs
     }
-
-    ## Choose plot type: 'b' for discrete, 'l' for continuous
-    if(is.null(type)){
-        if(is.character(xxx)){type <- 'b'} else {type <- 'l'}
-    }
-
-    ## Plot y-range
-    if(any(xdeltas)){
-        if(spread == 'quantiles'){
-            mpvar <- max(pvar[xdeltas, , ], na.rm = TRUE)
-        } else if(spread == 'samples'){
-            mpvar <- max(apply(
-                X = x[['samples']][xdeltas, , , drop = FALSE],
-                MARGIN = c(1, 2), FUN = quantile,
-                probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
-            ))
-        } else {
-            mpvar <- max(x[['values']][xdeltas, ], na.rm = TRUE)
-        }
-        ## compute max probability of singular points,
-        ## and find conversion scale
-        yticks <- axTicks(4)
-        ydivs <- length(yticks) - 1
-        yloc <- min(yticks)
-        yscale <- signif(x = mpvar / ydivs, digits = 1)
-        yscale <- (max(yticks) - yloc) / (yscale * ydivs)
-        ## ceiling(yscale * 10^(-floor(log10(yscale)) + 1)) *
-        ##     10^(floor(log10(yscale)) - 1) * ydivs
-        ## add axis for singular probability values
-        graphics::axis(4, at = yticks, labels = (yticks - yloc) / yscale,
-            tick = !grid, col = 'black', lwd = 1, lty = 1)
-    }
-
-
-
-    ## find maximum and minimum y-value first, if needed
-    if(is.na(ylim[2])){
-        ylim[2] <- max(maxvar, x[['values']])
-    }
-    if(is.na(ylim[1])){
-        ylim[1] <- min(maxvar, x[['values']])
-    }
-
 
     ## Plot
     pplot(
-        x = c(if(any(xdeltas)){ list(xxx[xdeltas]) },
-            if(any(!xdeltas)){ list(xxx[!xdeltas]) }
+        x = c(if(any(pdeltas)){ list(vals[pdeltas]) },
+            if(any(!pdeltas)){ list(vals[!pdeltas]) }
         )
         y = c(
-            if(spread %in% c('quantiles', 'samples')){
-                apply(X = x[[spread]], MARGIN = if(PvsY){1}else{2},
-                    FUN = 
-                unlist(lapply(
-                    X = seq_len(dim(pvar)[2]),
-                    FUN = function(ii){c(
-                        if(any(!xdeltas)){ list(pvar[!xdeltas, i, ]) },
-                        if(any(xdeltas)){ list(pvar[xdeltas, i ,]) }
-                    )}
-                ), recursive = FALSE, use.names = FALSE)
-            },
-            unlist(lapply(
-                X = seq_len(dim(x[['values']])[2]), FUN = function(ii){c(
-                    if(any(!xdeltas)){ list(x[['values']][!xdeltas, ii]) },
-                    if(any(xdeltas)){ list(x[['values']][xdeltas, ii]) }
-                    )}
-                ), recursive = FALSE, use.names = FALSE)
+            if(spread %in% c('quantiles', 'samples')){rbind(
+                if(any(!pdeltas)){
+                    apply(X = x[[spread]][!pdeltas, , ],
+                        MARGIN = pvsyi, FUN = identity, simplify = FALSE)
+                }
+                if(any(pdeltas)){
+                    apply(X = pscale * x[[spread]][pdeltas, , ] + ploc,
+                        MARGIN = pvsyi, FUN = identity, simplify = FALSE)
+                }
+            )},
+            rbind(
+                if(any(!pdeltas)){
+                    apply(X = x[['values']][!pdeltas, ],
+                        MARGIN = pvsyi, FUN = identity, simplify = FALSE)
+                }
+                if(any(pdeltas)){
+                    apply(X =  pscale * x[['values']][pdeltas, ] + ploc,
+                        MARGIN = pvsyi, FUN = identity, simplify = FALSE)
+                }
+            )
         ),
         xlab = xlab,
         ylab = ylab,
@@ -696,9 +696,13 @@ plot.probability <- function(
         add = add,
         ...
     )
-}
-        
 
+    ## add axis for singular probability values
+    if(any(pdeltas)){
+        graphics::axis(4, at = pticks, labels = (pticks - ploc) / pscale,
+            tick = !grid, col = 'black', lwd = 1, lty = 1)
+    }
+}
 
 
 
@@ -707,8 +711,8 @@ plot.probability <- function(
             )
             
             else 
-                            plotquantiles(x = unlist(xxx)[!xdeltas],
-                y = pvar[!xdeltas, i, ],
+                            plotquantiles(x = unlist(vals)[!pdeltas],
+                y = pvar[!pdeltas, i, ],
                 col = col[(i - 1) %% length(col) + 1],
                 alpha.f = var.alpha.f,
                 lty =  lty[(i - 1) %% length(lty) + 1],
@@ -732,7 +736,7 @@ plot.probability <- function(
 
     if(!is.null(pvar)){
         ## prepare window
-        flexiplot(x = xxx,
+        flexiplot(x = vals,
             y = matrix(pvar, nrow = dim(pvar)[1]),
             type = 'n',
             xlab = xlab,
@@ -746,37 +750,37 @@ plot.probability <- function(
         add <- TRUE
     }
 
-    if(any(xdeltas)){
+    if(any(pdeltas)){
         if(spread == 'quantiles'){
-            mpvar <- max(pvar[xdeltas, , ], na.rm = TRUE)
+            mpvar <- max(pvar[pdeltas, , ], na.rm = TRUE)
         } else if(spread == 'samples'){
             mpvar <- max(apply(
-                X = x[['samples']][xdeltas, , , drop = FALSE],
+                X = x[['samples']][pdeltas, , , drop = FALSE],
                 MARGIN = c(1, 2), FUN = quantile,
                 probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
             ))
         } else {
-            mpvar <- max(x[['values']][xdeltas, ], na.rm = TRUE)
+            mpvar <- max(x[['values']][pdeltas, ], na.rm = TRUE)
         }
         ## compute max probability of singular points,
         ## and find conversion scale
-        yticks <- axTicks(4)
-        ydivs <- length(yticks) - 1
-        yloc <- min(yticks)
-        yscale <- signif(x = mpvar / ydivs, digits = 1)
-        yscale <- (max(yticks) - yloc) / (yscale * ydivs)
-        ## ceiling(yscale * 10^(-floor(log10(yscale)) + 1)) *
-        ##     10^(floor(log10(yscale)) - 1) * ydivs
+        pticks <- axTicks(4)
+        pdivs <- length(pticks) - 1
+        ploc <- min(pticks)
+        pscale <- signif(x = mpvar / pdivs, digits = 1)
+        pscale <- (max(pticks) - ploc) / (pscale * pdivs)
+        ## ceiling(pscale * 10^(-floor(log10(pscale)) + 1)) *
+        ##     10^(floor(log10(pscale)) - 1) * pdivs
         ## add axis for singular probability values
-        graphics::axis(4, at = yticks, labels = (yticks - yloc) / yscale,
+        graphics::axis(4, at = pticks, labels = (pticks - ploc) / pscale,
             tick = !grid, col = 'black', lwd = 1, lty = 1)
     }
 
 
     if(spread == 'quantiles'){
         for(i in seq_len(dim(pvar)[2])){
-            plotquantiles(x = unlist(xxx)[!xdeltas],
-                y = pvar[!xdeltas, i, ],
+            plotquantiles(x = unlist(vals)[!pdeltas],
+                y = pvar[!pdeltas, i, ],
                 col = col[(i - 1) %% length(col) + 1],
                 alpha.f = var.alpha.f,
                 lty =  lty[(i - 1) %% length(lty) + 1],
@@ -785,10 +789,10 @@ plot.probability <- function(
                 add = TRUE,
                 ...)
 
-            if(any(xdeltas)){
-                for(xd in which(xdeltas)){
-                    plotquantiles(x = unlist(xxx)[xd],
-                        y = yscale * pvar[, i, ][xd, , drop = FALSE] + yloc,
+            if(any(pdeltas)){
+                for(xd in which(pdeltas)){
+                    plotquantiles(x = unlist(vals)[xd],
+                        y = pscale * pvar[, i, ][xd, , drop = FALSE] + ploc,
                         col = col[(i - 1) %% length(col) + 1],
                         border = adjustcolor(col[(i - 1) %% length(col) + 1],
                             alpha.f = var.alpha.f),
@@ -809,7 +813,7 @@ plot.probability <- function(
         ## the samples of the last subgroup cover the previous ones
         nx <- dim(pvar)[2]
         dim(pvar) <- c(dim(pvar)[1], prod(dim(pvar)[-1]))
-        flexiplot(x = xxx[!xdeltas], y = pvar[!xdeltas, , drop = FALSE],
+        flexiplot(x = vals[!pdeltas], y = pvar[!pdeltas, , drop = FALSE],
             type = type,
             col = col[(seq_len(nx) - 1) %% length(col) + 1],
             alpha.f = var.alpha.f,
@@ -820,9 +824,9 @@ plot.probability <- function(
             add = TRUE,
             ...)
 
-            if(any(xdeltas)){
-                for(xd in which(xdeltas)){
-        flexiplot(x = xxx[xd], y = yscale * pvar[xd, , drop = FALSE] + yloc,
+            if(any(pdeltas)){
+                for(xd in which(pdeltas)){
+        flexiplot(x = vals[xd], y = pscale * pvar[xd, , drop = FALSE] + ploc,
             type = 'p',
             col = col[(seq_len(nx) - 1) %% length(col) + 1],
             alpha.f = var.alpha.f,
@@ -840,8 +844,8 @@ plot.probability <- function(
     }
 
     ## Plot the probabilities
-    flexiplot(x = xxx[!xdeltas],
-        y = x[['values']][!xdeltas, , drop = FALSE],
+    flexiplot(x = vals[!pdeltas],
+        y = x[['values']][!pdeltas, , drop = FALSE],
         type = type,
         col = col,
         alpha.f = alpha.f,
@@ -858,9 +862,9 @@ plot.probability <- function(
         add = add,
         ...)
 
-    if(any(xdeltas)){
-    flexiplot(x = xxx[xdeltas],
-        y = yscale * x[['values']][xdeltas, , drop = FALSE] + yloc,
+    if(any(pdeltas)){
+    flexiplot(x = vals[pdeltas],
+        y = pscale * x[['values']][pdeltas, , drop = FALSE] + ploc,
         type = 'p',
         col = col,
         alpha.f = alpha.f,
@@ -882,18 +886,18 @@ plot.probability <- function(
 
 }
     ## Plot legends
-    if(!is.null(leg)){
+    if(!is.null(lgnd)){
         ##  && is.character(legend) &&
         ## (legend %in%
         ##      c("bottomright", "bottom", "bottomleft", "left", "topleft",
         ##          "top", "topright", "right", "center"))
         tails <- list()
-        tails[names(leg)] <- '='
+        tails[names(lgnd)] <- '='
         tails[names(x$tails)] <- x$tails
         graphics::legend(x = legend,
-            legend = apply(leg, 1, function(xxx){
-                nxxx <- names(xxx)
-                paste0(paste0(nxxx, ' ', tails[nxxx], ' ', xxx),
+            legend = apply(lgnd, 1, function(vals){
+                nvals <- names(vals)
+                paste0(paste0(nvals, ' ', tails[nvals], ' ', vals),
                     collapse = ', ')
             }),
             bty = 'n',
