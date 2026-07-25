@@ -446,6 +446,8 @@ plot.probability <- function(
     main = NULL,
     ylim = c(0, NA),
     grid = TRUE,
+    lwd.grid = NULL,
+    col.grid = '#BBBBBB80',
     axes = FALSE,
     add = FALSE,
     ...
@@ -513,7 +515,7 @@ plot.probability <- function(
         lgnd <- x$X
         tempxlab <- 'Y'
         pdeltas <- (x$densities < max(x$densities))
-        pvsyi <- 1
+        pvsyi <- 2
     } else {
         ## X is x-axis, one plot for each Y
         vals <- x$X
@@ -522,7 +524,7 @@ plot.probability <- function(
         if(!is.null(pvar)){ pvar <- aperm(pvar, c(2, 1, 3)) }
         ## It's unusual to plot probabilities of a continous variate against X
         pdeltas <- FALSE
-        pvsyi <- 2
+        pvsyi <- 1
     }
 
     ## If the abscissa has more than one variate,
@@ -543,23 +545,6 @@ plot.probability <- function(
         }
     }
 
-    ## Prepare axes labels and title
-    if(is.null(xlab)){xlab <- tempxlab}
-    if(missing(main)){
-        main <- paste0('P(',
-            paste0(names(x$Y), collapse = ', '),
-            if(!is.null(x$X)){
-                paste0(' | ', paste0(names(x$X), collapse = ', '))
-            }, ')')
-        if(spread == 'quantiles'){
-            main <- paste0(main, '\nquantiles: ',
-                paste0(round(qnames, 1), '%', collapse = ', '))
-        }
-    }
-    if(is.null(ylab)){
-        ylab <- paste0('probability', if(isdensity){' density'})
-    }
-
     ## Different denominations if there are singular-probability points
     if(any(pdeltas)){
         if(is.null(ylab2)){
@@ -577,46 +562,28 @@ plot.probability <- function(
     }
 
 
-
-
-
-
-
-
-    
     ## Rename the revisability object so as to avoid if-else below
     if(spread == 'quantiles'){
         mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
-        pvar <- x[['quantiles']]
-        maxvar <- max(pvar, na.rm = TRUE)
         ## if we are plotting more than one curve, keep only the 89% band
+        temp <- dimnames(x[['quantiles']])[[3]]
+        qnames <- as.numeric(sub('%', '', temp))
         if(Xlen > 1 && Ylen > 1){
-            qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
-            choosepercentiles <- sapply(mainpercentiles,
+            ispread <- sapply(mainpercentiles,
                 function(xx){which.min(abs(qnames - xx))})
-            pvar <- pvar[, , choosepercentiles, drop = FALSE]
-            qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
+        } else {
+            ispread <- TRUE
         }
-        qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
+        qnames <- qnames[ispread]
         if(is.null(var.alpha.f)){var.alpha.f <- 0.25}
 
     } else if(spread == 'samples'){
-        maxvar <- max(apply(
-            X = x[['samples']], MARGIN = c(1, 2), FUN = quantile,
-            probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
-        ))
         temp <- dim(x[['samples']])[3]
-        pvar <- x[['samples']][, , round(seq(from = 1, to = temp,
-                length.out = min(var.nsamples, temp))), drop = FALSE]
+        ispread <- round(seq.int(from = 1, to = temp,
+                length.out = min(var.nsamples, temp)))
         if(is.null(var.alpha.f)){var.alpha.f <- 1/ceiling(sqrt(dim(pvar)[3]))}
         ## if(is.null(var.alpha.f)){var.alpha.f <- 1/10}
-    } else {
-        pvar <- NULL
-        maxvar <- -Inf
     }
-
-
-
 
     ## y-range
     if(any(!pdeltas)){
@@ -658,33 +625,51 @@ plot.probability <- function(
         ##     10^(floor(log10(pscale)) - 1) * pdivs
     }
 
+    ## Prepare axes labels and title
+    if(is.null(xlab)){xlab <- tempxlab}
+    if(missing(main)){
+        main <- paste0('P(',
+            paste0(names(x$Y), collapse = ', '),
+            if(!is.null(x$X)){
+                paste0(' | ', paste0(names(x$X), collapse = ', '))
+            }, ')')
+        if(spread == 'quantiles'){
+            main <- paste0(main, '\nquantiles: ',
+                paste0(round(qnames, 1), '%', collapse = ', '))
+        }
+    }
+    if(is.null(ylab)){
+        ylab <- paste0('probability', if(isdensity){' density'})
+    }
+
     ## Plot
     pplot(
         x = c(if(any(pdeltas)){ list(vals[pdeltas]) },
             if(any(!pdeltas)){ list(vals[!pdeltas]) }
-        )
+        ),
         y = c(
             if(spread %in% c('quantiles', 'samples')){rbind(
                 if(any(!pdeltas)){
-                    apply(X = x[[spread]][!pdeltas, , ],
+                    apply(X = x[[spread]][!pdeltas, , ispread, drop = FALSE],
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
-                }
+                },
                 if(any(pdeltas)){
-                    apply(X = pscale * x[[spread]][pdeltas, , ] + ploc,
+                    apply(X = pscale * x[[spread]][pdeltas, , ispread, drop = FALSE] + ploc,
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
                 }
             )},
             rbind(
                 if(any(!pdeltas)){
-                    apply(X = x[['values']][!pdeltas, ],
+                    apply(X = x[['values']][!pdeltas, , drop = FALSE],
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
-                }
+                },
                 if(any(pdeltas)){
-                    apply(X =  pscale * x[['values']][pdeltas, ] + ploc,
+                    apply(X =  pscale * x[['values']][pdeltas, , drop = FALSE] + ploc,
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
                 }
             )
         ),
+        type = c(
         xlab = xlab,
         ylab = ylab,
         ylim = ylim,
@@ -702,211 +687,6 @@ plot.probability <- function(
         graphics::axis(4, at = pticks, labels = (pticks - ploc) / pscale,
             tick = !grid, col = 'black', lwd = 1, lty = 1)
     }
-}
-
-
-
-
-        
-            )
-            
-            else 
-                            plotquantiles(x = unlist(vals)[!pdeltas],
-                y = pvar[!pdeltas, i, ],
-                col = col[(i - 1) %% length(col) + 1],
-                alpha.f = var.alpha.f,
-                lty =  lty[(i - 1) %% length(lty) + 1],
-                grid = FALSE,
-                axes = FALSE,
-                add = TRUE,
-                ...)
-
-
-
-
-    
-    ## Plot the revisability first
-    ## find maximum and minimum y-value first, if needed
-    if(is.na(ylim[2])){
-        ylim[2] <- max(maxvar, x[['values']])
-    }
-    if(is.na(ylim[1])){
-        ylim[1] <- min(maxvar, x[['values']])
-    }
-
-    if(!is.null(pvar)){
-        ## prepare window
-        flexiplot(x = vals,
-            y = matrix(pvar, nrow = dim(pvar)[1]),
-            type = 'n',
-            xlab = xlab,
-            ylab = ylab,
-            ylim = ylim,
-            main = main,
-            grid = FALSE,
-            axes = axes,
-            add = add,
-            ...)
-        add <- TRUE
-    }
-
-    if(any(pdeltas)){
-        if(spread == 'quantiles'){
-            mpvar <- max(pvar[pdeltas, , ], na.rm = TRUE)
-        } else if(spread == 'samples'){
-            mpvar <- max(apply(
-                X = x[['samples']][pdeltas, , , drop = FALSE],
-                MARGIN = c(1, 2), FUN = quantile,
-                probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
-            ))
-        } else {
-            mpvar <- max(x[['values']][pdeltas, ], na.rm = TRUE)
-        }
-        ## compute max probability of singular points,
-        ## and find conversion scale
-        pticks <- axTicks(4)
-        pdivs <- length(pticks) - 1
-        ploc <- min(pticks)
-        pscale <- signif(x = mpvar / pdivs, digits = 1)
-        pscale <- (max(pticks) - ploc) / (pscale * pdivs)
-        ## ceiling(pscale * 10^(-floor(log10(pscale)) + 1)) *
-        ##     10^(floor(log10(pscale)) - 1) * pdivs
-        ## add axis for singular probability values
-        graphics::axis(4, at = pticks, labels = (pticks - ploc) / pscale,
-            tick = !grid, col = 'black', lwd = 1, lty = 1)
-    }
-
-
-    if(spread == 'quantiles'){
-        for(i in seq_len(dim(pvar)[2])){
-            plotquantiles(x = unlist(vals)[!pdeltas],
-                y = pvar[!pdeltas, i, ],
-                col = col[(i - 1) %% length(col) + 1],
-                alpha.f = var.alpha.f,
-                lty =  lty[(i - 1) %% length(lty) + 1],
-                grid = FALSE,
-                axes = FALSE,
-                add = TRUE,
-                ...)
-
-            if(any(pdeltas)){
-                for(xd in which(pdeltas)){
-                    plotquantiles(x = unlist(vals)[xd],
-                        y = pscale * pvar[, i, ][xd, , drop = FALSE] + ploc,
-                        col = col[(i - 1) %% length(col) + 1],
-                        border = adjustcolor(col[(i - 1) %% length(col) + 1],
-                            alpha.f = var.alpha.f),
-                        alpha.f = var.alpha.f,
-                        lty =  lty[(i - 1) %% length(lty) + 1],
-                        lwd = 10,
-                        grid = FALSE,
-                        axes = FALSE,
-                        add = TRUE,
-                        ...)
-                }
-            }
-        }
-
-    } else if(spread == 'samples'){
-        ## the samples are plotted alternating between the different subgroups,
-        ## rather than one group at a time, in order to avoid that
-        ## the samples of the last subgroup cover the previous ones
-        nx <- dim(pvar)[2]
-        dim(pvar) <- c(dim(pvar)[1], prod(dim(pvar)[-1]))
-        flexiplot(x = vals[!pdeltas], y = pvar[!pdeltas, , drop = FALSE],
-            type = type,
-            col = col[(seq_len(nx) - 1) %% length(col) + 1],
-            alpha.f = var.alpha.f,
-            lty =  1, #lty[(seq_len(nx) - 1) %% length(lty) + 1],
-            lwd = 0.5, #lwd[(seq_len(nx) - 1) %% length(lwd) + 1] / 4,
-            grid = FALSE,
-            axes = FALSE,
-            add = TRUE,
-            ...)
-
-            if(any(pdeltas)){
-                for(xd in which(pdeltas)){
-        flexiplot(x = vals[xd], y = pscale * pvar[xd, , drop = FALSE] + ploc,
-            type = 'p',
-            col = col[(seq_len(nx) - 1) %% length(col) + 1],
-            alpha.f = var.alpha.f,
-            pch = '-',
-            lty =  1, #lty[(seq_len(nx) - 1) %% length(lty) + 1],
-            lwd = 0.5, #lwd[(seq_len(nx) - 1) %% length(lwd) + 1] / 4,
-            xjitter = FALSE,
-            yjitter = FALSE,
-            grid = FALSE,
-            axes = FALSE,
-            add = TRUE,
-            ...)
-                }
-            }
-    }
-
-    ## Plot the probabilities
-    flexiplot(x = vals[!pdeltas],
-        y = x[['values']][!pdeltas, , drop = FALSE],
-        type = type,
-        col = col,
-        alpha.f = alpha.f,
-        lty = lty,
-        lwd = lwd,
-        xlab = xlab,
-        ylab = ylab,
-        ylim = ylim,
-        main = main,
-        grid = grid,
-        axes = axes,
-        xjitter = FALSE,
-        yjitter = FALSE,
-        add = add,
-        ...)
-
-    if(any(pdeltas)){
-    flexiplot(x = vals[pdeltas],
-        y = pscale * x[['values']][pdeltas, , drop = FALSE] + ploc,
-        type = 'p',
-        col = col,
-        alpha.f = alpha.f,
-        lty = lty,
-        pch = pch,
-        lwd = lwd,
-        xlab = xlab,
-        ylab = ylab,
-        ylim = ylim,
-        main = main,
-        grid = grid,
-        axes = axes,
-        xjitter = FALSE,
-        yjitter = FALSE,
-        add = TRUE,
-        ...)
-
-    mtext(ylab2, side = 4, line = 2.25)
-
-}
-    ## Plot legends
-    if(!is.null(lgnd)){
-        ##  && is.character(legend) &&
-        ## (legend %in%
-        ##      c("bottomright", "bottom", "bottomleft", "left", "topleft",
-        ##          "top", "topright", "right", "center"))
-        tails <- list()
-        tails[names(lgnd)] <- '='
-        tails[names(x$tails)] <- x$tails
-        graphics::legend(x = legend,
-            legend = apply(lgnd, 1, function(vals){
-                nvals <- names(vals)
-                paste0(paste0(nvals, ' ', tails[nvals], ' ', vals),
-                    collapse = ', ')
-            }),
-            bty = 'n',
-            col = col,
-            lty = lty,
-            lwd = lwd,
-            ...)
-    }
-    invisible()
 }
 
 
