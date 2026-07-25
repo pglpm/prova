@@ -600,22 +600,87 @@ plot.probability <- function(
         on.exit(par(oldpar))
     }
 
+    if(any(xdeltas)){
+        if(spread == 'quantiles'){
+            mpvar <- max(pvar[xdeltas, , ], na.rm = TRUE)
+        } else if(spread == 'samples'){
+            mpvar <- max(apply(
+                X = x[['samples']][xdeltas, , , drop = FALSE],
+                MARGIN = c(1, 2), FUN = quantile,
+                probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
+            ))
+        } else {
+            mpvar <- max(x[['values']][xdeltas, ], na.rm = TRUE)
+        }
+        ## compute max probability of singular points,
+        ## and find conversion scale
+        yticks <- axTicks(4)
+        ydivs <- length(yticks) - 1
+        yloc <- min(yticks)
+        yscale <- signif(x = mpvar / ydivs, digits = 1)
+        yscale <- (max(yticks) - yloc) / (yscale * ydivs)
+        ## ceiling(yscale * 10^(-floor(log10(yscale)) + 1)) *
+        ##     10^(floor(log10(yscale)) - 1) * ydivs
+        ## add axis for singular probability values
+        graphics::axis(4, at = yticks, labels = (yticks - yloc) / yscale,
+            tick = !grid, col = 'black', lwd = 1, lty = 1)
+    }
+
     ## Plot
     pplot(
         x = c(
             if(spread %in% c('quantiles', 'samples')){
-                lapply(X = seq_len(dim(pvar)[2]),
-                    FUN = function(ii){ xxx[!xdeltas] })
+                unlist(lapply(
+                    X = seq_len(dim(pvar)[2]),
+                    FUN = function(ii){c(
+                        if(any(!xdeltas)){ list(xxx[!xdeltas]) },
+                        if(any(xdeltas)){ list(xxx[xdeltas]) }
+                    )}
+                ), recursive = FALSE, use.names = FALSE)
             },
-            list(xxx)
+            unlist(lapply(
+                X = seq_len(dim(x[['values']])[2]), FUN = function(ii){c(
+                    if(any(!xdeltas)){ list(xxx[!xdeltas]) },
+                    if(any(xdeltas)){ list(xxx[xdeltas]) }
+                    )}
+                ), recursive = FALSE, use.names = FALSE)
         ),
         y = c(
             if(spread %in% c('quantiles', 'samples')){
-                lapply(X = seq_len(dim(pvar)[2]),
-                    FUN = function(ii){ pvar[!xdeltas, i, ] })
+                unlist(lapply(
+                    X = seq_len(dim(pvar)[2]),
+                    FUN = function(ii){c(
+                        if(any(!xdeltas)){ list(pvar[!xdeltas, i, ]) },
+                        if(any(xdeltas)){ list(pvar[xdeltas, i ,]) }
+                    )}
+                ), recursive = FALSE, use.names = FALSE)
             },
-            list(x[['values']][!xdeltas,])
-                
+            unlist(lapply(
+                X = seq_len(dim(x[['values']])[2]), FUN = function(ii){c(
+                    if(any(!xdeltas)){ list(x[['values']][!xdeltas, ii]) },
+                    if(any(xdeltas)){ list(x[['values']][xdeltas, ii]) }
+                    )}
+                ), recursive = FALSE, use.names = FALSE)
+        ),
+        xlab = xlab,
+        ylab = ylab,
+        ylim = ylim,
+        main = main,
+        grid = grid,
+        lwd.grid = lwd.grid,
+        col.grid = col.grid,
+        axes = axes,
+        add = add,
+        ...
+    )
+}
+        
+
+
+
+
+
+        
             )
             
             else 
