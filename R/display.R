@@ -514,6 +514,7 @@ plot.probability <- function(
         vals <- x$Y
         lgnd <- x$X
         tempxlab <- 'Y'
+        nplots <- Xlen
         pdeltas <- (x$densities < max(x$densities))
         pvsyi <- 2
     } else {
@@ -521,7 +522,7 @@ plot.probability <- function(
         vals <- x$X
         lgnd <- x$Y
         tempxlab <- 'X'
-        if(!is.null(pvar)){ pvar <- aperm(pvar, c(2, 1, 3)) }
+        nplots <- Ylen
         ## It's unusual to plot probabilities of a continous variate against X
         pdeltas <- FALSE
         pvsyi <- 1
@@ -556,12 +557,6 @@ plot.probability <- function(
         on.exit(par(oldpar))
     }
 
-    ## Choose plot type: 'b' for discrete, 'l' for continuous
-    if(is.null(type)){
-        if(is.character(vals)){type <- 'b'} else {type <- 'l'}
-    }
-
-
     ## Rename the revisability object so as to avoid if-else below
     if(spread == 'quantiles'){
         mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
@@ -581,7 +576,7 @@ plot.probability <- function(
         temp <- dim(x[['samples']])[3]
         ispread <- round(seq.int(from = 1, to = temp,
                 length.out = min(var.nsamples, temp)))
-        if(is.null(var.alpha.f)){var.alpha.f <- 1/ceiling(sqrt(dim(pvar)[3]))}
+        if(is.null(var.alpha.f)){var.alpha.f <- 1/ceiling(sqrt(temp))}
         ## if(is.null(var.alpha.f)){var.alpha.f <- 1/10}
     }
 
@@ -619,7 +614,7 @@ plot.probability <- function(
         pticks <- axisTicks(usr = ylim, log = FALSE)
         pdivs <- length(pticks) - 1
         ploc <- min(pticks)
-        pscale <- signif(x = mpvar / pdivs, digits = 1)
+        pscale <- signif(x = max(pticks) / pdivs, digits = 1)
         pscale <- (max(pticks) - ploc) / (pscale * pdivs)
         ## ceiling(pscale * 10^(-floor(log10(pscale)) + 1)) *
         ##     10^(floor(log10(pscale)) - 1) * pdivs
@@ -642,13 +637,35 @@ plot.probability <- function(
         ylab <- paste0('probability', if(isdensity){' density'})
     }
 
+    maintype <- if(is.character(vals)){'b'} else {'l'}
+    if(is.null(type)){ type <- c(
+        if(spread == 'quantiles'){ rep.int(x = 'qx',
+            times = nplots * (any(!pdeltas) + any(pdeltas))) },
+        if(spread == 'samples'){ rep.int(x = maintype,
+            times = nplot * (any(!pdeltas) + any(pdeltas))) },
+        if(any(!pdeltas)){ rep.int(x = maintype,
+            times = nplots) },
+        if(any(pdeltas)){ rep.int(x = 'p',
+            times = nplots) }
+    )}
+
+    col <- rep(x = col, length.out = nplots)
+    alpha.f <- c(
+        if(spread == 'quantiles'){ rep.int(x = var.alpha.f,
+            times = nplots * (any(!pdeltas) + any(pdeltas))) },
+        if(spread == 'samples'){ rep.int(x = var.alpha.f,
+            times = nplots * (any(!pdeltas) + any(pdeltas))) },
+        rep.int(x = alpha.f, times = nplots  * (any(!pdeltas) + any(pdeltas)))
+    )
+
     ## Plot
     pplot(
-        x = c(if(any(pdeltas)){ list(vals[pdeltas]) },
-            if(any(!pdeltas)){ list(vals[!pdeltas]) }
+        x = c(
+            if(any(!pdeltas)){ list(vals[!pdeltas]) },
+            if(any(pdeltas)){ list(vals[pdeltas]) }
         ),
         y = c(
-            if(spread %in% c('quantiles', 'samples')){rbind(
+            if(spread != 'none'){rbind(
                 if(any(!pdeltas)){
                     apply(X = x[[spread]][!pdeltas, , ispread, drop = FALSE],
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
@@ -669,7 +686,9 @@ plot.probability <- function(
                 }
             )
         ),
-        type = c(
+        type = type,
+        col = col,
+        alpha.f = alpha.f,
         xlab = xlab,
         ylab = ylab,
         ylim = ylim,
