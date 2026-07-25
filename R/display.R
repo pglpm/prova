@@ -492,6 +492,26 @@ plot.probability <- function(
     Ylen <- nrow(x[['values']])
     Xlen <- ncol(x[['values']])
 
+    ## If 'PvsY' is NULL, then guess that the longest between Y and X
+    ## is meant to be abscissa
+    if(is.null(PvsY)){ PvsY <- (Ylen >= Xlen) }
+
+    if(isTRUE(PvsY)){
+        ## Y is x-axis, one plot for each X
+        xxx <- x$Y
+        leg <- x$X
+        tempxlab <- 'Y'
+        xdeltas <- (x$densities < max(x$densities))
+    } else {
+        ## X is x-axis, one plot for each Y
+        xxx <- x$X
+        leg <- x$Y
+        tempxlab <- 'X'
+        x[['values']] <- t(x[['values']])
+        if(!is.null(pvar)){ pvar <- aperm(pvar, c(2, 1, 3)) }
+        xdeltas <- FALSE
+    }
+
     ## Rename the revisability object so as to avoid if-else below
     if(spread == 'quantiles'){
         mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
@@ -603,7 +623,7 @@ plot.probability <- function(
         if(is.character(xxx)){type <- 'b'} else {type <- 'l'}
     }
 
-    ## Plot range
+    ## Plot y-range
     if(any(xdeltas)){
         if(spread == 'quantiles'){
             mpvar <- max(pvar[xdeltas, , ], na.rm = TRUE)
@@ -630,27 +650,26 @@ plot.probability <- function(
             tick = !grid, col = 'black', lwd = 1, lty = 1)
     }
 
+
+
+    ## find maximum and minimum y-value first, if needed
+    if(is.na(ylim[2])){
+        ylim[2] <- max(maxvar, x[['values']])
+    }
+    if(is.na(ylim[1])){
+        ylim[1] <- min(maxvar, x[['values']])
+    }
+
+
     ## Plot
     pplot(
-        x = c(
-            if(spread %in% c('quantiles', 'samples')){
-                unlist(lapply(
-                    X = seq_len(dim(pvar)[2]),
-                    FUN = function(ii){c(
-                        if(any(!xdeltas)){ list(xxx[!xdeltas]) },
-                        if(any(xdeltas)){ list(xxx[xdeltas]) }
-                    )}
-                ), recursive = FALSE, use.names = FALSE)
-            },
-            unlist(lapply(
-                X = seq_len(dim(x[['values']])[2]), FUN = function(ii){c(
-                    if(any(!xdeltas)){ list(xxx[!xdeltas]) },
-                    if(any(xdeltas)){ list(xxx[xdeltas]) }
-                    )}
-                ), recursive = FALSE, use.names = FALSE)
-        ),
+        x = c(if(any(xdeltas)){ list(xxx[xdeltas]) },
+            if(any(!xdeltas)){ list(xxx[!xdeltas]) }
+        )
         y = c(
             if(spread %in% c('quantiles', 'samples')){
+                apply(X = x[[spread]], MARGIN = if(PvsY){1}else{2},
+                    FUN = 
                 unlist(lapply(
                     X = seq_len(dim(pvar)[2]),
                     FUN = function(ii){c(
