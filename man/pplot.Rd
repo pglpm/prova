@@ -15,8 +15,8 @@ pplot(
   col = palette(),
   xlab = NA,
   ylab = NA,
-  xlim = NA,
-  ylim = NA,
+  xlim = NULL,
+  ylim = NULL,
   add = FALSE,
   xdomain = NULL,
   ydomain = NULL,
@@ -25,29 +25,37 @@ pplot(
   yjitter = NA,
   border = NA,
   grid = TRUE,
+  lwd.grid = NULL,
+  col.grid = "#BBBBBB80",
   axes = FALSE,
   cex.main = 1,
   ...
 )
 }
 \arguments{
-\item{x}{Numeric or character: vector of x-coordinates. If missing, a numeric vector \code{1:...} is created having as many values as the rows of \code{y}.}
+\item{x}{Numeric or character or list: vectors of x-coordinates. If an element of \code{x} is missing, a numeric vector \code{1:...} is created having as many values as the rows of the corresponding element in \code{y}.}
 
-\item{y}{Numeric or character: vector of y coordinates. If missing, a numeric vector \code{1:...} is created having as many values as the rows of \code{x}.}
+\item{y}{Numeric or character or list: vectors of y-coordinates. If an element of \code{y} is missing, a numeric vector \code{1:...} is created having as many values as the rows of the corresponding element in \code{x}.}
 
-\item{type, lty, lwd, pch, lend, col, xlab, ylab, add, axes, cex.main}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}} and \code{\link[graphics:plot.default]{graphics::plot.default()}}.}
+\item{type}{Character vector or list indicating the type of plot for each element of \code{x} and \code{y}. The types of plot are the same as in \code{\link[base:plot]{base::plot()}}, in particular \code{'p'} for points, \code{'l'} for lines, \code{'b'} for both points and lines, \code{'c'} for empty points joined by lines, \code{'o'} for overplotted points and lines, ``n'\verb{for empty plot. Additional special types}'hx'`, `'qx'`, `'hy'`, `'qy'` are available for plotting histograms and quantile bands; see "Details".}
 
-\item{xlim, ylim}{\code{NULL} (default) or a vector of two values. In the latter case, if any of the two values is not finite (including \code{NA} or \code{NULL}), then the \code{min} or \code{max} \code{x}- or \code{y}-coordinates of the plotted points are used.}
+\item{lty, lwd, pch, lend, col, xlab, ylab, add, axes, cex.main}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}} and \code{\link[graphics:plot.default]{graphics::plot.default()}}; defaults are different (see "Usage").}
 
-\item{xdomain, ydomain}{Character or numeric or \code{NULL} (default): vector of possible values of the variates represented in the \code{x}- and \code{y}-axes, in case the \code{x} or \code{y} argument is a character vector. The ordering of the values is respected. If \code{NULL}, then \code{unique(x)} or \code{unique(y)} is used.}
+\item{xlim, ylim}{\code{NULL} (default) or a vector of two values. If non-\code{NULL} and any of the two values is not finite (including \code{NA} or \code{NULL}), then the \code{min} or \code{max} \code{x}- or \code{y}-coordinates of the plotted points are used.}
 
-\item{alpha.f}{Numeric, default 1: opacity of the colours, \code{0} being completely invisible and \code{1} completely opaque.}
+\item{xdomain, ydomain}{Character or numeric or \code{NULL} (default): vector of possible values of the variates represented in the \code{x}- and \code{y}-axes, in case the \code{x} or \code{y} argument is a character vector. Note that the domains apply to all elements in \code{x} and \code{y}. The ordering of the values is respected. If \code{NULL}, then \code{unique(x)} or \code{unique(y)} is used.}
 
-\item{xjitter, yjitter}{Logical or \code{NULL} (default): add \code{\link[base:jitter]{base::jitter()}} to \code{x}- or \code{y}-values? Useful when plotting discrete variates. If \code{NULL}, jitter is added if the values are of character (or factor) class.}
+\item{alpha.f}{Numeric vector or list: opacity of the colours specified with the \code{col} argument, \code{0} being completely invisible and \code{1} completely opaque. Default to 1, except for shaded plots of \code{type} \code{'hx'}, \code{'qx'}, \code{'hy'}, \code{'qy'}, for which it defaults to 0.25.}
+
+\item{xjitter, yjitter}{Vector or list of logicals or \code{NA} (default): add \code{\link[base:jitter]{base::jitter()}} to \code{x}- or \code{y}-values? Useful when plotting discrete variates. If \code{NA}, jitter is added if both \code{x} and \code{y} are of character (or factor) class.}
 
 \item{border}{Border colour for bands in plots of \code{type = 'q'}. Can be specified in any of the usual ways, see for instance \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}. If \code{NA} (default), no border is drawn.}
 
-\item{grid}{Logical: whether to plot a light grid. Default \code{TRUE}.}
+\item{grid}{Logical, default \code{TRUE}: plot a light grid?}
+
+\item{lwd.grid}{Numeric, default 1: width of grid lines.}
+
+\item{col.grid}{Color of grid lines, default \code{'#BBBBBB80'}. Can be specified in any of the usual ways, see for instance \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
 
 \item{...}{Other parameters to be passed to \code{\link[graphics:matplot]{graphics::matplot()}}.}
 }
@@ -58,13 +66,20 @@ pplot(
 Plot function that modifies and expands the \strong{graphics} package's \code{\link[graphics:matplot]{graphics::matplot()}} function in several ways.
 }
 \details{
-This function is essentially a wrapper around \code{\link[graphics:matplot]{graphics::matplot()}}, augmenting the latter with some additional features useful for plotting data and results handled by \strong{Prova}. Some of the additional features provided by \code{flexiplot} are the following:
+This function is essentially a wrapper around \code{\link[graphics:matplot]{graphics::matplot()}}, augmenting the latter with some features useful for plotting data and probabilities handled by \strong{Prova}. Some of the additional features provided by \code{pplot} are the following:
 \itemize{
-\item Either or both \code{x} and \code{y} arguments can be of class \code{\link[base:character]{base::character}}. In this case, axes labels corresponding to the unique values are used (see arguments \code{xdomain} and \code{ydomain}). This makes it easier to plot nominal and ordinal variates.
-\item A jitter can also be added to the generated points, via the \code{xjitter} and \code{yjitter} switches. This makes it easier to generate scatter plots of nominal and ordinal variates.
-\item It is possible to specify only a lower or upper limit in the \code{xlim} and \code{ylim} arguments, letting the other limit to be found automatically. This can be useful in plotting probabilities, in cases where we want to specify the lower, \code{0} limit, but want the upper limit to simply be the the maximum probability.
+\item Either or both \code{x} and \code{y} arguments can be \link[base:list]{list}s. In this case, the first element of \code{x} is plotted against the first element of \code{y}, and so on, recycling as necessary. This allows for plots having different numbers of base points. The specifications in arguments like \code{type}, \code{lty}, \code{col}, \code{alpha.f}, \code{xjitter}, and similar apply to each list element in turn.
+\item Argument \code{x}, or each element in \code{x} if it is a list, can be of class \code{\link[base:character]{base::character}}. In this case, x-axis labels as given in \code{xdomain} are used, or the unique values in \code{x} if \code{xdomain} is \code{NULL}. Similarly for \code{y} and \code{ydomain}. This feature makes it easier to plot nominal and ordinal non-numeric variates.
+\item Additional plot \code{type}s are available: \code{'hx'}, \code{'qx'}, \code{'hy'}, \code{'qy'} (internally they use \code{\link[graphics:polygon]{graphics::polygon()}}):
+\itemize{
+\item \code{'hx'} plots shaded histograms, extending from \eqn{y = 0} to the values given in each column of \code{y}. The x-values are the corresponding columns of \code{x}, recycled if necessary.
+\item \code{'qx'} plots shaded bands. The first band extends from the line defined by the first column of \code{y}, to the line defined by the \emph{last} column; the second band is similarly delimited by the second and second-last columns of \code{y}, and so on (if \code{y} has an odd number of columns, the central one defines a line rather than a band). The x-values are the corresponding columns of \code{x}, recycled if necessary. This plot \code{type} is useful for plotting quantile bands calculated with \code{\link[=Pr]{Pr()}}.
+\item \code{'hy'}, \code{'qy'} are analogous \code{type}s, but with the roles of \code{x} and \code{y} switched.
+}
+\item A jitter can be added to each plot, via the \code{xjitter} and \code{yjitter} vectors of switches. When either of these arguments is \code{NA}, it is internally assessed whether jitter is necessary. This feature makes it easier to generate scatter plots of nominal, ordinal, or rounded-continuous variates.
+\item It is possible to specify only a lower or upper limit in the \code{xlim} and \code{ylim} arguments, letting the other limit to be found automatically. This feature is useful in plotting probabilities and histograms, when we want to specify the lower as \code{0} but want the upper limit to be the the maximum probability.
 \item Transparency of lines or markers can be specified through argument \code{alpha.f}.
-\item The plotting style is different, and default argument \code{type = 'l'} (line plot) rather than \code{type = 'p'} (point plot).
+\item Some defaults are different from \code{\link[base:plot]{base::plot()}} and \code{\link[graphics:matplot]{graphics::matplot()}}.
 }
 
 See the package's vignettes for more examples.
@@ -101,6 +116,6 @@ flexiplot(x = x, y = y, ylim = c(0, NA))
 
 \code{\link[=plot.probability]{plot.probability()}} to directly plot posterior probabilities and quantiles contained in a probability object.
 
-\code{\link[=plotquantiles]{plotquantiles()}} to plot quantile ranges.
+\code{\link[=hist.probability]{hist.probability()}} to plot the revisability of the probabilities as a distribution.
 }
 \concept{display}
