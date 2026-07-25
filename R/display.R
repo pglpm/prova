@@ -45,17 +45,22 @@
 #' @examples
 #' ## Scatter plot of the 'island' vs 'species' nominal variates of the penguins dataset;
 #' ## note how jitter is automatically added:
-#' flexiplot(x = penguins[, 'species'], y = penguins[, 'island'])
+#' pplot(x = penguins[, 'species'], y = penguins[, 'island'])
 #'
 #'
 #' ## Scatter plot of the 'bill_len' vs 'species' variates of the penguins dataset:
-#' flexiplot(x = penguins[, 'species'], y = penguins[, 'bill_len'])
+#' pplot(x = penguins[, 'species'], y = penguins[, 'bill_len'])
 #'
 #' ## We can add jitter to separate the nominal values:
-#' flexiplot(x = penguins[, 'species'], y = penguins[, 'bill_len'],
-#'   xjitter = TRUE)
+#' pplot(x = penguins[, 'species'], y = penguins[, 'bill_len'], xjitter = TRUE)
 #'
+#' ## Plot y-values having different numbers of x-values
+#' pplot(x = list(1:5, 6:7), y = list(5:1, 6:7))
 #'
+#' ## Specify only the minimum plotting range
+#' xgrid <- seq(from = -1, to = 1, length.out = 65)
+#' pplot(x = xgrid, y = 
+
 #' ## Scatter plot of the 'bill_len' vs 'body_mass' variates;
 #' ## in this case we must specify the scatter-plot option `type = 'p'`:
 #' flexiplot(x = penguins[, 'body_mass'], y = penguins[, 'bill_len'],
