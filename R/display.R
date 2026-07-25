@@ -43,35 +43,27 @@
 #' [hist.probability()] to plot the revisability of the probabilities as a distribution.
 #'
 #' @examples
-#' ## Scatter plot of the 'island' vs 'species' nominal variates of the penguins dataset;
+#' ## Scatter plot of 'island' vs 'species' variates of the 'penguins' dataset;
 #' ## note how jitter is automatically added:
 #' pplot(x = penguins[, 'species'], y = penguins[, 'island'])
 #'
 #'
-#' ## Scatter plot of the 'bill_len' vs 'species' variates of the penguins dataset:
+#' ## Scatter plot of 'bill_len' vs 'species':
 #' pplot(x = penguins[, 'species'], y = penguins[, 'bill_len'])
 #'
-#' ## We can add jitter to separate the nominal values:
-#' pplot(x = penguins[, 'species'], y = penguins[, 'bill_len'], xjitter = TRUE)
+#' ## Scatter plot of 'bill_len' vs 'body_mass';
+#' ## in this case the scatter-plot `type = 'p'` must be specified:
+#' pplot(x = penguins[, 'body_mass'], y = penguins[, 'bill_len'], type = 'p')
 #'
 #' ## Plot y-values having different numbers of x-values
 #' pplot(x = list(1:5, 6:7), y = list(5:1, 6:7))
 #'
 #' ## Specify only the minimum plotting range
-#' xgrid <- seq(from = -1, to = 1, length.out = 65)
-#' pplot(x = xgrid, y = 
-
-#' ## Scatter plot of the 'bill_len' vs 'body_mass' variates;
-#' ## in this case we must specify the scatter-plot option `type = 'p'`:
-#' flexiplot(x = penguins[, 'body_mass'], y = penguins[, 'bill_len'],
-#'   type = 'p')
+#' xgrid <- seq(from = -2, to = 2, length.out = 65)
+#' pplot(x = xgrid, y = dnorm(xgrid), ylim = c(0, NA))
 #'
-#' ## Calculate the values of a normal distribution in a restricted range
-#' x <- seq(from = -2, to = 2, length.out = 127)
-#' y <- dnorm(x, mean = 0, sd = 1)
-#'
-#' ## plot the distribution, with 0 as the lower plot range:
-#' flexiplot(x = x, y = y, ylim = c(0, NA))
+#' ## Draw a shaded histogram
+#' pplot(x = xgrid, y = dnorm(xgrid), type = 'hx')
 #'
 #' @import grDevices
 #' @import graphics
@@ -112,12 +104,24 @@ pplot <- function(
     if(!is.list(x)){x <- list(x)}
     if(!is.list(y)){y <- list(y)}
 
-    ## Transform all factors to character
-    for(ii in seq_along(x)){
-        if(is.factor(x[[ii]])){x[[ii]] <- as.character(x[[i]])}
+    ## Elements: unlist, unfactor, other fixes
+    for(aplot in seq_along(x)){
+        if(is.list(x[[aplot]])){x[[aplot]] <- unlist(x[[aplot]],
+            recursive = TRUE, use.names = TRUE)}
+        if(is.factor(x[[aplot]])){x[[aplot]] <- as.character(x[[aplot]])}
+        if(anyDuplicated(x[[aplot]]) && is.character(x[[aplot]])){
+            if(is.na(xjitter[[aplot]])){ xjitter[[aplot]] <- TRUE }
+            if(is.na(type[[aplot]])){ type[[aplot]] <- 'p' }
+        }
     }
-    for(ii in seq_along(y)){
-        if(is.factor(y[[ii]])){y[[ii]] <- as.character(y[[i]])}
+    for(aplot in seq_along(y)){
+        if(is.list(y[[aplot]])){y[[aplot]] <- unlist(y[[aplot]],
+            recursive = TRUE, use.names = TRUE)}
+        if(is.factor(y[[aplot]])){y[[aplot]] <- as.character(y[[aplot]])}
+        if(anyDuplicated(y[[aplot]]) && is.character(y[[aplot]])){
+            if(is.na(yjitter[[aplot]])){ yjitter[[aplot]] <- TRUE }
+            if(is.na(type[[aplot]])){ type[[aplot]] <- 'p' }
+        }
     }
 
     if(!is.null(xdomain)){ xdomain <- unlist(xdomain) }
@@ -132,14 +136,14 @@ pplot <- function(
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all x are numeric, find common min max
         xcha <- FALSE
-        temp <- unlist(x)
+        temp <- unlist(x, recursive = FALSE, use.names = FALSE)
         temp <- temp[is.finite(temp)]
         rgx <- range(temp)
     } else if(all(vapply(X = x[!xnull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all x are character, find domain
         xcha <- TRUE
-        temp <- unlist(x)
+        temp <- unlist(x, recursive = FALSE, use.names = FALSE)
         temp <- temp[!is.na(temp)]
         if(is.null(xdomain)){ xdomain <- unique(temp) }
         rgx <- c(1, length(xdomain))
@@ -151,14 +155,14 @@ pplot <- function(
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all y are numeric, find common min max
         ycha <- FALSE
-        temp <- unlist(y)
+        temp <- unlist(y, recursive = FALSE, use.names = FALSE)
         temp <- temp[is.finite(temp)]
         rgy <- range(temp)
     } else if(all(vapply(X = y[!ynull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all y are character, find domain
         ycha <- TRUE
-        temp <- unlist(y)
+        temp <- unlist(y, recursive = FALSE, use.names = FALSE)
         temp <- temp[!is.na(temp)]
         if(is.null(ydomain)){ ydomain <- unique(temp) }
         rgy <- c(1, length(ydomain))
@@ -185,13 +189,6 @@ pplot <- function(
         ynull <- ynull[!temp]
     }
 
-    ## Check if jitter is needed
-    if(xcha && ycha) {
-        xjitter[is.na(xjitter)] <- TRUE
-        yjitter[is.na(yjitter)] <- TRUE
-        type[is.na(type)] <- 'p'
-    }
-
     ## Other NAs
     type[is.na(type)] <- 'l'
     xjitter[is.na(xjitter)] <- FALSE
@@ -215,7 +212,7 @@ pplot <- function(
     ## Plot ranges
     if(!isTRUE(is.finite(xlim[1]))){
         if(any(xjitter)){ rgx[1] <- rgx[1] - 1/3 }
-        if(any(type == 'hx')){ rgx[1] <- min(rgx[1], 0) }
+        if(any(type == 'hy')){ rgx[1] <- min(rgx[1], 0) }
         xlim[1] <- min(rgx)
     }
     if(!isTRUE(is.finite(xlim[2]))){
@@ -225,7 +222,7 @@ pplot <- function(
 
     if(!isTRUE(is.finite(ylim[1]))){
         if(any(yjitter)){ rgy[1] <- rgy[1] - 1/3 }
-        if(any(type == 'hy')){ rgy[1] <- min(rgy[1], 0) }
+        if(any(type == 'hx')){ rgy[1] <- min(rgy[1], 0) }
         ylim[1] <- min(rgy)
     }
     if(!isTRUE(is.finite(ylim[2]))){
@@ -268,8 +265,14 @@ pplot <- function(
         col[[aplot]] <- adjustcolor(col[[aplot]], alpha.f = alpha.f[[aplot]])
 
         ## Check if jitter needed
-        if(isTRUE(xjitter[[aplot]])){ thisx <- jitter(thisx, factor = 5/3) }
-        if(isTRUE(yjitter[[aplot]])){ thisy <- jitter(thisy, factor = 5/3) }
+        if((is.na(xjitter[[aplot]]) && anyDuplicated(thisx)) ||
+               isTRUE(xjitter[[aplot]])){
+            thisx <- jitter(thisx, factor = 5/3)
+        }
+        if((is.na(yjitter[[aplot]]) && anyDuplicated(thisy)) ||
+               isTRUE(yjitter[[aplot]])){
+            thisy <- jitter(thisy, factor = 5/3)
+        }
 
         ## Plot
         ## checks for type = 'q'
@@ -362,6 +365,454 @@ pplot <- function(
         }
         graphics::grid(nx = NULL, ny = NULL, lty = 1,
             lwd = lwd.grid, col = col.grid)
+    }
+    invisible()
+}
+
+
+#' Plot an object of class "probability"
+#'
+#' @description
+#' This [base::plot()] method is a utility to plot probabilities obtained with [Pr()], as well as their revisabilities. The probabilities are plotted either against `Y`, with one curve for each value of `X`, or vice versa.
+#'
+#' @param x Object of class "probability", obtained with [Pr()].
+#' @param spread One of the values `'quantiles'`, `'samples'`, `'none'` (equivalent to `NA` or `FALSE`), or `NULL` (default), in which case the revisability available in `p` is used. This argument chooses how to represent the revisability of the probability; see [Pr()]. If the requested representation is not available in the object `x`, then a warning is issued and no revisability is plotted.
+#' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
+#'
+#' @param PvsY Logical or `NULL`: should probabilities be plotted against their `Y` argument? If `NULL`, the argument between `Y` and `X` having larger number of values is chosen. As many probability curves will be plotted as the number of values of the other argument.
+#' @param ylab2 A title for the y-axis on the right side of the plot, if displayed.
+#' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'top'`.
+#' @param alpha.f Numeric, default 0.25: opacity of the colours, `0` being completely invisible and `1` completely opaque.
+#' @param var.alpha.f Numeric: opacity of the quantile bands or of the samples, `0` being completely invisible and `1` completely opaque.
+#' @param var.nsamples Integer, default 360: number of samples of long-run frequencies to display
+#' @param lty,lwd,pch,col,type,xlab,ylab,main,ylim,grid,axes,add see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
+#' @param ... Other parameters to be passed to [flexiplot()].
+#'
+#' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
+#'
+#' @seealso
+#' [Pr()] to calculate posterior probabilities and quantiles.
+#'
+#' [hist.probability()] to plot the revisability of the probabilities as a distribution.
+#'
+#' [flexiplot()] (on which `plot.probability()` is based) for more general plots.
+#'
+#' [plotquantiles()] to plot quantile ranges.
+#'
+#' @examples
+#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## variates: 'species' and 'bill_len'
+#' learnt <- learntExample
+#'
+#' ## create a grid of values for variate "bill length",
+#' ## based on the information in the dataset and metadata:
+#' valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt)
+#'
+#' ## calculate the probabilities and quantiles
+#' probs <- Pr(Y = valuesBill, learnt = learnt, parallel = 1)
+#'
+#' ## plot the probabilities and quantiles
+#' plot(probs)
+#'
+#' @import grDevices
+#'
+#' @concept display
+#' @export
+plot.probability <- function(
+    x,
+    spread = NULL,
+    subset = NULL,
+    PvsY = NULL,
+    legend = 'top',
+    lty = c(1, 2, 4, 3, 6, 5),
+    pch = c(1, 2, 0, 5, 6, 3), #, 4,
+    lwd = 2,
+    col = palette(),
+    type = NULL,
+    ##     c( ## Tol's colour-blind-safe scheme, or palette()
+    ##     '#4477AA',
+    ##     '#EE6677',
+    ##     '#228833',
+    ##     '#CCBB44',
+    ##     '#66CCEE',
+    ##     '#AA3377' #, '#BBBBBB'
+    ## ),
+    alpha.f = 1,
+    var.alpha.f = NULL,
+    var.nsamples = 360,
+    xlab = NULL,
+    ylab = NULL,
+    ylab2 = NULL,
+    main = NULL,
+    ylim = c(0, NA),
+    grid = TRUE,
+    axes = FALSE,
+    add = FALSE,
+    ...
+){
+    ## Replace object x keeping only values given in 'subset'
+    if(!is.null(subset)){
+        x <- .prsubset(x, subset = subset)
+    }
+
+    ## If there's only one probability it doesn't make sense to plot anything:
+    ## print() the result instead
+    if(length(x[['values']]) == 1){
+        return(print(x))
+    }
+
+    ## Check how we should represent the revisability
+    ## The user can choose among three options
+    ## provided that option is available in argument 'x'
+    if(is.null(spread)) { # User is not choosing
+        ## We choose 'quantiles' or what's available
+        if(!is.null(x[['quantiles']])) {
+            spread <- 'quantiles'
+        } else if(!is.null(x[['samples']])){
+            spread <- 'samples'
+        } else {
+            spread <- 'none'
+        }
+    } else { # User is choosing
+        if(is.na(spread) || isFALSE(spread)){ spread <- 'none'}
+
+        ## handle shortenings
+        spread <- match.arg(spread, c('quantiles', 'samples', 'none'))
+
+        ## handle impossible requests
+        if(
+        (spread == 'quantiles' && is.null(x[['quantiles']])) ||
+            (spread == 'samples' && is.null(x[['samples']]))
+        ) {
+            message('Requested spread not available. Omitting its plot.')
+            spread <- 'none'
+        }
+    }
+
+    Ylen <- nrow(x[['values']])
+    Xlen <- ncol(x[['values']])
+
+    ## Rename the revisability object so as to avoid if-else below
+    if(spread == 'quantiles'){
+        mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
+        pvar <- x[['quantiles']]
+        maxvar <- max(pvar, na.rm = TRUE)
+        ## if we are plotting more than one curve, keep only the 89% band
+        if(Xlen > 1 && Ylen > 1){
+            qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
+            choosepercentiles <- sapply(mainpercentiles,
+                function(xx){which.min(abs(qnames - xx))})
+            pvar <- pvar[, , choosepercentiles, drop = FALSE]
+            qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
+        }
+        qnames <- as.numeric(sub('%', '', dimnames(pvar)[[3]]))
+        if(is.null(var.alpha.f)){var.alpha.f <- 0.25}
+
+    } else if(spread == 'samples'){
+        maxvar <- max(apply(
+            X = x[['samples']], MARGIN = c(1, 2), FUN = quantile,
+            probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
+        ))
+        temp <- dim(x[['samples']])[3]
+        pvar <- x[['samples']][, , round(seq(from = 1, to = temp,
+                length.out = min(var.nsamples, temp))), drop = FALSE]
+        if(is.null(var.alpha.f)){var.alpha.f <- 1/ceiling(sqrt(dim(pvar)[3]))}
+        ## if(is.null(var.alpha.f)){var.alpha.f <- 1/10}
+    } else {
+        pvar <- NULL
+        maxvar <- -Inf
+    }
+
+    ## Handle the case of missing Y and X items in 'x'
+    if(is.null(x$Y)){
+        x$Y <- data.frame(Y = paste0('Y', seq_len(Ylen)))
+        if(Xlen > 1){
+            x$X <- data.frame(X = paste0('X', seq_len(Xlen)))
+        }
+    }
+
+    ## Check for singular-probability values
+    isdensity <- any(x$densities > 0)
+
+    ## If 'PvsY' is NULL, then we guess that the longest between Y and X
+    ## is meant to be abscissa
+    if(is.null(PvsY)){ PvsY <- (Ylen >= Xlen) }
+
+    if(isTRUE(PvsY)){
+        xxx <- x$Y
+        leg <- x$X
+        tempxlab <- 'Y'
+        xdeltas <- (x$densities < max(x$densities))
+    } else {
+        xxx <- x$X
+        leg <- x$Y
+        tempxlab <- 'X'
+        x[['values']] <- t(x[['values']])
+        if(!is.null(pvar)){ pvar <- aperm(pvar, c(2, 1, 3)) }
+        xdeltas <- FALSE
+    }
+
+    ## If the abscissa has more than one variate,
+    ## then it becomes tricky to understand which of these we must plot against
+    ## Heuristic: if there's one variate with as many unique elements as xxx,
+    ## then use that one. Otherwise use a generic 'Y...'
+    if(ncol(xxx) == 1){
+        tempxlab <- colnames(xxx)
+        xxx <- unlist(xxx)
+    } else {
+        uniquevrts <- apply(xxx, 2, function(xx){length(unique(xx))})
+        toselect <- which(uniquevrts == nrow(xxx))[1]
+        if(is.na(toselect)){
+            xxx <- seq_len(nrow(xxx))
+        } else {
+            tempxlab <- colnames(xxx)[toselect]
+            xxx <- xxx[, toselect]
+        }
+    }
+
+    if(is.null(xlab)){xlab <- tempxlab}
+    if(missing(main)){
+        main <- paste0('P(',
+            paste0(names(x$Y), collapse = ', '),
+            if(!is.null(x$X)){
+                paste0(' | ', paste0(names(x$X), collapse = ', '))
+            }, ')')
+        if(spread == 'quantiles'){
+            main <- paste0(main, '\nquantiles: ',
+                paste0(round(qnames, 1), '%', collapse = ', '))
+        }
+    }
+    if(is.null(ylab)){
+        ylab <- paste0('probability', if(isdensity){' density'})
+    }
+
+    if(is.null(type)){
+        if(is.character(xxx)){type <- 'b'} else {type <- 'l'}
+    }
+
+    if(any(xdeltas)){
+        if(is.null(ylab2)){
+            ylab2 <- paste0('probability',
+                if(max(x$densities[-which.max(x$densities)]) == 0){' density'},
+                ' at singular points')
+        }
+        oldpar <- par(mar = par('mar') + c(0, 0, 0, 1.5))
+        on.exit(par(oldpar))
+    }
+
+    ## Plot
+    pplot(
+        x = c(
+            if(spread %in% c('quantiles', 'samples')){
+                lapply(X = seq_len(dim(pvar)[2]),
+                    FUN = function(ii){ xxx[!xdeltas] })
+            },
+            list(xxx)
+        ),
+        y = c(
+            if(spread %in% c('quantiles', 'samples')){
+                lapply(X = seq_len(dim(pvar)[2]),
+                    FUN = function(ii){ pvar[!xdeltas, i, ] })
+            },
+            list(x[['values']][!xdeltas,])
+                
+            )
+            
+            else 
+                            plotquantiles(x = unlist(xxx)[!xdeltas],
+                y = pvar[!xdeltas, i, ],
+                col = col[(i - 1) %% length(col) + 1],
+                alpha.f = var.alpha.f,
+                lty =  lty[(i - 1) %% length(lty) + 1],
+                grid = FALSE,
+                axes = FALSE,
+                add = TRUE,
+                ...)
+
+
+
+
+    
+    ## Plot the revisability first
+    ## find maximum and minimum y-value first, if needed
+    if(is.na(ylim[2])){
+        ylim[2] <- max(maxvar, x[['values']])
+    }
+    if(is.na(ylim[1])){
+        ylim[1] <- min(maxvar, x[['values']])
+    }
+
+    if(!is.null(pvar)){
+        ## prepare window
+        flexiplot(x = xxx,
+            y = matrix(pvar, nrow = dim(pvar)[1]),
+            type = 'n',
+            xlab = xlab,
+            ylab = ylab,
+            ylim = ylim,
+            main = main,
+            grid = FALSE,
+            axes = axes,
+            add = add,
+            ...)
+        add <- TRUE
+    }
+
+    if(any(xdeltas)){
+        if(spread == 'quantiles'){
+            mpvar <- max(pvar[xdeltas, , ], na.rm = TRUE)
+        } else if(spread == 'samples'){
+            mpvar <- max(apply(
+                X = x[['samples']][xdeltas, , , drop = FALSE],
+                MARGIN = c(1, 2), FUN = quantile,
+                probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
+            ))
+        } else {
+            mpvar <- max(x[['values']][xdeltas, ], na.rm = TRUE)
+        }
+        ## compute max probability of singular points,
+        ## and find conversion scale
+        yticks <- axTicks(4)
+        ydivs <- length(yticks) - 1
+        yloc <- min(yticks)
+        yscale <- signif(x = mpvar / ydivs, digits = 1)
+        yscale <- (max(yticks) - yloc) / (yscale * ydivs)
+        ## ceiling(yscale * 10^(-floor(log10(yscale)) + 1)) *
+        ##     10^(floor(log10(yscale)) - 1) * ydivs
+        ## add axis for singular probability values
+        graphics::axis(4, at = yticks, labels = (yticks - yloc) / yscale,
+            tick = !grid, col = 'black', lwd = 1, lty = 1)
+    }
+
+
+    if(spread == 'quantiles'){
+        for(i in seq_len(dim(pvar)[2])){
+            plotquantiles(x = unlist(xxx)[!xdeltas],
+                y = pvar[!xdeltas, i, ],
+                col = col[(i - 1) %% length(col) + 1],
+                alpha.f = var.alpha.f,
+                lty =  lty[(i - 1) %% length(lty) + 1],
+                grid = FALSE,
+                axes = FALSE,
+                add = TRUE,
+                ...)
+
+            if(any(xdeltas)){
+                for(xd in which(xdeltas)){
+                    plotquantiles(x = unlist(xxx)[xd],
+                        y = yscale * pvar[, i, ][xd, , drop = FALSE] + yloc,
+                        col = col[(i - 1) %% length(col) + 1],
+                        border = adjustcolor(col[(i - 1) %% length(col) + 1],
+                            alpha.f = var.alpha.f),
+                        alpha.f = var.alpha.f,
+                        lty =  lty[(i - 1) %% length(lty) + 1],
+                        lwd = 10,
+                        grid = FALSE,
+                        axes = FALSE,
+                        add = TRUE,
+                        ...)
+                }
+            }
+        }
+
+    } else if(spread == 'samples'){
+        ## the samples are plotted alternating between the different subgroups,
+        ## rather than one group at a time, in order to avoid that
+        ## the samples of the last subgroup cover the previous ones
+        nx <- dim(pvar)[2]
+        dim(pvar) <- c(dim(pvar)[1], prod(dim(pvar)[-1]))
+        flexiplot(x = xxx[!xdeltas], y = pvar[!xdeltas, , drop = FALSE],
+            type = type,
+            col = col[(seq_len(nx) - 1) %% length(col) + 1],
+            alpha.f = var.alpha.f,
+            lty =  1, #lty[(seq_len(nx) - 1) %% length(lty) + 1],
+            lwd = 0.5, #lwd[(seq_len(nx) - 1) %% length(lwd) + 1] / 4,
+            grid = FALSE,
+            axes = FALSE,
+            add = TRUE,
+            ...)
+
+            if(any(xdeltas)){
+                for(xd in which(xdeltas)){
+        flexiplot(x = xxx[xd], y = yscale * pvar[xd, , drop = FALSE] + yloc,
+            type = 'p',
+            col = col[(seq_len(nx) - 1) %% length(col) + 1],
+            alpha.f = var.alpha.f,
+            pch = '-',
+            lty =  1, #lty[(seq_len(nx) - 1) %% length(lty) + 1],
+            lwd = 0.5, #lwd[(seq_len(nx) - 1) %% length(lwd) + 1] / 4,
+            xjitter = FALSE,
+            yjitter = FALSE,
+            grid = FALSE,
+            axes = FALSE,
+            add = TRUE,
+            ...)
+                }
+            }
+    }
+
+    ## Plot the probabilities
+    flexiplot(x = xxx[!xdeltas],
+        y = x[['values']][!xdeltas, , drop = FALSE],
+        type = type,
+        col = col,
+        alpha.f = alpha.f,
+        lty = lty,
+        lwd = lwd,
+        xlab = xlab,
+        ylab = ylab,
+        ylim = ylim,
+        main = main,
+        grid = grid,
+        axes = axes,
+        xjitter = FALSE,
+        yjitter = FALSE,
+        add = add,
+        ...)
+
+    if(any(xdeltas)){
+    flexiplot(x = xxx[xdeltas],
+        y = yscale * x[['values']][xdeltas, , drop = FALSE] + yloc,
+        type = 'p',
+        col = col,
+        alpha.f = alpha.f,
+        lty = lty,
+        pch = pch,
+        lwd = lwd,
+        xlab = xlab,
+        ylab = ylab,
+        ylim = ylim,
+        main = main,
+        grid = grid,
+        axes = axes,
+        xjitter = FALSE,
+        yjitter = FALSE,
+        add = TRUE,
+        ...)
+
+    mtext(ylab2, side = 4, line = 2.25)
+
+}
+    ## Plot legends
+    if(!is.null(leg)){
+        ##  && is.character(legend) &&
+        ## (legend %in%
+        ##      c("bottomright", "bottom", "bottomleft", "left", "topleft",
+        ##          "top", "topright", "right", "center"))
+        tails <- list()
+        tails[names(leg)] <- '='
+        tails[names(x$tails)] <- x$tails
+        graphics::legend(x = legend,
+            legend = apply(leg, 1, function(xxx){
+                nxxx <- names(xxx)
+                paste0(paste0(nxxx, ' ', tails[nxxx], ' ', xxx),
+                    collapse = ', ')
+            }),
+            bty = 'n',
+            col = col,
+            lty = lty,
+            lwd = lwd,
+            ...)
     }
     invisible()
 }
@@ -770,7 +1221,7 @@ plotquantiles <- function(
 #'
 #' @concept display
 #' @export
-plot.probability <- function(
+old.plot.probability <- function(
     x,
     spread = NULL,
     subset = NULL,

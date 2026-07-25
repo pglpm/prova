@@ -85,30 +85,27 @@ This function is essentially a wrapper around \code{\link[graphics:matplot]{grap
 See the package's vignettes for more examples.
 }
 \examples{
-## Scatter plot of the 'island' vs 'species' nominal variates of the penguins dataset;
+## Scatter plot of 'island' vs 'species' variates of the 'penguins' dataset;
 ## note how jitter is automatically added:
-flexiplot(x = penguins[, 'species'], y = penguins[, 'island'])
+pplot(x = penguins[, 'species'], y = penguins[, 'island'])
 
 
-## Scatter plot of the 'bill_len' vs 'species' variates of the penguins dataset:
-flexiplot(x = penguins[, 'species'], y = penguins[, 'bill_len'])
+## Scatter plot of 'bill_len' vs 'species':
+pplot(x = penguins[, 'species'], y = penguins[, 'bill_len'])
 
-## We can add jitter to separate the nominal values:
-flexiplot(x = penguins[, 'species'], y = penguins[, 'bill_len'],
-  xjitter = TRUE)
+## Scatter plot of 'bill_len' vs 'body_mass';
+## in this case the scatter-plot `type = 'p'` must be specified:
+pplot(x = penguins[, 'body_mass'], y = penguins[, 'bill_len'], type = 'p')
 
+## Plot y-values having different numbers of x-values
+pplot(x = list(1:5, 6:7), y = list(5:1, 6:7))
 
-## Scatter plot of the 'bill_len' vs 'body_mass' variates;
-## in this case we must specify the scatter-plot option `type = 'p'`:
-flexiplot(x = penguins[, 'body_mass'], y = penguins[, 'bill_len'],
-  type = 'p')
+## Specify only the minimum plotting range
+xgrid <- seq(from = -2, to = 2, length.out = 65)
+pplot(x = xgrid, y = dnorm(xgrid), ylim = c(0, NA))
 
-## Calculate the values of a normal distribution in a restricted range
-x <- seq(from = -2, to = 2, length.out = 127)
-y <- dnorm(x, mean = 0, sd = 1)
-
-## plot the distribution, with 0 as the lower plot range:
-flexiplot(x = x, y = y, ylim = c(0, NA))
+## Draw a shaded histogram
+pplot(x = xgrid, y = dnorm(xgrid), type = 'hx')
 
 }
 \seealso{
