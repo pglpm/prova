@@ -85,7 +85,7 @@ pplot <- function(
     alpha.f = NA,
     xjitter = NA,
     yjitter = NA,
-    border = NA,
+    border = FALSE,
     ## c( ## Tol's colour-blind-safe scheme
     ##     '#4477AA',
     ##     '#EE6677',
@@ -286,20 +286,17 @@ pplot <- function(
 
         } else if(type[[aplot]] %in% c('qx', 'hx')){
             if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
-            if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
+            if(is.null(dim(thisy))){ dim(thisy) <- c(1, length(thisy)) }
             if(type[[aplot]] == 'hx'){
                 temp <- dim(thisy) * c(1, 2)
                 thisy <- c(thisy, rep.int(x = 0, times = length(thisy)))
                 dim(thisy) <- temp
             }
-            print(thisx)
-            print(thisy)
             nquant <- ncol(thisy)
             temp <- ncol(thisx)
-            if(nrow(thisx) == 1){print('yes') ; print(col[[aplot]])
+            if(nrow(thisx) == 1){
                 border <- TRUE
             }
-            print(border)
             for(ii in seq_len(floor(nquant / 2))){
                 graphics::polygon(
                     x = c(thisx[,(ii - 1) %% temp + 1],
@@ -309,7 +306,7 @@ pplot <- function(
                     border = border, xpd = TRUE)
             }
         } else if(type[[aplot]] %in% c('qy', 'hy')){
-            if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
+            if(is.null(dim(thisx))){ dim(thisx) <- c(1, length(thisx)) }
             if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
             if(type[[aplot]] == 'hy'){
                 temp <- dim(thisx) * c(1, 2)
@@ -670,7 +667,7 @@ plot.probability <- function(
     if(is.null(type.spread)){type.spread <- if(is.character(vals)){'b'} else {'l'}}
     type <- largs('qx', 'qx', type.spread, 'p', type, 'p')
     lty <- largs(lty.spread, lty.spread, lty.spread, lty.spread, lty, lty)
-    if(is.null(lwd.spread)){ lwd.spread <- if(qspread){10}else{1} }
+    if(is.null(lwd.spread)){ lwd.spread <- if(qspread){20}else{1} }
     lwd <- largs(1, lwd.spread, lwd.spread, NA, lwd, NA)
     pch <- largs(NA, pch, pch, pch, pch, pch)
     col <- rep(x = col, length.out = nplots)
@@ -679,11 +676,11 @@ plot.probability <- function(
 
     ## Plot
     pplot(
-        x = testx <<- c(
+        x = c(
             if(npdeltas){ list(vals[!pdeltas]) },
             if(ypdeltas){ list(vals[pdeltas]) }
         ),
-        y = testy <<- c(
+        y = c(
             if(spread != 'none'){rbind(
                 if(npdeltas){
                     apply(X = x[[spread]][!pdeltas, , ispread, drop = FALSE],
