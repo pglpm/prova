@@ -74,7 +74,7 @@
             paper = 'special',
             height = floor(841 / sqrt(2)^(5)) / 25.4,
             width = floor(841 / sqrt(2)^(5 - 1)) / 25.4)
-        flexiplot(
+        pplot(
             x = xgrid, y = list(
                 util_Q(xgrid), qnorm(xgrid, sd = thismad / qnorm(3 / 4)), qcauchy(xgrid, scale = thismad) # ,qlogis(xgrid,scale=1/qlogis(3/4))
             ),

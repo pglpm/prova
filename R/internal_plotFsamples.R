@@ -185,7 +185,7 @@
 
                 ## If required, plot frequency samples
                 if (plotvariability == 'samples') {
-                    flexiplot(
+                    pplot(
                         x = Xgrid, y = probabilities$samples,
                         xlim = range(Xgrid), ylim = c(0, ymax),
                         type = 'l', lty = 1, lwd = 2,
@@ -200,10 +200,11 @@
                     ##     quantile(x = x, probs = quants, type = 6, na.rm = TRUE)
                     ## }))
 
-                    plotquantiles(
+                    pplot(
                         x = Xgrid,
                         y = probabilities$quantiles,
                         ## y = marguncertainty[, , drop = FALSE],
+                        type = 'qx',
                         col = cyan, alpha.f = 0.25,
                         xlim = range(Xgrid), ylim = c(0, ymax),
                         xlab = name,
@@ -216,7 +217,7 @@
 
                 ## If required, plot probability
                 if (plotprobability) {
-                    flexiplot(
+                    pplot(
                         x = Xgrid,
                         y = probabilities$values,
                         ## y = rowMeans(probabilities[, , drop = FALSE], na.rm = TRUE),
@@ -232,7 +233,7 @@
 
                 ## If required and possible, plot data histogram
                 if (datahistogram && theresdata) {
-                    flexiplot(
+                    pplot(
                         x = histo$mids, y = histo$density,
                         xlim = range(Xgrid), ylim = c(0, ymax),
                         type = 'l', cex = 0.5, lty = 1, lwd = 2,
@@ -320,7 +321,7 @@
                 ## If required, plot frequency samples
                 if (plotvariability == 'samples') {
                     if (any(xin)) {
-                        flexiplot(
+                        pplot(
                             x = Xgrid[xin],
                             y = probabilities$samples[xin, , drop = FALSE],
                             xlim = range(Xgrid), ylim = c(0, ymax),
@@ -335,7 +336,7 @@
 
                     ## Boundary points
                     if (any(!xin)) {
-                        flexiplot(
+                        pplot(
                             x = Xgrid[!xin],
                             y = probabilities$values[!xin] * ymax,
                             type = 'p', pch = 2, cex = 2,
@@ -348,9 +349,10 @@
 
                 } else if (plotvariability == 'quantiles') {
                     if (any(xin)) {
-                        plotquantiles(
+                        pplot(
                             x = Xgrid[xin],
                             y = probabilities$quantiles[xin, , drop = FALSE],
+                            type = 'qx',
                             col = cyan, alpha.f = 0.25,
                             xlim = range(Xgrid), ylim = c(0, ymax),
                             xlab = name,
@@ -363,7 +365,7 @@
 
                     ## Boundary points
                     if (any(!xin)) {
-                        flexiplot(
+                        pplot(
                             x = matrix(Xgrid[!xin],
                                 nrow = 2, ncol = sum(!xin), byrow = TRUE),
                             y = t(probabilities$quantiles[!xin, , drop = FALSE]) *
@@ -380,7 +382,7 @@
                 ## If required, plot probability
                 if (plotprobability) {
                     if (any(xin)) {
-                        flexiplot(
+                        pplot(
                             x = Xgrid[xin],
                             y = probabilities$values[xin],
                             xlim = range(Xgrid), ylim = c(0, ymax),
@@ -396,7 +398,7 @@
 
                     ## Boundary points
                     if (any(!xin)) {
-                        flexiplot(
+                        pplot(
                             x = Xgrid[!xin],
                             y = probabilities$values[!xin] * ymax,
                             type = 'p', pch = 2, cex = 2,
@@ -411,7 +413,7 @@
                 ## If required and possible, plot data histogram
                 if (datahistogram && theresdata) {
                     if(hleft + hright < 1) {
-                        flexiplot(
+                        pplot(
                             x = histo$mids, y = histo$density,
                             xlim = range(Xgrid), ylim = c(0, ymax),
                             type = 'l', cex = 0.5, lty = 1, lwd = 2,
@@ -427,7 +429,7 @@
 
                     ## Boundary points
                     if (hleft + hright > 0) {
-                        flexiplot(
+                        pplot(
                             x = c(if(hleft > 0){domainminplushs},
                                 if(hright > 0){domainmaxminushs}),
                             y = c(if(hleft > 0){hleft},
@@ -527,7 +529,7 @@
 
                 ## If required, plot frequency samples
                 if (plotvariability == 'samples') {
-                    flexiplot(
+                    pplot(
                         x = Xgrid,
                         y = probabilities$samples,
                         ## xlim = range(Xgrid),
@@ -545,9 +547,10 @@
                     ## marguncertainty <- t(apply(probabilities, 1, function(x) {
                     ##     quantile(x, quants, type = 6, na.rm = TRUE)
                     ## }))
-                    plotquantiles(
+                    pplot(
                         x = Xgrid,
                         y = probabilities$quantiles,
+                        type = 'qx',
                         col = cyan, alpha.f = 0.25,
                         ## xlim = range(Xgrid),
                         ylim = c(0, ymax),
@@ -562,7 +565,7 @@
 
                 ## If required, plot probability
                 if (plotprobability) {
-                    flexiplot(
+                    pplot(
                         x = Xgrid,
                         y = probabilities$values,
                         xlim = range(Xgrid), ylim = c(0, ymax),
@@ -579,7 +582,7 @@
 
                 ## If required and possible, plot data histogram
                 if (datahistogram && theresdata) {
-                    flexiplot(
+                    pplot(
                         x = Xgrid, y = histo,
                         xlim = range(Xgrid), ylim = c(0, ymax),
                         ## xticks = Xticks, xlabels = rownames(Xgrid),

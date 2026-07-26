@@ -52,7 +52,7 @@
 
 \item{ylab2}{A title for the y-axis on the right side of the plot, if displayed.}
 
-\item{...}{Other parameters to be passed to \code{\link[=flexiplot]{flexiplot()}}.}
+\item{...}{Other parameters to be passed to \code{\link[=pplot]{pplot()}}.}
 
 \item{var.alpha.f}{Numeric: opacity of the quantile bands or of the samples, \code{0} being completely invisible and \code{1} completely opaque.}
 
@@ -85,8 +85,6 @@ plot(probs)
 
 \code{\link[=hist.probability]{hist.probability()}} to plot the revisability of the probabilities as a distribution.
 
-\code{\link[=flexiplot]{flexiplot()}} (on which \code{plot.probability()} is based) for more general plots.
-
-\code{\link[=plotquantiles]{plotquantiles()}} to plot quantile ranges.
+\code{\link[=pplot]{pplot()}} (on which \code{plot.probability()} is based) for more general plots.
 }
 \concept{display}

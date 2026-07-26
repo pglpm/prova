@@ -1413,7 +1413,7 @@ learn <- function(
     for (avar in 1:ncol(oktraces)) {
         ## Do not join separate chains in the plot
         division <- (if(N > nchains) nchains else 1)
-        flexiplot(
+        pplot(
             y = 10*log10(oktraces[is.finite(oktraces[, avar]), avar]),
             ## x = matrix(seq_len(nsamples), ncol = division),
             ## y = matrix(10*log10(oktraces[, avar]), ncol = division),
@@ -3369,7 +3369,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 ## on.exit(par(oldpar), add = TRUE)
 
                 for (avar in 1:ncol(traces)) {
-                    flexiplot(
+                    pplot(
                         y = 10*log10(traces[is.finite(traces[, avar]), avar]),
                         type = 'l', lty = 1, col = 1,
                         main = paste0('#', colnames(traces)[avar], ': ',
@@ -3404,9 +3404,9 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                     cat('\nSTATS USED COMPONENTS:\n')
                     print(summary(allmcsamplesKA$K))
                     ##
-                    flexiplot(y = allmcsamplesKA$K, ylab = 'used components',
+                    pplot(y = allmcsamplesKA$K, ylab = 'used components',
                         xlab = 'iteration', ylim = c(0, ncomponents))
-                    flexiplot(x = 0:ncomponents,
+                    pplot(x = 0:ncomponents,
                         y = tabulate(allmcsamplesKA$K + 1, nbins = ncomponents + 1),
                         type = 'l', xlab = 'used components', ylab = NA,
                         ylim = c(0, NA))
@@ -3414,10 +3414,10 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 if (showAlphatraces) {
                     cat('\nSTATS alpha:\n')
                     print(summary(allmcsamplesKA$Alpha, na.rm = TRUE))
-                    flexiplot(y = allmcsamplesKA$Alpha,
+                    pplot(y = allmcsamplesKA$Alpha,
                         ylab = bquote(alpha), xlab = 'iteration',
                         ylim = c(1, nalpha))
-                    flexiplot(x = seq(minalpha, maxalpha, by = byalpha),
+                    pplot(x = seq(minalpha, maxalpha, by = byalpha),
                         y = tabulate(allmcsamplesKA$Alpha, nbins = nalpha),
                         type = 'l', xlab = bquote(alpha), ylab = '',
                         ylim = c(0, NA))

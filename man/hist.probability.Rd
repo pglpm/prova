@@ -41,7 +41,7 @@
 
 \item{showmean}{Logical, default \code{TRUE}: show the means of the probability distributions? The means correspond to the probabilities about the next observed unit.}
 
-\item{...}{Other parameters to be passed to \code{\link[=flexiplot]{flexiplot()}}.}
+\item{...}{Other parameters to be passed to \code{\link[=pplot]{pplot()}}.}
 }
 \value{
 \link[base:invisible]{Invisibly}, an object of class \link[graphics:hist]{"histogram"}.
@@ -76,8 +76,6 @@ hist(probs, legend = 'topright')
 
 \code{\link[=plot.probability]{plot.probability()}} to plot the posterior probabilities.
 
-\code{\link[=flexiplot]{flexiplot()}} (on which \code{hist.probability()} is based) for more general plots.
-
-\code{\link[=plotquantiles]{plotquantiles()}} to plot quantile ranges.
+\code{\link[=pplot]{pplot()}} (on which \code{hist.probability()} is based) for more general plots.
 }
 \concept{display}

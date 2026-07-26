@@ -35,7 +35,7 @@
 
 \item{showvalue}{Logical, default \code{TRUE}: show the mutual information obtained from the current data sample?}
 
-\item{...}{Other parameters to be passed to \code{\link[=flexiplot]{flexiplot()}}.}
+\item{...}{Other parameters to be passed to \code{\link[=pplot]{pplot()}}.}
 }
 \value{
 \link[base:invisible]{Invisibly}, an object of class \link[graphics:hist]{"histogram"}.
@@ -64,6 +64,6 @@ hist(MI)
 
 \code{\link[=print.mi]{print.mi()}} ] to plot mutual information and quantiles calculated by \code{mutualinfo()}
 
-\code{\link[=flexiplot]{flexiplot()}} (on which \code{hist.mi()} is based) for more general plots.
+\code{\link[=pplot]{pplot()}} (on which \code{hist.mi()} is based) for more general plots.
 }
 \concept{display}

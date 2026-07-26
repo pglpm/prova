@@ -619,11 +619,6 @@ hist(MIislandspecies)
 <p class="caption">**Revisability of mutual information with a much larger data sample**</p>
 </div>
 
-```
-# Error in `plotquantiles()`:
-# ! object 'xaxp' not found
-```
-
 \
 
 # Appendices {#appendix}
