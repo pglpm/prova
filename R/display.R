@@ -85,7 +85,6 @@ pplot <- function(
     alpha.f = NA,
     xjitter = NA,
     yjitter = NA,
-    border = FALSE,
     ## c( ## Tol's colour-blind-safe scheme
     ##     '#4477AA',
     ##     '#EE6677',
@@ -99,6 +98,7 @@ pplot <- function(
     col.grid = '#BBBBBB80',
     axes = FALSE,
     cex.main = 1,
+    lwd.q = 15,
     ...
 ){
     if(!is.list(x)){x <- list(x)}
@@ -230,15 +230,20 @@ pplot <- function(
         ylim[2] <- max(rgy)
     }
 
+    ## Parameters for q-type plots
+    border <- NA
+
     ## First plot window
     graphics::matplot(x = xlim, y = ylim, type = 'n',
         xlab = xlab, ylab = ylab, xlim = NULL, ylim = NULL,
         cex.main = cex.main, add = add, axes = FALSE, ...)
 ### List plots
     for(aplot in seq_len(nplots)){
-        ## drop unneeded dimensions
-        thisx <- drop(x[[aplot]])
-        thisy <- drop(y[[aplot]])
+        ## ## drop unneeded dimensions?
+        ## thisx <- drop(x[[aplot]])
+        ## thisy <- drop(y[[aplot]])
+        thisx <- x[[aplot]]
+        thisy <- y[[aplot]]
 
         ## Replace NULL values
         if(is.null(thisx)){
@@ -295,15 +300,16 @@ pplot <- function(
             nquant <- ncol(thisy)
             temp <- ncol(thisx)
             if(nrow(thisx) == 1){
-                border <- TRUE
+                border <- col[[aplot]]
             }
             for(ii in seq_len(floor(nquant / 2))){
                 graphics::polygon(
                     x = c(thisx[,(ii - 1) %% temp + 1],
                         rev(thisx[,(ii - 1) %% temp + 1])),
                     y = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
-                    col = col[[aplot]], lwd = lwd[[aplot]],
-                    border = border, xpd = TRUE)
+                    density = NULL, xpd = TRUE, lty = 1,
+                    border = border, col = col[[aplot]],
+                    lwd = lwd.q * lwd[[aplot]])
             }
         } else if(type[[aplot]] %in% c('qy', 'hy')){
             if(is.null(dim(thisx))){ dim(thisx) <- c(1, length(thisx)) }
@@ -316,13 +322,17 @@ pplot <- function(
 
             nquant <- ncol(thisx)
             temp <- ncol(thisy)
+            if(nrow(thisy) == 1){
+                border <- col[[aplot]]
+            }
             for(ii in seq_len(floor(nquant / 2))){
                 graphics::polygon(
                     x = c(thisx[, ii], rev(thisx[, nquant + 1 - ii])),
                     y = c(thisy[,(ii - 1) %% temp + 1],
                         rev(thisy[,(ii - 1) %% temp + 1])),
-                    col = col[[aplot]], lwd = lwd[[aplot]],
-                    border = border, xpd = TRUE)
+                    density = NULL, xpd = TRUE, lty = 1,
+                    border = border, col = col[[aplot]],
+                    lwd = lwd.q * lwd[[aplot]])
             }
         }
     }
@@ -648,39 +658,75 @@ plot.probability <- function(
     }
 
     ## Function to create repetitions of args
-    largs <- function(q, qd, s, sd, v, vd){c(
-        rep.int(x = rep(q, length.out = nplots),
-            times = nplots * qspread * npdeltas),
-        rep.int(x = rep(qd, length.out = nplots),
-            times = nplots * qspread * ypdeltas),
-        rep.int(x = rep(s, length.out = nplots),
-            times = nplots * sspread * npdeltas),
-        rep.int(x = rep(sd, length.out = nplots),
-            times = nplots * sspread * ypdeltas),
-        rep.int(x = rep(v, length.out = nplots),
-            times = nplots * npdeltas),
-        rep.int(x = rep(vd, length.out = nplots),
-            times = nplots * ypdeltas)
-    )}
+    largs <- function(qn, qy, sn, sy, vn, vy){c(
+        rep.int(x = rep(qn, length.out = nplots),
+            times = rep.int(x = qspread * npdeltas, times = nplots)),
+        rep.int(x = rep(qy, length.out = nplots),
+            times = rep.int(x = qspread * ypdeltas, times = nplots)),
+        rep.int(x = rep(sn, length.out = nplots),
+            times = rep.int(x = sspread * npdeltas, times = nplots)),
+        rep.int(x = rep(sy, length.out = nplots),
+            times = rep.int(x = sspread * ypdeltas, times = nplots)),
+        rep.int(x = rep(vn, length.out = nplots),
+            times = rep.int(x = npdeltas, times = nplots)),
+        rep.int(x = rep(vy, length.out = nplots),
+            times = rep.int(x = ypdeltas, times = nplots))
+        )}
+    ## largs <- function(q, qd, s, sd, v, vd){c(
+    ##     rep.int(x = rep(q, length.out = nplots),
+    ##         times = nplots * qspread * npdeltas),
+    ##     rep.int(x = rep(qd, length.out = nplots),
+    ##         times = nplots * qspread * ypdeltas),
+    ##     rep.int(x = rep(s, length.out = nplots),
+    ##         times = nplots * sspread * npdeltas),
+    ##     rep.int(x = rep(sd, length.out = nplots),
+    ##         times = nplots * sspread * ypdeltas),
+    ##     rep.int(x = rep(v, length.out = nplots),
+    ##         times = nplots * npdeltas),
+    ##     rep.int(x = rep(vd, length.out = nplots),
+    ##         times = nplots * ypdeltas)
+    ## )}
 
     if(is.null(type)){type <- if(is.character(vals)){'b'} else {'l'}}
     if(is.null(type.spread)){type.spread <- if(is.character(vals)){'b'} else {'l'}}
+    type <- c(
+        rep.int(x = 'qx', times = qspread * nplots * (ypdeltas + npdeltas)),
+        rep.int(x = c(if(ypdeltas){type.spread}, if(npdeltas){'p'}), times = sspread * nplots),
+        rep.int(x = c(if(ypdeltas){type}, if(npdeltas){'p'}), times = nplots)
+    )
+
+    lty <- c(
+        rep.int(x = c(if(ypdeltas){type.spread}, if(npdeltas){'p'}), times = sspread * nplots),
+
+
+
+
+
     type <- largs('qx', 'qx', type.spread, 'p', type, 'p')
     lty <- largs(lty.spread, lty.spread, lty.spread, lty.spread, lty, lty)
+    print(largs(
+        paste0(letters[1:3],'1'),
+        paste0(letters[1:3],'2'),
+        paste0(letters[1:3],'3'),
+        paste0(letters[1:3],'4'),
+        paste0(letters[1:3],'5'),
+        paste0(letters[1:3],'6')
+        ))
+print('type');print(nplots) ;    print(type) ; print(lty)
     if(is.null(lwd.spread)){ lwd.spread <- if(qspread){20}else{1} }
-    lwd <- largs(1, lwd.spread, lwd.spread, NA, lwd, NA)
+    lwd <- largs(1, 1, lwd.spread, NA, lwd, NA)
     pch <- largs(NA, pch, pch, pch, pch, pch)
-    col <- rep(x = col, length.out = nplots)
+    col <- largs(col, col, col, col, col, col)
     alpha.f <- largs(alpha.f.spread, alpha.f.spread,
         alpha.f.spread, alpha.f.spread, alpha.f, alpha.f)
 
     ## Plot
     pplot(
-        x = c(
+        x = testx <<- c(
             if(npdeltas){ list(vals[!pdeltas]) },
             if(ypdeltas){ list(vals[pdeltas]) }
         ),
-        y = c(
+        y = testy <<- c(
             if(spread != 'none'){rbind(
                 if(npdeltas){
                     apply(X = x[[spread]][!pdeltas, , ispread, drop = FALSE],
@@ -713,6 +759,7 @@ plot.probability <- function(
         ylim = ylim,
         main = main,
         grid = grid,
+        lwd.q = 15,
         lwd.grid = lwd.grid,
         col.grid = col.grid,
         axes = axes,
