@@ -25,8 +25,8 @@
 #' @param xdomain,ydomain Character or numeric or `NULL` (default): vector of possible values of the variates represented in the `x`- and `y`-axes, in case the `x` or `y` argument is a character vector. Note that the domains apply to all elements in `x` and `y`. The ordering of the values is respected. If `NULL`, then `unique(x)` or `unique(y)` is used.
 #' @param xlim,ylim `NULL` (default) or a vector of two values. If non-`NULL` and any of the two values is not finite (including `NA` or `NULL`), then the `min` or `max` `x`- or `y`-coordinates of the plotted points are used.
 #' @param alpha.f Numeric vector or list: opacity of the colours specified with the `col` argument, `0` being completely invisible and `1` completely opaque. Default to 1, except for shaded plots of `type` `'hx'`, `'qx'`, `'hy'`, `'qy'`, for which it defaults to 0.25.
-#' @param border Border colour for bands in plots of `type = 'q'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
 #' @param xjitter,yjitter Vector or list of logicals or `NA` (default): add [base::jitter()] to `x`- or `y`-values? Useful when plotting discrete variates. If `NA`, jitter is added if both `x` and `y` are of character (or factor) class.
+#' @param border Border colour for bands in plots of `type = 'q'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
 #' @param grid Logical, default `TRUE`: plot a light grid?
 #' @param lwd.grid Numeric, default 1: width of grid lines.
 #' @param col.grid Color of grid lines, default `'#BBBBBB80'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()].
@@ -78,13 +78,6 @@ pplot <- function(
     lend = par('lend'),
     pch = c(1, 2, 0, 5, 6, 3), #, 4,
     col = palette(),
-    xlab = NA, ylab = NA,
-    xlim = NULL, ylim = NULL,
-    add = FALSE,
-    xdomain = NULL, ydomain = NULL,
-    alpha.f = NA,
-    xjitter = NA,
-    yjitter = NA,
     ## c( ## Tol's colour-blind-safe scheme
     ##     '#4477AA',
     ##     '#EE6677',
@@ -93,12 +86,19 @@ pplot <- function(
     ##     '#66CCEE',
     ##     '#AA3377' #, '#BBBBBB'
     ## ),
+    xlab = NA, ylab = NA,
+    xlim = NULL, ylim = NULL,
+    add = FALSE,
+    xdomain = NULL, ydomain = NULL,
+    alpha.f = NA,
+    xjitter = NA,
+    yjitter = NA,
+    border = NA,
     grid = TRUE,
     lwd.grid = NULL,
     col.grid = '#BBBBBB80',
     axes = FALSE,
     cex.main = 1,
-    lwd.q = 15,
     ...
 ){
     if(!is.list(x)){x <- list(x)}
@@ -206,6 +206,7 @@ pplot <- function(
     pch <- rep(pch, length.out = nplots)
     col <- rep(col, length.out = nplots)
     alpha.f <- rep(alpha.f, length.out = nplots)
+    border <- rep(border, length.out = nplots)
     xjitter <- rep(xjitter, length.out = nplots)
     yjitter <- rep(yjitter, length.out = nplots)
 
@@ -231,7 +232,23 @@ pplot <- function(
     }
 
     ## Parameters for q-type plots
-    border <- NA
+
+    ## Function for preparing indices for q-type plots
+    qindices <- function(groups, col1 = 1, col2 = 1){
+        indices <- cumsum(groups$lengths)
+        n <- length(indices)
+        col1 <- indices[n] * (col1 - 1)
+        col2 <- indices[n] * (col2 - 1)
+        unlist(mapply(
+            FUN = function(v, i1, i2){
+                if(v){c(col1 + (i1:i2), col2 + (i2:i1))}else{NA}
+            },
+            groups$values,
+            c(1, 1 + indices[-n]),
+            indices,
+            USE.NAMES = FALSE, SIMPLIFY = FALSE
+        ))
+    }
 
     ## First plot window
     graphics::matplot(x = xlim, y = ylim, type = 'n',
@@ -268,6 +285,10 @@ pplot <- function(
         }
 
         col[[aplot]] <- adjustcolor(col[[aplot]], alpha.f = alpha.f[[aplot]])
+        if(!is.na(border[[aplot]])){
+            border[[aplot]] <-
+                adjustcolor(border[[aplot]], alpha.f = alpha.f[[aplot]])
+        }
 
         ## Check if jitter needed
         if((is.na(xjitter[[aplot]]) && anyDuplicated(thisx)) ||
@@ -290,49 +311,50 @@ pplot <- function(
                 add = TRUE, ...)
 
         } else if(type[[aplot]] %in% c('qx', 'hx')){
-            if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
-            if(is.null(dim(thisy))){ dim(thisy) <- c(1, length(thisy)) }
+            ## if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
             if(type[[aplot]] == 'hx'){
+                if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
                 temp <- dim(thisy) * c(1, 2)
                 thisy <- c(thisy, rep.int(x = 0, times = length(thisy)))
                 dim(thisy) <- temp
+            } else {
+                if(is.null(dim(thisy))){ dim(thisy) <- c(1, length(thisy)) }
             }
             nquant <- ncol(thisy)
-            temp <- ncol(thisx)
-            if(nrow(thisx) == 1){
-                border <- col[[aplot]]
-            }
-            for(ii in seq_len(floor(nquant / 2))){
+            groups <- rle(!is.na(thisx))
+            for(ii in seq_len(ceiling(nquant / 2))){
                 graphics::polygon(
-                    x = c(thisx[,(ii - 1) %% temp + 1],
-                        rev(thisx[,(ii - 1) %% temp + 1])),
-                    y = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
+                    x = thisx[qindices(groups = groups,
+                        col1 = 1, col2 = 1)],
+                    y = thisy[qindices(groups = groups,
+                        col1 = ii, col2 = nquant + 1 - ii)],
+                    ## x = c(thisx[,(ii - 1) %% temp + 1],
+                    ##     rev(thisx[,(ii - 1) %% temp + 1])),
+                    ## y = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
                     density = NULL, xpd = TRUE, lty = 1,
-                    border = border, col = col[[aplot]],
-                    lwd = lwd.q * lwd[[aplot]])
+                    border = border[[aplot]], col = col[[aplot]],
+                    lwd = lwd[[aplot]])
             }
         } else if(type[[aplot]] %in% c('qy', 'hy')){
-            if(is.null(dim(thisx))){ dim(thisx) <- c(1, length(thisx)) }
-            if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
             if(type[[aplot]] == 'hy'){
+                if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
                 temp <- dim(thisx) * c(1, 2)
                 thisx <- c(thisx, rep.int(x = 0, times = length(thisx)))
                 dim(thisx) <- temp
+            } else {
+                if(is.null(dim(thisx))){ dim(thisx) <- c(1, length(thisx)) }
             }
-
             nquant <- ncol(thisx)
-            temp <- ncol(thisy)
-            if(nrow(thisy) == 1){
-                border <- col[[aplot]]
-            }
-            for(ii in seq_len(floor(nquant / 2))){
+            groups <- rle(!is.na(thisy))
+            for(ii in seq_len(ceiling(nquant / 2))){
                 graphics::polygon(
-                    x = c(thisx[, ii], rev(thisx[, nquant + 1 - ii])),
-                    y = c(thisy[,(ii - 1) %% temp + 1],
-                        rev(thisy[,(ii - 1) %% temp + 1])),
+                    y = thisy[qindices(groups = groups,
+                        col1 = 1, col2 = 1)],
+                    x = thisx[qindices(groups = groups,
+                        col1 = ii, col2 = nquant + 1 - ii)],
                     density = NULL, xpd = TRUE, lty = 1,
-                    border = border, col = col[[aplot]],
-                    lwd = lwd.q * lwd[[aplot]])
+                    border = border[[aplot]], col = col[[aplot]],
+                    lwd = lwd[[aplot]])
             }
         }
     }
@@ -534,6 +556,7 @@ plot.probability <- function(
         tempxlab <- 'Y'
         nplots <- Xlen
         pdeltas <- (x$densities < max(x$densities))
+        poks <- !pdeltas
         pvsyi <- 2
     } else {
         ## X is x-axis, one plot for each Y
@@ -547,6 +570,11 @@ plot.probability <- function(
     }
     npdeltas <- any(!pdeltas)
     ypdeltas <- any(pdeltas)
+    ## Special indices to use for q-plots
+    qnpds <- !pdeltas
+    qnpds[!qnpds] <- NA
+    qypds <- pdeltas
+    qypds[!qypds] <- NA
 
     ## If the abscissa has more than one variate,
     ## then it's tricky to understand which of these we must plot against.
@@ -659,91 +687,56 @@ plot.probability <- function(
 
     ## Function to create repetitions of args
     largs <- function(qn, qy, sn, sy, vn, vy){c(
-        rep.int(x = rep(qn, length.out = nplots),
-            times = rep.int(x = qspread * npdeltas, times = nplots)),
-        rep.int(x = rep(qy, length.out = nplots),
-            times = rep.int(x = qspread * ypdeltas, times = nplots)),
-        rep.int(x = rep(sn, length.out = nplots),
-            times = rep.int(x = sspread * npdeltas, times = nplots)),
-        rep.int(x = rep(sy, length.out = nplots),
-            times = rep.int(x = sspread * ypdeltas, times = nplots)),
-        rep.int(x = rep(vn, length.out = nplots),
-            times = rep.int(x = npdeltas, times = nplots)),
-        rep.int(x = rep(vy, length.out = nplots),
-            times = rep.int(x = ypdeltas, times = nplots))
-        )}
-    ## largs <- function(q, qd, s, sd, v, vd){c(
-    ##     rep.int(x = rep(q, length.out = nplots),
-    ##         times = nplots * qspread * npdeltas),
-    ##     rep.int(x = rep(qd, length.out = nplots),
-    ##         times = nplots * qspread * ypdeltas),
-    ##     rep.int(x = rep(s, length.out = nplots),
-    ##         times = nplots * sspread * npdeltas),
-    ##     rep.int(x = rep(sd, length.out = nplots),
-    ##         times = nplots * sspread * ypdeltas),
-    ##     rep.int(x = rep(v, length.out = nplots),
-    ##         times = nplots * npdeltas),
-    ##     rep.int(x = rep(vd, length.out = nplots),
-    ##         times = nplots * ypdeltas)
-    ## )}
+        rbind(
+            rep(qn, length.out = qspread * npdeltas * nplots),
+            rep(qy, length.out = qspread * ypdeltas * nplots)
+        ),
+        rbind(
+            rep(sn, length.out = sspread * npdeltas * nplots),
+            rep(sy, length.out = sspread * ypdeltas * nplots)
+        ),
+        rbind(
+            rep(vn, length.out = npdeltas * nplots),
+            rep(vy, length.out = ypdeltas * nplots)
+        )
+    )}
 
     if(is.null(type)){type <- if(is.character(vals)){'b'} else {'l'}}
     if(is.null(type.spread)){type.spread <- if(is.character(vals)){'b'} else {'l'}}
-    type <- c(
-        rep.int(x = 'qx', times = qspread * nplots * (ypdeltas + npdeltas)),
-        rep.int(x = c(if(ypdeltas){type.spread}, if(npdeltas){'p'}), times = sspread * nplots),
-        rep.int(x = c(if(ypdeltas){type}, if(npdeltas){'p'}), times = nplots)
-    )
-
-    lty <- c(
-        rep.int(x = c(if(ypdeltas){type.spread}, if(npdeltas){'p'}), times = sspread * nplots),
-
-
-
-
-
     type <- largs('qx', 'qx', type.spread, 'p', type, 'p')
     lty <- largs(lty.spread, lty.spread, lty.spread, lty.spread, lty, lty)
-    print(largs(
-        paste0(letters[1:3],'1'),
-        paste0(letters[1:3],'2'),
-        paste0(letters[1:3],'3'),
-        paste0(letters[1:3],'4'),
-        paste0(letters[1:3],'5'),
-        paste0(letters[1:3],'6')
-        ))
-print('type');print(nplots) ;    print(type) ; print(lty)
-    if(is.null(lwd.spread)){ lwd.spread <- if(qspread){20}else{1} }
-    lwd <- largs(1, 1, lwd.spread, NA, lwd, NA)
-    pch <- largs(NA, pch, pch, pch, pch, pch)
+    if(is.null(lwd.spread)){ lwd.spread <- if(qspread){15}else{1} }
+    lwd <- largs(1, lwd.spread, lwd.spread, lwd.spread, lwd, lwd)
+    pch <- largs(pch, pch, pch, pch, pch, pch)
+    ## 'border' must be prepared before 'col'
+    border <- largs(NA, col, NA, NA, NA, NA)
     col <- largs(col, col, col, col, col, col)
     alpha.f <- largs(alpha.f.spread, alpha.f.spread,
         alpha.f.spread, alpha.f.spread, alpha.f, alpha.f)
-
     ## Plot
     pplot(
-        x = testx <<- c(
-            if(npdeltas){ list(vals[!pdeltas]) },
-            if(ypdeltas){ list(vals[pdeltas]) }
+        x = c(
+            if(npdeltas){ list(vals[qnpds]) },
+            if(ypdeltas){ list(vals[qypds]) }
         ),
-        y = testy <<- c(
-            if(spread != 'none'){rbind(
+        y = c(
+            if(qspread || sspread){rbind(
                 if(npdeltas){
-                    apply(X = x[[spread]][!pdeltas, , ispread, drop = FALSE],
+                    apply(X = x[[spread]][qnpds, , ispread, drop = FALSE],
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
                 },
                 if(ypdeltas){
-                    apply(X = pscale * x[[spread]][pdeltas, , ispread, drop = FALSE] + ploc,
+                    apply(X = pscale * x[[spread]][qypds, , ispread, drop = FALSE] + ploc,
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
                 }
             )},
             rbind(
                 if(npdeltas){
-                    apply(X = x[['values']][!pdeltas, , drop = FALSE],
+                    apply(X = x[['values']][qnpds, , drop = FALSE],
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
                 },
                 if(ypdeltas){
-                    apply(X =  pscale * x[['values']][pdeltas, , drop = FALSE] + ploc,
+                    apply(X =  pscale * x[['values']][qypds, , drop = FALSE] + ploc,
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
                 }
             )
@@ -754,12 +747,12 @@ print('type');print(nplots) ;    print(type) ; print(lty)
         pch = pch,
         col = col,
         alpha.f = alpha.f,
+        border = border,
         xlab = xlab,
         ylab = ylab,
         ylim = ylim,
         main = main,
         grid = grid,
-        lwd.q = 15,
         lwd.grid = lwd.grid,
         col.grid = col.grid,
         axes = axes,
