@@ -235,7 +235,7 @@ pplot <- function(
         xlab = xlab, ylab = ylab, xlim = NULL, ylim = NULL,
         cex.main = cex.main, add = add, axes = FALSE, ...)
 ### List plots
-    for(aplot in seq_len(nplots)){print(aplot)
+    for(aplot in seq_len(nplots)){
         ## drop unneeded dimensions
         thisx <- drop(x[[aplot]])
         thisy <- drop(y[[aplot]])
@@ -292,13 +292,14 @@ pplot <- function(
                 thisy <- c(thisy, rep.int(x = 0, times = length(thisy)))
                 dim(thisy) <- temp
             }
-
+            print(thisx)
+            print(thisy)
             nquant <- ncol(thisy)
             temp <- ncol(thisx)
-            if(nrow(thisx) == 1){
+            if(nrow(thisx) == 1){print('yes') ; print(col[[aplot]])
                 border <- TRUE
-                lwd[[aplot]] <- 10
             }
+            print(border)
             for(ii in seq_len(floor(nquant / 2))){
                 graphics::polygon(
                     x = c(thisx[,(ii - 1) %% temp + 1],
@@ -452,8 +453,8 @@ plot.probability <- function(
     ylab2 = NULL,
     main = NULL,
     type.spread = NULL,
-    lty.spread = lty,
-    pch.spread = pch,
+    lty.spread = c(1, 2, 4, 3, 6, 5),
+    pch.spread = c(1, 2, 0, 5, 6, 3),
     lwd.spread = NULL,
     alpha.f.spread = NULL,
     nsamples.spread = 360,
@@ -651,20 +652,27 @@ plot.probability <- function(
 
     ## Function to create repetitions of args
     largs <- function(q, qd, s, sd, v, vd){c(
-        rep.int(x = q, times = nplots * qspread * npdeltas),
-        rep.int(x = qd, times = nplots * qspread * ypdeltas),
-        rep.int(x = s, times = nplots * sspread * npdeltas),
-        rep.int(x = sd, times = nplots * sspread * ypdeltas),
-        rep.int(x = v, times = nplots * npdeltas),
-        rep.int(x = vd, times = nplots * ypdeltas)
+        rep.int(x = rep(q, length.out = nplots),
+            times = nplots * qspread * npdeltas),
+        rep.int(x = rep(qd, length.out = nplots),
+            times = nplots * qspread * ypdeltas),
+        rep.int(x = rep(s, length.out = nplots),
+            times = nplots * sspread * npdeltas),
+        rep.int(x = rep(sd, length.out = nplots),
+            times = nplots * sspread * ypdeltas),
+        rep.int(x = rep(v, length.out = nplots),
+            times = nplots * npdeltas),
+        rep.int(x = rep(vd, length.out = nplots),
+            times = nplots * ypdeltas)
     )}
 
     if(is.null(type)){type <- if(is.character(vals)){'b'} else {'l'}}
     if(is.null(type.spread)){type.spread <- if(is.character(vals)){'b'} else {'l'}}
-    type <- largs('qx', NA, type.spread, 'p', type, 'p')
+    type <- largs('qx', 'qx', type.spread, 'p', type, 'p')
+    lty <- largs(lty.spread, lty.spread, lty.spread, lty.spread, lty, lty)
     if(is.null(lwd.spread)){ lwd.spread <- if(qspread){10}else{1} }
-    lwd <- largs(NA, 10, lwd.spread, NA, lwd, NA)
-    lty <- largs(NA, NA, lty.spread, NA, lty, NA)
+    lwd <- largs(1, lwd.spread, lwd.spread, NA, lwd, NA)
+    pch <- largs(NA, pch, pch, pch, pch, pch)
     col <- rep(x = col, length.out = nplots)
     alpha.f <- largs(alpha.f.spread, alpha.f.spread,
         alpha.f.spread, alpha.f.spread, alpha.f, alpha.f)
@@ -698,6 +706,9 @@ plot.probability <- function(
             )
         ),
         type = type,
+        lty = lty,
+        lwd = lwd,
+        pch = pch,
         col = col,
         alpha.f = alpha.f,
         xlab = xlab,
