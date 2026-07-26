@@ -253,8 +253,11 @@ pplot <- function(
     ## First plot window
     graphics::matplot(x = xlim, y = ylim, type = 'n',
         xlab = xlab, ylab = ylab, xlim = NULL, ylim = NULL,
-        cex.main = cex.main, add = add, axes = FALSE, ...)
-### List plots
+        cex.main = cex.main, add = add, axes = FALSE,
+        ## xaxs = 'i', yaxs = 'i',
+        ...)
+
+### Plot the lists
     for(aplot in seq_len(nplots)){
         ## ## drop unneeded dimensions?
         ## thisx <- drop(x[[aplot]])
@@ -457,7 +460,7 @@ plot.probability <- function(
     spread = NULL,
     subset = NULL,
     PvsY = NULL,
-    legend = 'top',
+    legend = 'topright',
     type = NULL,
     lty = c(1, 2, 4, 3, 6, 5),
     pch = c(1, 2, 0, 5, 6, 3), #, 4,
@@ -483,7 +486,6 @@ plot.probability <- function(
     main = NULL,
     type.spread = NULL,
     lty.spread = c(1, 2, 4, 3, 6, 5),
-    pch.spread = c(1, 2, 0, 5, 6, 3),
     lwd.spread = NULL,
     alpha.f.spread = NULL,
     nsamples.spread = 360,
@@ -630,7 +632,7 @@ plot.probability <- function(
 
     ## y-range
     if(npdeltas){
-            pmax <- max(x[['values']][!pdeltas, ], na.rm = TRUE)
+        pmax <- max(x[['values']][!pdeltas, ], na.rm = TRUE)
     } else {
         pmax <- max(x[['values']][pdeltas, ], na.rm = TRUE)
     }
@@ -641,15 +643,15 @@ plot.probability <- function(
             pmax <- max(pmax, x[[spread]][pdeltas, , ], na.rm = TRUE)
         }
     } else if(sspread){
-        ## Some samples can have very high peaks; choose those within 95.4%
+        ## Some samples can have very high peaks; choose those within 94.5%
         pmax <- max(pmax, apply(
             X = if(npdeltas){
-                x[['samples']][!pdeltas, , , drop = FALSE]
+                x[[spread]][!pdeltas, , , drop = FALSE]
             } else {
-                x[['samples']][pdeltas, , , drop = FALSE]
+                x[[spread]][pdeltas, , , drop = FALSE]
             },
             MARGIN = c(1, 2), FUN = quantile,
-            probs = 0.954, na.rm = TRUE, names = FALSE, type = 6
+            probs = 0.945, na.rm = TRUE, names = FALSE, type = 6
         ))
     }
 
@@ -659,10 +661,19 @@ plot.probability <- function(
     ## compute max probability of singular points, if any,
     ## and find conversion scale
     if(ypdeltas){
-        pticks <- axisTicks(usr = ylim, log = FALSE)
+        maxpdelta <- max(x[['values']][pdeltas, ],
+            x[['quantiles']][pdeltas, , ],
+            if(sspread){apply(
+                X = x[[spread]][pdeltas, , , drop = FALSE],
+                MARGIN = c(1, 2), FUN = quantile,
+                probs = 0.945, na.rm = TRUE, names = FALSE, type = 6
+            )},
+            na.rm = TRUE)
+        temp <-  0.04 * (ylim[2] - ylim[1])
+        pticks <- axisTicks(usr = ylim + c(-temp, temp), log = FALSE)
         pdivs <- length(pticks) - 1
         ploc <- min(pticks)
-        pscale <- signif(x = max(pticks) / pdivs, digits = 1)
+        pscale <- signif(x = maxpdelta / pdivs, digits = 1)
         pscale <- (max(pticks) - ploc) / (pscale * pdivs)
         ## ceiling(pscale * 10^(-floor(log10(pscale)) + 1)) *
         ##     10^(floor(log10(pscale)) - 1) * pdivs
@@ -701,18 +712,14 @@ plot.probability <- function(
         )
     )}
 
+    ## Special graphical-parameter values
     if(is.null(type)){type <- if(is.character(vals)){'b'} else {'l'}}
     if(is.null(type.spread)){type.spread <- if(is.character(vals)){'b'} else {'l'}}
-    type <- largs('qx', 'qx', type.spread, 'p', type, 'p')
-    lty <- largs(lty.spread, lty.spread, lty.spread, lty.spread, lty, lty)
     if(is.null(lwd.spread)){ lwd.spread <- if(qspread){15}else{1} }
-    lwd <- largs(1, lwd.spread, lwd.spread, lwd.spread, lwd, lwd)
-    pch <- largs(pch, pch, pch, pch, pch, pch)
-    ## 'border' must be prepared before 'col'
-    border <- largs(NA, col, NA, NA, NA, NA)
-    col <- largs(col, col, col, col, col, col)
-    alpha.f <- largs(alpha.f.spread, alpha.f.spread,
-        alpha.f.spread, alpha.f.spread, alpha.f, alpha.f)
+    ## 'pch' needs to be list to mix characters and numbers
+    pchlist <- as.list(largs(pch, NA, pch, -1, pch, pch))
+    pchlist[pchlist == -1] <- '-'
+
     ## Plot
     pplot(
         x = c(
@@ -741,15 +748,17 @@ plot.probability <- function(
                 }
             )
         ),
-        type = type,
-        lty = lty,
-        lwd = lwd,
-        pch = pch,
-        col = col,
-        alpha.f = alpha.f,
-        border = border,
+        type = largs('qx', 'qx', type.spread, 'p', type, 'p'),
+        lty = largs(lty.spread, lty.spread, lty.spread, lty.spread, lty, lty),
+        lwd = largs(1, lwd.spread, lwd.spread, lwd.spread, lwd, lwd),
+        pch = pchlist,
+        col = largs(col, col, col, col, col, col),
+        alpha.f = largs(alpha.f.spread, alpha.f.spread,
+            alpha.f.spread, alpha.f.spread, alpha.f, alpha.f),
+        border = largs(NA, col, NA, NA, NA, NA),
         xlab = xlab,
         ylab = ylab,
+        xlim = xlim,
         ylim = ylim,
         main = main,
         grid = grid,
@@ -761,10 +770,237 @@ plot.probability <- function(
     )
 
     ## add axis for singular probability values
+    pticks <- axTicks(side = 4)
     if(ypdeltas){
-        graphics::axis(4, at = pticks, labels = (pticks - ploc) / pscale,
+        graphics::axis(side = 4, at = pticks, labels = (pticks - ploc) / pscale,
             tick = !grid, col = 'black', lwd = 1, lty = 1)
+        mtext(ylab2, side = 4, line = 2.25)
     }
+
+    ## Plot legends
+    if(!is.null(lgnd)){
+        ##  && is.character(legend) &&
+        ## (legend %in%
+        ##      c("bottomright", "bottom", "bottomleft", "left", "topleft",
+        ##          "top", "topright", "right", "center"))
+        tails <- list()
+        tails[names(lgnd)] <- '='
+        tails[names(x$tails)] <- x$tails
+        graphics::legend(x = legend,
+            legend = apply(lgnd, 1, function(xx){
+                nxx <- names(xx)
+                paste0(paste0(nxx, ' ', tails[nxx], ' ', xx),
+                    collapse = ', ')
+            }),
+            bty = 'n',
+            col = col,
+            lty = lty,
+            lwd = lwd,
+            ...)
+    }
+    invisible()
+}
+
+
+#' Plot the revisability of an object of class "probability" as a histogram
+#'
+#' @description
+#' The posterior probabilities calculated with the [Pr()] function, and outputted as a "probability" object, have an associated "revisability" that comes from the finite size of the data sample. This revisability can be interpreted in two ways:
+#'
+#' - How the probabilities could change, if we collected a much larger (infinite) data sample, and how likely would such change be;
+#' - The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
+#'
+#' The `hist()` method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution.
+#'
+#' @param x Object of class "probability", obtained with [Pr()].
+#' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
+#' @param breaks `NULL` or as in function [graphics::hist()]. If `NULL` (default), an optimal number of breaks for each probability distribution is computed.
+#' @param fill.alpha.f Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
+#' @param legend One of the values `"bottomright"`, `"bottom"`, `"bottomleft"`, `"left"`, `"topleft"`, `"top"`, `"topright"`, `"right"`, `"center"` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `"top"`.
+#' @param showmean Logical, default `TRUE`: show the means of the probability distributions? The means correspond to the probabilities about the next observed unit.
+#' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,axes,add see analogous arguments in [graphics::matplot()]
+#' @param ... Other parameters to be passed to [flexiplot()].
+#'
+#' @return [Invisibly][base::invisible()], an object of class ["histogram"][graphics::hist()].
+#'
+#' @seealso
+#' [Pr()] to calculate posterior probabilities and quantiles.
+#'
+#' [plot.probability()] to plot the posterior probabilities.
+#'
+#' [flexiplot()] (on which `hist.probability()` is based) for more general plots.
+#'
+#' [plotquantiles()] to plot quantile ranges.
+#'
+#' @examples
+#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## variates: 'species' and 'bill_len'
+#' learnt <- learntExample
+#'
+#' ## calculate the probability, and its revisability,
+#' ## for the value 'Adelie' of the "species" variate
+#' probs <- Pr(Y = data.frame(species = 'Adelie'), learnt = learnt, parallel = 1)
+#' probs$values
+#'
+#' ## show the revisability of this probability; equivalently show
+#' ## the probability distribution for the relative frequency of
+#' ## 'Adelie' penguins in the full population
+#' hist(probs, legend = 'topright')
+#'
+#' @import graphics
+#'
+#' @concept display
+#' @export
+hist.probability <- function(
+    x,
+    subset = NULL,
+    breaks = NULL,
+    legend = 'topright',
+    lty = c(1, 2, 4, 3, 6, 5),
+    lwd = 2,
+    col = palette(),
+    alpha.f = 1,
+    fill.alpha.f = 0.125,
+    showmean = TRUE,
+    ##     c( ## Tol's colour-blind-safe scheme, or palette()
+    ##     '#4477AA',
+    ##     '#EE6677',
+    ##     '#228833',
+    ##     '#CCBB44',
+    ##     '#66CCEE',
+    ##     '#AA3377' #, '#BBBBBB'
+    ## ),
+    xlab = NULL,
+    ylab = NULL,
+    xlim = NULL,
+    ylim = c(0, NA),
+    main = NULL,
+    grid = TRUE,
+    axes = FALSE,
+    add = FALSE,
+    ...
+){
+    ## Replace object x keeping only values given in 'subset'
+    if(!is.null(subset)){
+        x <- .prsubset(x, subset = subset)
+    }
+
+    ## Check that samples are available in the probability object
+    if(is.null(x[['samples']])) {
+        stop('The "probability" object does not contain any revisability samples')
+        }
+    pvar <- x[['samples']]
+    Ylen <- nrow(x[['values']])
+    Xlen <- ncol(x[['values']])
+
+    if(is.null(breaks)){n <- ceiling(sqrt(dim(pvar)[3])/2)} else {n <- NULL}
+
+    ## Precompute histograms, to determine maximum y-value
+    midslist <- densitylist <- list()
+    i <- 0L
+    for(xx in seq_len(Xlen)){ for(yy in seq_len(Ylen)){
+        i <- i + 1L
+        ff <- pvar[yy, xx, ]
+        rg <- range(ff)
+        if(diff(rg)==0){rg <- c(0, 1)}
+        if(!is.null(n)){ breaks <- seq(rg[1], rg[2], length.out = n + 1) }
+        hd <- graphics::hist(x = ff, breaks = breaks, plot = FALSE)
+        midslist[[i]] <- hd$mids
+        densitylist[[i]] <- hd$density
+    } }
+    nplots <- length(midslist)
+
+    if(is.null(xlab)){
+        xlab <- 'long-run relative frequency'
+    }
+    if(is.null(ylab)){ylab <- 'probability density'}
+    if(isFALSE(fill.alpha.f) || !is.numeric(fill.alpha.f)){fill.alpha.f <- 0}
+
+    if(missing(xlim)){xlim <- range(unlist(midslist))}
+    if(is.na(ylim)[2]){ylim[2] <- max(unlist(densitylist))}
+
+    pplot(x = c(midslist, midslist),
+            y = c(densitylist, densitylist),
+            type = c(
+                rep.int('hx', times = nplots),
+                rep('l', length.out = nplots)
+                ),
+            lty = rep(lty, length.out = nplots),
+            lwd = rep(lwd, length.out = nplots),
+            col = rep(col, length.out = nplots),
+            xlab = xlab, ylab = ylab,
+            xlim = xlim, ylim = ylim,
+            add = add,
+            alpha.f = c(
+                rep.int(fill.alpha.f, times = length(midslist)),
+                rep(alpha.f, length.out = length(midslist))
+                ),
+            xjitter = FALSE, yjitter = FALSE,
+            border = NA,
+            grid = grid,
+            axes = axes,
+            main = main,
+            ...
+        )
+
+        if(isTRUE(showmean)){
+            i <- 0L
+            for(xx in seq_len(Xlen)){ for(yy in seq_len(Ylen)){
+                i <- i + 1L
+                graphics::abline(v = x[['values']][yy, xx],
+                    col = adjustcolor(col[(i - 1) %% length(col) + 1],
+                        alpha.f * 0.75),
+                    lty = lty[(i - 1) %% length(lty) + 1],
+                    lwd = lwd * 0.75)
+            }}
+        }
+
+    ## Plot legends
+    if(is.character(legend) &&
+           (legend %in%
+                 c("bottomright", "bottom", "bottomleft", "left", "topleft",
+                     "top", "topright", "right", "center"))){
+        tails <- list()
+        if(!is.null(x$Y)){
+            tails[names(x$Y)] <- '='
+            tails[names(x$tails)] <- x$tails
+            legs <- paste0(apply(x$Y, 1, function(xxx){
+                nxxx <- names(xxx)
+                paste0(paste0(nxxx, ' ', tails[nxxx], ' ', xxx),
+                    collapse = ', ')
+        }))
+        ## legs <- paste0(apply(x$Y, 1, function(xxx){
+        ##         paste0(paste0(names(xxx), ' = ', xxx), collapse = ', ')
+        ## }))
+        } else {
+        legs <- paste0(apply(as.data.frame(x$pY), 1, function(xxx){
+                paste0(paste0(xxx, '-qtl'), collapse = ', ')
+        }))
+        }
+        if(!is.null(x$X)){
+            tails[names(x$X)] <- '='
+            tails[names(x$tails)] <- x$tails
+            legs <- c(outer( legs,
+                paste0(' | ',
+                    apply(x$X, 1, function(xxx){
+                        nxxx <- names(xxx)
+                        paste0(paste0(nxxx, ' ', tails[nxxx], ' ', xxx),
+                            collapse = ', ')
+                    })
+                ),
+                paste0))
+        }
+
+        graphics::legend(x = legend,
+            legend = legs,
+            bty = 'n',
+            col = col,
+            lty = lty,
+            lwd = lwd,
+            ...)
+    }
+    ## Return output of initial hist()
+    invisible(hd)
 }
 
 
@@ -1590,7 +1826,7 @@ old.plot.probability <- function(
 #'
 #' @concept display
 #' @export
-hist.probability <- function(
+old.hist.probability <- function(
     x,
     subset = NULL,
     breaks = NULL,

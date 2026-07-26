@@ -9,25 +9,29 @@
   spread = NULL,
   subset = NULL,
   PvsY = NULL,
-  legend = "top",
+  legend = "topright",
+  type = NULL,
   lty = c(1, 2, 4, 3, 6, 5),
   pch = c(1, 2, 0, 5, 6, 3),
   lwd = 2,
   col = palette(),
-  type = NULL,
-  alpha.f = 1,
-  var.alpha.f = NULL,
-  var.nsamples = 360,
   xlab = NULL,
   ylab = NULL,
-  ylab2 = NULL,
-  main = NULL,
+  xlim = NULL,
   ylim = c(0, NA),
+  add = FALSE,
+  alpha.f = 1,
   grid = TRUE,
   lwd.grid = NULL,
   col.grid = "#BBBBBB80",
   axes = FALSE,
-  add = FALSE,
+  ylab2 = NULL,
+  main = NULL,
+  type.spread = NULL,
+  lty.spread = c(1, 2, 4, 3, 6, 5),
+  lwd.spread = NULL,
+  alpha.f.spread = NULL,
+  nsamples.spread = 360,
   ...
 )
 }
@@ -46,13 +50,13 @@
 
 \item{alpha.f}{Numeric, default 0.25: opacity of the colours, \code{0} being completely invisible and \code{1} completely opaque.}
 
-\item{var.alpha.f}{Numeric: opacity of the quantile bands or of the samples, \code{0} being completely invisible and \code{1} completely opaque.}
-
-\item{var.nsamples}{Integer, default 360: number of samples of long-run frequencies to display}
-
 \item{ylab2}{A title for the y-axis on the right side of the plot, if displayed.}
 
 \item{...}{Other parameters to be passed to \code{\link[=flexiplot]{flexiplot()}}.}
+
+\item{var.alpha.f}{Numeric: opacity of the quantile bands or of the samples, \code{0} being completely invisible and \code{1} completely opaque.}
+
+\item{var.nsamples}{Integer, default 360: number of samples of long-run frequencies to display}
 }
 \value{
 \code{NULL}, \link[base:invisible]{invisibly}; produces a plot, see \code{\link[graphics:matplot]{graphics::matplot()}}.
