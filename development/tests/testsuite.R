@@ -58,7 +58,7 @@ tc(nm, {
     parallel = parallel,
     # maxrelMCSE = +Inf,
     # minESS = 100,
-    verbose = FALSE,
+    verbose = FALSE
     ## ncheckpoints = 12,
     ##
     ## ## parameters for short test run:
