@@ -26,7 +26,7 @@ hist(
   x,
   subset = NULL,
   breaks = NULL,
-  legend = "top",
+  legend = "topright",
   lty = c(1, 2, 4, 3, 6, 5),
   lwd = 2,
   col = palette(),
@@ -39,6 +39,7 @@ hist(
   ylim = c(0, NA),
   main = NULL,
   grid = TRUE,
+  axes = FALSE,
   add = FALSE,
   ...
 )
@@ -72,7 +73,7 @@ hist(
   plot a legend at that position. A value `FALSE` or any other does not
   plot any legend. Default `"top"`.
 
-- lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, add:
+- lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add:
 
   see analogous arguments in
   [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html)
@@ -91,7 +92,7 @@ hist(
 - ...:
 
   Other parameters to be passed to
-  [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md).
+  [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md).
 
 ## Value
 
@@ -106,11 +107,8 @@ posterior probabilities and quantiles.
 [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md)
 to plot the posterior probabilities.
 
-[`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
-(on which `hist.probability()` is based) for more general plots.
-
-[`plotquantiles()`](https://pglpm.github.io/prova/reference/plotquantiles.md)
-to plot quantile ranges.
+[`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) (on which
+`hist.probability()` is based) for more general plots.
 
 ## Examples
 

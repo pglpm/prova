@@ -1,12 +1,12 @@
-# Plot the revisability of an object of class "MI" as a histogram
+# Plot the revisability of an object of class "mi" as a histogram
 
 The mutual information calculated with the
 [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
-function, and outputted as a "MI" object, has an associated
+function, and outputted as a "mi" object, has an associated
 "revisability" that comes from the finite size of the data sample. A
 much larger sample might reveal a different value of mutual information.
 
-The [`hist()`](https://rdrr.io/r/graphics/hist.html) method for a "MI"
+The [`hist()`](https://rdrr.io/r/graphics/hist.html) method for a "mi"
 object is a utility to visualize this kind of revisability, in the form
 of a distribution: it shows how the mutual information could change, if
 we collected a much larger (infinite) data sample, and how likely would
@@ -31,6 +31,7 @@ hist(
   ylim = c(0, NA),
   main = NULL,
   grid = TRUE,
+  axes = FALSE,
   add = FALSE,
   ...
 )
@@ -40,7 +41,7 @@ hist(
 
 - x:
 
-  Object of class "MI", obtained with
+  Object of class "mi", obtained with
   [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md).
 
 - breaks:
@@ -50,7 +51,7 @@ hist(
   (default), an optimal number of breaks for each probability
   distribution is computed.
 
-- lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, add:
+- lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add:
 
   see analogous arguments in
   [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html)
@@ -68,7 +69,7 @@ hist(
 - ...:
 
   Other parameters to be passed to
-  [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md).
+  [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md).
 
 ## Value
 
@@ -84,8 +85,8 @@ to calculate mutual information and its revisability.
 to plot mutual information and quantiles calculated by
 [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
 
-[`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
-(on which `hist.mi()` is based) for more general plots.
+[`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) (on which
+`hist.mi()` is based) for more general plots.
 
 ## Examples
 

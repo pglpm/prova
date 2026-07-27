@@ -1,28 +1,20 @@
 # Create a grid of values for a variate
 
-This function creates a set of values for a variate, based on the
-information from data and metadata stored in a `learnt` object, created
-by the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
-function. The set of values depends on the type of variate (nominal or
-continuous, rounded, and so on, see
-[metadata](https://pglpm.github.io/prova/reference/metadatatemplate.md)).
-The range of values is chosen to include, and extend slightly beyond,
-the range observed in the data used in the
-[`learn()`](https://pglpm.github.io/prova/reference/learn.md) function.
-Variate domains are always respected.
+This function creates a data frame of values for one variate, or a
+combination of values for several variates.
 
 ## Usage
 
 ``` r
-vrtgrid(vrt, learnt, length.out = 129)
+vrtgrid(vrt, learnt, length.out = NA)
 ```
 
 ## Arguments
 
 - vrt:
 
-  Character: name of the variate, must match one of the names in the
-  `metadata` file provided to the
+  Character vector: names of the variates; they must match variate names
+  in the `metadata` file provided to the
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function.
 
@@ -35,13 +27,48 @@ vrtgrid(vrt, learnt, length.out = 129)
 
 - length.out:
 
-  Numeric, positive (default 129): number of values to be created; used
-  only for continuous, non-rounded variates (see
-  [`metadata`](https://pglpm.github.io/prova/reference/metadatatemplate.md)).
+  Vector or list of positive integer or `NA` values, possibly named:
+  number of values to be created for each variate. Elements with names
+  are used for the homonymous variates in `vrt`. Unnamed elements are
+  used for the remaining variates, recycled as necessary. See "Details"
+  for the meaning of `NA` values. Default `NA`.
 
 ## Value
 
-A numeric or character vector of values.
+A [data frame](https://rdrr.io/r/base/data.frame.html) with columns
+corresponding to the `vrt` argument, and one row for each combination of
+the variate values.
+
+## Details
+
+The value ranges are based on the information from data and metadata
+stored in the `learnt` object (see
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md)) provided
+in the `learnt =` argument; they include, and extend slightly beyond,
+the ranges observed in the data used in the
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md) function.
+Variate domains are always respected.
+
+The set of chosen values, for each variate, depends on the type of
+variate (nominal or continuous, rounded, and so on, see
+[metadata](https://pglpm.github.io/prova/reference/metadatatemplate.md)):
+
+- For a discrete (nominal or ordinal) variate, all possible values are
+  chosen.
+
+- For a continuous, *non-rounded* variate, a number of values as
+  specified in the `length.out` argument; or 129 values if `length.out`
+  is missing or `NA`.
+
+- For a continuous, *rounded* variate, a number of values as specified
+  in the `length.out` argument; or, if `length.out` is missing or `NA`,
+  the output values are separated by the variates's rounding interval
+  (field `datastep` in the
+  [`metadata`](https://pglpm.github.io/prova/reference/metadatatemplate.md)).
+
+The output is a [data frame](https://rdrr.io/r/base/data.frame.html)
+that can be used directly in functions like
+[`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 
 ## See also
 
@@ -50,6 +77,10 @@ generates the `learnt` objects required by `vrtgrid()`.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 probabilities and their revisabilities.
+
+[`base::expand.grid()`](https://rdrr.io/r/base/expand.grid.html) to
+create a data frame with combination of specified values of several
+variates.
 
 [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md)
 to plot probabilities and quantiles calculated by
@@ -67,27 +98,61 @@ learnt <- learntExample
 valuesSpecies <- vrtgrid(vrt = 'species', learnt = learnt)
 
 print(valuesSpecies)
-#> [1] "Adelie"    "Chinstrap" "Gentoo"   
+#>     species
+#> 1    Adelie
+#> 2 Chinstrap
+#> 3    Gentoo
 
-## create a set of values for the variate "bill length";
-## this variate is continuous and rounded, only realistic values are included
-valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt)
+## create a small set of values for the variate "bill length";
+## this variate is continuous and rounded
+valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 4)
 
-range(valuesBill)
-#> [1] 27.5 64.2
-
-## let's take a subset of these values, to speed up computation
-valuesBill <- valuesBill[seq(to = length(valuesBill), length.out = 65)]
+print(valuesBill)
+#>   bill_len
+#> 1 27.50000
+#> 2 39.73333
+#> 3 51.96667
+#> 4 64.20000
 
 ## calculate the conditional probabilities for the 'bill_len' values above,
 ## given the values of 'species'
-probs <- Pr(
-  Y = data.frame(bill_len = valuesBill),
-  X = data.frame(species = valuesSpecies),
-  learnt = learnt, parallel = 1
-)
+probs <- Pr(Y = valuesBill, X = valuesSpecies, learnt = learnt, parallel = 1)
 
-## plot the conditional probability distributions, and their revisabilities
-plot(probs)
 
+## Create a data frame with all possible combinations of the values above;
+## the 'length.out' argument does not apply to the discrete variate 'species'
+valuesAll <- vrtgrid(vrt = c('species', 'bill_len'), learnt = learnt, length.out = 4)
+
+print(valuesAll)
+#>      species bill_len
+#> 1     Adelie 27.50000
+#> 2  Chinstrap 27.50000
+#> 3     Gentoo 27.50000
+#> 4     Adelie 39.73333
+#> 5  Chinstrap 39.73333
+#> 6     Gentoo 39.73333
+#> 7     Adelie 51.96667
+#> 8  Chinstrap 51.96667
+#> 9     Gentoo 51.96667
+#> 10    Adelie 64.20000
+#> 11 Chinstrap 64.20000
+#> 12    Gentoo 64.20000
+
+## base::expand.grid() would give a similar result
+valuesAll2 <- expand.grid(species = unlist(valuesSpecies), bill_len = unlist(valuesBill))
+
+print(valuesAll2)
+#>      species bill_len
+#> 1     Adelie 27.50000
+#> 2  Chinstrap 27.50000
+#> 3     Gentoo 27.50000
+#> 4     Adelie 39.73333
+#> 5  Chinstrap 39.73333
+#> 6     Gentoo 39.73333
+#> 7     Adelie 51.96667
+#> 8  Chinstrap 51.96667
+#> 9     Gentoo 51.96667
+#> 10    Adelie 64.20000
+#> 11 Chinstrap 64.20000
+#> 12    Gentoo 64.20000
 ```

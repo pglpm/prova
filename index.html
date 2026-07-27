@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Nonparametric Probabilistic-Statistical Variate Analysis with Automated Markov-Chain Monte Carlo • prova</title>
+<title>Nonparametric Probabilistic-Statistical Variate Analysis • prova</title>
 <!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
   window.MathJax = {
     chtml: {
@@ -16,7 +16,7 @@
 <link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Nonparametric Probabilistic-Statistical Variate Analysis with Automated Markov-Chain Monte Carlo">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Nonparametric Probabilistic-Statistical Variate Analysis">
 <meta name="description" content="Calculate posterior joint and conditional probabilities, probability distributions of population frequencies, and information-theoretic measures, by means of Bayesian nonparametric methods. Data can be any combination of nominal, ordinal, continuous, censored, rounded types. Data imputation is automatic and done in a principled way. Markov-chain Monte Carlo calculations are automatically handled and do not require user supervision. Applications range from statistical estimation and probabilistic hypothesis testing to evidence-based inference and decision making, in a wide range of disciplines from astrophysics to medicine. For more details and examples see for instance Porta Mana et al. (2026) &lt;doi:10.31219/osf.io/8nr56&gt;, Dunson &amp; Bhattacharya (2011) &lt;doi:10.1093/acprof:oso/9780199694587.003.0005&gt;, Lindley &amp; Novick (1981) &lt;doi:10.1214/aos/1176345331&gt;, Bernardo &amp; Smith (2000) &lt;doi:10.1002/9780470316870&gt;, Müller et al. (2015) &lt;doi:10.1007/978-3-319-18968-0&gt;. Requires the package Nimble.">
 <meta property="og:description" content="Calculate posterior joint and conditional probabilities, probability distributions of population frequencies, and information-theoretic measures, by means of Bayesian nonparametric methods. Data can be any combination of nominal, ordinal, continuous, censored, rounded types. Data imputation is automatic and done in a principled way. Markov-chain Monte Carlo calculations are automatically handled and do not require user supervision. Applications range from statistical estimation and probabilistic hypothesis testing to evidence-based inference and decision making, in a wide range of disciplines from astrophysics to medicine. For more details and examples see for instance Porta Mana et al. (2026) &lt;doi:10.31219/osf.io/8nr56&gt;, Dunson &amp; Bhattacharya (2011) &lt;doi:10.1093/acprof:oso/9780199694587.003.0005&gt;, Lindley &amp; Novick (1981) &lt;doi:10.1214/aos/1176345331&gt;, Bernardo &amp; Smith (2000) &lt;doi:10.1002/9780470316870&gt;, Müller et al. (2015) &lt;doi:10.1007/978-3-319-18968-0&gt;. Requires the package Nimble.">
 </head>
@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9">
-<p><img src="https://github.com/pglpm/prova/raw/main/man/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"></p>
+<p><img src="/reference/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"></p>
 <p>“prova” /’prɔva/ (Italian)</p>
 <ul>
 <li>
@@ -94,18 +94,64 @@
 <li>
 <strong>Automated Markov-chain Monte Carlo</strong> computation. Users unfamiliar with Monte Carlo methods don’t have to worry, because the computations are handled automatically.</li>
 </ul>
-<p>The package at bottom does Bayesian nonparametric inference (also called “density inference” or “inference under exchangeability”), which makes all features above possible.</p>
+<p>The package essentially performs Bayesian nonparametric inference (also called “density inference” or “inference under exchangeability”), which makes most features above possible.</p>
+<p><br></p>
+<div class="section level2">
+<h2 id="minimal-example">Minimal example<a class="anchor" aria-label="anchor" href="#minimal-example"></a>
+</h2>
+<p>Use the <a href="https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html" class="external-link">R <code>penguins</code> dataset</a> (or download a shuffled version from <a href="https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv" class="external-link">here</a>), together with the metadata <code>meta_penguins</code> available in <strong>Prova</strong>. Metadata contain the characteristics of the dataset’s variates.</p>
+<p>“Learn” from this dataset using the function <code><a href="reference/learn.html">learn()</a></code>. Note that the dataset has partially missing values (datapoint #4 for instance), but this is not a problem for <strong>Prova</strong>:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">learnt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/learn.html">learn</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, metadata <span class="op">=</span> <span class="va">meta_penguins</span><span class="op">)</span></span>
+<span><span class="co"># [progress output about the learning computation]</span></span></code></pre></div>
+<p>Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a <em>new</em> penguin from this population is of species <em>Adélie</em>, if its bill length is 45 mm? To answer this question we use the function <code><a href="reference/Pr.html">Pr()</a></code>, and print a summary of the result:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Pr.html">Pr</a></span><span class="op">(</span></span>
+<span>    Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="co"># predictand</span></span>
+<span>    X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">45</span><span class="op">)</span>,      <span class="co"># predictor</span></span>
+<span>    learnt <span class="op">=</span> <span class="va">learnt</span>                     <span class="co"># learned data</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span>
+<span><span class="co"># , , |bill_len = 45</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co">#         probability</span></span>
+<span><span class="co"># species  value   +/-     Q5.5%   Q25%    Q75%    Q94.5%</span></span>
+<span><span class="co">#   Adelie 0.09857 0.00053 0.05337 0.07534 0.11893 0.1527</span></span></code></pre></div>
+<p>The answer is that there is roughly a 10% probability that a new penguin, among those with a 45 mm bill length, is of species <em>Adélie</em>.</p>
+<p>Now ask: what is the relative frequency of <em>Adélie</em> species <em>in the whole subpopulation</em> (including unsampled penguins), of penguins having bill length of 45 mm? This cannot be answered with certainty, because we have only a sample of the full population. But <strong>Prova</strong> can calculate the <em>probability distribution</em> for this full-population frequency. In fact, it has already been calculated by the function <code><a href="reference/Pr.html">Pr()</a></code> above, and we can visualize it with a plot:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span></code></pre></div>
+<p><img src="/reference/figures/README-hist-1.svg" alt="probability of long-run frequency" width="100%"></p>
+<p>The plot shows that this full-population frequency is most likely (with roughly 90% probability) between 0.05 and 0.15. These are the values shown by <code>print(prob)</code> above.</p>
+<p>The <em>inverse</em> question can also be asked: if we observe a new penguin of <em>Adélie</em> species, what could its bill length be? The answer is uncertain, and <strong>Prova</strong> can calculate the probability distribution of the penguin’s bill length:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">invprob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Pr.html">Pr</a></span><span class="op">(</span></span>
+<span>    Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">30</span><span class="op">:</span><span class="fl">50</span><span class="op">)</span>,   <span class="co"># predictand</span></span>
+<span>    X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="co"># predictor</span></span>
+<span>    learnt <span class="op">=</span> <span class="va">learnt</span>                     <span class="co"># learned data</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">invprob</span><span class="op">)</span></span></code></pre></div>
+<p><img src="/reference/figures/README-plot-1.svg" alt="probability distribution for bill length" width="100%"></p>
+<p>this probability distribution has a peak between 35 mm and 40 mm and it’s slightly skewed.</p>
+<p>This distribution is not the <em>frequency</em> distribution of bill length in the whole subpopulation of <em>Adélie</em> penguins; the latter is uncertain because we have only a sample. But the plot above shows that the full-population frequency distribution is somewhere between the grey bands.</p>
+<p></p>
+<p>This was just a minimal example, just touching on the basic functionality. More complex combinations of variates and more complex probabilistic-statistical questions can be approached.</p>
 <p>The <a href="https://pglpm.github.io/prova/articles/intro.html">introductory vignette</a> explains, with a guided example, most of the features above, as well as the main ideas and functions. It can be particularly useful for researchers who are more familiar with traditional “frequentist” statistics but would like to try the Bayesian approach. See the <a href="https://www.apadivisions.org/division-7/publications/newsletters/developmental/2018/07/bayesian-statistics" class="external-link">post</a> by Barbara W. Sarnecka, frequentist statistician turned Bayesian, for a brilliant overview of the Bayesian advantages. The <a href="https://pglpm.github.io/prova/articles/mutualinfo.html">vignette about mutual information</a> explains the use of this powerful measure of association.</p>
-<p>The package is under continuous development, but the core functionalities work and have been tested in concrete research questions; see <a href="#example-applications">example applications</a> below.</p>
+<p>The package is under continuous development, but the core functionalities work and have been tested in concrete research projects; see <a href="#example-applications">example applications</a> below.</p>
 <p>The package internally does the computations necessary for Bayesian inference by means of Monte Carlo methods thanks to the R package <a href="https://r-nimble.org/" class="external-link"><strong>Nimble</strong></a>. As already mentioned, this computation is automated. Users familiar with Monte Carlo methods can still access computational details and can even change some of the computation hyperparameters.</p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p><strong>You need to have installed the package <a href="https://r-nimble.org/" class="external-link"><strong>Nimble</strong></a>, <em>at least version 1.4.2</em>.</strong> Please follow <a href="https://r-nimble.org/manual/cha-installing-nimble.html" class="external-link">Nimble’s installation instructions</a> for your operating system.</p>
 <p>Then <strong>Prova</strong> can be installed from <a href="https://CRAN.R-project.org/package=prova" class="external-link">CRAN</a> with</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'prova'</span><span class="op">)</span></span></code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'prova'</span><span class="op">)</span></span></code></pre></div>
 <p>In case of a newer version not yet on CRAN, it can be installed with</p>
-<pre><code><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'pglpm/prova'</span><span class="op">)</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'pglpm/prova'</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>

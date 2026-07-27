@@ -5,5 +5,14 @@ Used in [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 ## Usage
 
 ``` r
-.combineYX(iyx, temporarydir, usememory = TRUE, quantiles, nsamples, Qerror)
+.combineYX(
+  iyx,
+  temporarydir,
+  usememory = TRUE,
+  doquantiles,
+  quantiles,
+  dosamples,
+  nsamples,
+  Qerror
+)
 ```

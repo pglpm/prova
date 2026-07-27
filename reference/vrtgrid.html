@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create a grid of values for a variate — vrtgrid"><meta name="description" content="This function creates a set of values for a variate, based on the information from data and metadata stored in a learnt object, created by the learn() function. The set of values depends on the type of variate (nominal or continuous, rounded, and so on, see metadata). The range of values is chosen to include, and extend slightly beyond, the range observed in the data used in the learn() function. Variate domains are always respected."><meta property="og:description" content="This function creates a set of values for a variate, based on the information from data and metadata stored in a learnt object, created by the learn() function. The set of values depends on the type of variate (nominal or continuous, rounded, and so on, see metadata). The range of values is chosen to include, and extend slightly beyond, the range observed in the data used in the learn() function. Variate domains are always respected."></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Create a grid of values for a variate — vrtgrid"><meta name="description" content="This function creates a data frame of values for one variate, or a combination of values for several variates."><meta property="og:description" content="This function creates a data frame of values for one variate, or a combination of values for several variates."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,12 +45,12 @@
     </div>
 
     <div class="ref-description section level2">
-    <p>This function creates a set of values for a variate, based on the information from data and metadata stored in a <code>learnt</code> object, created by the <code><a href="learn.html">learn()</a></code> function. The set of values depends on the type of variate (nominal or continuous, rounded, and so on, see <a href="metadatatemplate.html">metadata</a>). The range of values is chosen to include, and extend slightly beyond, the range observed in the data used in the <code><a href="learn.html">learn()</a></code> function. Variate domains are always respected.</p>
+    <p>This function creates a data frame of values for one variate, or a combination of values for several variates.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vrtgrid</span><span class="op">(</span><span class="va">vrt</span>, <span class="va">learnt</span>, length.out <span class="op">=</span> <span class="fl">129</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vrtgrid</span><span class="op">(</span><span class="va">vrt</span>, <span class="va">learnt</span>, length.out <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -58,7 +58,7 @@
 
 
 <dl><dt id="arg-vrt">vrt<a class="anchor" aria-label="anchor" href="#arg-vrt"></a></dt>
-<dd><p>Character: name of the variate, must match one of the names in the <code>metadata</code> file provided to the <code><a href="learn.html">learn()</a></code> function.</p></dd>
+<dd><p>Character vector: names of the variates; they must match variate names in the <code>metadata</code> file provided to the <code><a href="learn.html">learn()</a></code> function.</p></dd>
 
 
 <dt id="arg-learnt">learnt<a class="anchor" aria-label="anchor" href="#arg-learnt"></a></dt>
@@ -66,17 +66,26 @@
 
 
 <dt id="arg-length-out">length.out<a class="anchor" aria-label="anchor" href="#arg-length-out"></a></dt>
-<dd><p>Numeric, positive (default 129): number of values to be created; used only for continuous, non-rounded variates (see <code><a href="metadatatemplate.html">metadata</a></code>).</p></dd>
+<dd><p>Vector or list of positive integer or <code>NA</code> values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in <code>vrt</code>. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of <code>NA</code> values. Default <code>NA</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A numeric or character vector of values.</p>
+    <p>A <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> with columns corresponding to the <code>vrt</code> argument, and one row for each combination of the variate values.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>The value ranges are based on the information from data and metadata stored in the <code>learnt</code> object (see <code><a href="learn.html">learn()</a></code>) provided in the <code>learnt =</code> argument; they include, and extend slightly beyond, the ranges observed in the data used in the <code><a href="learn.html">learn()</a></code> function. Variate domains are always respected.</p>
+<p>The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see <a href="metadatatemplate.html">metadata</a>):</p><ul><li><p>For a discrete (nominal or ordinal) variate, all possible values are chosen.</p></li>
+<li><p>For a continuous, <em>non-rounded</em> variate, a number of values as specified in the <code>length.out</code> argument; or 129 values if <code>length.out</code> is missing or <code>NA</code>.</p></li>
+<li><p>For a continuous, <em>rounded</em> variate, a number of values as specified in the <code>length.out</code> argument; or, if <code>length.out</code> is missing or <code>NA</code>, the output values are separated by the variates's rounding interval (field <code>datastep</code> in the <code><a href="metadatatemplate.html">metadata</a></code>).</p></li>
+</ul><p>The output is a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> that can be used directly in functions like <code><a href="Pr.html">Pr()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, which generates the <code>learnt</code> objects required by <code>vrtgrid()</code>.</p>
 <p><code><a href="Pr.html">Pr()</a></code> to calculate probabilities and their revisabilities.</p>
+<p><code><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">base::expand.grid()</a></code> to create a data frame with combination of specified values of several variates.</p>
 <p><code><a href="plot.probability.html">plot.probability()</a></code> to plot probabilities and quantiles calculated by <code><a href="Pr.html">Pr()</a></code>.</p></div>
     </div>
 
@@ -91,29 +100,63 @@
 <span class="r-in"><span><span class="va">valuesSpecies</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'species'</span>, learnt <span class="op">=</span> <span class="va">learnt</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valuesSpecies</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Adelie"    "Chinstrap" "Gentoo"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Adelie</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Chinstrap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    Gentoo</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## create a set of values for the variate "bill length";</span></span></span>
-<span class="r-in"><span><span class="co">## this variate is continuous and rounded, only realistic values are included</span></span></span>
-<span class="r-in"><span><span class="va">valuesBill</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'bill_len'</span>, learnt <span class="op">=</span> <span class="va">learnt</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## create a small set of values for the variate "bill length";</span></span></span>
+<span class="r-in"><span><span class="co">## this variate is continuous and rounded</span></span></span>
+<span class="r-in"><span><span class="va">valuesBill</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'bill_len'</span>, learnt <span class="op">=</span> <span class="va">learnt</span>, length.out <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">valuesBill</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 27.5 64.2</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## let's take a subset of these values, to speed up computation</span></span></span>
-<span class="r-in"><span><span class="va">valuesBill</span> <span class="op">&lt;-</span> <span class="va">valuesBill</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">valuesBill</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">65</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valuesBill</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   bill_len</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 27.50000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 39.73333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 51.96667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 64.20000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## calculate the conditional probabilities for the 'bill_len' values above,</span></span></span>
 <span class="r-in"><span><span class="co">## given the values of 'species'</span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="va">valuesBill</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="va">valuesSpecies</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span>, parallel <span class="op">=</span> <span class="fl">1</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">valuesBill</span>, X <span class="op">=</span> <span class="va">valuesSpecies</span>, learnt <span class="op">=</span> <span class="va">learnt</span>, parallel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## plot the conditional probability distributions, and their revisabilities</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="vrtgrid-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Create a data frame with all possible combinations of the values above;</span></span></span>
+<span class="r-in"><span><span class="co">## the 'length.out' argument does not apply to the discrete variate 'species'</span></span></span>
+<span class="r-in"><span><span class="va">valuesAll</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span>vrt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'species'</span>, <span class="st">'bill_len'</span><span class="op">)</span>, learnt <span class="op">=</span> <span class="va">learnt</span>, length.out <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valuesAll</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      species bill_len</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     Adelie 27.50000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Chinstrap 27.50000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     Gentoo 27.50000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     Adelie 39.73333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Chinstrap 39.73333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     Gentoo 39.73333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     Adelie 51.96667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Chinstrap 51.96667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     Gentoo 51.96667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    Adelie 64.20000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 Chinstrap 64.20000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    Gentoo 64.20000</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## base::expand.grid() would give a similar result</span></span></span>
+<span class="r-in"><span><span class="va">valuesAll2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">valuesSpecies</span><span class="op">)</span>, bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">valuesBill</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valuesAll2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      species bill_len</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     Adelie 27.50000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Chinstrap 27.50000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     Gentoo 27.50000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     Adelie 39.73333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Chinstrap 39.73333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     Gentoo 39.73333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     Adelie 51.96667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Chinstrap 51.96667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     Gentoo 51.96667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    Adelie 64.20000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 Chinstrap 64.20000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    Gentoo 64.20000</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

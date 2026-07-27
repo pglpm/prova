@@ -441,8 +441,8 @@ learnt <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/Rtmpjgq58Z/prova-V1_D3_S10_260723T160254_19fb3b9ca8df
-#> Prova v1.9.1.
+#> /tmp/RtmpiAeAhk/prova-V1_D3_S10_260727T210101_1a12449b0131
+#> Prova v1.10.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
@@ -453,21 +453,100 @@ learnt <- learn(
 #>                                                                
 #> Finished Monte Carlo sampling.
 #> Highest number of Monte Carlo iterations across chains: 10.
-#> Highest number of used mixture components: 2.
+#> Highest number of used mixture components: 3.
 #> 
 #> Checking test data
 #> (#1 #2 #3):
-#> rel. quantile error: 0.324 to 0.751
-#> ESS: 8.05 to 8.59
-#> needed thinning: 1.05 to 5.07
-#> average: 0.0546 to 0.392
-#> quantile width: 0.143 to 0.998
+#> rel. quantile error: 0.341 to 0.816
+#> ESS: 6.13 to 8.59
+#> needed thinning: 1.05 to 5.99
+#> average: 0.0919 to 0.187
+#> quantile width: 0.0585 to 0.541
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Error in learn(data = dataset, metadata = metadata, nsamples = 10, nchains = 1,     startupMCiterations = 10, maxMCiterations = 10, minESS = 0,     initES = 0): object 'cl0' not found
+#> Total computation time: 38 secs
+#> Average preparation & finalization time: 37 secs.
+#> Average Monte Carlo time per chain: 0.58 secs.
+#> Max total memory used: approx 340MB.
+#> Max memory used per core: approx 340MB.
+#> Removing temporary output files.
+#> Finished.
+#> 
+#> **********************************************************
+#> Output saved in directory
+#> /tmp/RtmpiAeAhk/prova-V1_D3_S10_260727T210101_1a12449b0131
+#> **********************************************************
 
 ## Check structure of `learnt` object:
 str(learnt)
-#> Error: object 'learnt' not found
+#> List of 6
+#>  $ Rmean      : num [1, 1:64, 1:9] -1.047 3.247 2.547 -2.543 -0.296 ...
+#>  $ Rsd        : num [1, 1:64, 1:9] 8.224 0.227 1.145 0.638 7.141 ...
+#>  $ W          : num [1:64, 1:9] 4.10e-13 4.32e-10 6.51e-28 1.31e-262 2.73e-28 ...
+#>  $ MCindex    : num [1:9(1d)] 1 2 3 4 6 7 8 9 10
+#>  $ auxmetadata:'data.frame': 1 obs. of  24 variables:
+#>   ..$ name             : chr "V"
+#>   ..$ type             : chr "continuous"
+#>   ..$ mcmctype         : chr "R"
+#>   ..$ id               : int 1
+#>   ..$ transform        : chr "identity"
+#>   ..$ Nvalues          : int NA
+#>   ..$ indexpos         : int NA
+#>   ..$ halfstep         : num 0
+#>   ..$ domainmin        : num -Inf
+#>   ..$ domainmax        : num Inf
+#>   ..$ minincluded      : logi FALSE
+#>   ..$ maxincluded      : logi FALSE
+#>   ..$ tdomainmin       : num -Inf
+#>   ..$ tdomainmax       : num Inf
+#>   ..$ domainminplushs  : num -Inf
+#>   ..$ domainmaxminushs : num Inf
+#>   ..$ tdomainminplushs : num -Inf
+#>   ..$ tdomainmaxminushs: num Inf
+#>   ..$ tlocation        : num -0.59
+#>   ..$ tscale           : num 0.0508
+#>   ..$ plotmin          : num -0.815
+#>   ..$ plotmax          : num -0.381
+#>   ..$ V1               : logi NA
+#>   ..$ V2               : logi NA
+#>  $ auxinfo    :List of 12
+#>   ..$ nchains            : num 1
+#>   ..$ npoints            : int 3
+#>   ..$ hyperparams        :List of 21
+#>   .. ..$ ncomponents : num 64
+#>   .. ..$ minalpha    : num -4
+#>   .. ..$ maxalpha    : num 4
+#>   .. ..$ byalpha     : num 1
+#>   .. ..$ Rshapelo    : num 0.5
+#>   .. ..$ Rshapehi    : num 0.5
+#>   .. ..$ Rvarm1      : num 9
+#>   .. ..$ Cshapelo    : num 0.5
+#>   .. ..$ Cshapehi    : num 0.5
+#>   .. ..$ Cvarm1      : num 9
+#>   .. ..$ Dshapelo    : num 0.5
+#>   .. ..$ Dshapehi    : num 0.5
+#>   .. ..$ Dvarm1      : num 9
+#>   .. ..$ Bshapelo    : num 1
+#>   .. ..$ Bshapehi    : num 1
+#>   .. ..$ Dthreshold  : num 1
+#>   .. ..$ tscalefactor: num 4.27
+#>   .. ..$ Oprior      : chr "Hadamard"
+#>   .. ..$ Nprior      : chr "Hadamard"
+#>   .. ..$ initmethod  : chr "datacentre"
+#>   .. ..$ Qerror      : num [1:2] 0.159 0.841
+#>   ..$ maxiterations      : num 10
+#>   ..$ maxusedcomponents  : num 3
+#>   ..$ nonfinitechains    : num 0
+#>   ..$ stoppedchains      : num 0
+#>   ..$ rel. quantile error: Named num [1:4] 0.341 0.573 0.426 0.816
+#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
+#>   ..$ ESS                : Named num [1:4] 8.59 6.13 8.59 8.59
+#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
+#>   ..$ needed thinning    : Named num [1:4] 1.05 2.96 1.64 5.99
+#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
+#>   ..$ average            : Named num [1:4] 0.1168 0.1558 0.0919 0.1865
+#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
+#>   ..$ quantile width     : Named num [1:4] 0.0585 0.231 0.1549 0.5406
+#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
 # }
 ```

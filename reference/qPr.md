@@ -13,7 +13,6 @@ qPr(
   X = NULL,
   learnt,
   tails = NULL,
-  priorY = NULL,
   nsamples = "all",
   quantiles = c(0.055, 0.5, 0.945),
   parallel = TRUE,
@@ -56,10 +55,6 @@ qPr(
   the probability conditional is understood in a semi-open interval
   sense: \\X \le x\\ or \\X \ge x\\, an so on. See analogous argument in
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
-
-- priorY:
-
-  Reserved for use in future versions of the package.
 
 - nsamples:
 

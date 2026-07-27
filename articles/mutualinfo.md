@@ -11,11 +11,11 @@ present vignette continues with the same example and dataset.
 
 ## Probabilities and associations
 
-The `vignette('start')` focuses on the
-[`datasets::penguins`](https://rdrr.io/r/datasets/penguins.html)
-dataset, and shows how to calculate probabilities of single and joint
-variates from that dataset; also probabilities conditional on given
-variates. These probabilities refers to a *new unit*; for example:
+The `vignette('start')` focuses on the dataset
+[`datasets::penguins`](https://rdrr.io/r/datasets/penguins.html), and
+shows how to calculate probabilities of single and joint variates from
+that dataset; also probabilities conditional on given variates. These
+probabilities refers to a *new unit*; for example:
 
 - If we find that
   \\\mathrm{Pr}(\text{species}\mathrel{\\=\\}\text{Adelie}) = 44\\\\,
@@ -65,14 +65,22 @@ set.seed(10)
 ```
 
 As in the `vignette('start')`, we work with a specific population of
-penguins, of which we have 344 sample data stored in the
-\[[`datasets::penguins`](https://rdrr.io/r/datasets/penguins.html)\]
-dataset, included in R version 4.5.0 and above. For your convenience you
-can download the shuffled dataset as the CSV file
-[`penguin_data.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguin_data.csv),
+penguins, of which we have 344 sample data stored in the dataset
+[`datasets::penguins`](https://rdrr.io/r/datasets/penguins.html),
+included in R version 4.5.0 and above. For your convenience, for
+instance if you have an older R version, you can also download the
+shuffled dataset as the CSV file
+[`penguins_shuffled.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv),
 then load it with the
 [`pread.csv()`](https://pglpm.github.io/prova/reference/prova.data.md)
 function as follows:
+
+``` r
+
+if(!exists('penguins')){
+    penguins <- pread.csv('penguins_shuffled.csv')
+}
+```
 
 We assume that we have already learned all predictive information from
 this dataset by means of the **Prova** function
@@ -104,31 +112,30 @@ stored in the metadata of the `learnt` object:
 
 ``` r
 
-islandvalues <- vrtgrid(vrt = 'island', learnt = learnt)
+islandvalues <- unlist(vrtgrid(vrt = 'island', learnt = learnt))
 # [1] "Biscoe"    "Dream"     "Torgersen"
 
-speciesvalues <- vrtgrid(vrt = 'species', learnt = learnt)
+speciesvalues <- unlist(vrtgrid(vrt = 'species', learnt = learnt))
 # [1] "Adelie"    "Chinstrap" "Gentoo"
 ```
 
-The
-[`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
-function allows us to display the `island` and `species` variates
-against each other, for all *sample* data, as a scatter plot:
+The function
+[`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) allows us
+to display the `island` and `species` variates against each other, for
+all *sample* data, as a scatter plot:
 
 ``` r
 
-flexiplot(x = penguin$island, y = penguin$species,
+pplot(x = penguins$island, y = penguins$species,
     type = 'p', xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues)
 ```
 
-![\*\*Scatter plot of sample data\*\*](figure/vissample-1.jpeg)
+![\*\*Scatter plot of sample data\*\*](figure/vissample-1.svg)
 
 **Scatter plot of sample data**
 
-Note how
-[`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
+Note how [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md)
 automatically add a slight jitter (by means of
 [`base::jitter()`](https://rdrr.io/r/base/jitter.html)) to the discrete
 variates, so that the points don’t just overlap rendering the plot
@@ -213,13 +220,13 @@ Now let’s generate 2000 samples, and then plot them in a scatter plot:
 
 samples <- rPr(n = 2000, Ynames = c('island', 'species'), learnt = learnt)
 
-flexiplot(x = samples$island, y = samples$species,
+pplot(x = samples$island, y = samples$species,
     type = 'p', xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues)
 ```
 
 ![\*\*Scatter plot for \*whole\*
-population\*\*](figure/gensamplesplot-1.jpeg)
+population\*\*](figure/gensamplesplot-1.svg)
 
 **Scatter plot for *whole* population**
 
@@ -236,9 +243,9 @@ us visualize for instance the joint probability of `body_mass` and
 We generate 2000 whole-population samples of the two variates with
 [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md), and then
 scatter-plot them with
-[`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md).
-First we select an appropriate plot range for the continuous variate
-`body_mass` by means of **Prova**’s utility function
+[`pplot()`](https://pglpm.github.io/prova/reference/pplot.md). First we
+select an appropriate plot range for the continuous variate `body_mass`
+by means of **Prova**’s utility function
 [`vrtgrid()`](https://pglpm.github.io/prova/reference/vrtgrid.md): this
 function chooses an optimal value based on, and including, the range of
 data previously observed:
@@ -249,18 +256,18 @@ body_massrange <- range(vrtgrid(vrt = 'body_mass', learnt = learnt))
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), learnt = learnt)
 
-flexiplot(x = samples$body_mass, y = samples$species,
+pplot(x = samples$body_mass, y = samples$species,
     type = 'p', xlab = 'body mass / g', ylab = 'species',
     xlim = body_massrange, ydomain = speciesvalues)
 ```
 
 ![\*\*Scatter plot for body mass and
-species\*\*](figure/gensamplesplotbodymassspecies-1.jpeg)
+species\*\*](figure/gensamplesplotbodymassspecies-1.svg)
 
 **Scatter plot for body mass and species**
 
 Note again how
-[`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
+[`pplot()`](https://pglpm.github.io/prova/reference/pplot.md)
 automatically add a jitter to the discrete variate `species`, but not to
 the continuous `body_mass`.
 
@@ -280,13 +287,13 @@ bill_lenrange <- range(vrtgrid(vrt = 'bill_len', learnt = learnt))
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), learnt = learnt)
 
-flexiplot(x = samples$body_mass, y = samples$bill_len,
+pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
     xlim = body_massrange, ylim = bill_lenrange)
 ```
 
 ![\*\*Scatter plot of body mass and bill
-length\*\*](figure/gensamplesplotbodybilllen-1.jpeg)
+length\*\*](figure/gensamplesplotbodybilllen-1.svg)
 
 **Scatter plot of body mass and bill length**
 
@@ -302,11 +309,10 @@ different **subpopulations**.
 
 Subpopulation sampling and plots can also be easily done with the
 [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md) and
-[`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
-functions. In the
-[`rPr()`](https://pglpm.github.io/prova/reference/rPr.md) function we
-can specify the requested subpopulation via the `X` argument,
-analogously to the
+[`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) functions.
+In the [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md)
+function we can specify the requested subpopulation via the `X`
+argument, analogously to the
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function.
 
 Let’s generate sets of samples separately for the species `'Adelie'`,
@@ -334,18 +340,18 @@ samplesGentoo <- rPr(
 ```
 
 Now we plot these samples together with
-[`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md),
-choosing different colours and shapes for the three subpopulations. We
-also use the `alpha.f` argument to make sure that the plot points don’t
+[`pplot()`](https://pglpm.github.io/prova/reference/pplot.md), choosing
+different colours and shapes for the three subpopulations. We also use
+the `alpha.f` argument to make sure that the plot points don’t
 completely cover one another:
 
 ``` r
 
-flexiplot(
-    x = cbind(samplesAdelie$body_mass,
+pplot(
+    x = list(samplesAdelie$body_mass,
         samplesChinstrap$body_mass,
         samplesGentoo$body_mass),
-    y = cbind(samplesAdelie$bill_len,
+    y = list(samplesAdelie$bill_len,
         samplesChinstrap$bill_len,
         samplesGentoo$bill_len),
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
@@ -357,7 +363,7 @@ legend('top', speciesvalues, pch = c(0, 2, 5), col = 2:4,
 ```
 
 ![\*\*Scatter plot for species
-subpopulations\*\*](figure/plotbodybilllen3-1.jpeg)
+subpopulations\*\*](figure/plotbodybilllen3-1.svg)
 
 **Scatter plot for species subpopulations**
 
@@ -407,13 +413,13 @@ r <- cor(Y1, Y2, method = 'pearson')
 print(r)
 # [1] 0
 
-flexiplot(x = Y1, y = Y2, type = 'p',
+pplot(x = Y1, y = Y2, type = 'p',
     xlab = 'Y1', ylab = 'Y2',
     main = paste0('Pearson correlation: ', signif(r, 2)))
 ```
 
 ![\*\*Perfect correlation from \$Y_1\$ to \$Y_2\$, with zero Pearson
-correlation coefficient\*\*](figure/pearsonplot-1.jpeg)
+correlation coefficient\*\*](figure/pearsonplot-1.svg)
 
 **Perfect correlation from \\Y_1\\ to \\Y_2\\, with zero Pearson
 correlation coefficient**
@@ -576,7 +582,7 @@ coefficient \\r\\:
 \lvert r\rvert = \sqrt{1 - 2^{- 2 I/\mathrm{Sh}}} \\
 
 ![\*\*\$I\$ vs \$\lvert r\rvert\$ for jointly Gaussian
-variates\*\*](figure/Ivsr-1.jpeg)
+variates\*\*](figure/Ivsr-1.svg)
 
 **\\I\\ vs \\\lvert r\rvert\\ for jointly Gaussian variates**
 
@@ -617,7 +623,7 @@ r <- signif(MIislandspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('island', 'species'), learnt = learnt)
 
-flexiplot(x = samples$island, y = samples$species,
+pplot(x = samples$island, y = samples$species,
     type = 'p', xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues,
     main = paste0('mutual info: ', mi, ' Sh',
@@ -625,7 +631,7 @@ flexiplot(x = samples$island, y = samples$species,
 ```
 
 ![\*\*Scatter plot for \`island\` and
-\`species\`\*\*](figure/gensamplesplotbis-1.jpeg)
+\`species\`\*\*](figure/gensamplesplotbis-1.svg)
 
 **Scatter plot for `island` and `species`**
 
@@ -653,7 +659,7 @@ r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), learnt = learnt)
 
-flexiplot(x = samples$body_mass, y = samples$species,
+pplot(x = samples$body_mass, y = samples$species,
     type = 'p', xlab = 'body mass / g', ylab = 'species',
     xlim = body_massrange, ydomain = speciesvalues,
     main = paste0('mutual info: ', mi, ' Sh',
@@ -661,7 +667,7 @@ flexiplot(x = samples$body_mass, y = samples$species,
 ```
 
 ![\*\*Scatter plot and mutual info for body mass and
-species\*\*](figure/gensamplesplotbodymassspeciesbis-1.jpeg)
+species\*\*](figure/gensamplesplotbodymassspeciesbis-1.svg)
 
 **Scatter plot and mutual info for body mass and species**
 
@@ -689,7 +695,7 @@ r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), learnt = learnt)
 
-flexiplot(x = samples$body_mass, y = samples$bill_len,
+pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
     xlim = body_massrange, ylim = bill_lenrange,
     main = paste0('mutual info: ', mi, ' Sh',
@@ -697,7 +703,7 @@ flexiplot(x = samples$body_mass, y = samples$bill_len,
 ```
 
 ![\*\*Scatter plot and mutual info for body mass and bill
-length\*\*](figure/gensamplesplotbodymassbilllenbis-1.jpeg)
+length\*\*](figure/gensamplesplotbodymassbilllenbis-1.svg)
 
 **Scatter plot and mutual info for body mass and bill length**
 
@@ -707,7 +713,7 @@ Note that in this case the Pearson correlation between `body_mass` and
 ``` r
 
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.560428
+# [1] 0.578888
 ```
 
 which is different from the rough \\r\\-equivalent 0.67.
@@ -769,11 +775,11 @@ mispecies <- signif(c(
     MIgentoo$value
 ), digits = 2)
 
-flexiplot(
-    x = cbind(samplesAdelie$body_mass,
+pplot(
+    x = list(samplesAdelie$body_mass,
         samplesChinstrap$body_mass,
         samplesGentoo$body_mass),
-    y = cbind(samplesAdelie$bill_len,
+    y = list(samplesAdelie$bill_len,
         samplesChinstrap$bill_len,
         samplesGentoo$bill_len),
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
@@ -787,7 +793,7 @@ legend('top',
 ```
 
 ![\*\*Scatter plot and mutual info for species
-subpopulations\*\*](figure/plotbodybilllen3mi-1.jpeg)
+subpopulations\*\*](figure/plotbodybilllen3mi-1.svg)
 
 **Scatter plot and mutual info for species subpopulations**
 
@@ -843,7 +849,7 @@ hist(MIislandspecies)
 ```
 
 ![\*\*Revisability of mutual information with a much larger data
-sample\*\*](figure/histislandspecies-1.jpeg)
+sample\*\*](figure/histislandspecies-1.svg)
 
 **Revisability of mutual information with a much larger data sample**
 

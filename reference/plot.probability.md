@@ -15,22 +15,29 @@ plot(
   spread = NULL,
   subset = NULL,
   PvsY = NULL,
-  legend = "top",
+  legend = "topright",
+  type = NULL,
   lty = c(1, 2, 4, 3, 6, 5),
   pch = c(1, 2, 0, 5, 6, 3),
   lwd = 2,
   col = palette(),
-  type = NULL,
-  alpha.f = 1,
-  var.alpha.f = NULL,
-  var.nsamples = 360,
   xlab = NULL,
   ylab = NULL,
+  xlim = NULL,
+  ylim = c(0, NA),
+  add = FALSE,
+  alpha.f = 1,
+  grid = TRUE,
+  lwd.grid = NULL,
+  col.grid = "#BBBBBB80",
+  axes = FALSE,
   ylab2 = NULL,
   main = NULL,
-  ylim = c(0, NA),
-  grid = TRUE,
-  add = FALSE,
+  type.spread = NULL,
+  lty.spread = c(1, 2, 4, 3, 6, 5),
+  lwd.spread = NULL,
+  alpha.f.spread = NULL,
+  nsamples.spread = 360,
   ...
 )
 ```
@@ -73,35 +80,74 @@ plot(
   plot a legend at that position. A value `FALSE` or any other does not
   plot any legend. Default `'top'`.
 
-- lty, lwd, pch, col, type, xlab, ylab, main, ylim, grid, add:
+- type:
+
+  `NULL` (default) or character vector or indicating the type of plot
+  for the main probability distribution; see
+  [`base::plot()`](https://rdrr.io/r/base/plot.html). The default `NULL`
+  value uses type `'l'` (lines) for continuous variates, and `'b'`
+  (points and lines) for discrete variates.
+
+- lty:
+
+  Analogous to argument `lty` (line style) in
+  [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html), used
+  for the main probability distributions.
+
+- pch, col, xlab, ylab, main, xlim, ylim, grid, axes, add, lwd.grid,
+  col.grid:
 
   see analogous arguments in
   [`graphics::plot.default()`](https://rdrr.io/r/graphics/plot.default.html)
   and [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html).
 
+- lwd:
+
+  Analogous to argument `lwd` (line width) in
+  [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html), used
+  for the main probability distributions.
+
 - alpha.f:
 
-  Numeric, default 0.25: opacity of the colours, `0` being completely
-  invisible and `1` completely opaque.
-
-- var.alpha.f:
-
-  Numeric: opacity of the quantile bands or of the samples, `0` being
-  completely invisible and `1` completely opaque.
-
-- var.nsamples:
-
-  Integer, default 360: number of samples of long-run frequencies to
-  display
+  Numeric, default `1`: opacity of the colours of lines or markers, `0`
+  being completely invisible and `1` completely opaque.
 
 - ylab2:
 
   A title for the y-axis on the right side of the plot, if displayed.
 
+- type.spread:
+
+  `NULL` (default) or character vector or indicating the type of plot
+  for the long-run-frequency samples; see. The default `NULL` value uses
+  type `'l'` (lines) for continuous variates, and `'b'` (points and
+  lines) for discrete variates.
+
+- lty.spread:
+
+  Same as parameter `lty` (line style), but for the line type of the
+  long-run-frequency samples.
+
+- lwd.spread:
+
+  Same as parameter `lwd` (line width), but for the line type of the
+  long-run-frequency samples.
+
+- alpha.f.spread:
+
+  Numeric or `NULL` (default): opacity of the quantile bands or of the
+  long-run-frequency samples, similar to `alpha.f`. `NULL` means `1` if
+  `spread = 'samples'` and `0.25` if `spread = 'quantiles'`.
+
+- nsamples.spread:
+
+  Integer, default 360: number of samples of long-run frequencies to
+  display.
+
 - ...:
 
   Other parameters to be passed to
-  [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md).
+  [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md).
 
 ## Value
 
@@ -117,11 +163,8 @@ posterior probabilities and quantiles.
 [`hist.probability()`](https://pglpm.github.io/prova/reference/hist.probability.md)
 to plot the revisability of the probabilities as a distribution.
 
-[`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
-(on which `plot.probability()` is based) for more general plots.
-
-[`plotquantiles()`](https://pglpm.github.io/prova/reference/plotquantiles.md)
-to plot quantile ranges.
+[`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) (on which
+`plot.probability()` is based) for more general plots.
 
 ## Examples
 
@@ -132,12 +175,13 @@ learnt <- learntExample
 
 ## create a grid of values for variate "bill length",
 ## based on the information in the dataset and metadata:
-values <- vrtgrid(vrt = 'bill_len', learnt = learnt)
+valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt)
 
 ## calculate the probabilities and quantiles
-probs <- Pr(Y = data.frame(bill_len = values), learnt = learnt, parallel = 1)
+probs <- Pr(Y = valuesBill, learnt = learnt, parallel = 1)
 
 ## plot the probabilities and quantiles
 plot(probs)
+#> named list()
 
 ```

@@ -54,19 +54,20 @@ follows. Let’s start by loading the **Prova** package:
 library('prova')
 ```
 
-In our example we shall use data from the
-[`datasets::penguins`](https://rdrr.io/r/datasets/penguins.html)
-dataset, included in R version 4.5.0 and above. We shuffle this dataset
-to erase any particular ordering of its data, and call the new dataset
-`penguin` (without the final ‘s’):
+In our example we shall use data from the datset
+[`datasets::penguins`](https://rdrr.io/r/datasets/penguins.html),
+included in R version 4.5.0 and above (if you have an older version,
+continue reading as you’ll be able to download this dataset). We shuffle
+this dataset to erase any particular ordering of its data, and call the
+new dataset `penguins_shuffled`:
 
 ``` r
 
 set.seed(50) ## replace with your favourite seed number
 
-penguin <- penguins[sample(1:nrow(penguins)), ] ## shuffle
+penguins_shuffled <- datesets::penguins[sample(1:nrow(penguins)), ] ## shuffle
 
-pwrite.csv(penguin, file = 'penguin_data.csv')
+pwrite.csv(penguins_shuffled, file = 'penguins_shuffled.csv')
 ```
 
 The utility function
@@ -74,8 +75,9 @@ The utility function
 saves the dataset as a CSV file that respects the [formatting rules
 required by **Prova**](#format). For your convenience you can also
 download the shuffled dataset as the CSV file
-[`penguin_data.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguin_data.csv).
-We assume that you now have the `penguin_data.csv` file.
+[`penguins_shuffled.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv).
+We assume that you now have the file `penguins_shuffled.csv` in your
+working directory.
 
   
 
@@ -235,13 +237,13 @@ We make this assumption in order to avoid trends, which we’ll discuss in
 another vignette.
 
 We receive the first 10 samples from our sampling survey and store them
-in the file `penguin_data10.csv`, respecting the [formatting rules
-required by **Prova**](#format):
+in the file `penguins_10.csv`, respecting the [formatting rules required
+by **Prova**](#format):
 
 ``` r
 
-datafile <- 'penguin_data10.csv'
-pwrite.csv(penguin[1:10, ], datafile) ## write the first 10 samples
+datafile <- 'penguins_10.csv'
+pwrite.csv(penguins_shuffled[1:10, ], datafile) ## write the first 10 samples
 ```
 
 Here they are:
@@ -259,8 +261,8 @@ Here they are:
 | 9   | Chinstrap | Dream     |     46.5 |     17.9 |         192 |      3500 | female | 2007 |
 | 10  | Gentoo    | Biscoe    |     46.9 |     14.6 |         222 |      4875 | female | 2009 |
 
-If you generated the `penguin` dataset yourself, then your first 10
-samples may be different.
+If you generated the `penguins_shuffled` dataset yourself, then your
+first 10 samples may be different.
 
 Note that in the data above, samples \#1 and \#6 have one or more
 missing variates. But incomplete data are not a problem: inferences can
@@ -381,12 +383,12 @@ helper function. This function reads the sample data and prepares a
 preliminary file containing heuristic *guesses* about the metadata. We
 must then check and correct this file. The function motivates its
 guesses and warns about especially uncertain ones. Here is the code to
-generate a `penguin_metadata.csv` file, and the output and warnings of
-the helper function:
+generate a `meta_penguins_temp.csv` metadata file, and the output and
+warnings of the helper function:
 
 ``` r
 
-metadatafile <- 'penguin_metadata.csv'
+metadatafile <- 'meta_penguins_temp.csv'
 
 metadatatemplate(data = datafile, file = metadatafile)
 # Analyzing 8 variates for 10 datapoints.
@@ -449,7 +451,7 @@ metadatatemplate(data = datafile, file = metadatafile)
 # Preferably, transform it back to non-logarithmic scale.
 # =========
 # 
-# Saved proposal metadata file as "penguin_metadata.csv" 
+# Saved proposal metadata file as "meta_penguins_temp.csv" 
 ```
 
 The preliminary metadata file created by
@@ -467,9 +469,9 @@ looks like this:
 | sex | nominal |  |  |  |  |  | female | male |  |  |  |  |  |  |  |  |  |
 | year | ordinal | 2007 | 2009 | 1.0 |  |  |  |  |  |  |  |  |  |  |  |  |  |
 
-If you generated the `penguin` dataset yourself, then you might obtain
-different guesses. Try to follow the following guidelines for the
-present example.
+If you generated the `penguins_shuffled` dataset yourself, then you
+might obtain different guesses. Try to follow the following guidelines
+for the present example.
 
 We see that
 [`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadatatemplate.md)
@@ -505,11 +507,9 @@ correct, however: these variates are continuous, with a minimal value of
 `0` and no maximal value. They are rounded to `1` mm and `25` g (this
 was correctly guessed).
 
-We must open the preliminary metadata file `penguin_metadata.csv` with
+We must open the preliminary metadata file `meta_penguins_temp.csv` with
 our favourite editor, and correct and complete the guesses of the helper
-function. In this case we end up with the following corrected metadata
-file, also available for download as
-[`penguin_metadata.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguin_metadata.csv):
+function. In this case we end up with the following corrected metadata:
 
 | name | type | domainmin | domainmax | datastep | minincluded | maxincluded | V1 | V2 | V3 |
 |:---|:---|---:|---:|---:|---:|---:|:---|:---|:---|
@@ -521,6 +521,9 @@ file, also available for download as
 | body_mass | continuous | 0 |  | 25.0 |  |  |  |  |  |
 | sex | nominal |  |  |  |  |  | female | male |  |
 | year | ordinal | 2007 | 2009 | 1.0 |  |  |  |  |  |
+
+which is included in **Prova** as the data frame `meta_penguins`, which
+you can directly use in the following analysis.
 
 ### “Learning” and extrapolating from the sample data
 
@@ -566,7 +569,7 @@ your computer:
 
 learnt10 <- learn(
     data = datafile,
-    metadata = metadatafile,
+    metadata = meta_penguins, # included in 'Prova'
     outputdir = 'penguin_inference',
     parallel = 4 ## how many cores to use for the computation
 )
@@ -707,10 +710,11 @@ object:
 ``` r
 
 plot(Fspecies10)
+# named list()
 ```
 
 ![\*\*Estimates and uncertainty of relative frequencies of penguin
-species\*\*](figure/vis10-1.jpeg)
+species\*\*](figure/vis10-1.svg)
 
 **Estimates and uncertainty of relative frequencies of penguin species**
 
@@ -736,7 +740,7 @@ and can be read from the `values` element of the `Fspecies10` object,
 either directly or by using the
 [`print()`](https://rdrr.io/r/base/print.html) function, which by
 default a number of significant digits corresponding to the Monte Carlo
-numerical error:
+numerical accuracy:
 
 ``` r
 
@@ -824,7 +828,7 @@ hist(Fspecies10,
 ```
 
 ![\*\*Probability distribution for the frequency of Adelie
-penguins\*\*](figure/hist10adelie-1.jpeg)
+penguins\*\*](figure/hist10adelie-1.svg)
 
 **Probability distribution for the frequency of Adelie penguins**
 
@@ -890,9 +894,9 @@ Let’s take datapoint \#1 for instance, and infer its missing variate
 
 Yimp <- data.frame(sex = c('female', 'male'))
 
-## Extract data from datapoint #1 of our shuffled dataset 'penguin'
+## Extract data from datapoint #1 of our dataset 'penguins_shuffled'
 ## excluding 'sex' variate
-X <- penguin[1, colnames(penguin) != 'sex']
+X <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
 
 imputeddata <- Pr(Y = Yimp, X = X, learnt = learnt10, parallel = 4)
 
@@ -918,10 +922,10 @@ probability distribution over these values:
 ``` r
 
 ## Generate grid of realistic values for 'bill_len' using vrtgrid()
-Yimp <- data.frame(bill_len = vrtgrid(vrt = 'bill_len', learnt = learnt10))
+Yimp <- vrtgrid(vrt = 'bill_len', learnt = learnt10)
 
-## Extract data from datapoint #6 of our shuffled dataset 'penguin'
-X <- penguin[6, ]
+## Extract data from datapoint #6 of our dataset 'penguins_shuffled'
+X <- penguins_shuffled[6, ]
 
 ## drop unknown variates
 X <- X[, !is.na(X)]
@@ -929,13 +933,12 @@ X <- X[, !is.na(X)]
 imputeddata <- Pr(Y = Yimp, X = X, learnt = learnt10, parallel = 4)
 
 plot(imputeddata)
+# named list()
 ```
 
-![](figure/imputation6-1.jpeg)
+![](figure/imputation6-1.svg)
 
   
-
-## Analysis example: frequencies on different islands
 
 ### A preliminary report on question Q1
 
@@ -962,7 +965,7 @@ hist(Fspecies10, legend = 'topright', col = 2:4)
 ```
 
 ![\*\*Probability distribution for the rel. requencies of penguin
-species\*\*](figure/hist10-1.jpeg)
+species\*\*](figure/hist10-1.svg)
 
 **Probability distribution for the rel. requencies of penguin species**
 
@@ -1075,10 +1078,11 @@ frequencies and their uncertainties can again be visualized by calling
 ``` r
 
 plot(Fspecies10I, col = 5:6)
+# named list()
 ```
 
 ![\*\*Estimates and uncertainty of conditional
-frequencies\*\*](figure/vis10I-1.jpeg)
+frequencies\*\*](figure/vis10I-1.svg)
 
 **Estimates and uncertainty of conditional frequencies**
 
@@ -1130,7 +1134,7 @@ hist(Fspecies10I, subset = list(island = 'Biscoe'),
 ```
 
 ![\*\*Probability distribution for species frequencies on
-Biscoe\*\*](figure/hist10biscoe-1.jpeg)
+Biscoe\*\*](figure/hist10biscoe-1.svg)
 
 **Probability distribution for species frequencies on Biscoe**
 
@@ -1156,7 +1160,7 @@ hist(Fspecies10I, subset = list(island = 'Dream'),
 ```
 
 ![\*\*Probability distribution for species frequencies on
-Biscoe\*\*](figure/hist10dream-1.jpeg)
+Biscoe\*\*](figure/hist10dream-1.svg)
 
 **Probability distribution for species frequencies on Biscoe**
 
@@ -1306,12 +1310,12 @@ analysis and hypotheses had very large uncertainties.
 
 Now imagine that our sampling colleagues send us 50 more datapoints,
 which we add to the 10 we already have. Let’s store the 60 datapoints in
-the file `penguin_data60.csv`:
+the file `penguins_60.csv`:
 
 ``` r
 
-datafile <- 'penguin_data60.csv'
-pwrite.csv(penguin[1:60, ], datafile) ## write the first 60 samples
+datafile <- 'penguins_60.csv'
+pwrite.csv(penguins_shuffled[1:60, ], datafile) ## write the first 60 samples
 ```
 
 Feel free to take a look at your extended sample data. There may be new
@@ -1328,7 +1332,7 @@ your computer:
 
 learnt60 <- learn(
     data = datafile,
-    metadata = metadatafile,
+    metadata = meta_penguins,
     outputdir = 'penguin_inference',
     parallel = 4 ## how many cores to use for the computation
 )
@@ -1406,9 +1410,9 @@ In our preliminary analysis we focused on three questions:
 
 - *What’s the overall statistical occurrence of the three species in the
   whole population?*
-- *What’s the difference between Adélies and Chinstrap frequencies on
+- *What’s the difference between Adélie and Chinstrap frequencies on
   Biscoe island?*
-- *What’s the difference between Adélies and Chinstrap frequencies on
+- *What’s the difference between Adélie and Chinstrap frequencies on
   Dream island?*
 
 We can update our answers – frequency estimates, their credible
@@ -1451,10 +1455,11 @@ species. Let’s plot the new estimates and their credibility intervals:
 ``` r
 
 plot(Fspecies60)
+# named list()
 ```
 
 ![\*\*Updated frequency estimates of penguin
-species\*\*](figure/vis60-1.jpeg)
+species\*\*](figure/vis60-1.svg)
 
 **Updated frequency estimates of penguin species**
 
@@ -1471,15 +1476,17 @@ ymax <- max(Fspecies10$quantiles, Fspecies60$quantiles)
 
 plot(Fspecies10, ylim = c(0, ymax),
     col = 2, lty = 2, lwd = 3, pch = 2) ## distinguish the two plots
+# named list()
 
 plot(Fspecies60, ylim = c(0, ymax), add = TRUE,
     col = 1, lty = 1, lwd = 2, pch = 1) ## distinguish the two plots
+# named list()
 
 legend('top', c('10 samples', '60 samples'),
     col = 2:1, lty = 2:1, pch = 2:1, bty = 'n')
 ```
 
-![](figure/vis60compare-1.jpeg)
+![](figure/vis60compare-1.svg)
 
 We notice the following differences, among others:
 
@@ -1509,7 +1516,7 @@ hist(Fspecies10, legend = 'topright', xlim = c(0, 1),
     col = 2:4, main = '10 samples')
 ```
 
-![](figure/hist60-1.jpeg)
+![](figure/hist60-1.svg)
 
 ``` r
 
@@ -1519,7 +1526,7 @@ hist(Fspecies60, legend = 'topright', xlim = c(0, 1),
     col = 2:4, main = '60 samples')
 ```
 
-![](figure/hist60-2.jpeg)
+![](figure/hist60-2.svg)
 
 We see that in our initial inference (top plot) all three probability
 distributions largely overlapped, indicating our uncertainty on whether
@@ -1580,7 +1587,7 @@ hist(Fspecies10I, subset = list(island = 'Dream'),
     col = 2:4, main = '10 samples, Dream island')
 ```
 
-![](figure/hist60Dream-1.jpeg)
+![](figure/hist60Dream-1.svg)
 
 ``` r
 
@@ -1591,9 +1598,9 @@ hist(Fspecies60I, subset = list(island = 'Dream'),
     col = 2:4, main = '60 samples, Dream island')
 ```
 
-![](figure/hist60Dream-2.jpeg)
+![](figure/hist60Dream-2.svg)
 
-The new frequency estimates for `Adelies` (solid red line) and
+The new frequency estimates for `Adelie` (solid red line) and
 `Chinstrap` (dashed blue line) are now around 0.2 apart; the previous
 estimates had them around 0.1 apart. This change is not unexpected: the
 new estimates are well within the previous credibility intervals; we
@@ -1609,7 +1616,7 @@ hist(Fspecies10I, subset = list(island = 'Biscoe'),
     col = 2:4, main = '10 samples, Biscoe island')
 ```
 
-![](figure/hist60Biscoe-1.jpeg)
+![](figure/hist60Biscoe-1.svg)
 
 ``` r
 
@@ -1620,9 +1627,9 @@ hist(Fspecies60I, subset = list(island = 'Biscoe'),
     col = 2:4, main = '60 samples, Biscoe island')
 ```
 
-![](figure/hist60Biscoe-2.jpeg)
+![](figure/hist60Biscoe-2.svg)
 
-The new frequency estimates for `Adelies` (solid red line) and
+The new frequency estimates for `Adelie` (solid red line) and
 `Chinstrap` (dashed blue line) are now around 0.2 apart, whereas the
 previous estimates were almost equal. Again this is not unexpected, and
 these changes are well within the previous credibility intervals.
@@ -1647,7 +1654,7 @@ hist(freqdiff, plot = TRUE, xlim = c(-0.5, 1),
 ```
 
 ![\*\*probability of frequency difference between Gentoo and
-Chinstrap\*\*](figure/probdifference-1.jpeg)
+Chinstrap\*\*](figure/probdifference-1.svg)
 
 **probability of frequency difference between Gentoo and Chinstrap**
 
@@ -1725,13 +1732,9 @@ colleagues sent us 284 more data samples, for a total of 344 with the
 ones previously sent. The sampling then stopped, so this is all the data
 we have to report our final findings and their uncertainty.
 
-Let’s store all datapoints in the file `penguin_data.csv`:
-
-``` r
-
-datafile <- 'penguin_data.csv'
-pwrite.csv(penguin, datafile)
-```
+Our dataset is now the full `penguins` dataset, or equivalently
+`penguins_shuffled` – the order of the data in the dataset does not
+matter.
 
 As usual we perform the updated inference with the
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function
@@ -1741,8 +1744,8 @@ use 8 parallel cores:
 ``` r
 
 learntall <- learn(
-    data = datafile,
-    metadata = metadatafile,
+    data = penguins, # or 'data = penguins_shuffled'
+    metadata = meta_penguins,
     outputdir = 'penguin_inference',
     parallel = 8 ## how many cores to use for the computation
 )
@@ -1836,9 +1839,10 @@ and also their probability distributions:
 ``` r
 
 plot(Fspeciesall, ylim = c(0, 1))
+# named list()
 ```
 
-![](figure/visall-1.jpeg)
+![](figure/visall-1.svg)
 
 ``` r
 
@@ -1846,7 +1850,7 @@ plot(Fspeciesall, ylim = c(0, 1))
 hist(Fspeciesall, xlim = c(0, 1), legend = 'topright')
 ```
 
-![](figure/visall-2.jpeg)
+![](figure/visall-2.svg)
 
 The last plot is visually the most complete answer we can give to our
 research question **Q1**: “*What’s the overall statistical occurrence of
@@ -1918,14 +1922,12 @@ We define an object `Y` for the variate we want to know the frequency
 about, and an object `X` for the *subpopulation* we’re restricting our
 analysis to. Recall that we can use the function
 [`vrtgrid()`](https://pglpm.github.io/prova/reference/vrtgrid.md) to
-form a grid of all possible realistic values:
+generate a grid of all possible realistic values:
 
 ``` r
 
 ## All values for the variate of interest
-Yvls <- vrtgrid(vrt = 'species', learnt = learntall)
-## build Y object
-Y <- data.frame(species = Yvls)
+Y <- vrtgrid(vrt = 'species', learnt = learntall)
 
 Xvrt <- 'island' ## subpopulation variate
 Xvls <- 'Biscoe' ## subpopulation value or values
@@ -1945,7 +1947,7 @@ hist(Fanalysis, xlim = c(0, 1), col = 2:4, ## same colours as before!
     legend = 'topright')
 ```
 
-![](figure/unnamed-chunk-8-1.jpeg)
+![](figure/unnamed-chunk-8-1.svg)
 
 ``` r
 
@@ -1989,9 +1991,7 @@ In this case, `Adelie` penguins are our subpopulation:
 
 ``` r
 
-Yvls <- vrtgrid(vrt = 'island', learnt = learntall)
-## build Y object
-Y <- data.frame(island = Yvls)
+Y <- vrtgrid(vrt = 'island', learnt = learntall)
 
 Xvrt <- 'species' ## subpopulation variate
 Xvls <- 'Adelie' ## subpopulation value or values
@@ -2012,7 +2012,7 @@ hist(Fanalysis, xlim = c(0, 1), col = 5:7,
     legend = 'topright')
 ```
 
-![](figure/unnamed-chunk-9-1.jpeg)
+![](figure/unnamed-chunk-9-1.svg)
 
 ``` r
 
@@ -2029,7 +2029,7 @@ print(Fanalysis)
 
 Conclusions:
 
-> From a sample of 344 penguins, the distribution of the **Adélies**
+> From a sample of 344 penguins, the distribution of the **Adélie**
 > species on the three islands is estimated as follows:
 >
 > - Biscoe:
@@ -2048,7 +2048,7 @@ Conclusions:
 >   true rel. frequency between 0.28 and 0.40 with 89% probability.
 
 In this case our uncertainties do *not* allow us to exclude the
-possibility that Adélies penguins are roughly equally distributed on the
+possibility that Adélie penguins are roughly equally distributed on the
 three islands.
 
 #### **Q2c**: Body mass across the three species
@@ -2060,14 +2060,10 @@ mass in three separate subpopulations: `Adelie`, `Chinstrap`, and
 ``` r
 
 ## Grid of realistic values for 'body_mass'
-Yvls <- vrtgrid(vrt = 'body_mass', learnt = learntall)
-## build Y object
-Y <- data.frame(body_mass = Yvls)
+Y <- vrtgrid(vrt = 'body_mass', learnt = learntall)
 
 ## Grid of values for 'species', the subpopulation variate
-Xvls <- vrtgrid(vrt = 'species', learnt = learntall)
-## build X object
-X <- data.frame(species = Xvls)
+X <- vrtgrid(vrt = 'species', learnt = learntall)
 
 ## NB: rewriting the previous 'Fanalysis' object
 Fanalysis <- Pr(Y = Y, X = X, learnt = learntall, parallel = 4)
@@ -2079,9 +2075,10 @@ species
 ``` r
 
 plot(Fanalysis, col = 2:4, legend = 'topright')
+# named list()
 ```
 
-![](figure/unnamed-chunk-10-1.jpeg)
+![](figure/unnamed-chunk-10-1.svg)
 
 Note how the plots above give us much more information than just a set
 of estimates about medians and quantiles, or means and standard

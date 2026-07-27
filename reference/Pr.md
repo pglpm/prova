@@ -317,6 +317,7 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 
 ## plot the probabilities and quantiles
 plot(probs)
+#> named list()
 
 
 ## plot the probability distribution for the full-population frequency
@@ -411,6 +412,7 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 
 ## plot the probabilities and quantiles
 plot(probs)
+#> named list()
 
 
 

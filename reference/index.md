@@ -31,23 +31,24 @@
 
 ## Plot & print
 
-- [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
-  : Plot numeric or character values
 - [`hist(`*`<mi>`*`)`](https://pglpm.github.io/prova/reference/hist.mi.md)
-  : Plot the revisability of an object of class "MI" as a histogram
+  : Plot the revisability of an object of class "mi" as a histogram
 - [`hist(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/hist.probability.md)
   : Plot the revisability of an object of class "probability" as a
   histogram
 - [`plot(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/plot.probability.md)
   : Plot an object of class "probability"
-- [`plotquantiles()`](https://pglpm.github.io/prova/reference/plotquantiles.md)
-  : Plot pairs of quantiles
+- [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) : Plot
+  numeric or character values
 - [`print(`*`<mi>`*`)`](https://pglpm.github.io/prova/reference/print.mi.md)
-  : Print an object of class "MI" (mutual information)
+  : Print an object of class "mi" (mutual information)
 - [`print(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/print.probability.md)
   : Print an object of class "probability"
 
 ## Handle metadata and data files
+
+- [`meta_penguins`](https://pglpm.github.io/prova/reference/meta_penguins.md)
+  : Metadata file for "penguins" dataset
 
 - [`metadataExample`](https://pglpm.github.io/prova/reference/metadataExample.md)
   : Example metadata file
@@ -127,5 +128,4 @@ For developers (beware!)
   : Worker function called by learn()
 - [`prova`](https://pglpm.github.io/prova/reference/prova-package.md)
   [`prova-package`](https://pglpm.github.io/prova/reference/prova-package.md)
-  : prova: Nonparametric Probabilistic-Statistical Variate Analysis with
-  Automated Markov-Chain Monte Carlo
+  : prova: Nonparametric Probabilistic-Statistical Variate Analysis

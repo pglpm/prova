@@ -1,7 +1,7 @@
-# Print an object of class "MI" (mutual information)
+# Print an object of class "mi" (mutual information)
 
 This [`base::print()`](https://rdrr.io/r/base/print.html) method is a
-utility to display value and revisability of an "MI" object obtained
+utility to display value and revisability of an "mi" object obtained
 with
 [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md).
 
@@ -16,7 +16,7 @@ print(x, digits = TRUE, edigits = 2, unit = NULL, ...)
 
 - x:
 
-  Object of class "MI", obtained with
+  Object of class "mi", obtained with
   [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md).
 
 - digits:
@@ -82,11 +82,11 @@ MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
 ## display the value and revisability of the mutual information
 print(MI)
 #> value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#>    0.767     0.35     0.71     0.92      1.0 
+#>    0.747     0.33     0.62     0.93      1.1 
 
 ## convert to hartleys (base-10 logarithms):
 print(MI, unit = 'Hart')
 #> value/Hart      Q5.5%       Q25%       Q75%     Q94.5% 
-#>     0.2309       0.11       0.21       0.28       0.31 
+#>     0.2250      0.099       0.19       0.28       0.32 
 # }
 ```

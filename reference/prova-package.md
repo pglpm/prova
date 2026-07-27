@@ -1,4 +1,4 @@
-# prova: Nonparametric Probabilistic-Statistical Variate Analysis with Automated Markov-Chain Monte Carlo
+# prova: Nonparametric Probabilistic-Statistical Variate Analysis
 
 Calculate posterior joint and conditional probabilities, probability
 distributions of population frequencies, and information-theoretic

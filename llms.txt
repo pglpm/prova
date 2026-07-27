@@ -1,7 +1,6 @@
 # ***Prova***: probabilistic-statistical variate analysis, nonparametric and with automated Markov-chain Monte Carlo
 
-![Ensemble of
-densities](https://github.com/pglpm/prova/raw/main/man/figures/prova_symbol.jpg)
+![Ensemble of densities](/reference/figures/prova_symbol.jpg)
 
 “prova” /’prɔva/ (Italian)
 
@@ -57,9 +56,110 @@ are its main features:
   with Monte Carlo methods don’t have to worry, because the computations
   are handled automatically.
 
-The package at bottom does Bayesian nonparametric inference (also called
-“density inference” or “inference under exchangeability”), which makes
-all features above possible.
+The package essentially performs Bayesian nonparametric inference (also
+called “density inference” or “inference under exchangeability”), which
+makes most features above possible.
+
+  
+
+## Minimal example
+
+Use the [R `penguins`
+dataset](https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html)
+(or download a shuffled version from
+[here](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv)),
+together with the metadata `meta_penguins` available in **Prova**.
+Metadata contain the characteristics of the dataset’s variates.
+
+“Learn” from this dataset using the function
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md). Note that
+the dataset has partially missing values (datapoint \#4 for instance),
+but this is not a problem for **Prova**:
+
+``` r
+
+learnt <- learn(data = penguins, metadata = meta_penguins)
+# [progress output about the learning computation]
+```
+
+Ask a statistical question about the penguin population. For example:
+given the data we have collected, what is the probability that a *new*
+penguin from this population is of species *Adélie*, if its bill length
+is 45 mm? To answer this question we use the function
+[`Pr()`](https://pglpm.github.io/prova/reference/Pr.md), and print a
+summary of the result:
+
+``` r
+
+prob <- Pr(
+    Y = data.frame(species = 'Adelie'), # predictand
+    X = data.frame(bill_len = 45),      # predictor
+    learnt = learnt                     # learned data
+)
+
+print(prob)
+# , , |bill_len = 45
+#
+#         probability
+# species  value   +/-     Q5.5%   Q25%    Q75%    Q94.5%
+#   Adelie 0.09857 0.00053 0.05337 0.07534 0.11893 0.1527
+```
+
+The answer is that there is roughly a 10% probability that a new
+penguin, among those with a 45 mm bill length, is of species *Adélie*.
+
+Now ask: what is the relative frequency of *Adélie* species *in the
+whole subpopulation* (including unsampled penguins), of penguins having
+bill length of 45 mm? This cannot be answered with certainty, because we
+have only a sample of the full population. But **Prova** can calculate
+the *probability distribution* for this full-population frequency. In
+fact, it has already been calculated by the function
+[`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) above, and we
+can visualize it with a plot:
+
+``` r
+
+hist(prob)
+```
+
+![probability of long-run
+frequency](/reference/figures/README-hist-1.svg)
+
+The plot shows that this full-population frequency is most likely (with
+roughly 90% probability) between 0.05 and 0.15. These are the values
+shown by `print(prob)` above.
+
+The *inverse* question can also be asked: if we observe a new penguin of
+*Adélie* species, what could its bill length be? The answer is
+uncertain, and **Prova** can calculate the probability distribution of
+the penguin’s bill length:
+
+``` r
+
+invprob <- Pr(
+    Y = data.frame(bill_len = 30:50),   # predictand
+    X = data.frame(species = 'Adelie'), # predictor
+    learnt = learnt                     # learned data
+)
+
+plot(invprob)
+```
+
+![probability distribution for bill
+length](/reference/figures/README-plot-1.svg)
+
+this probability distribution has a peak between 35 mm and 40 mm and
+it’s slightly skewed.
+
+This distribution is not the *frequency* distribution of bill length in
+the whole subpopulation of *Adélie* penguins; the latter is uncertain
+because we have only a sample. But the plot above shows that the
+full-population frequency distribution is somewhere between the grey
+bands.
+
+This was just a minimal example, just touching on the basic
+functionality. More complex combinations of variates and more complex
+probabilistic-statistical questions can be approached.
 
 The [introductory
 vignette](https://pglpm.github.io/prova/articles/intro.html) explains,
@@ -75,8 +175,8 @@ information](https://pglpm.github.io/prova/articles/mutualinfo.html)
 explains the use of this powerful measure of association.
 
 The package is under continuous development, but the core
-functionalities work and have been tested in concrete research
-questions; see [example applications](#example-applications) below.
+functionalities work and have been tested in concrete research projects;
+see [example applications](#example-applications) below.
 
 The package internally does the computations necessary for Bayesian
 inference by means of Monte Carlo methods thanks to the R package
@@ -96,11 +196,17 @@ for your operating system.
 Then **Prova** can be installed from
 [CRAN](https://CRAN.R-project.org/package=prova) with
 
-    install.packages('prova')
+``` r
+
+install.packages('prova')
+```
 
 In case of a newer version not yet on CRAN, it can be installed with
 
-    remotes::install_github('pglpm/prova')
+``` r
+
+remotes::install_github('pglpm/prova')
+```
 
 ## Documentation
 
@@ -201,23 +307,24 @@ and of its documents.
 
 ## Plot & print
 
-- [`flexiplot()`](https://pglpm.github.io/prova/reference/flexiplot.md)
-  : Plot numeric or character values
 - [`hist(`*`<mi>`*`)`](https://pglpm.github.io/prova/reference/hist.mi.md)
-  : Plot the revisability of an object of class "MI" as a histogram
+  : Plot the revisability of an object of class "mi" as a histogram
 - [`hist(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/hist.probability.md)
   : Plot the revisability of an object of class "probability" as a
   histogram
 - [`plot(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/plot.probability.md)
   : Plot an object of class "probability"
-- [`plotquantiles()`](https://pglpm.github.io/prova/reference/plotquantiles.md)
-  : Plot pairs of quantiles
+- [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) : Plot
+  numeric or character values
 - [`print(`*`<mi>`*`)`](https://pglpm.github.io/prova/reference/print.mi.md)
-  : Print an object of class "MI" (mutual information)
+  : Print an object of class "mi" (mutual information)
 - [`print(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/print.probability.md)
   : Print an object of class "probability"
 
 ## Handle metadata and data files
+
+- [`meta_penguins`](https://pglpm.github.io/prova/reference/meta_penguins.md)
+  : Metadata file for "penguins" dataset
 
 - [`metadataExample`](https://pglpm.github.io/prova/reference/metadataExample.md)
   : Example metadata file
@@ -297,8 +404,7 @@ For developers (beware!)
   : Worker function called by learn()
 - [`prova`](https://pglpm.github.io/prova/reference/prova-package.md)
   [`prova-package`](https://pglpm.github.io/prova/reference/prova-package.md)
-  : prova: Nonparametric Probabilistic-Statistical Variate Analysis with
-  Automated Markov-Chain Monte Carlo
+  : prova: Nonparametric Probabilistic-Statistical Variate Analysis
 
 # Articles
 

@@ -91,7 +91,7 @@ mutualinfo(
 
 ## Value
 
-An object of class "MI", which is a list consisting of the following
+An object of class "mi", which is a list consisting of the following
 elements:
 
 - `$value`, the mutual information between (joint) variates `Y1names`
@@ -183,11 +183,11 @@ MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
 
 ## The value and its numerical Monte Carlo error
 c(MI$value, MI$MCaccuracy)
-#> [1] 0.71553556 0.03863583
+#> [1] 0.79723948 0.03379594
 
 ## If we had many more data, we could instead expect to obtain values
 ## within the following probable ranges:
 signif(MI$quantiles, 3)
 #>  5.5%   25%   75% 94.5% 
-#> 0.000 0.715 1.020 1.190 
+#> 0.142 0.706 1.080 1.280 
 ```
