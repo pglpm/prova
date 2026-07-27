@@ -3,7 +3,7 @@
   [![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.17226082.svg)](https://doi.org/10.5281/zenodo.17226082)
 <!-- badges: end -->
 
-<img src="https://github.com/pglpm/prova/raw/main/man/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"/>
+<img src="/man/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"/>
 
 "prova" /'prɔva/ (Italian)
 
@@ -31,7 +31,7 @@ The package at bottom does Bayesian nonparametric inference (also called "densit
 
 The [introductory vignette](https://pglpm.github.io/prova/articles/intro.html) explains, with a guided example, most of the features above, as well as the main ideas and functions. It can be particularly useful for researchers who are more familiar with traditional "frequentist" statistics but would like to try the Bayesian approach. See the [post](https://www.apadivisions.org/division-7/publications/newsletters/developmental/2018/07/bayesian-statistics) by Barbara W. Sarnecka, frequentist statistician turned Bayesian, for a brilliant overview of the Bayesian advantages. The [vignette about mutual information](https://pglpm.github.io/prova/articles/mutualinfo.html) explains the use of this powerful measure of association.
 
-The package is under continuous development, but the core functionalities work and have been tested in concrete research questions; see [example applications](#example-applications) below.
+The package is under continuous development, but the core functionalities work and have been tested in concrete research projects; see [example applications](#example-applications) below.
 
 The package internally does the computations necessary for Bayesian inference by means of Monte Carlo methods thanks to the R package [**Nimble**](https://r-nimble.org/). As already mentioned, this computation is automated. Users familiar with Monte Carlo methods can still access computational details and can even change some of the computation hyperparameters.
 
