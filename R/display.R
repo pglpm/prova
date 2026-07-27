@@ -176,37 +176,24 @@ pplot <- function(
         stop("Elements in 'y' must be all numeric or all character.")
     }
 
-    ## Recycle if necessary; don't forget NULL flags
-    if(length(x) < length(y)){
-        x <- rep(x, length.out = length(y))
-        xnull <- rep(xnull, length.out = length(y))
-    }
-    if(length(y) < length(x)){
-        y <- rep(y, length.out = length(x))
-        ynull <- rep(ynull, length.out = length(x))
-    }
-
-    ## Discard common NULLs
-    temp <- (xnull & ynull)
-    if(any(temp)){
-        x <- x[!temp]
-        xnull <- xnull[!temp]
-        y <- y[!temp]
-        ynull <- ynull[!temp]
-    }
-
-    ## Handle remaining NULLs
+    ## Handle NULLs
     if(any(xnull)){
-        x[xnull] <- lapply(X = y[xnull], FUN = function(xx){seq_len(NROW(xx))})
-        temp <- range(x[xnull])
-        rgx[1] <- min(rgx[1], temp[1])
-        rgx[2] <- max(rgx[2], temp[2])
+        temp <- lapply(
+            X = y[ rep(x = seq_along(y), length.out = length(x))[xnull] ],
+            FUN = function(xx){seq_len(NROW(xx))}
+        )
+        x[xnull] <- temp
+        rgx[1] <- min(rgx[1], unlist(temp), na.rm = TRUE)
+        rgx[2] <- max(rgx[2], unlist(temp), na.rm = TRUE)
     }
     if(any(ynull)){
-        y[ynull] <- lapply(X = x[ynull], FUN = function(xx){seq_len(NROW(xx))})
-        temp <- range(y[ynull])
-        rgy[1] <- min(rgy[1], temp[1])
-        rgy[2] <- max(rgy[2], temp[2])
+        temp <- lapply(
+            X = x[ rep(x = seq_along(x), length.out = length(y))[ynull] ],
+            FUN = function(xx){seq_len(NROW(xx))}
+        )
+        y[ynull] <- temp
+        rgy[1] <- min(rgy[1], unlist(temp), na.rm = TRUE)
+        rgy[2] <- max(rgy[2], unlist(temp), na.rm = TRUE)
     }
 
     ## Other NAs
@@ -215,20 +202,6 @@ pplot <- function(
     yjitter[is.na(yjitter)] <- FALSE
     alpha.f[is.na(alpha.f) & (type %in% c('qx', 'hx', 'qy', 'hy'))] <- 0.25
     alpha.f[is.na(alpha.f)] <- 1
-
-    nplots <- length(x)
-
-    ## Recycle type, lty, lwd, etc
-    type <- rep(type, length.out = nplots)
-    lty <- rep(lty, length.out = nplots)
-    lwd <- rep(lwd, length.out = nplots)
-    lend <- rep(lend, length.out = nplots)
-    pch <- rep(pch, length.out = nplots)
-    col <- rep(col, length.out = nplots)
-    alpha.f <- rep(alpha.f, length.out = nplots)
-    border <- rep(border, length.out = nplots)
-    xjitter <- rep(xjitter, length.out = nplots)
-    yjitter <- rep(yjitter, length.out = nplots)
 
     ## Plot ranges
     if(!isTRUE(is.finite(xlim[1]))){
@@ -271,29 +244,19 @@ pplot <- function(
     }
 
     ## First plot window
-    graphics::matplot(x = xlim, y = ylim, type = 'n',
-        xlab = xlab, ylab = ylab, xlim = NULL, ylim = NULL,
+    graphics::matplot(x = NA, y = NA, type = 'n',
+        xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim,
         cex.main = cex.main, add = add, axes = FALSE,
         ## xaxs = 'i', yaxs = 'i',
         ...)
 
 ### Plot the lists
-    for(aplot in seq_len(nplots)){
+    for(aplot in seq_len(max(length(x), length(y), na.rm = FALSE))){
         ## ## drop unneeded dimensions?
         ## thisx <- drop(x[[aplot]])
         ## thisy <- drop(y[[aplot]])
-        thisx <- x[[aplot]]
-        thisy <- y[[aplot]]
-
-        ## ## Replace NULL values
-        ## if(is.null(thisx)){
-        ##     thisx <- seq_len(NROW(thisy))
-        ##     if(xcha){thisx <- xdomain[thisx] }
-        ## }
-        ## if(is.null(thisy)){
-        ##     thisy <- seq_len(NROW(thisx))
-        ##     if(ycha){thisy <- ydomain[thisy] }
-        ## }
+        thisx <- x[[(aplot - 1) %% length(x) + 1]]
+        thisy <- y[[(aplot - 1) %% length(y) + 1]]
 
         ## convert characters to integers, according to domains
         if(xcha){
@@ -307,35 +270,41 @@ pplot <- function(
             dim(thisy) <- temp
         }
 
-        col[[aplot]] <- adjustcolor(col[[aplot]], alpha.f = alpha.f[[aplot]])
-        if(!is.na(border[[aplot]])){
-            border[[aplot]] <-
-                adjustcolor(border[[aplot]], alpha.f = alpha.f[[aplot]])
+        thisalpha.f <- alpha.f[[(aplot - 1) %% length(alpha.f) + 1]]
+        thiscol <- adjustcolor(col[[(aplot - 1) %% length(col) + 1]],
+            alpha.f = thisalpha.f)
+        thisborder <- border[[(aplot - 1) %% length(border) + 1]]
+        if(!is.na(thisborder)){
+            thisborder <- adjustcolor(thisborder, alpha.f = thisalpha.f)
         }
 
         ## Check if jitter needed
-        if((is.na(xjitter[[aplot]]) && anyDuplicated(thisx)) ||
-               isTRUE(xjitter[[aplot]])){
+        thisxjitter <- xjitter[[(aplot - 1) %% length(xjitter) + 1]]
+        if((is.na(thisxjitter) && anyDuplicated(thisx)) || isTRUE(thisxjitter)){
             thisx <- jitter(thisx, factor = 5/3)
         }
-        if((is.na(yjitter[[aplot]]) && anyDuplicated(thisy)) ||
-               isTRUE(yjitter[[aplot]])){
+        thisyjitter <- yjitter[[(aplot - 1) %% length(yjitter) + 1]]
+        if((is.na(thisyjitter) && anyDuplicated(thisy)) || isTRUE(thisyjitter)){
             thisy <- jitter(thisy, factor = 5/3)
         }
 
         ## Plot
         ## checks for type = 'q'
-        if(!(type[[aplot]] %in% c('qx', 'qy', 'hx', 'hy'))){
+        thistype <- type[[(aplot - 1) %% length(type) + 1]]
+        if(!(thistype %in% c('qx', 'qy', 'hx', 'hy'))){
 
             ## Plot
             graphics::matplot(x = thisx, y = thisy,
-                type = type[[aplot]], lty = lty[[aplot]], lwd = lwd[[aplot]],
-                lend = lend[[aplot]], pch = pch[[aplot]], col = col[[aplot]],
+                type = thistype,
+                lty = lty[[(aplot - 1) %% length(lty) + 1]],
+                lwd = lwd[[(aplot - 1) %% length(lwd) + 1]],
+                lend = lend[[(aplot - 1) %% length(lend) + 1]],
+                pch = pch[[(aplot - 1) %% length(pch) + 1]],
+                col = thiscol,
                 add = TRUE, ...)
 
-        } else if(type[[aplot]] %in% c('qx', 'hx')){
-            ## if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
-            if(type[[aplot]] == 'hx'){
+        } else if(thistype %in% c('qx', 'hx')){
+            if(thistype == 'hx'){
                 if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
                 temp <- dim(thisy) * c(1, 2)
                 thisy <- c(thisy, rep.int(x = 0, times = length(thisy)))
@@ -354,12 +323,12 @@ pplot <- function(
                     ## x = c(thisx[,(ii - 1) %% temp + 1],
                     ##     rev(thisx[,(ii - 1) %% temp + 1])),
                     ## y = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
-                    density = NULL, xpd = TRUE, lty = 1,
-                    border = border[[aplot]], col = col[[aplot]],
-                    lwd = lwd[[aplot]])
+                    border = thisborder, col = thiscol,
+                    lwd = lwd[[(aplot - 1) %% length(lwd) + 1]],
+                    density = NULL, xpd = TRUE, lty = 1)
             }
-        } else if(type[[aplot]] %in% c('qy', 'hy')){
-            if(type[[aplot]] == 'hy'){
+        } else if(thistype %in% c('qy', 'hy')){
+            if(thistype == 'hy'){
                 if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
                 temp <- dim(thisx) * c(1, 2)
                 thisx <- c(thisx, rep.int(x = 0, times = length(thisx)))
@@ -375,9 +344,9 @@ pplot <- function(
                         col1 = 1, col2 = 1)],
                     x = thisx[qindices(groups = groups,
                         col1 = ii, col2 = nquant + 1 - ii)],
-                    density = NULL, xpd = TRUE, lty = 1,
-                    border = border[[aplot]], col = col[[aplot]],
-                    lwd = lwd[[aplot]])
+                    border = thisborder, col = thiscol,
+                    lwd = lwd[[(aplot - 1) %% length(lwd) + 1]],
+                    density = NULL, xpd = TRUE, lty = 1)
             }
         }
     }
@@ -439,9 +408,9 @@ pplot <- function(
 #' @param PvsY Logical or `NULL`: should probabilities be plotted against their `Y` argument? If `NULL`, the argument between `Y` and `X` having larger number of values is chosen. As many probability curves will be plotted as the number of values of the other argument.
 #' @param ylab2 A title for the y-axis on the right side of the plot, if displayed.
 #' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'top'`.
-#' @param alpha.f Numeric, default 0.25: opacity of the colours, `0` being completely invisible and `1` completely opaque.
-#' @param alpha.f.spread Numeric: opacity of the quantile bands or of the samples, `0` being completely invisible and `1` completely opaque.
-#' @param nsamples.spread Integer, default 360: number of samples of long-run frequencies to display
+#' @param alpha.f Numeric, default `1`: opacity of the colours of lines or markers, `0` being completely invisible and `1` completely opaque.
+#' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run frequency samples, similar to `alpha.f`. `NULL` means `1` if `spread = 'samples'` and `0.25` if `spread = 'quantiles'`.
+#' @param nsamples.spread Integer, default 360: number of samples of long-run frequencies to display.
 #' @param type ***
 #' @param lty,lwd,pch,col,xlab,ylab,main,xlim,ylim,grid,axes,add see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
 #' @param ... Other parameters to be passed to [pplot()].
@@ -643,8 +612,9 @@ plot.probability <- function(
 
     } else if(sspread){
         temp <- dim(x[['samples']])[3]
+        nsamples.spread <- min(nsamples.spread, temp)
         ispread <- round(seq.int(from = 1, to = temp,
-                length.out = min(nsamples.spread, temp)))
+            length.out = nsamples.spread))
         if(is.null(alpha.f.spread)){alpha.f.spread <- 1/ceiling(sqrt(temp))}
         ## if(is.null(alpha.f.spread)){alpha.f.spread <- 1/10}
     }
@@ -697,18 +667,24 @@ plot.probability <- function(
         ## ceiling(pscale * 10^(-floor(log10(pscale)) + 1)) *
         ##     10^(floor(log10(pscale)) - 1) * pdivs
     }
-
+print(x$tails)
     ## Prepare axes labels and title
     if(is.null(xlab)){xlab <- tempxlab}
     if(is.null(main)){
+        tails <- list()
+        tails[c(names(x$Y), names(x$X))] <- ''
+        tails[names(x$tails)] <- x$tails
         main <- paste0('P(',
-            paste0(names(x$Y), collapse = ', '),
+            paste0(names(x$Y), tails[names(x$Y)], collapse = ', '),
             if(!is.null(x$X)){
-                paste0(' | ', paste0(names(x$X), collapse = ', '))
+                paste0(' | ',
+                    paste0(names(x$X), tails[names(x$X)], collapse = ', '))
             }, ')')
         if(qspread){
             main <- paste0(main, '\nquantiles: ',
                 paste0(round(qnames, 1), '%', collapse = ', '))
+        } else if(sspread){
+            main <- paste0(main, '\n', nsamples.spread, ' samples')
         }
     }
     if(is.null(ylab)){
@@ -937,7 +913,7 @@ hist.probability <- function(
     if(is.na(ylim)[2]){ylim[2] <- max(unlist(densitylist))}
 
     pplot(x = c(midslist, midslist),
-        y = c(densitylist, densitylist),
+        y = densitylist,
         type = c(
             rep.int('hx', times = nplots),
             rep('l', length.out = nplots)
@@ -1123,7 +1099,7 @@ hist.mi <- function(
     nplots <- 1
 
     pplot(x = list(midslist, midslist),
-        y = list(densitylist, densitylist),
+        y = list(densitylist),
         type = c('hx', 'l'),
         lty = rep(lty, length.out = nplots),
         lwd = rep(lwd, length.out = nplots),

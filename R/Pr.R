@@ -509,8 +509,8 @@ Pr <- function(
     if(is.null(priorY)){
         out <- combfnr(parallel::parApply(cl = cl,
             X = expand.grid(
-                jy = seq_len(nY),
-                jx = seq_len(nX),
+                jy = seq_len(nY), # these will be rows
+                jx = seq_len(nX), # these will be cols
                 KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
             MARGIN = 1,
             FUN = .combineYX,
@@ -521,8 +521,8 @@ Pr <- function(
     } else {
         out <- combfnr(parallel::parApply(cl = cl,
             X = expand.grid(
-                jx = seq_len(nX),
-                jy = seq_len(nY),
+                jx = seq_len(nX), # these will be rows
+                jy = seq_len(nY), # these will be cols
                 KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
             MARGIN = 1,
             FUN = .combineYX,
@@ -646,13 +646,12 @@ Pr <- function(
     rm(y)
     gc(full = TRUE)
 
-
     ## report whether the probabilities are 'tails' or not
     if(!is.null(tails)){
         outtails <- list()
         outtails[c(colnames(Y), colnames(X))] <- ''
-        outtails[names(tails == -1)] <- '>'
-        outtails[names(tails == 1)] <- '<'
+        outtails[names(tails)[tails == -1]] <- '>'
+        outtails[names(tails)[tails == 1]] <- '<'
     } else {
         outtails <- NULL
     }

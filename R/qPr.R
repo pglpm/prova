@@ -9,7 +9,6 @@
 #' @param X Matrix or data.table or `NULL` (default): set of values of variates on which we want to condition. If `NULL`, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.
 #' @param learnt Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the [learn()] function, or such an object itself.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
-#' @param priorY Reserved for use in future versions of the package.
 ## #' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal. For the moment only the value `NULL` is accepted.
 #' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the quantile for `Y`. If `NULL`, no samples are reported. If `'all'` (or `Inf`), all samples obtained by the [learn()] function are used.
 #' @param quantiles Numeric vector, between 0 and 1, or `NULL`: desired quantiles of the revisability of the quantile for `Y`. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles (these are typical quantile values in the Bayesian literature: they give 50% and 89% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty). If `NULL`, no quantiles are calculated.
@@ -107,7 +106,7 @@ qPr <- function(
     X = NULL,
     learnt,
     tails = NULL,
-    priorY = NULL,
+    ## priorY = NULL,
     nsamples = 'all',
     quantiles = c(0.055, 0.5, 0.945),
     parallel = TRUE,
@@ -189,7 +188,9 @@ qPr <- function(
     ncomponents <- nrow(learnt$W)
     nmcsamples <- ncol(learnt$W)
 
-    if(is.numeric(nsamples)){
+    if(is.null(nsamples)){
+        nsamples <- 0
+    } else if(is.numeric(nsamples)){
         if(is.na(nsamples) || nsamples < 1) {
             nsamples <- NULL
         } else if(!is.finite(nsamples)) {
@@ -275,53 +276,68 @@ qPr <- function(
     tails[cright] <- -1
     tails <- unlist(tails)
 
+#### 'priorY' Reserved for future use
+    priorY <- NULL
     ## Check if a prior for Y is given, in that case Y and X will be swapped
-    if (isFALSE(priorY) || is.null(priorY)) {
+    if(!is.null(priorY) && (isFALSE(priorY) || any(is.na(priorY)))){
         priorY <- NULL
-        doquantiles <- !is.null(quantiles)
-    } else {
-        if(is.null(X)){ stop('X must be non-null if priorY is given') }
+    }
 
-        if(!isTRUE(priorY) && length(priorY) != nrow(Y)) {
-            stop('priorY must have as many elements a the rows of Y')
-        }
+    if(!is.null(priorY)){
+        ## Conditions for using priorY
+        if(is.null(X)){ stop("'X' must be non-null if 'priorY' is given") }
 
-        doquantiles <- FALSE
-        if(!is.null(quantiles)) {
-            ## message('For the moment, ',
-            ##     'computation of quantiles is affected by a larger error',
-            ##     'if "priorY" is specified.')
-            nsamples0 <- nsamples
-            nsamples <- max(nsamples0, 1200L)
+        if(anyDuplicated(Y)){
+            stop("All rows in 'Y' must be unique if 'priorY' is given")
         }
 
         ## if priorY is TRUE, the user wants a uniform prior distribution
         if(isTRUE(priorY)){
             priorY <- 1 + numeric(nrow(Y))
-        } else {
-            ## Check for invalid probabilities
-            if (!is.numeric(priorY) || any(priorY < 0)) {
-                stop('priorY contains invalid probabilities')
-            }
+        }
+        if(length(priorY) != nrow(Y)){
+            stop("'priorY' must have as many entries as rows of 'Y'")
+        }
+        if(!is.numeric(priorY) || any(priorY < 0)) {
+            stop("'priorY' contains invalid probabilities")
         }
 
         ## Swap X and Y, to use Bayes's theorem
+        ## And consider all values of Y, if it only has discrete variates
         . <- Y
         Y <- X
         X <- .
-        rm(.)
-        . <- Yname
-        Yname <- Xv
+        ## ## ## Alternative version: calculate for all possible Y-values,
+        ## ## ## if Y has finite domain
+        ## ## 'X' used below will contain all values of the original Y-variates
+        ## if(all(auxmetadata[auxmetadata$name %in% Yv, 'mcmctype'] %in%
+        ##            c('B', 'O', 'N'))){
+        ##     X <- do.call(what = expand.grid,
+        ##         args = c(setNames(
+        ##             object = lapply(X = Yv, FUN = vrtgrid,
+        ##                 learnt = list(auxmetadata = auxmetadata)),
+        ##             nm = Yv),
+        ##             list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+        ##         ) )
+        ##
+        ##     Ytokeep <- match(do.call(paste0, Y0), do.call(paste0, X))
+        ##
+        ## } else {
+        ##     X <- Y0
+        ##     Ytokeep <- TRUE
+        ## }
+
+        . <- Yv
+        Yv <- Xv
         Xv <- .
         rm(.)
+        gc(full = TRUE)
+
     }
 
     nY <- length(p)
     nX <- max(nrow(X), 1L)
     auxY <- auxmetadata[auxmetadata$name == Yname, ]
-
-    dosamples <- !is.null(nsamples)
-
 
 #### tmp dir where to save X and Y objects
     temporarydir <- tempdir()
@@ -386,6 +402,9 @@ qPr <- function(
         keys)}
     ## combfnc <- function(...){setNames(do.call(mapply, c(FUN=cbind, lapply(list(...), `[`, keys))), keys)}
 
+    doquantiles <- !is.null(quantiles)
+    dosamples <- (nsamples > 0)
+
     out <- combfnr(parallel::parApply(cl = cl,
             X = expand.grid(pY = p, jx = seq_len(nX)),
             MARGIN = 1,
@@ -421,7 +440,16 @@ qPr <- function(
 
     ## transform to grid
     ## in the output-list elements the Y & X values are the rows
-    ## dim(out$values.MCaccuracy) <-
+    dim(out$values) <- dim(out$values.MCaccuracy) <- c(nY, nX)
+
+    if(nsamples > 0){
+        dim(out$samples) <- c(nY, nX, nsamples)
+    }
+
+    if(!is.null(quantiles)){
+        dim(out$quantiles) <- dim(out$quantiles.MCaccuracy) <-
+            c(nY, nX, length(quantiles))
+    }
     dim(out$values) <- c(nY, nX)
 
     ## dimension & value names for variates
@@ -570,8 +598,7 @@ qPr <- function(
     values <- (Yvals[1] + Yvals[2]) / 2
 
     FF <- mean(colSums(exp(
-        lprobX + pnorm(q = values,
-            mean = params1, sd = params2,
+        lprobX + pnorm(q = values, mean = params1, sd = params2,
             lower.tail = TRUE, log.p = TRUE)
     ), na.rm = TRUE) / sumlpX) - pY
 
