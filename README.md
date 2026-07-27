@@ -33,12 +33,12 @@ The package essentially performs Bayesian nonparametric inference (also called "
 
 ## Minimal example
 
-Use the built-in [`penguins` dataset](https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html), and download the [metadata file](/vignettes/penguin_metadata.csv') that contains the characteristics of its variates, save it as `metadata.csv`.
+Use the [R `penguins` dataset](https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html) (or download a shuffled version from [here](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv)), together with the metadata `meta_penguins` available in **Prova**. Metadata contain the characteristics of the dataset's variates.
 
 "Learn" from this dataset using the function `learn()`. Note that the dataset has partially missing values (datapoint #4 for instance), but this is not a problem for **Prova**:
 ```r
-learnt <- learn(data = penguins, metadata = metadata)
-# [output about how the learnnig process]
+learnt <- learn(data = penguins, metadata = meta_penguins)
+# [progress output about the learning computation]
 ```
 
 Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 45 mm? To answer this question we use the function `Pr()`, and print a summary of the result:
