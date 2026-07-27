@@ -37,7 +37,7 @@ Use the [R `penguins` dataset](https://stat.ethz.ch/R-manual/R-patched/library/d
 
 "Learn" from this dataset using the function `learn()`. Note that the dataset has partially missing values (datapoint #4 for instance), but this is not a problem for **Prova**:
 ```r
-learnt <- learn(data = penguins, metadata = meta_penguins)
+K <- learn(data = penguins, metadata = meta_penguins)
 # [progress output about the learning computation]
 ```
 
@@ -46,7 +46,7 @@ Ask a statistical question about the penguin population. For example: given the 
 prob <- Pr(
     Y = data.frame(species = 'Adelie'), # predictand
     X = data.frame(bill_len = 45),      # predictor
-    learnt = learnt                     # learned data
+    K = K                               # Knowledge from data & metadata
 )
 
 print(prob)
@@ -71,7 +71,7 @@ The *inverse* question can also be asked: if we observe a new penguin of *Adéli
 invprob <- Pr(
     Y = data.frame(bill_len = 30:50),   # predictand
     X = data.frame(species = 'Adelie'), # predictor
-    learnt = learnt                     # learned data
+    K = K                               # knowledge from data & metadata
 )
 
 plot(invprob)
