@@ -559,7 +559,8 @@
 .combineYX <- function(
     iyx,
     temporarydir, usememory = TRUE,
-    quantiles, nsamples,
+    doquantiles, quantiles,
+    dosamples, nsamples,
     Qerror
 ) {
     if(usememory) {
@@ -577,19 +578,19 @@
     list(
         values = mean(x = FF, na.rm = TRUE),
         ##
-        quantiles = if(!is.null(quantiles)){
+        quantiles = if(doquantiles){
             quantile(x = FF, probs = quantiles, type = 6,
                 na.rm = TRUE, names = FALSE)
         },
         ##
-        samples = if(nsamples > 0) {
+        samples = if(dosamples){
             FF <- FF[!is.na(FF)]
             FF[round(seq(1, length(FF), length.out = nsamples))]
         },
         ##
         values.MCaccuracy = .funMCSELD(x = FF),
         ##
-        quantiles.MCaccuracy = if(!is.null(quantiles)){
+        quantiles.MCaccuracy = if(doquantiles){
             temp <- .funMCEQ(x = FF, prob = quantiles, Qpair = Qerror)
             (temp[2, ] - temp[1, ]) / 2
         }

@@ -506,6 +506,9 @@ Pr <- function(
         keys)}
     ## combfnc <- function(...){setNames(do.call(mapply, c(FUN=cbind, lapply(list(...), `[`, keys))), keys)}
 
+    doquantiles <- !is.null(quantiles)
+    dosamples <- (nsamples > 0)
+
     if(is.null(priorY)){
         out <- combfnr(parallel::parApply(cl = cl,
             X = expand.grid(
@@ -515,7 +518,8 @@ Pr <- function(
             MARGIN = 1,
             FUN = .combineYX,
             temporarydir = temporarydir, usememory = usememory,
-            quantiles = quantiles, nsamples = nsamples,
+            doquantiles = doquantiles, quantiles = quantiles,
+            dosamples = dosamples, nsamples = nsamples,
             Qerror = Qerror
         ))
     } else {
@@ -527,7 +531,8 @@ Pr <- function(
             MARGIN = 1,
             FUN = .combineYX,
             temporarydir = temporarydir, usememory = usememory,
-            quantiles = quantiles, nsamples = nsamples,
+            doquantiles = doquantiles, quantiles = quantiles,
+            dosamples = dosamples, nsamples = nsamples,
             Qerror = Qerror
         ))
     }
@@ -549,11 +554,11 @@ Pr <- function(
     if(is.null(priorY)){
         dim(out$values) <- dim(out$values.MCaccuracy) <- c(nY, nX)
 
-        if(nsamples > 0){
+        if(dosamples){
             dim(out$samples) <- c(nY, nX, nsamples)
         }
 
-        if(!is.null(quantiles)){
+        if(doquantiles){
             dim(out$quantiles) <- dim(out$quantiles.MCaccuracy) <-
                 c(nY, nX, length(quantiles))
         }
@@ -584,7 +589,7 @@ Pr <- function(
         ## out$values <- out$values[Ytokeep, , drop = FALSE]
         ## out$values.MCaccuracy <- out$values.MCaccuracy[Ytokeep, , drop = FALSE]
 
-        if(nsamples > 0){
+        if(dosamples){
             dim(out$samples) <- c(nX, nY, nsamples)
             out$samples <- out$samples * priorY
             normf <- c(colSums(x = out$samples, dims = 1, na.rm = TRUE))
@@ -597,7 +602,7 @@ Pr <- function(
             ## out$samples <- out$samples[Ytokeep, , , drop = FALSE]
 
             ## Calculate quantiles from new samples
-            if(!is.null(quantiles)){
+            if(doquantiles){
                 out$quantiles <- aperm(
                     a = apply(
                         X = out$samples, MARGIN = c(1, 2),
@@ -691,7 +696,7 @@ Pr <- function(
     dimnames(out$values) <- dimnames(out$values.MCaccuracy) <-
         c(Ynames, Xnames)
 
-    if(!is.null(quantiles)){
+    if(doquantiles){
         out$quantiles <- out$quantiles * jacobians
         out$quantiles.MCaccuracy <-out$quantiles.MCaccuracy * jacobians
 
@@ -701,7 +706,7 @@ Pr <- function(
             c(Ynames, Xnames, temp)
     }
 
-    if(nsamples > 0){
+    if(dosamples){
         out$samples <- out$samples * jacobians
 
         temp <- list(sample = round(seq(1, nmcsamples, length.out = nsamples)))

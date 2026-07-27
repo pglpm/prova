@@ -440,111 +440,52 @@ qPr <- function(
 
     ## transform to grid
     ## in the output-list elements the Y & X values are the rows
-    dim(out$values) <- dim(out$values.MCaccuracy) <- c(nY, nX)
+    dim(out$values) <- c(nY, nX)
 
     if(nsamples > 0){
         dim(out$samples) <- c(nY, nX, nsamples)
     }
 
-    if(!is.null(quantiles)){
-        dim(out$quantiles) <- dim(out$quantiles.MCaccuracy) <-
-            c(nY, nX, length(quantiles))
+    if(doquantiles){
+        dim(out$quantiles) <- c(nY, nX, length(quantiles))
     }
-    dim(out$values) <- c(nY, nX)
 
-    ## dimension & value names for variates
+
+    ## report whether the probabilities are 'tails' or not
+    if(!is.null(tails)){
+        outtails <- list()
+        outtails[c(colnames(Y), colnames(X))] <- ''
+        outtails[names(tails)[tails == -1]] <- '>'
+        outtails[names(tails)[tails == 1]] <- '<'
+    } else {
+        outtails <- NULL
+    }
+
+
+    ## Dimension & value names for variates
+    Ynames <- setNames(object = list(p), nm = Yname)
+
     if(!is.null(X)){
         Xnames <- setNames(object = list(
             apply(X = X, MARGIN = 1, FUN = paste0, collapse = sep,
                 simplify = TRUE)),
-            nm = paste0(if(is.null(priorY)){solidus},
-                paste0(colnames(X), collapse = sep)) )
+            nm = paste0(solidus,
+                paste0(colnames(X), outtails[colnames(X)], collapse = sep)) )
     } else {
         Xnames <- list(NULL)
     }
-    if(!is.null(Yname)){
-        Ynames <- setNames(object = list(p), nm = Yname)
-        ## Ynames <- setNames(object = list(
-        ##     apply(X = Y, MARGIN = 1, FUN = paste0, collapse = sep,
-        ##         simplify = TRUE)),
-        ##     nm = paste0(colnames(Y), collapse = sep)
-        ## )
-    } else {
-        Ynames <- list(NULL)
-    }
 
-    if(is.null(priorY)){
+    dimnames(out$values) <- c(Ynames, Xnames)
 
-        dimnames(out$values) <- c(Ynames, Xnames)
-        ## dimnames(out$values.MCaccuracy) <- c(Ynames, Xnames)
-
-    } else {
-        ## Bayes's theorem
-        out$values <- t(priorY * t(out$values))
-        out$values.MCaccuracy <- NULL
-        normf <- rowSums(out$values, na.rm = TRUE)
-        out$values <- t(out$values/normf)
-
-        dimnames(out$values) <- c(Xnames, Ynames)
+    if(doquantiles){
+        temp <- list(Q = names(quantile(x = NA, probs = quantiles,
+            names = TRUE, na.rm = TRUE)))
+        dimnames(out$quantiles) <- c(Ynames, Xnames, temp)
     }
 
     if(dosamples){
         temp <- list(sample = round(seq(1, nmcsamples, length.out = nsamples)))
-
-        ## transform to grid
-        dim(out$samples) <- c(nY, nX, nsamples)
-
-        if(is.null(priorY)){
-            ## multiply by jacobian factors
-            ## out$samples <- out$samples * jacobians
-            dimnames(out$samples) <- c(Ynames, Xnames, temp)
-        } else {
-            ## Bayes's theorem
-            out$samples <- priorY * aperm(a = out$samples, perm = c(2, 1, 3),
-                resize = TRUE)
-            normf <- c(t(colSums(out$samples, na.rm = TRUE)))
-            out$samples <- aperm(a = aperm(a = out$samples, perm = NULL,
-                resize = TRUE) / normf, perm = NULL,
-                resize = TRUE)
-
-            dimnames(out$samples) <- c(Xnames, Ynames, temp)
-        }
-
-    }
-
-    if(doquantiles){
-        temp <- list(Q = names(quantile(x = 1, probs = quantiles, names = TRUE)))
-        if(is.null(priorY)){
-            ## transform to grid
-            dim(out$quantiles) <- c(nY, nX, length(quantiles))
-            ## dim(out$quantiles.MCaccuracy) <- c(nY, nX, length(quantiles))
-            ## multiply by jacobian factors
-            ## out$quantiles <- out$quantiles * jacobians
-            ## out$quantiles.MCaccuracy <- signif(x = out$quantiles.MCaccuracy * jacobians,
-            ##     digits = 2)
-
-            dimnames(out$quantiles) <- c(Ynames, Xnames, temp)
-            ## dimnames(out$quantiles.MCaccuracy) <- c(Ynames, Xnames, temp)
-        } else {
-            ## calculate quantiles from samples
-            out$quantiles <- aperm(
-                a = apply(X = out$samples, MARGIN = c(1, 2), FUN = quantile,
-                    probs = quantiles, type = 6,
-                    na.rm = TRUE, names = FALSE,
-                    simplify = TRUE),
-                perm = c(2, 3, 1), resize = TRUE)
-
-            ## adjust number of samples as originally requested
-            if(is.null(nsamples0)) {
-                out$samples <- NULL
-            } else if(nsamples0 < nsamples) {
-                out$samples <-out$samples[ , ,
-                    round(seq(1, nsamples, length.out = nsamples0))]
-            }
-
-            dimnames(out$quantiles) <- c(Xnames, Ynames, temp)
-            ## dimnames(out$quantiles.MCaccuracy) <- c(Xnames, Ynames, temp)
-        }
+        dimnames(out$samples) <- c(Ynames, Xnames, temp)
     }
 
     if(isTRUE(keepYX)){
@@ -556,6 +497,9 @@ qPr <- function(
             out$Y <- X
             out$X <- Y
             }
+    }
+    if(!is.null(outtails)){
+        out$tails <- outtails[!(outtails == '')]
     }
 
     class(out) <- 'probability'
@@ -611,7 +555,7 @@ qPr <- function(
                 lower.tail = TRUE, log.p = TRUE)
         ), na.rm = TRUE) / sumlpX) - pY
     }
-
+saveRDS('__valuesq.rds')
     values <- unname(unlist(.vtransform(values,
         auxmetadata = auxmetadata,
         Rout = 'original',

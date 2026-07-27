@@ -1187,21 +1187,30 @@ print.probability <- function(
         x <- .prsubset(x, subset = subset)
     }
 
+    vmca <- x[['values.MCaccuracy']]
+    if(is.null(vmca)){# output is from qPr()
+        vmca <- 1e-15
+    }
+    qmca <- x[['quantiles.MCaccuracy']]
+    if(is.null(qmca)){# output is from qPr()
+        qmca <- 1e-15
+    }
     if(isTRUE(digits) && is.null(elements)){
         vdigits <- edigits - 1 + ceiling(log10(x[['values']])) -
-            floor(log10(x[['values.MCaccuracy']]))
-        adigits <- rep.int(x = edigits,
-            times = length(x[['values.MCaccuracy']]))
+            floor(log10(vmca))
+        adigits <- rep.int(x = edigits, times = length(vmca))
         if('quantiles' %in% names(x)){
             qdigits <- edigits - 1 + ceiling(log10(x[['quantiles']])) -
-                floor(log10(x[['quantiles.MCaccuracy']]))
+                floor(log10(qmca))
         } else {qdigits <- NULL}
     } else if(is.null(elements)){
             vdigits <- adigits <- qdigits <- digits
     } else if(!is.null(elements)){
         digits <- edigits
     }
-
+print('v');    print(vdigits)
+print('a');    print(adigits)
+print('q');    print(qdigits)
     if(is.null(elements)){
         totake <- c('values', 'values.MCaccuracy', 'quantiles')
         ## rearrange and combine values and quantiles in a special way
