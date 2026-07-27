@@ -1,7 +1,9 @@
-# Prova v2.0.0
+# Prova v1.10.0
 
-* Rewrite of some internal code.
+* The functions `flexiplot()` and `plotquantiles()` are replaced by the single function `pplot()`; argument `type = 'qx'` reproduces the usage of `plotquantiles()`
 * Fixed a bug that prevented use of pre-existing parallel cluster.
+* Included a minimal example in the README.
+* Rewrite of some internal code.
 
 
 # Prova v1.9.0

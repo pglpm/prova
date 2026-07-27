@@ -84,6 +84,8 @@ This distribution is not the *frequency* distribution of bill length in the whol
 
 </br>
 
+This was just a minimal example, just touching on the basic functionality. More complex combinations of variates and more complex probabilistic-statistical questions can be approached.
+
 The [introductory vignette](https://pglpm.github.io/prova/articles/intro.html) explains, with a guided example, most of the features above, as well as the main ideas and functions. It can be particularly useful for researchers who are more familiar with traditional "frequentist" statistics but would like to try the Bayesian approach. See the [post](https://www.apadivisions.org/division-7/publications/newsletters/developmental/2018/07/bayesian-statistics) by Barbara W. Sarnecka, frequentist statistician turned Bayesian, for a brilliant overview of the Bayesian advantages. The [vignette about mutual information](https://pglpm.github.io/prova/articles/mutualinfo.html) explains the use of this powerful measure of association.
 
 The package is under continuous development, but the core functionalities work and have been tested in concrete research projects; see [example applications](#example-applications) below.
