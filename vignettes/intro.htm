@@ -1318,7 +1318,7 @@ cores – <em>please wait before running this code</em>, it might take
 longer time on your computer:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="do">## set.seed() already called</span></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>learnt10 <span class="ot">&lt;-</span> <span class="fu">learn</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>K10 <span class="ot">&lt;-</span> <span class="fu">learn</span>(</span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="at">data =</span> datafile,</span>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="at">metadata =</span> meta_penguins, <span class="co"># included in &#39;Prova&#39;</span></span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="at">outputdir =</span> <span class="st">&#39;penguin_inference&#39;</span>,</span>
@@ -1382,18 +1382,18 @@ memory use is provided.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</s
 and 8 variates, took around 3 GB and 15 minutes to complete on
 4 cores.</p>
 <p>The results of this main inference are now stored in the compressed
-file <code>learnt.rds</code> (around 32 MB) within the specified output
+file <code>K.rds</code> (around 32 MB) within the specified output
 directory. The name of this directory is also saved as the final value
 of the <code>learn()</code> function. We saved this directory name in
-the <code>learnt10</code> variable in the code above, by invoking
-<code>learnt10 &lt;- learn(...)</code>.</p>
+the <code>K10</code> variable in the code above, by invoking
+<code>K10 &lt;- learn(...)</code>.</p>
 <p>For your convenience the object produced by the computation above can
-be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/learnt10.rds"><code>learnt10.rds</code></a>.
+be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/K10.rds"><code>K10.rds</code></a>.
 Once you have downloaded it in your working directory you can just
 invoke</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>learnt10 <span class="ot">&lt;-</span> <span class="st">&#39;learnt10.rds&#39;</span></span></code></pre></div>
-<p>which produces an object <code>learnt10</code> (just a character
-string, in this case) which can be used in the following analysis.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>K10 <span class="ot">&lt;-</span> <span class="st">&#39;K10.rds&#39;</span></span></code></pre></div>
+<p>which produces an object <code>K10</code> (just a character string,
+in this case) which can be used in the following analysis.</p>
 <p><br />
 </p>
 </div>
@@ -1424,9 +1424,10 @@ requires three arguments:</p>
 variate we are interested in. In the present case the variate is
 <code>species</code> and the values are ‘Adelie’, ‘Chinstrap’,
 ‘Gentoo’.</li>
-<li><code>learnt</code>: the object that points to the computation made
-with the <code>learn()</code> function, discussed in the previous
-section. In the present case it’s <code>learnt10</code>.</li>
+<li><code>K</code>: the object that encodes the <code>K</code>nowledge
+from the computation made with the <code>learn()</code> function,
+discussed in the previous section. In the present case it’s
+<code>K10</code>.</li>
 <li>Optionally, <code>parallel</code> specifies how many cores we should
 use for the computation.</li>
 </ul>
@@ -1437,7 +1438,7 @@ most a couple of seconds:</p>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>Fspecies10 <span class="ot">&lt;-</span> <span class="fu">Pr</span>(</span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    <span class="at">Y =</span> Y,</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    <span class="at">learnt =</span> learnt10,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    <span class="at">K =</span> K10,</span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">4</span> <span class="do">## let&#39;s use 4 cores</span></span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>)</span></code></pre></div>
 <p>The answer to our question is now contained in the
@@ -1607,7 +1608,7 @@ missing data.</p>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="do">## excluding &#39;sex&#39; variate</span></span>
 <span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> penguins_shuffled[<span class="dv">1</span>, <span class="fu">colnames</span>(penguins_shuffled) <span class="sc">!=</span> <span class="st">&#39;sex&#39;</span>]</span>
 <span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>imputeddata <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Yimp, <span class="at">X =</span> X, <span class="at">learnt =</span> learnt10, <span class="at">parallel =</span> <span class="dv">4</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>imputeddata <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Yimp, <span class="at">X =</span> X, <span class="at">K =</span> K10, <span class="at">parallel =</span> <span class="dv">4</span>)</span>
 <span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a></span>
 <span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="fu">print</span>(imputeddata)</span>
 <span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co"># , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007</span></span>
@@ -1624,7 +1625,7 @@ although further data might shift that probability somewhere between
 generate a grid of realistic values based on the data, and then see the
 probability distribution over these values:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="do">## Generate grid of realistic values for &#39;bill_len&#39; using vrtgrid()</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>Yimp <span class="ot">&lt;-</span> <span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;bill_len&#39;</span>, <span class="at">learnt =</span> learnt10)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>Yimp <span class="ot">&lt;-</span> <span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;bill_len&#39;</span>, <span class="at">K =</span> K10)</span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="do">## Extract data from datapoint #6 of our dataset &#39;penguins_shuffled&#39;</span></span>
 <span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> penguins_shuffled[<span class="dv">6</span>, ]</span>
@@ -1632,7 +1633,7 @@ probability distribution over these values:</p>
 <span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="do">## drop unknown variates</span></span>
 <span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>X <span class="ot">&lt;-</span> X[, <span class="sc">!</span><span class="fu">is.na</span>(X)]</span>
 <span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>imputeddata <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Yimp, <span class="at">X =</span> X, <span class="at">learnt =</span> learnt10, <span class="at">parallel =</span> <span class="dv">4</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>imputeddata <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Yimp, <span class="at">X =</span> X, <span class="at">K =</span> K10, <span class="at">parallel =</span> <span class="dv">4</span>)</span>
 <span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a></span>
 <span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="fu">plot</span>(imputeddata)</span>
 <span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co"># named list()</span></span></code></pre></div>
@@ -1709,7 +1710,7 @@ code for such an analysis:</p>
 <span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a></span>
 <span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>Fspeciessex10 <span class="ot">&lt;-</span> <span class="fu">Pr</span>(</span>
 <span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>    <span class="at">Y =</span> Y2,</span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>    <span class="at">learnt =</span> learnt10,</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>    <span class="at">K =</span> K10,</span>
 <span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">4</span> <span class="do">## let&#39;s use 4 cores</span></span>
 <span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>)</span>
 <span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a></span>
@@ -1768,7 +1769,7 @@ whose <code>island</code> variate has the values <code>&#39;Biscoe</code> or
 <span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>Fspecies10I <span class="ot">&lt;-</span> <span class="fu">Pr</span>(</span>
 <span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>    <span class="at">Y =</span> Y,</span>
 <span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>    <span class="at">X =</span> X, <span class="do">## argument for conditional inferences</span></span>
-<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>    <span class="at">learnt =</span> learnt10,</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>    <span class="at">K =</span> K10,</span>
 <span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">4</span> <span class="do">## let&#39;s use 4 cores</span></span>
 <span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>)</span></code></pre></div>
 <p>The answer to our question is now contained in the
@@ -1949,7 +1950,7 @@ subpopulations. The procedure is analogous to the one we <a href="#twovariates">
 <span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>Fspecies10IS <span class="ot">&lt;-</span> <span class="fu">Pr</span>(</span>
 <span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>    <span class="at">Y =</span> Y,</span>
 <span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a>    <span class="at">X =</span> X2,</span>
-<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a>    <span class="at">learnt =</span> learnt10,</span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a>    <span class="at">K =</span> K10,</span>
 <span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">4</span> <span class="do">## let&#39;s use 4 cores</span></span>
 <span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a>)</span>
 <span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a></span>
@@ -1993,7 +1994,7 @@ a problem for Bayesian theory and <strong>Prova</strong>.</p>
 done again with the <code>learn()</code> function. <em>Please wait
 before running this code</em>, it might take longer time on your
 computer:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>learnt60 <span class="ot">&lt;-</span> <span class="fu">learn</span>(</span>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>K60 <span class="ot">&lt;-</span> <span class="fu">learn</span>(</span>
 <span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>    <span class="at">data =</span> datafile,</span>
 <span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>    <span class="at">metadata =</span> meta_penguins,</span>
 <span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>    <span class="at">outputdir =</span> <span class="st">&#39;penguin_inference&#39;</span>,</span>
@@ -2051,11 +2052,11 @@ computer:</p>
 <p>The calculation with 60 sample data took around 3 GB and 10 minutes
 on 4 cores.</p>
 <p>The results of this updated inference are now stored in the
-compressed file <code>learnt.rds</code> within the new output directory.
-For your convenience the object produced by the computation above can be
-downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/learnt60.rds"><code>learnt60.rds</code></a>.
+compressed file <code>K.rds</code> within the new output directory. For
+your convenience the object produced by the computation above can be
+downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/K60.rds"><code>K60.rds</code></a>.
 Once you have downloaded it in your working directory, invoke</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>learnt60 <span class="ot">&lt;-</span> <span class="st">&#39;learnt60.rds&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>K60 <span class="ot">&lt;-</span> <span class="st">&#39;K60.rds&#39;</span></span></code></pre></div>
 <p>which we now use to update our analysis.</p>
 </div>
 <div id="updates-in-analysis-and-hypotheses" class="section level2" number="6.2">
@@ -2073,23 +2074,23 @@ on Dream island?</em></li>
 <p>We can update our answers – frequency estimates, their credible
 intervals, and their probability distributions – from the increased data
 sample, using the <code>Pr()</code> function <a href="#learningfirst">as
-before</a>. In the <code>learnt =</code> argument we must now use the
-new <code>learnt60</code> object, which points to the updated inference.
-Here is the calculation for all three questions:</p>
+before</a>. In the <code>K =</code> argument we must now use the new
+<code>K60</code> object, which points to the updated inference. Here is
+the calculation for all three questions:</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="do">## &#39;Y&#39; and &#39;X&#39; were previously defined with:</span></span>
 <span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="do">## Y &lt;- data.frame(species = c(&#39;Adelie&#39;, &#39;Chinstrap&#39;, &#39;Gentoo&#39;))</span></span>
 <span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="do">## X &lt;- data.frame(island = c(&#39;Biscoe&#39;, &#39;Dream&#39;))</span></span>
 <span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a></span>
 <span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>Fspecies60 <span class="ot">&lt;-</span> <span class="fu">Pr</span>(</span>
 <span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a>    <span class="at">Y =</span> Y,</span>
-<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>    <span class="at">learnt =</span> learnt60, <span class="do">## updated inference</span></span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a>    <span class="at">K =</span> K60, <span class="do">## updated inference</span></span>
 <span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">4</span> <span class="do">## let&#39;s use 4 cores</span></span>
 <span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a>)</span>
 <span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a></span>
 <span id="cb27-11"><a href="#cb27-11" tabindex="-1"></a>Fspecies60I <span class="ot">&lt;-</span> <span class="fu">Pr</span>(</span>
 <span id="cb27-12"><a href="#cb27-12" tabindex="-1"></a>    <span class="at">Y =</span> Y,</span>
 <span id="cb27-13"><a href="#cb27-13" tabindex="-1"></a>    <span class="at">X =</span> X, <span class="do">## argument for conditional inferences</span></span>
-<span id="cb27-14"><a href="#cb27-14" tabindex="-1"></a>    <span class="at">learnt =</span> learnt60, <span class="do">## updated inference</span></span>
+<span id="cb27-14"><a href="#cb27-14" tabindex="-1"></a>    <span class="at">K =</span> K60, <span class="do">## updated inference</span></span>
 <span id="cb27-15"><a href="#cb27-15" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">4</span> <span class="do">## let&#39;s use 4 cores</span></span>
 <span id="cb27-16"><a href="#cb27-16" tabindex="-1"></a>)</span></code></pre></div>
 <p>Just like in the preliminary analysis we can use the
@@ -2343,7 +2344,7 @@ the dataset does not matter.</p>
 <p>As usual we perform the updated inference with the
 <code>learn()</code> function (and as usual please wait before running
 the code below); this time we use 8 parallel cores:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>learntall <span class="ot">&lt;-</span> <span class="fu">learn</span>(</span>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>Kall <span class="ot">&lt;-</span> <span class="fu">learn</span>(</span>
 <span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>    <span class="at">data =</span> penguins, <span class="co"># or &#39;data = penguins_shuffled&#39;</span></span>
 <span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a>    <span class="at">metadata =</span> meta_penguins,</span>
 <span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a>    <span class="at">outputdir =</span> <span class="st">&#39;penguin_inference&#39;</span>,</span>
@@ -2404,10 +2405,10 @@ the code below); this time we use 8 parallel cores:</p>
 <p>The calculation with 344 sample data took around 7 GB and
 17 hours.</p>
 <p>The results of this final inference are stored in the compressed file
-<code>learnt.rds</code> within the new output directory. The object
-produced by the computation above can be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/learntall.rds"><code>learntall.rds</code></a>.
+<code>K.rds</code> within the new output directory. The object produced
+by the computation above can be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds"><code>Kall.rds</code></a>.
 Once you have downloaded it in your working directory, invoke</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a>learntall <span class="ot">&lt;-</span> <span class="st">&#39;learntall.rds&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a>Kall <span class="ot">&lt;-</span> <span class="st">&#39;Kall.rds&#39;</span></span></code></pre></div>
 </div>
 <div id="final-results-on-overall-species-frequencies" class="section level2" number="7.2">
 <h2><span class="header-section-number">7.2</span> Final results on
@@ -2419,7 +2420,7 @@ species are computed in the usual way:</p>
 <span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a></span>
 <span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a>Fspeciesall <span class="ot">&lt;-</span> <span class="fu">Pr</span>(</span>
 <span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a>    <span class="at">Y =</span> Y,</span>
-<span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a>    <span class="at">learnt =</span> learntall, <span class="do">## updated inference</span></span>
+<span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a>    <span class="at">K =</span> Kall, <span class="do">## updated inference</span></span>
 <span id="cb42-7"><a href="#cb42-7" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">4</span> <span class="do">## let&#39;s use 4 cores</span></span>
 <span id="cb42-8"><a href="#cb42-8" tabindex="-1"></a>)</span></code></pre></div>
 <p>Let’s plot the estimated frequencies with their credibility
@@ -2501,7 +2502,7 @@ the frequency about, and an object <code>X</code> for the
 can use the function <code>vrtgrid()</code> to generate a grid of all
 possible realistic values:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="do">## All values for the variate of interest</span></span>
-<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;species&#39;</span>, <span class="at">learnt =</span> learntall)</span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;species&#39;</span>, <span class="at">K =</span> Kall)</span>
 <span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a></span>
 <span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a>Xvrt <span class="ot">&lt;-</span> <span class="st">&#39;island&#39;</span> <span class="do">## subpopulation variate</span></span>
 <span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a>Xvls <span class="ot">&lt;-</span> <span class="st">&#39;Biscoe&#39;</span> <span class="do">## subpopulation value or values</span></span>
@@ -2509,7 +2510,7 @@ possible realistic values:</p>
 <span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Xvls)</span>
 <span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a><span class="fu">colnames</span>(X) <span class="ot">&lt;-</span> Xvrt</span>
 <span id="cb46-9"><a href="#cb46-9" tabindex="-1"></a></span>
-<span id="cb46-10"><a href="#cb46-10" tabindex="-1"></a>Fanalysis <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Y, <span class="at">X =</span> X, <span class="at">learnt =</span> learntall, <span class="at">parallel =</span> <span class="dv">4</span>)</span></code></pre></div>
+<span id="cb46-10"><a href="#cb46-10" tabindex="-1"></a>Fanalysis <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Y, <span class="at">X =</span> X, <span class="at">K =</span> Kall, <span class="at">parallel =</span> <span class="dv">4</span>)</span></code></pre></div>
 <p>Here are the probability distributions and the credibility intervals
 for the three frequencies:</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="fu">hist</span>(Fanalysis, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>, <span class="do">## same colours as before!</span></span>
@@ -2553,7 +2554,7 @@ probability.
 <h3><span class="header-section-number">7.3.2</span>
 <strong>Q2b</strong>: Adélie on three islands</h3>
 <p>In this case, <code>Adelie</code> penguins are our subpopulation:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;island&#39;</span>, <span class="at">learnt =</span> learntall)</span>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;island&#39;</span>, <span class="at">K =</span> Kall)</span>
 <span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a></span>
 <span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a>Xvrt <span class="ot">&lt;-</span> <span class="st">&#39;species&#39;</span> <span class="do">## subpopulation variate</span></span>
 <span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>Xvls <span class="ot">&lt;-</span> <span class="st">&#39;Adelie&#39;</span> <span class="do">## subpopulation value or values</span></span>
@@ -2562,7 +2563,7 @@ probability.
 <span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a><span class="fu">colnames</span>(X) <span class="ot">&lt;-</span> Xvrt</span>
 <span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a></span>
 <span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a><span class="do">## NB: rewriting the previous &#39;Fanalysis&#39; object</span></span>
-<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a>Fanalysis <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Y, <span class="at">X =</span> X, <span class="at">learnt =</span> learntall, <span class="at">parallel =</span> <span class="dv">4</span>)</span></code></pre></div>
+<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a>Fanalysis <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Y, <span class="at">X =</span> X, <span class="at">K =</span> Kall, <span class="at">parallel =</span> <span class="dv">4</span>)</span></code></pre></div>
 <p>Here are the probability distributions and confidence intervals for
 the three frequencies:</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">hist</span>(Fanalysis, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">col =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>,</span>
@@ -2611,13 +2612,13 @@ the three islands.</p>
 body mass in three separate subpopulations: <code>Adelie</code>,
 <code>Chinstrap</code>, and <code>Gentoo</code> penguins.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="do">## Grid of realistic values for &#39;body_mass&#39;</span></span>
-<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;body_mass&#39;</span>, <span class="at">learnt =</span> learntall)</span>
+<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;body_mass&#39;</span>, <span class="at">K =</span> Kall)</span>
 <span id="cb52-3"><a href="#cb52-3" tabindex="-1"></a></span>
 <span id="cb52-4"><a href="#cb52-4" tabindex="-1"></a><span class="do">## Grid of values for &#39;species&#39;, the subpopulation variate</span></span>
-<span id="cb52-5"><a href="#cb52-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;species&#39;</span>, <span class="at">learnt =</span> learntall)</span>
+<span id="cb52-5"><a href="#cb52-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;species&#39;</span>, <span class="at">K =</span> Kall)</span>
 <span id="cb52-6"><a href="#cb52-6" tabindex="-1"></a></span>
 <span id="cb52-7"><a href="#cb52-7" tabindex="-1"></a><span class="do">## NB: rewriting the previous &#39;Fanalysis&#39; object</span></span>
-<span id="cb52-8"><a href="#cb52-8" tabindex="-1"></a>Fanalysis <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Y, <span class="at">X =</span> X, <span class="at">learnt =</span> learntall, <span class="at">parallel =</span> <span class="dv">4</span>)</span></code></pre></div>
+<span id="cb52-8"><a href="#cb52-8" tabindex="-1"></a>Fanalysis <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Y, <span class="at">X =</span> X, <span class="at">K =</span> Kall, <span class="at">parallel =</span> <span class="dv">4</span>)</span></code></pre></div>
 <p>Here is the estimated frequency distribution of body mass within each
 species</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="fu">plot</span>(Fanalysis, <span class="at">col =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">legend =</span> <span class="st">&#39;topright&#39;</span>)</span>

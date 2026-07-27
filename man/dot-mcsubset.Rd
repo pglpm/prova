@@ -4,7 +4,7 @@
 \alias{.mcsubset}
 \title{Eliminate samples from mcsamples object}
 \usage{
-.mcsubset(learnt, subsamples)
+.mcsubset(K, subsamples)
 }
 \description{
 Used in 'learn()'.

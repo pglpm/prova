@@ -411,17 +411,17 @@ then load it with the <code>pread.csv()</code> function as follows:</p>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>}</span></code></pre></div>
 <p>We assume that we have already learned all predictive information
 from this dataset by means of the <strong>Prova</strong> function
-<code>learn()</code>. This information is stored in a “learnt” object,
-which is either loaded in memory, or stored in the compressed file
-<code>learnt.rds</code> within the output directory that was specified
-in the <code>learn()</code> function. For your convenience the object
-produced by the computation mentioned above can be downloaded as the
-file <a href="https://github.com/pglpm/prova/raw/main/vignettes/learntall.rds"><code>learntall.rds</code></a>.
+<code>learn()</code>. This information is stored in a
+<code>K</code>nowledge object, which is either loaded in memory, or
+stored in the compressed file <code>K.rds</code> within the output
+directory that was specified in the <code>learn()</code> function. For
+your convenience the object produced by the computation mentioned above
+can be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds"><code>Kall.rds</code></a>.
 Once you have downloaded it in your working directory you can just
 set</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>learnt <span class="ot">&lt;-</span> <span class="st">&#39;learntall.rds&#39;</span></span></code></pre></div>
-<p>in this case <code>learnt</code> is just a character string pointing
-to the file containing the actual “learnt” object.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="st">&#39;Kall.rds&#39;</span></span></code></pre></div>
+<p>in this case <code>K</code> is just a character string pointing to
+the file containing the actual “K”nowledge object.</p>
 </div>
 <div id="newsamples" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Generating new
@@ -430,11 +430,11 @@ samples</h2>
 variates. Each variate has three possible values;
 <strong>Prova</strong>’s utility function <code>vrtgrid()</code> allows
 us to create a vector of all possible values of each variate, which are
-stored in the metadata of the <code>learnt</code> object:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>islandvalues <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;island&#39;</span>, <span class="at">learnt =</span> learnt))</span>
+stored in the metadata of the <code>K</code> object:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>islandvalues <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;island&#39;</span>, <span class="at">K =</span> K))</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># [1] &quot;Biscoe&quot;    &quot;Dream&quot;     &quot;Torgersen&quot;</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>speciesvalues <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;species&#39;</span>, <span class="at">learnt =</span> learnt))</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>speciesvalues <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;species&#39;</span>, <span class="at">K =</span> K))</span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co"># [1] &quot;Adelie&quot;    &quot;Chinstrap&quot; &quot;Gentoo&quot;</span></span></code></pre></div>
 <p>The function <code>pplot()</code> allows us to display the
 <code>island</code> and <code>species</code> variates against each
@@ -471,7 +471,7 @@ can say is that this pair roughly occurs less frequently than once every
 344 penguins. In fact, a calculation with the <code>Pr()</code> function
 shows that its probability is around 0.3%:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> <span class="fu">data.frame</span>(<span class="at">island =</span> <span class="st">&#39;Torgersen&#39;</span>, <span class="at">species =</span> <span class="st">&#39;Chinstrap&#39;</span>),</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>    <span class="at">learnt =</span> learnt)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>    <span class="at">K =</span> K)</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">print</span>(prob)</span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% </span></span>
@@ -493,15 +493,15 @@ generate.</li>
 for these variates jointly.</li>
 <li><code>X</code>: data frame of variate values to restrict the
 sampling to specific subpopulations.</li>
-<li><code>learnt</code>: the object that points to the computation made
-with the <code>learn()</code> function.</li>
+<li><code>K</code>: the object that encodes the <code>K</code>nowledge
+from the computation made with the <code>learn()</code> function.</li>
 </ul>
 <p>Let’s first generate 5 samples from the estimated whole population of
 penguins, as an example:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">rPr</span>(</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">5</span>,</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;island&#39;</span>, <span class="st">&#39;species&#39;</span>),</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>    <span class="at">learnt =</span> learnt</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>    <span class="at">K =</span> K</span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>)</span>
 <span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#        island   species</span></span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co"># 644_1   Dream Chinstrap</span></span>
@@ -510,12 +510,12 @@ penguins, as an example:</p>
 <span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co"># 2230_1 Biscoe    Gentoo</span></span>
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co"># 3083_1 Biscoe    Adelie</span></span></code></pre></div>
 <p>The rows of the resulting data frame are named according to the Monte
-Carlo samples used from the <code>learnt</code> object; they can be
-useful for peculiar studies but we can completely ignore them in the
-present case.</p>
+Carlo samples used from the <code>K</code> object; they can be useful
+for peculiar studies but we can completely ignore them in the present
+case.</p>
 <p>Now let’s generate 2000 samples, and then plot them in a scatter
 plot:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;island&#39;</span>, <span class="st">&#39;species&#39;</span>), <span class="at">learnt =</span> learnt)</span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;island&#39;</span>, <span class="st">&#39;species&#39;</span>), <span class="at">K =</span> K)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">pplot</span>(<span class="at">x =</span> samples<span class="sc">$</span>island, <span class="at">y =</span> samples<span class="sc">$</span>species,</span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&#39;p&#39;</span>, <span class="at">xlab =</span> <span class="st">&#39;island&#39;</span>, <span class="at">ylab =</span> <span class="st">&#39;species&#39;</span>,</span>
@@ -544,9 +544,9 @@ continuous variate <code>body_mass</code> by means of
 <strong>Prova</strong>’s utility function <code>vrtgrid()</code>: this
 function chooses an optimal value based on, and including, the range of
 data previously observed:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>body_massrange <span class="ot">&lt;-</span> <span class="fu">range</span>(<span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;body_mass&#39;</span>, <span class="at">learnt =</span> learnt))</span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>body_massrange <span class="ot">&lt;-</span> <span class="fu">range</span>(<span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;body_mass&#39;</span>, <span class="at">K =</span> K))</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;species&#39;</span>), <span class="at">learnt =</span> learnt)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;species&#39;</span>), <span class="at">K =</span> K)</span>
 <span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
 <span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">pplot</span>(<span class="at">x =</span> samples<span class="sc">$</span>body_mass, <span class="at">y =</span> samples<span class="sc">$</span>species,</span>
 <span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&#39;p&#39;</span>, <span class="at">xlab =</span> <span class="st">&#39;body mass / g&#39;</span>, <span class="at">ylab =</span> <span class="st">&#39;species&#39;</span>,</span>
@@ -572,9 +572,9 @@ different subpopulations</h2>
 <p>In a completely analogous way we can visually assess the association
 of two continuous variates, such as body mass and bill length
 (<code>bill_len</code>):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>bill_lenrange <span class="ot">&lt;-</span> <span class="fu">range</span>(<span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;bill_len&#39;</span>, <span class="at">learnt =</span> learnt))</span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>bill_lenrange <span class="ot">&lt;-</span> <span class="fu">range</span>(<span class="fu">vrtgrid</span>(<span class="at">vrt =</span> <span class="st">&#39;bill_len&#39;</span>, <span class="at">K =</span> K))</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;bill_len&#39;</span>), <span class="at">learnt =</span> learnt)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;bill_len&#39;</span>), <span class="at">K =</span> K)</span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">pplot</span>(<span class="at">x =</span> samples<span class="sc">$</span>body_mass, <span class="at">y =</span> samples<span class="sc">$</span>bill_len,</span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&#39;p&#39;</span>, <span class="at">xlab =</span> <span class="st">&#39;body mass / g&#39;</span>, <span class="at">ylab =</span> <span class="st">&#39;bill length / mm&#39;</span>,</span>
@@ -606,19 +606,19 @@ function.</p>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">1000</span>,</span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;bill_len&#39;</span>),</span>
 <span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>    <span class="at">X =</span> <span class="fu">data.frame</span>(<span class="at">species =</span> <span class="st">&#39;Adelie&#39;</span>),</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>    <span class="at">learnt =</span> learnt)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>    <span class="at">K =</span> K)</span>
 <span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
 <span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>samplesChinstrap <span class="ot">&lt;-</span> <span class="fu">rPr</span>(</span>
 <span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">1000</span>,</span>
 <span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>    <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;bill_len&#39;</span>),</span>
 <span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>    <span class="at">X =</span> <span class="fu">data.frame</span>(<span class="at">species =</span> <span class="st">&#39;Chinstrap&#39;</span>),</span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>    <span class="at">learnt =</span> learnt)</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>    <span class="at">K =</span> K)</span>
 <span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a></span>
 <span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>samplesGentoo <span class="ot">&lt;-</span> <span class="fu">rPr</span>(</span>
 <span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">1000</span>,</span>
 <span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>    <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;bill_len&#39;</span>),</span>
 <span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>    <span class="at">X =</span> <span class="fu">data.frame</span>(<span class="at">species =</span> <span class="st">&#39;Gentoo&#39;</span>),</span>
-<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>    <span class="at">learnt =</span> learnt)</span></code></pre></div>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>    <span class="at">K =</span> K)</span></code></pre></div>
 <p>Now we plot these samples together with <code>pplot()</code>,
 choosing different colours and shapes for the three subpopulations. We
 also use the <code>alpha.f</code> argument to make sure that the plot
@@ -764,8 +764,8 @@ following:</p>
 names; the mutual information is calculated between these two sets.</li>
 <li><code>X</code>: data frame of variate values to restrict the
 calculation to specific subpopulations.</li>
-<li><code>learnt</code>: the object that points to the computation made
-with the <code>learn()</code> function.</li>
+<li><code>K</code>: the object that encodes the <code>K</code>nowledge
+from the computation made with the <code>learn()</code> function.</li>
 <li>Optionally, <code>unit</code>: the mutual information unit; default
 “shannons” (Sh).</li>
 <li>Optionally, <code>parallel</code> specifies how many cores we should
@@ -779,7 +779,7 @@ joint variates.</p>
 <code>island</code> and <code>species</code>, <a href="#newsamples">previously discussed and visualized</a>:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>MIislandspecies <span class="ot">&lt;-</span> <span class="fu">mutualinfo</span>(</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>    <span class="at">Y1names =</span> <span class="st">&#39;island&#39;</span>, <span class="at">Y2names =</span> <span class="st">&#39;species&#39;</span>,</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    <span class="at">learnt =</span> learnt,</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    <span class="at">K =</span> K,</span>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">4</span> <span class="do">## let&#39;s use 4 cores</span></span>
 <span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>)</span></code></pre></div>
 <p>The resulting object <code>MIislandspecies</code> is a list of
@@ -870,7 +870,7 @@ species</h3>
 <span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="do">## approx r-equivalent</span></span>
 <span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">signif</span>(MIislandspecies<span class="sc">$</span>rGauss, <span class="at">digits =</span> <span class="dv">2</span>)</span>
 <span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;island&#39;</span>, <span class="st">&#39;species&#39;</span>), <span class="at">learnt =</span> learnt)</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;island&#39;</span>, <span class="st">&#39;species&#39;</span>), <span class="at">K =</span> K)</span>
 <span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a></span>
 <span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="fu">pplot</span>(<span class="at">x =</span> samples<span class="sc">$</span>island, <span class="at">y =</span> samples<span class="sc">$</span>species,</span>
 <span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&#39;p&#39;</span>, <span class="at">xlab =</span> <span class="st">&#39;island&#39;</span>, <span class="at">ylab =</span> <span class="st">&#39;species&#39;</span>,</span>
@@ -891,7 +891,7 @@ species</h3>
 <p>Calculation of mutual info:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>MIbodymassspecies <span class="ot">&lt;-</span> <span class="fu">mutualinfo</span>(</span>
 <span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>    <span class="at">Y1names =</span> <span class="st">&#39;body_mass&#39;</span>, <span class="at">Y2names =</span> <span class="st">&#39;species&#39;</span>,</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>    <span class="at">learnt =</span> learnt</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>    <span class="at">K =</span> K</span>
 <span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>)</span></code></pre></div>
 <p>Scatter plot:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="do">## mutual info</span></span>
@@ -900,7 +900,7 @@ species</h3>
 <span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="do">## approx r-equivalent</span></span>
 <span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">signif</span>(MIbodymassspecies<span class="sc">$</span>rGauss, <span class="at">digits =</span> <span class="dv">2</span>)</span>
 <span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;species&#39;</span>), <span class="at">learnt =</span> learnt)</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;species&#39;</span>), <span class="at">K =</span> K)</span>
 <span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a></span>
 <span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="fu">pplot</span>(<span class="at">x =</span> samples<span class="sc">$</span>body_mass, <span class="at">y =</span> samples<span class="sc">$</span>species,</span>
 <span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&#39;p&#39;</span>, <span class="at">xlab =</span> <span class="st">&#39;body mass / g&#39;</span>, <span class="at">ylab =</span> <span class="st">&#39;species&#39;</span>,</span>
@@ -920,7 +920,7 @@ length</h3>
 <p>Calculation of mutual information:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>MIbodymassbilllen <span class="ot">&lt;-</span> <span class="fu">mutualinfo</span>(</span>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>    <span class="at">Y1names =</span> <span class="st">&#39;body_mass&#39;</span>, <span class="at">Y2names =</span> <span class="st">&#39;bill_len&#39;</span>,</span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>    <span class="at">learnt =</span> learnt</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>    <span class="at">K =</span> K</span>
 <span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>)</span></code></pre></div>
 <p>Scatter plot:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="do">## mutual info</span></span>
@@ -929,7 +929,7 @@ length</h3>
 <span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="do">## approx r-equivalent</span></span>
 <span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">signif</span>(MIbodymassbilllen<span class="sc">$</span>rGauss, <span class="at">digits =</span> <span class="dv">2</span>)</span>
 <span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a></span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;bill_len&#39;</span>), <span class="at">learnt =</span> learnt)</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">2000</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;body_mass&#39;</span>, <span class="st">&#39;bill_len&#39;</span>), <span class="at">K =</span> K)</span>
 <span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a></span>
 <span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="fu">pplot</span>(<span class="at">x =</span> samples<span class="sc">$</span>body_mass, <span class="at">y =</span> samples<span class="sc">$</span>bill_len,</span>
 <span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">&#39;p&#39;</span>, <span class="at">xlab =</span> <span class="st">&#39;body mass / g&#39;</span>, <span class="at">ylab =</span> <span class="st">&#39;bill length / mm&#39;</span>,</span>
@@ -973,19 +973,19 @@ the whole computation could take half an hour):</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>MIadelie <span class="ot">&lt;-</span> <span class="fu">mutualinfo</span>(</span>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>    <span class="at">Y1names =</span> <span class="st">&#39;body_mass&#39;</span>, <span class="at">Y2names =</span> <span class="st">&#39;bill_len&#39;</span>,</span>
 <span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>    <span class="at">X =</span> <span class="fu">data.frame</span>(<span class="at">species =</span> <span class="st">&#39;Adelie&#39;</span>), <span class="do">## choose subpopulation</span></span>
-<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>    <span class="at">learnt =</span> learnt</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>    <span class="at">K =</span> K</span>
 <span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>)</span>
 <span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a></span>
 <span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>MIchinstrap <span class="ot">&lt;-</span> <span class="fu">mutualinfo</span>(</span>
 <span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>    <span class="at">Y1names =</span> <span class="st">&#39;body_mass&#39;</span>, <span class="at">Y2names =</span> <span class="st">&#39;bill_len&#39;</span>,</span>
 <span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>    <span class="at">X =</span> <span class="fu">data.frame</span>(<span class="at">species =</span> <span class="st">&#39;Chinstrap&#39;</span>), <span class="do">## choose subpopulation</span></span>
-<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>    <span class="at">learnt =</span> learnt</span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a>    <span class="at">K =</span> K</span>
 <span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a>)</span>
 <span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a></span>
 <span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a>MIgentoo <span class="ot">&lt;-</span> <span class="fu">mutualinfo</span>(</span>
 <span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a>    <span class="at">Y1names =</span> <span class="st">&#39;body_mass&#39;</span>, <span class="at">Y2names =</span> <span class="st">&#39;bill_len&#39;</span>,</span>
 <span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a>    <span class="at">X =</span> <span class="fu">data.frame</span>(<span class="at">species =</span> <span class="st">&#39;Gentoo&#39;</span>), <span class="do">## choose subpopulation</span></span>
-<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a>    <span class="at">learnt =</span> learnt</span>
+<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a>    <span class="at">K =</span> K</span>
 <span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a>)</span></code></pre></div>
 <p>Let’s compare the mutual information between <code>body_mass</code>
 and <code>bill_len</code> for each species, reporting the result

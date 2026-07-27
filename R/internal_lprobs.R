@@ -4,7 +4,7 @@
 #'
 #' @keywords internal
 .lprobsargsyx <- function(
-    x, auxmetadata, learnt, tails = NULL, ids = seq_len(nrow(x))
+    x, auxmetadata, K, tails = NULL, ids = seq_len(nrow(x))
 ) {
     Xv <- colnames(x)
     nX <- nrow(x)
@@ -26,9 +26,9 @@
         aux <- auxmetadata[toselect, ]
         nV0 <- TRUE
         V0mean <- .learnbind(V0mean,
-            learnt$Rmean[aux$id, , , drop = FALSE])
+            K$Rmean[aux$id, , , drop = FALSE])
         V0sd <- .learnbind(V0sd,
-            learnt$Rsd[aux$id, , , drop = FALSE])
+            K$Rsd[aux$id, , , drop = FALSE])
         xV0 <- rbind(xV0,
             t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
@@ -54,9 +54,9 @@
         aux <- auxmetadata[toselect, ]
         nV0 <- TRUE
         V0mean <- .learnbind(V0mean,
-            learnt$Cmean[aux$id, , , drop = FALSE])
+            K$Cmean[aux$id, , , drop = FALSE])
         V0sd <- .learnbind(V0sd,
-            learnt$Csd[aux$id, , , drop = FALSE])
+            K$Csd[aux$id, , , drop = FALSE])
         xV0 <- rbind(xV0,
             t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
@@ -82,9 +82,9 @@
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
         V1mean <- .learnbind(V1mean,
-                tails[aux$name] * learnt$Rmean[aux$id, , , drop = FALSE])
+                tails[aux$name] * K$Rmean[aux$id, , , drop = FALSE])
         V1sd <- .learnbind(V1sd,
-            learnt$Rsd[aux$id, , , drop = FALSE])
+            K$Rsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
             tails[aux$name] *
                 t(as.matrix(.vtransform(
@@ -104,8 +104,8 @@
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- .learnbind(V1mean, learnt$Cmean[aux$id, , , drop = FALSE])
-        V1sd <- .learnbind(V1sd, learnt$Csd[aux$id, , , drop = FALSE])
+        V1mean <- .learnbind(V1mean, K$Cmean[aux$id, , , drop = FALSE])
+        V1sd <- .learnbind(V1sd, K$Csd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
             t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
@@ -125,8 +125,8 @@
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
         ## note the minus!
-        V1mean <- .learnbind(V1mean, -learnt$Cmean[aux$id, , , drop = FALSE])
-        V1sd <- .learnbind(V1sd, learnt$Csd[aux$id, , , drop = FALSE])
+        V1mean <- .learnbind(V1mean, -K$Cmean[aux$id, , , drop = FALSE])
+        V1sd <- .learnbind(V1sd, K$Csd[aux$id, , , drop = FALSE])
         ## note the minus!
         xV1 <- rbind(xV1,
             - t(as.matrix(.vtransform(
@@ -146,8 +146,8 @@
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
-        V1mean <- .learnbind(V1mean, learnt$Dmean[aux$id, , , drop = FALSE])
-        V1sd <- .learnbind(V1sd, learnt$Dsd[aux$id, , , drop = FALSE])
+        V1mean <- .learnbind(V1mean, K$Dmean[aux$id, , , drop = FALSE])
+        V1sd <- .learnbind(V1sd, K$Dsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
             t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
@@ -168,8 +168,8 @@
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
         ## note the minus!
-        V1mean <- .learnbind(V1mean, -learnt$Dmean[aux$id, , , drop = FALSE])
-        V1sd <- .learnbind(V1sd, learnt$Dsd[aux$id, , , drop = FALSE])
+        V1mean <- .learnbind(V1mean, -K$Dmean[aux$id, , , drop = FALSE])
+        V1sd <- .learnbind(V1sd, K$Dsd[aux$id, , , drop = FALSE])
         ## note the minus!
         xV1 <- rbind(xV1,
             - t(as.matrix(.vtransform(
@@ -196,9 +196,9 @@
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
         V1mean <- .learnbind(V1mean,
-                learnt$Cmean[aux$id, , , drop = FALSE])
+                K$Cmean[aux$id, , , drop = FALSE])
         V1sd <- .learnbind(V1sd,
-            learnt$Csd[aux$id, , , drop = FALSE])
+            K$Csd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
                 t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
@@ -223,9 +223,9 @@
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
         V1mean <- .learnbind(V1mean,
-                - learnt$Cmean[aux$id, , , drop = FALSE]) # minus sign
+                - K$Cmean[aux$id, , , drop = FALSE]) # minus sign
         V1sd <- .learnbind(V1sd,
-            learnt$Csd[aux$id, , , drop = FALSE])
+            K$Csd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
                - t(as.matrix(.vtransform( # minus sign
                     x[, aux$name, drop = FALSE],
@@ -250,9 +250,9 @@
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
         V1mean <- .learnbind(V1mean,
-                learnt$Dmean[aux$id, , , drop = FALSE])
+                K$Dmean[aux$id, , , drop = FALSE])
         V1sd <- .learnbind(V1sd,
-            learnt$Dsd[aux$id, , , drop = FALSE])
+            K$Dsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
                 t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
@@ -278,9 +278,9 @@
         aux <- auxmetadata[toselect, ]
         nV1 <- TRUE
         V1mean <- .learnbind(V1mean,
-                - learnt$Dmean[aux$id, , , drop = FALSE]) # minus sign
+                - K$Dmean[aux$id, , , drop = FALSE]) # minus sign
         V1sd <- .learnbind(V1sd,
-            learnt$Dsd[aux$id, , , drop = FALSE])
+            K$Dsd[aux$id, , , drop = FALSE])
         xV1 <- rbind(xV1,
                - t(as.matrix(.vtransform( # minus sign
                     x[, aux$name, drop = FALSE],
@@ -315,9 +315,9 @@
         aux <- auxmetadata[toselect, ]
         nV2 <- TRUE
         V2mean <- .learnbind(V2mean,
-                learnt$Dmean[aux$id, , , drop = FALSE])
+                K$Dmean[aux$id, , , drop = FALSE])
         V2sd <- .learnbind(V2sd,
-            learnt$Dsd[aux$id, , , drop = FALSE])
+            K$Dsd[aux$id, , , drop = FALSE])
         V2steps <- aux$halfstep / aux$tscale
         xV2 <- rbind(xV2,
                 t(as.matrix(.vtransform(
@@ -350,7 +350,7 @@
             aux$indexpos, aux$Nvalues,
             SIMPLIFY = FALSE))
         VNprobs <- .learnbind(VNprobs,
-            learnt$Oprob[Nindices, , , drop = FALSE])
+            K$Oprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
                 t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
@@ -375,7 +375,7 @@
             aux$indexpos, aux$Nvalues,
             SIMPLIFY = FALSE))
         VNprobs <- .learnbind(VNprobs,
-            learnt$Nprob[Nindices, , , drop = FALSE])
+            K$Nprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
                 t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
@@ -398,11 +398,11 @@
         for(i in seq_len(nrow(aux))) {
             VNprobs <- .learnbind(VNprobs,
                 if(tails[aux$name[i]] > 0) {
-                    .rowcumsum(learnt$Oprob[
+                    .rowcumsum(K$Oprob[
                         aux$indexpos[i] + seq_len(aux$Nvalues[i]), , , drop = FALSE
                     ])
                 } else {
-                    .rowinvcumsum(learnt$Oprob[
+                    .rowinvcumsum(K$Oprob[
                         aux$indexpos[i] + seq_len(aux$Nvalues[i]), , , drop = FALSE
                     ])
                 }
@@ -432,7 +432,7 @@
         aux <- auxmetadata[toselect, ]
         nVB <- TRUE
         VBprobs <- .learnbind(VBprobs,
-            learnt$Bprob[aux$id, , , drop = FALSE])
+            K$Bprob[aux$id, , , drop = FALSE])
         xVB <- rbind(xVB,
             t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],

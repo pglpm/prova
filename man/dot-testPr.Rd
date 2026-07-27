@@ -4,14 +4,14 @@
 \alias{.testPr}
 \title{Test posterior probabilities}
 \usage{
-.testPr(Y, X = NULL, learnt, tails = NULL)
+.testPr(Y, X = NULL, K, tails = NULL)
 }
 \arguments{
 \item{Y}{named list of values; list names must be valid variate names.}
 
 \item{X}{named list of values; list names must be valid variate names.}
 
-\item{learnt}{Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
+\item{K}{Either a character with the name of a directory or full path for a 'K.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{Y} and \code{X}. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for \code{Y} and \code{X} variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by \code{'<='} or \code{'lower'} or\code{'left'} or \code{-1}; a right-open interval \eqn{Y \ge y} is indicated by \code{'>='} or \code{'upper'}  or \code{'right'} or \code{+1}. Values \code{NULL}, \code{'=='}, \code{0} indicate that a point value \code{Y = y} (not an interval) should be calculated. \strong{NB}: the semi-open intervals \emph{always} include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to \emph{more} than 1.}
 }

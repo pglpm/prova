@@ -3,8 +3,8 @@
 #' Used in 'learn()'.
 #'
 #' @keywords internal
-.mcsubset <- function(learnt, subsamples) {
-    lapply(learnt, function(xx) {
+.mcsubset <- function(K, subsamples) {
+    lapply(K, function(xx) {
         do.call('[', c(
             list(xx),
             rep(x = TRUE, times = length(dim(xx)) - 1),

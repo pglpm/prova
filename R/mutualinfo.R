@@ -23,12 +23,11 @@
 #' @param Y1names Character vector: first group of joint variates
 #' @param Y2names Character vector or `NULL`: second group of joint variates
 #' @param X Matrix or data.frame or `NULL`: values of some variates conditional on which we want the probabilities.
-#' @param learnt Either a character with the name of a directory or full path
-#'   for an 'learnt.rds' object, or such an object itself.
+#' @param K Either a character with the name of a directory or full path for an 'K.rds' object, or such an object itself.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param quantiles Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in [Pr()].
-#' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "learnt" object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "learnt" object.
-#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "learnt" object to use for calculating the revisability of the mutual information.
+#' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "K" object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "K" object.
+#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "K" object to use for calculating the revisability of the mutual information.
 #' @param unit Either one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used.
 #' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use as many cores as in user's [option][base::getOption()] "nc.cores", or 2 if that is `NULL`. `FALSE`: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
@@ -49,16 +48,16 @@
 #'
 #' [Pr()] to calculate probabilities and their revisability.
 #'
-#' [learn()], which generates the `learnt` objects required by `mutualinfo()`.
+#' [learn()], which generates the `K` objects required by `mutualinfo()`.
 #'
 #' @examples
-#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' learnt <- learntExample
+#' K <- Kexample
 #'
 #' ## mutual information between variates 'species' and 'bill_len'
 #' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-#'   learnt = learnt, nv = 2, parallel = 1)
+#'   K = K, nv = 2, parallel = 1)
 #'
 #' ## The value and its numerical Monte Carlo error
 #' c(MI$value, MI$MCaccuracy)
@@ -77,7 +76,7 @@ mutualinfo <- function(
     Y1names,
     Y2names,
     X = NULL,
-    learnt,
+    K,
     tails = NULL,
     quantiles =  c(0.055, 0.25, 0.75, 0.945),
     ns = NULL,
@@ -147,29 +146,29 @@ mutualinfo <- function(
     }
 
     ## Extract Monte Carlo output & aux-metadata
-    ## If learnt is a string, check if it's a folder name or file name
-    if (is.character(learnt)) {
-        ## Check if 'learnt' is a folder containing learnt.rds
-        if (file_test('-d', learnt) &&
-                file.exists(file.path(learnt, 'learnt.rds'))) {
-            learnt <- readRDS(file.path(learnt, 'learnt.rds'))
+    ## If K is a string, check if it's a folder name or file name
+    if (is.character(K)) {
+        ## Check if 'K' is a folder containing K.rds
+        if (file_test('-d', K) &&
+                file.exists(file.path(K, 'K.rds'))) {
+            K <- readRDS(file.path(K, 'K.rds'))
         } else {
-            ## Assume 'learnt' the full path of learnt.rds
+            ## Assume 'K' the full path of K.rds
             ## possibly without the file extension '.rds'
-            learnt <- paste0(sub('.rds$', '', learnt), '.rds')
-            if (file.exists(learnt)) {
-                learnt <- readRDS(learnt)
+            K <- paste0(sub('.rds$', '', K), '.rds')
+            if (file.exists(K)) {
+                K <- readRDS(K)
             } else {
-                stop("The argument 'learnt' must be a folder containing learnt.rds, or the path to an rds-file containing the output from 'learn()'.")
+                stop("The argument 'K' must be a folder containing 'K.rds', or the path to an rds-file containing the output from 'learn()'.")
             }
         }
     }
-    ## Add check to see that learnt is correct type of object?
-    auxmetadata <- learnt$auxmetadata
-    learnt$auxmetadata <- NULL
-    learnt$auxinfo <- NULL
-    ncomponents <- nrow(learnt$W)
-    nmcs <- ncol(learnt$W)
+    ## Add check to see that K is correct type of object?
+    auxmetadata <- K$auxmetadata
+    K$auxmetadata <- NULL
+    K$auxinfo <- NULL
+    ncomponents <- nrow(K$W)
+    nmcs <- ncol(K$W)
 
     if(is.null(ns) || !is.finite(ns) || ns == 'all'){ ns <- nmcs }
     ns <- max(min(ns, nmcs), 2)
@@ -287,19 +286,19 @@ mutualinfo <- function(
 
 #### Step 0. Adjust component weights W for conditioning on X
     if(is.null(X)){
-        lW <- log(learnt$W)
+        lW <- log(K$W)
     } else {
         lpargs <- .lprobsargsyx(
             x = X,
             auxmetadata = auxmetadata,
-            learnt = learnt,
+            K = K,
             tails = tails
         )
 
         lW <- .lprobsbase(
             xVs = lpargs$xVs[[1]],
             params = lpargs$params,
-            logW =  log(learnt$W)
+            logW =  log(K$W)
         ) # rows=components, columns=samples
 
     } # end definition of lW if non-null X
@@ -342,8 +341,8 @@ mutualinfo <- function(
             times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = ntot * nvrt,
-                mean = learnt$Rmean[totake],
-                sd = learnt$Rsd[totake] )
+                mean = K$Rmean[totake],
+                sd = K$Rsd[totake] )
         )
     }
 
@@ -358,8 +357,8 @@ mutualinfo <- function(
             times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = ntot * nvrt,
-                mean = learnt$Cmean[totake],
-                sd = learnt$Csd[totake] )
+                mean = K$Cmean[totake],
+                sd = K$Csd[totake] )
         )
     }
 
@@ -374,8 +373,8 @@ mutualinfo <- function(
             times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = ntot * nvrt,
-                mean = learnt$Dmean[totake],
-                sd = learnt$Dsd[totake] )
+                mean = K$Dmean[totake],
+                sd = K$Dsd[totake] )
         )
     }
 
@@ -390,7 +389,7 @@ mutualinfo <- function(
             Yout <- c(Yout, mapply(
                 FUN = function(xx, yy){
                 sample.int(n = aux$Nvalues, size = 1,
-                    prob = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues),
+                    prob = K$Oprob[aux$indexpos + seq_len(aux$Nvalues),
                         xx, yy])},
                 Ws, sseq, SIMPLIFY = TRUE) )
             ## ## old version with extraDistr::rcat()
@@ -398,7 +397,7 @@ mutualinfo <- function(
             ## Yout <- c(Yout,
             ##     extraDistr::rcat(n = ntot,
             ##         prob = apply(
-            ##             X = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+            ##             X = K$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
             ##             MARGIN = 1, FUN = `[`, totake,
             ##             simplify = TRUE) )
             ## )
@@ -416,7 +415,7 @@ mutualinfo <- function(
             Yout <- c(Yout, mapply(
                 FUN = function(xx, yy){
                 sample.int(n = aux$Nvalues, size = 1,
-                    prob = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues),
+                    prob = K$Nprob[aux$indexpos + seq_len(aux$Nvalues),
                         xx, yy])},
                 Ws, sseq, SIMPLIFY = TRUE) )
             ## ## old version with extraDistr::rcat()
@@ -424,7 +423,7 @@ mutualinfo <- function(
             ## Yout <- c(Yout,
             ##     extraDistr::rcat(n = ntot,
             ##         prob = apply(
-            ##             X = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+            ##             X = K$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
             ##             MARGIN = 1, FUN = `[`, totake,
             ##             simplify = TRUE) )
             ## )
@@ -441,9 +440,9 @@ mutualinfo <- function(
         totake <- cbind(rep.int(x = aux$id,
             times = rep.int(x = ntot, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
-            rbinom(n = ntot * nvrt, size = 1, prob = learnt$Bprob[totake])
+            rbinom(n = ntot * nvrt, size = 1, prob = K$Bprob[totake])
             ## ## Old version
-            ## extraDistr::rbern(n = ntot * nvrt, prob = learnt$Bprob[totake])
+            ## extraDistr::rbern(n = ntot * nvrt, prob = K$Bprob[totake])
         )
     }
 
@@ -487,7 +486,7 @@ mutualinfo <- function(
     lpargs1 <- .lprobsargsyx(
         x = Y1transf,
         auxmetadata = auxmetadata,
-        learnt = learnt,
+        K = K,
         tails = NULL,
         ids = ids
     )
@@ -495,7 +494,7 @@ mutualinfo <- function(
     lpargs2 <- .lprobsargsyx(
         x = Y2transf,
         auxmetadata = auxmetadata,
-        learnt = learnt,
+        K = K,
         tails = NULL,
         ids = ids
     )

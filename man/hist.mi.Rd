@@ -46,13 +46,13 @@ The mutual information calculated with the \code{\link[=mutualinfo]{mutualinfo()
 The \code{hist()} method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
 }
 \examples{
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## calculate the mutual information and its revisability
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-  learnt = learnt, nv = 2, parallel = 1)
+  K = K, nv = 2, parallel = 1)
 
 ## show the possible revisability of the mutual information,
 ## if a much larger data sample were collected

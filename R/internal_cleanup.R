@@ -10,13 +10,13 @@
 #' @keywords internal
 .cleanup <- function(path){
     if(all(file.exists(file.path(path, c(
-        'learnt.rds',
+        'K.rds',
         'MCtraces.rds',
         'MCtraces.pdf',
         'log-1.out',
         'main.out',
-        'plotquantiles_learnt.pdf',
-        'plotsamples_learnt.pdf'
+        'plotquantiles_learn.pdf',
+        'plotsamples_learn.pdf'
     ))))){
         invisible(file.remove(dir(path,
             pattern = paste0('^___.*\\..*$'),

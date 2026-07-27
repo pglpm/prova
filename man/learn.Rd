@@ -16,7 +16,7 @@ learn(
   seed = NULL,
   cleanup = TRUE,
   appendinfo = TRUE,
-  valueislearnt = TRUE,
+  valueisK = TRUE,
   subsampledata = NULL,
   prior = missing(data) || is.null(data),
   startupMCiterations = 3600,
@@ -62,7 +62,7 @@ learn(
 
 \item{appendinfo}{Logical, default \code{TRUE}: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory \code{outputdir}? The appended string has the format 'Vn_Dn_Sn_YYMMDDTHHMMSS'.}
 
-\item{valueislearnt}{Logical or \code{NULL}: should the \code{VALUE} returned be the \code{learnt} object containing the results from the Monte Carlo computation? Default \code{TRUE}. If \code{FALSE}, then \code{VALUE} is the output directory name. If \code{NULL}, then \code{VALUE} is \code{NULL}.}
+\item{valueisK}{Logical or \code{NULL}: should the \code{VALUE} returned be the \code{K}nowledge object containing the results from the Monte Carlo computation? Default \code{TRUE}. If \code{FALSE}, then \code{VALUE} is the output directory name. If \code{NULL}, then \code{VALUE} is \code{NULL}.}
 
 \item{subsampledata}{Integer or \code{NULL} (default): if integer, use only that many datapoints from the original dataset in the \code{data} argument.}
 
@@ -97,12 +97,12 @@ learn(
 \item{hyperparams}{List: hyperparameters of the hyperprior; see values in "Usage".}
 }
 \value{
-A "learnt" object, or name of directory containing such an object and other output files, or \code{NULL}, depending on argument \code{valueislearnt}.
+A "knowledge" object, or name of directory containing such an object and other output files, or \code{NULL}, depending on argument \code{valueisK}.
 
 \code{learn()} saves several files in a directory. By default this output directory is a temporary directory within the one used by \code{\link[base:tempdir]{base::tempdir()}}, but an alternative one can be chosen with the argument \verb{outputdir =}. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
 \itemize{
 \item \code{MCtraces.pdf}: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file \code{MCtraces.rds}.
-\item \code{plotsamples_learnt.pdf}, \code{plotquantiles_learnt.pdf}: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
+\item \code{plotsamples_learn.pdf}, \code{plotquantiles_learn.pdf}: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
 \item \verb{log-1.out}, \verb{log-2.out}, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.
 \item \code{rng_seed.rds}: the state of the pseudorandom seed (see \link[base:Random]{base::Random}) when \code{learn()} was called.
 \item \code{metadata.csv}: a copy of the metadata.
@@ -116,7 +116,7 @@ Compute the posterior joint probability distribution of the variates conditional
 \details{
 This function takes as main inputs a set of data and metadata, and computes the full joint probability distribution for new data, including its "revisability". From this full joint distribution any other distributions of interest can subsequently be computed; see \code{\link[=Pr]{Pr()}} and related functions. This computation can also be interpreted as an estimation of the full joint frequency distribution of the variates in the \emph{whole population}, beyond the sample data, together with its uncertainty. The computation allows for the use of datapoints with partially missing variables: imputation is automatically made. This imputation is \emph{principled}, made according to the rules of probability theory.
 
-The output is a "learnt" object, typically saved in a \code{learnt.rds} file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.
+The output is a "knowledge" object, typically saved in a \code{K.rds} file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.
 
 See \code{vignette('intro')} for introductory examples.
 
@@ -161,7 +161,7 @@ dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
 
 ## Learn from the data:
-learnt <- learn(
+K <- learn(
   data = dataset, metadata = metadata,
       ## the following parameters are unrealistic
       ## only used to reduce computation time for this example
@@ -170,8 +170,8 @@ learnt <- learn(
   minESS = 0, initES = 0
 )
 
-## Check structure of `learnt` object:
-str(learnt)
+## Check structure of `K` object:
+str(K)
 }
 
 }

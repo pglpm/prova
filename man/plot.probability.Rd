@@ -77,16 +77,16 @@
 This \code{\link[base:plot]{base::plot()}} method is a utility to plot probabilities obtained with \code{\link[=Pr]{Pr()}}, as well as their revisabilities. The probabilities are plotted either against \code{Y}, with one curve for each value of \code{X}, or vice versa.
 }
 \examples{
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## create a grid of values for variate "bill length",
 ## based on the information in the dataset and metadata:
-valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt)
+valuesBill <- vrtgrid(vrt = 'bill_len', K = K)
 
 ## calculate the probabilities and quantiles
-probs <- Pr(Y = valuesBill, learnt = learnt, parallel = 1)
+probs <- Pr(Y = valuesBill, K = K, parallel = 1)
 
 ## plot the probabilities and quantiles
 plot(probs)

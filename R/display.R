@@ -430,16 +430,16 @@ pplot <- function(
 #' [pplot()] (on which `plot.probability()` is based) for more general plots.
 #'
 #' @examples
-#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' learnt <- learntExample
+#' K <- Kexample
 #'
 #' ## create a grid of values for variate "bill length",
 #' ## based on the information in the dataset and metadata:
-#' valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt)
+#' valuesBill <- vrtgrid(vrt = 'bill_len', K = K)
 #'
 #' ## calculate the probabilities and quantiles
-#' probs <- Pr(Y = valuesBill, learnt = learnt, parallel = 1)
+#' probs <- Pr(Y = valuesBill, K = K, parallel = 1)
 #'
 #' ## plot the probabilities and quantiles
 #' plot(probs)
@@ -831,13 +831,13 @@ print(x$tails)
 #' [pplot()] (on which `hist.probability()` is based) for more general plots.
 #'
 #' @examples
-#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' learnt <- learntExample
+#' K <- Kexample
 #'
 #' ## calculate the probability, and its revisability,
 #' ## for the value 'Adelie' of the "species" variate
-#' probs <- Pr(Y = data.frame(species = 'Adelie'), learnt = learnt, parallel = 1)
+#' probs <- Pr(Y = data.frame(species = 'Adelie'), K = K, parallel = 1)
 #' probs$values
 #'
 #' ## show the revisability of this probability; equivalently show
@@ -1026,13 +1026,13 @@ hist.probability <- function(
 #' [pplot()] (on which `hist.mi()` is based) for more general plots.
 #'
 #' @examples
-#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' learnt <- learntExample
+#' K <- Kexample
 #'
 #' ## calculate the mutual information and its revisability
 #' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-#'   learnt = learnt, nv = 2, parallel = 1)
+#'   K = K, nv = 2, parallel = 1)
 #'
 #' ## show the possible revisability of the mutual information,
 #' ## if a much larger data sample were collected
@@ -1159,9 +1159,9 @@ hist.mi <- function(
 #' [hist.probability()] to plot the revisability of the probabilities as a distribution.
 #'
 #' @examples
-#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' learnt <- learntExample
+#' K <- Kexample
 #'
 #' ## Calculate the 3 x 2 probabilities for the 3 species
 #' ## given bill-lengths of 43 mm and 44 mm
@@ -1169,7 +1169,7 @@ hist.mi <- function(
 #' Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 #' X <- data.frame(bill_len = c(43, 44))
 #'
-#' probs <- Pr(Y = Y, X = X, learnt = learnt, parallel = 1)
+#' probs <- Pr(Y = Y, X = X, K = K, parallel = 1)
 #'
 #' ## display the values and revisabilities of these probabilities
 #' print(probs)
@@ -1280,13 +1280,13 @@ print.probability <- function(
 #' \donttest{
 #' ### WARNING: the following example, if run, might even take a minute or more.
 #'
-#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' learnt <- learntExample
+#' K <- Kexample
 #'
 #' ## Calculate the mutual information between variates 'species' and 'bill_len'
 #' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-#'   learnt = learnt, parallel = 1)
+#'   K = K, parallel = 1)
 #'
 #' ## display the value and revisability of the mutual information
 #' print(MI)
@@ -1375,9 +1375,9 @@ print.mi <- function(
 ## #' [hist.probability()] to plot histograms of the probability distributions calculated by `Pr()`.
 ## #'
 ## #' @examples
-## #' ## Load the example `learnt` object calculated from the "penguins" dataset;
+## #' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## #' ## variates: 'species' and 'bill_len'
-## #' learnt <- learntExample
+## #' K <- Kexample
 ## #'
 ## #' ## Calculate the probability object for the three values of variate 'species',
 ## #' ## given values 43 and 44 of variate 'bill_len';
@@ -1385,7 +1385,7 @@ print.mi <- function(
 ## #' probs <- Pr(
 ## #'   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
 ## #'   X = data.frame(bill_len = c(43, 44)),
-## #'   learnt = learnt, parallel = 1
+## #'   K = K, parallel = 1
 ## #' )
 ## #'
 ## #' probs$values

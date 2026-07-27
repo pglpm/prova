@@ -6,7 +6,7 @@
 \usage{
 .plotFsamples(
   filename,
-  learnt,
+  K,
   data,
   plotprobability = TRUE,
   plotvariability = "samples",
@@ -19,8 +19,8 @@
 \arguments{
 \item{filename}{Character: name of plot output file}
 
-\item{learnt}{Either a character with the name of a directory or full
-path for an 'learnt.rds' object, or such an object itself}
+\item{K}{Either a character with the name of a directory or full
+path for an 'K.rds' object, or such an object itself}
 
 \item{data}{data.table object or filepath: datapoints}
 

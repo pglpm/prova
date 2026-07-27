@@ -7,7 +7,7 @@
 Pr(
   Y,
   X = NULL,
-  learnt,
+  K,
   tails = NULL,
   priorY = NULL,
   nsamples = "all",
@@ -25,7 +25,7 @@ the joint probability of. One variate per column, one set of values per row.}
 
 \item{X}{Matrix or data.table or \code{NULL} (default): set of values of variates on which we want to condition the joint probability of \code{Y}. If \code{NULL}, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.}
 
-\item{learnt}{Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
+\item{K}{Either a character with the name of a directory or full path for a 'K.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{Y} and \code{X}. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for \code{Y} and \code{X} variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by \code{'<='} or \code{'lower'} or\code{'left'} or \code{-1}; a right-open interval \eqn{Y \ge y} is indicated by \code{'>='} or \code{'upper'} or \code{'right'} or \code{+1}. Values \code{NULL}, \code{'=='}, \code{0} indicate that a point value \code{Y = y} (not an interval) should be calculated. \strong{NB}: the semi-open intervals \emph{always} include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to \emph{more} than 1.}
 
@@ -90,9 +90,9 @@ Each variate in each argument \code{Y}, \code{X} can be specified either as a po
 See \code{vignette('intro')} for example uses.
 }
 \examples{
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## ## Example 1:
 ## Calculate the probability that an unknown penguin from this population
@@ -100,7 +100,7 @@ learnt <- learntExample
 
 probs <- Pr(
   Y = data.frame(species = 'Adelie'),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the probability value
@@ -121,7 +121,7 @@ hist(probs, legend = 'topright')
 
 probs <- Pr(
   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the 3 probability values
@@ -146,7 +146,7 @@ hist(probs)
 probs <- Pr(
   Y = data.frame(species = 'Adelie'),
   X = data.frame(bill_len = 43),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the probability value
@@ -165,7 +165,7 @@ probs$quantiles[, , c('5.5\%', '94.5\%')]
 
 probs <- Pr(
   Y = data.frame(species = 'Adelie', bill_len = 43),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the probability value
@@ -184,7 +184,7 @@ Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
 X <- data.frame(bill_len = c(43, 44))
 
-probs <- Pr(Y = Y, X = X, learnt = learnt, parallel = 1)
+probs <- Pr(Y = Y, X = X, K = K, parallel = 1)
 
 ## display the 3 x 2 probability values
 probs$values
@@ -206,7 +206,7 @@ Y <- expand.grid(
   bill_len = c(43, 44)
 )
 
-probs <- Pr(Y = Y, learnt = learnt, parallel = 1)
+probs <- Pr(Y = Y, K = K, parallel = 1)
 
 ## display the 6 joint-probability values
 probs$values
@@ -228,7 +228,7 @@ probs$quantiles[, , c('5.5\%', '94.5\%')]
 }
 }
 \seealso{
-\code{\link[=learn]{learn()}}, which generates the \code{learnt} objects required by \code{Pr()}.
+\code{\link[=learn]{learn()}}, which generates the \code{K}nowledge objects required by \code{Pr()}.
 
 \code{\link[=plot.probability]{plot.probability()}} to plot probabilities and quantiles calculated by \code{Pr()}.
 

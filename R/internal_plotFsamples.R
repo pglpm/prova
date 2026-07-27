@@ -3,8 +3,8 @@
 #' Used in 'learn()' to plot diagnostics.
 #'
 #' @param filename Character: name of plot output file
-#' @param learnt Either a character with the name of a directory or full
-#'   path for an 'learnt.rds' object, or such an object itself
+#' @param K Either a character with the name of a directory or full
+#'   path for an 'K.rds' object, or such an object itself
 #' @param data data.table object or filepath: datapoints
 #' @param plotprobability Logical: plot the resulting probability curve
 #' @param plotvariability Character, either 'samples' or 'quantiles':
@@ -28,7 +28,7 @@
 #' @keywords internal
 .plotFsamples <- function(
     filename,
-    learnt,
+    K,
     data,
     plotprobability = TRUE,
     plotvariability = 'samples',
@@ -49,28 +49,28 @@
     grey <- '#BBBBBB'
     midgrey <- '#888888'
 
-    ## Extract Monte Carlo output & auxmetadata
-    ## If 'learnt' is a string, check if it's a folder name or file name
-    if (is.character(learnt)) {
-        ## Check if 'learnt' is a folder containing learnt.rds
-        if (file_test('-d', learnt) &&
-                file.exists(file.path(learnt, 'learnt.rds'))) {
-            learnt <- readRDS(file.path(learnt, 'learnt.rds'))
-        } else {
-            ## Assume 'learnt' the full path of learnt.rds
-            ## possibly without the file extension '.rds'
-            learnt <- paste0(sub('.rds$', '', learnt), '.rds')
-            if (file.exists(learnt)) {
-                learnt <- readRDS(learnt)
-            } else {
-                stop('The argument "learnt" must be a folder containing learnt.rds, or the path to an rds-file containing the output from "learn".')
-            }
-        }
-    }
+    ## ## Extract Monte Carlo output & auxmetadata
+    ## ## If 'K' is a string, check if it's a folder name or file name
+    ## if (is.character(K)) {
+    ##     ## Check if 'K' is a folder containing K.rds
+    ##     if (file_test('-d', K) &&
+    ##             file.exists(file.path(K, 'K.rds'))) {
+    ##         K <- readRDS(file.path(K, 'K.rds'))
+    ##     } else {
+    ##         ## Assume 'K' the full path of K.rds
+    ##         ## possibly without the file extension '.rds'
+    ##         K <- paste0(sub('.rds$', '', K), '.rds')
+    ##         if (file.exists(K)) {
+    ##             K <- readRDS(K)
+    ##         } else {
+    ##             stop('The argument "K" must be a folder containing K.rds, or the path to an rds-file containing the output from "learn".')
+    ##         }
+    ##     }
+    ## }
 
-    auxmetadata <- learnt$auxmetadata
-    ## learnt$auxmetadata <- NULL
-    nsamples <- ncol(learnt$W)
+    auxmetadata <- K$auxmetadata
+    ## K$auxmetadata <- NULL
+    nsamples <- ncol(K$W)
 
     nodata <- missing(data) || is.null(data) || isFALSE(data)
     if (datahistogram && nodata) {
@@ -135,7 +135,7 @@
                 Xgrid <- cbind(seq(plotmin, plotmax, length.out = 129))
                 colnames(Xgrid) <- name
                 probabilities <- Pr(Y = Xgrid, X = NULL,
-                    learnt = learnt,
+                    K = K,
                     quantiles = quants,
                     nsamples = nmcsamples,
                     parallel = parallel,
@@ -258,7 +258,7 @@
                 xin <- Xgrid > domainminplushs & Xgrid < domainmaxminushs
 
                 probabilities <- Pr(Y = Xgrid, X = NULL,
-                    learnt = learnt,
+                    K = K,
                     quantiles = quants,
                     nsamples = nmcsamples,
                     parallel = parallel,
@@ -470,7 +470,7 @@
                 }
 
                 probabilities <- Pr(Y = Xgrid, X = NULL,
-                    learnt = learnt,
+                    K = K,
                     quantiles = quants,
                     nsamples = nmcsamples,
                     parallel = parallel,

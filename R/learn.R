@@ -6,7 +6,7 @@
 #' @details
 #' This function takes as main inputs a set of data and metadata, and computes the full joint probability distribution for new data, including its "revisability". From this full joint distribution any other distributions of interest can subsequently be computed; see [Pr()] and related functions. This computation can also be interpreted as an estimation of the full joint frequency distribution of the variates in the *whole population*, beyond the sample data, together with its uncertainty. The computation allows for the use of datapoints with partially missing variables: imputation is automatically made. This imputation is *principled*, made according to the rules of probability theory.
 #'
-#' The output is a "learnt" object, typically saved in a `learnt.rds` file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.
+#' The output is a "knowledge" object, typically saved in a `K.rds` file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.
 #'
 #' See `vignette('intro')` for introductory examples.
 #'
@@ -45,7 +45,7 @@
 #' @param metadata [metadata] about the dataset's variates, given either as a [data frame][base::data.frame()] or as a file path to a CSV file.
 #' @param auxdata An *additional*, larger dataset, given as a data frame or as a file path to a CSV file. Such a dataset would be too large to use in the Monte Carlo sampling, but is used to help estimate some hyperparameters. Note that the `auxdata` and `data` datasets should *not* have datapoints in common.
 #' @param outputdir `NULL` (default) or `NA` or character: path to folder where output information and diagnostics should be saved. If `NULL`, a directory is created in the temporary-directory space given by [base::tempdir()]. If `NA`, a directory is created in the current working directory given by [base::getwd()]. If character, this is taken to be the output directory; it should of course be writable by the user.
-#' @param valueislearnt Logical or `NULL`: should the `VALUE` returned be the `learnt` object containing the results from the Monte Carlo computation? Default `TRUE`. If `FALSE`, then `VALUE` is the output directory name. If `NULL`, then `VALUE` is `NULL`.
+#' @param valueisK Logical or `NULL`: should the `VALUE` returned be the `K`nowledge object containing the results from the Monte Carlo computation? Default `TRUE`. If `FALSE`, then `VALUE` is the output directory name. If `NULL`, then `VALUE` is `NULL`.
 #' @param nsamples Integer, default 3600: number of desired, *approximately independent* Monte Carlo samples. If this argument is changed, the user is also required to explicitly give either `nchains` or `nsamplesperchain`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
 #' @param nchains Integer, default 8: number of Monte Carlo chains. If this argument is changed, the user is also required to explicitly give either `nsamples` or `nsamplesperchain`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
 #' @param nsamplesperchain Integer, default 450: number of *approximately independent* Monte Carlo samples per chain. If this argument is changed, the user is also required to explicitly give either `nsamples` or `nchains`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
@@ -70,12 +70,12 @@
 #' @param showAlphatraces Logical, default `FALSE`: save plots of the Monte Carlo traces of the Alpha parameter?
 #' @param hyperparams List: hyperparameters of the hyperprior; see values in "Usage".
 #'
-#' @returns A "learnt" object, or name of directory containing such an object and other output files, or `NULL`, depending on argument `valueislearnt`.
+#' @returns A "knowledge" object, or name of directory containing such an object and other output files, or `NULL`, depending on argument `valueisK`.
 #'
 #' `learn()` saves several files in a directory. By default this output directory is a temporary directory within the one used by [base::tempdir()], but an alternative one can be chosen with the argument `outputdir =`. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
 #'
 #' - `MCtraces.pdf`: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file `MCtraces.rds`.
-#' - `plotsamples_learnt.pdf`, `plotquantiles_learnt.pdf`: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
+#' - `plotsamples_learn.pdf`, `plotquantiles_learn.pdf`: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
 #' - `log-1.out`, `log-2.out`, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.
 #' - `rng_seed.rds`: the state of the pseudorandom seed (see [base::Random]) when `learn()` was called.
 #' - `metadata.csv`: a copy of the metadata.
@@ -135,7 +135,7 @@
 #' metadata <- data.frame(name = 'V', type = 'continuous')
 #'
 #' ## Learn from the data:
-#' learnt <- learn(
+#' K <- learn(
 #'   data = dataset, metadata = metadata,
 #'       ## the following parameters are unrealistic
 #'       ## only used to reduce computation time for this example
@@ -144,8 +144,8 @@
 #'   minESS = 0, initES = 0
 #' )
 #'
-#' ## Check structure of `learnt` object:
-#' str(learnt)
+#' ## Check structure of `K` object:
+#' str(K)
 #' }
 #'
 #' @import grDevices
@@ -168,7 +168,7 @@ learn <- function(
     seed = NULL,
     cleanup = TRUE,
     appendinfo = TRUE,
-    valueislearnt = TRUE,
+    valueisK = TRUE,
     subsampledata = NULL,
     prior = missing(data) || is.null(data),
     startupMCiterations = 3600,
@@ -600,8 +600,8 @@ learn <- function(
         '_', format(Sys.time(), '%y%m%dT%H%M%S')
     )
     if(is.null(outputdir)){
-        if(!isTRUE(valueislearnt)) {
-            warning('With the chosen "outputdir" and "valueislearnt" arguments, results are not saved to a persistent directory and not outputted; they will likely be lost.')
+        if(!isTRUE(valueisK)) {
+            warning('With the chosen "outputdir" and "valueisK" arguments, results are not saved to a persistent directory and not outputted; they will likely be lost.')
         }
         ## Use a temporary output directory
         dirname <- tempfile(pattern = paste0('prova-', suffix, '_'))
@@ -1222,7 +1222,7 @@ learn <- function(
     ## }
 
 #### Save all final parameters together with some aux metadata in one file
-    learnt <- c(mcsamples, list(
+    K <- c(mcsamples, list(
         auxmetadata = auxmetadata,
         auxinfo = list(
             nchains = nchains,
@@ -1235,10 +1235,10 @@ learn <- function(
         )
     ))
     rm(mcsamples)
-    ## The 'learnt' object is preliminarily saved as soon as possible,
+    ## The 'K' object is preliminarily saved as soon as possible,
     ## in case something crashes during subsequent diagnostics
-    saveRDS(learnt,
-        file = file.path(dirname, paste0('___learnt', dashnameroot, '.rds'))
+    saveRDS(K,
+        file = file.path(dirname, paste0('___K', dashnameroot, '.rds'))
     )
 
     ## This is to delete the last 'estimated end time'
@@ -1286,26 +1286,26 @@ learn <- function(
 
     oktraces <- .Pcheckpoints(
         testdata = testdata,
-        learnt = learnt
+        K = K
     )
 
     ## Substitute variances for standard deviations
-    if(!is.null(learnt$Rvar)){
-        learnt$Rvar <- sqrt(learnt$Rvar)
-        names(learnt)[which(names(learnt) == 'Rvar')] <- 'Rsd'
+    if(!is.null(K$Rvar)){
+        K$Rvar <- sqrt(K$Rvar)
+        names(K)[which(names(K) == 'Rvar')] <- 'Rsd'
     }
-    if(!is.null(learnt$Cvar)){
-        learnt$Cvar <- sqrt(learnt$Cvar)
-        names(learnt)[which(names(learnt) == 'Cvar')] <- 'Csd'
+    if(!is.null(K$Cvar)){
+        K$Cvar <- sqrt(K$Cvar)
+        names(K)[which(names(K) == 'Cvar')] <- 'Csd'
     }
-    if(!is.null(learnt$Dvar)){
-        learnt$Dvar <- sqrt(learnt$Dvar)
-        names(learnt)[which(names(learnt) == 'Dvar')] <- 'Dsd'
+    if(!is.null(K$Dvar)){
+        K$Dvar <- sqrt(K$Dvar)
+        names(K)[which(names(K) == 'Dvar')] <- 'Dsd'
     }
 
-    ## Save 'learnt' object
-    saveRDS(learnt,
-        file = file.path(dirname, paste0('learnt', dashnameroot, '.rds'))
+    ## Save 'K' object
+    saveRDS(K,
+        file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
     )
 
 
@@ -1384,9 +1384,9 @@ learn <- function(
         'average' = colMeans(oktraces),
         'quantile width' = jointdiagn[4, ]
     )
-    learnt$auxinfo <- c(learnt$auxinfo, toprint)
-    saveRDS(learnt,
-        file = file.path(dirname, paste0('learnt', dashnameroot, '.rds'))
+    K$auxinfo <- c(K$auxinfo, toprint)
+    saveRDS(K,
+        file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
     )
 
 ####
@@ -1440,8 +1440,8 @@ learn <- function(
 
     .plotFsamples(
         filename = file.path(dirname,
-            paste0('plotsamples_learnt', dashnameroot)),
-        learnt = learnt,
+            paste0('plotsamples_learn', dashnameroot)),
+        K = K,
         data = data,
         plotvariability = 'samples',
         nFsamples = showsamples, plotprobability = TRUE,
@@ -1451,8 +1451,8 @@ learn <- function(
 
     .plotFsamples(
         filename = file.path(dirname,
-            paste0('plotquantiles_learnt', dashnameroot)),
-        learnt = learnt,
+            paste0('plotquantiles_learn', dashnameroot)),
+        K = K,
         data = data,
         plotvariability = 'quantiles',
         nFsamples = plotDisplayedQuantiles, plotprobability = TRUE,
@@ -1499,9 +1499,9 @@ learn <- function(
 
 
     ## What should we output? how about the full name of the output dir?
-    if (isTRUE(valueislearnt)) {
-        learnt
-    } else if (isFALSE(valueislearnt)) {
+    if (isTRUE(valueisK)) {
+        K
+    } else if (isFALSE(valueisK)) {
         dirname
     }
 }
@@ -3096,7 +3096,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
             ll <- .Pcheckpoints(
                 testdata = testdata,
-                learnt = mcsamples
+                K = mcsamples
             )
 
             ll <- cbind(

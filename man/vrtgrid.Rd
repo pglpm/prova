@@ -4,12 +4,12 @@
 \alias{vrtgrid}
 \title{Create a grid of values for a variate}
 \usage{
-vrtgrid(vrt, learnt, length.out = NA)
+vrtgrid(vrt, K, length.out = NA)
 }
 \arguments{
 \item{vrt}{Character vector: names of the variates; they must match variate names in the \code{metadata} file provided to the \code{\link[=learn]{learn()}} function.}
 
-\item{learnt}{Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
+\item{K}{Either a character with the name of a directory or full path for a 'K.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
 
 \item{length.out}{Vector or list of positive integer or \code{NA} values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in \code{vrt}. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of \code{NA} values. Default \code{NA}.}
 }
@@ -20,7 +20,7 @@ A \link[base:data.frame]{data frame} with columns corresponding to the \code{vrt
 This function creates a data frame of values for one variate, or a combination of values for several variates.
 }
 \details{
-The value ranges are based on the information from data and metadata stored in the \code{learnt} object (see \code{\link[=learn]{learn()}}) provided in the \verb{learnt =} argument; they include, and extend slightly beyond, the ranges observed in the data used in the \code{\link[=learn]{learn()}} function. Variate domains are always respected.
+The value ranges are based on the information from data and metadata stored in the \code{K}nowledge object (see \code{\link[=learn]{learn()}}) provided in the \verb{K =} argument; they include, and extend slightly beyond, the ranges observed in the data used in the \code{\link[=learn]{learn()}} function. Variate domains are always respected.
 
 The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see \link{metadata}):
 \itemize{
@@ -32,30 +32,30 @@ The set of chosen values, for each variate, depends on the type of variate (nomi
 The output is a \link[base:data.frame]{data frame} that can be used directly in functions like \code{\link[=Pr]{Pr()}}.
 }
 \examples{
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## set of values for the variate "species";
 ## since this variate is of a nominal kind, all values are included
-valuesSpecies <- vrtgrid(vrt = 'species', learnt = learnt)
+valuesSpecies <- vrtgrid(vrt = 'species', K = K)
 
 print(valuesSpecies)
 
 ## create a small set of values for the variate "bill length";
 ## this variate is continuous and rounded
-valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 4)
+valuesBill <- vrtgrid(vrt = 'bill_len', K = K, length.out = 4)
 
 print(valuesBill)
 
 ## calculate the conditional probabilities for the 'bill_len' values above,
 ## given the values of 'species'
-probs <- Pr(Y = valuesBill, X = valuesSpecies, learnt = learnt, parallel = 1)
+probs <- Pr(Y = valuesBill, X = valuesSpecies, K = K, parallel = 1)
 
 
 ## Create a data frame with all possible combinations of the values above;
 ## the 'length.out' argument does not apply to the discrete variate 'species'
-valuesAll <- vrtgrid(vrt = c('species', 'bill_len'), learnt = learnt, length.out = 4)
+valuesAll <- vrtgrid(vrt = c('species', 'bill_len'), K = K, length.out = 4)
 
 print(valuesAll)
 
@@ -66,7 +66,7 @@ print(valuesAll2)
 
 }
 \seealso{
-\code{\link[=learn]{learn()}}, which generates the \code{learnt} objects required by \code{vrtgrid()}.
+\code{\link[=learn]{learn()}}, which generates the \code{K} objects required by \code{vrtgrid()}.
 
 \code{\link[=Pr]{Pr()}} to calculate probabilities and their revisabilities.
 

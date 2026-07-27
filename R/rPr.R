@@ -7,7 +7,7 @@
 #' @param n Positive integer: number of samples to draw.
 #' @param Ynames Character vector: names of variates to draw jointly
 #' @param X List or data.table or `NULL`: set of values of variates on which we want to condition the joint probability for `Y`. If `NULL` (default), no conditioning is made. Any rows beyond the first are discarded
-#' @param learnt Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the [learn()] function, or such an object itself.
+#' @param K Either a character with the name of a directory or full path for a 'K.rds' object, produced by the [learn()] function, or such an object itself.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param mcsamples Vector of integers, or `'all'`, or `NULL` (default): which Monte Carlo samples calculated by the [learn()] function should be used to draw the variate values. The default is to choose a random subset if `n` is smaller than their number, otherwise to recycle them as necessary.
 #' @param parallel Not used: this function does not use parallelization.
@@ -15,16 +15,16 @@
 #' @return A [data frame][base::data.frame()] of joint draws of the variates `Ynames` from the posterior distribution, conditional on `X`. The row names of the data frame report the Monte Carlo sample (from [learn()]) used for that draw, and the total number of draws from that sample so far.
 #'
 #' @seealso
-#' [learn()], which generates the `learnt` objects required by `qPr()`.
+#' [learn()], which generates the `K` objects required by `qPr()`.
 #'
 #' [Pr()] to calculate joint and conditional probabilities.
 #'
 #' [qPr()] to calculate quantiles.
 #'
 #' @examples
-#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' learnt <- learntExample
+#' K <- Kexample
 #'
 #' ## ## Example 1:
 #' ## Generate 10 values of the 'species' variate,
@@ -33,7 +33,7 @@
 #' datapoints <- rPr(
 #'   n = 10,
 #'   Ynames = 'species',
-#'   learnt = learnt
+#'   K = K
 #' )
 #'
 #' c(datapoints)
@@ -45,7 +45,7 @@
 #' datapoints <- rPr(
 #'   n = 5,
 #'   Ynames = c('species', 'bill_len'),
-#'   learnt = learnt
+#'   K = K
 #' )
 #'
 #' print(datapoints, row.names = FALSE) ## row names give MCMC information
@@ -60,7 +60,7 @@
 #'   Ynames = 'species',
 #'   X = data.frame(bill_len = 40),
 #'   tails = list(bill_len = -1),
-#'   learnt = learnt
+#'   K = K
 #' )
 #'
 #' c(datapoints)
@@ -74,36 +74,36 @@ rPr <- function(
     n,
     Ynames,
     X = NULL,
-    learnt,
+    K,
     tails = NULL,
     mcsamples = NULL,
     parallel = NULL # unused
 ) {
 
     ## Extract Monte Carlo output & aux-metadata
-    ## If learnt is a string, check if it's a folder name or file name
-    if (is.character(learnt)) {
-        ## Check if 'learnt' is a folder containing learnt.rds
-        if (file_test('-d', learnt) &&
-                file.exists(file.path(learnt, 'learnt.rds'))) {
-            learnt <- readRDS(file.path(learnt, 'learnt.rds'))
+    ## If K is a string, check if it's a folder name or file name
+    if (is.character(K)) {
+        ## Check if 'K' is a folder containing K.rds
+        if (file_test('-d', K) &&
+                file.exists(file.path(K, 'K.rds'))) {
+            K <- readRDS(file.path(K, 'K.rds'))
         } else {
-            ## Assume 'learnt' the full path of learnt.rds
+            ## Assume 'K' the full path of K.rds
             ## possibly without the file extension '.rds'
-            learnt <- paste0(sub('.rds$', '', learnt), '.rds')
-            if (file.exists(learnt)) {
-                learnt <- readRDS(learnt)
+            K <- paste0(sub('.rds$', '', K), '.rds')
+            if (file.exists(K)) {
+                K <- readRDS(K)
             } else {
-                stop("The argument 'learnt' must be a folder containing learnt.rds, or the path to an rds-file containing the output from 'learn()'.")
+                stop("The argument 'K' must be a folder containing 'K.rds', or the path to an rds-file containing the output from 'learn()'.")
             }
         }
     }
-    ## Add check to see that learnt is correct type of object?
-    auxmetadata <- learnt$auxmetadata
-    learnt$auxmetadata <- NULL
-    learnt$auxinfo <- NULL
-    ncomponents <- nrow(learnt$W)
-    nmcsamples <- ncol(learnt$W)
+    ## Add check to see that K is correct type of object?
+    auxmetadata <- K$auxmetadata
+    K$auxmetadata <- NULL
+    K$auxinfo <- NULL
+    ncomponents <- nrow(K$W)
+    nmcsamples <- ncol(K$W)
 
     if(is.null(mcsamples) ||
            (is.character(mcsamples) && mcsamples == 'all') ||
@@ -198,19 +198,19 @@ rPr <- function(
 
 #### Adjust component weights W for conditioning on X
     if(is.null(X)){
-        lW <- log(learnt$W)
+        lW <- log(K$W)
     } else {
         lpargs <- .lprobsargsyx(
             x = X,
             auxmetadata = auxmetadata,
-            learnt = learnt,
+            K = K,
             tails = tails
         )
 
         lW <- .lprobsbase(
             xVs = lpargs$xVs[[1]],
             params = lpargs$params,
-            logW =  log(learnt$W)
+            logW =  log(K$W)
         ) # rows=components, columns=samples
 
     } # end definition of lW if non-null X
@@ -262,8 +262,8 @@ rPr <- function(
             times = rep.int(x = n, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = n * nvrt,
-                mean = learnt$Rmean[totake],
-                sd = learnt$Rsd[totake] )
+                mean = K$Rmean[totake],
+                sd = K$Rsd[totake] )
         )
     }
 
@@ -278,8 +278,8 @@ rPr <- function(
             times = rep.int(x = n, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = n * nvrt,
-                mean = learnt$Cmean[totake],
-                sd = learnt$Csd[totake] )
+                mean = K$Cmean[totake],
+                sd = K$Csd[totake] )
         )
     }
 
@@ -294,8 +294,8 @@ rPr <- function(
             times = rep.int(x = n, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = n * nvrt,
-                mean = learnt$Dmean[totake],
-                sd = learnt$Dsd[totake] )
+                mean = K$Dmean[totake],
+                sd = K$Dsd[totake] )
         )
     }
 
@@ -309,14 +309,14 @@ rPr <- function(
             aux <- auxmetadata[i, ]
             Yout <- c(Yout, mapply(FUN = function(xx, yy){
                 sample.int(n = aux$Nvalues, size = 1,
-                    prob = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
+                    prob = K$Oprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
                 Ws, sseq, SIMPLIFY = TRUE))
             ## ## old version with extraDistr::rcat()
             ## totake <- cbind(Ws, sseq)
             ## Yout <- c(Yout,
             ##     extraDistr::rcat(n = n,
             ##         prob = apply(
-            ##             X = learnt$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+            ##             X = K$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
             ##             MARGIN = 1, FUN = `[`, totake,
             ##             simplify = TRUE) )
             ## )
@@ -333,14 +333,14 @@ rPr <- function(
             aux <- auxmetadata[i, ]
             Yout <- c(Yout, mapply(FUN = function(xx, yy){
                 sample.int(n = aux$Nvalues, size = 1,
-                    prob = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
+                    prob = K$Nprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
                 Ws, sseq, SIMPLIFY = TRUE))
             ## ## old version with extraDistr::rcat()
             ## totake <- cbind(Ws, sseq)
             ## Yout <- c(Yout,
             ##     extraDistr::rcat(n = n,
             ##         prob = apply(
-            ##             X = learnt$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+            ##             X = K$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
             ##             MARGIN = 1, FUN = `[`, totake,
             ##             simplify = TRUE) )
             ## )
@@ -357,9 +357,9 @@ rPr <- function(
         totake <- cbind(rep.int(x = aux$id,
             times = rep.int(x = n, times = nvrt)), Ws, sseq)
         Yout <- c(Yout,
-            rbinom(n = n * nvrt, size = 1, prob = learnt$Bprob[totake])
+            rbinom(n = n * nvrt, size = 1, prob = K$Bprob[totake])
             ## ## Old version
-            ## extraDistr::rbern(n = n * nvrt, prob = learnt$Bprob[totake])
+            ## extraDistr::rbern(n = n * nvrt, prob = K$Bprob[totake])
         )
     }
 

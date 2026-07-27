@@ -56,13 +56,13 @@ The posterior probabilities calculated with the \code{\link[=Pr]{Pr()}} function
 The \code{hist()} method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution.
 }
 \examples{
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## calculate the probability, and its revisability,
 ## for the value 'Adelie' of the "species" variate
-probs <- Pr(Y = data.frame(species = 'Adelie'), learnt = learnt, parallel = 1)
+probs <- Pr(Y = data.frame(species = 'Adelie'), K = K, parallel = 1)
 probs$values
 
 ## show the revisability of this probability; equivalently show

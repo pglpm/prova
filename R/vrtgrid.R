@@ -2,7 +2,7 @@
 #'
 #' @description This function creates a data frame of values for one variate, or a combination of values for several variates.
 #'
-#' @details The value ranges are based on the information from data and metadata stored in the `learnt` object (see [learn()]) provided in the `learnt =` argument; they include, and extend slightly beyond, the ranges observed in the data used in the [learn()] function. Variate domains are always respected.
+#' @details The value ranges are based on the information from data and metadata stored in the `K`nowledge object (see [learn()]) provided in the `K =` argument; they include, and extend slightly beyond, the ranges observed in the data used in the [learn()] function. Variate domains are always respected.
 #'
 #' The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see [metadata]):
 #'
@@ -13,13 +13,13 @@
 #' The output is a [data frame][base::data.frame()] that can be used directly in functions like [Pr()].
 #'
 #' @param vrt Character vector: names of the variates; they must match variate names in the `metadata` file provided to the [learn()] function.
-#' @param learnt Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the [learn()] function, or such an object itself.
+#' @param K Either a character with the name of a directory or full path for a 'K.rds' object, produced by the [learn()] function, or such an object itself.
 #' @param length.out Vector or list of positive integer or `NA` values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in `vrt`. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of `NA` values. Default `NA`.
 #'
 #' @return A [data frame][base::data.frame()] with columns corresponding to the `vrt` argument, and one row for each combination of the variate values.
 #'
 #' @seealso
-#' [learn()], which generates the `learnt` objects required by `vrtgrid()`.
+#' [learn()], which generates the `K` objects required by `vrtgrid()`.
 #'
 #' [Pr()] to calculate probabilities and their revisabilities.
 #'
@@ -28,30 +28,30 @@
 #' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()`.
 #'
 #' @examples
-#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' learnt <- learntExample
+#' K <- Kexample
 #'
 #' ## set of values for the variate "species";
 #' ## since this variate is of a nominal kind, all values are included
-#' valuesSpecies <- vrtgrid(vrt = 'species', learnt = learnt)
+#' valuesSpecies <- vrtgrid(vrt = 'species', K = K)
 #'
 #' print(valuesSpecies)
 #'
 #' ## create a small set of values for the variate "bill length";
 #' ## this variate is continuous and rounded
-#' valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 4)
+#' valuesBill <- vrtgrid(vrt = 'bill_len', K = K, length.out = 4)
 #'
 #' print(valuesBill)
 #'
 #' ## calculate the conditional probabilities for the 'bill_len' values above,
 #' ## given the values of 'species'
-#' probs <- Pr(Y = valuesBill, X = valuesSpecies, learnt = learnt, parallel = 1)
+#' probs <- Pr(Y = valuesBill, X = valuesSpecies, K = K, parallel = 1)
 #'
 #'
 #' ## Create a data frame with all possible combinations of the values above;
 #' ## the 'length.out' argument does not apply to the discrete variate 'species'
-#' valuesAll <- vrtgrid(vrt = c('species', 'bill_len'), learnt = learnt, length.out = 4)
+#' valuesAll <- vrtgrid(vrt = c('species', 'bill_len'), K = K, length.out = 4)
 #'
 #' print(valuesAll)
 #'
@@ -66,30 +66,30 @@
 #' @export
 vrtgrid <- function(
     vrt,
-    learnt,
+    K,
     length.out = NA
 ){
     ## Extract auxmetadata
-    ## If learnt is a string, check if it's a folder name or file name
-    if (is.character(learnt)) {
-        ## Check if 'learnt' is a folder containing learnt.rds
-        if (file_test('-d', learnt) &&
-                file.exists(file.path(learnt, 'learnt.rds'))) {
-            learnt <- readRDS(file.path(learnt, 'learnt.rds'))
+    ## If K is a string, check if it's a folder name or file name
+    if (is.character(K)) {
+        ## Check if 'K' is a folder containing K.rds
+        if (file_test('-d', K) &&
+                file.exists(file.path(K, 'K.rds'))) {
+            K <- readRDS(file.path(K, 'K.rds'))
         } else {
-            ## Assume 'learnt' the full path of learnt.rds
+            ## Assume 'K' the full path of K.rds
             ## possibly without the file extension '.rds'
-            learnt <- paste0(sub('.rds$', '', learnt), '.rds')
-            if (file.exists(learnt)) {
-                learnt <- readRDS(learnt)
+            K <- paste0(sub('.rds$', '', K), '.rds')
+            if (file.exists(K)) {
+                K <- readRDS(K)
             } else {
-                stop('The argument "learnt" must be a folder containing learnt.rds, or the path to an rds-file containing the output from "learn()".')
+                stop('The argument "K" must be a folder containing "K.rds", or the path to an rds-file containing the output from "learn()".')
             }
         }
     }
 
     ## Consistency checks
-    if(!all(vrt %in% learnt$auxmetadata$name)){
+    if(!all(vrt %in% K$auxmetadata$name)){
         stop("'vrt' contains unknown variate names.")
     }
 
@@ -104,7 +104,7 @@ vrtgrid <- function(
 
     expand.grid(setNames(
         object = lapply(X = vrt, FUN = function(avrt){
-    adata <- as.list(learnt$auxmetadata[learnt$auxmetadata$name == avrt, ])
+    adata <- as.list(K$auxmetadata[K$auxmetadata$name == avrt, ])
 
     if(adata$mcmctype %in% c('R', 'C')){
         if(is.na(length.out[avrt])){length.out[avrt] <- 129}

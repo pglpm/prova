@@ -1,6 +1,6 @@
 #' Build augmented metadata file
 #'
-#' Builds an augmented metadata [data frame][base::data.frame()] from the metadata and data given to 'learn()'. This augmented metadata object is saved in the 'learnt' object produced by 'learn()'.
+#' Builds an augmented metadata [data frame][base::data.frame()] from the metadata and data given to 'learn()'. This augmented metadata object is saved in the 'K'nowledge object produced by 'learn()'.
 #'
 #' In addition to the original metadata it contains info about transformed variates and their domains, estimated location- and scale-parameters, and similar metadata.
 #'

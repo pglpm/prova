@@ -8,7 +8,7 @@ qPr(
   p = c(0.25, 0.5, 0.75),
   Yname,
   X = NULL,
-  learnt,
+  K,
   tails = NULL,
   nsamples = "all",
   quantiles = c(0.055, 0.5, 0.945),
@@ -27,7 +27,7 @@ qPr(
 
 \item{X}{Matrix or data.table or \code{NULL} (default): set of values of variates on which we want to condition. If \code{NULL}, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.}
 
-\item{learnt}{Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
+\item{K}{Either a character with the name of a directory or full path for a 'K.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
@@ -66,9 +66,9 @@ This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, \t
 ### WARNING: the following examples, if run, might even take a minute or more.
 
 \donttest{
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## ## Example 1:
 ## Calculate the 5.5\%-, 50\%-, and 94.5\%-quantiles for the variate "bill lengt",
@@ -76,7 +76,7 @@ learnt <- learntExample
 
 quants <- qPr(
   Yname = 'bill_len',
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the quantile values
@@ -86,7 +86,7 @@ quants$values
 probs <- Pr(
   Y = data.frame(bill_len = c(quants$values)),
   tails = list(bill_len = -1),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
@@ -103,7 +103,7 @@ quants$quantiles
 quants <- qPr(
   Yname = 'bill_len',
   X = data.frame(species = 'Adelie'),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the quantile values
@@ -114,7 +114,7 @@ probs <- Pr(
   Y = data.frame(bill_len = c(quants$values)),
   X = data.frame(species = 'Adelie'),
   tails = list(bill_len = -1),
-  learnt = learnt, parallel = 1)
+  K = K, parallel = 1)
 
 ## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
 probs$values
@@ -127,7 +127,7 @@ probs$values
 }
 }
 \seealso{
-\code{\link[=learn]{learn()}}, which generates the \code{learnt} objects required by \code{qPr()}.
+\code{\link[=learn]{learn()}}, which generates the \code{K} objects required by \code{qPr()}.
 
 \code{\link[=Pr]{Pr()}} to calculate joint and conditional probabilities.
 

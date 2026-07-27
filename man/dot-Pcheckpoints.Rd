@@ -4,12 +4,12 @@
 \alias{.Pcheckpoints}
 \title{Calculate joint frequencies for MCMC-monitoring checkpoints}
 \usage{
-.Pcheckpoints(testdata, learnt)
+.Pcheckpoints(testdata, K)
 }
 \arguments{
 \item{testdata}{List of objects calculated with .prepPcheckpoints}
 
-\item{learnt}{mcsamples object}
+\item{K}{mcsamples object}
 }
 \value{
 The joint frequencies of Y corresponding to the Monte Carlo samples

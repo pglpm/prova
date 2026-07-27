@@ -15,7 +15,7 @@
     ## Use .lprobsargsyx() as done in Pr(), but throw away some elements
     temp <- .lprobsargsyx(
         x = x, auxmetadata = auxmetadata,
-        learnt = list(
+        K = list(
             Cmean = array(NA, dim = c(max(auxmetadata$id), 1, 1)),
             Dmean = array(NA, dim = c(max(auxmetadata$id), 1, 1))
         ), tails = NULL
@@ -178,15 +178,15 @@
 #' Used in 'learn()'.
 #'
 #' @param testdata List of objects calculated with .prepPcheckpoints
-#' @param learnt mcsamples object
+#' @param K mcsamples object
 #'
 #' @keywords internal
 #'
 #' @return The joint frequencies of Y corresponding to the Monte Carlo samples
 .Pcheckpoints <- function(
-    testdata, learnt
+    testdata, K
 ) {
-    with(c(testdata, learnt), {
+    with(c(testdata, K), {
 
         nsamples <- ncol(W)
         ncomponents <- nrow(W)

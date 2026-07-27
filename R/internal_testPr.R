@@ -4,7 +4,7 @@
 #'
 #' @param Y named list of values; list names must be valid variate names.
 #' @param X named list of values; list names must be valid variate names.
-#' @param learnt Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the [learn()] function, or such an object itself.
+#' @param K Either a character with the name of a directory or full path for a 'K.rds' object, produced by the [learn()] function, or such an object itself.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'`  or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **NB**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
 #' @return A list consisting of the following elements:
 #'
@@ -19,35 +19,35 @@
 .testPr <- function(
     Y,
     X = NULL,
-    learnt,
+    K,
     tails = NULL
 ){
     Qerror <- pnorm(c(-1, 1))
 
     ## Extract Monte Carlo output & auxmetadata
-    ## If learnt is a string, check if it's a folder name or file name
-    if (is.character(learnt)) {
-        ## Check if 'learnt' is a folder containing learnt.rds
-        if (file_test('-d', learnt) &&
-                file.exists(file.path(learnt, 'learnt.rds'))) {
-            learnt <- readRDS(file.path(learnt, 'learnt.rds'))
+    ## If K is a string, check if it's a folder name or file name
+    if (is.character(K)) {
+        ## Check if 'K' is a folder containing K.rds
+        if (file_test('-d', K) &&
+                file.exists(file.path(K, 'K.rds'))) {
+            K <- readRDS(file.path(K, 'K.rds'))
         } else {
-            ## Assume 'learnt' the full path of learnt.rds
+            ## Assume 'K' the full path of K.rds
             ## possibly without the file extension '.rds'
-            learnt <- paste0(sub('.rds$', '', learnt), '.rds')
-            if (file.exists(learnt)) {
-                learnt <- readRDS(learnt)
+            K <- paste0(sub('.rds$', '', K), '.rds')
+            if (file.exists(K)) {
+                K <- readRDS(K)
             } else {
-                stop('The argument "learnt" must be a folder containing learnt.rds, or the path to an rds-file containing the output from "learn()".')
+                stop('The argument "K" must be a folder containing K.rds, or the path to an rds-file containing the output from "learn()".')
             }
         }
     }
-    ## Add check to see that learnt is correct type of object?
-    auxmetadata <- learnt$auxmetadata
-    learnt$auxmetadata <- NULL
-    learnt$auxinfo <- NULL
-    ncomponents <- nrow(learnt$W)
-    nmcsamples <- ncol(learnt$W)
+    ## Add check to see that K is correct type of object?
+    auxmetadata <- K$auxmetadata
+    K$auxmetadata <- NULL
+    K$auxinfo <- NULL
+    ncomponents <- nrow(K$W)
+    nmcsamples <- ncol(K$W)
 
     Yv <- names(Y)
     Xv <- names(X)
@@ -84,20 +84,20 @@
 
                 if(!(vrt %in% names(tails))){
                     logP <- dnorm(x = val,
-                        mean = learnt$Rmean[auxid, , ],
-                        sd = learnt$Rsd[auxid, , ],
+                        mean = K$Rmean[auxid, , ],
+                        sd = K$Rsd[auxid, , ],
                         log = TRUE)
 
                 } else if(tails[vrt] %in% tailsleft){
                     logP <- pnorm(q = val,
-                        mean = learnt$Rmean[auxid, , ],
-                        sd = learnt$Rsd[auxid, , ],
+                        mean = K$Rmean[auxid, , ],
+                        sd = K$Rsd[auxid, , ],
                         lower.tail = TRUE, log.p = TRUE)
 
                 } else if(tails[vrt] %in% tailsright){
                     logP <- pnorm(q = val,
-                        mean = learnt$Rmean[auxid, , ],
-                        sd = learnt$Rsd[auxid, , ],
+                        mean = K$Rmean[auxid, , ],
+                        sd = K$Rsd[auxid, , ],
                         lower.tail = FALSE, log.p = TRUE)
                 }
 
@@ -115,22 +115,22 @@
                 if(!(vrt %in% names(tails))){
                     if(is.finite(val)){
                         logP <- dnorm(x = val,
-                            mean = learnt$Cmean[auxid, , ],
-                            sd = learnt$Csd[auxid, , ],
+                            mean = K$Cmean[auxid, , ],
+                            sd = K$Csd[auxid, , ],
                             log = TRUE)
                     } else if(xorig > domainmin){
                         val <- unlist(.vtransform(Z[vrt], Cout = 'rightbound',
                             auxmetadata = auxmetadata, logjacobianOr = NULL))
                         logP <- pnorm(q = val,
-                            mean = learnt$Cmean[auxid, , ],
-                            sd = learnt$Csd[auxid, , ],
+                            mean = K$Cmean[auxid, , ],
+                            sd = K$Csd[auxid, , ],
                             lower.tail = FALSE, log.p = TRUE)
                     } else if(xorig < domainmax){
                         val <- unlist(.vtransform(Z[vrt], Cout = 'leftbound',
                             auxmetadata = auxmetadata, logjacobianOr = NULL))
                         logP <- pnorm(q = val,
-                            mean = learnt$Cmean[auxid, , ],
-                            sd = learnt$Csd[auxid, , ],
+                            mean = K$Cmean[auxid, , ],
+                            sd = K$Csd[auxid, , ],
                             lower.tail = TRUE, log.p = TRUE)
                     } else {
                         stop('Vrt ', vrt, ' has strange value')
@@ -140,16 +140,16 @@
                     val <- unlist(.vtransform(Z[vrt], Cout = '1',
                         auxmetadata = auxmetadata, logjacobianOr = NULL))
                     logP <- pnorm(q = val,
-                        mean = learnt$Cmean[auxid, , ],
-                        sd = learnt$Csd[auxid, , ],
+                        mean = K$Cmean[auxid, , ],
+                        sd = K$Csd[auxid, , ],
                         lower.tail = TRUE, log.p = TRUE)
 
                 } else if(tails[vrt] %in% tailsright){
                     val <- unlist(.vtransform(Z[vrt], Cout = '-1',
                         auxmetadata = auxmetadata, logjacobianOr = NULL))
                     logP <- pnorm(q = val,
-                        mean = learnt$Cmean[auxid, , ],
-                        sd = learnt$Csd[auxid, , ],
+                        mean = K$Cmean[auxid, , ],
+                        sd = K$Csd[auxid, , ],
                         lower.tail = FALSE, log.p = TRUE)
                 }
 
@@ -168,13 +168,13 @@
                 if(!(vrt %in% names(tails))){
                     if(!is.na(val)){
                         temp <- pnorm(q = val + hstep,
-                            mean = learnt$Dmean[auxid, , ],
-                            sd = learnt$Dsd[auxid, , ],
+                            mean = K$Dmean[auxid, , ],
+                            sd = K$Dsd[auxid, , ],
                             lower.tail = TRUE, log.p = TRUE)
                         logP <- temp + log(-expm1(
                             pnorm(q = val - hstep,
-                                mean = learnt$Dmean[auxid, , ],
-                                sd = learnt$Dsd[auxid, , ],
+                                mean = K$Dmean[auxid, , ],
+                                sd = K$Dsd[auxid, , ],
                                 lower.tail = TRUE, log.p = TRUE) - temp
                         ))
                         ##
@@ -182,12 +182,12 @@
                         ## ## compared with infinite-precision results
                         ## logP <- log(
                         ##     pnorm(q = val + hstep,
-                        ##         mean = learnt$Dmean[auxid, , ],
-                        ##         sd = learnt$Dsd[auxid, , ],
+                        ##         mean = K$Dmean[auxid, , ],
+                        ##         sd = K$Dsd[auxid, , ],
                         ##         lower.tail = TRUE, log.p = FALSE) -
                         ##         pnorm(q = val - hstep,
-                        ##             mean = learnt$Dmean[auxid, , ],
-                        ##             sd = learnt$Dsd[auxid, , ],
+                        ##             mean = K$Dmean[auxid, , ],
+                        ##             sd = K$Dsd[auxid, , ],
                         ##             lower.tail = TRUE, log.p = FALSE)
                         ## )
 
@@ -195,16 +195,16 @@
                         val <- unlist(.vtransform(Z[vrt], Dout = 'leftbound',
                             auxmetadata = auxmetadata, logjacobianOr = NULL))
                         logP <- pnorm(q = val + hstep,
-                            mean = learnt$Dmean[auxid, , ],
-                            sd = learnt$Dsd[auxid, , ],
+                            mean = K$Dmean[auxid, , ],
+                            sd = K$Dsd[auxid, , ],
                             lower.tail = TRUE, log.p = TRUE)
 
                     } else if(xorig >= domainminplushs){
                         val <- unlist(.vtransform(Z[vrt], Dout = 'rightbound',
                             auxmetadata = auxmetadata, logjacobianOr = NULL))
                         logP <- pnorm(q = val - hstep,
-                            mean = learnt$Dmean[auxid, , ],
-                            sd = learnt$Dsd[auxid, , ],
+                            mean = K$Dmean[auxid, , ],
+                            sd = K$Dsd[auxid, , ],
                             lower.tail = FALSE, log.p = TRUE)
                     }
 
@@ -212,16 +212,16 @@
                     val <- unlist(.vtransform(Z[vrt], Dout = '1',
                         auxmetadata = auxmetadata, logjacobianOr = NULL))
                     logP <- pnorm(q = val + hstep,
-                        mean = learnt$Dmean[auxid, , ],
-                        sd = learnt$Dsd[auxid, , ],
+                        mean = K$Dmean[auxid, , ],
+                        sd = K$Dsd[auxid, , ],
                         lower.tail = TRUE, log.p = TRUE)
 
                 } else if(tails[vrt] %in% tailsright){
                     val <- unlist(.vtransform(Z[vrt], Dout = '-1',
                         auxmetadata = auxmetadata, logjacobianOr = NULL))
                     logP <- pnorm(q = val - hstep,
-                        mean = learnt$Dmean[auxid, , ],
-                        sd = learnt$Dsd[auxid, , ],
+                        mean = K$Dmean[auxid, , ],
+                        sd = K$Dsd[auxid, , ],
                         lower.tail = FALSE, log.p = TRUE)
                 }
 
@@ -229,14 +229,14 @@
             } else if(mctype == 'N'){
                 val <- unlist(.vtransform(Z[vrt], Nout = 'index',
                     auxmetadata = auxmetadata, logjacobianOr = NULL))
-                logP <- log(learnt$Nprob[val, , ])
+                logP <- log(K$Nprob[val, , ])
 
 
             } else if(mctype == 'O'){
                 Nvals <- auxmetadata[auxmetadata$name == vrt, 'Nvalues']
                 seqO <- auxmetadata[auxmetadata$name == vrt, 'indexpos'] +
                     seq_len(Nvals)
-                allP <- learnt$Oprob[seqO, , , drop = FALSE]
+                allP <- K$Oprob[seqO, , , drop = FALSE]
                 val <- unlist(.vtransform(Z[vrt], Oout = 'numeric',
                     auxmetadata = auxmetadata, logjacobianOr = NULL))
 
@@ -254,9 +254,9 @@
                 val <- unlist(.vtransform(Z[vrt], Bout = 'numeric',
                     auxmetadata = auxmetadata, logjacobianOr = NULL))
                 if(val == 0){
-                    logP <- log(1 - learnt$Bprob[auxid, , ])
+                    logP <- log(1 - K$Bprob[auxid, , ])
                 } else {
-                    logP <- log(learnt$Bprob[auxid, , ])
+                    logP <- log(K$Bprob[auxid, , ])
                 }
             }
 ## cat(vrt, ':', logP[,1532],'\n')
@@ -270,12 +270,12 @@
 
     ## Conditional formula sum(W KX KY)/sum(W kX), sum over components
     if(is.null(X)){
-        FF <- colSums(x = exp(log(learnt$W) + logKY), na.rm = TRUE)
-        ## logKX <- log(learnt$W)
+        FF <- colSums(x = exp(log(K$W) + logKY), na.rm = TRUE)
+        ## logKX <- log(K$W)
         ## FF <- colSums(x = exp(logKX + logKY), na.rm = TRUE) /
         ##     colSums(x = exp(logKX), na.rm = TRUE)
     } else {
-        logKX <- log(learnt$W) + logK(X)
+        logKX <- log(K$W) + logK(X)
         FF <- colSums(x = exp(logKX + logKY), na.rm = TRUE) /
         colSums(x = exp(logKX), na.rm = TRUE)
     }

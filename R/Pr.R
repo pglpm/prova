@@ -33,7 +33,7 @@
 #' @param Y Matrix or data.table: set of values of variates of which we want
 #'   the joint probability of. One variate per column, one set of values per row.
 #' @param X Matrix or data.table or `NULL` (default): set of values of variates on which we want to condition the joint probability of `Y`. If `NULL`, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.
-#' @param learnt Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the [learn()] function, or such an object itself.
+#' @param K Either a character with the name of a directory or full path for a 'K.rds' object, produced by the [learn()] function, or such an object itself.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **NB**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
 #' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
 #' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the probability for `Y`. If `NULL` or 0, no samples are reported. If `'all'` or `Inf`, all samples obtained by the [learn()] function are used.
@@ -63,7 +63,7 @@
 #' - Porta Mana (2025): *What's special about 89% credibility intervals?*, <doi:10.5281/zenodo.17072199>.
 #'
 #' @seealso
-#' [learn()], which generates the `learnt` objects required by `Pr()`.
+#' [learn()], which generates the `K`nowledge objects required by `Pr()`.
 #'
 #' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()`.
 #'
@@ -76,9 +76,9 @@
 #' [rPr()] to generate datapoints.
 #'
 #' @examples
-#' ## Load the example `learnt` object calculated from the "penguins" dataset;
+#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' learnt <- learntExample
+#' K <- Kexample
 #'
 #' ## ## Example 1:
 #' ## Calculate the probability that an unknown penguin from this population
@@ -86,7 +86,7 @@
 #'
 #' probs <- Pr(
 #'   Y = data.frame(species = 'Adelie'),
-#'   learnt = learnt, parallel = 1
+#'   K = K, parallel = 1
 #' )
 #'
 #' ## display the probability value
@@ -107,7 +107,7 @@
 #'
 #' probs <- Pr(
 #'   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-#'   learnt = learnt, parallel = 1
+#'   K = K, parallel = 1
 #' )
 #'
 #' ## display the 3 probability values
@@ -132,7 +132,7 @@
 #' probs <- Pr(
 #'   Y = data.frame(species = 'Adelie'),
 #'   X = data.frame(bill_len = 43),
-#'   learnt = learnt, parallel = 1
+#'   K = K, parallel = 1
 #' )
 #'
 #' ## display the probability value
@@ -151,7 +151,7 @@
 #'
 #' probs <- Pr(
 #'   Y = data.frame(species = 'Adelie', bill_len = 43),
-#'   learnt = learnt, parallel = 1
+#'   K = K, parallel = 1
 #' )
 #'
 #' ## display the probability value
@@ -170,7 +170,7 @@
 #'
 #' X <- data.frame(bill_len = c(43, 44))
 #'
-#' probs <- Pr(Y = Y, X = X, learnt = learnt, parallel = 1)
+#' probs <- Pr(Y = Y, X = X, K = K, parallel = 1)
 #'
 #' ## display the 3 x 2 probability values
 #' probs$values
@@ -192,7 +192,7 @@
 #'   bill_len = c(43, 44)
 #' )
 #'
-#' probs <- Pr(Y = Y, learnt = learnt, parallel = 1)
+#' probs <- Pr(Y = Y, K = K, parallel = 1)
 #'
 #' ## display the 6 joint-probability values
 #' probs$values
@@ -211,7 +211,7 @@
 Pr <- function(
     Y,
     X = NULL,
-    learnt,
+    K,
     tails = NULL,
     priorY = NULL,
     nsamples = 'all',
@@ -269,29 +269,29 @@ Pr <- function(
     }
 
     ## Extract Monte Carlo output & auxmetadata
-    ## If learnt is a string, check if it's a folder name or file name
-    if (is.character(learnt)) {
-        ## Check if 'learnt' is a folder containing learnt.rds
-        if (file_test('-d', learnt) &&
-                file.exists(file.path(learnt, 'learnt.rds'))) {
-            learnt <- readRDS(file.path(learnt, 'learnt.rds'))
+    ## If K is a string, check if it's a folder name or file name
+    if (is.character(K)) {
+        ## Check if 'K' is a folder containing K.rds
+        if (file_test('-d', K) &&
+                file.exists(file.path(K, 'K.rds'))) {
+            K <- readRDS(file.path(K, 'K.rds'))
         } else {
-            ## Assume 'learnt' the full path of learnt.rds
+            ## Assume 'K' the full path of K.rds
             ## possibly without the file extension '.rds'
-            learnt <- paste0(sub('.rds$', '', learnt), '.rds')
-            if (file.exists(learnt)) {
-                learnt <- readRDS(learnt)
+            K <- paste0(sub('.rds$', '', K), '.rds')
+            if (file.exists(K)) {
+                K <- readRDS(K)
             } else {
-                stop('The argument "learnt" must be a folder containing learnt.rds, or the path to an rds-file containing the output from "learn()".')
+                stop('The argument "K" must be a folder containing "K.rds", or the path to an rds-file containing the output from "learn()".')
             }
         }
     }
-    ## Add check to see that learnt is correct type of object?
-    auxmetadata <- learnt$auxmetadata
-    learnt$auxmetadata <- NULL
-    learnt$auxinfo <- NULL
-    ncomponents <- nrow(learnt$W)
-    nmcsamples <- ncol(learnt$W)
+    ## Add check to see that K is correct type of object?
+    auxmetadata <- K$auxmetadata
+    K$auxmetadata <- NULL
+    K$auxinfo <- NULL
+    ncomponents <- nrow(K$W)
+    nmcsamples <- ncol(K$W)
 
     if(is.null(nsamples)){
         nsamples <- 0
@@ -416,7 +416,7 @@ Pr <- function(
         ##     X <- do.call(what = expand.grid,
         ##         args = c(setNames(
         ##             object = lapply(X = Yv, FUN = vrtgrid,
-        ##                 learnt = list(auxmetadata = auxmetadata)),
+        ##                 K = list(auxmetadata = auxmetadata)),
         ##             nm = Yv),
         ##             list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
         ##         ) )
@@ -445,7 +445,7 @@ Pr <- function(
 
 #### Calculate and save arrays for X values:
     if (is.null(X)) {
-        lprobX <- log(learnt$W)
+        lprobX <- log(K$W)
         saveRDS(lprobX,
             file.path(temporarydir,
                 paste0('__X', 1, '__.rds'))
@@ -455,7 +455,7 @@ Pr <- function(
         lpargs <- .lprobsargsyx(
             x = X,
             auxmetadata = auxmetadata,
-            learnt = learnt,
+            K = K,
             tails = tails
         )
 
@@ -464,7 +464,7 @@ Pr <- function(
             X = lpargs$xVs,
             fun = .lprobsbase,
             params = lpargs$params,
-            logW = c(log(learnt$W)),
+            logW = c(log(K$W)),
             temporarydir = temporarydir,
             lab = '__X'
         ))
@@ -484,7 +484,7 @@ Pr <- function(
     lpargs <- .lprobsargsyx(
         x = Y,
         auxmetadata = auxmetadata,
-        learnt = learnt,
+        K = K,
         tails = tails
     )
 

@@ -4,15 +4,7 @@
 \alias{rPr}
 \title{Generate datapoints}
 \usage{
-rPr(
-  n,
-  Ynames,
-  X = NULL,
-  learnt,
-  tails = NULL,
-  mcsamples = NULL,
-  parallel = NULL
-)
+rPr(n, Ynames, X = NULL, K, tails = NULL, mcsamples = NULL, parallel = NULL)
 }
 \arguments{
 \item{n}{Positive integer: number of samples to draw.}
@@ -21,7 +13,7 @@ rPr(
 
 \item{X}{List or data.table or \code{NULL}: set of values of variates on which we want to condition the joint probability for \code{Y}. If \code{NULL} (default), no conditioning is made. Any rows beyond the first are discarded}
 
-\item{learnt}{Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
+\item{K}{Either a character with the name of a directory or full path for a 'K.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
@@ -39,9 +31,9 @@ This function generates datapoints of chosen joint variates, according to poster
 This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, \text{data})} or combinations thereof, for the variates specified in the argument \code{Y}, and conditional on the variate values specified in the argument \code{X}. It is somewhat analogous to the \code{rxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y | \text{data})} is used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.
 }
 \examples{
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## ## Example 1:
 ## Generate 10 values of the 'species' variate,
@@ -50,7 +42,7 @@ learnt <- learntExample
 datapoints <- rPr(
   n = 10,
   Ynames = 'species',
-  learnt = learnt
+  K = K
 )
 
 c(datapoints)
@@ -62,7 +54,7 @@ c(datapoints)
 datapoints <- rPr(
   n = 5,
   Ynames = c('species', 'bill_len'),
-  learnt = learnt
+  K = K
 )
 
 print(datapoints, row.names = FALSE) ## row names give MCMC information
@@ -77,14 +69,14 @@ datapoints <- rPr(
   Ynames = 'species',
   X = data.frame(bill_len = 40),
   tails = list(bill_len = -1),
-  learnt = learnt
+  K = K
 )
 
 c(datapoints)
 
 }
 \seealso{
-\code{\link[=learn]{learn()}}, which generates the \code{learnt} objects required by \code{qPr()}.
+\code{\link[=learn]{learn()}}, which generates the \code{K} objects required by \code{qPr()}.
 
 \code{\link[=Pr]{Pr()}} to calculate joint and conditional probabilities.
 

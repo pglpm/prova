@@ -8,7 +8,7 @@ mutualinfo(
   Y1names,
   Y2names,
   X = NULL,
-  learnt,
+  K,
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   ns = NULL,
@@ -25,16 +25,15 @@ mutualinfo(
 
 \item{X}{Matrix or data.frame or \code{NULL}: values of some variates conditional on which we want the probabilities.}
 
-\item{learnt}{Either a character with the name of a directory or full path
-for an 'learnt.rds' object, or such an object itself.}
+\item{K}{Either a character with the name of a directory or full path for an 'K.rds' object, or such an object itself.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
 \item{quantiles}{Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default \code{c(0.055, 0.25, 0.75, 0.945)}, that is, the 5.5\%, 25\%, 75\%, 94.5\% quantiles. See similar argument in \code{\link[=Pr]{Pr()}}.}
 
-\item{ns}{Integer or \code{Inf} or \code{NULL} (default): number of Monte Carlo samples in the "learnt" object to use for calculating the mutual information. If \code{Inf} or \code{NULL}, use all Monte Carlo samples available in the "learnt" object.}
+\item{ns}{Integer or \code{Inf} or \code{NULL} (default): number of Monte Carlo samples in the "K" object to use for calculating the mutual information. If \code{Inf} or \code{NULL}, use all Monte Carlo samples available in the "K" object.}
 
-\item{nv}{Integer, default 12: number of \emph{duplicates} of Monte Carlo samples in the "learnt" object to use for calculating the revisability of the mutual information.}
+\item{nv}{Integer, default 12: number of \emph{duplicates} of Monte Carlo samples in the "K" object to use for calculating the revisability of the mutual information.}
 
 \item{unit}{Either one of 'Sh' for \emph{shannon} (default), 'Hart' for \emph{hartley}, 'nat' for \emph{natural unit}, or a positive real indicating the base of the logarithms to be used.}
 
@@ -76,13 +75,13 @@ The function \code{mutualinfo()} calculates the mutual information above for the
 The computation of these quantities is done via Monte Carlo integration, using the samples produced by the \code{\link[=learn]{learn()}} function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more cores (if available) in parallel, through the argument \verb{parallel =}.
 }
 \examples{
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## mutual information between variates 'species' and 'bill_len'
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-  learnt = learnt, nv = 2, parallel = 1)
+  K = K, nv = 2, parallel = 1)
 
 ## The value and its numerical Monte Carlo error
 c(MI$value, MI$MCaccuracy)
@@ -99,6 +98,6 @@ signif(MI$quantiles, 3)
 
 \code{\link[=Pr]{Pr()}} to calculate probabilities and their revisability.
 
-\code{\link[=learn]{learn()}}, which generates the \code{learnt} objects required by \code{mutualinfo()}.
+\code{\link[=learn]{learn()}}, which generates the \code{K} objects required by \code{mutualinfo()}.
 }
 \concept{association}
