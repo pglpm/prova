@@ -1189,11 +1189,22 @@ print.probability <- function(
 
     vmca <- x[['values.MCaccuracy']]
     if(is.null(vmca)){# output is from qPr()
+        hasvmca <- FALSE
         vmca <- 1e-15
+    } else {
+        hasvmca <- TRUE
     }
     qmca <- x[['quantiles.MCaccuracy']]
     if(is.null(qmca)){# output is from qPr()
         qmca <- 1e-15
+    }
+
+    densities <- x[['densities']]
+    if(is.null(densities)){# output is from qPr()
+        densities <- 0
+        oname <- 'quantile'
+    } else {
+        oname <- 'probability'
     }
     if(isTRUE(digits) && is.null(elements)){
         vdigits <- edigits - 1 + ceiling(log10(x[['values']])) -
@@ -1208,28 +1219,26 @@ print.probability <- function(
     } else if(!is.null(elements)){
         digits <- edigits
     }
-print('v');    print(vdigits)
-print('a');    print(adigits)
-print('q');    print(qdigits)
+
     if(is.null(elements)){
-        totake <- c('values', 'values.MCaccuracy', 'quantiles')
+        totake <- c('values', if(hasvmca){'values.MCaccuracy'}, 'quantiles')
         ## rearrange and combine values and quantiles in a special way
         temp <- aperm(a = array(data = .signifC(
             x = unname(unlist(x[totake])),
-            digits = c(vdigits, adigits, qdigits) ),
+            digits = c(vdigits, if(hasvmca){adigits}, qdigits) ),
             dim = c(dim(x[['values']]),
-                2 + (if(is.null(x[['quantiles']])){0}else{dim(x[['quantiles']])[3]}) ),
+            (if(is.null(x[['quantiles']])){0}else{dim(x[['quantiles']])[3]}) +
+                1 + hasvmca),
             dimnames = c(dimnames(x[['values']]),
-                setNames(object = list(c('value', '+/-',
+                setNames(object = list(c('value', if(hasvmca){'+/-'},
                     if(!is.null(x[['quantiles']])){
                         paste0('Q', dimnames(x[['quantiles']])[[3]])
                     }
-                )), nm = paste0('probability',
-                    if(any(x[['densities']] > 0)){' density'}))
+                )), nm = paste0(oname, if(any(densities > 0)){' density'}))
                 )),
             perm = c(1,3,2))
-        temp2 <- dimnames(temp)[[1]][x[['densities']] < max(x[['densities']])]
-        dimnames(temp)[[1]][x[['densities']] < max(x[['densities']])] <-
+        temp2 <- dimnames(temp)[[1]][densities < max(densities)]
+        dimnames(temp)[[1]][densities < max(densities)] <-
             paste0(temp2, '*')
 
         if(is.null(x$X)){temp <- temp[,,]}
