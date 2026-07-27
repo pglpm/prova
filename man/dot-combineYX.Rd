@@ -4,7 +4,16 @@
 \alias{.combineYX}
 \title{Calculate probabilities, quantiles, etc, for all Y and X combinations}
 \usage{
-.combineYX(iyx, temporarydir, usememory = TRUE, quantiles, nsamples, Qerror)
+.combineYX(
+  iyx,
+  temporarydir,
+  usememory = TRUE,
+  doquantiles,
+  quantiles,
+  dosamples,
+  nsamples,
+  Qerror
+)
 }
 \description{
 Used in \code{\link[=Pr]{Pr()}}.

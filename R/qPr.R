@@ -405,7 +405,7 @@ qPr <- function(
     doquantiles <- !is.null(quantiles)
     dosamples <- (nsamples > 0)
 
-    out <- combfnr(parallel::parApply(cl = cl,
+    out <- combfnr(apply(#parallel::parApply(cl = cl,
             X = expand.grid(pY = p, jx = seq_len(nX)),
             MARGIN = 1,
             FUN = util_qYX,
@@ -454,7 +454,7 @@ qPr <- function(
     ## report whether the probabilities are 'tails' or not
     if(!is.null(tails)){
         outtails <- list()
-        outtails[c(colnames(Y), colnames(X))] <- ''
+        outtails[colnames(X)] <- ''
         outtails[names(tails)[tails == -1]] <- '>'
         outtails[names(tails)[tails == 1]] <- '<'
     } else {
@@ -555,7 +555,7 @@ qPr <- function(
                 lower.tail = TRUE, log.p = TRUE)
         ), na.rm = TRUE) / sumlpX) - pY
     }
-saveRDS('__valuesq.rds')
+
     values <- unname(unlist(.vtransform(values,
         auxmetadata = auxmetadata,
         Rout = 'original',

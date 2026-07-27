@@ -11,9 +11,9 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-    dev = 'jpeg',
-#    dpi = 96,
-#    fig.retina = 2,
+    dev = 'svg',
+    ## dpi = 150,
+    ## fig.retina = 1,
     fig.asp = 1/sqrt(2),
     fig.width = 8,
     out.width='100%',

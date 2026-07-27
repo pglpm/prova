@@ -313,7 +313,7 @@ pplot <- function(
                 if(is.null(dim(thisy))){ dim(thisy) <- c(1, length(thisy)) }
             }
             nquant <- ncol(thisy)
-            groups <- rle(!is.na(thisx))
+            groups <- rle(!is.na(c(thisx)))
             for(ii in seq_len(ceiling(nquant / 2))){
                 graphics::polygon(
                     x = thisx[qindices(groups = groups,
@@ -337,7 +337,7 @@ pplot <- function(
                 if(is.null(dim(thisx))){ dim(thisx) <- c(1, length(thisx)) }
             }
             nquant <- ncol(thisx)
-            groups <- rle(!is.na(thisy))
+            groups <- rle(!is.na(c(thisy)))
             for(ii in seq_len(ceiling(nquant / 2))){
                 graphics::polygon(
                     y = thisy[qindices(groups = groups,
@@ -408,11 +408,16 @@ pplot <- function(
 #' @param PvsY Logical or `NULL`: should probabilities be plotted against their `Y` argument? If `NULL`, the argument between `Y` and `X` having larger number of values is chosen. As many probability curves will be plotted as the number of values of the other argument.
 #' @param ylab2 A title for the y-axis on the right side of the plot, if displayed.
 #' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'top'`.
+#' @param type `NULL` (default) or character vector or indicating the type of plot for the main probability distribution; see [base::plot()]. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
+#' @param lty Analogous to argument `lty` (line style) in [graphics::matplot()], used for the main probability distributions.
+#' @param lwd Analogous to argument `lwd` (line width) in [graphics::matplot()], used for the main probability distributions.
 #' @param alpha.f Numeric, default `1`: opacity of the colours of lines or markers, `0` being completely invisible and `1` completely opaque.
-#' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run frequency samples, similar to `alpha.f`. `NULL` means `1` if `spread = 'samples'` and `0.25` if `spread = 'quantiles'`.
 #' @param nsamples.spread Integer, default 360: number of samples of long-run frequencies to display.
-#' @param type ***
-#' @param lty,lwd,pch,col,xlab,ylab,main,xlim,ylim,grid,axes,add see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
+#' @param type.spread `NULL` (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
+#' @param lty.spread Same as parameter `lty` (line style), but for the line type of the long-run-frequency samples.
+#' @param lwd.spread Same as parameter `lwd` (line width), but for the line type of the long-run-frequency samples.
+#' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` means `1` if `spread = 'samples'` and `0.25` if `spread = 'quantiles'`.
+#' @param pch,col,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
 #' @param ... Other parameters to be passed to [pplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].

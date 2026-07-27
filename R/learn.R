@@ -360,7 +360,7 @@ learn <- function(
         ## user wants us to register a parallel backend
         ## and to choose number of cores
         ncores <- min(nchains, getOption("cl.cores", 2))
-        cl <- parallel::makeCluster(ncores)
+        cl0 <- cl <- parallel::makeCluster(ncores)
         closeexit <- TRUE
         predirmsgs <- c(predirmsgs, list(
             paste0('Registered ', capture.output(print(cl)), '.')
@@ -368,13 +368,13 @@ learn <- function(
     } else if (isFALSE(parallel)) {
         ## user wants us not to use parallel cores
         ncores <- 1
-        cl <- parallel::makeCluster(ncores)
+        cl0 <- cl <- parallel::makeCluster(ncores)
         closeexit <- TRUE
     } else if (is.numeric(parallel) &&
                    is.finite(parallel) && parallel >= 1) {
         ## user wants us to register 'parallel' # of cores
         ncores <- min(nchains, parallel)
-        cl <- parallel::makeCluster(ncores)
+        cl0 <- cl <- parallel::makeCluster(ncores)
         closeexit <- TRUE
         predirmsgs <- c(predirmsgs, list(
             paste0('Registered ', capture.output(print(cl)), '.')

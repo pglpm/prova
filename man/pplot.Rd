@@ -5,8 +5,8 @@
 \title{Plot numeric or character values}
 \usage{
 pplot(
-  x,
-  y,
+  x = NULL,
+  y = NULL,
   type = NA,
   lty = c(1, 2, 4, 3, 6, 5),
   lwd = 2,

@@ -46,17 +46,29 @@
 
 \item{legend}{One of the values \code{'bottomright'}, \code{'bottom'}, \code{'bottomleft'}, \code{'left'}, \code{'topleft'}, \code{'top'}, \code{'topright'}, \code{'right'}, \code{'center'} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{'top'}.}
 
-\item{lty, lwd, pch, col, type, xlab, ylab, main, ylim, grid, axes, add}{see analogous arguments in \code{\link[graphics:plot.default]{graphics::plot.default()}} and \code{\link[graphics:matplot]{graphics::matplot()}}.}
+\item{type}{\code{NULL} (default) or character vector or indicating the type of plot for the main probability distribution; see \code{\link[base:plot]{base::plot()}}. The default \code{NULL} value uses type \code{'l'} (lines) for continuous variates, and \code{'b'} (points and lines) for discrete variates.}
 
-\item{alpha.f}{Numeric, default 0.25: opacity of the colours, \code{0} being completely invisible and \code{1} completely opaque.}
+\item{lty}{Analogous to argument \code{lty} (line style) in \code{\link[graphics:matplot]{graphics::matplot()}}, used for the main probability distributions.}
+
+\item{pch, col, xlab, ylab, main, xlim, ylim, grid, axes, add, lwd.grid, col.grid}{see analogous arguments in \code{\link[graphics:plot.default]{graphics::plot.default()}} and \code{\link[graphics:matplot]{graphics::matplot()}}.}
+
+\item{lwd}{Analogous to argument \code{lwd} (line width) in \code{\link[graphics:matplot]{graphics::matplot()}}, used for the main probability distributions.}
+
+\item{alpha.f}{Numeric, default \code{1}: opacity of the colours of lines or markers, \code{0} being completely invisible and \code{1} completely opaque.}
 
 \item{ylab2}{A title for the y-axis on the right side of the plot, if displayed.}
 
+\item{type.spread}{\code{NULL} (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default \code{NULL} value uses type \code{'l'} (lines) for continuous variates, and \code{'b'} (points and lines) for discrete variates.}
+
+\item{lty.spread}{Same as parameter \code{lty} (line style), but for the line type of the long-run-frequency samples.}
+
+\item{lwd.spread}{Same as parameter \code{lwd} (line width), but for the line type of the long-run-frequency samples.}
+
+\item{alpha.f.spread}{Numeric or \code{NULL} (default): opacity of the quantile bands or of the long-run-frequency samples, similar to \code{alpha.f}. \code{NULL} means \code{1} if \code{spread = 'samples'} and \code{0.25} if \code{spread = 'quantiles'}.}
+
+\item{nsamples.spread}{Integer, default 360: number of samples of long-run frequencies to display.}
+
 \item{...}{Other parameters to be passed to \code{\link[=pplot]{pplot()}}.}
-
-\item{var.alpha.f}{Numeric: opacity of the quantile bands or of the samples, \code{0} being completely invisible and \code{1} completely opaque.}
-
-\item{var.nsamples}{Integer, default 360: number of samples of long-run frequencies to display}
 }
 \value{
 \code{NULL}, \link[base:invisible]{invisibly}; produces a plot, see \code{\link[graphics:matplot]{graphics::matplot()}}.
