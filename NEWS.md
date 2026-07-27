@@ -1,5 +1,6 @@
-# Prova v1.9.1
+# Prova v2.0.0
 
+* Rewrite of some internal code.
 * Fixed a bug that prevented use of pre-existing parallel cluster.
 
 
