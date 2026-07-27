@@ -27,7 +27,35 @@ This repository provides an R package and some theoretical background to perform
 - **[Base-rate](https://dictionary.apa.org/base-rate-fallacy) correction** for inferences about out-of-population data, by means of Bayes's theorem.
 - **Automated Markov-chain Monte Carlo** computation. Users unfamiliar with Monte Carlo methods don't have to worry, because the computations are handled automatically.
 
-The package at bottom does Bayesian nonparametric inference (also called "density inference" or "inference under exchangeability"), which makes all features above possible.
+The package essentially performs Bayesian nonparametric inference (also called "density inference" or "inference under exchangeability"), which makes most features above possible.
+
+<br>
+
+## Minimal example
+
+Let's use the built-in [`penguins` dataset](https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html), and the [metadata file](/vignettes/penguin_metadata.csv') that contains the characteristics of its variates.
+
+We learn from this dataset using the function `learn()`. Note that the dataset has partially missing values, but this is not a problem for **Prova**:
+```r
+learnt <- learn(data = penguins, metadata = metadata)
+```
+
+Now we ask a statistical question, for example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélies*, if its bill length is 30 mm? To answer this question we use the function `Pr()`:
+```r
+prob <- Pr(Y = data.frame(species = 'Adelie'), X = data.frame(bill_len = 30), learnt = learnt)
+
+print(prob)
+# , , |bill_len = 30
+#
+#         probability
+# species  value  +/-    Q5.5% Q25%   Q75%    Q94.5% 
+#   Adelie 0.9031 0.0024 0.556 0.8988 0.98998 0.99779
+```
+The answer is that there is a 90% probability that a new penguin, whose bill length turns out to be 30 mm, is of species *Adélies*.
+
+Let's also ask: what is the relative frequency of *Adélies* *in the whole population* (including unsampled penguins), among those having bill length of 30 mm? Obviously we cannot answer with certainty, because we have not sampled the full population. But **Prova** allows us to calculate the *probability distribution* for this frequency. In fact, it has already been calculated by the function `Pr()`
+
+
 
 The [introductory vignette](https://pglpm.github.io/prova/articles/intro.html) explains, with a guided example, most of the features above, as well as the main ideas and functions. It can be particularly useful for researchers who are more familiar with traditional "frequentist" statistics but would like to try the Bayesian approach. See the [post](https://www.apadivisions.org/division-7/publications/newsletters/developmental/2018/07/bayesian-statistics) by Barbara W. Sarnecka, frequentist statistician turned Bayesian, for a brilliant overview of the Bayesian advantages. The [vignette about mutual information](https://pglpm.github.io/prova/articles/mutualinfo.html) explains the use of this powerful measure of association.
 
@@ -40,12 +68,12 @@ The package internally does the computations necessary for Bayesian inference by
 **You need to have installed the package [**Nimble**](https://r-nimble.org/), *at least version 1.4.2*.** Please follow [Nimble's installation instructions](https://r-nimble.org/manual/cha-installing-nimble.html) for your operating system.
 
 Then **Prova** can be installed from [CRAN](https://CRAN.R-project.org/package=prova) with
-```
+```r
 install.packages('prova')
 ```
 
 In case of a newer version not yet on CRAN, it can be installed with
-```
+```r
 remotes::install_github('pglpm/prova')
 ```
 
