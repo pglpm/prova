@@ -2,6 +2,7 @@
 
 * The functions `flexiplot()` and `plotquantiles()` are replaced by the single function `pplot()`; argument `type = 'qx'` reproduces the usage of `plotquantiles()`
 * Fixed a bug that prevented use of pre-existing parallel cluster.
+* Metadata data frame `meta_penguins` for the R dataset `datasets::penguins` is now included in the package.
 * Included a minimal example in the README.
 * Rewrite of some internal code.
 

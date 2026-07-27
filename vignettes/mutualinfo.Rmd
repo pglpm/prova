@@ -20,7 +20,7 @@ See the `vignette('start')` for an introduction to the package. The present vign
 
 # Probabilities and associations
 
-The `vignette('start')` focuses on the `datasets::penguins` dataset, and shows how to calculate probabilities of single and joint variates from that dataset; also probabilities conditional on given variates. These probabilities refers to a *new unit*; for example:
+The `vignette('start')` focuses on the dataset `datasets::penguins`, and shows how to calculate probabilities of single and joint variates from that dataset; also probabilities conditional on given variates. These probabilities refers to a *new unit*; for example:
 
 - If we find that $\mathrm{Pr}(\text{species}\mo \text{Adelie}) = 44\%$, then there's a 44% probability that the next penguin we sample (from the same population) is of the *Adélie* species.
 - If we find that $\mathrm{Pr}(\text{species}\mo \text{Gentoo} \,\vert\, \text{island} \mo \text{Biscoe}) = 1\%$, then if we have a new penguin, and we know it is from Biscoe island, there's a 1% probability that it is of the *Gentoo* species.
@@ -43,16 +43,17 @@ Let's load the **Prova** package, if we haven't already done so, and set a rando
 
 ``` r
 library('prova')
-devtools::load_all()
+
 set.seed(10)
 ```
 
-As in the `vignette('start')`, we work with a specific population of penguins, of which we have 344 sample data stored in the [`datasets::penguins`] dataset, included in R version 4.5.0 and above. For your convenience you can download the shuffled dataset as the CSV file [`penguin_data.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguin_data.csv), then load it with the `pread.csv()` function as follows:
+As in the `vignette('start')`, we work with a specific population of penguins, of which we have 344 sample data stored in the dataset `datasets::penguins`, included in R version 4.5.0 and above. For your convenience, for instance if you have an older R version, you can also download the shuffled dataset as the CSV file [`penguins_shuffled.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv), then load it with the `pread.csv()` function as follows:
 
 
 ``` r
-datafile <- 'penguin_data.csv'
-penguin <- pread.csv(datafile)
+if(!exists('penguins')){
+    penguins <- pread.csv('penguins_shuffled.csv')
+}
 ```
 
 We assume that we have already learned all predictive information from this dataset by means of the **Prova** function `learn()`. This information is stored in a "learnt" object, which is either loaded in memory, or stored in the compressed file `learnt.rds` within the output directory that was specified in the `learn()` function. For your convenience the object produced by the computation mentioned above can be downloaded as the file [`learntall.rds`](https://github.com/pglpm/prova/raw/main/vignettes/learntall.rds). Once you have downloaded it in your working directory you can just set
@@ -80,7 +81,7 @@ The function `pplot()` allows us to display the `island` and `species` variates 
 
 
 ``` r
-pplot(x = penguin$island, y = penguin$species,
+pplot(x = penguins$island, y = penguins$species,
     type = 'p', xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues)
 ```

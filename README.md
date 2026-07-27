@@ -41,7 +41,7 @@ learnt <- learn(data = penguins, metadata = metadata)
 # [output about how the learnnig process]
 ```
 
-Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélies*, if its bill length is 45 mm? To answer this question we use the function `Pr()`, and print a summary of the result:
+Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 45 mm? To answer this question we use the function `Pr()`, and print a summary of the result:
 ```r
 prob <- Pr(
     Y = data.frame(species = 'Adelie'), # predictand
@@ -56,9 +56,9 @@ print(prob)
 # species  value   +/-     Q5.5%   Q25%    Q75%    Q94.5%
 #   Adelie 0.09857 0.00053 0.05337 0.07534 0.11893 0.1527
 ```
-The answer is that there is roughly a 10% probability that a new penguin, among those with a 45 mm bill length, is of species *Adélies*.
+The answer is that there is roughly a 10% probability that a new penguin, among those with a 45 mm bill length, is of species *Adélie*.
 
-Now ask: what is the relative frequency of *Adélies* species *in the whole subpopulation* (including unsampled penguins), of penguins having bill length of 45 mm? This cannot be answered with certainty, because we have only a sample of the full population. But **Prova** can calculate the *probability distribution* for this full-population frequency. In fact, it has already been calculated by the function `Pr()` above, and we can visualize it with a plot:
+Now ask: what is the relative frequency of *Adélie* species *in the whole subpopulation* (including unsampled penguins), of penguins having bill length of 45 mm? This cannot be answered with certainty, because we have only a sample of the full population. But **Prova** can calculate the *probability distribution* for this full-population frequency. In fact, it has already been calculated by the function `Pr()` above, and we can visualize it with a plot:
 ```r
 hist(prob)
 ```
@@ -66,7 +66,7 @@ hist(prob)
 
 The plot shows that this full-population frequency is most likely (with roughly 90% probability) between 0.05 and 0.15. These are the values shown by `print(prob)` above.
 
-The *inverse* question can also be asked: if we observe a new penguin of *Adélies* species, what could its bill length be? The answer is uncertain, and **Prova** can calculate the probability distribution of the penguin's bill length:
+The *inverse* question can also be asked: if we observe a new penguin of *Adélie* species, what could its bill length be? The answer is uncertain, and **Prova** can calculate the probability distribution of the penguin's bill length:
 ```r
 invprob <- Pr(
     Y = data.frame(bill_len = 30:50),   # predictand
@@ -80,7 +80,7 @@ plot(invprob)
 
 this probability distribution has a peak between 35 mm and 40 mm and it's slightly skewed.
 
-This distribution is not the *frequency* distribution of bill length in the whole subpopulation of *Adélies* penguins; the latter is uncertain because we have only a sample. But the plot above shows that the full-population frequency distribution is somewhere between the grey bands.
+This distribution is not the *frequency* distribution of bill length in the whole subpopulation of *Adélie* penguins; the latter is uncertain because we have only a sample. But the plot above shows that the full-population frequency distribution is somewhere between the grey bands.
 
 </br>
 

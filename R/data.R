@@ -41,3 +41,23 @@
 #' [Pr()], [qPr()], [rPr()], [mutualinfo()]: functions that require this kind of object in order to calculate probabilities and quantiles, generate data points, and calculate mutual information.
 #' @concept learn
 "learntExample"
+
+
+#' Metadata file for "penguins" dataset
+#'
+#' @description
+#' A [data frame][base::data.frame()] containing the prior information about all variates of the [penguins][datasets::penguins] dataset.
+#'
+#' @format ## `metadataExample`
+#' A [data frame][base::data.frame()] with 8 rows and 10 columns.
+#'
+#' @returns No return value.
+#'
+#' @seealso
+#' [datasets::penguins] dataset.
+#'
+#' [metadatatemplate()] which helps producing this kind of metadata files from a given dataset.
+#'
+#' [learn()] which needs this kind of metadata files to "learn" from data.
+#' @concept data
+"meta_penguins"
