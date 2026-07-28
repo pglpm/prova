@@ -29,7 +29,7 @@ plot(
   alpha.f = 1,
   grid = TRUE,
   lwd.grid = NULL,
-  col.grid = "#BBBBBB80",
+  col.grid = "#00000022",
   axes = FALSE,
   ylab2 = NULL,
   main = NULL,

@@ -29,7 +29,7 @@ pplot(
   border = NA,
   grid = TRUE,
   lwd.grid = NULL,
-  col.grid = "#BBBBBB80",
+  col.grid = "#00000022",
   axes = FALSE,
   cex.main = 1,
   ...
@@ -113,7 +113,7 @@ pplot(
 
 - col.grid:
 
-  Color of grid lines, default `'#BBBBBB80'`. Can be specified in any of
+  Color of grid lines, default `'#00000022'`. Can be specified in any of
   the usual ways, see for instance
   [`grDevices::col2rgb()`](https://rdrr.io/r/grDevices/col2rgb.html).
 

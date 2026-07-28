@@ -1422,10 +1422,10 @@ initial and updated inferences, to better see how they got updated:
 ## find common y-maximum for correct visual comparison
 ymax <- max(Fspecies10$quantiles, Fspecies60$quantiles)
 
-plot(Fspecies10, ylim = c(0, ymax),
+plot(Fspecies10, ylim = c(0, ymax), grid = FALSE,
     col = 2, lty = 2, lwd = 3, pch = 2) ## distinguish the two plots
 
-plot(Fspecies60, ylim = c(0, ymax), add = TRUE,
+plot(Fspecies60, ylim = c(0, ymax), grid = FALSE, add = TRUE,
     col = 1, lty = 1, lwd = 2, pch = 1) ## distinguish the two plots
 
 legend('top', c('10 samples', '60 samples'),

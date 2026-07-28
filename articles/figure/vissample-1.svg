@@ -525,15 +525,15 @@
 <use xlink:href="#glyph-1-15" x="41.509766" y="87.980469"/>
 </g>
 <g clip-path="url(#clip-0)">
-<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(73.333333%, 73.333333%, 73.333333%)" stroke-opacity="0.501961" stroke-miterlimit="10" d="M 59.039062 243.960938 L 545.761719 243.960938 "/>
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0%, 0%, 0%)" stroke-opacity="0.133333" stroke-miterlimit="10" d="M 59.039062 243.960938 L 545.761719 243.960938 "/>
 </g>
 <g clip-path="url(#clip-1)">
-<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(73.333333%, 73.333333%, 73.333333%)" stroke-opacity="0.501961" stroke-miterlimit="10" d="M 59.039062 148.640625 L 545.761719 148.640625 "/>
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0%, 0%, 0%)" stroke-opacity="0.133333" stroke-miterlimit="10" d="M 59.039062 148.640625 L 545.761719 148.640625 "/>
 </g>
 <g clip-path="url(#clip-2)">
-<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(73.333333%, 73.333333%, 73.333333%)" stroke-opacity="0.501961" stroke-miterlimit="10" d="M 217.898438 333.558594 L 217.898438 59.039062 "/>
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0%, 0%, 0%)" stroke-opacity="0.133333" stroke-miterlimit="10" d="M 217.898438 333.558594 L 217.898438 59.039062 "/>
 </g>
 <g clip-path="url(#clip-3)">
-<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(73.333333%, 73.333333%, 73.333333%)" stroke-opacity="0.501961" stroke-miterlimit="10" d="M 386.898438 333.558594 L 386.898438 59.039062 "/>
+<path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0%, 0%, 0%)" stroke-opacity="0.133333" stroke-miterlimit="10" d="M 386.898438 333.558594 L 386.898438 59.039062 "/>
 </g>
 </svg>
