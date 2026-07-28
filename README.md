@@ -3,7 +3,7 @@
   [![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.17226082.svg)](https://doi.org/10.5281/zenodo.17226082)
 <!-- badges: end -->
 
-<img src="man/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"/>
+<img src="man/figures/prova_logo.jpg" alt="Ensemble of densities" width="100%"/>
 
 "prova" /'prɔva/ (Italian)
 
@@ -41,7 +41,19 @@ K <- learn(data = penguins, metadata = meta_penguins)
 # [progress output about the learning computation]
 ```
 
-Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 45 mm? To answer this question we use the function `Pr()`, and print a summary of the result:
+Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 45 mm? In symbols,
+
+$$
+\mathrm{P}(\texttt{\small species}\mathrel{\negthinspace=\negthinspace}
+\text{\small Adelie}
+\nonscript\thinspace\vert\nonscript\thinspace\mathopen{}
+\texttt{\small bill\\_len}\mathrel{\negthinspace=\negthinspace}
+\text{\small 45\thinspace mm}
+,
+K)
+$$
+
+To answer this question we use the function `Pr()`, and print a summary of the result:
 ```r
 prob <- Pr(
     Y = data.frame(species = 'Adelie'), # predictand
