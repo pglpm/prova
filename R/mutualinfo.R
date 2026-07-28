@@ -31,6 +31,7 @@
 #' @param unit Either one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used.
 #' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use as many cores as in user's [option][base::getOption()] "nc.cores", or 2 if that is `NULL`. `FALSE`: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
+#' @param keepX Logical, default `TRUE`: keep a copy of the `X` argument in the output? This is used for [hist.mi()].
 #'
 #' @return An object of class "mi", which is a list consisting of the following elements:
 #'
@@ -84,7 +85,8 @@ mutualinfo <- function(
     nv = 12,
     unit = 'Sh',
     parallel = TRUE,
-    verbose = FALSE
+    verbose = FALSE,
+    keepX = TRUE
 ){
 #### Mutual information between Y2 and Y1
 #### conditional on X, data, prior information
@@ -565,10 +567,13 @@ mutualinfo <- function(
         Y2names = Y2names
         ## , ids = rowMeans(ids) # for debugging
     ),
-    if(!is.null(outtails)){
-        list(tails <- outtails[!(outtails == '')])
+    if(isTRUE(keepX)){
+                list(X = X)
     },
-        list(K = Kname)
+    if(!is.null(outtails)){
+        list(tails = outtails[!(outtails == '')])
+    },
+    list(K = Kname)
     )
 
     class(out) <- 'mi'

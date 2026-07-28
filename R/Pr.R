@@ -42,7 +42,7 @@
 #' @param sep character, default `','`: character to separate variate names and values
 #' @param solidus character, default `'|'`: character prepended to names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
-#' @param keepYX Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in the output? This is used for the plot method.
+#' @param keepYX Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in the output? This is used for [plot.probability()].
 #'
 #' @return An object of class "probability", which is a list consisting of the following elements:
 #'

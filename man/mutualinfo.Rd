@@ -15,7 +15,8 @@ mutualinfo(
   nv = 12,
   unit = "Sh",
   parallel = TRUE,
-  verbose = FALSE
+  verbose = FALSE,
+  keepX = TRUE
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ mutualinfo(
 \item{parallel}{Logical or positive integer or cluster object. \code{TRUE} (default): use as many cores as in user's \link[base:getOption]{option} "nc.cores", or 2 if that is \code{NULL}. \code{FALSE}: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}; in this case the parallel computation will use this object.}
 
 \item{verbose}{Logical, default \code{FALSE}: give messages about parallel processing?}
+
+\item{keepX}{Logical, default \code{TRUE}: keep a copy of the \code{X} argument in the output? This is used for \code{\link[=hist.mi]{hist.mi()}}.}
 }
 \value{
 An object of class "mi", which is a list consisting of the following elements:

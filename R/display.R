@@ -1094,12 +1094,19 @@ hist.mi <- function(
     if(is.null(ylab)){ylab <- 'probability density'}
     if(isFALSE(fill.alpha.f) || !is.numeric(fill.alpha.f)){fill.alpha.f <- 0}
     if(missing(xlim)){xlim <- range(midslist)}
-    if(missing(main)){
-        main <- paste0('long-run MI  ',
+    if(is.null(main)){
+        tails <- list()
+        tails[names(x$X)] <- ''
+        tails[names(x$tails)] <- x$tails
+        main <- paste0('long-run MI(',
             paste0(x$Y1names, collapse = ', '),
-            '  &  ',
-            paste0(x$Y2names, collapse = ', ')
-        )
+            ' : ',
+            paste0(x$Y2names, collapse = ', '),
+            ' | ',
+            if(!is.null(x$X)){ paste0(
+                paste0(names(x$X), tails[names(x$X)], collapse = ', '),
+            ', ')},
+            x$K, ')')
     }
 
     nplots <- 1

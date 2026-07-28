@@ -43,7 +43,7 @@ qPr(
 
 \item{verbose}{Logical, default \code{FALSE}: give messages about parallel processing?}
 
-\item{keepYX}{Logical, default \code{TRUE}: keep a copy of the \code{Y} and \code{X} arguments in the output? This is used for the plot method.}
+\item{keepYX}{Logical, default \code{TRUE}: keep a copy of the \code{Yname} and \code{X} arguments in the output? This is used for \code{\link[=plot.probability]{plot.probability()}}.}
 
 \item{tol}{numeric positive: tolerance in the calculation of quantiles. Default: \code{.Machine$double.eps * 10} (typically \code{2.22045e-15}).}
 }

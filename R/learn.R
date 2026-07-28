@@ -1385,6 +1385,7 @@ learn <- function(
         'quantile width' = jointdiagn[4, ]
     )
     K$auxinfo <- c(K$auxinfo, toprint)
+    class(K) <- 'K'
     saveRDS(K,
         file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
     )
