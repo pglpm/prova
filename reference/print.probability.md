@@ -99,6 +99,7 @@ probs <- Pr(Y = Y, X = X, K = K, parallel = 1)
 
 ## display the values and revisabilities of these probabilities
 print(probs)
+#> [1] "array"
 #> , , |bill_len = 43
 #> 
 #>            probability

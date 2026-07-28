@@ -120,7 +120,8 @@ Pr(
 - keepYX:
 
   Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in
-  the output? This is used for the plot method.
+  the output? This is used for
+  [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md).
 
 ## Value
 
@@ -151,6 +152,8 @@ following elements:
   (\\\mathrm{p}(\dotso)\\\mathrm{d}y_1\\\mathrm{d}y_2\\); and so on.
 
 - `$Y`, `$X`, `$tails`: copies of the `Y`, `X`, `tails` arguments.
+
+- `$K`: name of the `K` object used in the calculation.
 
 ## Details
 
@@ -317,7 +320,6 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 
 ## plot the probabilities and quantiles
 plot(probs)
-#> named list()
 
 
 ## plot the probability distribution for the full-population frequency
@@ -412,7 +414,6 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 
 ## plot the probabilities and quantiles
 plot(probs)
-#> named list()
 
 
 

@@ -116,7 +116,7 @@ the joint probability of. One variate per column, one set of values per row.</p>
 
 
 <dt id="arg-keepyx">keepYX<a class="anchor" aria-label="anchor" href="#arg-keepyx"></a></dt>
-<dd><p>Logical, default <code>TRUE</code>: keep a copy of the <code>Y</code> and <code>X</code> arguments in the output? This is used for the plot method.</p></dd>
+<dd><p>Logical, default <code>TRUE</code>: keep a copy of the <code>Y</code> and <code>X</code> arguments in the output? This is used for <code><a href="plot.probability.html">plot.probability()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -127,6 +127,7 @@ the joint probability of. One variate per column, one set of values per row.</p>
 <li><p><code>$values.MCaccuracy</code>, <code>quantiles.MCaccuracy</code>: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the <code>values</code> and <code>quantiles</code> elements.</p></li>
 <li><p><code>$densities</code>: numerical vector as long as number of rows in <code>Y</code>, used mainly for <code><a href="plot.probability.html">plot.probability()</a></code>. It is the order of the probability density the <code>Y</code>-values: values with <code>0</code> are actual probabilities; values with <code>1</code> are linear probability densities (\(\mathrm{p}(\dotso)\,\mathrm{d}y\)); values with <code>2</code> are areic probability densities (\(\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2\)); and so on.</p></li>
 <li><p><code>$Y</code>, <code>$X</code>, <code>$tails</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
+<li><p><code>$K</code>: name of the <code>K</code> object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -232,7 +233,6 @@ $$\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## plot the probabilities and quantiles</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> named list()</span>
 <span class="r-plt img"><img src="Pr-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## plot the probability distribution for the full-population frequency</span></span></span>
@@ -327,7 +327,6 @@ $$\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## plot the probabilities and quantiles</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> named list()</span>
 <span class="r-plt img"><img src="Pr-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>

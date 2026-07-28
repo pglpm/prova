@@ -116,7 +116,7 @@
 
 
 <dt id="arg-keepyx">keepYX<a class="anchor" aria-label="anchor" href="#arg-keepyx"></a></dt>
-<dd><p>Logical, default <code>TRUE</code>: keep a copy of the <code>Y</code> and <code>X</code> arguments in the output? This is used for the plot method.</p></dd>
+<dd><p>Logical, default <code>TRUE</code>: keep a copy of the <code>Yname</code> and <code>X</code> arguments in the output? This is used for <code><a href="plot.probability.html">plot.probability()</a></code>.</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
@@ -128,7 +128,8 @@
     <p>A list of the following elements:</p><ul><li><p><code>$values</code>: a matrix with the requested \(Y\)-quantiles <code>p</code> conditional on the requested \(X\)-values in <code>X</code>, for all combinations of <code>p</code> (rows) and <code>X</code> (columns).</p></li>
 <li><p><code>$quantiles</code> (possibly <code>NULL</code>): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the <code>value</code> element.</p></li>
 <li><p><code>$samples</code> (possibly <code>NULL</code>): an array with the revisability samples (3rd dimension of the array) for such quantiles.</p></li>
-<li><p><code>$Y</code>, <code>$X</code>: copies of the <code>Y</code> and <code>X</code> arguments.</p></li>
+<li><p><code>$Y</code>, <code>$X</code> <code>$tails</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
+<li><p><code>$K</code>: name of the <code>K</code> object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -172,14 +173,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  44.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.3</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## verify these values using Pr():</span></span></span>
+<span class="r-in"><span><span class="co">## verify these values, within numerical error, using Pr():</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">values</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  K <span class="op">=</span> <span class="va">K</span>, parallel <span class="op">=</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len&lt;      [,1]</span>
@@ -233,14 +232,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.5    38.8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.75   40.6</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## verify these values using Pr():</span></span></span>
+<span class="r-in"><span><span class="co">## verify these values, within numerical error, using Pr():</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">values</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  K <span class="op">=</span> <span class="va">K</span>, parallel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          |species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len&lt;    Adelie</span>

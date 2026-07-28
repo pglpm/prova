@@ -17,7 +17,8 @@ mutualinfo(
   nv = 12,
   unit = "Sh",
   parallel = TRUE,
-  verbose = FALSE
+  verbose = FALSE,
+  keepX = TRUE
 )
 ```
 
@@ -88,6 +89,12 @@ mutualinfo(
 
   Logical, default `FALSE`: give messages about parallel processing?
 
+- keepX:
+
+  Logical, default `TRUE`: keep a copy of the `X` argument in the
+  output? This is used for
+  [`hist.mi()`](https://pglpm.github.io/prova/reference/hist.mi.md).
+
 ## Value
 
 An object of class "mi", which is a list consisting of the following
@@ -113,7 +120,10 @@ elements:
   for the `MI` value for people more familiar with Pearson's
   correlation, but should be taken with a grain of salt.
 
-- `$unit`, `$Y1names`, `$Y1names`: same as the input arguments.
+- `$unit`, `$Y1names`, `$Y1names`, `$tails`: copies of the homonymous
+  input arguments.
+
+- `$K`: name of the `K` object used in the calculation.
 
 ## Details
 

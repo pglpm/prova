@@ -166,6 +166,7 @@ prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'),
     K = K)
 
 print(prob)
+# [1] "character"
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
 # 0.003085 0.000061 0.000408 0.001174 0.004149  0.00825
 ```
@@ -532,7 +533,7 @@ the `$unit` element:
 ``` r
 
 MIislandspecies$value
-# [1] 0.625043
+# [1] 0.628277
 
 MIislandspecies$unit
 # [1] "Sh"
@@ -597,13 +598,13 @@ corresponding \\\lvert r \rvert\\ value. In the previous case of the
 
 MIislandspecies[c('value', 'unit')]
 # $value
-# [1] 0.625043
+# [1] 0.628277
 # 
 # $unit
 # [1] "Sh"
 
 MIislandspecies$rGauss
-# [1] 0.7613
+# [1] 0.762534
 ```
 
 ### Mutual information for previous examples
@@ -834,7 +835,7 @@ and can be seen with the utility function
 
 print(MIislandspecies)
 # value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#   0.6250     0.16     0.47     0.82      1.0
+#   0.6283     0.16     0.47     0.82      1.0
 ```
 
 which shows that, acquiring more data, we can expect with 89%

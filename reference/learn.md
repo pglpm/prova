@@ -441,7 +441,7 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpwcXWMT/prova-V1_D3_S10_260728T085318_1a412dfc6e1f
+#> /tmp/Rtmpm1iq2G/prova-V1_D3_S10_260728T131542_19fb5d90fd2e
 #> Prova v2.0.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -464,9 +464,9 @@ K <- learn(
 #> quantile width: 0.0585 to 0.541
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 35 secs
-#> Average preparation & finalization time: 34 secs.
-#> Average Monte Carlo time per chain: 0.55 secs.
+#> Total computation time: 36 secs
+#> Average preparation & finalization time: 35 secs.
+#> Average Monte Carlo time per chain: 0.68 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -474,7 +474,7 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpwcXWMT/prova-V1_D3_S10_260728T085318_1a412dfc6e1f
+#> /tmp/Rtmpm1iq2G/prova-V1_D3_S10_260728T131542_19fb5d90fd2e
 #> **********************************************************
 
 ## Check structure of `K` object:
@@ -548,5 +548,6 @@ str(K)
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
 #>   ..$ quantile width     : Named num [1:4] 0.0585 0.231 0.1549 0.5406
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
+#>  - attr(*, "class")= chr "K"
 # }
 ```

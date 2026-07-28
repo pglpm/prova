@@ -182,6 +182,5 @@ probs <- Pr(Y = valuesBill, K = K, parallel = 1)
 
 ## plot the probabilities and quantiles
 plot(probs)
-#> named list()
 
 ```

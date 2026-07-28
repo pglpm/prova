@@ -100,8 +100,9 @@ qPr(
 
 - keepYX:
 
-  Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in
-  the output? This is used for the plot method.
+  Logical, default `TRUE`: keep a copy of the `Yname` and `X` arguments
+  in the output? This is used for
+  [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md).
 
 - tol:
 
@@ -123,7 +124,9 @@ A list of the following elements:
 - `$samples` (possibly `NULL`): an array with the revisability samples
   (3rd dimension of the array) for such quantiles.
 
-- `$Y`, `$X`: copies of the `Y` and `X` arguments.
+- `$Y`, `$X` `$tails`: copies of the `Y`, `X`, `tails` arguments.
+
+- `$K`: name of the `K` object used in the calculation.
 
 ## Details
 
@@ -188,14 +191,12 @@ quants$values
 #>     0.5  44.3
 #>     0.75 48.3
 
-## verify these values using Pr():
+## verify these values, within numerical error, using Pr():
 probs <- Pr(
   Y = data.frame(bill_len = c(quants$values)),
   tails = list(bill_len = -1),
   K = K, parallel = 1
 )
-
-## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
 probs$values
 #>          
 #> bill_len<      [,1]
@@ -249,14 +250,12 @@ quants$values
 #>     0.5    38.8
 #>     0.75   40.6
 
-## verify these values using Pr():
+## verify these values, within numerical error, using Pr():
 probs <- Pr(
   Y = data.frame(bill_len = c(quants$values)),
   X = data.frame(species = 'Adelie'),
   tails = list(bill_len = -1),
   K = K, parallel = 1)
-
-## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
 probs$values
 #>          |species
 #> bill_len<    Adelie

@@ -710,7 +710,6 @@ object:
 ``` r
 
 plot(Fspecies10)
-# named list()
 ```
 
 ![\*\*Estimates and uncertainty of relative frequencies of penguin
@@ -871,6 +870,7 @@ function to display values and quantiles together:
 ``` r
 
 print(Fspecies10)
+# [1] "matrix" "array" 
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
 #   Adelie    0.2987 0.0018 0.1218 0.2072 0.3763 0.5068
@@ -901,6 +901,7 @@ X <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
 imputeddata <- Pr(Y = Yimp, X = X, K = K10, parallel = 4)
 
 print(imputeddata)
+# [1] "array"
 # , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007
 # 
 #         probability
@@ -933,7 +934,6 @@ X <- X[, !is.na(X)]
 imputeddata <- Pr(Y = Yimp, X = X, K = K10, parallel = 4)
 
 plot(imputeddata)
-# named list()
 ```
 
 ![](figure/imputation6-1.svg)
@@ -1008,6 +1008,7 @@ Fspeciessex10 <- Pr(
 ## Display the estimated frequencies of all six combinations,
 ## as well as their credibility intervals
 print(Fspeciessex10)
+# [1] "matrix" "array" 
 #                   probability
 # species,sex        value  +/-    Q5.5%   Q25%    Q75%   Q94.5%
 #   Adelie,female    0.1634 0.0013 0.0508  0.0984  0.2153 0.3193
@@ -1078,7 +1079,6 @@ frequencies and their uncertainties can again be visualized by calling
 ``` r
 
 plot(Fspecies10I, col = 5:6)
-# named list()
 ```
 
 ![\*\*Estimates and uncertainty of conditional
@@ -1097,6 +1097,7 @@ precise values are contained in the `values` element of the
 ``` r
 
 print(Fspecies10I)
+# [1] "array"
 # , , |island = Biscoe
 # 
 #            probability
@@ -1190,6 +1191,7 @@ function as usual:
 ``` r
 
 print(Fspecies10I)
+# [1] "array"
 # , , |island = Biscoe
 # 
 #            probability
@@ -1454,7 +1456,6 @@ species. Let’s plot the new estimates and their credibility intervals:
 ``` r
 
 plot(Fspecies60)
-# named list()
 ```
 
 ![\*\*Updated frequency estimates of penguin
@@ -1475,11 +1476,9 @@ ymax <- max(Fspecies10$quantiles, Fspecies60$quantiles)
 
 plot(Fspecies10, ylim = c(0, ymax),
     col = 2, lty = 2, lwd = 3, pch = 2) ## distinguish the two plots
-# named list()
 
 plot(Fspecies60, ylim = c(0, ymax), add = TRUE,
     col = 1, lty = 1, lwd = 2, pch = 1) ## distinguish the two plots
-# named list()
 
 legend('top', c('10 samples', '60 samples'),
     col = 2:1, lty = 2:1, pch = 2:1, bty = 'n')
@@ -1552,6 +1551,7 @@ is as follows:
 ``` r
 
 print(Fspecies60)
+# [1] "matrix" "array" 
 #            probability
 # species     value   +/-     Q5.5%  Q25%   Q75%   Q94.5%
 #   Adelie    0.3950  0.0010  0.2960 0.3522 0.4357 0.4976
@@ -1838,7 +1838,6 @@ and also their probability distributions:
 ``` r
 
 plot(Fspeciesall, ylim = c(0, 1))
-# named list()
 ```
 
 ![](figure/visall-1.svg)
@@ -1859,6 +1858,7 @@ be extracted from the `Fspeciesall` in the usual way:
 ``` r
 
 print(Fspeciesall)
+# [1] "matrix" "array" 
 #            probability
 # species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
 #   Adelie    0.44171 0.00041 0.39809 0.42309 0.46035 0.48378
@@ -1952,6 +1952,7 @@ hist(Fanalysis, xlim = c(0, 1), col = 2:4, ## same colours as before!
 
 
 print(Fanalysis)
+# [1] "array"
 # , , |island = Biscoe
 # 
 #            probability
@@ -2017,6 +2018,7 @@ hist(Fanalysis, xlim = c(0, 1), col = 5:7,
 
 
 print(Fanalysis)
+# [1] "array"
 # , , |species = Adelie
 # 
 #            probability
@@ -2074,7 +2076,6 @@ species
 ``` r
 
 plot(Fanalysis, col = 2:4, legend = 'topright')
-# named list()
 ```
 
 ![](figure/unnamed-chunk-10-1.svg)

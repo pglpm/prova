@@ -208,6 +208,7 @@ shows that its probability is around 0.3%:</p>
 <span>    K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span>
+<span><span class="co"># [1] "character"</span></span>
 <span><span class="co">#    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% </span></span>
 <span><span class="co"># 0.003085 0.000061 0.000408 0.001174 0.004149  0.00825</span></span></code></pre></div>
 <p><br>
@@ -532,7 +533,7 @@ several quantities; the mutual information is given in the
 element:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">MIislandspecies</span><span class="op">$</span><span class="va">value</span></span>
-<span><span class="co"># [1] 0.625043</span></span>
+<span><span class="co"># [1] 0.628277</span></span>
 <span></span>
 <span><span class="va">MIislandspecies</span><span class="op">$</span><span class="va">unit</span></span>
 <span><span class="co"># [1] "Sh"</span></span></code></pre></div>
@@ -593,13 +594,13 @@ have</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">MIislandspecies</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'value'</span>, <span class="st">'unit'</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co"># $value</span></span>
-<span><span class="co"># [1] 0.625043</span></span>
+<span><span class="co"># [1] 0.628277</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># $unit</span></span>
 <span><span class="co"># [1] "Sh"</span></span>
 <span></span>
 <span><span class="va">MIislandspecies</span><span class="op">$</span><span class="va">rGauss</span></span>
-<span><span class="co"># [1] 0.7613</span></span></code></pre></div>
+<span><span class="co"># [1] 0.762534</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="mutual-information-for-previous-examples">Mutual information for previous examples<a class="anchor" aria-label="anchor" href="#mutual-information-for-previous-examples"></a>
@@ -818,7 +819,7 @@ probability?”. The answer was already calculated by
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">MIislandspecies</span><span class="op">)</span></span>
 <span><span class="co"># value/Sh    Q5.5%     Q25%     Q75%   Q94.5% </span></span>
-<span><span class="co">#   0.6250     0.16     0.47     0.82      1.0</span></span></code></pre></div>
+<span><span class="co">#   0.6283     0.16     0.47     0.82      1.0</span></span></code></pre></div>
 <p>which shows that, acquiring more data, we can expect with 89%
 probability a mutual information between 0.16 Sh and 1 Sh. We can also
 visualize our uncertainty about this “long-run” mutual information by

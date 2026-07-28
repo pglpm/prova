@@ -39,6 +39,8 @@
   : Plot an object of class "probability"
 - [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) : Plot
   numeric or character values
+- [`print(`*`<K>`*`)`](https://pglpm.github.io/prova/reference/print.K.md)
+  : Print summary of a "Knowledge" object
 - [`print(`*`<mi>`*`)`](https://pglpm.github.io/prova/reference/print.mi.md)
   : Print an object of class "mi" (mutual information)
 - [`print(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/print.probability.md)
