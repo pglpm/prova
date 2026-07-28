@@ -29,7 +29,7 @@
 #' @param border Border colour for bands in plots of `type = 'q'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
 #' @param grid Logical, default `TRUE`: plot a light grid?
 #' @param lwd.grid Numeric, default 1: width of grid lines.
-#' @param col.grid Color of grid lines, default `'#BBBBBB80'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()].
+#' @param col.grid Color of grid lines, default `'#00000022'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()].
 #' @param lty,lwd,pch,lend,col,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()]; defaults are different (see "Usage").
 #' @param ... Other parameters to be passed to [graphics::matplot()].
 #'
@@ -96,7 +96,7 @@ pplot <- function(
     border = NA,
     grid = TRUE,
     lwd.grid = NULL,
-    col.grid = '#BBBBBB80',
+    col.grid = '#00000022',
     axes = FALSE,
     cex.main = 1,
     ...
@@ -475,7 +475,7 @@ plot.probability <- function(
     alpha.f = 1,
     grid = TRUE,
     lwd.grid = NULL,
-    col.grid = '#BBBBBB80',
+    col.grid = '#00000022',
     axes = FALSE,
     ylab2 = NULL,
     main = NULL,

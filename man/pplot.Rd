@@ -26,7 +26,7 @@ pplot(
   border = NA,
   grid = TRUE,
   lwd.grid = NULL,
-  col.grid = "#BBBBBB80",
+  col.grid = "#00000022",
   axes = FALSE,
   cex.main = 1,
   ...
@@ -55,7 +55,7 @@ pplot(
 
 \item{lwd.grid}{Numeric, default 1: width of grid lines.}
 
-\item{col.grid}{Color of grid lines, default \code{'#BBBBBB80'}. Can be specified in any of the usual ways, see for instance \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
+\item{col.grid}{Color of grid lines, default \code{'#00000022'}. Can be specified in any of the usual ways, see for instance \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}.}
 
 \item{...}{Other parameters to be passed to \code{\link[graphics:matplot]{graphics::matplot()}}.}
 }
