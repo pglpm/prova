@@ -41,6 +41,8 @@ K <- learn(data = penguins, metadata = meta_penguins)
 # [progress output about the learning computation]
 ```
 
+The object `K` (for "0`K`nowledge" or "`K`nown") encodes what has been learnt from data and metadata.
+
 Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 45 mm? In symbols,
 
 $$
