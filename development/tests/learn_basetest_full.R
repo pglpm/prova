@@ -5,7 +5,7 @@ set.seed(16)
 parallel <- 8
 
 outputdir <- 'testbase_full'
-learntdir <- learn(
+Kdir <- learn(
     data = 'data_basetest.csv',
     metadata = 'metadata_basetest.csv',
     # nsamples = 200,
