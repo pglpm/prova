@@ -630,6 +630,7 @@
     temp <- colSums(exp(lprobY2 + lprobnorm)) / celprobnorm
     pY2 <- mean(temp, na.rm = TRUE)
     fY2 <- temp[thisid]
+    rm(temp)
 
     c(
         pMI = log(pY1and2) - log(pY1) - log(pY2),

@@ -139,16 +139,19 @@ pplot <- function(
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all x are numeric, find common min max
         xcha <- FALSE
-        temp <- unlist(x, recursive = FALSE, use.names = FALSE)
-        temp <- temp[is.finite(temp)]
-        rgx <- range(temp)
+        rgx <- unlist(x, recursive = FALSE, use.names = FALSE)
+        rgx <- rgx[is.finite(rgx)]
+        rgx <- range(rgx)
+        rm(temp)
     } else if(all(vapply(X = x[!xnull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all x are character, find domain
         xcha <- TRUE
-        temp <- unlist(x, recursive = FALSE, use.names = FALSE)
-        temp <- temp[!is.na(temp)]
-        if(is.null(xdomain)){ xdomain <- unique(temp) }
+        if(is.null(xdomain)){
+            xdomain <- unlist(x, recursive = FALSE, use.names = FALSE)
+            xdomain <- xdomain[!is.na(xdomain)]
+            xdomain <- unique(xdomain)
+        }
         rgx <- c(1, length(xdomain))
     } else {
         stop("Elements in 'x' must be all numeric or all character.")
@@ -161,16 +164,18 @@ pplot <- function(
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all y are numeric, find common min max
         ycha <- FALSE
-        temp <- unlist(y, recursive = FALSE, use.names = FALSE)
-        temp <- temp[is.finite(temp)]
-        rgy <- range(temp)
+        rgy <- unlist(y, recursive = FALSE, use.names = FALSE)
+        rgy <- rgy[is.finite(rgy)]
+        rgy <- range(rgy)
     } else if(all(vapply(X = y[!ynull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all y are character, find domain
         ycha <- TRUE
-        temp <- unlist(y, recursive = FALSE, use.names = FALSE)
-        temp <- temp[!is.na(temp)]
-        if(is.null(ydomain)){ ydomain <- unique(temp) }
+        if(is.null(ydomain)){
+            ydomain <- unlist(y, recursive = FALSE, use.names = FALSE)
+            ydomain <- ydomain[!is.na(ydomain)]
+            ydomain <- unique(ydomain)
+        }
         rgy <- c(1, length(ydomain))
     } else {
         stop("Elements in 'y' must be all numeric or all character.")
@@ -185,6 +190,7 @@ pplot <- function(
         x[xnull] <- temp
         rgx[1] <- min(rgx[1], unlist(temp), na.rm = TRUE)
         rgx[2] <- max(rgx[2], unlist(temp), na.rm = TRUE)
+        rm(temp)
     }
     if(any(ynull)){
         temp <- lapply(
@@ -194,6 +200,7 @@ pplot <- function(
         y[ynull] <- temp
         rgy[1] <- min(rgy[1], unlist(temp), na.rm = TRUE)
         rgy[2] <- max(rgy[2], unlist(temp), na.rm = TRUE)
+        rm(temp)
     }
 
     ## Other NAs
