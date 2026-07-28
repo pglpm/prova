@@ -47,7 +47,7 @@ $$
 \mathrm{P}(\texttt{\small species}\mathrel{\negthinspace=\negthinspace}
 \text{\small Adelie}
 \nonscript\thinspace\thinspace\vert\nonscript\thinspace\thinspace\mathopen{}
-\texttt{\small bill\_len}\mathrel{\negthinspace=\negthinspace}
+\texttt{\small bill\\_len}\mathrel{\negthinspace=\negthinspace}
 \text{\small 45\thinspace mm}
 ,
 K)
