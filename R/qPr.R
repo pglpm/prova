@@ -57,14 +57,12 @@
 #' ## display the quantile values
 #' quants$values
 #'
-#' ## verify these values using Pr():
+#' ## verify these values, within numerical error, using Pr():
 #' probs <- Pr(
 #'   Y = data.frame(bill_len = c(quants$values)),
 #'   tails = list(bill_len = -1),
 #'   K = K, parallel = 1
 #' )
-#'
-#' ## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
 #' probs$values
 #'
 #' ## display the revisability about the quantiles
@@ -84,14 +82,12 @@
 #' ## display the quantile values
 #' quants$values
 #'
-#' ## verify these values using Pr():
+#' ## verify these values, within numerical error, using Pr():
 #' probs <- Pr(
 #'   Y = data.frame(bill_len = c(quants$values)),
 #'   X = data.frame(species = 'Adelie'),
 #'   tails = list(bill_len = -1),
 #'   K = K, parallel = 1)
-#'
-#' ## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
 #' probs$values
 #' }
 #'
