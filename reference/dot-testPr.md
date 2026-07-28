@@ -11,7 +11,7 @@ function does not do consistency checks of its arguments.
 ## Usage
 
 ``` r
-.testPr(Y, X = NULL, learnt, tails = NULL)
+.testPr(Y, X = NULL, K, tails = NULL)
 ```
 
 ## Arguments
@@ -24,10 +24,10 @@ function does not do consistency checks of its arguments.
 
   named list of values; list names must be valid variate names.
 
-- learnt:
+- K:
 
   Either a character with the name of a directory or full path for a
-  'learnt.rds' object, produced by the
+  'K.rds' object, produced by the
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function, or such an object itself.
 

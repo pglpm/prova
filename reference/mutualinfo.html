@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
 <span>  <span class="va">Y1names</span>,</span>
 <span>  <span class="va">Y2names</span>,</span>
 <span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">learnt</span>,</span>
+<span>  <span class="va">K</span>,</span>
 <span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.055</span>, <span class="fl">0.25</span>, <span class="fl">0.75</span>, <span class="fl">0.945</span><span class="op">)</span>,</span>
 <span>  ns <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -81,9 +81,8 @@
 <dd><p>Matrix or data.frame or <code>NULL</code>: values of some variates conditional on which we want the probabilities.</p></dd>
 
 
-<dt id="arg-learnt">learnt<a class="anchor" aria-label="anchor" href="#arg-learnt"></a></dt>
-<dd><p>Either a character with the name of a directory or full path
-for an 'learnt.rds' object, or such an object itself.</p></dd>
+<dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
+<dd><p>Either a character with the name of a directory or full path for an 'K.rds' object, or such an object itself.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
@@ -95,11 +94,11 @@ for an 'learnt.rds' object, or such an object itself.</p></dd>
 
 
 <dt id="arg-ns">ns<a class="anchor" aria-label="anchor" href="#arg-ns"></a></dt>
-<dd><p>Integer or <code>Inf</code> or <code>NULL</code> (default): number of Monte Carlo samples in the "learnt" object to use for calculating the mutual information. If <code>Inf</code> or <code>NULL</code>, use all Monte Carlo samples available in the "learnt" object.</p></dd>
+<dd><p>Integer or <code>Inf</code> or <code>NULL</code> (default): number of Monte Carlo samples in the "K" object to use for calculating the mutual information. If <code>Inf</code> or <code>NULL</code>, use all Monte Carlo samples available in the "K" object.</p></dd>
 
 
 <dt id="arg-nv">nv<a class="anchor" aria-label="anchor" href="#arg-nv"></a></dt>
-<dd><p>Integer, default 12: number of <em>duplicates</em> of Monte Carlo samples in the "learnt" object to use for calculating the revisability of the mutual information.</p></dd>
+<dd><p>Integer, default 12: number of <em>duplicates</em> of Monte Carlo samples in the "K" object to use for calculating the revisability of the mutual information.</p></dd>
 
 
 <dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
@@ -146,18 +145,18 @@ an expression which can also be written in several other equivalent ways. It is 
     <div class="dont-index"><p><code><a href="print.mi.html">print.mi()</a></code> ] to plot mutual information and quantiles calculated by <code>mutualinfo()</code></p>
 <p><code><a href="hist.mi.html">hist.mi()</a></code> to plot the revisability of the mutual information.</p>
 <p><code><a href="Pr.html">Pr()</a></code> to calculate probabilities and their revisability.</p>
-<p><code><a href="learn.html">learn()</a></code>, which generates the <code>learnt</code> objects required by <code>mutualinfo()</code>.</p></div>
+<p><code><a href="learn.html">learn()</a></code>, which generates the <code>K</code> objects required by <code>mutualinfo()</code>.</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Load the example `learnt` object calculated from the "penguins" dataset;</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Load the example `K`nowledge object calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
-<span class="r-in"><span><span class="va">learnt</span> <span class="op">&lt;-</span> <span class="va">learntExample</span></span></span>
+<span class="r-in"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="va">Kexample</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## mutual information between variates 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span><span class="va">MI</span> <span class="op">&lt;-</span> <span class="fu">mutualinfo</span><span class="op">(</span>Y1names <span class="op">=</span> <span class="st">'species'</span>, Y2names <span class="op">=</span> <span class="st">'bill_len'</span>,</span></span>
-<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span>, nv <span class="op">=</span> <span class="fl">2</span>, parallel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  K <span class="op">=</span> <span class="va">K</span>, nv <span class="op">=</span> <span class="fl">2</span>, parallel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## The value and its numerical Monte Carlo error</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">MI</span><span class="op">$</span><span class="va">value</span>, <span class="va">MI</span><span class="op">$</span><span class="va">MCaccuracy</span><span class="op">)</span></span></span>

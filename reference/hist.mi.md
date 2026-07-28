@@ -91,13 +91,13 @@ to plot mutual information and quantiles calculated by
 ## Examples
 
 ``` r
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## calculate the mutual information and its revisability
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-  learnt = learnt, nv = 2, parallel = 1)
+  K = K, nv = 2, parallel = 1)
 
 ## show the possible revisability of the mutual information,
 ## if a much larger data sample were collected

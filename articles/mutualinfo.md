@@ -85,22 +85,22 @@ if(!exists('penguins')){
 We assume that we have already learned all predictive information from
 this dataset by means of the **Prova** function
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md). This
-information is stored in a “learnt” object, which is either loaded in
-memory, or stored in the compressed file `learnt.rds` within the output
+information is stored in a `K`nowledge object, which is either loaded in
+memory, or stored in the compressed file `K.rds` within the output
 directory that was specified in the
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function.
 For your convenience the object produced by the computation mentioned
 above can be downloaded as the file
-[`learntall.rds`](https://github.com/pglpm/prova/raw/main/vignettes/learntall.rds).
+[`Kall.rds`](https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds).
 Once you have downloaded it in your working directory you can just set
 
 ``` r
 
-learnt <- 'learntall.rds'
+K <- 'Kall.rds'
 ```
 
-in this case `learnt` is just a character string pointing to the file
-containing the actual “learnt” object.
+in this case `K` is just a character string pointing to the file
+containing the actual “K”nowledge object.
 
 ### Generating new samples
 
@@ -108,14 +108,14 @@ Let’s focus on the `island` and `species` variates. Each variate has
 three possible values; **Prova**’s utility function
 [`vrtgrid()`](https://pglpm.github.io/prova/reference/vrtgrid.md) allows
 us to create a vector of all possible values of each variate, which are
-stored in the metadata of the `learnt` object:
+stored in the metadata of the `K` object:
 
 ``` r
 
-islandvalues <- unlist(vrtgrid(vrt = 'island', learnt = learnt))
+islandvalues <- unlist(vrtgrid(vrt = 'island', K = K))
 # [1] "Biscoe"    "Dream"     "Torgersen"
 
-speciesvalues <- unlist(vrtgrid(vrt = 'species', learnt = learnt))
+speciesvalues <- unlist(vrtgrid(vrt = 'species', K = K))
 # [1] "Adelie"    "Chinstrap" "Gentoo"
 ```
 
@@ -163,7 +163,7 @@ that its probability is around 0.3%:
 ``` r
 
 prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'),
-    learnt = learnt)
+    K = K)
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
@@ -188,8 +188,8 @@ instance to produce a scatter plot. The main arguments of
   variates jointly.
 - `X`: data frame of variate values to restrict the sampling to specific
   subpopulations.
-- `learnt`: the object that points to the computation made with the
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
+- `K`: the object that encodes the `K`nowledge from the computation made
+  with the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function.
 
 Let’s first generate 5 samples from the estimated whole population of
@@ -200,7 +200,7 @@ penguins, as an example:
 rPr(
     n = 5,
     Ynames = c('island', 'species'),
-    learnt = learnt
+    K = K
 )
 #        island   species
 # 644_1   Dream Chinstrap
@@ -211,14 +211,14 @@ rPr(
 ```
 
 The rows of the resulting data frame are named according to the Monte
-Carlo samples used from the `learnt` object; they can be useful for
-peculiar studies but we can completely ignore them in the present case.
+Carlo samples used from the `K` object; they can be useful for peculiar
+studies but we can completely ignore them in the present case.
 
 Now let’s generate 2000 samples, and then plot them in a scatter plot:
 
 ``` r
 
-samples <- rPr(n = 2000, Ynames = c('island', 'species'), learnt = learnt)
+samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
 
 pplot(x = samples$island, y = samples$species,
     type = 'p', xlab = 'island', ylab = 'species',
@@ -252,9 +252,9 @@ data previously observed:
 
 ``` r
 
-body_massrange <- range(vrtgrid(vrt = 'body_mass', learnt = learnt))
+body_massrange <- range(vrtgrid(vrt = 'body_mass', K = K))
 
-samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), learnt = learnt)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
 
 pplot(x = samples$body_mass, y = samples$species,
     type = 'p', xlab = 'body mass / g', ylab = 'species',
@@ -283,9 +283,9 @@ two continuous variates, such as body mass and bill length (`bill_len`):
 
 ``` r
 
-bill_lenrange <- range(vrtgrid(vrt = 'bill_len', learnt = learnt))
+bill_lenrange <- range(vrtgrid(vrt = 'bill_len', K = K))
 
-samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), learnt = learnt)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
@@ -324,19 +324,19 @@ samplesAdelie <- rPr(
     n = 1000,
     Ynames = c('body_mass', 'bill_len'),
     X = data.frame(species = 'Adelie'),
-    learnt = learnt)
+    K = K)
 
 samplesChinstrap <- rPr(
     n = 1000,
     Ynames = c('body_mass', 'bill_len'),
     X = data.frame(species = 'Chinstrap'),
-    learnt = learnt)
+    K = K)
 
 samplesGentoo <- rPr(
     n = 1000,
     Ynames = c('body_mass', 'bill_len'),
     X = data.frame(species = 'Gentoo'),
-    learnt = learnt)
+    K = K)
 ```
 
 Now we plot these samples together with
@@ -501,8 +501,8 @@ joint variates. Its main arguments are the following:
   information is calculated between these two sets.
 - `X`: data frame of variate values to restrict the calculation to
   specific subpopulations.
-- `learnt`: the object that points to the computation made with the
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
+- `K`: the object that encodes the `K`nowledge from the computation made
+  with the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function.
 - Optionally, `unit`: the mutual information unit; default “shannons”
   (Sh).
@@ -520,7 +520,7 @@ Let’s calculate the mutual information between the variates `island` and
 
 MIislandspecies <- mutualinfo(
     Y1names = 'island', Y2names = 'species',
-    learnt = learnt,
+    K = K,
     parallel = 4 ## let's use 4 cores
 )
 ```
@@ -621,7 +621,7 @@ mi <- signif(MIislandspecies$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIislandspecies$rGauss, digits = 2)
 
-samples <- rPr(n = 2000, Ynames = c('island', 'species'), learnt = learnt)
+samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
 
 pplot(x = samples$island, y = samples$species,
     type = 'p', xlab = 'island', ylab = 'species',
@@ -643,7 +643,7 @@ Calculation of mutual info:
 
 MIbodymassspecies <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'species',
-    learnt = learnt
+    K = K
 )
 ```
 
@@ -657,7 +657,7 @@ mi <- signif(MIbodymassspecies$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
-samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), learnt = learnt)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
 
 pplot(x = samples$body_mass, y = samples$species,
     type = 'p', xlab = 'body mass / g', ylab = 'species',
@@ -679,7 +679,7 @@ Calculation of mutual information:
 
 MIbodymassbilllen <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
-    learnt = learnt
+    K = K
 )
 ```
 
@@ -693,7 +693,7 @@ mi <- signif(MIbodymassbilllen$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 
-samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), learnt = learnt)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
@@ -746,19 +746,19 @@ computation could take half an hour):
 MIadelie <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Adelie'), ## choose subpopulation
-    learnt = learnt
+    K = K
 )
 
 MIchinstrap <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Chinstrap'), ## choose subpopulation
-    learnt = learnt
+    K = K
 )
 
 MIgentoo <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     X = data.frame(species = 'Gentoo'), ## choose subpopulation
-    learnt = learnt
+    K = K
 )
 ```
 

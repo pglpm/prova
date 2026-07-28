@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vrtgrid</span><span class="op">(</span><span class="va">vrt</span>, <span class="va">learnt</span>, length.out <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vrtgrid</span><span class="op">(</span><span class="va">vrt</span>, <span class="va">K</span>, length.out <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -61,8 +61,8 @@
 <dd><p>Character vector: names of the variates; they must match variate names in the <code>metadata</code> file provided to the <code><a href="learn.html">learn()</a></code> function.</p></dd>
 
 
-<dt id="arg-learnt">learnt<a class="anchor" aria-label="anchor" href="#arg-learnt"></a></dt>
-<dd><p>Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the <code><a href="learn.html">learn()</a></code> function, or such an object itself.</p></dd>
+<dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
+<dd><p>Either a character with the name of a directory or full path for a 'K.rds' object, produced by the <code><a href="learn.html">learn()</a></code> function, or such an object itself.</p></dd>
 
 
 <dt id="arg-length-out">length.out<a class="anchor" aria-label="anchor" href="#arg-length-out"></a></dt>
@@ -75,7 +75,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The value ranges are based on the information from data and metadata stored in the <code>learnt</code> object (see <code><a href="learn.html">learn()</a></code>) provided in the <code>learnt =</code> argument; they include, and extend slightly beyond, the ranges observed in the data used in the <code><a href="learn.html">learn()</a></code> function. Variate domains are always respected.</p>
+    <p>The value ranges are based on the information from data and metadata stored in the <code>K</code>nowledge object (see <code><a href="learn.html">learn()</a></code>) provided in the <code>K =</code> argument; they include, and extend slightly beyond, the ranges observed in the data used in the <code><a href="learn.html">learn()</a></code> function. Variate domains are always respected.</p>
 <p>The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see <a href="metadatatemplate.html">metadata</a>):</p><ul><li><p>For a discrete (nominal or ordinal) variate, all possible values are chosen.</p></li>
 <li><p>For a continuous, <em>non-rounded</em> variate, a number of values as specified in the <code>length.out</code> argument; or 129 values if <code>length.out</code> is missing or <code>NA</code>.</p></li>
 <li><p>For a continuous, <em>rounded</em> variate, a number of values as specified in the <code>length.out</code> argument; or, if <code>length.out</code> is missing or <code>NA</code>, the output values are separated by the variates's rounding interval (field <code>datastep</code> in the <code><a href="metadatatemplate.html">metadata</a></code>).</p></li>
@@ -83,7 +83,7 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, which generates the <code>learnt</code> objects required by <code>vrtgrid()</code>.</p>
+    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, which generates the <code>K</code> objects required by <code>vrtgrid()</code>.</p>
 <p><code><a href="Pr.html">Pr()</a></code> to calculate probabilities and their revisabilities.</p>
 <p><code><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">base::expand.grid()</a></code> to create a data frame with combination of specified values of several variates.</p>
 <p><code><a href="plot.probability.html">plot.probability()</a></code> to plot probabilities and quantiles calculated by <code><a href="Pr.html">Pr()</a></code>.</p></div>
@@ -91,13 +91,13 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Load the example `learnt` object calculated from the "penguins" dataset;</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Load the example `K`nowledge object calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
-<span class="r-in"><span><span class="va">learnt</span> <span class="op">&lt;-</span> <span class="va">learntExample</span></span></span>
+<span class="r-in"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="va">Kexample</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## set of values for the variate "species";</span></span></span>
 <span class="r-in"><span><span class="co">## since this variate is of a nominal kind, all values are included</span></span></span>
-<span class="r-in"><span><span class="va">valuesSpecies</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'species'</span>, learnt <span class="op">=</span> <span class="va">learnt</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">valuesSpecies</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'species'</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valuesSpecies</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     species</span>
@@ -107,7 +107,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## create a small set of values for the variate "bill length";</span></span></span>
 <span class="r-in"><span><span class="co">## this variate is continuous and rounded</span></span></span>
-<span class="r-in"><span><span class="va">valuesBill</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'bill_len'</span>, learnt <span class="op">=</span> <span class="va">learnt</span>, length.out <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">valuesBill</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'bill_len'</span>, K <span class="op">=</span> <span class="va">K</span>, length.out <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valuesBill</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   bill_len</span>
@@ -118,12 +118,12 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## calculate the conditional probabilities for the 'bill_len' values above,</span></span></span>
 <span class="r-in"><span><span class="co">## given the values of 'species'</span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">valuesBill</span>, X <span class="op">=</span> <span class="va">valuesSpecies</span>, learnt <span class="op">=</span> <span class="va">learnt</span>, parallel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">valuesBill</span>, X <span class="op">=</span> <span class="va">valuesSpecies</span>, K <span class="op">=</span> <span class="va">K</span>, parallel <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Create a data frame with all possible combinations of the values above;</span></span></span>
 <span class="r-in"><span><span class="co">## the 'length.out' argument does not apply to the discrete variate 'species'</span></span></span>
-<span class="r-in"><span><span class="va">valuesAll</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span>vrt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'species'</span>, <span class="st">'bill_len'</span><span class="op">)</span>, learnt <span class="op">=</span> <span class="va">learnt</span>, length.out <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">valuesAll</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span>vrt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'species'</span>, <span class="st">'bill_len'</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">K</span>, length.out <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valuesAll</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      species bill_len</span>

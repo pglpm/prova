@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9">
-<p><img src="reference/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"></p>
+<p><img src="reference/figures/prova_logo.jpg" alt="Ensemble of densities" width="100%"></p>
 <p>“prova” /’prɔva/ (Italian)</p>
 <ul>
 <li>
@@ -102,14 +102,24 @@
 <p>Use the <a href="https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html" class="external-link">R <code>penguins</code> dataset</a> (or download a shuffled version from <a href="https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv" class="external-link">here</a>), together with the metadata <code>meta_penguins</code> available in <strong>Prova</strong>. Metadata contain the characteristics of the dataset’s variates.</p>
 <p>“Learn” from this dataset using the function <code><a href="reference/learn.html">learn()</a></code>. Note that the dataset has partially missing values (datapoint #4 for instance), but this is not a problem for <strong>Prova</strong>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">learnt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/learn.html">learn</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, metadata <span class="op">=</span> <span class="va">meta_penguins</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/learn.html">learn</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, metadata <span class="op">=</span> <span class="va">meta_penguins</span><span class="op">)</span></span>
 <span><span class="co"># [progress output about the learning computation]</span></span></code></pre></div>
-<p>Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a <em>new</em> penguin from this population is of species <em>Adélie</em>, if its bill length is 45 mm? To answer this question we use the function <code><a href="reference/Pr.html">Pr()</a></code>, and print a summary of the result:</p>
+<p>Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a <em>new</em> penguin from this population is of species <em>Adélie</em>, if its bill length is 45 mm? In symbols,</p>
+<p><span class="math display">\[
+\mathrm{P}(\texttt{\small species}\mathrel{\negthinspace=\negthinspace}
+\text{\small Adelie}
+\nonscript\thinspace\vert\nonscript\thinspace\mathopen{}
+\texttt{\small bill\\_len}\mathrel{\negthinspace=\negthinspace}
+\text{\small 45\thinspace mm}
+,
+K)
+\]</span></p>
+<p>where <span class="math inline">\(K\)</span> stands for the knowledge acquired from data and metadata. To answer this question, use the function <code><a href="reference/Pr.html">Pr()</a></code>, and print a summary of the result:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="co"># predictand</span></span>
 <span>    X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">45</span><span class="op">)</span>,      <span class="co"># predictor</span></span>
-<span>    learnt <span class="op">=</span> <span class="va">learnt</span>                     <span class="co"># learned data</span></span>
+<span>    K <span class="op">=</span> <span class="va">K</span>                               <span class="co"># Knowledge from data &amp; metadata</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span>
@@ -129,7 +139,7 @@
 <code class="sourceCode R"><span><span class="va">invprob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">30</span><span class="op">:</span><span class="fl">50</span><span class="op">)</span>,   <span class="co"># predictand</span></span>
 <span>    X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="co"># predictor</span></span>
-<span>    learnt <span class="op">=</span> <span class="va">learnt</span>                     <span class="co"># learned data</span></span>
+<span>    K <span class="op">=</span> <span class="va">K</span>                               <span class="co"># knowledge from data &amp; metadata</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">invprob</span><span class="op">)</span></span></code></pre></div>

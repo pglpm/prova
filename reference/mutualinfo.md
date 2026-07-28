@@ -10,7 +10,7 @@ mutualinfo(
   Y1names,
   Y2names,
   X = NULL,
-  learnt,
+  K,
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   ns = NULL,
@@ -36,10 +36,10 @@ mutualinfo(
   Matrix or data.frame or `NULL`: values of some variates conditional on
   which we want the probabilities.
 
-- learnt:
+- K:
 
   Either a character with the name of a directory or full path for an
-  'learnt.rds' object, or such an object itself.
+  'K.rds' object, or such an object itself.
 
 - tails:
 
@@ -59,15 +59,14 @@ mutualinfo(
 - ns:
 
   Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in
-  the "learnt" object to use for calculating the mutual information. If
-  `Inf` or `NULL`, use all Monte Carlo samples available in the "learnt"
-  object.
+  the "K" object to use for calculating the mutual information. If `Inf`
+  or `NULL`, use all Monte Carlo samples available in the "K" object.
 
 - nv:
 
   Integer, default 12: number of *duplicates* of Monte Carlo samples in
-  the "learnt" object to use for calculating the revisability of the
-  mutual information.
+  the "K" object to use for calculating the revisability of the mutual
+  information.
 
 - unit:
 
@@ -168,18 +167,18 @@ plot the revisability of the mutual information.
 probabilities and their revisability.
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the `learnt` objects required by `mutualinfo()`.
+generates the `K` objects required by `mutualinfo()`.
 
 ## Examples
 
 ``` r
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## mutual information between variates 'species' and 'bill_len'
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-  learnt = learnt, nv = 2, parallel = 1)
+  K = K, nv = 2, parallel = 1)
 
 ## The value and its numerical Monte Carlo error
 c(MI$value, MI$MCaccuracy)

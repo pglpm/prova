@@ -3,7 +3,7 @@
 Builds an augmented metadata [data
 frame](https://rdrr.io/r/base/data.frame.html) from the metadata and
 data given to 'learn()'. This augmented metadata object is saved in the
-'learnt' object produced by 'learn()'.
+'K'nowledge object produced by 'learn()'.
 
 ## Usage
 

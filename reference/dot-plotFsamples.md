@@ -7,7 +7,7 @@ Used in 'learn()' to plot diagnostics.
 ``` r
 .plotFsamples(
   filename,
-  learnt,
+  K,
   data,
   plotprobability = TRUE,
   plotvariability = "samples",
@@ -24,10 +24,10 @@ Used in 'learn()' to plot diagnostics.
 
   Character: name of plot output file
 
-- learnt:
+- K:
 
   Either a character with the name of a directory or full path for an
-  'learnt.rds' object, or such an object itself
+  'K.rds' object, or such an object itself
 
 - data:
 

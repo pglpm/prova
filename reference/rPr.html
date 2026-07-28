@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,15 +50,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rPr</span><span class="op">(</span></span>
-<span>  <span class="va">n</span>,</span>
-<span>  <span class="va">Ynames</span>,</span>
-<span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">learnt</span>,</span>
-<span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  mcsamples <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  parallel <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rPr</span><span class="op">(</span><span class="va">n</span>, <span class="va">Ynames</span>, X <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">K</span>, tails <span class="op">=</span> <span class="cn">NULL</span>, mcsamples <span class="op">=</span> <span class="cn">NULL</span>, parallel <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -77,8 +69,8 @@
 <dd><p>List or data.table or <code>NULL</code>: set of values of variates on which we want to condition the joint probability for <code>Y</code>. If <code>NULL</code> (default), no conditioning is made. Any rows beyond the first are discarded</p></dd>
 
 
-<dt id="arg-learnt">learnt<a class="anchor" aria-label="anchor" href="#arg-learnt"></a></dt>
-<dd><p>Either a character with the name of a directory or full path for a 'learnt.rds' object, produced by the <code><a href="learn.html">learn()</a></code> function, or such an object itself.</p></dd>
+<dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
+<dd><p>Either a character with the name of a directory or full path for a 'K.rds' object, produced by the <code><a href="learn.html">learn()</a></code> function, or such an object itself.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
@@ -103,16 +95,16 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, which generates the <code>learnt</code> objects required by <code><a href="qPr.html">qPr()</a></code>.</p>
+    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, which generates the <code>K</code> objects required by <code><a href="qPr.html">qPr()</a></code>.</p>
 <p><code><a href="Pr.html">Pr()</a></code> to calculate joint and conditional probabilities.</p>
 <p><code><a href="qPr.html">qPr()</a></code> to calculate quantiles.</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Load the example `learnt` object calculated from the "penguins" dataset;</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Load the example `K`nowledge object calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
-<span class="r-in"><span><span class="va">learnt</span> <span class="op">&lt;-</span> <span class="va">learntExample</span></span></span>
+<span class="r-in"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="va">Kexample</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 1:</span></span></span>
 <span class="r-in"><span><span class="co">## Generate 10 values of the 'species' variate,</span></span></span>
@@ -121,7 +113,7 @@
 <span class="r-in"><span><span class="va">datapoints</span> <span class="op">&lt;-</span> <span class="fu">rPr</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  n <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>  Ynames <span class="op">=</span> <span class="st">'species'</span>,</span></span>
-<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span></span></span>
+<span class="r-in"><span>  K <span class="op">=</span> <span class="va">K</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">datapoints</span><span class="op">)</span></span></span>
@@ -137,7 +129,7 @@
 <span class="r-in"><span><span class="va">datapoints</span> <span class="op">&lt;-</span> <span class="fu">rPr</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  n <span class="op">=</span> <span class="fl">5</span>,</span></span>
 <span class="r-in"><span>  Ynames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'species'</span>, <span class="st">'bill_len'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span></span></span>
+<span class="r-in"><span>  K <span class="op">=</span> <span class="va">K</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">datapoints</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">## row names give MCMC information</span></span></span>
@@ -158,7 +150,7 @@
 <span class="r-in"><span>  Ynames <span class="op">=</span> <span class="st">'species'</span>,</span></span>
 <span class="r-in"><span>  X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">40</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  learnt <span class="op">=</span> <span class="va">learnt</span></span></span>
+<span class="r-in"><span>  K <span class="op">=</span> <span class="va">K</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">datapoints</span><span class="op">)</span></span></span>

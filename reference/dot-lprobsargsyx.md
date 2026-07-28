@@ -8,5 +8,5 @@ Used in [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md),
 ## Usage
 
 ``` r
-.lprobsargsyx(x, auxmetadata, learnt, tails = NULL, ids = seq_len(nrow(x)))
+.lprobsargsyx(x, auxmetadata, K, tails = NULL, ids = seq_len(nrow(x)))
 ```

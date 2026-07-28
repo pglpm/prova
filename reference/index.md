@@ -2,13 +2,12 @@
 
 ## Learn from data
 
+- [`Kexample`](https://pglpm.github.io/prova/reference/Kexample.md) :
+
+  Example `K`nowledge object produced by learn()
+
 - [`learn()`](https://pglpm.github.io/prova/reference/learn.md) : Monte
   Carlo computation of posterior probability distribution
-
-- [`learntExample`](https://pglpm.github.io/prova/reference/learntExample.md)
-  :
-
-  Example `learnt` object produced by learn()
 
 ## Calculate probabilities & statistics
 

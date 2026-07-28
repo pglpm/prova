@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,7 @@
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cleanup <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  appendinfo <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  valueislearnt <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  valueisK <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  subsampledata <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/missing.html" class="external-link">missing</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>,</span>
 <span>  startupMCiterations <span class="op">=</span> <span class="fl">3600</span>,</span>
@@ -134,8 +134,8 @@
 <dd><p>Logical, default <code>TRUE</code>: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory <code>outputdir</code>? The appended string has the format 'Vn_Dn_Sn_YYMMDDTHHMMSS'.</p></dd>
 
 
-<dt id="arg-valueislearnt">valueislearnt<a class="anchor" aria-label="anchor" href="#arg-valueislearnt"></a></dt>
-<dd><p>Logical or <code>NULL</code>: should the <code>VALUE</code> returned be the <code>learnt</code> object containing the results from the Monte Carlo computation? Default <code>TRUE</code>. If <code>FALSE</code>, then <code>VALUE</code> is the output directory name. If <code>NULL</code>, then <code>VALUE</code> is <code>NULL</code>.</p></dd>
+<dt id="arg-valueisk">valueisK<a class="anchor" aria-label="anchor" href="#arg-valueisk"></a></dt>
+<dd><p>Logical or <code>NULL</code>: should the <code>VALUE</code> returned be the <code>K</code>nowledge object containing the results from the Monte Carlo computation? Default <code>TRUE</code>. If <code>FALSE</code>, then <code>VALUE</code> is the output directory name. If <code>NULL</code>, then <code>VALUE</code> is <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-subsampledata">subsampledata<a class="anchor" aria-label="anchor" href="#arg-subsampledata"></a></dt>
@@ -204,9 +204,9 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A "learnt" object, or name of directory containing such an object and other output files, or <code>NULL</code>, depending on argument <code>valueislearnt</code>.</p>
+    <p>A "knowledge" object, or name of directory containing such an object and other output files, or <code>NULL</code>, depending on argument <code>valueisK</code>.</p>
 <p><code>learn()</code> saves several files in a directory. By default this output directory is a temporary directory within the one used by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">base::tempdir()</a></code>, but an alternative one can be chosen with the argument <code>outputdir =</code>. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:</p><ul><li><p><code>MCtraces.pdf</code>: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file <code>MCtraces.rds</code>.</p></li>
-<li><p><code>plotsamples_learnt.pdf</code>, <code>plotquantiles_learnt.pdf</code>: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).</p></li>
+<li><p><code>plotsamples_learn.pdf</code>, <code>plotquantiles_learn.pdf</code>: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).</p></li>
 <li><p><code>log-1.out</code>, <code>log-2.out</code>, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.</p></li>
 <li><p><code>rng_seed.rds</code>: the state of the pseudorandom seed (see <a href="https://rdrr.io/r/base/Random.html" class="external-link">base::Random</a>) when <code>learn()</code> was called.</p></li>
 <li><p><code>metadata.csv</code>: a copy of the metadata.</p></li>
@@ -215,7 +215,7 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function takes as main inputs a set of data and metadata, and computes the full joint probability distribution for new data, including its "revisability". From this full joint distribution any other distributions of interest can subsequently be computed; see <code><a href="Pr.html">Pr()</a></code> and related functions. This computation can also be interpreted as an estimation of the full joint frequency distribution of the variates in the <em>whole population</em>, beyond the sample data, together with its uncertainty. The computation allows for the use of datapoints with partially missing variables: imputation is automatically made. This imputation is <em>principled</em>, made according to the rules of probability theory.</p>
-<p>The output is a "learnt" object, typically saved in a <code>learnt.rds</code> file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.</p>
+<p>The output is a "knowledge" object, typically saved in a <code>K.rds</code> file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.</p>
 <p>See <code><a href="../articles/intro.html">vignette('intro')</a></code> for introductory examples.</p>
 <p>The computation is "non-parametric": probability or frequency distributions are not assumed to be Gaussian or of any other specific shape; no "model" is assumed. The mathematical representation of the space of joint frequency distributions follows ideas of Dunson &amp; Bhattacharya (2011); see <a href="https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf" class="external-link">technical manual</a> for details.</p>
 <p>The computation is done via Markov-chain Monte Carlo, using the package <a href="https://cran.r-project.org/package=nimble" class="external-link"><strong>Nimble</strong></a>. "Convergence" of the Monte Carlo computation is automatically assessed with methods described in Vehtari &amp; al. (2021) and Kwon &amp; al. (2025); see <a href="https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf" class="external-link">technical manual</a> for details. The default values for convergence require that all of the following three conditions be fulilled:</p><ul><li><p>The computation's numerical error (Monte-Carlo Standard Error) for the posterior probability must be smaller than 4.7% of the standard deviation of the posterior's variability.</p></li>
@@ -275,7 +275,7 @@
 <span class="r-in"><span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'V'</span>, type <span class="op">=</span> <span class="st">'continuous'</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Learn from the data:</span></span></span>
-<span class="r-in"><span><span class="va">learnt</span> <span class="op">&lt;-</span> <span class="fu">learn</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="fu">learn</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">dataset</span>, metadata <span class="op">=</span> <span class="va">metadata</span>,</span></span>
 <span class="r-in"><span>      <span class="co">## the following parameters are unrealistic</span></span></span>
 <span class="r-in"><span>      <span class="co">## only used to reduce computation time for this example</span></span></span>
@@ -285,8 +285,8 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmpx3k9Ho/prova-V1_D3_S10_260728T051124_1a361cd58223</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v1.10.0.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmpa42IrE/prova-V1_D3_S10_260728T085009_1b9e6375e1b7</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v2.0.0.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Registered socket cluster with 1 nodes on host ‘localhost’.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Learning from 3 datapoints, 1 variates.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Monte Carlo sampling of 10 samples by 1 chains</span>
@@ -310,7 +310,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting final Monte Carlo traces and marginal samples...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 34 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 33 secs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.5 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.55 secs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max total memory used: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max memory used per core: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Removing temporary output files.</span>
@@ -318,11 +318,11 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Output saved in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmpx3k9Ho/prova-V1_D3_S10_260728T051124_1a361cd58223</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmpa42IrE/prova-V1_D3_S10_260728T085009_1b9e6375e1b7</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Check structure of `learnt` object:</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">learnt</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Check structure of `K` object:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">K</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ Rmean      : num [1, 1:64, 1:9] -1.047 3.247 2.547 -2.543 -0.296 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ Rsd        : num [1, 1:64, 1:9] 8.224 0.227 1.145 0.638 7.141 ...</span>

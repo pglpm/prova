@@ -5,7 +5,7 @@ Used in 'learn()'.
 ## Usage
 
 ``` r
-.Pcheckpoints(testdata, learnt)
+.Pcheckpoints(testdata, K)
 ```
 
 ## Arguments
@@ -14,7 +14,7 @@ Used in 'learn()'.
 
   List of objects calculated with .prepPcheckpoints
 
-- learnt:
+- K:
 
   mcsamples object
 

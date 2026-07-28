@@ -567,7 +567,7 @@ your computer:
 
 ## set.seed() already called
 
-learnt10 <- learn(
+K10 <- learn(
     data = datafile,
     metadata = meta_penguins, # included in 'Prova'
     outputdir = 'penguin_inference',
@@ -633,25 +633,25 @@ provided.[^2] The inference above, with 10 sample data and 8 variates,
 took around 3 GB and 15 minutes to complete on 4 cores.
 
 The results of this main inference are now stored in the compressed file
-`learnt.rds` (around 32 MB) within the specified output directory. The
-name of this directory is also saved as the final value of the
+`K.rds` (around 32 MB) within the specified output directory. The name
+of this directory is also saved as the final value of the
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function.
-We saved this directory name in the `learnt10` variable in the code
-above, by invoking `learnt10 <- learn(...)`.
+We saved this directory name in the `K10` variable in the code above, by
+invoking `K10 <- learn(...)`.
 
 For your convenience the object produced by the computation above can be
 downloaded as the file
-[`learnt10.rds`](https://github.com/pglpm/prova/raw/main/vignettes/learnt10.rds).
+[`K10.rds`](https://github.com/pglpm/prova/raw/main/vignettes/K10.rds).
 Once you have downloaded it in your working directory you can just
 invoke
 
 ``` r
 
-learnt10 <- 'learnt10.rds'
+K10 <- 'K10.rds'
 ```
 
-which produces an object `learnt10` (just a character string, in this
-case) which can be used in the following analysis.
+which produces an object `K10` (just a character string, in this case)
+which can be used in the following analysis.
 
   
 
@@ -678,10 +678,10 @@ the present question, this function requires three arguments:
 - `Y`: a `data.frame` listing the values of the variate we are
   interested in. In the present case the variate is `species` and the
   values are ‘Adelie’, ‘Chinstrap’, ‘Gentoo’.
-- `learnt`: the object that points to the computation made with the
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
+- `K`: the object that encodes the `K`nowledge from the computation made
+  with the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function, discussed in the previous section. In the present case it’s
-  `learnt10`.
+  `K10`.
 - Optionally, `parallel` specifies how many cores we should use for the
   computation.
 
@@ -695,7 +695,7 @@ Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
 Fspecies10 <- Pr(
     Y = Y,
-    learnt = learnt10,
+    K = K10,
     parallel = 4 ## let's use 4 cores
 )
 ```
@@ -898,7 +898,7 @@ Yimp <- data.frame(sex = c('female', 'male'))
 ## excluding 'sex' variate
 X <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
 
-imputeddata <- Pr(Y = Yimp, X = X, learnt = learnt10, parallel = 4)
+imputeddata <- Pr(Y = Yimp, X = X, K = K10, parallel = 4)
 
 print(imputeddata)
 # , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007
@@ -922,7 +922,7 @@ probability distribution over these values:
 ``` r
 
 ## Generate grid of realistic values for 'bill_len' using vrtgrid()
-Yimp <- vrtgrid(vrt = 'bill_len', learnt = learnt10)
+Yimp <- vrtgrid(vrt = 'bill_len', K = K10)
 
 ## Extract data from datapoint #6 of our dataset 'penguins_shuffled'
 X <- penguins_shuffled[6, ]
@@ -930,7 +930,7 @@ X <- penguins_shuffled[6, ]
 ## drop unknown variates
 X <- X[, !is.na(X)]
 
-imputeddata <- Pr(Y = Yimp, X = X, learnt = learnt10, parallel = 4)
+imputeddata <- Pr(Y = Yimp, X = X, K = K10, parallel = 4)
 
 plot(imputeddata)
 # named list()
@@ -1001,7 +1001,7 @@ Y2 <- expand.grid(
 
 Fspeciessex10 <- Pr(
     Y = Y2,
-    learnt = learnt10,
+    K = K10,
     parallel = 4 ## let's use 4 cores
 )
 
@@ -1065,7 +1065,7 @@ X <- data.frame(island = c('Biscoe', 'Dream'))
 Fspecies10I <- Pr(
     Y = Y,
     X = X, ## argument for conditional inferences
-    learnt = learnt10,
+    K = K10,
     parallel = 4 ## let's use 4 cores
 )
 ```
@@ -1276,7 +1276,7 @@ X2 <- expand.grid(
 Fspecies10IS <- Pr(
     Y = Y,
     X = X2,
-    learnt = learnt10,
+    K = K10,
     parallel = 4 ## let's use 4 cores
 )
 
@@ -1330,7 +1330,7 @@ your computer:
 
 ``` r
 
-learnt60 <- learn(
+K60 <- learn(
     data = datafile,
     metadata = meta_penguins,
     outputdir = 'penguin_inference',
@@ -1391,15 +1391,14 @@ The calculation with 60 sample data took around 3 GB and 10 minutes on
 4 cores.
 
 The results of this updated inference are now stored in the compressed
-file `learnt.rds` within the new output directory. For your convenience
-the object produced by the computation above can be downloaded as the
-file
-[`learnt60.rds`](https://github.com/pglpm/prova/raw/main/vignettes/learnt60.rds).
+file `K.rds` within the new output directory. For your convenience the
+object produced by the computation above can be downloaded as the file
+[`K60.rds`](https://github.com/pglpm/prova/raw/main/vignettes/K60.rds).
 Once you have downloaded it in your working directory, invoke
 
 ``` r
 
-learnt60 <- 'learnt60.rds'
+K60 <- 'K60.rds'
 ```
 
 which we now use to update our analysis.
@@ -1419,9 +1418,9 @@ We can update our answers – frequency estimates, their credible
 intervals, and their probability distributions – from the increased data
 sample, using the
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function [as
-before](#learningfirst). In the `learnt =` argument we must now use the
-new `learnt60` object, which points to the updated inference. Here is
-the calculation for all three questions:
+before](#learningfirst). In the `K =` argument we must now use the new
+`K60` object, which points to the updated inference. Here is the
+calculation for all three questions:
 
 ``` r
 
@@ -1431,14 +1430,14 @@ the calculation for all three questions:
 
 Fspecies60 <- Pr(
     Y = Y,
-    learnt = learnt60, ## updated inference
+    K = K60, ## updated inference
     parallel = 4 ## let's use 4 cores
 )
 
 Fspecies60I <- Pr(
     Y = Y,
     X = X, ## argument for conditional inferences
-    learnt = learnt60, ## updated inference
+    K = K60, ## updated inference
     parallel = 4 ## let's use 4 cores
 )
 ```
@@ -1743,7 +1742,7 @@ use 8 parallel cores:
 
 ``` r
 
-learntall <- learn(
+Kall <- learn(
     data = penguins, # or 'data = penguins_shuffled'
     metadata = meta_penguins,
     outputdir = 'penguin_inference',
@@ -1806,14 +1805,14 @@ learntall <- learn(
 The calculation with 344 sample data took around 7 GB and 17 hours.
 
 The results of this final inference are stored in the compressed file
-`learnt.rds` within the new output directory. The object produced by the
+`K.rds` within the new output directory. The object produced by the
 computation above can be downloaded as the file
-[`learntall.rds`](https://github.com/pglpm/prova/raw/main/vignettes/learntall.rds).
+[`Kall.rds`](https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds).
 Once you have downloaded it in your working directory, invoke
 
 ``` r
 
-learntall <- 'learntall.rds'
+Kall <- 'Kall.rds'
 ```
 
 ### Final results on overall species frequencies
@@ -1828,7 +1827,7 @@ species are computed in the usual way:
 
 Fspeciesall <- Pr(
     Y = Y,
-    learnt = learntall, ## updated inference
+    K = Kall, ## updated inference
     parallel = 4 ## let's use 4 cores
 )
 ```
@@ -1927,7 +1926,7 @@ generate a grid of all possible realistic values:
 ``` r
 
 ## All values for the variate of interest
-Y <- vrtgrid(vrt = 'species', learnt = learntall)
+Y <- vrtgrid(vrt = 'species', K = Kall)
 
 Xvrt <- 'island' ## subpopulation variate
 Xvls <- 'Biscoe' ## subpopulation value or values
@@ -1935,7 +1934,7 @@ Xvls <- 'Biscoe' ## subpopulation value or values
 X <- data.frame(Xvls)
 colnames(X) <- Xvrt
 
-Fanalysis <- Pr(Y = Y, X = X, learnt = learntall, parallel = 4)
+Fanalysis <- Pr(Y = Y, X = X, K = Kall, parallel = 4)
 ```
 
 Here are the probability distributions and the credibility intervals for
@@ -1991,7 +1990,7 @@ In this case, `Adelie` penguins are our subpopulation:
 
 ``` r
 
-Y <- vrtgrid(vrt = 'island', learnt = learntall)
+Y <- vrtgrid(vrt = 'island', K = Kall)
 
 Xvrt <- 'species' ## subpopulation variate
 Xvls <- 'Adelie' ## subpopulation value or values
@@ -2000,7 +1999,7 @@ X <- data.frame(Xvls)
 colnames(X) <- Xvrt
 
 ## NB: rewriting the previous 'Fanalysis' object
-Fanalysis <- Pr(Y = Y, X = X, learnt = learntall, parallel = 4)
+Fanalysis <- Pr(Y = Y, X = X, K = Kall, parallel = 4)
 ```
 
 Here are the probability distributions and confidence intervals for the
@@ -2060,13 +2059,13 @@ mass in three separate subpopulations: `Adelie`, `Chinstrap`, and
 ``` r
 
 ## Grid of realistic values for 'body_mass'
-Y <- vrtgrid(vrt = 'body_mass', learnt = learntall)
+Y <- vrtgrid(vrt = 'body_mass', K = Kall)
 
 ## Grid of values for 'species', the subpopulation variate
-X <- vrtgrid(vrt = 'species', learnt = learntall)
+X <- vrtgrid(vrt = 'species', K = Kall)
 
 ## NB: rewriting the previous 'Fanalysis' object
-Fanalysis <- Pr(Y = Y, X = X, learnt = learntall, parallel = 4)
+Fanalysis <- Pr(Y = Y, X = X, K = Kall, parallel = 4)
 ```
 
 Here is the estimated frequency distribution of body mass within each

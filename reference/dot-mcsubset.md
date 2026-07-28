@@ -5,5 +5,5 @@ Used in 'learn()'.
 ## Usage
 
 ``` r
-.mcsubset(learnt, subsamples)
+.mcsubset(K, subsamples)
 ```

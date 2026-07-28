@@ -1,6 +1,6 @@
 # ***Prova***: probabilistic-statistical variate analysis, nonparametric and with automated Markov-chain Monte Carlo
 
-![Ensemble of densities](reference/figures/prova_symbol.jpg)
+![Ensemble of densities](reference/figures/prova_logo.jpg)
 
 “prova” /’prɔva/ (Italian)
 
@@ -78,14 +78,23 @@ but this is not a problem for **Prova**:
 
 ``` r
 
-learnt <- learn(data = penguins, metadata = meta_penguins)
+K <- learn(data = penguins, metadata = meta_penguins)
 # [progress output about the learning computation]
 ```
 
 Ask a statistical question about the penguin population. For example:
 given the data we have collected, what is the probability that a *new*
 penguin from this population is of species *Adélie*, if its bill length
-is 45 mm? To answer this question we use the function
+is 45 mm? In symbols,
+
+\\ \mathrm{P}(\texttt{\small
+species}\mathrel{\negthinspace=\negthinspace} \text{\small Adelie}
+\nonscript\thinspace\vert\nonscript\thinspace\mathopen{} \texttt{\small
+bill\\\_len}\mathrel{\negthinspace=\negthinspace} \text{\small
+45\thinspace mm} , K) \\
+
+where \\K\\ stands for the knowledge acquired from data and metadata. To
+answer this question, use the function
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md), and print a
 summary of the result:
 
@@ -94,7 +103,7 @@ summary of the result:
 prob <- Pr(
     Y = data.frame(species = 'Adelie'), # predictand
     X = data.frame(bill_len = 45),      # predictor
-    learnt = learnt                     # learned data
+    K = K                               # Knowledge from data & metadata
 )
 
 print(prob)
@@ -139,7 +148,7 @@ the penguin’s bill length:
 invprob <- Pr(
     Y = data.frame(bill_len = 30:50),   # predictand
     X = data.frame(species = 'Adelie'), # predictor
-    learnt = learnt                     # learned data
+    K = K                               # knowledge from data & metadata
 )
 
 plot(invprob)
@@ -278,13 +287,12 @@ and of its documents.
 
 ## Learn from data
 
+- [`Kexample`](https://pglpm.github.io/prova/reference/Kexample.md) :
+
+  Example `K`nowledge object produced by learn()
+
 - [`learn()`](https://pglpm.github.io/prova/reference/learn.md) : Monte
   Carlo computation of posterior probability distribution
-
-- [`learntExample`](https://pglpm.github.io/prova/reference/learntExample.md)
-  :
-
-  Example `learnt` object produced by learn()
 
 ## Calculate probabilities & statistics
 

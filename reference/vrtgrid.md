@@ -6,7 +6,7 @@ combination of values for several variates.
 ## Usage
 
 ``` r
-vrtgrid(vrt, learnt, length.out = NA)
+vrtgrid(vrt, K, length.out = NA)
 ```
 
 ## Arguments
@@ -18,10 +18,10 @@ vrtgrid(vrt, learnt, length.out = NA)
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function.
 
-- learnt:
+- K:
 
   Either a character with the name of a directory or full path for a
-  'learnt.rds' object, produced by the
+  'K.rds' object, produced by the
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function, or such an object itself.
 
@@ -42,10 +42,10 @@ the variate values.
 ## Details
 
 The value ranges are based on the information from data and metadata
-stored in the `learnt` object (see
+stored in the `K`nowledge object (see
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md)) provided
-in the `learnt =` argument; they include, and extend slightly beyond,
-the ranges observed in the data used in the
+in the `K =` argument; they include, and extend slightly beyond, the
+ranges observed in the data used in the
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function.
 Variate domains are always respected.
 
@@ -73,7 +73,7 @@ that can be used directly in functions like
 ## See also
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the `learnt` objects required by `vrtgrid()`.
+generates the `K` objects required by `vrtgrid()`.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 probabilities and their revisabilities.
@@ -89,13 +89,13 @@ to plot probabilities and quantiles calculated by
 ## Examples
 
 ``` r
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## set of values for the variate "species";
 ## since this variate is of a nominal kind, all values are included
-valuesSpecies <- vrtgrid(vrt = 'species', learnt = learnt)
+valuesSpecies <- vrtgrid(vrt = 'species', K = K)
 
 print(valuesSpecies)
 #>     species
@@ -105,7 +105,7 @@ print(valuesSpecies)
 
 ## create a small set of values for the variate "bill length";
 ## this variate is continuous and rounded
-valuesBill <- vrtgrid(vrt = 'bill_len', learnt = learnt, length.out = 4)
+valuesBill <- vrtgrid(vrt = 'bill_len', K = K, length.out = 4)
 
 print(valuesBill)
 #>   bill_len
@@ -116,12 +116,12 @@ print(valuesBill)
 
 ## calculate the conditional probabilities for the 'bill_len' values above,
 ## given the values of 'species'
-probs <- Pr(Y = valuesBill, X = valuesSpecies, learnt = learnt, parallel = 1)
+probs <- Pr(Y = valuesBill, X = valuesSpecies, K = K, parallel = 1)
 
 
 ## Create a data frame with all possible combinations of the values above;
 ## the 'length.out' argument does not apply to the discrete variate 'species'
-valuesAll <- vrtgrid(vrt = c('species', 'bill_len'), learnt = learnt, length.out = 4)
+valuesAll <- vrtgrid(vrt = c('species', 'bill_len'), K = K, length.out = 4)
 
 print(valuesAll)
 #>      species bill_len

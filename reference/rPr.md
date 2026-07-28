@@ -6,15 +6,7 @@ to posterior probabilities and posterior conditional probabilities.
 ## Usage
 
 ``` r
-rPr(
-  n,
-  Ynames,
-  X = NULL,
-  learnt,
-  tails = NULL,
-  mcsamples = NULL,
-  parallel = NULL
-)
+rPr(n, Ynames, X = NULL, K, tails = NULL, mcsamples = NULL, parallel = NULL)
 ```
 
 ## Arguments
@@ -33,10 +25,10 @@ rPr(
   want to condition the joint probability for `Y`. If `NULL` (default),
   no conditioning is made. Any rows beyond the first are discarded
 
-- learnt:
+- K:
 
   Either a character with the name of a directory or full path for a
-  'learnt.rds' object, produced by the
+  'K.rds' object, produced by the
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function, or such an object itself.
 
@@ -87,7 +79,7 @@ argument `tails`.
 ## See also
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the `learnt` objects required by
+generates the `K` objects required by
 [`qPr()`](https://pglpm.github.io/prova/reference/qPr.md).
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
@@ -99,9 +91,9 @@ quantiles.
 ## Examples
 
 ``` r
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## ## Example 1:
 ## Generate 10 values of the 'species' variate,
@@ -110,7 +102,7 @@ learnt <- learntExample
 datapoints <- rPr(
   n = 10,
   Ynames = 'species',
-  learnt = learnt
+  K = K
 )
 
 c(datapoints)
@@ -126,7 +118,7 @@ c(datapoints)
 datapoints <- rPr(
   n = 5,
   Ynames = c('species', 'bill_len'),
-  learnt = learnt
+  K = K
 )
 
 print(datapoints, row.names = FALSE) ## row names give MCMC information
@@ -147,7 +139,7 @@ datapoints <- rPr(
   Ynames = 'species',
   X = data.frame(bill_len = 40),
   tails = list(bill_len = -1),
-  learnt = learnt
+  K = K
 )
 
 c(datapoints)

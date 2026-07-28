@@ -11,7 +11,7 @@ qPr(
   p = c(0.25, 0.5, 0.75),
   Yname,
   X = NULL,
-  learnt,
+  K,
   tails = NULL,
   nsamples = "all",
   quantiles = c(0.055, 0.5, 0.945),
@@ -41,10 +41,10 @@ qPr(
   for conditioning on the learning dataset and prior assumptions). One
   variate per column, one set of values per row.
 
-- learnt:
+- K:
 
   Either a character with the name of a directory or full path for a
-  'learnt.rds' object, produced by the
+  'K.rds' object, produced by the
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function, or such an object itself.
 
@@ -153,7 +153,7 @@ through the argument `tails`.
 ## See also
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the `learnt` objects required by `qPr()`.
+generates the `K` objects required by `qPr()`.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 joint and conditional probabilities.
@@ -167,9 +167,9 @@ datapoints.
 ### WARNING: the following examples, if run, might even take a minute or more.
 
 # \donttest{
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## ## Example 1:
 ## Calculate the 5.5%-, 50%-, and 94.5%-quantiles for the variate "bill lengt",
@@ -177,7 +177,7 @@ learnt <- learntExample
 
 quants <- qPr(
   Yname = 'bill_len',
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the quantile values
@@ -192,7 +192,7 @@ quants$values
 probs <- Pr(
   Y = data.frame(bill_len = c(quants$values)),
   tails = list(bill_len = -1),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
@@ -238,7 +238,7 @@ quants$quantiles
 quants <- qPr(
   Yname = 'bill_len',
   X = data.frame(species = 'Adelie'),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the quantile values
@@ -254,7 +254,7 @@ probs <- Pr(
   Y = data.frame(bill_len = c(quants$values)),
   X = data.frame(species = 'Adelie'),
   tails = list(bill_len = -1),
-  learnt = learnt, parallel = 1)
+  K = K, parallel = 1)
 
 ## the cumulative probabilities are indeed 0.055, 0.5, 0.945 within numerical error:
 probs$values

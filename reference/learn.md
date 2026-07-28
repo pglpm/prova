@@ -19,7 +19,7 @@ learn(
   seed = NULL,
   cleanup = TRUE,
   appendinfo = TRUE,
-  valueislearnt = TRUE,
+  valueisK = TRUE,
   subsampledata = NULL,
   prior = missing(data) || is.null(data),
   startupMCiterations = 3600,
@@ -131,12 +131,12 @@ learn(
   ('S'), and timestamp, to the name of the output directory `outputdir`?
   The appended string has the format 'Vn_Dn_Sn_YYMMDDTHHMMSS'.
 
-- valueislearnt:
+- valueisK:
 
-  Logical or `NULL`: should the `VALUE` returned be the `learnt` object
-  containing the results from the Monte Carlo computation? Default
-  `TRUE`. If `FALSE`, then `VALUE` is the output directory name. If
-  `NULL`, then `VALUE` is `NULL`.
+  Logical or `NULL`: should the `VALUE` returned be the `K`nowledge
+  object containing the results from the Monte Carlo computation?
+  Default `TRUE`. If `FALSE`, then `VALUE` is the output directory name.
+  If `NULL`, then `VALUE` is `NULL`.
 
 - subsampledata:
 
@@ -227,8 +227,8 @@ learn(
 
 ## Value
 
-A "learnt" object, or name of directory containing such an object and
-other output files, or `NULL`, depending on argument `valueislearnt`.
+A "knowledge" object, or name of directory containing such an object and
+other output files, or `NULL`, depending on argument `valueisK`.
 
 `learn()` saves several files in a directory. By default this output
 directory is a temporary directory within the one used by
@@ -240,9 +240,9 @@ computation; in particular:
 - `MCtraces.pdf`: shows several trace plots of the Monte Carlo sampling;
   the corresponding data are in the file `MCtraces.rds`.
 
-- `plotsamples_learnt.pdf`, `plotquantiles_learnt.pdf`: show the
-  marginal posterior distributions of each individual variate, together
-  with their "revisability" (as samples or quantiles).
+- `plotsamples_learn.pdf`, `plotquantiles_learn.pdf`: show the marginal
+  posterior distributions of each individual variate, together with
+  their "revisability" (as samples or quantiles).
 
 - `log-1.out`, `log-2.out`, ... one for each parallel core; report the
   progress of each parallel Monte Carlo computation and notes about it.
@@ -273,7 +273,7 @@ computation allows for the use of datapoints with partially missing
 variables: imputation is automatically made. This imputation is
 *principled*, made according to the rules of probability theory.
 
-The output is a "learnt" object, typically saved in a `learnt.rds` file,
+The output is a "knowledge" object, typically saved in a `K.rds` file,
 which is used in all subsequent probabilistic computations. Other
 information about the computation is provided in logs and plots, saved
 in a directory specified by the user.
@@ -431,7 +431,7 @@ dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
 
 ## Learn from the data:
-learnt <- learn(
+K <- learn(
   data = dataset, metadata = metadata,
       ## the following parameters are unrealistic
       ## only used to reduce computation time for this example
@@ -441,8 +441,8 @@ learnt <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/Rtmpx3k9Ho/prova-V1_D3_S10_260728T051124_1a361cd58223
-#> Prova v1.10.0.
+#> /tmp/Rtmpa42IrE/prova-V1_D3_S10_260728T085009_1b9e6375e1b7
+#> Prova v2.0.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
@@ -466,7 +466,7 @@ learnt <- learn(
 #> Plotting final Monte Carlo traces and marginal samples...
 #> Total computation time: 34 secs
 #> Average preparation & finalization time: 33 secs.
-#> Average Monte Carlo time per chain: 0.5 secs.
+#> Average Monte Carlo time per chain: 0.55 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -474,11 +474,11 @@ learnt <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/Rtmpx3k9Ho/prova-V1_D3_S10_260728T051124_1a361cd58223
+#> /tmp/Rtmpa42IrE/prova-V1_D3_S10_260728T085009_1b9e6375e1b7
 #> **********************************************************
 
-## Check structure of `learnt` object:
-str(learnt)
+## Check structure of `K` object:
+str(K)
 #> List of 6
 #>  $ Rmean      : num [1, 1:64, 1:9] -1.047 3.247 2.547 -2.543 -0.296 ...
 #>  $ Rsd        : num [1, 1:64, 1:9] 8.224 0.227 1.145 0.638 7.141 ...

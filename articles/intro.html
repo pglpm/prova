@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1060,7 +1060,7 @@ longer time on your computer:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## set.seed() already called</span></span>
 <span></span>
-<span><span class="va">learnt10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/learn.html">learn</a></span><span class="op">(</span></span>
+<span><span class="va">K10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/learn.html">learn</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">datafile</span>,</span>
 <span>    metadata <span class="op">=</span> <span class="va">meta_penguins</span>, <span class="co"># included in 'Prova'</span></span>
 <span>    outputdir <span class="op">=</span> <span class="st">'penguin_inference'</span>,</span>
@@ -1132,19 +1132,19 @@ standard error can be specified with the &lt;code&gt;nsamples&lt;/code&gt;,
 and 8 variates, took around 3 GB and 15 minutes to complete on
 4 cores.</p>
 <p>The results of this main inference are now stored in the compressed
-file <code>learnt.rds</code> (around 32 MB) within the specified output
+file <code>K.rds</code> (around 32 MB) within the specified output
 directory. The name of this directory is also saved as the final value
 of the <code><a href="../reference/learn.html">learn()</a></code> function. We saved this directory name in
-the <code>learnt10</code> variable in the code above, by invoking
-<code>learnt10 &lt;- learn(...)</code>.</p>
+the <code>K10</code> variable in the code above, by invoking
+<code>K10 &lt;- learn(...)</code>.</p>
 <p>For your convenience the object produced by the computation above can
-be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/learnt10.rds" class="external-link"><code>learnt10.rds</code></a>.
+be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/K10.rds" class="external-link"><code>K10.rds</code></a>.
 Once you have downloaded it in your working directory you can just
 invoke</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">learnt10</span> <span class="op">&lt;-</span> <span class="st">'learnt10.rds'</span></span></code></pre></div>
-<p>which produces an object <code>learnt10</code> (just a character
-string, in this case) which can be used in the following analysis.</p>
+<code class="sourceCode R"><span><span class="va">K10</span> <span class="op">&lt;-</span> <span class="st">'K10.rds'</span></span></code></pre></div>
+<p>which produces an object <code>K10</code> (just a character string,
+in this case) which can be used in the following analysis.</p>
 <p><br></p>
 </div>
 </div>
@@ -1176,9 +1176,10 @@ variate we are interested in. In the present case the variate is
 <code>species</code> and the values are ‘Adelie’, ‘Chinstrap’,
 ‘Gentoo’.</li>
 <li>
-<code>learnt</code>: the object that points to the computation made
-with the <code><a href="../reference/learn.html">learn()</a></code> function, discussed in the previous
-section. In the present case it’s <code>learnt10</code>.</li>
+<code>K</code>: the object that encodes the <code>K</code>nowledge
+from the computation made with the <code><a href="../reference/learn.html">learn()</a></code> function,
+discussed in the previous section. In the present case it’s
+<code>K10</code>.</li>
 <li>Optionally, <code>parallel</code> specifies how many cores we should
 use for the computation.</li>
 </ul>
@@ -1190,7 +1191,7 @@ most a couple of seconds:</p>
 <span></span>
 <span><span class="va">Fspecies10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    Y <span class="op">=</span> <span class="va">Y</span>,</span>
-<span>    learnt <span class="op">=</span> <span class="va">learnt10</span>,</span>
+<span>    K <span class="op">=</span> <span class="va">K10</span>,</span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span> <span class="co">## let's use 4 cores</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>The answer to our question is now contained in the
@@ -1363,7 +1364,7 @@ missing data.</p>
 <span><span class="co">## excluding 'sex' variate</span></span>
 <span><span class="va">X</span> <span class="op">&lt;-</span> <span class="va">penguins_shuffled</span><span class="op">[</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">penguins_shuffled</span><span class="op">)</span> <span class="op">!=</span> <span class="st">'sex'</span><span class="op">]</span></span>
 <span></span>
-<span><span class="va">imputeddata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Yimp</span>, X <span class="op">=</span> <span class="va">X</span>, learnt <span class="op">=</span> <span class="va">learnt10</span>, parallel <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">imputeddata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Yimp</span>, X <span class="op">=</span> <span class="va">X</span>, K <span class="op">=</span> <span class="va">K10</span>, parallel <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">imputeddata</span><span class="op">)</span></span>
 <span><span class="co"># , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007</span></span>
@@ -1381,7 +1382,7 @@ generate a grid of realistic values based on the data, and then see the
 probability distribution over these values:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Generate grid of realistic values for 'bill_len' using vrtgrid()</span></span>
-<span><span class="va">Yimp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'bill_len'</span>, learnt <span class="op">=</span> <span class="va">learnt10</span><span class="op">)</span></span>
+<span><span class="va">Yimp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'bill_len'</span>, K <span class="op">=</span> <span class="va">K10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Extract data from datapoint #6 of our dataset 'penguins_shuffled'</span></span>
 <span><span class="va">X</span> <span class="op">&lt;-</span> <span class="va">penguins_shuffled</span><span class="op">[</span><span class="fl">6</span>, <span class="op">]</span></span>
@@ -1389,7 +1390,7 @@ probability distribution over these values:</p>
 <span><span class="co">## drop unknown variates</span></span>
 <span><span class="va">X</span> <span class="op">&lt;-</span> <span class="va">X</span><span class="op">[</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
-<span><span class="va">imputeddata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Yimp</span>, X <span class="op">=</span> <span class="va">X</span>, learnt <span class="op">=</span> <span class="va">learnt10</span>, parallel <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">imputeddata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Yimp</span>, X <span class="op">=</span> <span class="va">X</span>, K <span class="op">=</span> <span class="va">K10</span>, parallel <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">imputeddata</span><span class="op">)</span></span>
 <span><span class="co"># named list()</span></span></code></pre></div>
@@ -1465,7 +1466,7 @@ code for such an analysis:</p>
 <span></span>
 <span><span class="va">Fspeciessex10</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    Y <span class="op">=</span> <span class="va">Y2</span>,</span>
-<span>    learnt <span class="op">=</span> <span class="va">learnt10</span>,</span>
+<span>    K <span class="op">=</span> <span class="va">K10</span>,</span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span> <span class="co">## let's use 4 cores</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -1524,7 +1525,7 @@ whose <code>island</code> variate has the values <code>'Biscoe</code> or
 <span><span class="va">Fspecies10I</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    Y <span class="op">=</span> <span class="va">Y</span>,</span>
 <span>    X <span class="op">=</span> <span class="va">X</span>, <span class="co">## argument for conditional inferences</span></span>
-<span>    learnt <span class="op">=</span> <span class="va">learnt10</span>,</span>
+<span>    K <span class="op">=</span> <span class="va">K10</span>,</span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span> <span class="co">## let's use 4 cores</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>The answer to our question is now contained in the
@@ -1706,7 +1707,7 @@ subpopulations. The procedure is analogous to the one we <a href="#twovariates">
 <span><span class="va">Fspecies10IS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    Y <span class="op">=</span> <span class="va">Y</span>,</span>
 <span>    X <span class="op">=</span> <span class="va">X2</span>,</span>
-<span>    learnt <span class="op">=</span> <span class="va">learnt10</span>,</span>
+<span>    K <span class="op">=</span> <span class="va">K10</span>,</span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span> <span class="co">## let's use 4 cores</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -1752,7 +1753,7 @@ done again with the <code><a href="../reference/learn.html">learn()</a></code> f
 before running this code</em>, it might take longer time on your
 computer:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">learnt60</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/learn.html">learn</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">K60</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/learn.html">learn</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">datafile</span>,</span>
 <span>    metadata <span class="op">=</span> <span class="va">meta_penguins</span>,</span>
 <span>    outputdir <span class="op">=</span> <span class="st">'penguin_inference'</span>,</span>
@@ -1810,12 +1811,12 @@ computer:</p>
 <p>The calculation with 60 sample data took around 3 GB and 10 minutes
 on 4 cores.</p>
 <p>The results of this updated inference are now stored in the
-compressed file <code>learnt.rds</code> within the new output directory.
-For your convenience the object produced by the computation above can be
-downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/learnt60.rds" class="external-link"><code>learnt60.rds</code></a>.
+compressed file <code>K.rds</code> within the new output directory. For
+your convenience the object produced by the computation above can be
+downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/K60.rds" class="external-link"><code>K60.rds</code></a>.
 Once you have downloaded it in your working directory, invoke</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">learnt60</span> <span class="op">&lt;-</span> <span class="st">'learnt60.rds'</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">K60</span> <span class="op">&lt;-</span> <span class="st">'K60.rds'</span></span></code></pre></div>
 <p>which we now use to update our analysis.</p>
 </div>
 <div class="section level3">
@@ -1833,9 +1834,9 @@ on Dream island?</em></li>
 <p>We can update our answers – frequency estimates, their credible
 intervals, and their probability distributions – from the increased data
 sample, using the <code><a href="../reference/Pr.html">Pr()</a></code> function <a href="#learningfirst">as
-before</a>. In the <code>learnt =</code> argument we must now use the
-new <code>learnt60</code> object, which points to the updated inference.
-Here is the calculation for all three questions:</p>
+before</a>. In the <code>K =</code> argument we must now use the new
+<code>K60</code> object, which points to the updated inference. Here is
+the calculation for all three questions:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## 'Y' and 'X' were previously defined with:</span></span>
 <span><span class="co">## Y &lt;- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))</span></span>
@@ -1843,14 +1844,14 @@ Here is the calculation for all three questions:</p>
 <span></span>
 <span><span class="va">Fspecies60</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    Y <span class="op">=</span> <span class="va">Y</span>,</span>
-<span>    learnt <span class="op">=</span> <span class="va">learnt60</span>, <span class="co">## updated inference</span></span>
+<span>    K <span class="op">=</span> <span class="va">K60</span>, <span class="co">## updated inference</span></span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span> <span class="co">## let's use 4 cores</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Fspecies60I</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    Y <span class="op">=</span> <span class="va">Y</span>,</span>
 <span>    X <span class="op">=</span> <span class="va">X</span>, <span class="co">## argument for conditional inferences</span></span>
-<span>    learnt <span class="op">=</span> <span class="va">learnt60</span>, <span class="co">## updated inference</span></span>
+<span>    K <span class="op">=</span> <span class="va">K60</span>, <span class="co">## updated inference</span></span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span> <span class="co">## let's use 4 cores</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Just like in the preliminary analysis we can use the
@@ -2113,7 +2114,7 @@ the dataset does not matter.</p>
 <code><a href="../reference/learn.html">learn()</a></code> function (and as usual please wait before running
 the code below); this time we use 8 parallel cores:</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">learntall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/learn.html">learn</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">Kall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/learn.html">learn</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">penguins</span>, <span class="co"># or 'data = penguins_shuffled'</span></span>
 <span>    metadata <span class="op">=</span> <span class="va">meta_penguins</span>,</span>
 <span>    outputdir <span class="op">=</span> <span class="st">'penguin_inference'</span>,</span>
@@ -2174,11 +2175,11 @@ the code below); this time we use 8 parallel cores:</p>
 <p>The calculation with 344 sample data took around 7 GB and
 17 hours.</p>
 <p>The results of this final inference are stored in the compressed file
-<code>learnt.rds</code> within the new output directory. The object
-produced by the computation above can be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/learntall.rds" class="external-link"><code>learntall.rds</code></a>.
+<code>K.rds</code> within the new output directory. The object produced
+by the computation above can be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds" class="external-link"><code>Kall.rds</code></a>.
 Once you have downloaded it in your working directory, invoke</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">learntall</span> <span class="op">&lt;-</span> <span class="st">'learntall.rds'</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Kall</span> <span class="op">&lt;-</span> <span class="st">'Kall.rds'</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="final-results-on-overall-species-frequencies">Final results on overall species frequencies<a class="anchor" aria-label="anchor" href="#final-results-on-overall-species-frequencies"></a>
@@ -2191,7 +2192,7 @@ species are computed in the usual way:</p>
 <span></span>
 <span><span class="va">Fspeciesall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    Y <span class="op">=</span> <span class="va">Y</span>,</span>
-<span>    learnt <span class="op">=</span> <span class="va">learntall</span>, <span class="co">## updated inference</span></span>
+<span>    K <span class="op">=</span> <span class="va">Kall</span>, <span class="co">## updated inference</span></span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span> <span class="co">## let's use 4 cores</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Let’s plot the estimated frequencies with their credibility
@@ -2282,7 +2283,7 @@ can use the function <code><a href="../reference/vrtgrid.html">vrtgrid()</a></co
 possible realistic values:</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## All values for the variate of interest</span></span>
-<span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'species'</span>, learnt <span class="op">=</span> <span class="va">learntall</span><span class="op">)</span></span>
+<span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'species'</span>, K <span class="op">=</span> <span class="va">Kall</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Xvrt</span> <span class="op">&lt;-</span> <span class="st">'island'</span> <span class="co">## subpopulation variate</span></span>
 <span><span class="va">Xvls</span> <span class="op">&lt;-</span> <span class="st">'Biscoe'</span> <span class="co">## subpopulation value or values</span></span>
@@ -2290,7 +2291,7 @@ possible realistic values:</p>
 <span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">Xvls</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">Xvrt</span></span>
 <span></span>
-<span><span class="va">Fanalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Y</span>, X <span class="op">=</span> <span class="va">X</span>, learnt <span class="op">=</span> <span class="va">learntall</span>, parallel <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">Fanalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Y</span>, X <span class="op">=</span> <span class="va">X</span>, K <span class="op">=</span> <span class="va">Kall</span>, parallel <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <p>Here are the probability distributions and the credibility intervals
 for the three frequencies:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
@@ -2338,7 +2339,7 @@ probability.
 </h4>
 <p>In this case, <code>Adelie</code> penguins are our subpopulation:</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'island'</span>, learnt <span class="op">=</span> <span class="va">learntall</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'island'</span>, K <span class="op">=</span> <span class="va">Kall</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Xvrt</span> <span class="op">&lt;-</span> <span class="st">'species'</span> <span class="co">## subpopulation variate</span></span>
 <span><span class="va">Xvls</span> <span class="op">&lt;-</span> <span class="st">'Adelie'</span> <span class="co">## subpopulation value or values</span></span>
@@ -2347,7 +2348,7 @@ probability.
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">Xvrt</span></span>
 <span></span>
 <span><span class="co">## NB: rewriting the previous 'Fanalysis' object</span></span>
-<span><span class="va">Fanalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Y</span>, X <span class="op">=</span> <span class="va">X</span>, learnt <span class="op">=</span> <span class="va">learntall</span>, parallel <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">Fanalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Y</span>, X <span class="op">=</span> <span class="va">X</span>, K <span class="op">=</span> <span class="va">Kall</span>, parallel <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <p>Here are the probability distributions and confidence intervals for
 the three frequencies:</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
@@ -2400,13 +2401,13 @@ body mass in three separate subpopulations: <code>Adelie</code>,
 <code>Chinstrap</code>, and <code>Gentoo</code> penguins.</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Grid of realistic values for 'body_mass'</span></span>
-<span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'body_mass'</span>, learnt <span class="op">=</span> <span class="va">learntall</span><span class="op">)</span></span>
+<span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'body_mass'</span>, K <span class="op">=</span> <span class="va">Kall</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Grid of values for 'species', the subpopulation variate</span></span>
-<span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'species'</span>, learnt <span class="op">=</span> <span class="va">learntall</span><span class="op">)</span></span>
+<span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'species'</span>, K <span class="op">=</span> <span class="va">Kall</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## NB: rewriting the previous 'Fanalysis' object</span></span>
-<span><span class="va">Fanalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Y</span>, X <span class="op">=</span> <span class="va">X</span>, learnt <span class="op">=</span> <span class="va">learntall</span>, parallel <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">Fanalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Y</span>, X <span class="op">=</span> <span class="va">X</span>, K <span class="op">=</span> <span class="va">Kall</span>, parallel <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <p>Here is the estimated frequency distribution of body mass within each
 species</p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">

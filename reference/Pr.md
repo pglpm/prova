@@ -12,7 +12,7 @@ calculated posterior probabilities.
 Pr(
   Y,
   X = NULL,
-  learnt,
+  K,
   tails = NULL,
   priorY = NULL,
   nsamples = "all",
@@ -41,10 +41,10 @@ Pr(
   and prior assumptions). One variate per column, one set of values per
   row.
 
-- learnt:
+- K:
 
   Either a character with the name of a directory or full path for a
-  'learnt.rds' object, produced by the
+  'K.rds' object, produced by the
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function, or such an object itself.
 
@@ -235,7 +235,7 @@ for example uses.
 ## See also
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the `learnt` objects required by `Pr()`.
+generates the `K`nowledge objects required by `Pr()`.
 
 [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md)
 to plot probabilities and quantiles calculated by `Pr()`.
@@ -257,9 +257,9 @@ datapoints.
 ## Examples
 
 ``` r
-## Load the example `learnt` object calculated from the "penguins" dataset;
+## Load the example `K`nowledge object calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-learnt <- learntExample
+K <- Kexample
 
 ## ## Example 1:
 ## Calculate the probability that an unknown penguin from this population
@@ -267,7 +267,7 @@ learnt <- learntExample
 
 probs <- Pr(
   Y = data.frame(species = 'Adelie'),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the probability value
@@ -294,7 +294,7 @@ hist(probs, legend = 'topright')
 
 probs <- Pr(
   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the 3 probability values
@@ -332,7 +332,7 @@ hist(probs)
 probs <- Pr(
   Y = data.frame(species = 'Adelie'),
   X = data.frame(bill_len = 43),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the probability value
@@ -356,7 +356,7 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 
 probs <- Pr(
   Y = data.frame(species = 'Adelie', bill_len = 43),
-  learnt = learnt, parallel = 1
+  K = K, parallel = 1
 )
 
 ## display the probability value
@@ -380,7 +380,7 @@ Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
 X <- data.frame(bill_len = c(43, 44))
 
-probs <- Pr(Y = Y, X = X, learnt = learnt, parallel = 1)
+probs <- Pr(Y = Y, X = X, K = K, parallel = 1)
 
 ## display the 3 x 2 probability values
 probs$values
@@ -425,7 +425,7 @@ Y <- expand.grid(
   bill_len = c(43, 44)
 )
 
-probs <- Pr(Y = Y, learnt = learnt, parallel = 1)
+probs <- Pr(Y = Y, K = K, parallel = 1)
 
 ## display the 6 joint-probability values
 probs$values
