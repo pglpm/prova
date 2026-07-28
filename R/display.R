@@ -1255,7 +1255,7 @@ print.probability <- function(
             paste0(temp2, '*')
 
         if(is.null(x$X)){temp <- temp[,,]}
-
+print(class(temp))
         print(x = noquote(temp), ...)
 
     } else {
@@ -1362,6 +1362,55 @@ print.mi <- function(
         digits = c(vdigits, qdigits))
     names(temp) <- c(paste0('value/', unit), paste0('Q', names(xquants)))
     print(x = noquote(temp), ...)
+}
+
+
+
+#' Print summary of a "Knowledge" object
+#'
+#' @description
+#' This [base::print()] method is a utility to display a summary of a "Knowledge" object outputted by [learn()], internally using [utils::str()]. It also display a summary if [learn()]'s value is only the path to the directory of the rds file containing the "Knowledge" object itself (see argument `valueisK =` in [learn()]), by internally retrieving the object. If you want to have a summary of a "K" object in a given directory or rds file, you can explicitly call `print.K(<file path>)`.
+#'
+#' @param x Object of class "K", output of [learn()].
+#' @param ... Other parameters to be passed to [utils::str()].
+#'
+#' @return Its `x` argument, [invisibly][base::invisible()]; see [base::print()].
+#'
+#' @seealso
+#' [learn()], which generates a "Knowledge" object.
+#'
+#' [Kexample] an example "K" object included with **Prova**.
+#'
+#' @examples
+#' ## Display a summary of the example "Knowledge" object calculated from the "penguins" dataset
+#' print(Kexample)
+#'
+#' @import utils
+#'
+#' @concept display
+#' @export
+print.K <- function(x, ...){
+    Kname <- deparse(substitute(x))
+    if (is.character(x)) {
+        ## Check if 'x' is a folder containing K.rds
+        if (file_test('-d', x) &&
+                file.exists(file.path(x, 'K.rds'))) {
+            x <- readRDS(file.path(x, 'K.rds'))
+        } else {
+            ## Assume 'x' the full path of K.rds
+            ## possibly without the file extension '.rds'
+            x <- paste0(sub('.rds$', '', x), '.rds')
+            if (file.exists(x)) {
+                x <- readRDS(x)
+            } else {
+                x <- 'Not a "K" object'
+            }
+        }
+    } else if(!is.list(x) || is.null(x[['auxmetadata']])){
+        x <- 'Not a "K" object'
+    }
+    str(object = x, ...)
+    invisible(x)
 }
 
 

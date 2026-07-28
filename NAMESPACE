@@ -3,6 +3,7 @@
 S3method(hist,mi)
 S3method(hist,probability)
 S3method(plot,probability)
+S3method(print,K)
 S3method(print,mi)
 S3method(print,probability)
 export(Pr)
