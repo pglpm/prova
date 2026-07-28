@@ -53,7 +53,7 @@ $$
 K)
 $$
 
-To answer this question we use the function `Pr()`, and print a summary of the result:
+where $K$ stands for the knowledge acquired from data and metadata. To answer this question, use the function `Pr()`, and print a summary of the result:
 ```r
 prob <- Pr(
     Y = data.frame(species = 'Adelie'), # predictand
