@@ -261,6 +261,10 @@ useful to report Monte Carlo convergence in any work of yours that used
 
 ## Details
 
+To use this function, the package
+[**Nimble**](https://cran.r-project.org/package=nimble) needs to be
+installed.
+
 This function takes as main inputs a set of data and metadata, and
 computes the full joint probability distribution for new data, including
 its "revisability". From this full joint distribution any other
@@ -291,9 +295,9 @@ manual](https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bay
 for details.
 
 The computation is done via Markov-chain Monte Carlo, using the package
-[**Nimble**](https://cran.r-project.org/package=nimble). "Convergence"
-of the Monte Carlo computation is automatically assessed with methods
-described in Vehtari & al. (2021) and Kwon & al. (2025); see [technical
+**Nimble**. "Convergence" of the Monte Carlo computation is
+automatically assessed with methods described in Vehtari & al. (2021)
+and Kwon & al. (2025); see [technical
 manual](https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf)
 for details. The default values for convergence require that all of the
 following three conditions be fulilled:
@@ -441,7 +445,7 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpikPiul/prova-V1_D3_S10_260728T161711_1a0c797c38cc
+#> /tmp/RtmpyhuIlP/prova-V1_D3_S10_260728T170323_192e6f837463
 #> Prova v2.0.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -464,9 +468,9 @@ K <- learn(
 #> quantile width: 0.0585 to 0.541
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 33 secs
-#> Average preparation & finalization time: 32 secs.
-#> Average Monte Carlo time per chain: 0.69 secs.
+#> Total computation time: 28 secs
+#> Average preparation & finalization time: 27 secs.
+#> Average Monte Carlo time per chain: 0.62 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -474,7 +478,7 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpikPiul/prova-V1_D3_S10_260728T161711_1a0c797c38cc
+#> /tmp/RtmpyhuIlP/prova-V1_D3_S10_260728T170323_192e6f837463
 #> **********************************************************
 
 ## Check structure of `K` object:
