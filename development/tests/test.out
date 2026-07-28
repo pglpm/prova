@@ -1,14 +1,18 @@
 2.0.0
-Starting tests 260728T084802
-Quick learn 260728T084802
+Starting tests 260728T093111
+Quick learn 260728T093111
 [1] TRUE
-Full base learn 260728T084819
+Full base learn 260728T093129
 [1] TRUE
-Simple Pr 260728T085556
+Simple Pr 260728T093856
 [1] TRUE
-Various Pr 260728T085700
+Various Pr 260728T094000
 [1] TRUE
-Simple MIs 260728T085750
-Error in testMI(Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],  : 
-  could not find function "testMI"
-Execution halted
+Simple MIs 260728T094051
+[1] TRUE
+Quick learn autocluster 260728T094327
+[1] TRUE
+Quick learn existing cluster 260728T094345
+[1] TRUE
+All test passed: TRUE
+Done 260728T094404
