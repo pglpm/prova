@@ -90,11 +90,9 @@ given the data we have collected, what is the probability that a *new*
 penguin from this population is of species *Adélie*, if its bill length
 is 45 mm? In symbols,
 
-\\ \mathrm{P}(\texttt{species}\mathrel{\negthinspace=\negthinspace}
-\text{\small Adelie}
-\nonscript\thinspace\vert\nonscript\thinspace\mathopen{} \texttt{\small
-bill\\\_len}\mathrel{\negthinspace=\negthinspace} \text{\small 45 mm} ,
-K) \\
+\\ \mathrm{P}(\text{species = Adelie}
+\nonscript\thinspace\vert\nonscript\thinspace\mathopen{}
+\texttt{bill len = 45 mm}, K) \\
 
 where \\K\\ stands for the knowledge acquired from data and metadata. To
 answer this question, use the function
