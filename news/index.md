@@ -5,9 +5,6 @@
 - The argument `learnt =`, common to many functions, has been changed to
   `K =` for brevity. Previous “learnt” objects can still be used with
   the `K =` argument.
-
-## Prova v1.10.0
-
 - The functions `flexiplot()` and `plotquantiles()` are replaced by the
   single function
   [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md);

@@ -60,6 +60,8 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9">
+<p><a href="https://pglpm.r-universe.dev/prova" class="external-link"><img src="https://pglpm.r-universe.dev/prova/badges/version" alt="r-universe version"></a></p>
+<!-- badges: end -->
 <p><img src="reference/figures/prova_logo.jpg" alt="Ensemble of densities" width="100%"></p>
 <p>“prova” /’prɔva/ (Italian)</p>
 <ul>
@@ -104,6 +106,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/learn.html">learn</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, metadata <span class="op">=</span> <span class="va">meta_penguins</span><span class="op">)</span></span>
 <span><span class="co"># [progress output about the learning computation]</span></span></code></pre></div>
+<p>The object <code>K</code> (for “0<code>K</code>nowledge” or “<code>K</code>nown”) encodes what has been learnt from data and metadata.</p>
 <p>Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a <em>new</em> penguin from this population is of species <em>Adélie</em>, if its bill length is 45 mm? In symbols,</p>
 <p><span class="math display">\[
 \mathrm{P}(\texttt{\small species}\mathrel{\negthinspace=\negthinspace}
@@ -135,14 +138,13 @@ K)
 <p><img src="reference/figures/README-hist-1.svg" alt="probability of long-run frequency" width="100%"></p>
 <p>The plot shows that this full-population frequency is most likely (with roughly 90% probability) between 0.05 and 0.15. These are the values shown by <code>print(prob)</code> above.</p>
 <p>The <em>inverse</em> question can also be asked: if we observe a new penguin of <em>Adélie</em> species, what could its bill length be? The answer is uncertain, and <strong>Prova</strong> can calculate the probability distribution of the penguin’s bill length:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">invprob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Pr.html">Pr</a></span><span class="op">(</span></span>
-<span>    Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">30</span><span class="op">:</span><span class="fl">50</span><span class="op">)</span>,   <span class="co"># predictand</span></span>
-<span>    X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="co"># predictor</span></span>
-<span>    K <span class="op">=</span> <span class="va">K</span>                               <span class="co"># knowledge from data &amp; metadata</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">invprob</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>invprob <span class="ot">&lt;-</span> <span class="fu">Pr</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>    <span class="at">Y =</span> <span class="fu">data.frame</span>(<span class="at">bill_len =</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">50</span> <span class="at">by =</span> <span class="fl">0.5</span>)), <span class="co"># predictand</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="at">X =</span> <span class="fu">data.frame</span>(<span class="at">species =</span> <span class="st">'Adelie'</span>),              <span class="co"># predictor</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">K =</span> K                                            <span class="co"># knowledge</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="fu">plot</span>(invprob)</span></code></pre></div>
 <p><img src="reference/figures/README-plot-1.svg" alt="probability distribution for bill length" width="100%"></p>
 <p>this probability distribution has a peak between 35 mm and 40 mm and it’s slightly skewed.</p>
 <p>This distribution is not the <em>frequency</em> distribution of bill length in the whole subpopulation of <em>Adélie</em> penguins; the latter is uncertain because we have only a sample. But the plot above shows that the full-population frequency distribution is somewhere between the grey bands.</p>
