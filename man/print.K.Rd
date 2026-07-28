@@ -4,10 +4,12 @@
 \alias{print.K}
 \title{Print summary of a "Knowledge" object}
 \usage{
-\method{print}{K}(x)
+\method{print}{K}(x, ...)
 }
 \arguments{
 \item{x}{Object of class "K", output of \code{\link[=learn]{learn()}}.}
+
+\item{...}{Other parameters to be passed to \code{\link[utils:str]{utils::str()}}.}
 }
 \value{
 Its \code{x} argument, \link[base:invisible]{invisibly}; see \code{\link[base:print]{base::print()}}.
