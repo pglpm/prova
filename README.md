@@ -45,11 +45,11 @@ Ask a statistical question about the penguin population. For example: given the 
 
 $$
 \mathrm{P}(\texttt{\small species}
-\mathclose{}\mathord{\nonscript\mkern0.5mu#1\nonscript\mkern0.5mu}\mathopen{}
+\mathclose{}\mathord{\nonscript\mkern0.5mu=\nonscript\mkern0.5mu}\mathopen{}
 \text{\small Adelie}
 \nonscript\:\vert\nonscript\:\mathopen{}
 \texttt{\small bill\,len}
-\mathclose{}\mathord{\nonscript\mkern0.5mu#1\nonscript\mkern0.5mu}\mathopen{}
+\mathclose{}\mathord{\nonscript\mkern0.5mu=\nonscript\mkern0.5mu}\mathopen{}
 \text{\small 45\,mm}
 ,
 K)
