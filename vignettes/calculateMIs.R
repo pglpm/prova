@@ -50,5 +50,4 @@ saveRDS(temp, 'MIgentoo.rds')
 
 parallel::stopCluster(parallel)
 cat('\ndone\n')
-
-
+cat('\nFinished\n')
