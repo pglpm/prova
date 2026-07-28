@@ -629,7 +629,7 @@ variates, saving directory, and other computational details. An
 updated from time to time with a better estimate of the computation’s
 end time. Once the computation is finished, some final information about
 the underlying Monte Carlo computation and time and memory use is
-provided.[^2] The inference above, with 10 sample data and 8 variates,
+provided.[^2] The inference above, with 10 datasamples and 8 variates,
 took around 3 GB and 15 minutes to complete on 4 cores.
 
 The results of this main inference are now stored in the compressed file
@@ -870,7 +870,6 @@ function to display values and quantiles together:
 ``` r
 
 print(Fspecies10)
-# [1] "matrix" "array" 
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
 #   Adelie    0.2987 0.0018 0.1218 0.2072 0.3763 0.5068
@@ -901,7 +900,6 @@ X <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
 imputeddata <- Pr(Y = Yimp, X = X, K = K10, parallel = 4)
 
 print(imputeddata)
-# [1] "array"
 # , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007
 # 
 #         probability
@@ -1008,7 +1006,6 @@ Fspeciessex10 <- Pr(
 ## Display the estimated frequencies of all six combinations,
 ## as well as their credibility intervals
 print(Fspeciessex10)
-# [1] "matrix" "array" 
 #                   probability
 # species,sex        value  +/-    Q5.5%   Q25%    Q75%   Q94.5%
 #   Adelie,female    0.1634 0.0013 0.0508  0.0984  0.2153 0.3193
@@ -1097,7 +1094,6 @@ precise values are contained in the `values` element of the
 ``` r
 
 print(Fspecies10I)
-# [1] "array"
 # , , |island = Biscoe
 # 
 #            probability
@@ -1191,7 +1187,6 @@ function as usual:
 ``` r
 
 print(Fspecies10I)
-# [1] "array"
 # , , |island = Biscoe
 # 
 #            probability
@@ -1339,57 +1334,10 @@ K60 <- learn(
     parallel = 4 ## how many cores to use for the computation
 )
 
-## Registered socket cluster with 4 nodes on host ‘localhost’.
-## 
-## Learning from 60 datapoints, 8 variates.
-## 
-##  Saving output in directory
-##  __penguin_inference_60-V8_D60_S3600_260621T120619 
-## 
-## Starting Monte Carlo sampling of 3600 samples by 8 chains
-## in a space of 1023 (effectively 16706) dimensions.
-## Using 4 cores: 450 samples per chain, max 2 chains per core.
-## Requested:   ESS 450   rel.MCSE 0.047.
-## Core logs are being saved in individual files.
-## C-compiling samplers appropriate to the variates (Nimble v1.4.2)
-## this can take tens of minutes. Please wait...
-## Compiled core 1. Number of samplers: 1328.             
-## Estimating remaining time, please be patient...
-## Core 4 finished.                                        
-## Core 1 finished.                                        
-## Core 2 finished.                                        
-## Core 3 finished.                                        
-## Finished Monte Carlo sampling.
-## Highest number of Monte Carlo iterations across chains: 39600.
-## Highest number of used mixture components: 7.
-## 
-## Checking test data
-## (#3 #8 #11 #16 #18 #27 #31 #46 #48 #50 #52 #57):
-## rel. CI error: 0.0333 to 0.0975
-## ESS: 2920 to 3690
-## needed thinning: 3.98 to 34.2
-## average: 3.29e-09 to 1.51e-07
-## quantile width: 4.27e-09 to 3.13e-07
-## 
-## Plotting final Monte Carlo traces and marginal samples...
-## 
-## Total computation time: 12 mins
-## Average preparation & finalization time: 2.5 mins.
-## Average Monte Carlo time per chain: 3.1 mins.
-## Max total memory used: approx 3300MB.
-## Max memory used per core: approx 850MB.
-## Removing temporary output files.
-## Finished.
-## 
-## *************************************************
-##  Output saved in directory
-## __penguin_inference_60-V8_D60_S3600_260621T120619
-## *************************************************
-## 
-## Closing connections to cores.
+## [Output omitted]
 ```
 
-The calculation with 60 sample data took around 3 GB and 10 minutes on
+The calculation with 60 datasamples took around 3 GB and 10 minutes on
 4 cores.
 
 The results of this updated inference are now stored in the compressed
@@ -1551,7 +1499,6 @@ is as follows:
 ``` r
 
 print(Fspecies60)
-# [1] "matrix" "array" 
 #            probability
 # species     value   +/-     Q5.5%  Q25%   Q75%   Q94.5%
 #   Adelie    0.3950  0.0010  0.2960 0.3522 0.4357 0.4976
@@ -1748,61 +1695,10 @@ Kall <- learn(
     outputdir = 'penguin_inference',
     parallel = 8 ## how many cores to use for the computation
 )
-## Registered socket cluster with 8 nodes on host ‘localhost’.
-## 
-## Learning from 344 datapoints, 8 variates.
-## 
-##  Saving output in directory
-##  __penguin_inference_all-V8_D344_S3600_260622T073853 
-## 
-## Starting Monte Carlo sampling of 3600 samples by 8 chains
-## in a space of 1023 (effectively 89707) dimensions.
-## Using 8 cores: 450 samples per chain, max 1 chains per core.
-## Requested:   ESS 450   rel.MCSE 0.047.
-## Core logs are being saved in individual files.
-## C-compiling samplers appropriate to the variates (Nimble v1.4.2)
-## this can take tens of minutes. Please wait...
-## Compiled core 1. Number of samplers: 2757.             
-## Estimating remaining time, please be patient...
-## Core 1 finished.                                        
-## Core 3 finished.                                        
-## Core 8 finished.                                        
-## Core 7 finished.                                        
-## Core 4 finished.                                        
-## Core 5 finished.                                        
-## Core 2 finished.                                        
-## Core 6 finished.                                        
-## Finished Monte Carlo sampling.
-## Highest number of Monte Carlo iterations across chains: 1541125.
-## Highest number of used mixture components: 8.
-## 
-## Checking test data
-## (#8 #37 #80 #90 #96 #115 #116 #129 #162 #230 #258 #342):
-## rel. CI error: 0.0243 to 0.293
-## ESS: 627 to 3520
-## needed thinning: 2.13 to 310
-## average: 3.18e-09 to 5.58e-08
-## quantile width: 5.45e-09 to 7.18e-08
-## 
-## Plotting final Monte Carlo traces and marginal samples...
-## 
-## Total computation time: 17 hours
-## Average preparation & finalization time: 5.4 mins.
-## Average Monte Carlo time per chain: 2.8 hours.
-## Max total memory used: approx 7100MB.
-## Max memory used per core: approx 1100MB.
-## Removing temporary output files.
-## Finished.
-## 
-## ***************************************************
-##  Output saved in directory
-## __penguin_inference_all-V8_D344_S3600_260622T073853
-## ***************************************************
-## 
-## Closing connections to cores.
+## [Output omitted]
 ```
 
-The calculation with 344 sample data took around 7 GB and 17 hours.
+The calculation with 344 datasamples took around 7 GB and 17 hours.
 
 The results of this final inference are stored in the compressed file
 `K.rds` within the new output directory. The object produced by the
@@ -1858,7 +1754,6 @@ be extracted from the `Fspeciesall` in the usual way:
 ``` r
 
 print(Fspeciesall)
-# [1] "matrix" "array" 
 #            probability
 # species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
 #   Adelie    0.44171 0.00041 0.39809 0.42309 0.46035 0.48378
@@ -1952,7 +1847,6 @@ hist(Fanalysis, xlim = c(0, 1), col = 2:4, ## same colours as before!
 
 
 print(Fanalysis)
-# [1] "array"
 # , , |island = Biscoe
 # 
 #            probability
@@ -2018,7 +1912,6 @@ hist(Fanalysis, xlim = c(0, 1), col = 5:7,
 
 
 print(Fanalysis)
-# [1] "array"
 # , , |species = Adelie
 # 
 #            probability
