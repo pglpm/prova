@@ -92,7 +92,7 @@ is 45 mm? In symbols,
 
 \\ \mathrm{P}(\text{species = Adelie}
 \nonscript\thinspace\vert\nonscript\thinspace\mathopen{}
-\texttt{bill len = 45 mm}, K) \\
+\text{bill len = 45 mm}, K) \\
 
 where \\K\\ stands for the knowledge acquired from data and metadata. To
 answer this question, use the function
