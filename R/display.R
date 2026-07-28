@@ -140,17 +140,14 @@ pplot <- function(
         ## all x are numeric, find common min max
         xcha <- FALSE
         rgx <- unlist(x, recursive = FALSE, use.names = FALSE)
-        rgx <- rgx[is.finite(rgx)]
-        rgx <- range(rgx)
-        rm(temp)
+        rgx <- range(rgx[is.finite(rgx)])
     } else if(all(vapply(X = x[!xnull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all x are character, find domain
         xcha <- TRUE
         if(is.null(xdomain)){
             xdomain <- unlist(x, recursive = FALSE, use.names = FALSE)
-            xdomain <- xdomain[!is.na(xdomain)]
-            xdomain <- unique(xdomain)
+            xdomain <- unique(xdomain[!is.na(xdomain)])
         }
         rgx <- c(1, length(xdomain))
     } else {
@@ -165,16 +162,14 @@ pplot <- function(
         ## all y are numeric, find common min max
         ycha <- FALSE
         rgy <- unlist(y, recursive = FALSE, use.names = FALSE)
-        rgy <- rgy[is.finite(rgy)]
-        rgy <- range(rgy)
+        rgy <- range(rgy[is.finite(rgy)])
     } else if(all(vapply(X = y[!ynull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all y are character, find domain
         ycha <- TRUE
         if(is.null(ydomain)){
             ydomain <- unlist(y, recursive = FALSE, use.names = FALSE)
-            ydomain <- ydomain[!is.na(ydomain)]
-            ydomain <- unique(ydomain)
+            ydomain <- unique(ydomain[!is.na(ydomain)])
         }
         rgy <- c(1, length(ydomain))
     } else {
@@ -1262,7 +1257,7 @@ print.probability <- function(
             paste0(temp2, '*')
 
         if(is.null(x$X)){temp <- temp[,,]}
-print(class(temp))
+
         print(x = noquote(temp), ...)
 
     } else {

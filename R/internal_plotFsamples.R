@@ -69,7 +69,6 @@
     ## }
 
     auxmetadata <- K$auxmetadata
-    K$auxmetadata <- NULL
     K$auxinfo <- NULL
     nsamples <- ncol(K$W)
 
