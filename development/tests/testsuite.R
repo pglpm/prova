@@ -23,7 +23,7 @@ message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
 tc(nm, {
-    learnt <- learn(
+    K <- learn(
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
     ## only used to reduce computation time for this example
@@ -31,12 +31,12 @@ tc(nm, {
     startupMCiterations = 10, maxMCiterations = 10,
     minESS = 0, initES = 0, verbose = FALSE
     )
-    is.list(learnt)
+    is.list(K)
     }
 )
 saveRDS(results, savefile)
 all(sapply(results, isTRUE))
-rm(learnt)
+rm(K)
 
 
 
@@ -44,7 +44,7 @@ nm <- 'Full base learn'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 outputdir <- 'testbase_test'
 tc(nm, {
-    learntdir <- learn(
+    Kdir <- learn(
     data = 'data_basetest.csv',
     metadata = 'metadata_basetest.csv',
     # nsamples = 200,
@@ -52,7 +52,7 @@ tc(nm, {
     ## minMCiterations = 3600 * 3,
     prior = FALSE,
     outputdir = outputdir,
-    valueislearnt = FALSE,
+    valueisK = FALSE,
     appendinfo = TRUE,
     cleanup = TRUE,
     parallel = parallel,
@@ -68,7 +68,7 @@ tc(nm, {
     ## nchains = parallel + 1,
     ##
     )
-    is.character(learntdir)
+    is.character(Kdir)
     }
 )
 saveRDS(results, savefile)
@@ -78,7 +78,7 @@ all(sapply(results, isTRUE))
 
 nm <- 'Simple Pr'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-learnt <- learntdir
+K <- Kdir
 suite <- list(
     Rvrt = seq(-3, 3, length.out = 9),
     RPvrt = seq(0, 3, length.out = 9),
@@ -99,12 +99,12 @@ for(iv in seq_along(suite)){
         ##
         prob <- Pr(Y = as.data.frame(atest), X = NULL,
             tails = tail,
-            learnt = learnt, parallel = 1)
+            K = K, parallel = 1)
         ##
         vals <- atest[[1]]
         targetprob <- lapply(vals, function(x){
                 prova:::.testPr(Y = setNames(list(x), vrt), X = NULL,
-                    tails = tail, learnt = learnt)
+                    tails = tail, K = K)
         })
         targetprob = list(values = cbind(sapply(targetprob, `[[`, 1)),
             samples = t(sapply(targetprob, `[[`, 2)))
@@ -126,7 +126,7 @@ all(sapply(results, isTRUE))
 
 nm <- 'Various Pr'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-learnt <- learntdir
+K <- Kdir
 atest <- 0L
 set.seed(16)
 while(atest < 50){
@@ -158,10 +158,10 @@ while(atest < 50){
     }
     ##
     prob <- Pr(Y = as.data.frame(inY), X = as.data.frame(inX),
-        tails = intails, learnt = learnt, parallel = 1)
+        tails = intails, K = K, parallel = 1)
     ##
     targetprob <- prova:::.testPr(Y = inY, X = inX, tails = intails,
-        learnt = learnt)
+        K = K)
     ##
     tc(paste0(nm, '-', atest, '-values'),
         test_equivalent(c(prob$values), c(targetprob$value),
@@ -179,10 +179,10 @@ all(sapply(results, isTRUE))
 
 nm <- 'Simple MIs'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-learnt <- readRDS('tests_MIlearnt.rds')
+K <- readRDS('tests_MIK.rds')
 testMI <- readRDS('tests_testMIfunction.rds')
 nn <- 60 * 3600
-ns <- ncol(learnt$W)
+ns <- ncol(K$W)
 nv <- nn / ns
 ##
 suite <- list(
@@ -211,11 +211,11 @@ for(atest in suite){
     testand <- target <- NULL
     testand <- mutualinfo(
         Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
-        learnt = learnt, nv = nv, ns = ns, parallel = parallel
+        K = K, nv = nv, ns = ns, parallel = parallel
     )
     target <- testMI(
         Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
-        nn = nn, learnt = learnt
+        nn = nn, K = K
     )
     tc(paste0(nm, '-', paste0(atest, collapse = '-')), test_equivalent(
         testand$value, target$value,
@@ -236,7 +236,7 @@ message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
 tc(nm, {
-    learnt <- learn(
+    K <- learn(
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
     ## only used to reduce computation time for this example
@@ -244,12 +244,12 @@ tc(nm, {
     startupMCiterations = 10, maxMCiterations = 10,
     minESS = 0, initES = 0, verbose = FALSE, parallel = TRUE
     )
-    is.list(learnt)
+    is.list(K)
     }
 )
 saveRDS(results, savefile)
 all(sapply(results, isTRUE))
-rm(learnt)
+rm(K)
 
 
 
@@ -259,7 +259,7 @@ cl <- parallel::makeCluster(6)
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
 tc(nm, {
-    learnt <- learn(
+    K <- learn(
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
     ## only used to reduce computation time for this example
@@ -267,13 +267,13 @@ tc(nm, {
     startupMCiterations = 10, maxMCiterations = 10,
     minESS = 0, initES = 0, verbose = FALSE, parallel = cl
     )
-    is.list(learnt)
+    is.list(K)
     }
 )
 saveRDS(results, savefile)
 all(sapply(results, isTRUE))
 parallel::stopCluster(cl)
-rm(learnt)
+rm(K)
 
 
 
