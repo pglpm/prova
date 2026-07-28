@@ -60,7 +60,7 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9">
-<p><img src="/reference/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"></p>
+<p><img src="reference/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"></p>
 <p>“prova” /’prɔva/ (Italian)</p>
 <ul>
 <li>
@@ -122,7 +122,7 @@
 <p>Now ask: what is the relative frequency of <em>Adélie</em> species <em>in the whole subpopulation</em> (including unsampled penguins), of penguins having bill length of 45 mm? This cannot be answered with certainty, because we have only a sample of the full population. But <strong>Prova</strong> can calculate the <em>probability distribution</em> for this full-population frequency. In fact, it has already been calculated by the function <code><a href="reference/Pr.html">Pr()</a></code> above, and we can visualize it with a plot:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span></code></pre></div>
-<p><img src="/reference/figures/README-hist-1.svg" alt="probability of long-run frequency" width="100%"></p>
+<p><img src="reference/figures/README-hist-1.svg" alt="probability of long-run frequency" width="100%"></p>
 <p>The plot shows that this full-population frequency is most likely (with roughly 90% probability) between 0.05 and 0.15. These are the values shown by <code>print(prob)</code> above.</p>
 <p>The <em>inverse</em> question can also be asked: if we observe a new penguin of <em>Adélie</em> species, what could its bill length be? The answer is uncertain, and <strong>Prova</strong> can calculate the probability distribution of the penguin’s bill length:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -133,7 +133,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">invprob</span><span class="op">)</span></span></code></pre></div>
-<p><img src="/reference/figures/README-plot-1.svg" alt="probability distribution for bill length" width="100%"></p>
+<p><img src="reference/figures/README-plot-1.svg" alt="probability distribution for bill length" width="100%"></p>
 <p>this probability distribution has a peak between 35 mm and 40 mm and it’s slightly skewed.</p>
 <p>This distribution is not the <em>frequency</em> distribution of bill length in the whole subpopulation of <em>Adélie</em> penguins; the latter is uncertain because we have only a sample. But the plot above shows that the full-population frequency distribution is somewhere between the grey bands.</p>
 <p></p>

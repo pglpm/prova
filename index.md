@@ -1,6 +1,6 @@
 # ***Prova***: probabilistic-statistical variate analysis, nonparametric and with automated Markov-chain Monte Carlo
 
-![Ensemble of densities](/reference/figures/prova_symbol.jpg)
+![Ensemble of densities](reference/figures/prova_symbol.jpg)
 
 “prova” /’prɔva/ (Italian)
 
@@ -123,7 +123,7 @@ hist(prob)
 ```
 
 ![probability of long-run
-frequency](/reference/figures/README-hist-1.svg)
+frequency](reference/figures/README-hist-1.svg)
 
 The plot shows that this full-population frequency is most likely (with
 roughly 90% probability) between 0.05 and 0.15. These are the values
@@ -146,7 +146,7 @@ plot(invprob)
 ```
 
 ![probability distribution for bill
-length](/reference/figures/README-plot-1.svg)
+length](reference/figures/README-plot-1.svg)
 
 this probability distribution has a peak between 35 mm and 40 mm and
 it’s slightly skewed.
