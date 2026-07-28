@@ -47,10 +47,10 @@ $$
 \mathrm{P}(\texttt{\small species}
 \mathclose{}\mathord{\nonscript\mkern0.5mu=\nonscript\mkern0.5mu}\mathopen{}
 \text{\small Adelie}
-\nonscript\:\vert\nonscript\:\mathopen{}
-\texttt{\small bill\,len}
+\nonscript\>\vert\nonscript\>\mathopen{}
+\texttt{\small bill\thinspace len}
 \mathclose{}\mathord{\nonscript\mkern0.5mu=\nonscript\mkern0.5mu}\mathopen{}
-\text{\small 45\,mm}
+\text{\small 45\thinspace mm}
 ,
 K)
 $$
