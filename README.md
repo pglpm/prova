@@ -86,9 +86,9 @@ The plot shows that this full-population frequency is most likely (with roughly 
 The *inverse* question can also be asked: if we observe a new penguin of *Adélie* species, what could its bill length be? The answer is uncertain, and **Prova** can calculate the probability distribution of the penguin's bill length:
 ```r
 invprob <- Pr(
-    Y = data.frame(bill_len = 30:50),   # predictand
-    X = data.frame(species = 'Adelie'), # predictor
-    K = K                               # knowledge from data & metadata
+    Y = data.frame(bill_len = seq(30, 50 by = 0.5)), # predictand
+    X = data.frame(species = 'Adelie'),              # predictor
+    K = K                                            # knowledge
 )
 
 plot(invprob)
