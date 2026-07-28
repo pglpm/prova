@@ -180,7 +180,7 @@ all(sapply(results, isTRUE))
 nm <- 'Simple MIs'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 K <- readRDS('tests_MIK.rds')
-testMI <- readRDS('tests_testMIfunction.rds')
+testMI <- source('testMIfunction.R')
 nn <- 60 * 3600
 ns <- ncol(K$W)
 nv <- nn / ns
