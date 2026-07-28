@@ -371,7 +371,7 @@ K10 <- learn(
 ## Closing connections to cores.
 ```
 
-The initial output gives a summary of the sample size, number of variates, saving directory, and other computational details. An "`estimated end time`" line (not appearing in the output above) is updated from time to time with a better estimate of the computation's end time. Once the computation is finished, some final information about the underlying Monte Carlo computation and time and memory use is provided.^[The Monte Carlo expert will notice that the effective sample size is around 3000 or more. The Monte Carlo sampling is designed to stop when 3600 samples have been obtained from 8 chains, each with an effective sample size of at least 450, or equivalently a relative Monte Carlo standard error under 0.047. This is enough, considering that the statistical uncertainty in the results can be tens or hundreds of times larger than this. The desired number of samples and maximal Monte Carlo standard error can be specified with the `nsamples`, `minESS`, and `maxrelMCSE` arguments.] The inference above, with 10 sample data and 8 variates, took around 3 GB and 15 minutes to complete on 4 cores.
+The initial output gives a summary of the sample size, number of variates, saving directory, and other computational details. An "`estimated end time`" line (not appearing in the output above) is updated from time to time with a better estimate of the computation's end time. Once the computation is finished, some final information about the underlying Monte Carlo computation and time and memory use is provided.^[The Monte Carlo expert will notice that the effective sample size is around 3000 or more. The Monte Carlo sampling is designed to stop when 3600 samples have been obtained from 8 chains, each with an effective sample size of at least 450, or equivalently a relative Monte Carlo standard error under 0.047. This is enough, considering that the statistical uncertainty in the results can be tens or hundreds of times larger than this. The desired number of samples and maximal Monte Carlo standard error can be specified with the `nsamples`, `minESS`, and `maxrelMCSE` arguments.] The inference above, with 10 datasamples and 8 variates, took around 3 GB and 15 minutes to complete on 4 cores.
 
 The results of this main inference are now stored in the compressed file `K.rds` (around 32 MB) within the specified output directory. The name of this directory is also saved as the final value of the `learn()` function. We saved this directory name in the `K10` variable in the code above, by invoking `K10 <- learn(...)`.
 
@@ -731,57 +731,10 @@ K60 <- learn(
     parallel = 4 ## how many cores to use for the computation
 )
 
-## Registered socket cluster with 4 nodes on host ‘localhost’.
-## 
-## Learning from 60 datapoints, 8 variates.
-## 
-##  Saving output in directory
-##  __penguin_inference_60-V8_D60_S3600_260621T120619 
-## 
-## Starting Monte Carlo sampling of 3600 samples by 8 chains
-## in a space of 1023 (effectively 16706) dimensions.
-## Using 4 cores: 450 samples per chain, max 2 chains per core.
-## Requested:   ESS 450   rel.MCSE 0.047.
-## Core logs are being saved in individual files.
-## C-compiling samplers appropriate to the variates (Nimble v1.4.2)
-## this can take tens of minutes. Please wait...
-## Compiled core 1. Number of samplers: 1328.             
-## Estimating remaining time, please be patient...
-## Core 4 finished.                                        
-## Core 1 finished.                                        
-## Core 2 finished.                                        
-## Core 3 finished.                                        
-## Finished Monte Carlo sampling.
-## Highest number of Monte Carlo iterations across chains: 39600.
-## Highest number of used mixture components: 7.
-## 
-## Checking test data
-## (#3 #8 #11 #16 #18 #27 #31 #46 #48 #50 #52 #57):
-## rel. CI error: 0.0333 to 0.0975
-## ESS: 2920 to 3690
-## needed thinning: 3.98 to 34.2
-## average: 3.29e-09 to 1.51e-07
-## quantile width: 4.27e-09 to 3.13e-07
-## 
-## Plotting final Monte Carlo traces and marginal samples...
-## 
-## Total computation time: 12 mins
-## Average preparation & finalization time: 2.5 mins.
-## Average Monte Carlo time per chain: 3.1 mins.
-## Max total memory used: approx 3300MB.
-## Max memory used per core: approx 850MB.
-## Removing temporary output files.
-## Finished.
-## 
-## *************************************************
-##  Output saved in directory
-## __penguin_inference_60-V8_D60_S3600_260621T120619
-## *************************************************
-## 
-## Closing connections to cores.
+## [Output omitted]
 ```
 
-The calculation with 60 sample data took around 3 GB and 10 minutes on 4 cores.
+The calculation with 60 datasamples took around 3 GB and 10 minutes on 4 cores.
 
 The results of this updated inference are now stored in the compressed file `K.rds` within the new output directory. For your convenience the object produced by the computation above can be downloaded as the file [`K60.rds`](https://github.com/pglpm/prova/raw/main/vignettes/K60.rds). Once you have downloaded it in your working directory, invoke
 
@@ -996,61 +949,10 @@ Kall <- learn(
     outputdir = 'penguin_inference',
     parallel = 8 ## how many cores to use for the computation
 )
-## Registered socket cluster with 8 nodes on host ‘localhost’.
-## 
-## Learning from 344 datapoints, 8 variates.
-## 
-##  Saving output in directory
-##  __penguin_inference_all-V8_D344_S3600_260622T073853 
-## 
-## Starting Monte Carlo sampling of 3600 samples by 8 chains
-## in a space of 1023 (effectively 89707) dimensions.
-## Using 8 cores: 450 samples per chain, max 1 chains per core.
-## Requested:   ESS 450   rel.MCSE 0.047.
-## Core logs are being saved in individual files.
-## C-compiling samplers appropriate to the variates (Nimble v1.4.2)
-## this can take tens of minutes. Please wait...
-## Compiled core 1. Number of samplers: 2757.             
-## Estimating remaining time, please be patient...
-## Core 1 finished.                                        
-## Core 3 finished.                                        
-## Core 8 finished.                                        
-## Core 7 finished.                                        
-## Core 4 finished.                                        
-## Core 5 finished.                                        
-## Core 2 finished.                                        
-## Core 6 finished.                                        
-## Finished Monte Carlo sampling.
-## Highest number of Monte Carlo iterations across chains: 1541125.
-## Highest number of used mixture components: 8.
-## 
-## Checking test data
-## (#8 #37 #80 #90 #96 #115 #116 #129 #162 #230 #258 #342):
-## rel. CI error: 0.0243 to 0.293
-## ESS: 627 to 3520
-## needed thinning: 2.13 to 310
-## average: 3.18e-09 to 5.58e-08
-## quantile width: 5.45e-09 to 7.18e-08
-## 
-## Plotting final Monte Carlo traces and marginal samples...
-## 
-## Total computation time: 17 hours
-## Average preparation & finalization time: 5.4 mins.
-## Average Monte Carlo time per chain: 2.8 hours.
-## Max total memory used: approx 7100MB.
-## Max memory used per core: approx 1100MB.
-## Removing temporary output files.
-## Finished.
-## 
-## ***************************************************
-##  Output saved in directory
-## __penguin_inference_all-V8_D344_S3600_260622T073853
-## ***************************************************
-## 
-## Closing connections to cores.
+## [Output omitted]
 ```
 
-The calculation with 344 sample data took around 7 GB and 17 hours.
+The calculation with 344 datasamples took around 7 GB and 17 hours.
 
 The results of this final inference are stored in the compressed file `K.rds` within the new output directory. The object produced by the computation above can be downloaded as the file [`Kall.rds`](https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds). Once you have downloaded it in your working directory, invoke
 
