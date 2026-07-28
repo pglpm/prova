@@ -42,6 +42,7 @@ K <- learn(data = penguins, metadata = meta_penguins)
 ```
 
 Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 45 mm? In symbols,
+
 $$
 \mathrm{P}(\texttt{\small species}
 \mathclose{}\mathord{\nonscript\mkern0.5mu#1\nonscript\mkern0.5mu}\mathopen{}
@@ -53,6 +54,7 @@ $$
 ,
 K)
 $$
+
 To answer this question we use the function `Pr()`, and print a summary of the result:
 ```r
 prob <- Pr(
