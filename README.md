@@ -44,12 +44,10 @@ K <- learn(data = penguins, metadata = meta_penguins)
 Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 45 mm? In symbols,
 
 $$
-\mathrm{P}(\texttt{\small species}
-\mathclose{}\mathord{\nonscript\mkern0.5mu=\nonscript\mkern0.5mu}\mathopen{}
+\mathrm{P}(\texttt{\small species}\mathrel{\!=\!}
 \text{\small Adelie}
 \nonscript\>\vert\nonscript\>\mathopen{}
-\texttt{\small bill\thinspace len}
-\mathclose{}\mathord{\nonscript\mkern0.5mu=\nonscript\mkern0.5mu}\mathopen{}
+\texttt{\small bill\thinspace len}\mathrel{\!=\!}
 \text{\small 45\thinspace mm}
 ,
 K)
