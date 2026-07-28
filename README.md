@@ -3,7 +3,7 @@
   [![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.17226082.svg)](https://doi.org/10.5281/zenodo.17226082)
 <!-- badges: end -->
 
-<img src="man/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"/>
+<img src="man/figures/prova_logo.jpg" alt="Ensemble of densities" width="100%"/>
 
 "prova" /'prɔva/ (Italian)
 
