@@ -46,7 +46,7 @@ Ask a statistical question about the penguin population. For example: given the 
 $$
 \mathrm{P}(\texttt{\small species}\mathrel{\negthinspace=\negthinspace}
 \text{\small Adelie}
-\nonscript\thinspace\thinspace\vert\nonscript\thinspace\thinspace\mathopen{}
+\nonscript\thinspace\vert\nonscript\thinspace\mathopen{}
 \texttt{\small bill\\_len}\mathrel{\negthinspace=\negthinspace}
 \text{\small 45\thinspace mm}
 ,
