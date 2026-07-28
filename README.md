@@ -3,7 +3,7 @@
   [![Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.17226082.svg)](https://doi.org/10.5281/zenodo.17226082)
 <!-- badges: end -->
 
-<img src="/man/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"/>
+<img src="man/figures/prova_symbol.jpg" alt="Ensemble of densities" width="100%"/>
 
 "prova" /'prɔva/ (Italian)
 
@@ -62,7 +62,7 @@ Now ask: what is the relative frequency of *Adélie* species *in the whole subpo
 ```r
 hist(prob)
 ```
-<img src="/man/figures/README-hist-1.svg" alt="probability of long-run frequency" width="100%"/>
+<img src="man/figures/README-hist-1.svg" alt="probability of long-run frequency" width="100%"/>
 
 The plot shows that this full-population frequency is most likely (with roughly 90% probability) between 0.05 and 0.15. These are the values shown by `print(prob)` above.
 
@@ -76,7 +76,7 @@ invprob <- Pr(
 
 plot(invprob)
 ```
-<img src="/man/figures/README-plot-1.svg" alt="probability distribution for bill length" width="100%"/>
+<img src="man/figures/README-plot-1.svg" alt="probability distribution for bill length" width="100%"/>
 
 this probability distribution has a peak between 35 mm and 40 mm and it's slightly skewed.
 
