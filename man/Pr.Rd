@@ -54,6 +54,7 @@ An object of class "probability", which is a list consisting of the following el
 \item \verb{$values.MCaccuracy}, \code{quantiles.MCaccuracy}: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the \code{values} and \code{quantiles} elements.
 \item \verb{$densities}: numerical vector as long as number of rows in \code{Y}, used mainly for \code{\link[=plot.probability]{plot.probability()}}. It is the order of the probability density the \code{Y}-values: values with \code{0} are actual probabilities; values with \code{1} are linear probability densities (\eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}); values with \code{2} are areic probability densities (\eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}); and so on.
 \item \verb{$Y}, \verb{$X}, \verb{$tails}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
+\item \verb{$K}: name of the \code{K} object used in the calculation.
 }
 }
 \description{

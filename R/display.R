@@ -672,7 +672,7 @@ plot.probability <- function(
         ## ceiling(pscale * 10^(-floor(log10(pscale)) + 1)) *
         ##     10^(floor(log10(pscale)) - 1) * pdivs
     }
-print(x$tails)
+
     ## Prepare axes labels and title
     if(is.null(xlab)){xlab <- tempxlab}
     if(is.null(main)){
@@ -681,10 +681,11 @@ print(x$tails)
         tails[names(x$tails)] <- x$tails
         main <- paste0('P(',
             paste0(names(x$Y), tails[names(x$Y)], collapse = ', '),
-            if(!is.null(x$X)){
-                paste0(' | ',
-                    paste0(names(x$X), tails[names(x$X)], collapse = ', '))
-            }, ')')
+            ' | ',
+            if(!is.null(x$X)){ paste0(
+                paste0(names(x$X), tails[names(x$X)], collapse = ', '),
+            ', ')},
+            x$K, ')')
         if(qspread){
             main <- paste0(main, '\nquantiles: ',
                 paste0(round(qnames, 1), '%', collapse = ', '))

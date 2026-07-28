@@ -53,7 +53,8 @@ A list of the following elements:
 \item \verb{$values}: a matrix with the requested \eqn{Y}-quantiles \code{p} conditional on the requested \eqn{X}-values in \code{X}, for all combinations of \code{p} (rows) and \code{X} (columns).
 \item \verb{$quantiles} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the \code{value} element.
 \item \verb{$samples} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such quantiles.
-\item \verb{$Y}, \verb{$X}: copies of the \code{Y} and \code{X} arguments.
+\item \verb{$Y}, \verb{$X} \verb{$tails}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
+\item \verb{$K}: name of the \code{K} object used in the calculation.
 }
 }
 \description{

@@ -39,7 +39,8 @@
 #' - `$MCaccuracy`, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the `value` of the mutual information.
 #' - `$samples`, a vector with the revisability samples for the mutual information.
 #' - `$rGauss`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
-#' - `$unit`, `$Y1names`, `$Y1names`: same as the input arguments.
+#' - `$unit`, `$Y1names`, `$Y1names`, `$tails`: copies of the homonymous input arguments.
+#' - `$K`: name of the `K` object used in the calculation.
 #'
 #' @seealso
 #' [print.mi()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
@@ -147,6 +148,7 @@ mutualinfo <- function(
 
     ## Extract Monte Carlo output & aux-metadata
     ## If K is a string, check if it's a folder name or file name
+    Kname <- deparse(substitute(K))
     if (is.character(K)) {
         ## Check if 'K' is a folder containing K.rds
         if (file_test('-d', K) &&
@@ -163,6 +165,7 @@ mutualinfo <- function(
             }
         }
     }
+
     ## Add check to see that K is correct type of object?
     auxmetadata <- K$auxmetadata
     K$auxmetadata <- NULL
@@ -537,10 +540,20 @@ mutualinfo <- function(
     outva <- rowMeans(x = outva, na.rm = TRUE)
     outva[outva < 0] <- 0
 
+    ## report whether the probabilities are 'tails' or not
+    if(!is.null(tails)){
+        outtails <- list()
+        outtails[colnames(X)] <- ''
+        outtails[names(tails)[tails == -1]] <- '>'
+        outtails[names(tails)[tails == 1]] <- '<'
+    } else {
+        outtails <- NULL
+    }
+
     ## Output
     MI <- mean(out)
     if(MI < 0){ MI <- 0 }
-    out <- list(
+    out <- c(list(
         value = MI / lbase,
         quantiles = quantile(outva, probs = quantiles,
             type = 6, na.rm = TRUE, names = TRUE) / lbase,
@@ -551,7 +564,13 @@ mutualinfo <- function(
         Y1names = Y1names,
         Y2names = Y2names
         ## , ids = rowMeans(ids) # for debugging
-        )
+    ),
+    if(!is.null(outtails)){
+        list(tails <- outtails[!(outtails == '')])
+    },
+        list(K = Kname)
+    )
+
     class(out) <- 'mi'
     out
 }

@@ -24,7 +24,8 @@
 #' - `$values`: a matrix with the requested \eqn{Y}-quantiles `p` conditional on the requested \eqn{X}-values in `X`, for all combinations of `p` (rows) and `X` (columns).
 #' - `$quantiles` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the `value` element.
 #' - `$samples` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such quantiles.
-#' - `$Y`, `$X`: copies of the `Y` and `X` arguments.
+#' - `$Y`, `$X` `$tails`: copies of the `Y`, `X`, `tails` arguments.
+#' - `$K`: name of the `K` object used in the calculation.
 #'
 #' @references
 #' - Porta Mana (2025): *What's special about 89% credibility intervals?* <doi:10.5281/zenodo.17072199>.
@@ -165,6 +166,7 @@ qPr <- function(
 
     ## Extract Monte Carlo output & auxmetadata
     ## If K is a string, check if it's a folder name or file name
+    Kname <- deparse(substitute(K))
     if (is.character(K)) {
         ## Check if 'K' is a folder containing K.rds
         if (file_test('-d', K) &&
@@ -177,10 +179,11 @@ qPr <- function(
             if (file.exists(K)) {
                 K <- readRDS(K)
             } else {
-                stop('The argument "K" must be a folder containing "K.rds", or the path to an rds-file containing the output from "learn()".')
+                stop("The argument 'K' must be a folder containing 'K.rds', or the path to an rds-file containing the output from 'learn()'.")
             }
         }
     }
+
     ## Add check to see that K is correct type of object?
     auxmetadata <- K$auxmetadata
     K$auxmetadata <- NULL
@@ -501,6 +504,7 @@ qPr <- function(
     if(!is.null(outtails)){
         out$tails <- outtails[!(outtails == '')]
     }
+    out$K <- Kname
 
     class(out) <- 'probability'
     out

@@ -52,6 +52,7 @@
 #' - `$values.MCaccuracy`, `quantiles.MCaccuracy`: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the `values` and `quantiles` elements.
 #' - `$densities`: numerical vector as long as number of rows in `Y`, used mainly for [plot.probability()]. It is the order of the probability density the `Y`-values: values with `0` are actual probabilities; values with `1` are linear probability densities (\eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}); values with `2` are areic probability densities (\eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}); and so on.
 #' - `$Y`, `$X`, `$tails`: copies of the `Y`, `X`, `tails` arguments.
+#' - `$K`: name of the `K` object used in the calculation.
 #'
 #' @references
 #'
@@ -270,10 +271,10 @@ Pr <- function(
 
     ## Extract Monte Carlo output & auxmetadata
     ## If K is a string, check if it's a folder name or file name
+    Kname <- deparse(substitute(K))
     if (is.character(K)) {
         ## Check if 'K' is a folder containing K.rds
-        if (file_test('-d', K) &&
-                file.exists(file.path(K, 'K.rds'))) {
+        if (file_test('-d', K) && file.exists(file.path(K, 'K.rds'))) {
             K <- readRDS(file.path(K, 'K.rds'))
         } else {
             ## Assume 'K' the full path of K.rds
@@ -286,6 +287,7 @@ Pr <- function(
             }
         }
     }
+
     ## Add check to see that K is correct type of object?
     auxmetadata <- K$auxmetadata
     K$auxmetadata <- NULL
@@ -721,6 +723,7 @@ Pr <- function(
     if(!is.null(outtails)){
         out$tails <- outtails[!(outtails == '')]
     }
+    out$K <- Kname
 
     class(out) <- 'probability'
     out
