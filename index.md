@@ -283,8 +283,10 @@ anti-spam purposes).
 No large language models were used in the production of this software
 and of its documents.
 
-[^1]: [*variate*](https://dictionary.cambridge.org/dictionary/english/variate):
-    “a quantity that can take the value of any member of a particular
-    set (= group)”.  
-    [*variable*](https://dictionary.cambridge.org/dictionary/english/variable)
-    “a number, amount, or situation that can change”.
+[^1]: [*variate*](https://archive.org/details/conciseoxfordeng0000unse_i8l8/page/1598/mode/1up):
+    “a quantity having a numerical value for each member of a group,
+    especially one whose values occur according to a frequency
+    distribution.” (Concise Oxford English Dictionary).  
+    [*variable*](https://archive.org/details/conciseoxfordeng0000unse_i8l8/page/1598/mode/1up):
+    “a factor or quantity able to assume different numerical values”
+    (Concise Oxford English Dictionary).
