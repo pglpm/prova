@@ -1081,10 +1081,8 @@ hist.mi <- function(
         }
     ff <- x[['samples']]
 
-    if(is.null(breaks)){n <- ceiling(sqrt(length(ff))/2)} else {n <- NULL}
-
     ## Precompute histogram
-    rg <- range(ff)
+    rg <- range(ff, na.rm = TRUE)
     if(rg[2] == rg[1]){rg <- c(0, 1)}
     if(is.null(breaks)){
         n <- nclass.Sturges(ff)
