@@ -55,7 +55,7 @@
 #' - A "cluster" object previously created with [parallel::makeCluster()].
 #' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
 #' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
-#' - `TRUE`: Use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exist, then generate a cluster with as many nodes as in the [option][base::getOption()] "nc.cores"; if this option is unset, then use 2 nodes.
+#' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exist, then generate a cluster with as many nodes as in the [option][base::getOption()] "nc.cores"; if this option is unset, then use 2 nodes.
 #' @param seed Integer or `NULL` (default): use this seed for the random number generator. If `NULL`, do not set the seed.
 #' @param cleanup Logical, default `TRUE`: remove diagnostic files at the end of the computation?
 #' @param appendinfo Logical, default `TRUE`: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory `outputdir`? The appended string has the format 'Vn_Dn_Sn_YYMMDDTHHMMSS'.
