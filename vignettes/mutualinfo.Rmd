@@ -107,7 +107,7 @@ prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'),
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-# 0.003085 0.000061 0.000408 0.001174 0.004149  0.00825
+# 0.002958 0.000048 0.000408 0.001190 0.003974  0.00778
 ```
 
 \
@@ -131,9 +131,9 @@ rPr(
 )
 #        island   species
 # 644_1   Dream Chinstrap
-# 996_1   Dream Chinstrap
+# 996_1  Biscoe    Gentoo
 # 1228_1  Dream Chinstrap
-# 2230_1 Biscoe    Gentoo
+# 2230_1  Dream Chinstrap
 # 3083_1 Biscoe    Adelie
 ```
 
@@ -501,7 +501,7 @@ Note that in this case the Pearson correlation between `body_mass` and `bill_len
 
 ``` r
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.578888
+# [1] 0.582938
 ```
 
 which is different from the rough $r$-equivalent 0.67.
@@ -577,15 +577,15 @@ It is interesting to contrast this result with values of the Pearson correlation
 ``` r
 ## Pearson r for Adelie subpopulation:
 cor(samplesAdelie$body_mass, samplesAdelie$bill_len, method = 'pearson')
-# [1] 0.437217
+# [1] 0.501561
 
 ## Pearson r for Chinstrap subpopulation:
 cor(samplesChinstrap$body_mass, samplesChinstrap$bill_len, method = 'pearson')
-# [1] 0.340647
+# [1] 0.355749
 
 ## Pearson r for Gentoo subpopulation:
 cor(samplesGentoo$body_mass, samplesGentoo$bill_len, method = 'pearson')
-# [1] 0.50797
+# [1] 0.508308
 ```
 
 The Pearson correlation yields the same the association *ranking* as the mutual information does (first Gentoo, then Adélie, then Chinstrap), but it yields the association for the Adélie subpopulation to be closer to the Gentoo one than to the Chinstrap one. The mutual information yields the opposite.
