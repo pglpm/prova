@@ -1,7 +1,7 @@
 # Create a grid of values for a variate
 
-This function creates a data frame of values for one variate, or a
-combination of values for several variates.
+Create a data frame of values for one variate, or a combination of
+values for several variates.
 
 ## Usage
 
@@ -20,10 +20,10 @@ vrtgrid(vrt, K, length.out = NA)
 
 - K:
 
-  Either a character with the name of a directory or full path for a
-  'K.rds' object, produced by the
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
-  function, or such an object itself.
+  A "Knowledge" object produced by
+  [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
+  also be a path to a 'K.rds' file containing such object, or to a
+  directory containing one.
 
 - length.out:
 

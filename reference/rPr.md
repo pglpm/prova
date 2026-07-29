@@ -1,7 +1,7 @@
 # Generate datapoints
 
-This function generates datapoints of chosen joint variates, according
-to posterior probabilities and posterior conditional probabilities.
+Generates datapoints of chosen joint variates, according to posterior
+probabilities and posterior conditional probabilities.
 
 ## Usage
 
@@ -27,10 +27,10 @@ rPr(n, Ynames, X = NULL, K, tails = NULL, mcsamples = NULL, parallel = NULL)
 
 - K:
 
-  Either a character with the name of a directory or full path for a
-  'K.rds' object, produced by the
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
-  function, or such an object itself.
+  A "Knowledge" object produced by
+  [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
+  also be a path to a 'K.rds' file containing such object, or to a
+  directory containing one.
 
 - tails:
 

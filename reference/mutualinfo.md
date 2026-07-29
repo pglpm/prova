@@ -39,8 +39,10 @@ mutualinfo(
 
 - K:
 
-  Either a character with the name of a directory or full path for an
-  'K.rds' object, or such an object itself.
+  A "Knowledge" object produced by
+  [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
+  also be a path to a 'K.rds' file containing such object, or to a
+  directory containing one.
 
 - tails:
 
@@ -123,7 +125,7 @@ elements:
 - `$unit`, `$Y1names`, `$Y1names`, `$tails`: copies of the homonymous
   input arguments.
 
-- `$K`: name of the `K` object used in the calculation.
+- `$K`: name of the "Knowledge" object used in the calculation.
 
 ## Details
 

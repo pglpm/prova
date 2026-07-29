@@ -1,8 +1,8 @@
 # Calculate quantiles
 
-This function calculates the quantiles of posterior probabilities and
-posterior conditional probabilities. It also outputs the revisability of
-such quantiles if more training data were available.
+Calculate the quantiles of posterior probabilities and posterior
+conditional probabilities. Output the revisability of such quantiles if
+more training data were available.
 
 ## Usage
 
@@ -43,10 +43,10 @@ qPr(
 
 - K:
 
-  Either a character with the name of a directory or full path for a
-  'K.rds' object, produced by the
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
-  function, or such an object itself.
+  A "Knowledge" object produced by
+  [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
+  also be a path to a 'K.rds' file containing such object, or to a
+  directory containing one.
 
 - tails:
 
@@ -126,7 +126,7 @@ A list of the following elements:
 
 - `$Y`, `$X` `$tails`: copies of the `Y`, `X`, `tails` arguments.
 
-- `$K`: name of the `K` object used in the calculation.
+- `$K`: name of the "Knowledge" object used in the calculation.
 
 ## Details
 
