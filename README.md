@@ -12,10 +12,9 @@
 - [(verb)](https://dictionary.cambridge.org/dictionary/italian-english/provare): test!, try out!, assess!, attempt!, prove!, demonstrate!, show!
 
 
-# ***Prova***: probabilistic-statistical variate analysis
-## nonparametric and with automated Markov-chain Monte Carlo
+# ***Prova***: <br> Probabilistic-statistical variate analysis <br> nonparametric and with automated Markov-chain Monte Carlo
 
-(You wonder "what's a variate?" Answer here[^1])
+("What's a variate?" Answer here[^1])
 
 An R package to perform probabilistic and statistical data analysis and inference. These are its main features:
 
