@@ -91,8 +91,8 @@ given the data we have collected, what is the probability that a *new*
 penguin from this population is of species *Adélie*, if its bill length
 is 45 mm? In symbols,
 
-\\ \mathrm{Pr}(\text{species = Adelie} \vert \text{bill len = 45 mm}, K)
-\\
+\\ \mathrm{Pr}(\text{species = Adelie}
+\thinspace\vert\thinspace\mathopen{} \text{bill len = 45 mm}, K) \\
 
 where \\K\\ stands for the knowledge acquired from data and metadata. To
 answer this question, use the function
