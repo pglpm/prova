@@ -145,8 +145,9 @@ uncertain, and **Prova** can calculate the probability distribution of
 the penguin’s bill length:
 
 ``` r
+
 invprob <- Pr(
-    Y = data.frame(bill_len = seq(30, 50 by = 0.5)), # predictand
+    Y = data.frame(bill_len = seq(30, 50, by = 0.5)), # predictand
     X = data.frame(species = 'Adelie'),              # predictor
     K = K                                            # knowledge
 )

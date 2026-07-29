@@ -541,12 +541,15 @@ Its minimal arguments are three: the sample `data`, the `metadata`, and
 the name `outputdir` of a directory where the inference results should
 be saved; some additional information will be suffixed to this directory
 name. We can give a `parallel` argument specifying the number of cores
-to be used for parallel computation. A `seed` argument can also be given
-if we want to reproduce the same output in another run; or alternatively
-we can first call [`set.seed()`](https://rdrr.io/r/base/Random.html) in
-the usual R-way, as we did at the beginning of this vignette. (The
-function [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
-in any case always saves the current random-seed status in its output
+to be used for parallel computation, or alternatively a “cluster” object
+previously created with
+[`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html).
+A `seed` argument can also be given if we want to reproduce the same
+output in another run; or alternatively we can first call
+[`set.seed()`](https://rdrr.io/r/base/Random.html) in the usual R-way,
+as we did at the beginning of this vignette. (The function
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md) in any
+case always saves the current random-seed status in its output
 directory, in the file `rng_seed.rds`, so it’s always possible to
 recover its initial state.)
 
@@ -682,22 +685,37 @@ the present question, this function requires three arguments:
   with the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function, discussed in the previous section. In the present case it’s
   `K10`.
-- Optionally, `parallel` specifies how many cores we should use for the
-  computation.
+- Optionally, `parallel`. This argument specifies how many nodes we
+  should use for the computation, or a cluster previously generated with
+  [`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html).
+  If this argument is missing, then the function checks whether a
+  default cluster (set with
+  [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html))
+  exists, and if it doesn’t then it creates a number of nodes equal to
+  the R option ““nc.cores” (see
+  [`getOption()`](https://rdrr.io/r/base/options.html)), or equal to 2,
+  if that option is unset. Let’s create a default parallel cluster with
+  4 nodes, to be used for the remainder of our analysis. If you don’t
+  want to bother with parallel computation for the moment, just skip
+  this step.
 
-Here is a way to call the function; the computation should take at most
-a couple of seconds:
+``` r
+
+cl <- parallel::makeCluster(4) ## let's use 4 cores, if we have them
+setDefaultCluster(cl)
+```
+
+Back to our function
+[`Pr()`](https://pglpm.github.io/prova/reference/Pr.md): here is a way
+to call the function; the computation should take at most a couple of
+seconds:
 
 ``` r
 
 ## data frame with the variate and values we want to know the frequencies of
 Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
-Fspecies10 <- Pr(
-    Y = Y,
-    K = K10,
-    parallel = 4 ## let's use 4 cores
-)
+Fspecies10 <- Pr(Y = Y, K = K10)
 ```
 
 The answer to our question is now contained in the `Fspecies10` object
@@ -897,7 +915,7 @@ Yimp <- data.frame(sex = c('female', 'male'))
 ## excluding 'sex' variate
 X <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
 
-imputeddata <- Pr(Y = Yimp, X = X, K = K10, parallel = 4)
+imputeddata <- Pr(Y = Yimp, X = X, K = K10)
 
 print(imputeddata)
 # , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007
@@ -929,7 +947,7 @@ X <- penguins_shuffled[6, ]
 ## drop unknown variates
 X <- X[, !is.na(X)]
 
-imputeddata <- Pr(Y = Yimp, X = X, K = K10, parallel = 4)
+imputeddata <- Pr(Y = Yimp, X = X, K = K10)
 
 plot(imputeddata)
 ```
@@ -997,11 +1015,7 @@ Y2 <- expand.grid(
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspeciessex10 <- Pr(
-    Y = Y2,
-    K = K10,
-    parallel = 4 ## let's use 4 cores
-)
+Fspeciessex10 <- Pr(Y = Y2, K = K10)
 
 ## Display the estimated frequencies of all six combinations,
 ## as well as their credibility intervals
@@ -1063,8 +1077,7 @@ X <- data.frame(island = c('Biscoe', 'Dream'))
 Fspecies10I <- Pr(
     Y = Y,
     X = X, ## argument for conditional inferences
-    K = K10,
-    parallel = 4 ## let's use 4 cores
+    K = K10
 )
 ```
 
@@ -1270,12 +1283,7 @@ X2 <- expand.grid(
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspecies10IS <- Pr(
-    Y = Y,
-    X = X2,
-    K = K10,
-    parallel = 4 ## let's use 4 cores
-)
+Fspecies10IS <- Pr(Y = Y, X = X2, K = K10)
 
 ## Display the estimated frequencies of species
 ## within all six combinations of subpopulations
@@ -1331,7 +1339,7 @@ K60 <- learn(
     data = datafile,
     metadata = meta_penguins,
     outputdir = 'penguin_inference',
-    parallel = 4 ## how many cores to use for the computation
+    parallel = 4 ## how many nodes to use for the computation
 )
 
 ## [Output omitted]
@@ -1380,15 +1388,13 @@ calculation for all three questions:
 
 Fspecies60 <- Pr(
     Y = Y,
-    K = K60, ## updated inference
-    parallel = 4 ## let's use 4 cores
+    K = K60 ## updated inference
 )
 
 Fspecies60I <- Pr(
     Y = Y,
     X = X, ## argument for conditional inferences
-    K = K60, ## updated inference
-    parallel = 4 ## let's use 4 cores
+    K = K60 ## updated inference
 )
 ```
 
@@ -1723,8 +1729,7 @@ species are computed in the usual way:
 
 Fspeciesall <- Pr(
     Y = Y,
-    K = Kall, ## updated inference
-    parallel = 4 ## let's use 4 cores
+    K = Kall ## updated inference
 )
 ```
 
@@ -1829,7 +1834,7 @@ Xvls <- 'Biscoe' ## subpopulation value or values
 X <- data.frame(Xvls)
 colnames(X) <- Xvrt
 
-Fanalysis <- Pr(Y = Y, X = X, K = Kall, parallel = 4)
+Fanalysis <- Pr(Y = Y, X = X, K = Kall)
 ```
 
 Here are the probability distributions and the credibility intervals for
@@ -1894,7 +1899,7 @@ X <- data.frame(Xvls)
 colnames(X) <- Xvrt
 
 ## NB: rewriting the previous 'Fanalysis' object
-Fanalysis <- Pr(Y = Y, X = X, K = Kall, parallel = 4)
+Fanalysis <- Pr(Y = Y, X = X, K = Kall)
 ```
 
 Here are the probability distributions and confidence intervals for the
@@ -1960,7 +1965,7 @@ Y <- vrtgrid(vrt = 'body_mass', K = Kall)
 X <- vrtgrid(vrt = 'species', K = Kall)
 
 ## NB: rewriting the previous 'Fanalysis' object
-Fanalysis <- Pr(Y = Y, X = X, K = Kall, parallel = 4)
+Fanalysis <- Pr(Y = Y, X = X, K = Kall)
 ```
 
 Here is the estimated frequency distribution of body mass within each
@@ -1987,6 +1992,16 @@ very similar values – there’s still some uncertainty there. But in the
 body-mass range around 3750 g there’s a high probability that the two
 distributions clearly differ; we see that their mean estimates are
 outside each other’s 89%-credibility interval.
+
+ 
+
+If we created a parallel cluster at the beginning of our analysis, let’s
+close it now.
+
+``` r
+
+parallel::stopCluster(cl)
+```
 
   
 

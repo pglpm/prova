@@ -506,9 +506,25 @@ joint variates. Its main arguments are the following:
   function.
 - Optionally, `unit`: the mutual information unit; default “shannons”
   (Sh).
-- Optionally, `parallel` specifies how many cores we should use for the
-  computation. If `NULL` or omitted, half of the cores available will be
-  used.
+- Optionally, `parallel` This argument specifies how many nodes we
+  should use for the computation, or a cluster previously generated with
+  [`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html).
+  If this argument is missing, then the function checks whether a
+  default cluster (set with
+  [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html))
+  exists, and if it doesn’t then it creates a number of nodes equal to
+  the R option ““nc.cores” (see
+  [`getOption()`](https://rdrr.io/r/base/options.html)), or equal to 2,
+  if that option is unset. Let’s create a default parallel cluster with
+  4 nodes, to be used for the remainder of our analysis. If you don’t
+  want to bother with parallel computation for the moment, just skip
+  this step.
+
+``` r
+
+cl <- parallel::makeCluster(4) ## let's use 4 cores, if we have them
+setDefaultCluster(cl)
+```
 
 Be aware that the computation can take even tens of minutes if the
 arguments `Y1names` and `Y2names` include multiple joint variates.
@@ -520,8 +536,7 @@ Let’s calculate the mutual information between the variates `island` and
 
 MIislandspecies <- mutualinfo(
     Y1names = 'island', Y2names = 'species',
-    K = K,
-    parallel = 4 ## let's use 4 cores
+    K = K
 )
 ```
 
@@ -853,7 +868,17 @@ sample\*\*](figure/histislandspecies-1.svg)
 
 **Revisability of mutual information with a much larger data sample**
 
-  
+ 
+
+If we created a parallel cluster at the beginning of our analysis, let’s
+close it now.
+
+``` r
+
+parallel::stopCluster(cl)
+```
+
+ 
 
 ## Appendices
 

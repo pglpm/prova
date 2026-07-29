@@ -60,10 +60,11 @@ hist(
 
 - breaks:
 
-  `NULL` or as in function
-  [`graphics::hist()`](https://rdrr.io/r/graphics/hist.html). If `NULL`
-  (default), an optimal number of breaks for each probability
-  distribution is computed.
+  as in function
+  [`graphics::hist()`](https://rdrr.io/r/graphics/hist.html), or `NULL`
+  (default). Value `NULL` uses the geometric mean of
+  [Sturges](https://rdrr.io/r/grDevices/nclass.html) and
+  [Freedman-Diaconis](https://rdrr.io/r/grDevices/nclass.html) bins.
 
 - legend:
 

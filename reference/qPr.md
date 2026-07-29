@@ -76,13 +76,22 @@ qPr(
 
 - parallel:
 
-  Logical or positive integer or cluster object. `TRUE` (default): use
-  as many cores as in user's
-  [option](https://rdrr.io/r/base/options.html) "nc.cores", or 2 if that
-  is `NULL`. `FALSE`: use serial computation. Integer: use this many
-  cores. It can also be a cluster object previously created with
-  [`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
-  in this case the parallel computation will use this object.
+  One of the following values:
+
+  - A "cluster" object previously created with
+    [`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html).
+
+  - Positive integer: create a parallel cluster with this number of
+    nodes (it will be stopped at the end).
+
+  - `FALSE`: do not use clusters (one node is still generated, in order
+    to eliminate temporary objects from the computation).
+
+  - `TRUE`: Use the cluster that was set as default with
+    [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
+    if no such object exist, then generate a cluster with as many nodes
+    as in the [option](https://rdrr.io/r/base/options.html) "nc.cores";
+    if this option is unset, then use 2 nodes.
 
 - sep:
 

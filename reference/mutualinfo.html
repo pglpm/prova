@@ -107,7 +107,11 @@
 
 
 <dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
-<dd><p>Logical or positive integer or cluster object. <code>TRUE</code> (default): use as many cores as in user's <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores", or 2 if that is <code>NULL</code>. <code>FALSE</code>: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>; in this case the parallel computation will use this object.</p></dd>
+<dd><p>One of the following values:</p><ul><li><p>A "cluster" object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>.</p></li>
+<li><p>Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).</p></li>
+<li><p><code>FALSE</code>: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).</p></li>
+<li><p><code>TRUE</code>: Use the cluster that was set as default with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>; if no such object exist, then generate a cluster with as many nodes as in the <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores"; if this option is unset, then use 2 nodes.</p></li>
+</ul></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -144,7 +148,7 @@ $$\mathit{MI}(Y_1, Y_2 \vert X = x) \mathrel{:=}
 $$
 an expression which can also be written in several other equivalent ways. It is a model-free information-theoretic measure of association, that is, it does not depend on assumptions such as linearity, gaussianity, and similar. See <code><a href="../articles/mutualinfo.html">vignette('mutualinfo')</a></code> for discussion and example uses, and also the "References" section.  If \(Y_1, Y_2\) are <em>jointly gaussian variates</em>, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output <code>rGauss</code> in the "Value" section.</p>
 <p>The function <code>mutualinfo()</code> calculates the mutual information above for the joint variates specified in the arguments <code>Y1names</code> and <code>Y2names</code>, conditional on the values of the variates specified in the <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> <code>X</code>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probabilities \(\mathrm{Pr}(Y_1 | K)\) etc. are used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
-<p>The computation of these quantities is done via Monte Carlo integration, using the samples produced by the <code><a href="learn.html">learn()</a></code> function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more cores (if available) in parallel, through the argument <code>parallel =</code>.</p>
+<p>The computation of these quantities is done via Monte Carlo integration, using the samples produced by the <code><a href="learn.html">learn()</a></code> function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more nodes (if available) in parallel, through the argument <code>parallel =</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

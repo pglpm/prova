@@ -100,7 +100,11 @@
 
 
 <dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
-<dd><p>Logical or positive integer or cluster object. <code>TRUE</code> (default): use as many cores as in user's <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores", or 2 if that is <code>NULL</code>. <code>FALSE</code>: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>; in this case the parallel computation will use this object.</p></dd>
+<dd><p>One of the following values:</p><ul><li><p>A "cluster" object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>.</p></li>
+<li><p>Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).</p></li>
+<li><p><code>FALSE</code>: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).</p></li>
+<li><p><code>TRUE</code>: Use the cluster that was set as default with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>; if no such object exist, then generate a cluster with as many nodes as in the <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores"; if this option is unset, then use 2 nodes.</p></li>
+</ul></dd>
 
 
 <dt id="arg-sep">sep<a class="anchor" aria-label="anchor" href="#arg-sep"></a></dt>

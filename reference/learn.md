@@ -106,13 +106,22 @@ learn(
 
 - parallel:
 
-  Logical or positive integer or cluster object. `TRUE` (default): use
-  as many cores as in user's
-  [option](https://rdrr.io/r/base/options.html) "nc.cores", or 2 if that
-  is `NULL`. `FALSE`: use serial computation. Integer: use this many
-  cores. It can also be a cluster object previously created with
-  [`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
-  in this case the parallel computation will use this object.
+  One of the following values:
+
+  - A "cluster" object previously created with
+    [`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html).
+
+  - Positive integer: create a parallel cluster with this number of
+    nodes (it will be stopped at the end).
+
+  - `FALSE`: do not use clusters (one node is still generated, in order
+    to eliminate temporary objects from the computation).
+
+  - `TRUE`: Use the cluster that was set as default with
+    [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
+    if no such object exist, then generate a cluster with as many nodes
+    as in the [option](https://rdrr.io/r/base/options.html) "nc.cores";
+    if this option is unset, then use 2 nodes.
 
 - seed:
 
@@ -327,7 +336,7 @@ example, a script 'myscript.R' could have the following structure:
       data = 'filename_with_data.csv', # CSV file containing the dataset
       metadata = 'filename_with_metadata.csv', # CSV file containing the metadata
       outputdir = 'some_directory', # path to output directory
-      parallel = 8 # machine has more than 8 cores, so we use 8
+      parallel = 8 # let's say machine has more than 8 cores, so we use 8
       ## possibly other arguments to learn()
     )
 
@@ -445,7 +454,7 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/Rtmp2JQsIv/prova-V1_D3_S10_260729T154805_19fa5a3bdb6c
+#> /tmp/Rtmp2Rr21v/prova-V1_D3_S10_260729T205151_198037b5462
 #> Prova v2.0.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -468,18 +477,18 @@ K <- learn(
 #> quantile width: 0.0585 to 0.541
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 35 secs
-#> Average preparation & finalization time: 34 secs.
-#> Average Monte Carlo time per chain: 0.67 secs.
+#> Total computation time: 39 secs
+#> Average preparation & finalization time: 38 secs.
+#> Average Monte Carlo time per chain: 0.55 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
 #> Finished.
 #> 
-#> **********************************************************
+#> *********************************************************
 #> Output saved in directory
-#> /tmp/Rtmp2JQsIv/prova-V1_D3_S10_260729T154805_19fa5a3bdb6c
-#> **********************************************************
+#> /tmp/Rtmp2Rr21v/prova-V1_D3_S10_260729T205151_198037b5462
+#> *********************************************************
 
 ## Check structure of `K` object:
 str(K)
