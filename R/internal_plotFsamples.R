@@ -69,7 +69,7 @@
     ## }
 
     auxmetadata <- K$auxmetadata
-    ## K$auxmetadata <- NULL
+    K$auxinfo <- NULL
     nsamples <- ncol(K$W)
 
     nodata <- missing(data) || is.null(data) || isFALSE(data)
@@ -285,8 +285,8 @@
                     ## ), 31 / 32, type = 6, na.rm = TRUE)
                 } else {
                     dim(probabilities$quantiles) <- dim(probabilities$quantiles)[-2]
-                    temp <- probabilities$quantiles[xin, ]
-                    ymax <- max(temp[is.finite(temp)])
+                    ymax <- probabilities$quantiles[xin, ]
+                    ymax <- max(ymax[is.finite(ymax)])
                     ## ymax <- apply(probabilities[xin, , drop = FALSE], 1,
                     ##     function(x) {
                     ##         quantile(x, max(quants), type = 6, na.rm = TRUE)
@@ -497,8 +497,8 @@
                     ## ), 31 / 32, type = 6, na.rm = TRUE)
                 } else {
                     dim(probabilities$quantiles) <- dim(probabilities$quantiles)[-2]
-                    temp <- probabilities$quantiles
-                    ymax <- max(temp[is.finite(temp)])
+                    ymax <- probabilities$quantiles
+                    ymax <- max(ymax[is.finite(ymax)])
                     ## ymax <- apply(probabilities[, , drop = FALSE], 1,
                     ##     function(x) {
                     ##         quantile(x, max(quants), type = 6, na.rm = TRUE)

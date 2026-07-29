@@ -46,7 +46,7 @@
 #'
 #' ## calculate the conditional probabilities for the 'bill_len' values above,
 #' ## given the values of 'species'
-#' probs <- Pr(Y = valuesBill, X = valuesSpecies, K = K, parallel = 1)
+#' probs <- Pr(Y = valuesBill, X = valuesSpecies, K = K)
 #'
 #'
 #' ## Create a data frame with all possible combinations of the values above;
@@ -111,9 +111,9 @@ vrtgrid <- function(
         temp <- seq(adata$plotmin, adata$plotmax, length.out = length.out[avrt])
     } else if(adata$mcmctype == 'D'){
         if(is.na(length.out[avrt])){
-            temp <- seq(adata$plotmin, adata$plotmax, by = 2 * adata$halfstep)
+            seq(adata$plotmin, adata$plotmax, by = 2 * adata$halfstep)
         } else {
-            temp <- seq(adata$plotmin, adata$plotmax, length.out = length.out[avrt])
+            seq(adata$plotmin, adata$plotmax, length.out = length.out[avrt])
         }
         ## step <- as.integer(ceiling((adata$plotmax - adata$plotmin) /
         ##                                (2 * adata$halfstep)))
@@ -124,7 +124,7 @@ vrtgrid <- function(
         ## temp <- seq(adata$plotmin, adata$plotmax,
         ##     length.out = 1 + round((adata$plotmax - adata$plotmin)/step))
     } else if(adata$mcmctype %in% c('B', 'O', 'N')){
-        temp <- unname(unlist(adata[paste0('V', seq_len(adata$Nvalues))]))
+        unname(unlist(adata[paste0('V', seq_len(adata$Nvalues))]))
     }
         }),
     nm = vrt), KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)

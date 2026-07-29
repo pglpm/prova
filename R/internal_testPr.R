@@ -167,15 +167,15 @@
 
                 if(!(vrt %in% names(tails))){
                     if(!is.na(val)){
-                        temp <- pnorm(q = val + hstep,
+                        logP <- pnorm(q = val + hstep,
                             mean = K$Dmean[auxid, , ],
                             sd = K$Dsd[auxid, , ],
                             lower.tail = TRUE, log.p = TRUE)
-                        logP <- temp + log(-expm1(
+                        logP <- logP + log(-expm1(
                             pnorm(q = val - hstep,
                                 mean = K$Dmean[auxid, , ],
                                 sd = K$Dsd[auxid, , ],
-                                lower.tail = TRUE, log.p = TRUE) - temp
+                                lower.tail = TRUE, log.p = TRUE) - logP
                         ))
                         ##
                         ## ## this alternate form seems less precise,

@@ -58,8 +58,7 @@
 #' K <- Kexample
 #'
 #' ## mutual information between variates 'species' and 'bill_len'
-#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-#'   K = K, nv = 2, parallel = 1)
+#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
 #'
 #' ## The value and its numerical Monte Carlo error
 #' c(MI$value, MI$MCaccuracy)

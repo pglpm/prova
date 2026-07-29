@@ -29,7 +29,7 @@
 #' @param border Border colour for bands in plots of `type = 'q'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
 #' @param grid Logical, default `TRUE`: plot a light grid?
 #' @param lwd.grid Numeric, default 1: width of grid lines.
-#' @param col.grid Color of grid lines, default `'#BBBBBB80'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()].
+#' @param col.grid Color of grid lines, default `'#00000022'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()].
 #' @param lty,lwd,pch,lend,col,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()]; defaults are different (see "Usage").
 #' @param ... Other parameters to be passed to [graphics::matplot()].
 #'
@@ -96,7 +96,7 @@ pplot <- function(
     border = NA,
     grid = TRUE,
     lwd.grid = NULL,
-    col.grid = '#BBBBBB80',
+    col.grid = '#00000022',
     axes = FALSE,
     cex.main = 1,
     ...
@@ -139,16 +139,16 @@ pplot <- function(
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all x are numeric, find common min max
         xcha <- FALSE
-        temp <- unlist(x, recursive = FALSE, use.names = FALSE)
-        temp <- temp[is.finite(temp)]
-        rgx <- range(temp)
+        rgx <- unlist(x, recursive = FALSE, use.names = FALSE)
+        rgx <- range(rgx[is.finite(rgx)])
     } else if(all(vapply(X = x[!xnull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all x are character, find domain
         xcha <- TRUE
-        temp <- unlist(x, recursive = FALSE, use.names = FALSE)
-        temp <- temp[!is.na(temp)]
-        if(is.null(xdomain)){ xdomain <- unique(temp) }
+        if(is.null(xdomain)){
+            xdomain <- unlist(x, recursive = FALSE, use.names = FALSE)
+            xdomain <- unique(xdomain[!is.na(xdomain)])
+        }
         rgx <- c(1, length(xdomain))
     } else {
         stop("Elements in 'x' must be all numeric or all character.")
@@ -161,16 +161,16 @@ pplot <- function(
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all y are numeric, find common min max
         ycha <- FALSE
-        temp <- unlist(y, recursive = FALSE, use.names = FALSE)
-        temp <- temp[is.finite(temp)]
-        rgy <- range(temp)
+        rgy <- unlist(y, recursive = FALSE, use.names = FALSE)
+        rgy <- range(rgy[is.finite(rgy)])
     } else if(all(vapply(X = y[!ynull], FUN = is.character,
         FUN.VALUE = FALSE, USE.NAMES = FALSE))){
         ## all y are character, find domain
         ycha <- TRUE
-        temp <- unlist(y, recursive = FALSE, use.names = FALSE)
-        temp <- temp[!is.na(temp)]
-        if(is.null(ydomain)){ ydomain <- unique(temp) }
+        if(is.null(ydomain)){
+            ydomain <- unlist(y, recursive = FALSE, use.names = FALSE)
+            ydomain <- unique(ydomain[!is.na(ydomain)])
+        }
         rgy <- c(1, length(ydomain))
     } else {
         stop("Elements in 'y' must be all numeric or all character.")
@@ -185,6 +185,7 @@ pplot <- function(
         x[xnull] <- temp
         rgx[1] <- min(rgx[1], unlist(temp), na.rm = TRUE)
         rgx[2] <- max(rgx[2], unlist(temp), na.rm = TRUE)
+        rm(temp)
     }
     if(any(ynull)){
         temp <- lapply(
@@ -194,6 +195,7 @@ pplot <- function(
         y[ynull] <- temp
         rgy[1] <- min(rgy[1], unlist(temp), na.rm = TRUE)
         rgy[2] <- max(rgy[2], unlist(temp), na.rm = TRUE)
+        rm(temp)
     }
 
     ## Other NAs
@@ -439,7 +441,7 @@ pplot <- function(
 #' valuesBill <- vrtgrid(vrt = 'bill_len', K = K)
 #'
 #' ## calculate the probabilities and quantiles
-#' probs <- Pr(Y = valuesBill, K = K, parallel = 1)
+#' probs <- Pr(Y = valuesBill, K = K)
 #'
 #' ## plot the probabilities and quantiles
 #' plot(probs)
@@ -473,7 +475,7 @@ plot.probability <- function(
     alpha.f = 1,
     grid = TRUE,
     lwd.grid = NULL,
-    col.grid = '#BBBBBB80',
+    col.grid = '#00000022',
     axes = FALSE,
     ylab2 = NULL,
     main = NULL,
@@ -838,7 +840,7 @@ plot.probability <- function(
 #'
 #' ## calculate the probability, and its revisability,
 #' ## for the value 'Adelie' of the "species" variate
-#' probs <- Pr(Y = data.frame(species = 'Adelie'), K = K, parallel = 1)
+#' probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
 #' probs$values
 #'
 #' ## show the revisability of this probability; equivalently show
@@ -1032,8 +1034,7 @@ hist.probability <- function(
 #' K <- Kexample
 #'
 #' ## calculate the mutual information and its revisability
-#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-#'   K = K, nv = 2, parallel = 1)
+#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
 #'
 #' ## show the possible revisability of the mutual information,
 #' ## if a much larger data sample were collected
@@ -1177,7 +1178,7 @@ hist.mi <- function(
 #' Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 #' X <- data.frame(bill_len = c(43, 44))
 #'
-#' probs <- Pr(Y = Y, X = X, K = K, parallel = 1)
+#' probs <- Pr(Y = Y, X = X, K = K)
 #'
 #' ## display the values and revisabilities of these probabilities
 #' print(probs)
@@ -1255,7 +1256,7 @@ print.probability <- function(
             paste0(temp2, '*')
 
         if(is.null(x$X)){temp <- temp[,,]}
-print(class(temp))
+
         print(x = noquote(temp), ...)
 
     } else {
@@ -1293,8 +1294,7 @@ print(class(temp))
 #' K <- Kexample
 #'
 #' ## Calculate the mutual information between variates 'species' and 'bill_len'
-#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-#'   K = K, parallel = 1)
+#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K)
 #'
 #' ## display the value and revisability of the mutual information
 #' print(MI)
@@ -1442,7 +1442,7 @@ print.K <- function(x, ...){
 ## #' probs <- Pr(
 ## #'   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
 ## #'   X = data.frame(bill_len = c(43, 44)),
-## #'   K = K, parallel = 1
+## #'   K = K
 ## #' )
 ## #'
 ## #' probs$values

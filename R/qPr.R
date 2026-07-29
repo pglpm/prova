@@ -49,10 +49,7 @@
 #' ## Calculate the 5.5%-, 50%-, and 94.5%-quantiles for the variate "bill lengt",
 #' ## that is, the values of "bill length" having such cumulative probabilities
 #'
-#' quants <- qPr(
-#'   Yname = 'bill_len',
-#'   K = K, parallel = 1
-#' )
+#' quants <- qPr(Yname = 'bill_len', K = K)
 #'
 #' ## display the quantile values
 #' quants$values
@@ -61,7 +58,7 @@
 #' probs <- Pr(
 #'   Y = data.frame(bill_len = c(quants$values)),
 #'   tails = list(bill_len = -1),
-#'   K = K, parallel = 1
+#'   K = K
 #' )
 #' probs$values
 #'
@@ -73,11 +70,7 @@
 #' ## Calculate the 5.5%-, 50%-, and 94.5%-quantiles for the variate "bill lengt",
 #' ## for the subpopulation of species 'Adelie'
 #'
-#' quants <- qPr(
-#'   Yname = 'bill_len',
-#'   X = data.frame(species = 'Adelie'),
-#'   K = K, parallel = 1
-#' )
+#' quants <- qPr(Yname = 'bill_len', X = data.frame(species = 'Adelie'), K = K)
 #'
 #' ## display the quantile values
 #' quants$values
@@ -87,7 +80,7 @@
 #'   Y = data.frame(bill_len = c(quants$values)),
 #'   X = data.frame(species = 'Adelie'),
 #'   tails = list(bill_len = -1),
-#'   K = K, parallel = 1)
+#'   K = K)
 #' probs$values
 #' }
 #'

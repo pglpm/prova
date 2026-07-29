@@ -68,7 +68,7 @@ datapoints <- rPr(
   n = 5,
   Ynames = 'species',
   X = data.frame(bill_len = 40),
-  tails = list(bill_len = -1),
+  tails = list(bill_len = 'lower'),
   K = K
 )
 

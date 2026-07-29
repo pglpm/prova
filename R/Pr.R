@@ -85,10 +85,7 @@
 #' ## Calculate the probability that an unknown penguin from this population
 #' ## is of species 'Adelie'
 #'
-#' probs <- Pr(
-#'   Y = data.frame(species = 'Adelie'),
-#'   K = K, parallel = 1
-#' )
+#' probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
 #'
 #' ## display the probability value
 #' probs$values
@@ -108,7 +105,7 @@
 #'
 #' probs <- Pr(
 #'   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-#'   K = K, parallel = 1
+#'   K = K
 #' )
 #'
 #' ## display the 3 probability values
@@ -133,7 +130,7 @@
 #' probs <- Pr(
 #'   Y = data.frame(species = 'Adelie'),
 #'   X = data.frame(bill_len = 43),
-#'   K = K, parallel = 1
+#'   K = K
 #' )
 #'
 #' ## display the probability value
@@ -150,10 +147,7 @@
 #' ## Calculate the probability that
 #' ## an unknown penguin is of species 'Adelie' AND its bill length is 43 mm
 #'
-#' probs <- Pr(
-#'   Y = data.frame(species = 'Adelie', bill_len = 43),
-#'   K = K, parallel = 1
-#' )
+#' probs <- Pr(Y = data.frame(species = 'Adelie', bill_len = 43), K = K)
 #'
 #' ## display the probability value
 #' probs$values
@@ -171,7 +165,7 @@
 #'
 #' X <- data.frame(bill_len = c(43, 44))
 #'
-#' probs <- Pr(Y = Y, X = X, K = K, parallel = 1)
+#' probs <- Pr(Y = Y, X = X, K = K)
 #'
 #' ## display the 3 x 2 probability values
 #' probs$values
@@ -193,7 +187,7 @@
 #'   bill_len = c(43, 44)
 #' )
 #'
-#' probs <- Pr(Y = Y, K = K, parallel = 1)
+#' probs <- Pr(Y = Y, K = K)
 #'
 #' ## display the 6 joint-probability values
 #' probs$values
