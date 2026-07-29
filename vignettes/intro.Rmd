@@ -606,12 +606,9 @@ But we can also give a fuller answer by displaying the probability distributions
 
 ``` r
 hist(Fspecies10, legend = 'topright', col = 2:4)
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 ```
-
-<div class="figure">
-<img src="figure/hist10-1.svg" alt="**Probability distribution for the rel. requencies of penguin species**" width="100%" />
-<p class="caption">**Probability distribution for the rel. requencies of penguin species**</p>
-</div>
 \
 
 It's important to keep in mind that the three frequencies must add up to 1, so if our future estimates of some of them increase, then the estimate of some others must decrease.
@@ -724,12 +721,9 @@ For Biscoe island we find
 ## select only Biscoe
 hist(Fspecies10I, subset = list(island = 'Biscoe'),
     xlim = c(0, 1), legend = 'topright', col = 2:4)
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 ```
-
-<div class="figure">
-<img src="figure/hist10biscoe-1.svg" alt="**Probability distribution for species frequencies on Biscoe**" width="100%" />
-<p class="caption">**Probability distribution for species frequencies on Biscoe**</p>
-</div>
 
 Note how, according to these preliminary estimates, the frequencies of Adélie and Chinstrap are very close, around 0.1, and quite different from the frequency of Gentoo, around 0.7. Yet, the probability distributions are wide; each distribution gives a non-zero probability to all three estimates.
 
@@ -743,12 +737,9 @@ For Dream island we find
 ## select only Dream
 hist(Fspecies10I, subset = list(island = 'Dream'),
     xlim = c(0, 1), legend = 'topright', col = 2:4)
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 ```
-
-<div class="figure">
-<img src="figure/hist10dream-1.svg" alt="**Probability distribution for species frequencies on Biscoe**" width="100%" />
-<p class="caption">**Probability distribution for species frequencies on Biscoe**</p>
-</div>
 \
 
 Among other things we see here a larger difference in the estimated frequencies of Adélie, around 0.36, and Chinstrap, around 0.47. Still, the probability distributions are wide.
@@ -963,18 +954,15 @@ We can also plot the updated probability distributions for the relative frequenc
 hist(Fspecies10, legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 10), ## y-range same for both plots
     col = 2:4, main = '10 samples')
-```
-
-<img src="figure/hist60-1.svg" alt="" width="100%" />
-
-``` r
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 
 hist(Fspecies60, legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 10), ## y-range same for both plots
     col = 2:4, main = '60 samples')
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 ```
-
-<img src="figure/hist60-2.svg" alt="" width="100%" />
 
 We see that in our initial inference (top plot) all three probability distributions largely overlapped, indicating our uncertainty on whether any of these frequencies might be very different from the others.
 
@@ -1020,19 +1008,16 @@ hist(Fspecies10I, subset = list(island = 'Dream'),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 13), ## same y-range
     col = 2:4, main = '10 samples, Dream island')
-```
-
-<img src="figure/hist60Dream-1.svg" alt="" width="100%" />
-
-``` r
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 
 hist(Fspecies60I, subset = list(island = 'Dream'),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 13), ## same y-range
     col = 2:4, main = '60 samples, Dream island')
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 ```
-
-<img src="figure/hist60Dream-2.svg" alt="" width="100%" />
 
 The new frequency estimates for `Adelie` (solid red line) and `Chinstrap` (dashed blue line) are now around 0.2 apart; the previous estimates had them around 0.1 apart. This change is not unexpected: the new estimates are well within the previous credibility intervals; we were correctly warned about their possible change.
 
@@ -1045,19 +1030,16 @@ hist(Fspecies10I, subset = list(island = 'Biscoe'),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 17), ## same y-range from previous plot
     col = 2:4, main = '10 samples, Biscoe island')
-```
-
-<img src="figure/hist60Biscoe-1.svg" alt="" width="100%" />
-
-``` r
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 
 hist(Fspecies60I, subset = list(island = 'Biscoe'),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 17), ## same y-range from previous plot
     col = 2:4, main = '60 samples, Biscoe island')
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 ```
-
-<img src="figure/hist60Biscoe-2.svg" alt="" width="100%" />
 
 The new frequency estimates for `Adelie` (solid red line) and `Chinstrap` (dashed blue line) are now around 0.2 apart, whereas the previous estimates were almost equal. Again this is not unexpected, and these changes are well within the previous credibility intervals.
 
@@ -1180,9 +1162,9 @@ plot(Fspeciesall, ylim = c(0, 1))
 ``` r
 
 hist(Fspeciesall, xlim = c(0, 1), legend = 'topright')
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 ```
-
-<img src="figure/visall-2.svg" alt="" width="100%" />
 
 The last plot is visually the most complete answer we can give to our research question **Q1**: "*What's the overall statistical occurrence of the three species in the whole population?*". A quantitative summary can be extracted from the `Fspeciesall` in the usual way:
 
@@ -1244,11 +1226,8 @@ Here are the probability distributions and the credibility intervals for the thr
 ``` r
 hist(Fanalysis, xlim = c(0, 1), col = 2:4, ## same colours as before!
     legend = 'topright')
-```
-
-<img src="figure/unnamed-chunk-8-1.svg" alt="" width="100%" />
-
-``` r
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 
 print(Fanalysis)
 # , , |island = Biscoe
@@ -1301,11 +1280,8 @@ Here are the probability distributions and confidence intervals for the three fr
 ``` r
 hist(Fanalysis, xlim = c(0, 1), col = 5:7,
     legend = 'topright')
-```
-
-<img src="figure/unnamed-chunk-9-1.svg" alt="" width="100%" />
-
-``` r
+# Error in `hist.default()`:
+# ! some 'x' not counted; maybe 'breaks' do not span range of 'x'
 
 print(Fanalysis)
 # , , |species = Adelie

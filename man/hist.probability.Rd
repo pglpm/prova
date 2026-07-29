@@ -31,7 +31,7 @@
 
 \item{subset}{Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.}
 
-\item{breaks}{\code{NULL} or as in function \code{\link[graphics:hist]{graphics::hist()}}. If \code{NULL} (default), an optimal number of breaks for each probability distribution is computed.}
+\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). \code{NULL} means using "sturges", see \code{\link[grDevices:nclass.Sturges]{grDevices::nclass.Sturges()}}, but without "prettifying" the break boundaries, unlike \code{\link[graphics:hist]{graphics::hist()}}.}
 
 \item{legend}{One of the values \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"}, \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"}, \code{"right"}, \code{"center"} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{"top"}.}
 

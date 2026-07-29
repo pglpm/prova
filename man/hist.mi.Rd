@@ -27,7 +27,7 @@
 \arguments{
 \item{x}{Object of class "mi", obtained with \code{\link[=mutualinfo]{mutualinfo()}}.}
 
-\item{breaks}{\code{NULL} or as in function \code{\link[graphics:hist]{graphics::hist()}}. If \code{NULL} (default), an optimal number of breaks for each probability distribution is computed.}
+\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). \code{NULL} means using "sturges", see \code{\link[grDevices:nclass.Sturges]{grDevices::nclass.Sturges()}}, but without "prettifying" the break boundaries, unlike \code{\link[graphics:hist]{graphics::hist()}}.}
 
 \item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
 
