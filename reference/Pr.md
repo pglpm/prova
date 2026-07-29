@@ -146,10 +146,10 @@ following elements:
   mainly for
   [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md).
   It is the order of the probability density the `Y`-values: values with
-  `0` are actual probabilities; values with `1` are linear probability
-  densities (\\\mathrm{p}(\dotso)\\\mathrm{d}y\\); values with `2` are
-  areic probability densities
-  (\\\mathrm{p}(\dotso)\\\mathrm{d}y_1\\\mathrm{d}y_2\\); and so on.
+  `0` are actual probabilities; values with `1` are one-dimensional
+  probability densities \\\mathrm{p}(\dotso)\\\mathrm{d}y\\; values with
+  `2` are two-dimensional probability densities
+  \\\mathrm{p}(\dotso)\\\mathrm{d}y_1\\\mathrm{d}y_2\\; and so on.
 
 - `$Y`, `$X`, `$tails`: copies of the `Y`, `X`, `tails` arguments.
 
