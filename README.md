@@ -12,9 +12,12 @@
 - [(verb)](https://dictionary.cambridge.org/dictionary/italian-english/provare): test!, try out!, assess!, attempt!, prove!, demonstrate!, show!
 
 
-# ***Prova***: probabilistic-statistical variate analysis, nonparametric and with automated Markov-chain Monte Carlo
+# ***Prova***: probabilistic-statistical variate analysis
+## nonparametric and with automated Markov-chain Monte Carlo
 
-This repository provides an R package and some theoretical background to perform probabilistic and statistical data analysis and inference. These are its main features:
+[You wonder "what's a variate?" Answer here[^1]]
+
+An R package to perform probabilistic and statistical data analysis and inference. These are its main features:
 
 - Any combination of **binary**, **nominal**, **ordinal**, **continuous**, **discrete** data. Continuous data can be bounded, unbounded, **censored**, and rounded.
 - **No modelling assumptions** such as gaussianity, linearity, or any other kind of model. The analysis and inferences are fully [nonparametric](https://dictionary.apa.org/nonparametric).
@@ -154,3 +157,6 @@ If you have other questions about application, theory, technical implementation,
 ## Disclaimer
 
 No large language models were used in the production of this software and of its documents.
+
+
+[^1] [*variate*](https://dictionary.cambridge.org/dictionary/english/variate): a quantity that can take the value of any member of a particular set (= group). [*variable*](https://dictionary.cambridge.org/dictionary/english/variable) a number, amount, or situation that can change.
