@@ -40,7 +40,7 @@ qPr(
 \item A "cluster" object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}.
 \item Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
 \item \code{FALSE}: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
-\item \code{TRUE} (default): use the cluster that was set as default with \code{\link[parallel:setDefaultCluster]{parallel::setDefaultCluster()}}; if no such object exist, then generate a cluster with as many nodes as in the \link[base:getOption]{option} "nc.cores"; if this option is unset, then use 2 nodes.
+\item \code{TRUE} (default): use the cluster that was set as default with \code{\link[parallel:setDefaultCluster]{parallel::setDefaultCluster()}}; if no such object exists, then generate a cluster with as many nodes as in the \link[base:getOption]{option} "nc.cores"; if this option is unset, then use 2 nodes.
 }}
 
 \item{sep}{character, default \code{','}: character to separate variate names and values}
