@@ -49,7 +49,7 @@ The object `K` (for "0`K`nowledge" or "`K`nown") encodes what has been learnt fr
 Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 45 mm? In symbols,
 
 $$
-\mathrm{Pr}(\text{species = Adelie} \thinspace\thinspace\vert\thinspace\thinspace\mathopen{}
+\mathrm{Pr}(\text{species = Adelie} \thinspace\vert\thinspace\mathopen{}
 \text{bill len = 45 mm}, K)
 $$
 
