@@ -117,7 +117,7 @@ learn(
   - `FALSE`: do not use clusters (one node is still generated, in order
     to eliminate temporary objects from the computation).
 
-  - `TRUE`: Use the cluster that was set as default with
+  - `TRUE` (default): use the cluster that was set as default with
     [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
     if no such object exist, then generate a cluster with as many nodes
     as in the [option](https://rdrr.io/r/base/options.html) "nc.cores";
@@ -454,7 +454,7 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/Rtmp2Rr21v/prova-V1_D3_S10_260729T205151_198037b5462
+#> /tmp/RtmpLa4udl/prova-V1_D3_S10_260729T212834_1a02242ae7b5
 #> Prova v2.0.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -477,18 +477,18 @@ K <- learn(
 #> quantile width: 0.0585 to 0.541
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 39 secs
-#> Average preparation & finalization time: 38 secs.
-#> Average Monte Carlo time per chain: 0.55 secs.
+#> Total computation time: 36 secs
+#> Average preparation & finalization time: 35 secs.
+#> Average Monte Carlo time per chain: 0.56 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
 #> Finished.
 #> 
-#> *********************************************************
+#> **********************************************************
 #> Output saved in directory
-#> /tmp/Rtmp2Rr21v/prova-V1_D3_S10_260729T205151_198037b5462
-#> *********************************************************
+#> /tmp/RtmpLa4udl/prova-V1_D3_S10_260729T212834_1a02242ae7b5
+#> **********************************************************
 
 ## Check structure of `K` object:
 str(K)

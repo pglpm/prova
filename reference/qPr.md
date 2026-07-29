@@ -87,7 +87,7 @@ qPr(
   - `FALSE`: do not use clusters (one node is still generated, in order
     to eliminate temporary objects from the computation).
 
-  - `TRUE`: Use the cluster that was set as default with
+  - `TRUE` (default): use the cluster that was set as default with
     [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
     if no such object exist, then generate a cluster with as many nodes
     as in the [option](https://rdrr.io/r/base/options.html) "nc.cores";
