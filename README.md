@@ -158,4 +158,4 @@ If you have other questions about application, theory, technical implementation,
 No large language models were used in the production of this software and of its documents.
 
 
-[^1]: [*variate*](https://dictionary.cambridge.org/dictionary/english/variate): a quantity that can take the value of any member of a particular set (= group).<br>[*variable*](https://dictionary.cambridge.org/dictionary/english/variable) a number, amount, or situation that can change.
+[^1]: [*variate*](https://dictionary.cambridge.org/dictionary/english/variate): "a quantity that can take the value of any member of a particular set (= group)".<br>[*variable*](https://dictionary.cambridge.org/dictionary/english/variable) "a number, amount, or situation that can change".
