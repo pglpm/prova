@@ -46,7 +46,7 @@
 #'
 #' ## calculate the conditional probabilities for the 'bill_len' values above,
 #' ## given the values of 'species'
-#' probs <- Pr(Y = valuesBill, X = valuesSpecies, K = K, parallel = 1)
+#' probs <- Pr(Y = valuesBill, X = valuesSpecies, K = K)
 #'
 #'
 #' ## Create a data frame with all possible combinations of the values above;

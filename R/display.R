@@ -441,7 +441,7 @@ pplot <- function(
 #' valuesBill <- vrtgrid(vrt = 'bill_len', K = K)
 #'
 #' ## calculate the probabilities and quantiles
-#' probs <- Pr(Y = valuesBill, K = K, parallel = 1)
+#' probs <- Pr(Y = valuesBill, K = K)
 #'
 #' ## plot the probabilities and quantiles
 #' plot(probs)
@@ -840,7 +840,7 @@ plot.probability <- function(
 #'
 #' ## calculate the probability, and its revisability,
 #' ## for the value 'Adelie' of the "species" variate
-#' probs <- Pr(Y = data.frame(species = 'Adelie'), K = K, parallel = 1)
+#' probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
 #' probs$values
 #'
 #' ## show the revisability of this probability; equivalently show
@@ -1034,8 +1034,7 @@ hist.probability <- function(
 #' K <- Kexample
 #'
 #' ## calculate the mutual information and its revisability
-#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-#'   K = K, nv = 2, parallel = 1)
+#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
 #'
 #' ## show the possible revisability of the mutual information,
 #' ## if a much larger data sample were collected
@@ -1179,7 +1178,7 @@ hist.mi <- function(
 #' Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 #' X <- data.frame(bill_len = c(43, 44))
 #'
-#' probs <- Pr(Y = Y, X = X, K = K, parallel = 1)
+#' probs <- Pr(Y = Y, X = X, K = K)
 #'
 #' ## display the values and revisabilities of these probabilities
 #' print(probs)
@@ -1295,8 +1294,7 @@ print.probability <- function(
 #' K <- Kexample
 #'
 #' ## Calculate the mutual information between variates 'species' and 'bill_len'
-#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-#'   K = K, parallel = 1)
+#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K)
 #'
 #' ## display the value and revisability of the mutual information
 #' print(MI)
@@ -1444,7 +1442,7 @@ print.K <- function(x, ...){
 ## #' probs <- Pr(
 ## #'   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
 ## #'   X = data.frame(bill_len = c(43, 44)),
-## #'   K = K, parallel = 1
+## #'   K = K
 ## #' )
 ## #'
 ## #' probs$values
