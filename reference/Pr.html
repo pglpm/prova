@@ -103,7 +103,7 @@ the joint probability of. One variate per column, one set of values per row.</p>
 <dd><p>One of the following values:</p><ul><li><p>A "cluster" object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>.</p></li>
 <li><p>Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).</p></li>
 <li><p><code>FALSE</code>: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).</p></li>
-<li><p><code>TRUE</code>: Use the cluster that was set as default with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>; if no such object exist, then generate a cluster with as many nodes as in the <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores"; if this option is unset, then use 2 nodes.</p></li>
+<li><p><code>TRUE</code> (default): use the cluster that was set as default with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>; if no such object exists, then generate a cluster with as many nodes as in the <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores"; if this option is unset, then use 2 nodes.</p></li>
 </ul></dd>
 
 
