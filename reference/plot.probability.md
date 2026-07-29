@@ -178,7 +178,7 @@ K <- Kexample
 valuesBill <- vrtgrid(vrt = 'bill_len', K = K)
 
 ## calculate the probabilities and quantiles
-probs <- Pr(Y = valuesBill, K = K, parallel = 1)
+probs <- Pr(Y = valuesBill, K = K)
 
 ## plot the probabilities and quantiles
 plot(probs)

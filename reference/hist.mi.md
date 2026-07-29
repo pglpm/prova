@@ -96,8 +96,7 @@ to plot mutual information and quantiles calculated by
 K <- Kexample
 
 ## calculate the mutual information and its revisability
-MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len',
-  K = K, nv = 2, parallel = 1)
+MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
 
 ## show the possible revisability of the mutual information,
 ## if a much larger data sample were collected

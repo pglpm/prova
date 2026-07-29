@@ -119,7 +119,7 @@ K <- Kexample
 
 ## calculate the probability, and its revisability,
 ## for the value 'Adelie' of the "species" variate
-probs <- Pr(Y = data.frame(species = 'Adelie'), K = K, parallel = 1)
+probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
 probs$values
 #>         
 #> species      [,1]

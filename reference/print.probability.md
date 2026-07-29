@@ -95,7 +95,7 @@ K <- Kexample
 Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 X <- data.frame(bill_len = c(43, 44))
 
-probs <- Pr(Y = Y, X = X, K = K, parallel = 1)
+probs <- Pr(Y = Y, X = X, K = K)
 
 ## display the values and revisabilities of these probabilities
 print(probs)

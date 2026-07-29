@@ -1756,9 +1756,9 @@ be extracted from the `Fspeciesall` in the usual way:
 print(Fspeciesall)
 #            probability
 # species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
-#   Adelie    0.44171 0.00041 0.39809 0.42309 0.46035 0.48378
-#   Chinstrap 0.19884 0.00040 0.16568 0.18395 0.21262 0.23371
-#   Gentoo    0.35945 0.00039 0.31938 0.34128 0.37726 0.40024
+#   Adelie    0.44225 0.00044 0.4005  0.42419 0.46014 0.48477
+#   Chinstrap 0.19887 0.00032 0.16459 0.18422 0.21357 0.23351
+#   Gentoo    0.35888 0.00043 0.31755 0.34042 0.37732 0.40008
 ```
 
 > From a sample of 344 penguins \[add a more thorough specification of
@@ -1775,7 +1775,7 @@ print(Fspeciesall)
 > - Chinstrap:
 >
 >   estimate 0.20  
->   true rel. frequency between 0.17 and 0.23 with 89% probability.
+>   true rel. frequency between 0.16 and 0.23 with 89% probability.
 >
 > - Gentoo:
 >
@@ -1850,10 +1850,10 @@ print(Fanalysis)
 # , , |island = Biscoe
 # 
 #            probability
-# species     value   +/-     Q5.5%    Q25%    Q75%    Q94.5% 
-#   Adelie    0.26621 0.00060 0.2132   0.24273 0.2883  0.3223 
-#   Chinstrap 0.01167 0.00020 0.002755 0.00590 0.01559 0.02538
-#   Gentoo    0.72211 0.00060 0.6662   0.69935 0.74631 0.77468
+# species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
+#   Adelie    0.26708 0.00064 0.2148  0.24353 0.29007 0.3225 
+#   Chinstrap 0.01170 0.00018 0.00262 0.00605 0.01553 0.02709
+#   Gentoo    0.72122 0.00065 0.6649  0.69826 0.74474 0.7746
 ```
 
 Conclusion:
@@ -1874,7 +1874,7 @@ Conclusion:
 > - Gentoo:
 >
 >   estimate 0.72  
->   true rel. frequency between 0.67 and 0.77 with 89% probability.
+>   true rel. frequency between 0.66 and 0.77 with 89% probability.
 
 Note how our [previous estimates from 60 samples](#surprise) were
 already quite on the spot.
@@ -1916,9 +1916,9 @@ print(Fanalysis)
 # 
 #            probability
 # island      value   +/-     Q5.5%  Q25%    Q75%    Q94.5%
-#   Biscoe    0.29190 0.00063 0.2377 0.26682 0.31562 0.3525
-#   Dream     0.36962 0.00065 0.3084 0.34267 0.39637 0.4337
-#   Torgersen 0.33848 0.00079 0.2787 0.31146 0.3641  0.4006
+#   Biscoe    0.29254 0.00064 0.2367 0.26804 0.31637 0.3525
+#   Dream     0.36890 0.00076 0.3081 0.34277 0.39467 0.4307
+#   Torgersen 0.33856 0.00053 0.2810 0.31306 0.36247 0.4004
 ```
 
 Conclusions:

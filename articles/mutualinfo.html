@@ -209,7 +209,7 @@ shows that its probability is around 0.3%:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span>
 <span><span class="co">#    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% </span></span>
-<span><span class="co"># 0.003085 0.000061 0.000408 0.001174 0.004149  0.00825</span></span></code></pre></div>
+<span><span class="co"># 0.002958 0.000048 0.000408 0.001190 0.003974  0.00778</span></span></code></pre></div>
 <p><br>
 This example shows the limitations of using sample data for visualizing
 features of the <em>whole</em> population. How would a scatter plot
@@ -244,9 +244,9 @@ penguins, as an example:</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#        island   species</span></span>
 <span><span class="co"># 644_1   Dream Chinstrap</span></span>
-<span><span class="co"># 996_1   Dream Chinstrap</span></span>
+<span><span class="co"># 996_1  Biscoe    Gentoo</span></span>
 <span><span class="co"># 1228_1  Dream Chinstrap</span></span>
-<span><span class="co"># 2230_1 Biscoe    Gentoo</span></span>
+<span><span class="co"># 2230_1  Dream Chinstrap</span></span>
 <span><span class="co"># 3083_1 Biscoe    Adelie</span></span></code></pre></div>
 <p>The rows of the resulting data frame are named according to the Monte
 Carlo samples used from the <code>K</code> object; they can be useful
@@ -694,7 +694,7 @@ length</strong>
 <code>body_mass</code> and <code>bill_len</code> is</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">samples</span><span class="op">$</span><span class="va">body_mass</span>, <span class="va">samples</span><span class="op">$</span><span class="va">bill_len</span>, method <span class="op">=</span> <span class="st">'pearson'</span><span class="op">)</span></span>
-<span><span class="co"># [1] 0.578888</span></span></code></pre></div>
+<span><span class="co"># [1] 0.582938</span></span></code></pre></div>
 <p>which is different from the rough <span class="math inline">\(r\)</span>-equivalent 0.67.</p>
 <p><br></p>
 </div>
@@ -777,15 +777,15 @@ It is interesting to contrast this result with values of the Pearson correlation
 ``` r
 ## Pearson r for Adelie subpopulation:
 cor(samplesAdelie$body_mass, samplesAdelie$bill_len, method = 'pearson')
-# [1] 0.437217
+# [1] 0.501561
 
 ## Pearson r for Chinstrap subpopulation:
 cor(samplesChinstrap$body_mass, samplesChinstrap$bill_len, method = 'pearson')
-# [1] 0.340647
+# [1] 0.355749
 
 ## Pearson r for Gentoo subpopulation:
 cor(samplesGentoo$body_mass, samplesGentoo$bill_len, method = 'pearson')
-# [1] 0.50797
+# [1] 0.508308
 ```
 
 The Pearson correlation yields the same the association *ranking* as the mutual information does (first Gentoo, then Adélie, then Chinstrap), but it yields the association for the Adélie subpopulation to be closer to the Gentoo one than to the Chinstrap one. The mutual information yields the opposite.
