@@ -23,7 +23,7 @@
 #' @param Y1names Character vector: first group of joint variates
 #' @param Y2names Character vector or `NULL`: second group of joint variates
 #' @param X Matrix or data.frame or `NULL`: values of some variates conditional on which we want the probabilities.
-#' @param K Either a character with the name of a directory or full path for an 'K.rds' object, or such an object itself.
+#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param quantiles Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in [Pr()].
 #' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "K" object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "K" object.
@@ -41,7 +41,7 @@
 #' - `$samples`, a vector with the revisability samples for the mutual information.
 #' - `$rGauss`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
 #' - `$unit`, `$Y1names`, `$Y1names`, `$tails`: copies of the homonymous input arguments.
-#' - `$K`: name of the `K` object used in the calculation.
+#' - `$K`: name of the "Knowledge" object used in the calculation.
 #'
 #' @seealso
 #' [print.mi()] ] to plot mutual information and quantiles calculated by `mutualinfo()`

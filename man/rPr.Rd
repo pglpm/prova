@@ -13,7 +13,7 @@ rPr(n, Ynames, X = NULL, K, tails = NULL, mcsamples = NULL, parallel = NULL)
 
 \item{X}{List or data.table or \code{NULL}: set of values of variates on which we want to condition the joint probability for \code{Y}. If \code{NULL} (default), no conditioning is made. Any rows beyond the first are discarded}
 
-\item{K}{Either a character with the name of a directory or full path for a 'K.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
+\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
@@ -25,7 +25,7 @@ rPr(n, Ynames, X = NULL, K, tails = NULL, mcsamples = NULL, parallel = NULL)
 A \link[base:data.frame]{data frame} of joint draws of the variates \code{Ynames} from the posterior distribution, conditional on \code{X}. The row names of the data frame report the Monte Carlo sample (from \code{\link[=learn]{learn()}}) used for that draw, and the total number of draws from that sample so far.
 }
 \description{
-This function generates datapoints of chosen joint variates, according to posterior probabilities and posterior conditional probabilities.
+Generates datapoints of chosen joint variates, according to posterior probabilities and posterior conditional probabilities.
 }
 \details{
 This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument \code{Y}, and conditional on the variate values specified in the argument \code{X}. It is somewhat analogous to the \code{rxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.

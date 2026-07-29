@@ -25,7 +25,7 @@ the joint probability of. One variate per column, one set of values per row.}
 
 \item{X}{Matrix or data.table or \code{NULL} (default): set of values of variates on which we want to condition the joint probability of \code{Y}. If \code{NULL}, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.}
 
-\item{K}{Either a character with the name of a directory or full path for a 'K.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself.}
+\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{Y} and \code{X}. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for \code{Y} and \code{X} variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by \code{'<='} or \code{'lower'} or\code{'left'} or \code{-1}; a right-open interval \eqn{Y \ge y} is indicated by \code{'>='} or \code{'upper'} or \code{'right'} or \code{+1}. Values \code{NULL}, \code{'=='}, \code{0} indicate that a point value \code{Y = y} (not an interval) should be calculated. \strong{NB}: the semi-open intervals \emph{always} include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to \emph{more} than 1.}
 
@@ -54,11 +54,11 @@ An object of class "probability", which is a list consisting of the following el
 \item \verb{$values.MCaccuracy}, \code{quantiles.MCaccuracy}: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the \code{values} and \code{quantiles} elements.
 \item \verb{$densities}: numerical vector as long as number of rows in \code{Y}, used mainly for \code{\link[=plot.probability]{plot.probability()}}. It is the order of the probability density the \code{Y}-values: values with \code{0} are actual probabilities; values with \code{1} are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with \code{2} are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
 \item \verb{$Y}, \verb{$X}, \verb{$tails}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
-\item \verb{$K}: name of the \code{K} object used in the calculation.
+\item \verb{$K}: name of the "Knowledge" object used in the calculation.
 }
 }
 \description{
-This function calculates posterior probabilities and probability densities, cumulative posterior probabilities, and mixtures thereof. It also outputs the "revisability" of such probabilities if more training data were available, and the Monte Carlo Standard Error for the calculated posterior probabilities.
+Calculate posterior probabilities and probability densities, cumulative posterior probabilities, and mixtures thereof. Output the "revisability" of such probabilities if more training data were available, and the Monte Carlo Standard Error for the calculated posterior probabilities.
 }
 \details{
 This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as \link[base:data.frame]{data frame} arguments \code{Y} and \code{X}, and \eqn{K} is the information in the data and metadata. It is somewhat analogous to the \code{dxxx}-variants and \code{pxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert K)} is calculated.

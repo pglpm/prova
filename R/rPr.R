@@ -1,13 +1,13 @@
 #' Generate datapoints
 #'
-#' @description This function generates datapoints of chosen joint variates, according to posterior probabilities and posterior conditional probabilities.
+#' @description Generates datapoints of chosen joint variates, according to posterior probabilities and posterior conditional probabilities.
 #'
 #' @details This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument `Y`, and conditional on the variate values specified in the argument `X`. It is somewhat analogous to the `rxxx`-variants of [R distribution functions][stats::Distributions]. If `X` is omitted or `NULL`, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails`.
 #'
 #' @param n Positive integer: number of samples to draw.
 #' @param Ynames Character vector: names of variates to draw jointly
 #' @param X List or data.table or `NULL`: set of values of variates on which we want to condition the joint probability for `Y`. If `NULL` (default), no conditioning is made. Any rows beyond the first are discarded
-#' @param K Either a character with the name of a directory or full path for a 'K.rds' object, produced by the [learn()] function, or such an object itself.
+#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param mcsamples Vector of integers, or `'all'`, or `NULL` (default): which Monte Carlo samples calculated by the [learn()] function should be used to draw the variate values. The default is to choose a random subset if `n` is smaller than their number, otherwise to recycle them as necessary.
 #' @param parallel Not used: this function does not use parallelization.

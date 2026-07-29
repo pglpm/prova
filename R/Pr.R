@@ -1,6 +1,6 @@
 #' Calculate posterior probabilities
 #'
-#' @description This function calculates posterior probabilities and probability densities, cumulative posterior probabilities, and mixtures thereof. It also outputs the "revisability" of such probabilities if more training data were available, and the Monte Carlo Standard Error for the calculated posterior probabilities.
+#' @description Calculate posterior probabilities and probability densities, cumulative posterior probabilities, and mixtures thereof. Output the "revisability" of such probabilities if more training data were available, and the Monte Carlo Standard Error for the calculated posterior probabilities.
 #'
 #' @details This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as [data frame][base::data.frame()] arguments `Y` and `X`, and \eqn{K} is the information in the data and metadata. It is somewhat analogous to the `dxxx`-variants and `pxxx`-variants of [R distribution functions][stats::Distributions]. If `X` is omitted or `NULL`, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert K)} is calculated.
 #'
@@ -33,7 +33,7 @@
 #' @param Y Matrix or data.table: set of values of variates of which we want
 #'   the joint probability of. One variate per column, one set of values per row.
 #' @param X Matrix or data.table or `NULL` (default): set of values of variates on which we want to condition the joint probability of `Y`. If `NULL`, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.
-#' @param K Either a character with the name of a directory or full path for a 'K.rds' object, produced by the [learn()] function, or such an object itself.
+#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **NB**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
 #' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
 #' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the probability for `Y`. If `NULL` or 0, no samples are reported. If `'all'` or `Inf`, all samples obtained by the [learn()] function are used.
@@ -52,7 +52,7 @@
 #' - `$values.MCaccuracy`, `quantiles.MCaccuracy`: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the `values` and `quantiles` elements.
 #' - `$densities`: numerical vector as long as number of rows in `Y`, used mainly for [plot.probability()]. It is the order of the probability density the `Y`-values: values with `0` are actual probabilities; values with `1` are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with `2` are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
 #' - `$Y`, `$X`, `$tails`: copies of the `Y`, `X`, `tails` arguments.
-#' - `$K`: name of the `K` object used in the calculation.
+#' - `$K`: name of the "Knowledge" object used in the calculation.
 #'
 #' @references
 #'

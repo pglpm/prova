@@ -26,7 +26,7 @@ mutualinfo(
 
 \item{X}{Matrix or data.frame or \code{NULL}: values of some variates conditional on which we want the probabilities.}
 
-\item{K}{Either a character with the name of a directory or full path for an 'K.rds' object, or such an object itself.}
+\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
@@ -53,7 +53,7 @@ An object of class "mi", which is a list consisting of the following elements:
 \item \verb{$samples}, a vector with the revisability samples for the mutual information.
 \item \verb{$rGauss}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
 \item \verb{$unit}, \verb{$Y1names}, \verb{$Y1names}, \verb{$tails}: copies of the homonymous input arguments.
-\item \verb{$K}: name of the \code{K} object used in the calculation.
+\item \verb{$K}: name of the "Knowledge" object used in the calculation.
 }
 }
 \description{

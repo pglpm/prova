@@ -1,6 +1,6 @@
 #' Create a grid of values for a variate
 #'
-#' @description This function creates a data frame of values for one variate, or a combination of values for several variates.
+#' @description Create a data frame of values for one variate, or a combination of values for several variates.
 #'
 #' @details The value ranges are based on the information from data and metadata stored in the `K`nowledge object (see [learn()]) provided in the `K =` argument; they include, and extend slightly beyond, the ranges observed in the data used in the [learn()] function. Variate domains are always respected.
 #'
@@ -13,7 +13,7 @@
 #' The output is a [data frame][base::data.frame()] that can be used directly in functions like [Pr()].
 #'
 #' @param vrt Character vector: names of the variates; they must match variate names in the `metadata` file provided to the [learn()] function.
-#' @param K Either a character with the name of a directory or full path for a 'K.rds' object, produced by the [learn()] function, or such an object itself.
+#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
 #' @param length.out Vector or list of positive integer or `NA` values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in `vrt`. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of `NA` values. Default `NA`.
 #'
 #' @return A [data frame][base::data.frame()] with columns corresponding to the `vrt` argument, and one row for each combination of the variate values.
