@@ -130,16 +130,16 @@ elements:
 If \\Y_1\\ and \\Y_2\\ are two variates, each of which can be a joint
 variate such as \\Y_1 = (Y\_{1,1}, Y\_{1,2}, \dotsc)\\, and \\X\\ a
 third, also possibly join, variate, then the mutual information
-\\\mathit{MI}\\ between \\Y_1\\ and \\Y_2\\, conditional on \\X = x\\,
-is given by \$\$\mathit{MI}(Y_1, Y_2 \vert X = x) \mathrel{:=}
-\sum\_{y_1, y_2} \mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x,
-\text{data}) \log_2\frac{ \mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x,
-\text{data}) }{ \mathrm{Pr}(Y_1 = y_1 \vert X = x, \text{data}) \cdot
-\mathrm{Pr}(Y_2 = y_2 \vert X = x, \text{data}) } \\ \mathrm{Sh} \$\$ an
-expression which can also be written in several other equivalent ways.
-It is a model-free information-theoretic measure of association, that
-is, it does not depend on assumptions such as linearity, gaussianity,
-and similar. See
+\\\mathit{MI}\\ between \\Y_1\\ and \\Y_2\\, conditional on \\X = x\\
+and the knowledge \\K\\ about data and metadata, is given by
+\$\$\mathit{MI}(Y_1, Y_2 \vert X = x) \mathrel{:=} \sum\_{y_1, y_2}
+\mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x, K) \log_2\frac{
+\mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x, K) }{ \mathrm{Pr}(Y_1 =
+y_1 \vert X = x, K) \cdot \mathrm{Pr}(Y_2 = y_2 \vert X = x, K) } \\
+\mathrm{Sh} \$\$ an expression which can also be written in several
+other equivalent ways. It is a model-free information-theoretic measure
+of association, that is, it does not depend on assumptions such as
+linearity, gaussianity, and similar. See
 [`vignette('mutualinfo')`](https://pglpm.github.io/prova/articles/mutualinfo.md)
 for discussion and example uses, and also the "References" section. If
 \\Y_1, Y_2\\ are *jointly gaussian variates*, then there is a
@@ -151,11 +151,10 @@ The function `mutualinfo()` calculates the mutual information above for
 the joint variates specified in the arguments `Y1names` and `Y2names`,
 conditional on the values of the variates specified in the [data
 frame](https://rdrr.io/r/base/data.frame.html) `X`. If `X` is omitted or
-`NULL`, then the posterior probabilities \\\mathrm{Pr}(Y_1 \|
-\text{data})\\ etc. are used. Each variate in the argument `X` can be
-specified either as a point-value \\X = x\\ or as a left-open interval
-\\X \le x\\ or as a right-open interval \\X \ge x\\, through the
-argument `tails`.
+`NULL`, then the posterior probabilities \\\mathrm{Pr}(Y_1 \| K)\\ etc.
+are used. Each variate in the argument `X` can be specified either as a
+point-value \\X = x\\ or as a left-open interval \\X \le x\\ or as a
+right-open interval \\X \ge x\\, through the argument `tails`.
 
 The computation of these quantities is done via Monte Carlo integration,
 using the samples produced by the

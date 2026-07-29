@@ -131,13 +131,12 @@ A list of the following elements:
 ## Details
 
 This function calculates the quantiles of \\\mathrm{Pr}(Y = y \vert X =
-x, \text{data})\\ or of \\\mathrm{Pr}(Y = y \vert X \le x,
-\text{data})\\ or combinations thereof, at specified
-cumulative-probability levels. In other words, it calculates the values
-of \\Y\\ having specified cumulative probabilities or conditional
-probabilities. It also calculates the revisability of those quantiles if
-more learning data were provided. It is somewhat analogous to the
-`qxxx`-variants of [R distribution
+x, K)\\ or of \\\mathrm{Pr}(Y = y \vert X \le x, K)\\ or combinations
+thereof, at specified cumulative-probability levels. In other words, it
+calculates the values of \\Y\\ having specified cumulative probabilities
+or conditional probabilities. It also calculates the revisability of
+those quantiles if more learning data were provided. It is somewhat
+analogous to the `qxxx`-variants of [R distribution
 functions](https://rdrr.io/r/stats/Distributions.html). The revisability
 can be expressed in the form of quantiles, samples, or both, as in the
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function. If

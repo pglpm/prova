@@ -107,9 +107,7 @@
 <p>The object <code>K</code> (for “0<code>K</code>nowledge” or “<code>K</code>nown”) encodes what has been learnt from data and metadata.</p>
 <p>Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a <em>new</em> penguin from this population is of species <em>Adélie</em>, if its bill length is 45 mm? In symbols,</p>
 <p><span class="math display">\[
-\mathrm{P}(\text{species = Adelie}
-\nonscript\thinspace\vert\nonscript\thinspace\mathopen{}
-\text{bill len = 45 mm}, K)
+\mathrm{Pr}(\text{species = Adelie} \vert \text{bill len = 45 mm}, K)
 \]</span></p>
 <p>where <span class="math inline">\(K\)</span> stands for the knowledge acquired from data and metadata. To answer this question, use the function <code><a href="reference/Pr.html">Pr()</a></code>, and print a summary of the result:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">

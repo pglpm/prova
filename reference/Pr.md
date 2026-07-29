@@ -129,8 +129,8 @@ An object of class "probability", which is a list consisting of the
 following elements:
 
 - `$values`: a matrix with the probabilities \\\mathrm{Pr}(Y = y \vert X
-  = x, \text{data})\\, for all joint values \\y\\ of the \\Y\\-variates
-  (rows) and all joint values \\x\\ of the \\X\\-variates (columns).
+  = x, K)\\, for all joint values \\y\\ of the \\Y\\-variates (rows) and
+  all joint values \\x\\ of the \\X\\-variates (columns).
 
 - `$quantiles` (possibly `NULL`): an array with the revisability
   quantiles (3rd dimension of the array) for such probabilities.
@@ -158,26 +158,27 @@ following elements:
 ## Details
 
 This function calculates the posterior probability \\\mathrm{Pr}(Y = y
-\vert X = x, \text{data})\\, where \\Y = y\\ and \\X = x\\ are two (non
+\vert X = x, K)\\, where \\Y = y\\ and \\X = x\\ are two (non
 overlapping) sets of joint variate values, inputted as [data
-frame](https://rdrr.io/r/base/data.frame.html) arguments `Y` and `X`. It
-is somewhat analogous to the `dxxx`-variants and `pxxx`-variants of [R
-distribution functions](https://rdrr.io/r/stats/Distributions.html). If
-`X` is omitted or `NULL`, then the posterior probability \\\mathrm{Pr}(Y
-= y \vert \text{data})\\ is calculated.
+frame](https://rdrr.io/r/base/data.frame.html) arguments `Y` and `X`,
+and \\K\\ is the information in the data and metadata. It is somewhat
+analogous to the `dxxx`-variants and `pxxx`-variants of [R distribution
+functions](https://rdrr.io/r/stats/Distributions.html). If `X` is
+omitted or `NULL`, then the posterior probability \\\mathrm{Pr}(Y = y
+\vert K)\\ is calculated.
 
 For some variates in `Y` or `X`, tail values can also be prescribed, so
 that this function calculates mixed probabilities such as
 \$\$\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge
-x_2, \dotsc, \text{data})\\ .\$\$ Tail values are inputted via the
-`'tails'` argument; see "Usage".
+x_2, \dotsc, K)\\ .\$\$ Tail values are inputted via the `'tails'`
+argument; see "Usage".
 
 This function also outputs the "revisability" of the posterior
 probabilities above, that is, probabilities such as \\\mathrm{Pr}(Y = y
-\vert X = x, \text{new\\data}, \text{data})\\ that we could have if more
-learning data were provided, as well as a number of samples of the
-possible values of such probability. This revisability can be outputted
-in two ways; the user can choose either, or both, or none:
+\vert X = x, \text{new data}, K)\\ that we could have if more learning
+data were provided, as well as a number of samples of the possible
+values of such probability. This revisability can be outputted in two
+ways; the user can choose either, or both, or none:
 
 - As samples (default 3600 samples, depending on the 'nsamples' argument
   given to the
@@ -195,16 +196,15 @@ create a 2D grid of results for all possible combinations of the given
 This function also allows for base-rate or other prior-probability
 corrections: If a prior (for instance, a base rate) for the data
 corresponding to rows `Y` is given, the function will calculate the
-probability \\\mathrm{Pr}(Y = y \vert X = x, \text{data},
-\text{prior})\\ from \\\mathrm{Pr}(X = x \vert Y = y, \text{data})\\ and
-the prior, by means of Bayes's theorem \$\$\mathrm{Pr}(Y = y \vert X =
-x, \text{data}, \text{prior}) = \frac{ \mathrm{Pr}(X = x \vert Y = y,
-\text{data}) \cdot \mathrm{Pr}(Y = y \vert \text{prior}) }{ \sum\_{y'}
-\mathrm{Pr}(X = x \vert Y = y', \text{data}) \cdot \mathrm{Pr}(Y = y'
-\vert \text{prior}) } \\ .\$\$ *Important*: any values *not* present in
-the `Y` data frame are given *zero* prior probability; in other words,
-the normalization \\\sum\_{y'}\\ only counts the \$y\$ values appearing
-in the data frame `Y`.
+probability \\\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})\\ from
+\\\mathrm{Pr}(X = x \vert Y = y, K)\\ and the prior, by means of Bayes's
+theorem \$\$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior}) = \frac{
+\mathrm{Pr}(X = x \vert Y = y, K) \cdot \mathrm{Pr}(Y = y \vert
+\text{prior}) }{ \sum\_{y'} \mathrm{Pr}(X = x \vert Y = y', K) \cdot
+\mathrm{Pr}(Y = y' \vert \text{prior}) } \\ .\$\$ *Important*: any
+values *not* present in the `Y` data frame are given *zero* prior
+probability; in other words, the normalization \\\sum\_{y'}\\ only
+counts the \$y\$ values appearing in the data frame `Y`.
 
 Each variate in each argument `Y`, `X` can be specified either as a
 point-value \\Y = y\\ or as a left-open interval \\Y \le y\\ or as a

@@ -64,17 +64,15 @@ that draw, and the total number of draws from that sample so far.
 ## Details
 
 This function generates datapoints according to the posterior
-probability \\\mathrm{Pr}(Y = y \vert X = x, \text{data})\\ or
-\\\mathrm{Pr}(Y = y \vert X \le x, \text{data})\\ or combinations
-thereof, for the variates specified in the argument `Y`, and conditional
-on the variate values specified in the argument `X`. It is somewhat
-analogous to the `rxxx`-variants of [R distribution
-functions](https://rdrr.io/r/stats/Distributions.html). If `X` is
-omitted or `NULL`, then the posterior probability \\\mathrm{Pr}(Y \|
-\text{data})\\ is used. Each variate in the argument `X` can be
-specified either as a point-value \\X = x\\ or as a left-open interval
-\\X \le x\\ or as a right-open interval \\X \ge x\\, through the
-argument `tails`.
+probability \\\mathrm{Pr}(Y = y \vert X = x, K)\\ or \\\mathrm{Pr}(Y = y
+\vert X \le x, K)\\ or combinations thereof, for the variates specified
+in the argument `Y`, and conditional on the variate values specified in
+the argument `X`. It is somewhat analogous to the `rxxx`-variants of [R
+distribution functions](https://rdrr.io/r/stats/Distributions.html). If
+`X` is omitted or `NULL`, then the posterior probability \\\mathrm{Pr}(Y
+\| K)\\ is used. Each variate in the argument `X` can be specified
+either as a point-value \\X = x\\ or as a left-open interval \\X \le x\\
+or as a right-open interval \\X \ge x\\, through the argument `tails`.
 
 ## See also
 
