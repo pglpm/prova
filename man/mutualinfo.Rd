@@ -38,7 +38,13 @@ mutualinfo(
 
 \item{unit}{Either one of 'Sh' for \emph{shannon} (default), 'Hart' for \emph{hartley}, 'nat' for \emph{natural unit}, or a positive real indicating the base of the logarithms to be used.}
 
-\item{parallel}{Logical or positive integer or cluster object. \code{TRUE} (default): use as many cores as in user's \link[base:getOption]{option} "nc.cores", or 2 if that is \code{NULL}. \code{FALSE}: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}; in this case the parallel computation will use this object.}
+\item{parallel}{One of the following values:
+\itemize{
+\item A "cluster" object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}.
+\item Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
+\item \code{FALSE}: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
+\item \code{TRUE}: Use the cluster that was set as default with \code{\link[parallel:setDefaultCluster]{parallel::setDefaultCluster()}}; if no such object exist, then generate a cluster with as many nodes as in the \link[base:getOption]{option} "nc.cores"; if this option is unset, then use 2 nodes.
+}}
 
 \item{verbose}{Logical, default \code{FALSE}: give messages about parallel processing?}
 
@@ -76,7 +82,7 @@ an expression which can also be written in several other equivalent ways. It is 
 
 The function \code{mutualinfo()} calculates the mutual information above for the joint variates specified in the arguments \code{Y1names} and \code{Y2names}, conditional on the values of the variates specified in the \link[base:data.frame]{data frame} \code{X}. If \code{X} is omitted or \code{NULL}, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | K)} etc. are used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.
 
-The computation of these quantities is done via Monte Carlo integration, using the samples produced by the \code{\link[=learn]{learn()}} function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more cores (if available) in parallel, through the argument \verb{parallel =}.
+The computation of these quantities is done via Monte Carlo integration, using the samples produced by the \code{\link[=learn]{learn()}} function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more nodes (if available) in parallel, through the argument \verb{parallel =}.
 }
 \examples{
 ## Load the example `K`nowledge object calculated from the "penguins" dataset;

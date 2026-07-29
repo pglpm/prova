@@ -817,7 +817,7 @@ plot.probability <- function(
 #'
 #' @param x Object of class "probability", obtained with [Pr()].
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
-#' @param breaks as in function [graphics::hist()], or `NULL` (default). `NULL` means using "sturges", see [grDevices::nclass.Sturges()], but without "prettifying" the break boundaries, unlike [graphics::hist()].
+#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` uses the geometric mean of [Sturges][grDevices::nclass.Sturges()] and [Freedman-Diaconis][grDevices::nclass.FD()] bins.
 #' @param fill.alpha.f Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
 #' @param legend One of the values `"bottomright"`, `"bottom"`, `"bottomleft"`, `"left"`, `"topleft"`, `"top"`, `"topright"`, `"right"`, `"center"` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `"top"`.
 #' @param showmean Logical, default `TRUE`: show the means of the probability distributions? The means correspond to the probabilities about the next observed unit.
@@ -901,13 +901,14 @@ hist.probability <- function(
     for(xx in seq_len(Xlen)){ for(yy in seq_len(Ylen)){
         i <- i + 1L
         ff <- pvar[yy, xx, ]
-        rg <- range(ff)
-        if(rg[2] == rg[1]){rg <- c(0, 1)}
         if(is.null(breaks)){
-            n <- nclass.Sturges(ff)
-            breaks <- seq(rg[1], rg[2], length.out = n + 1)
+            rg <- range(ff, na.rm = TRUE)
+            if(rg[2] == rg[1]){rg <- c(0, 1)}
+            n <- ceiling(sqrt(nclass.Sturges(ff) * nclass.FD(ff, digits = 6)))
+            ## n <- nclass.FD(ff)
+            ibreaks <- seq(rg[1], rg[2], length.out = n + 1)
         }
-        hd <- graphics::hist(x = ff, breaks = breaks, plot = FALSE)
+        hd <- graphics::hist(x = ff, breaks = ibreaks, plot = FALSE)
         midslist[[i]] <- hd$mids
         densitylist[[i]] <- hd$density
     } }
@@ -1015,7 +1016,7 @@ hist.probability <- function(
 #' The `hist()` method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
 #'
 #' @param x Object of class "mi", obtained with [mutualinfo()].
-#' @param breaks as in function [graphics::hist()], or `NULL` (default). `NULL` means using "sturges", see [grDevices::nclass.Sturges()], but without "prettifying" the break boundaries, unlike [graphics::hist()].
+#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` uses the geometric mean of [Sturges][grDevices::nclass.Sturges()] and [Freedman-Diaconis][grDevices::nclass.FD()] bins.
 #' @param fill.alpha.f Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
 #' @param showvalue Logical, default `TRUE`: show the mutual information obtained from the current data sample?
 #' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,axes,add see analogous arguments in [graphics::matplot()]
@@ -1082,13 +1083,14 @@ hist.mi <- function(
     ff <- x[['samples']]
 
     ## Precompute histogram
-    rg <- range(ff, na.rm = TRUE)
-    if(rg[2] == rg[1]){rg <- c(0, 1)}
     if(is.null(breaks)){
-        n <- nclass.Sturges(ff)
-        breaks <- seq(rg[1], rg[2], length.out = n + 1)
+        rg <- range(ff, na.rm = TRUE)
+        if(rg[2] == rg[1]){rg <- c(0, 1)}
+        n <- ceiling(sqrt(nclass.Sturges(ff) * nclass.FD(ff, digits = 6)))
+        ## n <- nclass.FD(ff)
+        ibreaks <- seq(rg[1], rg[2], length.out = n + 1)
     }
-    hd <- graphics::hist(x = ff, breaks = breaks, plot = FALSE)
+    hd <- graphics::hist(x = ff, breaks = ibreaks, plot = FALSE)
     midslist <- hd$mids
     densitylist <- hd$density
 

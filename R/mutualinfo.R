@@ -18,7 +18,7 @@
 #'
 #' The function `mutualinfo()` calculates the mutual information above for the joint variates specified in the arguments `Y1names` and `Y2names`, conditional on the values of the variates specified in the [data frame][base::data.frame()] `X`. If `X` is omitted or `NULL`, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | K)} etc. are used. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails`.
 #'
-#' The computation of these quantities is done via Monte Carlo integration, using the samples produced by the [learn()] function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more cores (if available) in parallel, through the argument `parallel =`.
+#' The computation of these quantities is done via Monte Carlo integration, using the samples produced by the [learn()] function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more nodes (if available) in parallel, through the argument `parallel =`.
 #'
 #' @param Y1names Character vector: first group of joint variates
 #' @param Y2names Character vector or `NULL`: second group of joint variates
@@ -29,7 +29,11 @@
 #' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "K" object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "K" object.
 #' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "K" object to use for calculating the revisability of the mutual information.
 #' @param unit Either one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used.
-#' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use as many cores as in user's [option][base::getOption()] "nc.cores", or 2 if that is `NULL`. `FALSE`: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
+#' @param parallel One of the following values:
+#' - A "cluster" object previously created with [parallel::makeCluster()].
+#' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
+#' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
+#' - `TRUE`: Use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exist, then generate a cluster with as many nodes as in the [option][base::getOption()] "nc.cores"; if this option is unset, then use 2 nodes.
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #' @param keepX Logical, default `TRUE`: keep a copy of the `X` argument in the output? This is used for [hist.mi()].
 #'
@@ -115,12 +119,15 @@ mutualinfo <- function(
         ncores <- length(parallel)
         cl <- parallel
     } else if (isTRUE(parallel)) {
-        ## user wants us to register a parallel backend
+        ## user wants us to check for or register a parallel backend
         ## and to choose number of cores
-        ncores <- getOption("cl.cores", 2)
-        cl <- parallel::makeCluster(ncores)
-        closeexit <- TRUE
-        if(verbose){message('Registered ', capture.output(print(cl)), '.')}
+        cl <- parallel::getDefaultCluster()
+        if(is.null(cl)){
+            ncores <- getOption("cl.cores", 2)
+            cl <- parallel::makeCluster(ncores)
+            closeexit <- TRUE
+            if(verbose){message('Registered ', capture.output(print(cl)), '.')}
+        }
     } else if (isFALSE(parallel)) {
         ## user wants us not to use parallel cores
         ncores <- 1

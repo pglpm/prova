@@ -27,7 +27,7 @@
 \arguments{
 \item{x}{Object of class "mi", obtained with \code{\link[=mutualinfo]{mutualinfo()}}.}
 
-\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). \code{NULL} means using "sturges", see \code{\link[grDevices:nclass.Sturges]{grDevices::nclass.Sturges()}}, but without "prettifying" the break boundaries, unlike \code{\link[graphics:hist]{graphics::hist()}}.}
+\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} uses the geometric mean of \link[grDevices:nclass.Sturges]{Sturges} and \link[grDevices:nclass.FD]{Freedman-Diaconis} bins.}
 
 \item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
 

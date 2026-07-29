@@ -30,7 +30,7 @@
 #'   data = 'filename_with_data.csv', # CSV file containing the dataset
 #'   metadata = 'filename_with_metadata.csv', # CSV file containing the metadata
 #'   outputdir = 'some_directory', # path to output directory
-#'   parallel = 8 # machine has more than 8 cores, so we use 8
+#'   parallel = 8 # let's say machine has more than 8 cores, so we use 8
 #'   ## possibly other arguments to learn()
 #' )
 #' ```
@@ -51,7 +51,11 @@
 #' @param nsamples Integer, default 3600: number of desired, *approximately independent* Monte Carlo samples. If this argument is changed, the user is also required to explicitly give either `nchains` or `nsamplesperchain`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
 #' @param nchains Integer, default 8: number of Monte Carlo chains. If this argument is changed, the user is also required to explicitly give either `nsamples` or `nsamplesperchain`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
 #' @param nsamplesperchain Integer, default 450: number of *approximately independent* Monte Carlo samples per chain. If this argument is changed, the user is also required to explicitly give either `nsamples` or `nchains`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
-#' @param parallel Logical or positive integer or cluster object. `TRUE` (default): use as many cores as in user's [option][base::getOption()] "nc.cores", or 2 if that is `NULL`. `FALSE`: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with [parallel::makeCluster()]; in this case the parallel computation will use this object.
+#' @param parallel One of the following values:
+#' - A "cluster" object previously created with [parallel::makeCluster()].
+#' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
+#' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
+#' - `TRUE`: Use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exist, then generate a cluster with as many nodes as in the [option][base::getOption()] "nc.cores"; if this option is unset, then use 2 nodes.
 #' @param seed Integer or `NULL` (default): use this seed for the random number generator. If `NULL`, do not set the seed.
 #' @param cleanup Logical, default `TRUE`: remove diagnostic files at the end of the computation?
 #' @param appendinfo Logical, default `TRUE`: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory `outputdir`? The appended string has the format 'Vn_Dn_Sn_YYMMDDTHHMMSS'.
@@ -356,17 +360,23 @@ learn <- function(
         ## user provides a cluster object
         ## use only as many nodes as necessary
         cl0 <- parallel # this will be used in plotFsamples
-        ncores <- min(nchains, length(parallel))
-        cl <- parallel[seq_len(ncores)]
+        ncores <- min(nchains, length(cl0))
+        cl <- cl0[seq_len(ncores)]
     } else if (isTRUE(parallel)) {
-        ## user wants us to register a parallel backend
+        ## user wants us to check for or register a parallel backend
         ## and to choose number of cores
-        ncores <- min(nchains, getOption("cl.cores", 2))
-        cl0 <- cl <- parallel::makeCluster(ncores)
-        closeexit <- TRUE
-        predirmsgs <- c(predirmsgs, list(
-            paste0('Registered ', capture.output(print(cl)), '.')
-        ))
+        cl0 <- parallel::getDefaultCluster()
+        if(is.null(cl0)){
+            ncores <- min(nchains, getOption("cl.cores", 2))
+            cl0 <- cl <- parallel::makeCluster(ncores)
+            closeexit <- TRUE
+            predirmsgs <- c(predirmsgs, list(
+                paste0('Registered ', capture.output(print(cl)), '.')
+            ))
+        } else {
+            ncores <- min(nchains, length(cl0))
+            cl <- cl0[seq_len(ncores)]
+        }
     } else if (isFALSE(parallel)) {
         ## user wants us not to use parallel cores
         ncores <- 1

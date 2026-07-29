@@ -23,7 +23,8 @@ knitr::opts_chunk$set(
 )
 options(knitr.kable.NA = '')
 
-parallel <- 8
+cl <- parallel::makeCluster(8)
+parallel::setDefaultCluster(cl)
 
 printprob <- function(x, d = 2){sprintf(paste0('%.', d, 'f'), x)}
 
@@ -306,7 +307,7 @@ which is included in **Prova** as the data frame `meta_penguins`, which you can 
 
 Now comes the essential part of our analysis: from the sample data and the metadata information,**Prova** will draw inferences about the *whole* population of penguins, including new penguins (from the same population) that we shall observe in the future. Subsequent analyses are based on this main inference. The general theory behind this kind of inference, based on the property of *exchangeability* and related mathematical theorems, is explained in the [references](#references).
 
-This inference is performed by calling the `learn()` function. Its minimal arguments are three: the sample `data`, the `metadata`, and the name `outputdir` of a directory where the inference results should be saved; some additional information will be suffixed to this directory name. We can give a `parallel` argument specifying the number of cores to be used for parallel computation. A `seed` argument can also be given if we want to reproduce the same output in another run; or alternatively we can first call `set.seed()` in the usual R-way, as we did at the beginning of this vignette. (The function `learn()` in any case always saves the current random-seed status in its output directory, in the file `rng_seed.rds`, so it's always possible to recover its initial state.)
+This inference is performed by calling the `learn()` function. Its minimal arguments are three: the sample `data`, the `metadata`, and the name `outputdir` of a directory where the inference results should be saved; some additional information will be suffixed to this directory name. We can give a `parallel` argument specifying the number of cores to be used for parallel computation, or alternatively a "cluster" object previously created with `parallel::makeCluster()`. A `seed` argument can also be given if we want to reproduce the same output in another run; or alternatively we can first call `set.seed()` in the usual R-way, as we did at the beginning of this vignette. (The function `learn()` in any case always saves the current random-seed status in its output directory, in the file `rng_seed.rds`, so it's always possible to recover its initial state.)
 
 This function in fact does Monte Carlo sampling and is computationally expensive. It may take minutes, hours, or days to run, depending on the amount of sample data and the number of variates. In order to speed up its computations, it tries to use any multi-cores capabilities of the machine it runs in, or the number of cores specified in the `parallel` argument (which shouldn't be larger than the number of cores you actually have!).
 
@@ -399,19 +400,20 @@ We discuss both in a moment. First let's compute them using the `Pr()` function.
 
 - `Y`: a `data.frame` listing the values of the variate we are interested in. In the present case the variate is `species` and the values are 'Adelie', 'Chinstrap', 'Gentoo'.
 - `K`: the object that encodes the `K`nowledge from the computation made with the `learn()` function, discussed in the previous section. In the present case it's `K10`.
-- Optionally, `parallel` specifies how many cores we should use for the computation.
+- Optionally, `parallel`. This argument specifies how many nodes we should use for the computation, or a cluster previously generated with `parallel::makeCluster()`. If this argument is missing, then the function checks whether a default cluster (set with `parallel::setDefaultCluster()`) exists, and if it doesn't then it creates a number of nodes equal to the R option ""nc.cores" (see `getOption()`), or equal to 2, if that option is unset. Let's create a default parallel cluster with 4 nodes, to be used for the remainder of our analysis. If you don't want to bother with parallel computation for the moment, just skip this step.
 
-Here is a way to call the function; the computation should take at most a couple of seconds:
+```{r makecluster, eval = FALSE}
+cl <- parallel::makeCluster(4) ## let's use 4 cores, if we have them
+setDefaultCluster(cl)
+```
+
+Back to our function `Pr()`: here is a way to call the function; the computation should take at most a couple of seconds:
 
 ```{r prob_species10, eval = TRUE}
 ## data frame with the variate and values we want to know the frequencies of
 Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
-Fspecies10 <- Pr(
-    Y = Y,
-    K = K10,
-    parallel = 4 ## let's use 4 cores
-)
+Fspecies10 <- Pr(Y = Y, K = K10)
 ```
 
 The answer to our question is now contained in the `Fspecies10` object (we chose this name for "`F`requency distribution of `species`, estimated from `10` samples"). The estimate and its uncertainty can be immediately visualized by calling `plot()` with this object:
@@ -501,7 +503,7 @@ Yimp <- data.frame(sex = c('female', 'male'))
 ## excluding 'sex' variate
 X <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
 
-imputeddata <- Pr(Y = Yimp, X = X, K = K10, parallel = 4)
+imputeddata <- Pr(Y = Yimp, X = X, K = K10)
 
 print(imputeddata)
 ```
@@ -520,12 +522,14 @@ X <- penguins_shuffled[6, ]
 ## drop unknown variates
 X <- X[, !is.na(X)]
 
-imputeddata <- Pr(Y = Yimp, X = X, K = K10, parallel = 4)
+imputeddata <- Pr(Y = Yimp, X = X, K = K10)
 
 plot(imputeddata)
 ```
 
-<!-- The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(Yname = 'bill_len', p = 0.5, X = X, K = K10, parallel = 4)$values[1,1])`. -->
+<!-- commented
+The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(Yname = 'bill_len', p = 0.5, X = X, K = K10, parallel = 4)$values[1,1])`.
+commented -->
 
 \
 
@@ -570,11 +574,7 @@ Y2 <- expand.grid(
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspeciessex10 <- Pr(
-    Y = Y2,
-    K = K10,
-    parallel = 4 ## let's use 4 cores
-)
+Fspeciessex10 <- Pr(Y = Y2, K = K10)
 
 ## Display the estimated frequencies of all six combinations,
 ## as well as their credibility intervals
@@ -604,8 +604,7 @@ X <- data.frame(island = c('Biscoe', 'Dream'))
 Fspecies10I <- Pr(
     Y = Y,
     X = X, ## argument for conditional inferences
-    K = K10,
-    parallel = 4 ## let's use 4 cores
+    K = K10
 )
 ```
 
@@ -691,12 +690,7 @@ X2 <- expand.grid(
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspecies10IS <- Pr(
-    Y = Y,
-    X = X2,
-    K = K10,
-    parallel = 4 ## let's use 4 cores
-)
+Fspecies10IS <- Pr(Y = Y, X = X2, K = K10),
 
 ## Display the estimated frequencies of species
 ## within all six combinations of subpopulations
@@ -728,7 +722,7 @@ K60 <- learn(
     data = datafile,
     metadata = meta_penguins,
     outputdir = 'penguin_inference',
-    parallel = 4 ## how many cores to use for the computation
+    parallel = 4 ## how many nodes to use for the computation
 )
 
 ## [Output omitted]
@@ -762,15 +756,13 @@ We can update our answers -- frequency estimates, their credible intervals, and 
 
 Fspecies60 <- Pr(
     Y = Y,
-    K = K60, ## updated inference
-    parallel = 4 ## let's use 4 cores
+    K = K60 ## updated inference
 )
 
 Fspecies60I <- Pr(
     Y = Y,
     X = X, ## argument for conditional inferences
-    K = K60, ## updated inference
-    parallel = 4 ## let's use 4 cores
+    K = K60 ## updated inference
 )
 ```
 
@@ -970,8 +962,7 @@ Our final results about the overall relative frequencies of the three species ar
 
 Fspeciesall <- Pr(
     Y = Y,
-    K = Kall, ## updated inference
-    parallel = 4 ## let's use 4 cores
+    K = Kall ## updated inference
 )
 ```
 
@@ -1028,7 +1019,7 @@ Xvls <- 'Biscoe' ## subpopulation value or values
 X <- data.frame(Xvls)
 colnames(X) <- Xvrt
 
-Fanalysis <- Pr(Y = Y, X = X, K = Kall, parallel = 4)
+Fanalysis <- Pr(Y = Y, X = X, K = Kall)
 ```
 Here are the probability distributions and the credibility intervals for the three frequencies:
 
@@ -1072,7 +1063,7 @@ X <- data.frame(Xvls)
 colnames(X) <- Xvrt
 
 ## NB: rewriting the previous 'Fanalysis' object
-Fanalysis <- Pr(Y = Y, X = X, K = Kall, parallel = 4)
+Fanalysis <- Pr(Y = Y, X = X, K = Kall)
 ```
 Here are the probability distributions and confidence intervals for the three frequencies:
 ```{r, eval = TRUE, fig.cap=''}
@@ -1113,7 +1104,7 @@ Y <- vrtgrid(vrt = 'body_mass', K = Kall)
 X <- vrtgrid(vrt = 'species', K = Kall)
 
 ## NB: rewriting the previous 'Fanalysis' object
-Fanalysis <- Pr(Y = Y, X = X, K = Kall, parallel = 4)
+Fanalysis <- Pr(Y = Y, X = X, K = Kall)
 ```
 Here is the estimated frequency distribution of body mass within each species
 ```{r, eval = TRUE, fig.cap=''}
@@ -1125,7 +1116,13 @@ Note how the plots above give us much more information than just a set of estima
 Consider also this question: "Do Adélie and Chinstrap penguins have identical body-mass distributions?" The plots show that this question is too generic and ambiguous. In the body-mass range between 4200 g and 5000 g, the two distributions (solid red, dashed blue) could maybe have very similar values -- there's still some uncertainty there. But in the body-mass range around 3750 g there's a high probability that the two distributions clearly differ; we see that their mean estimates are outside each other's 89%-credibility interval.
 
 
+\ 
 
+If we created a parallel cluster at the beginning of our analysis, let's close it now.
+
+```{r stopcluster, eval = TRUE}
+parallel::stopCluster(cl)
+```
 
 <!--
 \ 

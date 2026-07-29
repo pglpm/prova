@@ -54,7 +54,13 @@ learn(
 
 \item{nsamplesperchain}{Integer, default 450: number of \emph{approximately independent} Monte Carlo samples per chain. If this argument is changed, the user is also required to explicitly give either \code{nsamples} or \code{nchains}, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.}
 
-\item{parallel}{Logical or positive integer or cluster object. \code{TRUE} (default): use as many cores as in user's \link[base:getOption]{option} "nc.cores", or 2 if that is \code{NULL}. \code{FALSE}: use serial computation. Integer: use this many cores. It can also be a cluster object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}; in this case the parallel computation will use this object.}
+\item{parallel}{One of the following values:
+\itemize{
+\item A "cluster" object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}.
+\item Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
+\item \code{FALSE}: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
+\item \code{TRUE}: Use the cluster that was set as default with \code{\link[parallel:setDefaultCluster]{parallel::setDefaultCluster()}}; if no such object exist, then generate a cluster with as many nodes as in the \link[base:getOption]{option} "nc.cores"; if this option is unset, then use 2 nodes.
+}}
 
 \item{seed}{Integer or \code{NULL} (default): use this seed for the random number generator. If \code{NULL}, do not set the seed.}
 
@@ -140,7 +146,7 @@ learn(
   data = 'filename_with_data.csv', # CSV file containing the dataset
   metadata = 'filename_with_metadata.csv', # CSV file containing the metadata
   outputdir = 'some_directory', # path to output directory
-  parallel = 8 # machine has more than 8 cores, so we use 8
+  parallel = 8 # let's say machine has more than 8 cores, so we use 8
   ## possibly other arguments to learn()
 )
 }\if{html}{\out{</div>}}
