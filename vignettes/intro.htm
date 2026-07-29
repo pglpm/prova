@@ -1949,15 +1949,22 @@ subpopulations. The procedure is analogous to the one we <a href="#twovariates">
 <span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span> <span class="do">## important! Prova doesn&#39;t use factors</span></span>
 <span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>)</span>
 <span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a></span>
-<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>Fspecies10IS <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Y, <span class="at">X =</span> X2, <span class="at">K =</span> K10),</span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>Fspecies10IS <span class="ot">&lt;-</span> <span class="fu">Pr</span>(<span class="at">Y =</span> Y, <span class="at">X =</span> X2, <span class="at">K =</span> K10)</span>
 <span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a></span>
 <span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a><span class="do">## Display the estimated frequencies of species</span></span>
 <span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a><span class="do">## within all six combinations of subpopulations</span></span>
 <span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a><span class="fu">print</span>(Fspecies10IS, <span class="st">&#39;values&#39;</span>)</span>
-<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a><span class="co"># Error in parse(text = input): &lt;text&gt;:9:43: unexpected &#39;,&#39;</span></span>
-<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a><span class="co"># 8: </span></span>
-<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a><span class="co"># 9: Fspecies10IS &lt;- Pr(Y = Y, X = X2, K = K10),</span></span>
-<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a><span class="co">#                                              ^</span></span></code></pre></div>
+<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a><span class="co"># $values</span></span>
+<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a><span class="co">#            |island,sex</span></span>
+<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a><span class="co"># species     Biscoe,female Dream,female Torgersen,female Biscoe,male</span></span>
+<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a><span class="co">#   Adelie             0.13         0.40             0.48        0.21</span></span>
+<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a><span class="co">#   Chinstrap          0.11         0.40             0.27        0.22</span></span>
+<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a><span class="co">#   Gentoo             0.76         0.21             0.25        0.57</span></span>
+<span id="cb24-20"><a href="#cb24-20" tabindex="-1"></a><span class="co">#            |island,sex</span></span>
+<span id="cb24-21"><a href="#cb24-21" tabindex="-1"></a><span class="co"># species     Dream,male Torgersen,male</span></span>
+<span id="cb24-22"><a href="#cb24-22" tabindex="-1"></a><span class="co">#   Adelie          0.32           0.45</span></span>
+<span id="cb24-23"><a href="#cb24-23" tabindex="-1"></a><span class="co">#   Chinstrap       0.54           0.38</span></span>
+<span id="cb24-24"><a href="#cb24-24" tabindex="-1"></a><span class="co">#   Gentoo          0.14           0.17</span></span></code></pre></div>
 <p><br />
 </p>
 </div>

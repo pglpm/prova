@@ -690,7 +690,7 @@ X2 <- expand.grid(
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspecies10IS <- Pr(Y = Y, X = X2, K = K10),
+Fspecies10IS <- Pr(Y = Y, X = X2, K = K10)
 
 ## Display the estimated frequencies of species
 ## within all six combinations of subpopulations
