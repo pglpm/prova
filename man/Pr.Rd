@@ -48,7 +48,7 @@ the joint probability of. One variate per column, one set of values per row.}
 \value{
 An object of class "probability", which is a list consisting of the following elements:
 \itemize{
-\item \verb{$values}: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
+\item \verb{$values}: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
 \item \verb{$quantiles} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
 \item \verb{$samples} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such probabilities.
 \item \verb{$values.MCaccuracy}, \code{quantiles.MCaccuracy}: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the \code{values} and \code{quantiles} elements.
@@ -61,11 +61,11 @@ An object of class "probability", which is a list consisting of the following el
 This function calculates posterior probabilities and probability densities, cumulative posterior probabilities, and mixtures thereof. It also outputs the "revisability" of such probabilities if more training data were available, and the Monte Carlo Standard Error for the calculated posterior probabilities.
 }
 \details{
-This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data})}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as \link[base:data.frame]{data frame} arguments \code{Y} and \code{X}. It is somewhat analogous to the \code{dxxx}-variants and \code{pxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert \text{data})} is calculated.
+This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as \link[base:data.frame]{data frame} arguments \code{Y} and \code{X}, and \eqn{K} is the information in the data and metadata. It is somewhat analogous to the \code{dxxx}-variants and \code{pxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert K)} is calculated.
 
-For some variates in \code{Y} or \code{X}, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, \text{data})\ .} Tail values are inputted via the \code{'tails'} argument; see "Usage".
+For some variates in \code{Y} or \code{X}, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .} Tail values are inputted via the \code{'tails'} argument; see "Usage".
 
-This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new\,data}, \text{data})} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:
+This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:
 \itemize{
 \item As samples (default 3600 samples, depending on the 'nsamples' argument given to the \code{\link[=learn]{learn()}} function) of the alternative values that the posterior probability could have.
 \item As quantiles (default 5.5\%, 25\%, 75\%, 94.5\%) of the possible revisability.
@@ -73,14 +73,14 @@ This function also outputs the "revisability" of the posterior probabilities abo
 
 If several joint values are given for \code{Y} or \code{X}, the function will create a 2D grid of results for all possible combinations of the given \code{Y} and \code{X} values.
 
-This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for the data corresponding to rows \code{Y} is given, the function will calculate the probability \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})} from \eqn{\mathrm{Pr}(X = x \vert Y = y, \text{data})} and the prior, by means of Bayes's theorem
-\deqn{\mathrm{Pr}(Y = y \vert X = x, \text{data}, \text{prior})
+This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for the data corresponding to rows \code{Y} is given, the function will calculate the probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})} from \eqn{\mathrm{Pr}(X = x \vert Y = y, K)} and the prior, by means of Bayes's theorem
+\deqn{\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 =
 \frac{
-\mathrm{Pr}(X = x \vert Y = y, \text{data}) \cdot
+\mathrm{Pr}(X = x \vert Y = y, K) \cdot
 \mathrm{Pr}(Y = y \vert \text{prior})
 }{
-\sum_{y'} \mathrm{Pr}(X = x \vert Y = y', \text{data}) \cdot
+\sum_{y'} \mathrm{Pr}(X = x \vert Y = y', K) \cdot
 \mathrm{Pr}(Y = y' \vert \text{prior})
 }
 \ .}

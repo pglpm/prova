@@ -60,21 +60,21 @@ An object of class "mi", which is a list consisting of the following elements:
 Calculate the mutual information between two grops of joint variates, as well as its revisability.
 }
 \details{
-If \eqn{Y_1} and \eqn{Y_2} are two variates, each of which can be a joint variate such as \eqn{Y_1 = (Y_{1,1}, Y_{1,2}, \dotsc)}, and \eqn{X} a third, also possibly join, variate, then the mutual information \eqn{\mathit{MI}} between \eqn{Y_1} and \eqn{Y_2}, conditional on \eqn{X = x}, is given by
+If \eqn{Y_1} and \eqn{Y_2} are two variates, each of which can be a joint variate such as \eqn{Y_1 = (Y_{1,1}, Y_{1,2}, \dotsc)}, and \eqn{X} a third, also possibly join, variate, then the mutual information \eqn{\mathit{MI}} between \eqn{Y_1} and \eqn{Y_2}, conditional on \eqn{X = x} and the knowledge \eqn{K} about data and metadata, is given by
 \deqn{\mathit{MI}(Y_1, Y_2 \vert X = x) \mathrel{:=}
 \sum_{y_1, y_2}
-\mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x, \text{data})
+\mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x, K)
 \log_2\frac{
-\mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x, \text{data})
+\mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x, K)
 }{
-\mathrm{Pr}(Y_1 = y_1 \vert X = x, \text{data})
+\mathrm{Pr}(Y_1 = y_1 \vert X = x, K)
 \cdot
-\mathrm{Pr}(Y_2 = y_2 \vert X = x, \text{data})
+\mathrm{Pr}(Y_2 = y_2 \vert X = x, K)
 } \, \mathrm{Sh}
 }
 an expression which can also be written in several other equivalent ways. It is a model-free information-theoretic measure of association, that is, it does not depend on assumptions such as linearity, gaussianity, and similar. See \code{vignette('mutualinfo')} for discussion and example uses, and also the "References" section.  If \eqn{Y_1, Y_2} are \emph{jointly gaussian variates}, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output \code{rGauss} in the "Value" section.
 
-The function \code{mutualinfo()} calculates the mutual information above for the joint variates specified in the arguments \code{Y1names} and \code{Y2names}, conditional on the values of the variates specified in the \link[base:data.frame]{data frame} \code{X}. If \code{X} is omitted or \code{NULL}, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | \text{data})} etc. are used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.
+The function \code{mutualinfo()} calculates the mutual information above for the joint variates specified in the arguments \code{Y1names} and \code{Y2names}, conditional on the values of the variates specified in the \link[base:data.frame]{data frame} \code{X}. If \code{X} is omitted or \code{NULL}, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | K)} etc. are used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.
 
 The computation of these quantities is done via Monte Carlo integration, using the samples produced by the \code{\link[=learn]{learn()}} function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more cores (if available) in parallel, through the argument \verb{parallel =}.
 }
