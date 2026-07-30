@@ -27,7 +27,7 @@
 \arguments{
 \item{x}{Object of class "mi", obtained with \code{\link[=mutualinfo]{mutualinfo()}}.}
 
-\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).}
+\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} determines the bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).}
 
 \item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
 
@@ -43,7 +43,7 @@
 \description{
 The mutual information calculated with the \code{\link[=mutualinfo]{mutualinfo()}} function, and outputted as a "mi" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
 
-The \code{hist()} method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
+The \code{hist()} method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely such change would be. The distribution is represented by a histogram formed from samples of revised mutual information. The bin size is chosen according to the Monte Carlo accuracy.
 }
 \examples{
 ## Load the example `K`nowledge object calculated from the "penguins" dataset;

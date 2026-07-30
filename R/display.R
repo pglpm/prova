@@ -848,11 +848,11 @@ plot.probability <- function(
 #' - How the probabilities could change, if we collected a much larger (infinite) data sample, and how likely would such change be;
 #' - The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
 #'
-#' The `hist()` method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution.
+#' The `hist()` method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution. This distribution is represented by a histogram formed from samples of revised proobabilities (or long-run frequencies). The bin size is chosen according to the Monte Carlo accuracy.
 #'
 #' @param x Object of class "probability", obtained with [Pr()].
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
-#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).
+#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` determines bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).
 #' @param alpha.f.fill Numeric, default `0.125`: opacity of the histogram filling, `0` being completely invisible and `1` completely opaque.
 #' @param legend One of the values `"bottomright"`, `"bottom"`, `"bottomleft"`, `"left"`, `"topleft"`, `"top"`, `"topright"`, `"right"`, `"center"` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `"top"`.
 #' @param showmean Logical, default `TRUE`: show the means of the probability distributions? The means correspond to the probabilities about the next observed unit.
@@ -1060,10 +1060,10 @@ hist.probability <- function(
 #' @description
 #' The mutual information calculated with the [mutualinfo()] function, and outputted as a "mi" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
 #'
-#' The `hist()` method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
+#' The `hist()` method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely such change would be. The distribution is represented by a histogram formed from samples of revised mutual information. The bin size is chosen according to the Monte Carlo accuracy.
 #'
 #' @param x Object of class "mi", obtained with [mutualinfo()].
-#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).
+#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` determines the bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).
 #' @param alpha.f.fill Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
 #' @param showvalue Logical, default `TRUE`: show the mutual information obtained from the current data sample?
 #' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,axes,add see analogous arguments in [graphics::matplot()]
@@ -1412,12 +1412,14 @@ print.mi <- function(
     xvalue <- x[['value']] / lbase
     xquants <- x[['quantiles']] / lbase
     xacc <- x[['value.acc']] / lbase
+    qacc <- x[['quantiles.acc']] / lbase
 
     if(isTRUE(digits)){
         vdigits <- edigits - 1 + ceiling(log10(xvalue)) -
             floor(log10(xacc))
         adigits <- edigits
-        qdigits <- rep.int(x = edigits, times = length(xquants))
+        qdigits <- edigits - 1 + ceiling(log10(xquants)) -
+            floor(log10(qacc))
     } else {
         vdigits <- adigits <- qdigits <- digits
     }
