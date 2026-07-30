@@ -61,7 +61,7 @@ The hist() method for a "mi" object is a utility to visualize this kind of revis
 <span>  lwd <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palette.html" class="external-link">palette</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  alpha.f <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  fill.alpha.f <span class="op">=</span> <span class="fl">0.125</span>,</span>
+<span>  alpha.f.fill <span class="op">=</span> <span class="fl">0.125</span>,</span>
 <span>  showvalue <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -84,14 +84,14 @@ The hist() method for a "mi" object is a utility to visualize this kind of revis
 
 
 <dt id="arg-breaks">breaks<a class="anchor" aria-label="anchor" href="#arg-breaks"></a></dt>
-<dd><p>as in function <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">graphics::hist()</a></code>, or <code>NULL</code> (default). Value <code>NULL</code> uses the geometric mean of <a href="https://rdrr.io/r/grDevices/nclass.html" class="external-link">Sturges</a> and <a href="https://rdrr.io/r/grDevices/nclass.html" class="external-link">Freedman-Diaconis</a> bins.</p></dd>
+<dd><p>as in function <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">graphics::hist()</a></code>, or <code>NULL</code> (default). Value <code>NULL</code> uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).</p></dd>
 
 
 <dt id="arg-lty-lwd-col-alpha-f-xlab-ylab-xlim-ylim-main-grid-axes-add">lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add<a class="anchor" aria-label="anchor" href="#arg-lty-lwd-col-alpha-f-xlab-ylab-xlim-ylim-main-grid-axes-add"></a></dt>
 <dd><p>see analogous arguments in <code><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">graphics::matplot()</a></code></p></dd>
 
 
-<dt id="arg-fill-alpha-f">fill.alpha.f<a class="anchor" aria-label="anchor" href="#arg-fill-alpha-f"></a></dt>
+<dt id="arg-alpha-f-fill">alpha.f.fill<a class="anchor" aria-label="anchor" href="#arg-alpha-f-fill"></a></dt>
 <dd><p>Numeric, default 0.125: opacity of the histogram filling. <code>0</code> means no filling.</p></dd>
 
 

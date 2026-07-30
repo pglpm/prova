@@ -66,10 +66,11 @@
 <span>  add <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  xdomain <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ydomain <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  alpha.f <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  alpha.f <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  xjitter <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  yjitter <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  border <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  fill <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  alpha.f.fill <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  grid <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  lwd.grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  col.grid <span class="op">=</span> <span class="st">"#00000022"</span>,</span>
@@ -108,15 +109,19 @@
 
 
 <dt id="arg-alpha-f">alpha.f<a class="anchor" aria-label="anchor" href="#arg-alpha-f"></a></dt>
-<dd><p>Numeric vector or list: opacity of the colours specified with the <code>col</code> argument, <code>0</code> being completely invisible and <code>1</code> completely opaque. Default to 1, except for shaded plots of <code>type</code> <code>'hx'</code>, <code>'qx'</code>, <code>'hy'</code>, <code>'qy'</code>, for which it defaults to 0.25.</p></dd>
+<dd><p>Numeric vector or list, default <code>1</code>: opacity of the line or contour colours, <code>0</code> being completely invisible and <code>1</code> completely opaque.</p></dd>
 
 
 <dt id="arg-xjitter-yjitter">xjitter, yjitter<a class="anchor" aria-label="anchor" href="#arg-xjitter-yjitter"></a></dt>
 <dd><p>Vector or list of logicals or <code>NA</code> (default): add <code><a href="https://rdrr.io/r/base/jitter.html" class="external-link">base::jitter()</a></code> to <code>x</code>- or <code>y</code>-values? Useful when plotting discrete variates. If <code>NA</code>, jitter is added if both <code>x</code> and <code>y</code> are of character (or factor) class.</p></dd>
 
 
-<dt id="arg-border">border<a class="anchor" aria-label="anchor" href="#arg-border"></a></dt>
-<dd><p>Border colour for bands in plots of <code>type = 'q'</code>. Can be specified in any of the usual ways, see for instance <code><a href="https://rdrr.io/r/grDevices/col2rgb.html" class="external-link">grDevices::col2rgb()</a></code>. If <code>NA</code> (default), no border is drawn.</p></dd>
+<dt id="arg-fill">fill<a class="anchor" aria-label="anchor" href="#arg-fill"></a></dt>
+<dd><p>Logical or <code>NA</code> (default). For histogram plots (<code>type = 'hx'</code> or <code>'hy'</code>), value <code>TRUE</code> means fill the histogram, and do not plot its contour; <code>FAlSE</code> means plot only its contour without filling; <code>NA</code> means plot contour and fill. For quantile plots (<code>type = 'qx'</code> or <code>'qy'</code>), value <code>TRUE</code> do not plot the bands' contours; <code>FAlSE</code> means plot only the contours without filling; <code>NA</code> plots a contour only when the quantile band has zero area (and would be invisible otherwise).</p></dd>
+
+
+<dt id="arg-alpha-f-fill">alpha.f.fill<a class="anchor" aria-label="anchor" href="#arg-alpha-f-fill"></a></dt>
+<dd><p>Numeric vector or list, default <code>0.25</code>: opacity of the filling colours, <code>0</code> being completely invisible and <code>1</code> completely opaque.</p></dd>
 
 
 <dt id="arg-grid">grid<a class="anchor" aria-label="anchor" href="#arg-grid"></a></dt>
@@ -143,7 +148,7 @@
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function is essentially a wrapper around <code><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">graphics::matplot()</a></code>, augmenting the latter with some features useful for plotting data and probabilities handled by <strong>Prova</strong>. Some of the additional features provided by <code>pplot</code> are the following:</p><ul><li><p>Either or both <code>x</code> and <code>y</code> arguments can be <a href="https://rdrr.io/r/base/list.html" class="external-link">list</a>s. In this case, the first element of <code>x</code> is plotted against the first element of <code>y</code>, and so on, recycling as necessary. This allows for plots having different numbers of base points. The specifications in arguments like <code>type</code>, <code>lty</code>, <code>col</code>, <code>alpha.f</code>, <code>xjitter</code>, and similar apply to each list element in turn.</p></li>
 <li><p>Argument <code>x</code>, or each element in <code>x</code> if it is a list, can be of class <code><a href="https://rdrr.io/r/base/character.html" class="external-link">base::character</a></code>. In this case, x-axis labels as given in <code>xdomain</code> are used, or the unique values in <code>x</code> if <code>xdomain</code> is <code>NULL</code>. Similarly for <code>y</code> and <code>ydomain</code>. This feature makes it easier to plot nominal and ordinal non-numeric variates.</p></li>
-<li><p>Additional plot <code>type</code>s are available: <code>'hx'</code>, <code>'qx'</code>, <code>'hy'</code>, <code>'qy'</code> (internally they use <code><a href="https://rdrr.io/r/graphics/polygon.html" class="external-link">graphics::polygon()</a></code>):</p><ul><li><p><code>'hx'</code> plots shaded histograms, extending from \(y = 0\) to the values given in each column of <code>y</code>. The x-values are the corresponding columns of <code>x</code>, recycled if necessary.</p></li>
+<li><p>Additional plot <code>type</code>s are available: <code>'hx'</code>, <code>'qx'</code>, <code>'hy'</code>, <code>'qy'</code> (internally they use <code><a href="https://rdrr.io/r/graphics/polygon.html" class="external-link">graphics::polygon()</a></code>):</p><ul><li><p><code>'hx'</code> plots shaded histograms. Argument <code>x</code> must be a list of <code>breaks</code>, and <code>y</code> a list of <code>counts</code> or <code>densities</code>, for example produced by by <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">graphics::hist()</a></code>.</p></li>
 <li><p><code>'qx'</code> plots shaded bands. The first band extends from the line defined by the first column of <code>y</code>, to the line defined by the <em>last</em> column; the second band is similarly delimited by the second and second-last columns of <code>y</code>, and so on (if <code>y</code> has an odd number of columns, the central one defines a line rather than a band). The x-values are the corresponding columns of <code>x</code>, recycled if necessary. This plot <code>type</code> is useful for plotting quantile bands calculated with <code><a href="Pr.html">Pr()</a></code>.</p></li>
 <li><p><code>'hy'</code>, <code>'qy'</code> are analogous <code>type</code>s, but with the roles of <code>x</code> and <code>y</code> switched.</p></li>
 </ul></li>
@@ -187,7 +192,8 @@
 <span class="r-plt img"><img src="pplot-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Draw a shaded histogram</span></span></span>
-<span class="r-in"><span><span class="fu">pplot</span><span class="op">(</span>x <span class="op">=</span> <span class="va">xgrid</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">dnorm</a></span><span class="op">(</span><span class="va">xgrid</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">'hx'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">histo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span>, breaks <span class="op">=</span> <span class="st">'FD'</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pplot</span><span class="op">(</span>x <span class="op">=</span> <span class="va">histo</span><span class="op">$</span><span class="va">breaks</span>, y <span class="op">=</span> <span class="va">histo</span><span class="op">$</span><span class="va">density</span>, type <span class="op">=</span> <span class="st">'hx'</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="pplot-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

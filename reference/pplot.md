@@ -23,10 +23,11 @@ pplot(
   add = FALSE,
   xdomain = NULL,
   ydomain = NULL,
-  alpha.f = NA,
+  alpha.f = 1,
   xjitter = NA,
   yjitter = NA,
-  border = NA,
+  fill = NA,
+  alpha.f.fill = 0.25,
   grid = TRUE,
   lwd.grid = NULL,
   col.grid = "#00000022",
@@ -84,10 +85,8 @@ pplot(
 
 - alpha.f:
 
-  Numeric vector or list: opacity of the colours specified with the
-  `col` argument, `0` being completely invisible and `1` completely
-  opaque. Default to 1, except for shaded plots of `type` `'hx'`,
-  `'qx'`, `'hy'`, `'qy'`, for which it defaults to 0.25.
+  Numeric vector or list, default `1`: opacity of the line or contour
+  colours, `0` being completely invisible and `1` completely opaque.
 
 - xjitter, yjitter:
 
@@ -96,12 +95,20 @@ pplot(
   `y`-values? Useful when plotting discrete variates. If `NA`, jitter is
   added if both `x` and `y` are of character (or factor) class.
 
-- border:
+- fill:
 
-  Border colour for bands in plots of `type = 'q'`. Can be specified in
-  any of the usual ways, see for instance
-  [`grDevices::col2rgb()`](https://rdrr.io/r/grDevices/col2rgb.html). If
-  `NA` (default), no border is drawn.
+  Logical or `NA` (default). For histogram plots (`type = 'hx'` or
+  `'hy'`), value `TRUE` means fill the histogram, and do not plot its
+  contour; `FAlSE` means plot only its contour without filling; `NA`
+  means plot contour and fill. For quantile plots (`type = 'qx'` or
+  `'qy'`), value `TRUE` do not plot the bands' contours; `FAlSE` means
+  plot only the contours without filling; `NA` plots a contour only when
+  the quantile band has zero area (and would be invisible otherwise).
+
+- alpha.f.fill:
+
+  Numeric vector or list, default `0.25`: opacity of the filling
+  colours, `0` being completely invisible and `1` completely opaque.
 
 - grid:
 
@@ -155,9 +162,10 @@ provided by `pplot` are the following:
   (internally they use
   [`graphics::polygon()`](https://rdrr.io/r/graphics/polygon.html)):
 
-  - `'hx'` plots shaded histograms, extending from \\y = 0\\ to the
-    values given in each column of `y`. The x-values are the
-    corresponding columns of `x`, recycled if necessary.
+  - `'hx'` plots shaded histograms. Argument `x` must be a list of
+    `breaks`, and `y` a list of `counts` or `densities`, for example
+    produced by by
+    [`graphics::hist()`](https://rdrr.io/r/graphics/hist.html).
 
   - `'qx'` plots shaded bands. The first band extends from the line
     defined by the first column of `y`, to the line defined by the
@@ -233,6 +241,7 @@ pplot(x = xgrid, y = dnorm(xgrid), ylim = c(0, NA))
 
 
 ## Draw a shaded histogram
-pplot(x = xgrid, y = dnorm(xgrid), type = 'hx')
+histo <- hist(rnorm(1000), breaks = 'FD', plot = FALSE)
+pplot(x = histo$breaks, y = histo$density, type = 'hx')
 
 ```

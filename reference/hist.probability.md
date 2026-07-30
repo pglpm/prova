@@ -31,7 +31,7 @@ hist(
   lwd = 2,
   col = palette(),
   alpha.f = 1,
-  fill.alpha.f = 0.125,
+  alpha.f.fill = 0.125,
   showmean = TRUE,
   xlab = NULL,
   ylab = NULL,
@@ -62,9 +62,9 @@ hist(
 
   as in function
   [`graphics::hist()`](https://rdrr.io/r/graphics/hist.html), or `NULL`
-  (default). Value `NULL` uses the geometric mean of
-  [Sturges](https://rdrr.io/r/grDevices/nclass.html) and
-  [Freedman-Diaconis](https://rdrr.io/r/grDevices/nclass.html) bins.
+  (default). Value `NULL` uses a number of bins inversely proportional
+  to the square root of the number of samples (because the Monte Carlo
+  error associated with the quantiles scales as the square root).
 
 - legend:
 
@@ -79,10 +79,10 @@ hist(
   see analogous arguments in
   [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html)
 
-- fill.alpha.f:
+- alpha.f.fill:
 
-  Numeric, default 0.125: opacity of the histogram filling. `0` means no
-  filling.
+  Numeric, default `0.125`: opacity of the histogram filling, `0` being
+  completely invisible and `1` completely opaque.
 
 - showmean:
 

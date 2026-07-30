@@ -1600,7 +1600,7 @@ visualized as follows:
 freqdiff <- Fspecies60I$samples['Gentoo', 'Biscoe',] -
     Fspecies60I$samples['Chinstrap', 'Biscoe',]
 
-hist(freqdiff, plot = TRUE, xlim = c(-0.5, 1),
+hist(freqdiff, plot = TRUE, xlim = c(-0.5, 1), breaks = 'FD',
     xlab = 'frequency difference', ylab = 'probability density',
     main = NULL)
 ```

@@ -136,8 +136,10 @@ plot(
 - alpha.f.spread:
 
   Numeric or `NULL` (default): opacity of the quantile bands or of the
-  long-run-frequency samples, similar to `alpha.f`. `NULL` means `1` if
-  `spread = 'samples'` and `0.25` if `spread = 'quantiles'`.
+  long-run-frequency samples, similar to `alpha.f`. `NULL` means `0.25`
+  if `spread = 'quantiles'`; and an appropriate value if
+  `spread = 'samples'`,dependent on the number of samples (more samples,
+  less opacity).
 
 - nsamples.spread:
 

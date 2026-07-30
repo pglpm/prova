@@ -144,7 +144,7 @@
 
 
 <dt id="arg-alpha-f-spread">alpha.f.spread<a class="anchor" aria-label="anchor" href="#arg-alpha-f-spread"></a></dt>
-<dd><p>Numeric or <code>NULL</code> (default): opacity of the quantile bands or of the long-run-frequency samples, similar to <code>alpha.f</code>. <code>NULL</code> means <code>1</code> if <code>spread = 'samples'</code> and <code>0.25</code> if <code>spread = 'quantiles'</code>.</p></dd>
+<dd><p>Numeric or <code>NULL</code> (default): opacity of the quantile bands or of the long-run-frequency samples, similar to <code>alpha.f</code>. <code>NULL</code> means <code>0.25</code> if <code>spread = 'quantiles'</code>; and an appropriate value if <code>spread = 'samples'</code>,dependent on the number of samples (more samples, less opacity).</p></dd>
 
 
 <dt id="arg-nsamples-spread">nsamples.spread<a class="anchor" aria-label="anchor" href="#arg-nsamples-spread"></a></dt>
