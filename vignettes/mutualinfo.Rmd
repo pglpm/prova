@@ -357,7 +357,7 @@ The resulting object `MIislandspecies` is a list of several quantities; the mutu
 
 ``` r
 MIislandspecies$value
-# [1] 0.628277
+# [1] 0.629213
 
 MIislandspecies$unit
 # [1] "Sh"
@@ -392,13 +392,13 @@ This relationship can be a *rough* guide to get familiar with mutual-information
 ``` r
 MIislandspecies[c('value', 'unit')]
 # $value
-# [1] 0.628277
+# [1] 0.629213
 # 
 # $unit
 # [1] "Sh"
 
 MIislandspecies$rGauss
-# [1] 0.762534
+# [1] 0.762889
 ```
 
 ## Mutual information for previous examples
@@ -610,10 +610,10 @@ Let's see for example how much variation we can expect in the case of the [assoc
 ``` r
 print(MIislandspecies)
 # value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#   0.6283     0.16     0.47     0.82      1.0
+#   0.6292     0.19     0.48     0.82      1.0
 ```
 
-which shows that, acquiring more data, we can expect with 89% probability a mutual information between 0.16 Sh and 1 Sh. We can also visualize our uncertainty about this "long-run" mutual information by means of a probability distribution, using the `hist()` function:
+which shows that, acquiring more data, we can expect with 89% probability a mutual information between 0.19 Sh and 1 Sh. We can also visualize our uncertainty about this "long-run" mutual information by means of a probability distribution, using the `hist()` function:
 
 
 ``` r
