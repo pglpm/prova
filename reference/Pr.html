@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ the joint probability of. One variate per column, one set of values per row.</p>
 
 
 <dt id="arg-sep">sep<a class="anchor" aria-label="anchor" href="#arg-sep"></a></dt>
-<dd><p>character, default <code>','</code>: character to separate variate names and values</p></dd>
+<dd><p>character, default <code>','</code>: character to separate variate names and values.</p></dd>
 
 
 <dt id="arg-solidus">solidus<a class="anchor" aria-label="anchor" href="#arg-solidus"></a></dt>
@@ -125,13 +125,13 @@ the joint probability of. One variate per column, one set of values per row.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class "probability", which is a list consisting of the following elements:</p><ul><li><p><code>$values</code>: a matrix with the probabilities \(\mathrm{Pr}(Y = y \vert X = x, K)\), for all joint values \(y\) of the \(Y\)-variates (rows) and  all joint values \(x\) of the \(X\)-variates (columns).</p></li>
-<li><p><code>$quantiles</code> (possibly <code>NULL</code>): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.</p></li>
-<li><p><code>$samples</code> (possibly <code>NULL</code>): an array with the revisability samples (3rd dimension of the array) for such probabilities.</p></li>
-<li><p><code>$values.MCaccuracy</code>, <code>quantiles.MCaccuracy</code>: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the <code>values</code> and <code>quantiles</code> elements.</p></li>
-<li><p><code>$densities</code>: numerical vector as long as number of rows in <code>Y</code>, used mainly for <code><a href="plot.probability.html">plot.probability()</a></code>. It is the order of the probability density the <code>Y</code>-values: values with <code>0</code> are actual probabilities; values with <code>1</code> are one-dimensional probability densities \(\mathrm{p}(\dotso)\,\mathrm{d}y\); values with <code>2</code> are two-dimensional probability densities \(\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2\); and so on.</p></li>
-<li><p><code>$Y</code>, <code>$X</code>, <code>$tails</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
-<li><p><code>$K</code>: name of the "Knowledge" object used in the calculation.</p></li>
+    <p>An object of class "probability", which is a list consisting of the following elements:</p><ul><li><p><code>'value'</code>: a matrix with the probabilities \(\mathrm{Pr}(Y = y \vert X = x, K)\), for all joint values \(y\) of the \(Y\)-variates (rows) and  all joint values \(x\) of the \(X\)-variates (columns).</p></li>
+<li><p><code>'quantiles'</code> (possibly <code>NULL</code>): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.</p></li>
+<li><p><code>'samples'</code> (possibly <code>NULL</code>): an array with the revisability samples (3rd dimension of the array) for such probabilities.</p></li>
+<li><p><code>'value.acc'</code>, <code>quantiles.acc</code>: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the <code>'values'</code> and <code>'quantiles'</code> elements.</p></li>
+<li><p><code>'density'</code>: numerical vector as long as number of rows in <code>Y</code>, used mainly for <code><a href="plot.probability.html">plot.probability()</a></code>. It is the order of the probability density the <code>Y</code>-values: values with <code>0</code> are actual probabilities; values with <code>1</code> are one-dimensional probability densities \(\mathrm{p}(\dotso)\,\mathrm{d}y\); values with <code>2</code> are two-dimensional probability densities \(\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2\); and so on.</p></li>
+<li><p><code>'Y'</code>, <code>'X'</code>, <code>'tails'</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
+<li><p><code>'K'</code>: name of the "Knowledge" object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -188,7 +188,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
-<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species      [,1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.440685</span>
@@ -215,7 +215,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 3 probability values</span></span></span>
-<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species          [,1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4406850</span>
@@ -252,7 +252,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
-<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species         43</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4647433</span>
@@ -273,7 +273,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span>, bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
-<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len        [,1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Adelie,43 0.001819114</span>
@@ -296,7 +296,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Y</span>, X <span class="op">=</span> <span class="va">X</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 3 x 2 probability values</span></span></span>
-<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species            43        44</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4647433 0.2223224</span>
@@ -340,7 +340,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Y</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 6 joint-probability values</span></span></span>
-<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len         [,1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0018191137</span>

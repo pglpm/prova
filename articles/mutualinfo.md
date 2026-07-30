@@ -547,7 +547,7 @@ the `$unit` element:
 ``` r
 
 MIislandspecies$value
-# [1] 0.628277
+# [1] 0.629213
 
 MIislandspecies$unit
 # [1] "Sh"
@@ -612,13 +612,13 @@ corresponding \\\lvert r \rvert\\ value. In the previous case of the
 
 MIislandspecies[c('value', 'unit')]
 # $value
-# [1] 0.628277
+# [1] 0.629213
 # 
 # $unit
 # [1] "Sh"
 
 MIislandspecies$rGauss
-# [1] 0.762534
+# [1] 0.762889
 ```
 
 ### Mutual information for previous examples
@@ -849,11 +849,11 @@ and can be seen with the utility function
 
 print(MIislandspecies)
 # value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#   0.6283     0.16     0.47     0.82      1.0
+#   0.6292     0.19     0.48     0.82      1.0
 ```
 
 which shows that, acquiring more data, we can expect with 89%
-probability a mutual information between 0.16 Sh and 1 Sh. We can also
+probability a mutual information between 0.19 Sh and 1 Sh. We can also
 visualize our uncertainty about this “long-run” mutual information by
 means of a probability distribution, using the
 [`hist()`](https://rdrr.io/r/graphics/hist.html) function:

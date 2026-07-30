@@ -6,8 +6,8 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Plot the revisability of an object of class " mi as a histogram hist.mi><meta name="description" content='The mutual information calculated with the mutualinfo() function, and outputted as a "mi" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
-The hist() method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.'><meta property="og:description" content='The mutual information calculated with the mutualinfo() function, and outputted as a "mi" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
-The hist() method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.'></head><body>
+The hist() method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely such change would be. The distribution is represented by a histogram formed from samples of revised mutual information. The bin size is chosen according to the Monte Carlo accuracy.'><meta property="og:description" content='The mutual information calculated with the mutualinfo() function, and outputted as a "mi" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
+The hist() method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely such change would be. The distribution is represented by a histogram formed from samples of revised mutual information. The bin size is chosen according to the Monte Carlo accuracy.'></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +15,7 @@ The hist() method for a "mi" object is a utility to visualize this kind of revis
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@ The hist() method for a "mi" object is a utility to visualize this kind of revis
 
     <div class="ref-description section level2">
     <p>The mutual information calculated with the <code><a href="mutualinfo.html">mutualinfo()</a></code> function, and outputted as a "mi" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.</p>
-<p>The <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code> method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.</p>
+<p>The <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code> method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely such change would be. The distribution is represented by a histogram formed from samples of revised mutual information. The bin size is chosen according to the Monte Carlo accuracy.</p>
     </div>
 
     <div class="section level2">
@@ -84,7 +84,7 @@ The hist() method for a "mi" object is a utility to visualize this kind of revis
 
 
 <dt id="arg-breaks">breaks<a class="anchor" aria-label="anchor" href="#arg-breaks"></a></dt>
-<dd><p>as in function <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">graphics::hist()</a></code>, or <code>NULL</code> (default). Value <code>NULL</code> uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).</p></dd>
+<dd><p>as in function <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">graphics::hist()</a></code>, or <code>NULL</code> (default). Value <code>NULL</code> determines the bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).</p></dd>
 
 
 <dt id="arg-lty-lwd-col-alpha-f-xlab-ylab-xlim-ylim-main-grid-axes-add">lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add<a class="anchor" aria-label="anchor" href="#arg-lty-lwd-col-alpha-f-xlab-ylab-xlim-ylim-main-grid-axes-add"></a></dt>

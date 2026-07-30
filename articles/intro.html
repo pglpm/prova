@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1232,12 +1232,12 @@ to compare several frequency distributions, as we’ll do later.)</p>
 <li>Chinstrap: 0.30</li>
 <li>Gentoo: 0.40</li>
 </ul>
-<p>and can be read from the <code>values</code> element of the
+<p>and can be read from the <code>value</code> element of the
 <code>Fspecies10</code> object, either directly or by using the
 <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> function, which by default a number of significant
 digits corresponding to the Monte Carlo numerical accuracy:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Fspecies10</span><span class="op">$</span><span class="va">values</span></span>
+<code class="sourceCode R"><span><span class="va">Fspecies10</span><span class="op">$</span><span class="va">value</span></span>
 <span><span class="co">#            </span></span>
 <span><span class="co"># species         [,1]</span></span>
 <span><span class="co">#   Adelie    0.298718</span></span>
@@ -1245,8 +1245,8 @@ digits corresponding to the Monte Carlo numerical accuracy:</p>
 <span><span class="co">#   Gentoo    0.396668</span></span>
 <span></span>
 <span><span class="co">## or</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspecies10</span>, <span class="st">'values'</span><span class="op">)</span></span>
-<span><span class="co"># $values</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspecies10</span>, <span class="st">'value'</span><span class="op">)</span></span>
+<span><span class="co"># $value</span></span>
 <span><span class="co">#            </span></span>
 <span><span class="co"># species     [,1]</span></span>
 <span><span class="co">#   Adelie     0.3</span></span>
@@ -1711,18 +1711,18 @@ subpopulations. The procedure is analogous to the one we <a href="#twovariates">
 <span></span>
 <span><span class="co">## Display the estimated frequencies of species</span></span>
 <span><span class="co">## within all six combinations of subpopulations</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspecies10IS</span>, <span class="st">'values'</span><span class="op">)</span></span>
-<span><span class="co"># $values</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspecies10IS</span>, <span class="st">'value'</span><span class="op">)</span></span>
+<span><span class="co"># $value</span></span>
 <span><span class="co">#            |island,sex</span></span>
-<span><span class="co"># species     Biscoe,female Dream,female Torgersen,female Biscoe,male</span></span>
-<span><span class="co">#   Adelie             0.13         0.40             0.48        0.21</span></span>
-<span><span class="co">#   Chinstrap          0.11         0.40             0.27        0.22</span></span>
-<span><span class="co">#   Gentoo             0.76         0.21             0.25        0.57</span></span>
+<span><span class="co"># species     Biscoe,female Dream,female Torgersen,female Biscoe,male Dream,male</span></span>
+<span><span class="co">#   Adelie             0.13         0.40             0.48        0.21       0.32</span></span>
+<span><span class="co">#   Chinstrap          0.11         0.40             0.27        0.22       0.54</span></span>
+<span><span class="co">#   Gentoo             0.76         0.21             0.25        0.57       0.14</span></span>
 <span><span class="co">#            |island,sex</span></span>
-<span><span class="co"># species     Dream,male Torgersen,male</span></span>
-<span><span class="co">#   Adelie          0.32           0.45</span></span>
-<span><span class="co">#   Chinstrap       0.54           0.38</span></span>
-<span><span class="co">#   Gentoo          0.14           0.17</span></span></code></pre></div>
+<span><span class="co"># species     Torgersen,male</span></span>
+<span><span class="co">#   Adelie              0.45</span></span>
+<span><span class="co">#   Chinstrap           0.38</span></span>
+<span><span class="co">#   Gentoo              0.17</span></span></code></pre></div>
 <p><br></p>
 </div>
 </div>

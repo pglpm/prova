@@ -96,7 +96,7 @@ qPr(
 - sep:
 
   character, default `','`: character to separate variate names and
-  values
+  values.
 
 - solidus:
 
@@ -122,20 +122,20 @@ qPr(
 
 A list of the following elements:
 
-- `$values`: a matrix with the requested \\Y\\-quantiles `p` conditional
+- `'value'`: a matrix with the requested \\Y\\-quantiles `p` conditional
   on the requested \\X\\-values in `X`, for all combinations of `p`
   (rows) and `X` (columns).
 
-- `$quantiles` (possibly `NULL`): an array with the revisability
+- `'quantiles'` (possibly `NULL`): an array with the revisability
   quantiles (3rd dimension of the array) for the quantiles of the
-  `value` element.
+  `'value'` element.
 
-- `$samples` (possibly `NULL`): an array with the revisability samples
+- `'samples'` (possibly `NULL`): an array with the revisability samples
   (3rd dimension of the array) for such quantiles.
 
-- `$Y`, `$X` `$tails`: copies of the `Y`, `X`, `tails` arguments.
+- `'Y'`, `'X'` `'tails'`: copies of the `Y`, `X`, `tails` arguments.
 
-- `$K`: name of the "Knowledge" object used in the calculation.
+- `'K'`: name of the "Knowledge" object used in the calculation.
 
 ## Details
 
@@ -189,7 +189,7 @@ K <- Kexample
 quants <- qPr(Yname = 'bill_len', K = K)
 
 ## display the quantile values
-quants$values
+quants$value
 #>         
 #> bill_len [,1]
 #>     0.25 39.2
@@ -198,11 +198,11 @@ quants$values
 
 ## verify these values, within numerical error, using Pr():
 probs <- Pr(
-  Y = data.frame(bill_len = c(quants$values)),
+  Y = data.frame(bill_len = c(quants$value)),
   tails = list(bill_len = -1),
   K = K
 )
-probs$values
+probs$value
 #>          
 #> bill_len<      [,1]
 #>      39.2 0.2528194
@@ -244,7 +244,7 @@ quants$quantiles
 quants <- qPr(Yname = 'bill_len', X = data.frame(species = 'Adelie'), K = K)
 
 ## display the quantile values
-quants$values
+quants$value
 #>         |species
 #> bill_len Adelie
 #>     0.25   37.0
@@ -253,11 +253,11 @@ quants$values
 
 ## verify these values, within numerical error, using Pr():
 probs <- Pr(
-  Y = data.frame(bill_len = c(quants$values)),
+  Y = data.frame(bill_len = c(quants$value)),
   X = data.frame(species = 'Adelie'),
   tails = list(bill_len = -1),
   K = K)
-probs$values
+probs$value
 #>          |species
 #> bill_len<    Adelie
 #>      37   0.2530943

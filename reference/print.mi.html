@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,11 +63,11 @@
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
-<dd><p>positive integer or <code>NULL</code> or <code>TRUE</code> (default): minimal number of significant digits, see <code><a href="https://rdrr.io/r/base/print.default.html" class="external-link">base::print.default()</a></code>. If value is <code>TRUE</code>, then the significant digits for element <code>$value</code> is determined from is respective <code>$MCaccuracy</code>  (see <code><a href="mutualinfo.html">mutualinfo()</a></code>), according to the rules of the <em>Guide to the expression of Uncertainty in Measurement</em>, keeping as many digits as given in parameter <code>edigits</code>; whereas <code>$quantiles</code> elements uses <code>edigits</code> significant digits.</p></dd>
+<dd><p>positive integer or <code>NULL</code> or <code>TRUE</code> (default): minimal number of significant digits, see <code><a href="https://rdrr.io/r/base/print.default.html" class="external-link">base::print.default()</a></code>. If value is <code>TRUE</code>, then the significant digits for element <code>'value'</code> are determined from is respective <code>'value.acc'</code>  (see <code><a href="mutualinfo.html">mutualinfo()</a></code>), according to the rules of the <em>Guide to the expression of Uncertainty in Measurement</em>, keeping as many digits as given in parameter <code>edigits</code>; whereas <code>'quantiles'</code> elements uses <code>edigits</code> significant digits.</p></dd>
 
 
 <dt id="arg-edigits">edigits<a class="anchor" aria-label="anchor" href="#arg-edigits"></a></dt>
-<dd><p>positive integer, default 2: number of significant digits for element <code>$value</code> and <code>$quantiles</code>, if <code>digits = TRUE</code>.</p></dd>
+<dd><p>positive integer, default 2: number of significant digits for element <code>'value'</code> and <code>'quantiles'</code>, if <code>digits = TRUE</code>.</p></dd>
 
 
 <dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
@@ -103,12 +103,12 @@
 <span class="r-in"><span><span class="co">## display the value and revisability of the mutual information</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">MI</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> value/Sh    Q5.5%     Q25%     Q75%   Q94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0.735     0.31     0.64     0.93      1.0 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.735    0.313    0.637    0.926    1.046 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## convert to hartleys (base-10 logarithms):</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">MI</span>, unit <span class="op">=</span> <span class="st">'Hart'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> value/Hart      Q5.5%       Q25%       Q75%     Q94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.2212      0.094       0.19       0.28       0.32 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.2212     0.0943     0.1916     0.2787     0.3150 </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

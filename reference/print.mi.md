@@ -24,18 +24,18 @@ print(x, digits = TRUE, edigits = 2, unit = NULL, ...)
   positive integer or `NULL` or `TRUE` (default): minimal number of
   significant digits, see
   [`base::print.default()`](https://rdrr.io/r/base/print.default.html).
-  If value is `TRUE`, then the significant digits for element `$value`
-  is determined from is respective `$MCaccuracy` (see
+  If value is `TRUE`, then the significant digits for element `'value'`
+  are determined from is respective `'value.acc'` (see
   [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)),
   according to the rules of the *Guide to the expression of Uncertainty
   in Measurement*, keeping as many digits as given in parameter
-  `edigits`; whereas `$quantiles` elements uses `edigits` significant
+  `edigits`; whereas `'quantiles'` elements uses `edigits` significant
   digits.
 
 - edigits:
 
   positive integer, default 2: number of significant digits for element
-  `$value` and `$quantiles`, if `digits = TRUE`.
+  `'value'` and `'quantiles'`, if `digits = TRUE`.
 
 - unit:
 
@@ -81,11 +81,11 @@ MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K)
 ## display the value and revisability of the mutual information
 print(MI)
 #> value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#>    0.735     0.31     0.64     0.93      1.0 
+#>    0.735    0.313    0.637    0.926    1.046 
 
 ## convert to hartleys (base-10 logarithms):
 print(MI, unit = 'Hart')
 #> value/Hart      Q5.5%       Q25%       Q75%     Q94.5% 
-#>     0.2212      0.094       0.19       0.28       0.32 
+#>     0.2212     0.0943     0.1916     0.2787     0.3150 
 # }
 ```

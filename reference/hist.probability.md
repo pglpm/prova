@@ -16,7 +16,10 @@ can be interpreted in two ways:
 
 The [`hist()`](https://rdrr.io/r/graphics/hist.html) method for a
 "probability" object is a utility to visualize this kind of
-revisability, in the form of a distribution.
+revisability, in the form of a distribution. This distribution is
+represented by a histogram formed from samples of revised proobabilities
+(or long-run frequencies). The bin size is chosen according to the Monte
+Carlo accuracy.
 
 ## Usage
 
@@ -62,9 +65,8 @@ hist(
 
   as in function
   [`graphics::hist()`](https://rdrr.io/r/graphics/hist.html), or `NULL`
-  (default). Value `NULL` uses a number of bins inversely proportional
-  to the square root of the number of samples (because the Monte Carlo
-  error associated with the quantiles scales as the square root).
+  (default). Value `NULL` determines bin width from the Monte Carlo
+  accuracy (roughly speaking, each bin spans two standard deviations).
 
 - legend:
 
@@ -121,7 +123,7 @@ K <- Kexample
 ## calculate the probability, and its revisability,
 ## for the value 'Adelie' of the "species" variate
 probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
-probs$values
+probs$value
 #>         
 #> species      [,1]
 #>   Adelie 0.440685

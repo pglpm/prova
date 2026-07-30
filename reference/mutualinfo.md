@@ -111,30 +111,30 @@ mutualinfo(
 An object of class "mi", which is a list consisting of the following
 elements:
 
-- `$value`, the mutual information between (joint) variates `Y1names`
+- `'value'`, the mutual information between (joint) variates `Y1names`
   and (joint) variates `Y2names`.
 
-- `$quantiles`, a vector with the revisability quantiles for the mutual
+- `'quantiles'`, a vector with the revisability quantiles for the mutual
   information.
 
-- `$MCaccuracy`, vector with the numerical accuracies (roughly speaking
-  a standard deviation) of the Monte Carlo calculation for the `value`
-  of the mutual information.
+- `'value.acc'`, `quantiles.acc` number and vector with the numerical
+  accuracies (roughly speaking a standard deviation) of the Monte Carlo
+  calculation for the `'value'` and the `'quantiles'` elements.
 
-- `$samples`, a vector with the revisability samples for the mutual
+- `'samples'`, a vector with the revisability samples for the mutual
   information.
 
-- `$rGauss`, a vector of `value` and `accuracy`: the absolute value of
+- `'rGauss'`, a vector of `value` and `accuracy`: the absolute value of
   the Pearson correlation coefficient \\r\\ of a *multivariate Gaussian
   distribution* having mutual information `MI`; the two are related by
   \\\mathrm{MI} = -\ln(1 - r^2)/2\\. It may provide a vague intuition
   for the `MI` value for people more familiar with Pearson's
   correlation, but should be taken with a grain of salt.
 
-- `$unit`, `$Y1names`, `$Y1names`, `$tails`: copies of the homonymous
-  input arguments.
+- `'unit'`, `'Y1names'`, `'Y1names'`, `'tails'`: copies of the
+  homonymous input arguments.
 
-- `$K`: name of the "Knowledge" object used in the calculation.
+- `'K'`: name of the "Knowledge" object used in the calculation.
 
 ## Details
 
@@ -199,8 +199,8 @@ K <- Kexample
 ## mutual information between variates 'species' and 'bill_len'
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
 
-## The value and its numerical Monte Carlo error
-c(MI$value, MI$MCaccuracy)
+## The value and its numerical Monte Carlo accuracy
+c(MI$value, MI$value.acc)
 #> [1] 0.79723948 0.03379594
 
 ## If we had many more data, we could instead expect to obtain values

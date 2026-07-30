@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@
 
 
 <dt id="arg-sep">sep<a class="anchor" aria-label="anchor" href="#arg-sep"></a></dt>
-<dd><p>character, default <code>','</code>: character to separate variate names and values</p></dd>
+<dd><p>character, default <code>','</code>: character to separate variate names and values.</p></dd>
 
 
 <dt id="arg-solidus">solidus<a class="anchor" aria-label="anchor" href="#arg-solidus"></a></dt>
@@ -129,11 +129,11 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list of the following elements:</p><ul><li><p><code>$values</code>: a matrix with the requested \(Y\)-quantiles <code>p</code> conditional on the requested \(X\)-values in <code>X</code>, for all combinations of <code>p</code> (rows) and <code>X</code> (columns).</p></li>
-<li><p><code>$quantiles</code> (possibly <code>NULL</code>): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the <code>value</code> element.</p></li>
-<li><p><code>$samples</code> (possibly <code>NULL</code>): an array with the revisability samples (3rd dimension of the array) for such quantiles.</p></li>
-<li><p><code>$Y</code>, <code>$X</code> <code>$tails</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
-<li><p><code>$K</code>: name of the "Knowledge" object used in the calculation.</p></li>
+    <p>A list of the following elements:</p><ul><li><p><code>'value'</code>: a matrix with the requested \(Y\)-quantiles <code>p</code> conditional on the requested \(X\)-values in <code>X</code>, for all combinations of <code>p</code> (rows) and <code>X</code> (columns).</p></li>
+<li><p><code>'quantiles'</code> (possibly <code>NULL</code>): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the <code>'value'</code> element.</p></li>
+<li><p><code>'samples'</code> (possibly <code>NULL</code>): an array with the revisability samples (3rd dimension of the array) for such quantiles.</p></li>
+<li><p><code>'Y'</code>, <code>'X'</code> <code>'tails'</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
+<li><p><code>'K'</code>: name of the "Knowledge" object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -167,7 +167,7 @@
 <span class="r-in"><span><span class="va">quants</span> <span class="op">&lt;-</span> <span class="fu">qPr</span><span class="op">(</span>Yname <span class="op">=</span> <span class="st">'bill_len'</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the quantile values</span></span></span>
-<span class="r-in"><span><span class="va">quants</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">quants</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len [,1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 39.2</span>
@@ -176,11 +176,11 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## verify these values, within numerical error, using Pr():</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">values</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  K <span class="op">=</span> <span class="va">K</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len&lt;      [,1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      39.2 0.2528194</span>
@@ -222,7 +222,7 @@
 <span class="r-in"><span><span class="va">quants</span> <span class="op">&lt;-</span> <span class="fu">qPr</span><span class="op">(</span>Yname <span class="op">=</span> <span class="st">'bill_len'</span>, X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the quantile values</span></span></span>
-<span class="r-in"><span><span class="va">quants</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">quants</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         |species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len Adelie</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.25   37.0</span>
@@ -231,11 +231,11 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## verify these values, within numerical error, using Pr():</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">values</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          |species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len&lt;    Adelie</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      37   0.2530943</span>

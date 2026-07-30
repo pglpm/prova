@@ -3,8 +3,8 @@
 This [`base::print()`](https://rdrr.io/r/base/print.html) method is a
 utility to display selected elements of a "probability" object obtained
 with [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md); typically
-its posterior probabilies (element `$values`) and their revisabilities
-(element `$quantiles`). If the `Y` or `X` variates are joint variates,
+its posterior probabilies (element `'value'`) and their revisabilities
+(element `'quantiles'`). If the `Y` or `X` variates are joint variates,
 this method also allow to display only selected values of them. Singular
 probabilities, such as the probability of a censored value for a
 continuous variate, are indicated with an asterisk `*`.
@@ -28,7 +28,7 @@ print(x, elements = NULL, subset = NULL, digits = TRUE, edigits = 2, ...)
   character or integer vector, or `NULL` (default): elements of the
   "probability" object to display. The syntax is the same as with
   [`[`](https://rdrr.io/r/base/Extract.html). If `NULL`, the elements
-  `$values` and `$quantiles` are displayed together in a special way.
+  `'value'` and `'quantiles'` are displayed together in a special way.
 
 - subset:
 
@@ -41,19 +41,18 @@ print(x, elements = NULL, subset = NULL, digits = TRUE, edigits = 2, ...)
   positive integer or `NULL` or `TRUE` (default): minimal number of
   significant digits, see
   [`base::print.default()`](https://rdrr.io/r/base/print.default.html).
-  If value is `TRUE`, then the significant digits for elements `$values`
-  and `$quantiles` are determined from their respective
-  `$values.MCaccuracy` and `$quantiles.MCaccuracy` elements of the
-  "probability" object (see
+  If value is `TRUE`, then the significant digits for elements `'value'`
+  and `'quantiles'` are determined from their respective `'value.acc'`
+  and `'quantiles.acc'` elements of the "probability" object (see
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md)), according to
   the rules of the *Guide to the expression of Uncertainty in
   Measurement*, keeping as many digits as given in parameter `edigits`;
-  whereas `$samples` elements uses `edigits` significant digits.
+  whereas `'samples'` elements uses `edigits` significant digits.
 
 - edigits:
 
   positive integer, default 2: number of significant digits for elements
-  `$values.MCaccuracy` and `$quantiles.MCaccuracy`, if `digits = TRUE`.
+  `'value.acc'` and `'quantiles.acc'`, if `digits = TRUE`.
 
 - ...:
 
@@ -116,9 +115,9 @@ print(probs)
 #>   Gentoo    0.5722 0.0031 0.4671 0.5270 0.6204 0.6718
 #> 
 
-## diplay 'values' only, and only for the species value 'Gentoo'
-print(probs, elements = 'values', subset = list(species = 'Gentoo'))
-#> $values
+## diplay 'value' only, and only for the species value 'Gentoo'
+print(probs, elements = 'value', subset = list(species = 'Gentoo'))
+#> $value
 #>         |bill_len
 #> species    43   44
 #>   Gentoo 0.39 0.57

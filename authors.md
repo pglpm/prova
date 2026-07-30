@@ -22,13 +22,13 @@ Source:
 [`DESCRIPTION`](https://github.com/pglpm/prova/blob/main/DESCRIPTION)
 
 Porta Mana P (2026). *prova: Nonparametric Probabilistic-Statistical
-Variate Analysis*. R package version 2.0.0,
+Variate Analysis*. R package version 2.1.0,
 <https://pglpm.github.io/prova/>.
 
     @Manual{,
       title = {prova: Nonparametric Probabilistic-Statistical Variate Analysis},
       author = {PierGianLuca {Porta Mana}},
       year = {2026},
-      note = {R package version 2.0.0},
+      note = {R package version 2.1.0},
       url = {https://pglpm.github.io/prova/},
     }

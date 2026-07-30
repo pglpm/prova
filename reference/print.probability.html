@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Print an object of class " probability print.probability><meta name="description" content='This base::print() method is a utility to display selected elements of a "probability" object obtained with Pr(); typically its posterior probabilies (element $values) and their revisabilities (element $quantiles). If the Y or X variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk *.'><meta property="og:description" content='This base::print() method is a utility to display selected elements of a "probability" object obtained with Pr(); typically its posterior probabilies (element $values) and their revisabilities (element $quantiles). If the Y or X variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk *.'></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Print an object of class " probability print.probability><meta name="description" content="This base::print() method is a utility to display selected elements of a &quot;probability&quot; object obtained with Pr(); typically its posterior probabilies (element 'value') and their revisabilities (element 'quantiles'). If the Y or X variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk *."><meta property="og:description" content="This base::print() method is a utility to display selected elements of a &quot;probability&quot; object obtained with Pr(); typically its posterior probabilies (element 'value') and their revisabilities (element 'quantiles'). If the Y or X variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk *."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@
     </div>
 
     <div class="ref-description section level2">
-    <p>This <code><a href="https://rdrr.io/r/base/print.html" class="external-link">base::print()</a></code> method is a utility to display selected elements of a "probability" object obtained with <code><a href="Pr.html">Pr()</a></code>; typically its posterior probabilies (element <code>$values</code>) and their revisabilities (element <code>$quantiles</code>). If the <code>Y</code> or <code>X</code> variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk <code>*</code>.</p>
+    <p>This <code><a href="https://rdrr.io/r/base/print.html" class="external-link">base::print()</a></code> method is a utility to display selected elements of a "probability" object obtained with <code><a href="Pr.html">Pr()</a></code>; typically its posterior probabilies (element <code>'value'</code>) and their revisabilities (element <code>'quantiles'</code>). If the <code>Y</code> or <code>X</code> variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk <code>*</code>.</p>
     </div>
 
     <div class="section level2">
@@ -63,7 +63,7 @@
 
 
 <dt id="arg-elements">elements<a class="anchor" aria-label="anchor" href="#arg-elements"></a></dt>
-<dd><p>character or integer vector, or <code>NULL</code> (default): elements of the "probability" object to display. The syntax is the same as with <code><a href="https://rdrr.io/r/base/Extract.html" class="external-link">[</a></code>. If <code>NULL</code>, the elements <code>$values</code> and <code>$quantiles</code> are displayed together in a special way.</p></dd>
+<dd><p>character or integer vector, or <code>NULL</code> (default): elements of the "probability" object to display. The syntax is the same as with <code><a href="https://rdrr.io/r/base/Extract.html" class="external-link">[</a></code>. If <code>NULL</code>, the elements <code>'value'</code> and <code>'quantiles'</code> are displayed together in a special way.</p></dd>
 
 
 <dt id="arg-subset">subset<a class="anchor" aria-label="anchor" href="#arg-subset"></a></dt>
@@ -71,11 +71,11 @@
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
-<dd><p>positive integer or <code>NULL</code> or <code>TRUE</code> (default): minimal number of significant digits, see <code><a href="https://rdrr.io/r/base/print.default.html" class="external-link">base::print.default()</a></code>. If value is <code>TRUE</code>, then the significant digits for elements <code>$values</code> and <code>$quantiles</code> are determined from their respective <code>$values.MCaccuracy</code> and <code>$quantiles.MCaccuracy</code> elements of the "probability" object (see <code><a href="Pr.html">Pr()</a></code>), according to the rules of the <em>Guide to the expression of Uncertainty in Measurement</em>, keeping as many digits as given in parameter <code>edigits</code>; whereas <code>$samples</code> elements uses <code>edigits</code> significant digits.</p></dd>
+<dd><p>positive integer or <code>NULL</code> or <code>TRUE</code> (default): minimal number of significant digits, see <code><a href="https://rdrr.io/r/base/print.default.html" class="external-link">base::print.default()</a></code>. If value is <code>TRUE</code>, then the significant digits for elements <code>'value'</code> and <code>'quantiles'</code> are determined from their respective <code>'value.acc'</code> and <code>'quantiles.acc'</code> elements of the "probability" object (see <code><a href="Pr.html">Pr()</a></code>), according to the rules of the <em>Guide to the expression of Uncertainty in Measurement</em>, keeping as many digits as given in parameter <code>edigits</code>; whereas <code>'samples'</code> elements uses <code>edigits</code> significant digits.</p></dd>
 
 
 <dt id="arg-edigits">edigits<a class="anchor" aria-label="anchor" href="#arg-edigits"></a></dt>
-<dd><p>positive integer, default 2: number of significant digits for elements <code>$values.MCaccuracy</code> and <code>$quantiles.MCaccuracy</code>, if <code>digits = TRUE</code>.</p></dd>
+<dd><p>positive integer, default 2: number of significant digits for elements <code>'value.acc'</code> and <code>'quantiles.acc'</code>, if <code>digits = TRUE</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -131,9 +131,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.5722 0.0031 0.4671 0.5270 0.6204 0.6718</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## diplay 'values' only, and only for the species value 'Gentoo'</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">probs</span>, elements <span class="op">=</span> <span class="st">'values'</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Gentoo'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $values</span>
+<span class="r-in"><span><span class="co">## diplay 'value' only, and only for the species value 'Gentoo'</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">probs</span>, elements <span class="op">=</span> <span class="st">'value'</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Gentoo'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species    43   44</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo 0.39 0.57</span>

@@ -10,12 +10,12 @@ How the probabilities could change, if we collected a much larger (infinite) dat
 The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
 
 
-The hist() method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution.'><meta property="og:description" content='The posterior probabilities calculated with the Pr() function, and outputted as a "probability" object, have an associated "revisability" that comes from the finite size of the data sample. This revisability can be interpreted in two ways:
+The hist() method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution. This distribution is represented by a histogram formed from samples of revised proobabilities (or long-run frequencies). The bin size is chosen according to the Monte Carlo accuracy.'><meta property="og:description" content='The posterior probabilities calculated with the Pr() function, and outputted as a "probability" object, have an associated "revisability" that comes from the finite size of the data sample. This revisability can be interpreted in two ways:
 How the probabilities could change, if we collected a much larger (infinite) data sample, and how likely would such change be;
 The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
 
 
-The hist() method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution.'></head><body>
+The hist() method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution. This distribution is represented by a histogram formed from samples of revised proobabilities (or long-run frequencies). The bin size is chosen according to the Monte Carlo accuracy.'></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -23,7 +23,7 @@ The hist() method for a "probability" object is a utility to visualize this kind
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@ The hist() method for a "probability" object is a utility to visualize this kind
     <div class="ref-description section level2">
     <p>The posterior probabilities calculated with the <code><a href="Pr.html">Pr()</a></code> function, and outputted as a "probability" object, have an associated "revisability" that comes from the finite size of the data sample. This revisability can be interpreted in two ways:</p><ul><li><p>How the probabilities could change, if we collected a much larger (infinite) data sample, and how likely would such change be;</p></li>
 <li><p>The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.</p></li>
-</ul><p>The <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code> method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution.</p>
+</ul><p>The <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code> method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution. This distribution is represented by a histogram formed from samples of revised proobabilities (or long-run frequencies). The bin size is chosen according to the Monte Carlo accuracy.</p>
     </div>
 
     <div class="section level2">
@@ -99,7 +99,7 @@ The hist() method for a "probability" object is a utility to visualize this kind
 
 
 <dt id="arg-breaks">breaks<a class="anchor" aria-label="anchor" href="#arg-breaks"></a></dt>
-<dd><p>as in function <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">graphics::hist()</a></code>, or <code>NULL</code> (default). Value <code>NULL</code> uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).</p></dd>
+<dd><p>as in function <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">graphics::hist()</a></code>, or <code>NULL</code> (default). Value <code>NULL</code> determines bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).</p></dd>
 
 
 <dt id="arg-legend">legend<a class="anchor" aria-label="anchor" href="#arg-legend"></a></dt>
@@ -142,7 +142,7 @@ The hist() method for a "probability" object is a utility to visualize this kind
 <span class="r-in"><span><span class="co">## calculate the probability, and its revisability,</span></span></span>
 <span class="r-in"><span><span class="co">## for the value 'Adelie' of the "species" variate</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species      [,1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.440685</span>

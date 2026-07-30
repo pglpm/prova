@@ -9,8 +9,10 @@ much larger sample might reveal a different value of mutual information.
 The [`hist()`](https://rdrr.io/r/graphics/hist.html) method for a "mi"
 object is a utility to visualize this kind of revisability, in the form
 of a distribution: it shows how the mutual information could change, if
-we collected a much larger (infinite) data sample, and how likely would
-such change be.
+we collected a much larger (infinite) data sample, and how likely such
+change would be. The distribution is represented by a histogram formed
+from samples of revised mutual information. The bin size is chosen
+according to the Monte Carlo accuracy.
 
 ## Usage
 
@@ -48,9 +50,8 @@ hist(
 
   as in function
   [`graphics::hist()`](https://rdrr.io/r/graphics/hist.html), or `NULL`
-  (default). Value `NULL` uses a number of bins inversely proportional
-  to the square root of the number of samples (because the Monte Carlo
-  error associated with the quantiles scales as the square root).
+  (default). Value `NULL` determines the bin width from the Monte Carlo
+  accuracy (roughly speaking, each bin spans two standard deviations).
 
 - lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add:
 

@@ -114,7 +114,7 @@ Pr(
 - sep:
 
   character, default `','`: character to separate variate names and
-  values
+  values.
 
 - solidus:
 
@@ -136,21 +136,21 @@ Pr(
 An object of class "probability", which is a list consisting of the
 following elements:
 
-- `$values`: a matrix with the probabilities \\\mathrm{Pr}(Y = y \vert X
+- `'value'`: a matrix with the probabilities \\\mathrm{Pr}(Y = y \vert X
   = x, K)\\, for all joint values \\y\\ of the \\Y\\-variates (rows) and
   all joint values \\x\\ of the \\X\\-variates (columns).
 
-- `$quantiles` (possibly `NULL`): an array with the revisability
+- `'quantiles'` (possibly `NULL`): an array with the revisability
   quantiles (3rd dimension of the array) for such probabilities.
 
-- `$samples` (possibly `NULL`): an array with the revisability samples
+- `'samples'` (possibly `NULL`): an array with the revisability samples
   (3rd dimension of the array) for such probabilities.
 
-- `$values.MCaccuracy`, `quantiles.MCaccuracy`: arrays with the
-  numerical accuracies (roughly speaking a standard deviation) of the
-  Monte Carlo calculations for the `values` and `quantiles` elements.
+- `'value.acc'`, `quantiles.acc`: arrays with the numerical accuracies
+  (roughly speaking a standard deviation) of the Monte Carlo
+  calculations for the `'values'` and `'quantiles'` elements.
 
-- `$densities`: numerical vector as long as number of rows in `Y`, used
+- `'density'`: numerical vector as long as number of rows in `Y`, used
   mainly for
   [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md).
   It is the order of the probability density the `Y`-values: values with
@@ -159,9 +159,9 @@ following elements:
   `2` are two-dimensional probability densities
   \\\mathrm{p}(\dotso)\\\mathrm{d}y_1\\\mathrm{d}y_2\\; and so on.
 
-- `$Y`, `$X`, `$tails`: copies of the `Y`, `X`, `tails` arguments.
+- `'Y'`, `'X'`, `'tails'`: copies of the `Y`, `X`, `tails` arguments.
 
-- `$K`: name of the "Knowledge" object used in the calculation.
+- `'K'`: name of the "Knowledge" object used in the calculation.
 
 ## Details
 
@@ -279,7 +279,7 @@ K <- Kexample
 probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
 
 ## display the probability value
-probs$values
+probs$value
 #>         
 #> species      [,1]
 #>   Adelie 0.440685
@@ -306,7 +306,7 @@ probs <- Pr(
 )
 
 ## display the 3 probability values
-probs$values
+probs$value
 #>            
 #> species          [,1]
 #>   Adelie    0.4406850
@@ -343,7 +343,7 @@ probs <- Pr(
 )
 
 ## display the probability value
-probs$values
+probs$value
 #>         |bill_len
 #> species         43
 #>   Adelie 0.4647433
@@ -364,7 +364,7 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 probs <- Pr(Y = data.frame(species = 'Adelie', bill_len = 43), K = K)
 
 ## display the probability value
-probs$values
+probs$value
 #>                 
 #> species,bill_len        [,1]
 #>        Adelie,43 0.001819114
@@ -387,7 +387,7 @@ X <- data.frame(bill_len = c(43, 44))
 probs <- Pr(Y = Y, X = X, K = K)
 
 ## display the 3 x 2 probability values
-probs$values
+probs$value
 #>            |bill_len
 #> species            43        44
 #>   Adelie    0.4647433 0.2223224
@@ -431,7 +431,7 @@ Y <- expand.grid(
 probs <- Pr(Y = Y, K = K)
 
 ## display the 6 joint-probability values
-probs$values
+probs$value
 #>                 
 #> species,bill_len         [,1]
 #>     Adelie,43    0.0018191137

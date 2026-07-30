@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,13 +124,13 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class "mi", which is a list consisting of the following elements:</p><ul><li><p><code>$value</code>, the mutual information between (joint) variates <code>Y1names</code> and (joint) variates <code>Y2names</code>.</p></li>
-<li><p><code>$quantiles</code>, a vector with the revisability quantiles for the mutual information.</p></li>
-<li><p><code>$MCaccuracy</code>, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the <code>value</code> of the mutual information.</p></li>
-<li><p><code>$samples</code>, a vector with the revisability samples for the mutual information.</p></li>
-<li><p><code>$rGauss</code>, a vector of <code>value</code> and <code>accuracy</code>: the absolute value of the Pearson correlation coefficient \(r\) of a <em>multivariate Gaussian distribution</em> having mutual information <code>MI</code>; the two are related by \(\mathrm{MI} = -\ln(1 - r^2)/2\). It may provide a vague intuition for the <code>MI</code> value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.</p></li>
-<li><p><code>$unit</code>, <code>$Y1names</code>, <code>$Y1names</code>, <code>$tails</code>: copies of the homonymous input arguments.</p></li>
-<li><p><code>$K</code>: name of the "Knowledge" object used in the calculation.</p></li>
+    <p>An object of class "mi", which is a list consisting of the following elements:</p><ul><li><p><code>'value'</code>, the mutual information between (joint) variates <code>Y1names</code> and (joint) variates <code>Y2names</code>.</p></li>
+<li><p><code>'quantiles'</code>, a vector with the revisability quantiles for the mutual information.</p></li>
+<li><p><code>'value.acc'</code>, <code>quantiles.acc</code> number and vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the <code>'value'</code> and the <code>'quantiles'</code> elements.</p></li>
+<li><p><code>'samples'</code>, a vector with the revisability samples for the mutual information.</p></li>
+<li><p><code>'rGauss'</code>, a vector of <code>value</code> and <code>accuracy</code>: the absolute value of the Pearson correlation coefficient \(r\) of a <em>multivariate Gaussian distribution</em> having mutual information <code>MI</code>; the two are related by \(\mathrm{MI} = -\ln(1 - r^2)/2\). It may provide a vague intuition for the <code>MI</code> value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.</p></li>
+<li><p><code>'unit'</code>, <code>'Y1names'</code>, <code>'Y1names'</code>, <code>'tails'</code>: copies of the homonymous input arguments.</p></li>
+<li><p><code>'K'</code>: name of the "Knowledge" object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -167,8 +167,8 @@ an expression which can also be written in several other equivalent ways. It is 
 <span class="r-in"><span><span class="co">## mutual information between variates 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span><span class="va">MI</span> <span class="op">&lt;-</span> <span class="fu">mutualinfo</span><span class="op">(</span>Y1names <span class="op">=</span> <span class="st">'species'</span>, Y2names <span class="op">=</span> <span class="st">'bill_len'</span>, K <span class="op">=</span> <span class="va">K</span>, nv <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## The value and its numerical Monte Carlo error</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">MI</span><span class="op">$</span><span class="va">value</span>, <span class="va">MI</span><span class="op">$</span><span class="va">MCaccuracy</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## The value and its numerical Monte Carlo accuracy</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">MI</span><span class="op">$</span><span class="va">value</span>, <span class="va">MI</span><span class="op">$</span><span class="va">value.acc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.79723948 0.03379594</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## If we had many more data, we could instead expect to obtain values</span></span></span>

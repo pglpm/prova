@@ -753,7 +753,7 @@ The three estimated frequencies are:
 - Chinstrap: 0.30
 - Gentoo: 0.40
 
-and can be read from the `values` element of the `Fspecies10` object,
+and can be read from the `value` element of the `Fspecies10` object,
 either directly or by using the
 [`print()`](https://rdrr.io/r/base/print.html) function, which by
 default a number of significant digits corresponding to the Monte Carlo
@@ -761,7 +761,7 @@ numerical accuracy:
 
 ``` r
 
-Fspecies10$values
+Fspecies10$value
 #            
 # species         [,1]
 #   Adelie    0.298718
@@ -769,8 +769,8 @@ Fspecies10$values
 #   Gentoo    0.396668
 
 ## or
-print(Fspecies10, 'values')
-# $values
+print(Fspecies10, 'value')
+# $value
 #            
 # species     [,1]
 #   Adelie     0.3
@@ -1287,18 +1287,18 @@ Fspecies10IS <- Pr(Y = Y, X = X2, K = K10)
 
 ## Display the estimated frequencies of species
 ## within all six combinations of subpopulations
-print(Fspecies10IS, 'values')
-# $values
+print(Fspecies10IS, 'value')
+# $value
 #            |island,sex
-# species     Biscoe,female Dream,female Torgersen,female Biscoe,male
-#   Adelie             0.13         0.40             0.48        0.21
-#   Chinstrap          0.11         0.40             0.27        0.22
-#   Gentoo             0.76         0.21             0.25        0.57
+# species     Biscoe,female Dream,female Torgersen,female Biscoe,male Dream,male
+#   Adelie             0.13         0.40             0.48        0.21       0.32
+#   Chinstrap          0.11         0.40             0.27        0.22       0.54
+#   Gentoo             0.76         0.21             0.25        0.57       0.14
 #            |island,sex
-# species     Dream,male Torgersen,male
-#   Adelie          0.32           0.45
-#   Chinstrap       0.54           0.38
-#   Gentoo          0.14           0.17
+# species     Torgersen,male
+#   Adelie              0.45
+#   Chinstrap           0.38
+#   Gentoo              0.17
 ```
 
   
