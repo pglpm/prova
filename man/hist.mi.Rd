@@ -11,7 +11,7 @@
   lwd = 2,
   col = palette(),
   alpha.f = 1,
-  fill.alpha.f = 0.125,
+  alpha.f.fill = 0.125,
   showvalue = TRUE,
   xlab = NULL,
   ylab = NULL,
@@ -27,11 +27,11 @@
 \arguments{
 \item{x}{Object of class "mi", obtained with \code{\link[=mutualinfo]{mutualinfo()}}.}
 
-\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} uses the geometric mean of \link[grDevices:nclass.Sturges]{Sturges} and \link[grDevices:nclass.FD]{Freedman-Diaconis} bins.}
+\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).}
 
 \item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
 
-\item{fill.alpha.f}{Numeric, default 0.125: opacity of the histogram filling. \code{0} means no filling.}
+\item{alpha.f.fill}{Numeric, default 0.125: opacity of the histogram filling. \code{0} means no filling.}
 
 \item{showvalue}{Logical, default \code{TRUE}: show the mutual information obtained from the current data sample?}
 

@@ -9,7 +9,7 @@
 #' - Either or both `x` and `y` arguments can be [list][base::list()]s. In this case, the first element of `x` is plotted against the first element of `y`, and so on, recycling as necessary. This allows for plots having different numbers of base points. The specifications in arguments like `type`, `lty`, `col`, `alpha.f`, `xjitter`, and similar apply to each list element in turn.
 #' - Argument `x`, or each element in `x` if it is a list, can be of class [`base::character`]. In this case, x-axis labels as given in `xdomain` are used, or the unique values in `x` if `xdomain` is `NULL`. Similarly for `y` and `ydomain`. This feature makes it easier to plot nominal and ordinal non-numeric variates.
 #' - Additional plot `type`s are available: `'hx'`, `'qx'`, `'hy'`, `'qy'` (internally they use [graphics::polygon()]):
-#'   - `'hx'` plots shaded histograms, extending from \eqn{y = 0} to the values given in each column of `y`. The x-values are the corresponding columns of `x`, recycled if necessary.
+#'   - `'hx'` plots shaded histograms. Argument `x` must be a list of `breaks`, and `y` a list of `counts` or `densities`, for example produced by by [graphics::hist()].
 #'   - `'qx'` plots shaded bands. The first band extends from the line defined by the first column of `y`, to the line defined by the *last* column; the second band is similarly delimited by the second and second-last columns of `y`, and so on (if `y` has an odd number of columns, the central one defines a line rather than a band). The x-values are the corresponding columns of `x`, recycled if necessary. This plot `type` is useful for plotting quantile bands calculated with [Pr()].
 #'   - `'hy'`, `'qy'` are analogous `type`s, but with the roles of `x` and `y` switched.
 #' - A jitter can be added to each plot, via the `xjitter` and `yjitter` vectors of switches. When either of these arguments is `NA`, it is internally assessed whether jitter is necessary. This feature makes it easier to generate scatter plots of nominal, ordinal, or rounded-continuous variates.
@@ -24,9 +24,10 @@
 #' @param type Character vector or list indicating the type of plot for each element of `x` and `y`. The types of plot are the same as in [base::plot()], in particular `'p'` for points, `'l'` for lines, `'b'` for both points and lines, `'c'` for empty points joined by lines, `'o'` for overplotted points and lines, ``n'` for empty plot. Additional special types `'hx'`, `'qx'`, `'hy'`, `'qy'` are available for plotting histograms and quantile bands; see "Details".
 #' @param xdomain,ydomain Character or numeric or `NULL` (default): vector of possible values of the variates represented in the `x`- and `y`-axes, in case the `x` or `y` argument is a character vector. Note that the domains apply to all elements in `x` and `y`. The ordering of the values is respected. If `NULL`, then `unique(x)` or `unique(y)` is used.
 #' @param xlim,ylim `NULL` (default) or a vector of two values. If non-`NULL` and any of the two values is not finite (including `NA` or `NULL`), then the `min` or `max` `x`- or `y`-coordinates of the plotted points are used.
-#' @param alpha.f Numeric vector or list: opacity of the colours specified with the `col` argument, `0` being completely invisible and `1` completely opaque. Default to 1, except for shaded plots of `type` `'hx'`, `'qx'`, `'hy'`, `'qy'`, for which it defaults to 0.25.
+#' @param alpha.f Numeric vector or list, default `1`: opacity of the line or contour colours, `0` being completely invisible and `1` completely opaque.
 #' @param xjitter,yjitter Vector or list of logicals or `NA` (default): add [base::jitter()] to `x`- or `y`-values? Useful when plotting discrete variates. If `NA`, jitter is added if both `x` and `y` are of character (or factor) class.
-#' @param border Border colour for bands in plots of `type = 'q'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()]. If `NA` (default), no border is drawn.
+#' @param fill Logical or `NA` (default). For histogram plots (`type = 'hx'` or `'hy'`), value `TRUE` means fill the histogram, and do not plot its contour; `FAlSE` means plot only its contour without filling; `NA` means plot contour and fill. For quantile plots (`type = 'qx'` or `'qy'`), value `TRUE` do not plot the bands' contours; `FAlSE` means plot only the contours without filling; `NA` plots a contour only when the quantile band has zero area (and would be invisible otherwise).
+#' @param alpha.f.fill Numeric vector or list, default `0.25`: opacity of the filling colours, `0` being completely invisible and `1` completely opaque.
 #' @param grid Logical, default `TRUE`: plot a light grid?
 #' @param lwd.grid Numeric, default 1: width of grid lines.
 #' @param col.grid Color of grid lines, default `'#00000022'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()].
@@ -63,7 +64,8 @@
 #' pplot(x = xgrid, y = dnorm(xgrid), ylim = c(0, NA))
 #'
 #' ## Draw a shaded histogram
-#' pplot(x = xgrid, y = dnorm(xgrid), type = 'hx')
+#' histo <- hist(rnorm(1000), breaks = 'FD', plot = FALSE)
+#' pplot(x = histo$breaks, y = histo$density, type = 'hx')
 #'
 #' @import grDevices
 #' @import graphics
@@ -90,10 +92,11 @@ pplot <- function(
     xlim = NULL, ylim = NULL,
     add = FALSE,
     xdomain = NULL, ydomain = NULL,
-    alpha.f = NA,
+    alpha.f = 1,
     xjitter = NA,
     yjitter = NA,
-    border = NA,
+    fill = NA,
+    alpha.f.fill = 0.25,
     grid = TRUE,
     lwd.grid = NULL,
     col.grid = '#00000022',
@@ -202,8 +205,6 @@ pplot <- function(
     type[is.na(type)] <- 'l'
     xjitter[is.na(xjitter)] <- FALSE
     yjitter[is.na(yjitter)] <- FALSE
-    alpha.f[is.na(alpha.f) & (type %in% c('qx', 'hx', 'qy', 'hy'))] <- 0.25
-    alpha.f[is.na(alpha.f)] <- 1
 
     ## Plot ranges
     if(!isTRUE(is.finite(xlim[1]))){
@@ -272,13 +273,12 @@ pplot <- function(
             dim(thisy) <- temp
         }
 
+        thiscol <- col[[(aplot - 1) %% length(col) + 1]]
         thisalpha.f <- alpha.f[[(aplot - 1) %% length(alpha.f) + 1]]
-        thiscol <- adjustcolor(col[[(aplot - 1) %% length(col) + 1]],
-            alpha.f = thisalpha.f)
-        thisborder <- border[[(aplot - 1) %% length(border) + 1]]
-        if(!is.na(thisborder)){
-            thisborder <- adjustcolor(thisborder, alpha.f = thisalpha.f)
-        }
+
+        thisfill <- fill[[(aplot - 1) %% length(fill) + 1]]
+        thisalpha.f.fill <-
+            alpha.f.fill[[(aplot - 1) %% length(alpha.f.fill) + 1]]
 
         ## Check if jitter needed
         thisxjitter <- xjitter[[(aplot - 1) %% length(xjitter) + 1]]
@@ -293,6 +293,29 @@ pplot <- function(
         ## Plot
         ## checks for type = 'q'
         thistype <- type[[(aplot - 1) %% length(type) + 1]]
+
+        if(thistype %in% c('hx', 'hy')){
+            if(thistype == 'hx'){
+                thisx <- rep(x = thisx, each = 4)
+                thisx <- thisx[-c(1, length(thisx))]
+                thisy <- c(0, rep(x = thisy, each = 4), 0)
+            } else if(thistype == 'hy'){
+                thisy <- rep(x = thisy, each = 4)
+                thisy <- thisy[-c(1, length(thisy))]
+                thisx <- c(0, rep(x = thisx, each = 4), 0)
+            }
+
+            if(is.na(thisfill) || thisfill){
+                graphics::polygon(
+                    x = thisx, y = thisy,
+                    border = NA,
+                    col = adjustcolor(thiscol, alpha.f = thisalpha.f.fill),
+                    lwd = lwd[[(aplot - 1) %% length(lwd) + 1]],
+                    density = NULL, xpd = TRUE, lty = 1)
+            }
+            if(is.na(thisfill) || !thisfill){ thistype <- 'l' }
+        }
+
         if(!(thistype %in% c('qx', 'qy', 'hx', 'hy'))){
 
             ## Plot
@@ -302,53 +325,64 @@ pplot <- function(
                 lwd = lwd[[(aplot - 1) %% length(lwd) + 1]],
                 lend = lend[[(aplot - 1) %% length(lend) + 1]],
                 pch = pch[[(aplot - 1) %% length(pch) + 1]],
-                col = thiscol,
+                col = adjustcolor(thiscol, alpha.f = thisalpha.f),
                 add = TRUE, ...)
 
-        } else if(thistype %in% c('qx', 'hx')){
-            if(thistype == 'hx'){
-                if(is.null(dim(thisy))){ dim(thisy) <- c(length(thisy), 1) }
-                temp <- dim(thisy) * c(1, 2)
-                thisy <- c(thisy, rep.int(x = 0, times = length(thisy)))
-                dim(thisy) <- temp
-            } else {
+        }
+        if(thistype %in% c('qx', 'qy')){
+
+            if(thistype == 'qx'){
                 if(is.null(dim(thisy))){ dim(thisy) <- c(1, length(thisy)) }
-            }
-            nquant <- ncol(thisy)
-            groups <- rle(!is.na(c(thisx)))
-            for(ii in seq_len(ceiling(nquant / 2))){
-                graphics::polygon(
-                    x = thisx[qindices(groups = groups,
-                        col1 = 1, col2 = 1)],
-                    y = thisy[qindices(groups = groups,
-                        col1 = ii, col2 = nquant + 1 - ii)],
-                    ## x = c(thisx[,(ii - 1) %% temp + 1],
-                    ##     rev(thisx[,(ii - 1) %% temp + 1])),
-                    ## y = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
-                    border = thisborder, col = thiscol,
-                    lwd = lwd[[(aplot - 1) %% length(lwd) + 1]],
-                    density = NULL, xpd = TRUE, lty = 1)
-            }
-        } else if(thistype %in% c('qy', 'hy')){
-            if(thistype == 'hy'){
-                if(is.null(dim(thisx))){ dim(thisx) <- c(length(thisx), 1) }
-                temp <- dim(thisx) * c(1, 2)
-                thisx <- c(thisx, rep.int(x = 0, times = length(thisx)))
-                dim(thisx) <- temp
+                nquant <- ncol(thisy)
+                groups <- rle(!is.na(c(thisx)))
+
+                ## quantiles of zero x-extension need a border
+                if(is.na(thisfill)){
+                    border <- rep.int(x = NA, times = length(thisx))
+                    border[(groups$length[groups$values] == 1)] <-
+                        adjustcolor(thiscol, alpha.f = thisalpha.f.fill)
+                }
+
+                for(ii in seq_len(ceiling(nquant / 2))){
+                    graphics::polygon(
+                        x = thisx[qindices(groups = groups,
+                            col1 = 1, col2 = 1)],
+                        y = thisy[qindices(groups = groups,
+                            col1 = ii, col2 = nquant + 1 - ii)],
+                        ## x = c(thisx[,(ii - 1) %% temp + 1],
+                        ##     rev(thisx[,(ii - 1) %% temp + 1])),
+                        ## y = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
+                        border = border,
+                        col = adjustcolor(thiscol, alpha.f = thisalpha.f.fill),
+                        lwd = lwd[[(aplot - 1) %% length(lwd) + 1]],
+                        density = NULL, xpd = TRUE, lty = 1)
+                }
             } else {
                 if(is.null(dim(thisx))){ dim(thisx) <- c(1, length(thisx)) }
-            }
-            nquant <- ncol(thisx)
-            groups <- rle(!is.na(c(thisy)))
-            for(ii in seq_len(ceiling(nquant / 2))){
-                graphics::polygon(
-                    y = thisy[qindices(groups = groups,
-                        col1 = 1, col2 = 1)],
-                    x = thisx[qindices(groups = groups,
-                        col1 = ii, col2 = nquant + 1 - ii)],
-                    border = thisborder, col = thiscol,
-                    lwd = lwd[[(aplot - 1) %% length(lwd) + 1]],
-                    density = NULL, xpd = TRUE, lty = 1)
+                nquant <- ncol(thisx)
+                groups <- rle(!is.na(c(thisy)))
+
+                ## quantiles of zero y-extension need a border
+                if(is.na(thisfill)){
+                    border <- rep.int(x = NA, times = length(thisy))
+                    border[(groups$length[groups$values] == 1)] <-
+                        adjustcolor(thiscol, alpha.f = thisalpha.f.fill)
+                }
+
+                for(ii in seq_len(ceiling(nquant / 2))){
+                    graphics::polygon(
+                        y = thisy[qindices(groups = groups,
+                            col1 = 1, col2 = 1)],
+                        x = thisx[qindices(groups = groups,
+                            col1 = ii, col2 = nquant + 1 - ii)],
+                        ## x = c(thisx[,(ii - 1) %% temp + 1],
+                        ##     rev(thisx[,(ii - 1) %% temp + 1])),
+                        ## y = c(thisy[, ii], rev(thisy[, nquant + 1 - ii])),
+                        border = border,
+                        col = adjustcolor(thiscol, alpha.f = thisalpha.f.fill),
+                        lwd = lwd[[(aplot - 1) %% length(lwd) + 1]],
+                        density = NULL, xpd = TRUE, lty = 1)
+                }
             }
         }
     }
@@ -398,6 +432,7 @@ pplot <- function(
 }
 
 
+
 #' Plot an object of class "probability"
 #'
 #' @description
@@ -418,7 +453,7 @@ pplot <- function(
 #' @param type.spread `NULL` (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
 #' @param lty.spread Same as parameter `lty` (line style), but for the line type of the long-run-frequency samples.
 #' @param lwd.spread Same as parameter `lwd` (line width), but for the line type of the long-run-frequency samples.
-#' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` means `1` if `spread = 'samples'` and `0.25` if `spread = 'quantiles'`.
+#' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` means `0.25` if `spread = 'quantiles'`; and an appropriate value if `spread = 'samples'`,dependent on the number of samples (more samples, less opacity).
 #' @param pch,col,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
 #' @param ... Other parameters to be passed to [pplot()].
 #'
@@ -758,7 +793,7 @@ plot.probability <- function(
         col = largs(col, col, col, col, col, col),
         alpha.f = largs(alpha.f.spread, alpha.f.spread,
             alpha.f.spread, alpha.f.spread, alpha.f, alpha.f),
-        border = largs(NA, col, NA, NA, NA, NA),
+        fill = NA,
         xlab = xlab,
         ylab = ylab,
         xlim = xlim,
@@ -817,8 +852,8 @@ plot.probability <- function(
 #'
 #' @param x Object of class "probability", obtained with [Pr()].
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
-#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` uses the geometric mean of [Sturges][grDevices::nclass.Sturges()] and [Freedman-Diaconis][grDevices::nclass.FD()] bins.
-#' @param fill.alpha.f Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
+#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).
+#' @param alpha.f.fill Numeric, default `0.125`: opacity of the histogram filling, `0` being completely invisible and `1` completely opaque.
 #' @param legend One of the values `"bottomright"`, `"bottom"`, `"bottomleft"`, `"left"`, `"topleft"`, `"top"`, `"topright"`, `"right"`, `"center"` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `"top"`.
 #' @param showmean Logical, default `TRUE`: show the means of the probability distributions? The means correspond to the probabilities about the next observed unit.
 #' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,axes,add see analogous arguments in [graphics::matplot()]
@@ -849,7 +884,6 @@ plot.probability <- function(
 #' hist(probs, legend = 'topright')
 #'
 #' @import graphics
-#' @import grDevices
 #'
 #' @concept display
 #' @export
@@ -862,7 +896,7 @@ hist.probability <- function(
     lwd = 2,
     col = palette(),
     alpha.f = 1,
-    fill.alpha.f = 0.125,
+    alpha.f.fill = 0.125,
     showmean = TRUE,
     ##     c( ## Tol's colour-blind-safe scheme, or palette()
     ##     '#4477AA',
@@ -896,7 +930,7 @@ hist.probability <- function(
     Xlen <- ncol(x[['values']])
 
     ## Precompute histograms, to determine maximum y-value
-    midslist <- densitylist <- list()
+    xlist <- densitylist <- list()
     i <- 0L
     for(xx in seq_len(Xlen)){ for(yy in seq_len(Ylen)){
         i <- i + 1L
@@ -904,43 +938,38 @@ hist.probability <- function(
         if(is.null(breaks)){
             rg <- range(ff, na.rm = TRUE)
             if(rg[2] == rg[1]){rg <- c(0, 1)}
-            n <- ceiling(sqrt(nclass.Sturges(ff) * nclass.FD(ff, digits = 6)))
             ## n <- nclass.FD(ff)
+            n <- ceiling(sqrt(length(ff))/2)
             ibreaks <- seq(rg[1], rg[2], length.out = n + 1)
         }
         hd <- graphics::hist(x = ff, breaks = ibreaks, plot = FALSE)
-        midslist[[i]] <- hd$mids
+        xlist[[i]] <- hd$breaks
         densitylist[[i]] <- hd$density
     } }
-    nplots <- length(midslist)
+    nplots <- length(xlist)
 
     if(is.null(xlab)){
         xlab <- 'long-run relative frequency'
     }
     if(is.null(ylab)){ylab <- 'probability density'}
-    if(isFALSE(fill.alpha.f) || !is.numeric(fill.alpha.f)){fill.alpha.f <- 0}
+    if(isFALSE(alpha.f.fill) || !is.numeric(alpha.f.fill)){alpha.f.fill <- 0}
 
-    if(missing(xlim)){xlim <- range(unlist(midslist))}
+    if(missing(xlim)){xlim <- range(unlist(xlist))}
     if(is.na(ylim)[2]){ylim[2] <- max(unlist(densitylist))}
 
-    pplot(x = c(midslist, midslist),
+    pplot(x = xlist,
         y = densitylist,
-        type = c(
-            rep.int('hx', times = nplots),
-            rep('l', length.out = nplots)
-        ),
-        lty = rep(lty, length.out = nplots),
-        lwd = rep(lwd, length.out = nplots),
-        col = rep(col, length.out = nplots),
+        type = 'hx',
+        lty = lty,
+        lwd = lwd,
+        col = col,
         xlab = xlab, ylab = ylab,
         xlim = xlim, ylim = ylim,
         add = add,
-        alpha.f = c(
-            rep.int(fill.alpha.f, times = nplots),
-            rep(alpha.f, length.out = nplots)
-        ),
+        alpha.f = alpha.f,
         xjitter = FALSE, yjitter = FALSE,
-        border = NA,
+        fill = NA,
+        alpha.f.fill = alpha.f.fill,
         grid = grid,
         axes = axes,
         main = main,
@@ -1016,8 +1045,8 @@ hist.probability <- function(
 #' The `hist()` method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely would such change be.
 #'
 #' @param x Object of class "mi", obtained with [mutualinfo()].
-#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` uses the geometric mean of [Sturges][grDevices::nclass.Sturges()] and [Freedman-Diaconis][grDevices::nclass.FD()] bins.
-#' @param fill.alpha.f Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
+#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).
+#' @param alpha.f.fill Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
 #' @param showvalue Logical, default `TRUE`: show the mutual information obtained from the current data sample?
 #' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,axes,add see analogous arguments in [graphics::matplot()]
 #' @param ... Other parameters to be passed to [pplot()].
@@ -1044,7 +1073,6 @@ hist.probability <- function(
 #' hist(MI)
 #'
 #' @import graphics
-#' @import grDevices
 #'
 #' @concept display
 #' @export
@@ -1055,7 +1083,7 @@ hist.mi <- function(
     lwd = 2,
     col = palette(),
     alpha.f = 1,
-    fill.alpha.f = 0.125,
+    alpha.f.fill = 0.125,
     showvalue = TRUE,
     ##     c( ## Tol's colour-blind-safe scheme, or palette()
     ##     '#4477AA',
@@ -1086,12 +1114,12 @@ hist.mi <- function(
     if(is.null(breaks)){
         rg <- range(ff, na.rm = TRUE)
         if(rg[2] == rg[1]){rg <- c(0, 1)}
-        n <- ceiling(sqrt(nclass.Sturges(ff) * nclass.FD(ff, digits = 6)))
         ## n <- nclass.FD(ff)
+        n <- ceiling(sqrt(length(ff))/2)
         ibreaks <- seq(rg[1], rg[2], length.out = n + 1)
     }
     hd <- graphics::hist(x = ff, breaks = ibreaks, plot = FALSE)
-    midslist <- hd$mids
+    xlist <- hd$breaks
     densitylist <- hd$density
 
     if(is.null(xlab)){
@@ -1099,8 +1127,8 @@ hist.mi <- function(
     }
 
     if(is.null(ylab)){ylab <- 'probability density'}
-    if(isFALSE(fill.alpha.f) || !is.numeric(fill.alpha.f)){fill.alpha.f <- 0}
-    if(missing(xlim)){xlim <- range(midslist)}
+    if(isFALSE(alpha.f.fill) || !is.numeric(alpha.f.fill)){alpha.f.fill <- 0}
+    if(missing(xlim)){xlim <- range(xlist)}
     if(is.null(main)){
         tails <- list()
         tails[names(x$X)] <- ''
@@ -1118,21 +1146,19 @@ hist.mi <- function(
 
     nplots <- 1
 
-    pplot(x = list(midslist, midslist),
-        y = list(densitylist),
-        type = c('hx', 'l'),
+    pplot(x = xlist,
+        y = densitylist,
+        type = 'hx',
         lty = rep(lty, length.out = nplots),
         lwd = rep(lwd, length.out = nplots),
         col = rep(col, length.out = nplots),
         xlab = xlab, ylab = ylab,
         xlim = xlim, ylim = ylim,
         add = add,
-        alpha.f = c(
-            rep.int(fill.alpha.f, times = nplots),
-            rep(alpha.f, length.out = nplots)
-        ),
+        alpha.f = alpha.f,
         xjitter = FALSE, yjitter = FALSE,
-        border = NA,
+        fill = NA,
+        alpha.f.fill = alpha.f.fill,
         grid = grid,
         axes = axes,
         main = main,

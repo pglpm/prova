@@ -20,10 +20,11 @@ pplot(
   add = FALSE,
   xdomain = NULL,
   ydomain = NULL,
-  alpha.f = NA,
+  alpha.f = 1,
   xjitter = NA,
   yjitter = NA,
-  border = NA,
+  fill = NA,
+  alpha.f.fill = 0.25,
   grid = TRUE,
   lwd.grid = NULL,
   col.grid = "#00000022",
@@ -45,11 +46,13 @@ pplot(
 
 \item{xdomain, ydomain}{Character or numeric or \code{NULL} (default): vector of possible values of the variates represented in the \code{x}- and \code{y}-axes, in case the \code{x} or \code{y} argument is a character vector. Note that the domains apply to all elements in \code{x} and \code{y}. The ordering of the values is respected. If \code{NULL}, then \code{unique(x)} or \code{unique(y)} is used.}
 
-\item{alpha.f}{Numeric vector or list: opacity of the colours specified with the \code{col} argument, \code{0} being completely invisible and \code{1} completely opaque. Default to 1, except for shaded plots of \code{type} \code{'hx'}, \code{'qx'}, \code{'hy'}, \code{'qy'}, for which it defaults to 0.25.}
+\item{alpha.f}{Numeric vector or list, default \code{1}: opacity of the line or contour colours, \code{0} being completely invisible and \code{1} completely opaque.}
 
 \item{xjitter, yjitter}{Vector or list of logicals or \code{NA} (default): add \code{\link[base:jitter]{base::jitter()}} to \code{x}- or \code{y}-values? Useful when plotting discrete variates. If \code{NA}, jitter is added if both \code{x} and \code{y} are of character (or factor) class.}
 
-\item{border}{Border colour for bands in plots of \code{type = 'q'}. Can be specified in any of the usual ways, see for instance \code{\link[grDevices:col2rgb]{grDevices::col2rgb()}}. If \code{NA} (default), no border is drawn.}
+\item{fill}{Logical or \code{NA} (default). For histogram plots (\code{type = 'hx'} or \code{'hy'}), value \code{TRUE} means fill the histogram, and do not plot its contour; \code{FAlSE} means plot only its contour without filling; \code{NA} means plot contour and fill. For quantile plots (\code{type = 'qx'} or \code{'qy'}), value \code{TRUE} do not plot the bands' contours; \code{FAlSE} means plot only the contours without filling; \code{NA} plots a contour only when the quantile band has zero area (and would be invisible otherwise).}
+
+\item{alpha.f.fill}{Numeric vector or list, default \code{0.25}: opacity of the filling colours, \code{0} being completely invisible and \code{1} completely opaque.}
 
 \item{grid}{Logical, default \code{TRUE}: plot a light grid?}
 
@@ -72,7 +75,7 @@ This function is essentially a wrapper around \code{\link[graphics:matplot]{grap
 \item Argument \code{x}, or each element in \code{x} if it is a list, can be of class \code{\link[base:character]{base::character}}. In this case, x-axis labels as given in \code{xdomain} are used, or the unique values in \code{x} if \code{xdomain} is \code{NULL}. Similarly for \code{y} and \code{ydomain}. This feature makes it easier to plot nominal and ordinal non-numeric variates.
 \item Additional plot \code{type}s are available: \code{'hx'}, \code{'qx'}, \code{'hy'}, \code{'qy'} (internally they use \code{\link[graphics:polygon]{graphics::polygon()}}):
 \itemize{
-\item \code{'hx'} plots shaded histograms, extending from \eqn{y = 0} to the values given in each column of \code{y}. The x-values are the corresponding columns of \code{x}, recycled if necessary.
+\item \code{'hx'} plots shaded histograms. Argument \code{x} must be a list of \code{breaks}, and \code{y} a list of \code{counts} or \code{densities}, for example produced by by \code{\link[graphics:hist]{graphics::hist()}}.
 \item \code{'qx'} plots shaded bands. The first band extends from the line defined by the first column of \code{y}, to the line defined by the \emph{last} column; the second band is similarly delimited by the second and second-last columns of \code{y}, and so on (if \code{y} has an odd number of columns, the central one defines a line rather than a band). The x-values are the corresponding columns of \code{x}, recycled if necessary. This plot \code{type} is useful for plotting quantile bands calculated with \code{\link[=Pr]{Pr()}}.
 \item \code{'hy'}, \code{'qy'} are analogous \code{type}s, but with the roles of \code{x} and \code{y} switched.
 }
@@ -105,7 +108,8 @@ xgrid <- seq(from = -2, to = 2, length.out = 65)
 pplot(x = xgrid, y = dnorm(xgrid), ylim = c(0, NA))
 
 ## Draw a shaded histogram
-pplot(x = xgrid, y = dnorm(xgrid), type = 'hx')
+histo <- hist(rnorm(1000), breaks = 'FD', plot = FALSE)
+pplot(x = histo$breaks, y = histo$density, type = 'hx')
 
 }
 \seealso{

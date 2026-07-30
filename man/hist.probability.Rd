@@ -13,7 +13,7 @@
   lwd = 2,
   col = palette(),
   alpha.f = 1,
-  fill.alpha.f = 0.125,
+  alpha.f.fill = 0.125,
   showmean = TRUE,
   xlab = NULL,
   ylab = NULL,
@@ -31,13 +31,13 @@
 
 \item{subset}{Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.}
 
-\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} uses the geometric mean of \link[grDevices:nclass.Sturges]{Sturges} and \link[grDevices:nclass.FD]{Freedman-Diaconis} bins.}
+\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).}
 
 \item{legend}{One of the values \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"}, \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"}, \code{"right"}, \code{"center"} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{"top"}.}
 
 \item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
 
-\item{fill.alpha.f}{Numeric, default 0.125: opacity of the histogram filling. \code{0} means no filling.}
+\item{alpha.f.fill}{Numeric, default \code{0.125}: opacity of the histogram filling, \code{0} being completely invisible and \code{1} completely opaque.}
 
 \item{showmean}{Logical, default \code{TRUE}: show the means of the probability distributions? The means correspond to the probabilities about the next observed unit.}
 

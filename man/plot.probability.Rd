@@ -64,7 +64,7 @@
 
 \item{lwd.spread}{Same as parameter \code{lwd} (line width), but for the line type of the long-run-frequency samples.}
 
-\item{alpha.f.spread}{Numeric or \code{NULL} (default): opacity of the quantile bands or of the long-run-frequency samples, similar to \code{alpha.f}. \code{NULL} means \code{1} if \code{spread = 'samples'} and \code{0.25} if \code{spread = 'quantiles'}.}
+\item{alpha.f.spread}{Numeric or \code{NULL} (default): opacity of the quantile bands or of the long-run-frequency samples, similar to \code{alpha.f}. \code{NULL} means \code{0.25} if \code{spread = 'quantiles'}; and an appropriate value if \code{spread = 'samples'},dependent on the number of samples (more samples, less opacity).}
 
 \item{nsamples.spread}{Integer, default 360: number of samples of long-run frequencies to display.}
 
