@@ -31,7 +31,7 @@
 
 \item{subset}{Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.}
 
-\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} uses a number of bins inversely proportional to the square root of the number of samples (because the Monte Carlo error associated with the quantiles scales as the square root).}
+\item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} determines bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).}
 
 \item{legend}{One of the values \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"}, \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"}, \code{"right"}, \code{"center"} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{"top"}.}
 
@@ -53,7 +53,7 @@ The posterior probabilities calculated with the \code{\link[=Pr]{Pr()}} function
 \item The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
 }
 
-The \code{hist()} method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution.
+The \code{hist()} method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution. This distribution is represented by a histogram formed from samples of revised proobabilities (or long-run frequencies). The bin size is chosen according to the Monte Carlo accuracy.
 }
 \examples{
 ## Load the example `K`nowledge object calculated from the "penguins" dataset;
