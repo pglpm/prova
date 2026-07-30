@@ -43,7 +43,7 @@ qPr(
 \item \code{TRUE} (default): use the cluster that was set as default with \code{\link[parallel:setDefaultCluster]{parallel::setDefaultCluster()}}; if no such object exists, then generate a cluster with as many nodes as in the \link[base:getOption]{option} "nc.cores"; if this option is unset, then use 2 nodes.
 }}
 
-\item{sep}{character, default \code{','}: character to separate variate names and values}
+\item{sep}{character, default \code{','}: character to separate variate names and values.}
 
 \item{solidus}{character, default \code{'|'}: character prepended to names of the variates in the conditional (typically the \code{X} variates).}
 
@@ -56,11 +56,11 @@ qPr(
 \value{
 A list of the following elements:
 \itemize{
-\item \verb{$values}: a matrix with the requested \eqn{Y}-quantiles \code{p} conditional on the requested \eqn{X}-values in \code{X}, for all combinations of \code{p} (rows) and \code{X} (columns).
-\item \verb{$quantiles} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the \code{value} element.
-\item \verb{$samples} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such quantiles.
-\item \verb{$Y}, \verb{$X} \verb{$tails}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
-\item \verb{$K}: name of the "Knowledge" object used in the calculation.
+\item \code{'value'}: a matrix with the requested \eqn{Y}-quantiles \code{p} conditional on the requested \eqn{X}-values in \code{X}, for all combinations of \code{p} (rows) and \code{X} (columns).
+\item \code{'quantiles'} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the \code{'value'} element.
+\item \code{'samples'} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such quantiles.
+\item \code{'Y'}, \code{'X'} \code{'tails'}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
+\item \code{'K'}: name of the "Knowledge" object used in the calculation.
 }
 }
 \description{
@@ -84,15 +84,15 @@ K <- Kexample
 quants <- qPr(Yname = 'bill_len', K = K)
 
 ## display the quantile values
-quants$values
+quants$value
 
 ## verify these values, within numerical error, using Pr():
 probs <- Pr(
-  Y = data.frame(bill_len = c(quants$values)),
+  Y = data.frame(bill_len = c(quants$value)),
   tails = list(bill_len = -1),
   K = K
 )
-probs$values
+probs$value
 
 ## display the revisability about the quantiles
 quants$quantiles
@@ -105,15 +105,15 @@ quants$quantiles
 quants <- qPr(Yname = 'bill_len', X = data.frame(species = 'Adelie'), K = K)
 
 ## display the quantile values
-quants$values
+quants$value
 
 ## verify these values, within numerical error, using Pr():
 probs <- Pr(
-  Y = data.frame(bill_len = c(quants$values)),
+  Y = data.frame(bill_len = c(quants$value)),
   X = data.frame(species = 'Adelie'),
   tails = list(bill_len = -1),
   K = K)
-probs$values
+probs$value
 }
 
 }

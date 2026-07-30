@@ -17,7 +17,7 @@
 #' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
 #' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
 #' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "nc.cores"; if this option is unset, then use 2 nodes.
-#' @param sep character, default `','`: character to separate variate names and values
+#' @param sep character, default `','`: character to separate variate names and values.
 #' @param solidus character, default `'|'`: character prepended to names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #' @param keepYX Logical, default `TRUE`: keep a copy of the `Yname` and `X` arguments in the output? This is used for [plot.probability()].
@@ -25,11 +25,11 @@
 
 #'
 #' @return A list of the following elements:
-#' - `$values`: a matrix with the requested \eqn{Y}-quantiles `p` conditional on the requested \eqn{X}-values in `X`, for all combinations of `p` (rows) and `X` (columns).
-#' - `$quantiles` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the `value` element.
-#' - `$samples` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such quantiles.
-#' - `$Y`, `$X` `$tails`: copies of the `Y`, `X`, `tails` arguments.
-#' - `$K`: name of the "Knowledge" object used in the calculation.
+#' - `'value'`: a matrix with the requested \eqn{Y}-quantiles `p` conditional on the requested \eqn{X}-values in `X`, for all combinations of `p` (rows) and `X` (columns).
+#' - `'quantiles'` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the `'value'` element.
+#' - `'samples'` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such quantiles.
+#' - `'Y'`, `'X'` `'tails'`: copies of the `Y`, `X`, `tails` arguments.
+#' - `'K'`: name of the "Knowledge" object used in the calculation.
 #'
 #' @references
 #' - Porta Mana (2025): *What's special about 89% credibility intervals?* <doi:10.5281/zenodo.17072199>.
@@ -56,15 +56,15 @@
 #' quants <- qPr(Yname = 'bill_len', K = K)
 #'
 #' ## display the quantile values
-#' quants$values
+#' quants$value
 #'
 #' ## verify these values, within numerical error, using Pr():
 #' probs <- Pr(
-#'   Y = data.frame(bill_len = c(quants$values)),
+#'   Y = data.frame(bill_len = c(quants$value)),
 #'   tails = list(bill_len = -1),
 #'   K = K
 #' )
-#' probs$values
+#' probs$value
 #'
 #' ## display the revisability about the quantiles
 #' quants$quantiles
@@ -77,15 +77,15 @@
 #' quants <- qPr(Yname = 'bill_len', X = data.frame(species = 'Adelie'), K = K)
 #'
 #' ## display the quantile values
-#' quants$values
+#' quants$value
 #'
 #' ## verify these values, within numerical error, using Pr():
 #' probs <- Pr(
-#'   Y = data.frame(bill_len = c(quants$values)),
+#'   Y = data.frame(bill_len = c(quants$value)),
 #'   X = data.frame(species = 'Adelie'),
 #'   tails = list(bill_len = -1),
 #'   K = K)
-#' probs$values
+#' probs$value
 #' }
 #'
 #' @import parallel
@@ -393,8 +393,8 @@ qPr <- function(
     }
 
 #### Calculation with all pY and X combinations
-    ## keys <- c('values', 'quantiles', 'samples', 'values.MCaccuracy', 'quantiles.MCaccuracy')
-    keys <- c('values', 'quantiles', 'samples')
+    ## keys <- c('value', 'quantiles', 'samples', 'value.acc', 'quantiles.acc')
+    keys <- c('value', 'quantiles', 'samples')
     ##
     combfnr <- function(...){setNames(do.call(mapply,
         c(FUN = `rbind`, lapply(X = ..., FUN = `[`, keys, drop = FALSE))),
@@ -439,7 +439,7 @@ qPr <- function(
 
     ## transform to grid
     ## in the output-list elements the Y & X values are the rows
-    dim(out$values) <- c(nY, nX)
+    dim(out$value) <- c(nY, nX)
 
     if(nsamples > 0){
         dim(out$samples) <- c(nY, nX, nsamples)
@@ -474,7 +474,7 @@ qPr <- function(
         Xnames <- list(NULL)
     }
 
-    dimnames(out$values) <- c(Ynames, Xnames)
+    dimnames(out$value) <- c(Ynames, Xnames)
 
     if(doquantiles){
         temp <- list(Q = names(quantile(x = NA, probs = quantiles,
@@ -539,24 +539,24 @@ qPr <- function(
 
     Yvals <- .Machine$double.xmax * c(-0.125, 0.125)
 
-    values <- (Yvals[1] + Yvals[2]) / 2
+    value <- (Yvals[1] + Yvals[2]) / 2
 
     FF <- mean(colSums(exp(
-        lprobX + pnorm(q = values, mean = params1, sd = params2,
+        lprobX + pnorm(q = value, mean = params1, sd = params2,
             lower.tail = TRUE, log.p = TRUE)
     ), na.rm = TRUE) / sumlpX) - pY
 
     while(abs(FF) > tol && Yvals[2] - Yvals[1] > tol){
-        Yvals[(FF > 0) + 1L] <- values
-        values <- (Yvals[1] + Yvals[2]) / 2
+        Yvals[(FF > 0) + 1L] <- value
+        value <- (Yvals[1] + Yvals[2]) / 2
         FF <- mean(colSums(exp(
-            lprobX + pnorm(q = values,
+            lprobX + pnorm(q = value,
                 mean = params1, sd = params2,
                 lower.tail = TRUE, log.p = TRUE)
         ), na.rm = TRUE) / sumlpX) - pY
     }
 
-    values <- unname(unlist(.vtransform(values,
+    value <- unname(unlist(.vtransform(value,
         auxmetadata = auxmetadata,
         Rout = 'original',
         Cout = 'original',
@@ -618,7 +618,7 @@ qPr <- function(
     }
 
     list(
-        values = values,
+        value = value,
         ##
         quantiles = if(doquantiles) {
             quantile(x = samples, probs = quantiles, type = 6,
@@ -628,8 +628,8 @@ qPr <- function(
         samples = if(dosamples) {
             samples[round(seq(1, length(samples), length.out = nsamples))]
         }
-        ## values.MCaccuracy
-        ## quantiles.MCaccuracy
+        ## value.acc
+        ## quantiles.acc
 )
 }
 
@@ -665,19 +665,19 @@ qPr <- function(
 
 #### Calculate quantile for the posterior probability distribution
 
-    values <- 1L
+    value <- 1L
 
     FF <- mean(colSums(exp(
-        lprobX + params1[values, ,]
+        lprobX + params1[value, ,]
     ), na.rm = TRUE) / sumlpX)
 
-    while(FF < pY && values <= Nvalues){
-        values <- values + 1L
+    while(FF < pY && value <= Nvalues){
+        value <- value + 1L
         FF <- mean(colSums(exp(
-            lprobX + params1[values, ,]
+            lprobX + params1[value, ,]
         ), na.rm = TRUE) / sumlpX)
     }
-    values <- unname(unlist(.vtransform(values,
+    value <- unname(unlist(.vtransform(value,
         auxmetadata = auxmetadata,
         Rout = 'original',
         Cout = 'original',
@@ -731,7 +731,7 @@ qPr <- function(
     }
 
     list(
-        values = values,
+        value = value,
         ##
         quantiles = if(doquantiles) {
             quantile(x = samples, probs = quantiles, type = 6,
@@ -741,7 +741,7 @@ qPr <- function(
         samples = if(dosamples) {
             samples[round(seq(1, length(samples), length.out = nsamples))]
         }
-        ## values.MCaccuracy
-        ## quantiles.MCaccuracy
+        ## value.acc
+        ## quantiles.acc
 )
 }

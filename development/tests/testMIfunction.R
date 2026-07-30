@@ -47,5 +47,5 @@ testMI <- function(Y1names, Y2names, X = NULL, nn, K){
         log(colSums(exp(W + lprob1 + lprob2)))
     ##
     list(value = mean(mis, na.rm = TRUE) / log(2),
-        MCaccuracy = sd(mis, na.rm = TRUE)/(sqrt(length(mis)) * log(2)))
+        value.acc = sd(mis, na.rm = TRUE)/(sqrt(length(mis)) * log(2)))
 }

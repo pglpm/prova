@@ -106,10 +106,10 @@ for(iv in seq_along(suite)){
                 prova:::.testPr(Y = setNames(list(x), vrt), X = NULL,
                     tails = tail, K = K)
         })
-        targetprob = list(values = cbind(sapply(targetprob, `[[`, 1)),
+        targetprob = list(value = cbind(sapply(targetprob, `[[`, 1)),
             samples = t(sapply(targetprob, `[[`, 2)))
         tc(paste0(nm, '-', iv, '-', atail, '-values'),
-            test_equivalent(prob$values, targetprob$values,
+            test_equivalent(prob$value, targetprob$value,
                 tolerance = 10 * .Machine$double.eps
             ))
         tc(paste0(nm, '-', iv, '-', atail, '-samples'),
@@ -164,7 +164,7 @@ while(atest < 50){
         K = K)
     ##
     tc(paste0(nm, '-', atest, '-values'),
-        test_equivalent(c(prob$values), c(targetprob$value),
+        test_equivalent(c(prob$value), c(targetprob$value),
             tolerance = 10 * .Machine$double.eps
         ))
     tc(paste0(nm, '-', atest, '-samples'),
@@ -219,7 +219,7 @@ for(atest in suite){
     )
     tc(paste0(nm, '-', paste0(atest, collapse = '-')), test_equivalent(
         testand$value, target$value,
-        tolerance = max((testand$MCaccuracy + target$MCaccuracy) * 2,
+        tolerance = max((testand$value.acc + target$value.acc) * 2,
             10 * .Machine$double.eps)
     ))
 }

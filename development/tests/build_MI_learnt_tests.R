@@ -110,7 +110,7 @@ testMI <- function(Y1names, Y2names, X = NULL, nn, learnt){
         log(colSums(exp(W + lprob1 + lprob2)))
     ##
     list(value = mean(mis, na.rm = TRUE) / log(2),
-        MCaccuracy = sd(mis, na.rm = TRUE)/(sqrt(length(mis)) * log(2)))
+        value.acc = sd(mis, na.rm = TRUE)/(sqrt(length(mis)) * log(2)))
 }
 saveRDS(testMI, '~/repos/prova/development/tests/mitest_testMI.rds')
 

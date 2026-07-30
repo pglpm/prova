@@ -43,20 +43,20 @@
 #' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
 #' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
 #' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "nc.cores"; if this option is unset, then use 2 nodes.
-#' @param sep character, default `','`: character to separate variate names and values
+#' @param sep character, default `','`: character to separate variate names and values.
 #' @param solidus character, default `'|'`: character prepended to names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #' @param keepYX Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in the output? This is used for [plot.probability()].
 #'
 #' @return An object of class "probability", which is a list consisting of the following elements:
 #'
-#' - `$values`: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
-#' - `$quantiles` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
-#' - `$samples` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such probabilities.
-#' - `$values.MCaccuracy`, `quantiles.MCaccuracy`: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the `values` and `quantiles` elements.
-#' - `$densities`: numerical vector as long as number of rows in `Y`, used mainly for [plot.probability()]. It is the order of the probability density the `Y`-values: values with `0` are actual probabilities; values with `1` are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with `2` are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
-#' - `$Y`, `$X`, `$tails`: copies of the `Y`, `X`, `tails` arguments.
-#' - `$K`: name of the "Knowledge" object used in the calculation.
+#' - `'value'`: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
+#' - `'quantiles'` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
+#' - `'samples'` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such probabilities.
+#' - `'value.acc'`, `quantiles.acc`: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the `'values'` and `'quantiles'` elements.
+#' - `'density'`: numerical vector as long as number of rows in `Y`, used mainly for [plot.probability()]. It is the order of the probability density the `Y`-values: values with `0` are actual probabilities; values with `1` are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with `2` are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
+#' - `'Y'`, `'X'`, `'tails'`: copies of the `Y`, `X`, `tails` arguments.
+#' - `'K'`: name of the "Knowledge" object used in the calculation.
 #'
 #' @references
 #'
@@ -92,7 +92,7 @@
 #' probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
 #'
 #' ## display the probability value
-#' probs$values
+#' probs$value
 #'
 #' ## the full-population frequency of 'Adelie' penguins is unknown;
 #' ## display the 5.5%- and 94.5%-probability values
@@ -113,7 +113,7 @@
 #' )
 #'
 #' ## display the 3 probability values
-#' probs$values
+#' probs$value
 #'
 #' ## the full-population frequencies of the three species are unknown;
 #' ## display the 5.5%- and 94.5%-probability values
@@ -138,7 +138,7 @@
 #' )
 #'
 #' ## display the probability value
-#' probs$values
+#' probs$value
 #'
 #' ## the full-subpopulation frequency of 'Adelie' penguins,
 #' ## among penguins having bill length of 43 mm, is unknown;
@@ -154,7 +154,7 @@
 #' probs <- Pr(Y = data.frame(species = 'Adelie', bill_len = 43), K = K)
 #'
 #' ## display the probability value
-#' probs$values
+#' probs$value
 #'
 #' ## display the 5.5%- and 94.5%-probability values
 #' ## for the full-population frequency of 'Adelie' penguins with 43 mm bills
@@ -172,7 +172,7 @@
 #' probs <- Pr(Y = Y, X = X, K = K)
 #'
 #' ## display the 3 x 2 probability values
-#' probs$values
+#' probs$value
 #'
 #' ## display the 5.5%- and 94.5%-probability values
 #' ## for the full-population joint frequencies
@@ -194,7 +194,7 @@
 #' probs <- Pr(Y = Y, K = K)
 #'
 #' ## display the 6 joint-probability values
-#' probs$values
+#' probs$value
 #'
 #' ## display the 5.5%- and 94.5%-probability values
 #' ## for the full-population joint frequencies
@@ -502,7 +502,7 @@ Pr <- function(
     ))
 
     ## Calculation with all Y and X combinations
-    keys <- c('values', 'quantiles', 'samples', 'values.MCaccuracy', 'quantiles.MCaccuracy')
+    keys <- c('value', 'quantiles', 'samples', 'value.acc', 'quantiles.acc')
     ##
     combfnr <- function(...){setNames(do.call(mapply,
         c(FUN = `rbind`, lapply(X = ..., FUN = `[`, keys, drop = FALSE))),
@@ -555,42 +555,42 @@ Pr <- function(
     ## transform to grid
     ## in the output-list elements the Y & X values are the rows
     if(is.null(priorY)){
-        dim(out$values) <- dim(out$values.MCaccuracy) <- c(nY, nX)
+        dim(out$value) <- dim(out$value.acc) <- c(nY, nX)
 
         if(dosamples){
             dim(out$samples) <- c(nY, nX, nsamples)
         }
 
         if(doquantiles){
-            dim(out$quantiles) <- dim(out$quantiles.MCaccuracy) <-
+            dim(out$quantiles) <- dim(out$quantiles.acc) <-
                 c(nY, nX, length(quantiles))
         }
 
     } else {
-        dim(out$values) <- dim(out$values.MCaccuracy) <- c(nX, nY)
+        dim(out$value) <- dim(out$value.acc) <- c(nX, nY)
         ## now: *original Y* are rows, *original X* are cols
         ## apply Bayes's theorem
-        out$values <- t(out$values * priorY)
-        out$values.MCaccuracy <- t(out$values.MCaccuracy * priorY)
+        out$value <- t(out$value * priorY)
+        out$value.acc <- t(out$value.acc * priorY)
         ## now: *original X* are rows, *original Y* are cols
 
-        normf <- rowSums(x = out$values, na.rm = TRUE)
+        normf <- rowSums(x = out$value, na.rm = TRUE)
 
         ## error propagaion:
-        out$values.MCaccuracy <- t(
-            out$values.MCaccuracy / normf +
-                out$values *
-                rowSums(x = out$values.MCaccuracy, na.rm = TRUE) /
+        out$value.acc <- t(
+            out$value.acc / normf +
+                out$value *
+                rowSums(x = out$value.acc, na.rm = TRUE) /
                 (normf^2)
         )
-        out$values <- t(out$values / normf)
+        out$value <- t(out$value / normf)
 
         ## now: *original Y* are rows, *original X* are cols
 
         ## ## ## Alternative version, with all Y-values
         ## ## subset to original Y-values
-        ## out$values <- out$values[Ytokeep, , drop = FALSE]
-        ## out$values.MCaccuracy <- out$values.MCaccuracy[Ytokeep, , drop = FALSE]
+        ## out$value <- out$value[Ytokeep, , drop = FALSE]
+        ## out$value.acc <- out$value.acc[Ytokeep, , drop = FALSE]
 
         if(dosamples){
             dim(out$samples) <- c(nX, nY, nsamples)
@@ -619,7 +619,7 @@ Pr <- function(
                             )}
                     ), perm = c(2, 3, 1) )
 
-                out$quantiles.MCaccuracy <- out$quantiles[, ,
+                out$quantiles.acc <- out$quantiles[, ,
                     -seq_along(quantiles), drop = FALSE]
                 out$quantiles <- out$quantiles[, ,
                     seq_along(quantiles), drop = FALSE]
@@ -627,8 +627,8 @@ Pr <- function(
                 ## ## ## Alternative version, with all Y-values
                 ## ## subset to original Y-values
                 ## out$quantiles <- out$quantiles[Ytokeep, , , drop = FALSE]
-                ## out$quantiles.MCaccuracy <-
-                ##     out$quantiles.MCaccuracy[Ytokeep, , , drop = FALSE]
+                ## out$quantiles.acc <-
+                ##     out$quantiles.acc[Ytokeep, , , drop = FALSE]
 
             }
         }
@@ -670,7 +670,7 @@ Pr <- function(
     if(!is.null(tails)){
         temp <- temp & unname(outtails[auxmetadata$name] == '')
     }
-    out$densities <- apply(X = Y[, auxmetadata[temp, 'name'], drop = FALSE],
+    out$density <- apply(X = Y[, auxmetadata[temp, 'name'], drop = FALSE],
         MARGIN = 1,
         FUN = function(xx){
             sum(xx > auxmetadata[temp ,'domainmin'] &
@@ -694,18 +694,18 @@ Pr <- function(
     }
 
 
-    out$values <- out$values * jacobians
-    out$values.MCaccuracy <- out$values.MCaccuracy * jacobians
-    dimnames(out$values) <- dimnames(out$values.MCaccuracy) <-
+    out$value <- out$value * jacobians
+    out$value.acc <- out$value.acc * jacobians
+    dimnames(out$value) <- dimnames(out$value.acc) <-
         c(Ynames, Xnames)
 
     if(doquantiles){
         out$quantiles <- out$quantiles * jacobians
-        out$quantiles.MCaccuracy <-out$quantiles.MCaccuracy * jacobians
+        out$quantiles.acc <-out$quantiles.acc * jacobians
 
         temp <- list(Q = names(quantile(x = NA, probs = quantiles,
             names = TRUE, na.rm = TRUE)))
-        dimnames(out$quantiles) <- dimnames(out$quantiles.MCaccuracy) <-
+        dimnames(out$quantiles) <- dimnames(out$quantiles.acc) <-
             c(Ynames, Xnames, temp)
     }
 

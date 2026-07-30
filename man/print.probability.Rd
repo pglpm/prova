@@ -9,13 +9,13 @@
 \arguments{
 \item{x}{Object of class "probability", obtained with \code{\link[=Pr]{Pr()}}.}
 
-\item{elements}{character or integer vector, or \code{NULL} (default): elements of the "probability" object to display. The syntax is the same as with \code{\link[base:Extract]{[}}. If \code{NULL}, the elements \verb{$values} and \verb{$quantiles} are displayed together in a special way.}
+\item{elements}{character or integer vector, or \code{NULL} (default): elements of the "probability" object to display. The syntax is the same as with \code{\link[base:Extract]{[}}. If \code{NULL}, the elements \code{'value'} and \code{'quantiles'} are displayed together in a special way.}
 
 \item{subset}{Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.}
 
-\item{digits}{positive integer or \code{NULL} or \code{TRUE} (default): minimal number of significant digits, see \code{\link[base:print.default]{base::print.default()}}. If value is \code{TRUE}, then the significant digits for elements \verb{$values} and \verb{$quantiles} are determined from their respective \verb{$values.MCaccuracy} and \verb{$quantiles.MCaccuracy} elements of the "probability" object (see \code{\link[=Pr]{Pr()}}), according to the rules of the \emph{Guide to the expression of Uncertainty in Measurement}, keeping as many digits as given in parameter \code{edigits}; whereas \verb{$samples} elements uses \code{edigits} significant digits.}
+\item{digits}{positive integer or \code{NULL} or \code{TRUE} (default): minimal number of significant digits, see \code{\link[base:print.default]{base::print.default()}}. If value is \code{TRUE}, then the significant digits for elements \code{'value'} and \code{'quantiles'} are determined from their respective \code{'value.acc'} and \code{'quantiles.acc'} elements of the "probability" object (see \code{\link[=Pr]{Pr()}}), according to the rules of the \emph{Guide to the expression of Uncertainty in Measurement}, keeping as many digits as given in parameter \code{edigits}; whereas \code{'samples'} elements uses \code{edigits} significant digits.}
 
-\item{edigits}{positive integer, default 2: number of significant digits for elements \verb{$values.MCaccuracy} and \verb{$quantiles.MCaccuracy}, if \code{digits = TRUE}.}
+\item{edigits}{positive integer, default 2: number of significant digits for elements \code{'value.acc'} and \code{'quantiles.acc'}, if \code{digits = TRUE}.}
 
 \item{...}{Other parameters to be passed to \code{\link[base:print]{base::print()}}.}
 }
@@ -23,7 +23,7 @@
 Its \code{x} argument, \link[base:invisible]{invisibly}; see \code{\link[base:print]{base::print()}}.
 }
 \description{
-This \code{\link[base:print]{base::print()}} method is a utility to display selected elements of a "probability" object obtained with \code{\link[=Pr]{Pr()}}; typically its posterior probabilies (element \verb{$values}) and their revisabilities (element \verb{$quantiles}). If the \code{Y} or \code{X} variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk \code{*}.
+This \code{\link[base:print]{base::print()}} method is a utility to display selected elements of a "probability" object obtained with \code{\link[=Pr]{Pr()}}; typically its posterior probabilies (element \code{'value'}) and their revisabilities (element \code{'quantiles'}). If the \code{Y} or \code{X} variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk \code{*}.
 }
 \examples{
 ## Load the example `K`nowledge object calculated from the "penguins" dataset;
@@ -41,8 +41,8 @@ probs <- Pr(Y = Y, X = X, K = K)
 ## display the values and revisabilities of these probabilities
 print(probs)
 
-## diplay 'values' only, and only for the species value 'Gentoo'
-print(probs, elements = 'values', subset = list(species = 'Gentoo'))
+## diplay 'value' only, and only for the species value 'Gentoo'
+print(probs, elements = 'value', subset = list(species = 'Gentoo'))
 
 }
 \references{

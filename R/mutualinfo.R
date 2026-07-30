@@ -39,13 +39,13 @@
 #'
 #' @return An object of class "mi", which is a list consisting of the following elements:
 #'
-#' - `$value`, the mutual information between (joint) variates `Y1names` and (joint) variates `Y2names`.
-#' - `$quantiles`, a vector with the revisability quantiles for the mutual information.
-#' - `$MCaccuracy`, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the `value` of the mutual information.
-#' - `$samples`, a vector with the revisability samples for the mutual information.
-#' - `$rGauss`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
-#' - `$unit`, `$Y1names`, `$Y1names`, `$tails`: copies of the homonymous input arguments.
-#' - `$K`: name of the "Knowledge" object used in the calculation.
+#' - `'value'`, the mutual information between (joint) variates `Y1names` and (joint) variates `Y2names`.
+#' - `'quantiles'`, a vector with the revisability quantiles for the mutual information.
+#' - `'value.acc'`, `quantiles.acc` number and vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the `'value'` and the `'quantiles'` elements.
+#' - `'samples'`, a vector with the revisability samples for the mutual information.
+#' - `'rGauss'`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
+#' - `'unit'`, `'Y1names'`, `'Y1names'`, `'tails'`: copies of the homonymous input arguments.
+#' - `'K'`: name of the "Knowledge" object used in the calculation.
 #'
 #' @seealso
 #' [print.mi()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
@@ -64,8 +64,8 @@
 #' ## mutual information between variates 'species' and 'bill_len'
 #' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
 #'
-#' ## The value and its numerical Monte Carlo error
-#' c(MI$value, MI$MCaccuracy)
+#' ## The value and its numerical Monte Carlo accuracy
+#' c(MI$value, MI$value.acc)
 #'
 #' ## If we had many more data, we could instead expect to obtain values
 #' ## within the following probable ranges:
@@ -539,14 +539,14 @@ mutualinfo <- function(
     ##     na.rm = TRUE)
 
     ## Separate columns for MI with columns for its revisability
-    outva <- out[, 'fMI']
+    outsamples <- out[, 'fMI']
     ## ids <- out[,3] # for debugging
     ## dim(ids) <- c(ns, nv) # for debugging
     out <- out[, 'pMI']
 
-    dim(outva) <- c(ns, nv)
-    outva <- rowMeans(x = outva, na.rm = TRUE)
-    outva[outva < 0] <- 0
+    dim(outsamples) <- c(ns, nv)
+    outsamples <- rowMeans(x = outsamples, na.rm = TRUE)
+    outsamples[outsamples < 0] <- 0
 
     ## report whether the probabilities are 'tails' or not
     if(!is.null(tails)){
@@ -558,15 +558,22 @@ mutualinfo <- function(
         outtails <- NULL
     }
 
+    Qerror <- pnorm(c(-1, 1))
+
     ## Output
     MI <- mean(out)
     if(MI < 0){ MI <- 0 }
+
     out <- c(list(
         value = MI / lbase,
-        quantiles = quantile(outva, probs = quantiles,
+        value.acc = sd(out, na.rm = TRUE) / (sqrt(ntot) * lbase),
+        quantiles = quantile(outsamples, probs = quantiles,
             type = 6, na.rm = TRUE, names = TRUE) / lbase,
-        MCaccuracy = sd(out, na.rm = TRUE) / (sqrt(ntot) * lbase),
-        samples = outva / lbase,
+        quantiles.acc = {
+            temp <- .funMCEQ(x = outsamples, prob = quantiles, Qpair = Qerror)
+            (temp[2, ] - temp[1, ]) / (2 * lbase)
+        },
+        samples = outsamples / lbase,
         rGauss = sqrt(1 - exp(-2 * MI)),
         unit = unit,
         Y1names = Y1names,

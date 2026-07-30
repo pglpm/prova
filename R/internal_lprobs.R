@@ -576,7 +576,7 @@
         colSums(x = exp(lprobX), na.rm = TRUE)
 
     list(
-        values = mean(x = FF, na.rm = TRUE),
+        value = mean(x = FF, na.rm = TRUE),
         ##
         quantiles = if(doquantiles){
             quantile(x = FF, probs = quantiles, type = 6,
@@ -588,9 +588,9 @@
             FF[round(seq(1, length(FF), length.out = nsamples))]
         },
         ##
-        values.MCaccuracy = .funMCSELD(x = FF),
+        value.acc = .funMCSELD(x = FF),
         ##
-        quantiles.MCaccuracy = if(doquantiles){
+        quantiles.acc = if(doquantiles){
             temp <- .funMCEQ(x = FF, prob = quantiles, Qpair = Qerror)
             (temp[2, ] - temp[1, ]) / 2
         }

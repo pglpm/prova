@@ -30,13 +30,13 @@ for(iv in seq_len(length(tvals))){
                 testPr(Y = setNames(list(x), vrt), X = NULL,
                     tails = tail, learnt = learnt)
         })
-        tprob = list(values = cbind(sapply(tempprob, `[[`, 1)),
+        tprob = list(value = cbind(sapply(tempprob, `[[`, 1)),
             samples = t(sapply(tempprob, `[[`, 2)))
         ##
-        # print(cbind(prob$values, tprob$values))
+        # print(cbind(prob$value, tprob$value))
         ##
-        rg1 <- range(abs(1 - tprob$values / c(prob$values)), na.rm = TRUE)
-        rg1b <- range(abs(tprob$values - c(prob$values)), na.rm = TRUE)
+        rg1 <- range(abs(1 - tprob$value / c(prob$value)), na.rm = TRUE)
+        rg1b <- range(abs(tprob$value - c(prob$value)), na.rm = TRUE)
         if(any(rg1 > 1e-15 & rg1b > 1e-15)){
             print('values:'); print(rg1)
         }
@@ -46,25 +46,25 @@ for(iv in seq_len(length(tvals))){
             print('samples:'); print(rg2)
         }
         if(atail == 'left' && !(vrt %in% c('Bvrt', 'Nvrt')) &&
-               (any(diff(prob$values) < 0) || any(diff(tprob$values) < 0))){
-            print('order'); print(cbind(prob$values, tprob$values))
+               (any(diff(prob$value) < 0) || any(diff(tprob$value) < 0))){
+            print('order'); print(cbind(prob$value, tprob$value))
         }
         if(atail == 'right' && !(vrt %in% c('Bvrt', 'Nvrt')) &&
-               (any(diff(prob$values) > 0) || any(diff(tprob$values) > 0))){
-            print('order'); print(cbind(prob$values, tprob$values))
+               (any(diff(prob$value) > 0) || any(diff(tprob$value) > 0))){
+            print('order'); print(cbind(prob$value, tprob$value))
         }
         if(atail == 0 && vrt %in% c('Bvrt', 'Nvrt', 'Ovrt') &&
-               (sum(prob$values) != 1 || sum(tprob$values) != 1)){
-            print('sum'); print(colSums(cbind(prob$values, tprob$values)))
+               (sum(prob$value) != 1 || sum(tprob$value) != 1)){
+            print('sum'); print(colSums(cbind(prob$value, tprob$value)))
         }
         if(atail == 'left' && vrt %in% c('RFvrt', 'Cvrt') &&
-                (prob$values[length(prob$values)] != 1 ||
-                     tprob$values[length(prob$values)] != 1)){
-            print('last'); print(cbind(prob$values, tprob$values))
+                (prob$value[length(prob$value)] != 1 ||
+                     tprob$value[length(prob$value)] != 1)){
+            print('last'); print(cbind(prob$value, tprob$value))
         }
         if(atail == 'right' && vrt %in% c('RPvrt', 'DPvrt', 'Cvrt') &&
-               (prob$values[1] != 1 || tprob$values[1] != 1)){
-            print('first'); print(cbind(prob$values, tprob$values))
+               (prob$value[1] != 1 || tprob$value[1] != 1)){
+            print('first'); print(cbind(prob$value, tprob$value))
         }
     }
 }
@@ -109,12 +109,12 @@ while(!problem){
     ##
     tprob <- testPr(Y = inY, X = inX, tails = intails, learnt = learnt)
     ##
-    dd1 <- abs(1 - tprob$value / c(prob$values))
+    dd1 <- abs(1 - tprob$value / c(prob$value))
     if(any(dd1 > tol, na.rm = TRUE)){
         pind <- which(dd1 == max(dd1, na.rm = TRUE))
-        if(max(tprob$value[pind], prob$values[pind]) > 1e-6){
+        if(max(tprob$value[pind], prob$value[pind]) > 1e-6){
             problem <- TRUE
-            print('values:') ; print(cbind(prob$values, tprob$value))
+            print('values:') ; print(cbind(prob$value, tprob$value))
             print(max(dd1,na.rm=TRUE))
         }
     }
@@ -139,7 +139,7 @@ while(!problem){
 source('__debug_Pr.R')
 parallel <- 4
 nsamples <- 'all'
-pnames <- c('values', 'quantiles', 'samples', 'values.MCaccuracy', 'quantiles.MCaccuracy', 'Y', 'X')
+pnames <- c('value', 'quantiles', 'samples', 'value.acc', 'quantiles.acc', 'Y', 'X')
 set.seed(11)
 problem <- FALSE
 kc <- 0L
@@ -210,8 +210,8 @@ probnt <- sapply(Yvals, function(val){
     testPr(X = list(Nvrt = val), Y = list(Rvrt = 1), learnt = learnt)$value
 }) * prior
 probnt <- probnt/sum(probnt)
-cbind(probnt, probn$values)
-sum(probn$values)
+cbind(probnt, probn$value)
+sum(probn$value)
 
 Yvals <- paste0('N', letters[1:4])
 prior <- c(0.5,0,0.5,0)
@@ -222,8 +222,8 @@ probnt <- sapply(Yvals, function(val){
     testPr(X = list(Nvrt = val), Y = list(Rvrt = 1), learnt = learnt)$value
 }) * prior
 probnt <- probnt/sum(probnt)
-cbind(probnt, probn$values)
-sum(probn$values)
+cbind(probnt, probn$value)
+sum(probn$value)
 
 Yvals <- paste0('N', letters[c(1,3)])
 prior <- c(0.5,0.5)
@@ -234,8 +234,8 @@ probnt <- sapply(Yvals, function(val){
     testPr(X = list(Nvrt = val), Y = list(Rvrt = 1), learnt = learnt)$value
 }) * prior
 probnt <- probnt/sum(probnt)
-cbind(probnt, probn$values)
-sum(probn$values)
+cbind(probnt, probn$value)
+sum(probn$value)
 
 
 Yvals <- paste0('N', letters[c(1,3,1)])
@@ -247,5 +247,5 @@ probnt <- sapply(Yvals, function(val){
     testPr(X = list(Nvrt = val), Y = list(Rvrt = 1), learnt = learnt)$value
 }) * prior
 probnt <- probnt/sum(probnt)
-cbind(probnt, probn$values)
-sum(probn$values)
+cbind(probnt, probn$value)
+sum(probn$value)

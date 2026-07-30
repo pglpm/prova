@@ -528,7 +528,7 @@ plot.probability <- function(
 
     ## If there's only one probability it doesn't make sense to plot anything:
     ## print() the result instead
-    if(length(x[['values']]) == 1){
+    if(length(x[['value']]) == 1){
         return(print(x))
     }
 
@@ -563,8 +563,8 @@ plot.probability <- function(
     qspread <- ('quantiles' %in% spread)
     sspread <- ('samples' %in% spread)
 
-    Ylen <- nrow(x[['values']])
-    Xlen <- ncol(x[['values']])
+    Ylen <- nrow(x[['value']])
+    Xlen <- ncol(x[['value']])
 
     ## Handle the case of missing Y and X items in 'x'
     if(is.null(x$Y)){
@@ -575,7 +575,7 @@ plot.probability <- function(
     }
 
     ## Check for singular-probability values
-    isdensity <- any(x$densities > 0)
+    isdensity <- any(x$density > 0)
 
     ## If 'PvsY' is NULL, then guess that the longest between Y and X
     ## is meant to be abscissa
@@ -587,7 +587,7 @@ plot.probability <- function(
         lgnd <- x$X
         tempxlab <- 'Y'
         nplots <- Xlen
-        pdeltas <- (x$densities < max(x$densities))
+        pdeltas <- (x$density < max(x$density))
         poks <- !pdeltas
         pvsyi <- 2
     } else {
@@ -630,7 +630,7 @@ plot.probability <- function(
     if(ypdeltas){
         if(is.null(ylab2)){
             ylab2 <- paste0('probability',
-                if(max(x$densities[-which.max(x$densities)]) == 0){' density'},
+                if(max(x$density[-which.max(x$density)]) == 0){' density'},
                 ' at singular points')
         }
         oldpar <- par(mar = par('mar') + c(0, 0, 0, 1.5))
@@ -663,9 +663,9 @@ plot.probability <- function(
 
     ## y-range
     if(npdeltas){
-        pmax <- max(x[['values']][!pdeltas, ], na.rm = TRUE)
+        pmax <- max(x[['value']][!pdeltas, ], na.rm = TRUE)
     } else {
-        pmax <- max(x[['values']][pdeltas, ], na.rm = TRUE)
+        pmax <- max(x[['value']][pdeltas, ], na.rm = TRUE)
     }
     if(qspread){
         if(npdeltas){
@@ -692,7 +692,7 @@ plot.probability <- function(
     ## compute max probability of singular points, if any,
     ## and find conversion scale
     if(ypdeltas){
-        maxpdelta <- max(x[['values']][pdeltas, ],
+        maxpdelta <- max(x[['value']][pdeltas, ],
             x[['quantiles']][pdeltas, , ],
             if(sspread){apply(
                 X = x[[spread]][pdeltas, , , drop = FALSE],
@@ -777,11 +777,11 @@ plot.probability <- function(
             )},
             rbind(
                 if(npdeltas){
-                    apply(X = x[['values']][qnpds, , drop = FALSE],
+                    apply(X = x[['value']][qnpds, , drop = FALSE],
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
                 },
                 if(ypdeltas){
-                    apply(X =  pscale * x[['values']][qypds, , drop = FALSE] + ploc,
+                    apply(X =  pscale * x[['value']][qypds, , drop = FALSE] + ploc,
                         MARGIN = pvsyi, FUN = identity, simplify = FALSE)
                 }
             )
@@ -876,7 +876,7 @@ plot.probability <- function(
 #' ## calculate the probability, and its revisability,
 #' ## for the value 'Adelie' of the "species" variate
 #' probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
-#' probs$values
+#' probs$value
 #'
 #' ## show the revisability of this probability; equivalently show
 #' ## the probability distribution for the relative frequency of
@@ -925,22 +925,40 @@ hist.probability <- function(
     if(is.null(x[['samples']])) {
         stop('The "probability" object does not contain any revisability samples')
         }
-    pvar <- x[['samples']]
-    Ylen <- nrow(x[['values']])
-    Xlen <- ncol(x[['values']])
+    Ylen <- nrow(x[['value']])
+    Xlen <- ncol(x[['value']])
 
     ## Precompute histograms, to determine maximum y-value
     xlist <- densitylist <- list()
     i <- 0L
     for(xx in seq_len(Xlen)){ for(yy in seq_len(Ylen)){
         i <- i + 1L
-        ff <- pvar[yy, xx, ]
+        ff <- x[['samples']][yy, xx, ]
         if(is.null(breaks)){
             rg <- range(ff, na.rm = TRUE)
             if(rg[2] == rg[1]){rg <- c(0, 1)}
+            if(!is.null(x[['quantiles.acc']])){
+                wd <- 4 * max(x[['quantiles.acc']][yy, xx, ])
+            } else if(!is.null(x[['samples']])){
+                wd <- 4 * max(sapply(X = c(0.055, 0.945),
+                    FUN = function(aquant){
+                        temp <- .funMCEQ(x = x[['samples']][yy, xx,],
+                            prob = aquant,
+                            Qpair = pnorm(c(-1, 1)))
+                        (temp[2, ] - temp[1, ]) / 2},
+                    USE.NAMES = FALSE, simplify = TRUE))
+            } else {
+                wd <- (rg[2] - rg[1]) / ceiling(sqrt(length(ff))/2)
+            }
+            n <- (rg[2] - rg[1]) / wd
+                ## n <- (rg[2] - rg[1]) / (2 * qnorm(0.945) * exp(mean(log(
+                ##     x[['quantiles.acc']][yy, xx,]
+                ## ), na.rm = TRUE)))
             ## n <- nclass.FD(ff)
-            n <- ceiling(sqrt(length(ff))/2)
+            ## n <- ceiling(sqrt(length(ff))/2)
             ibreaks <- seq(rg[1], rg[2], length.out = n + 1)
+        } else {
+            ibreaks <- breaks
         }
         hd <- graphics::hist(x = ff, breaks = ibreaks, plot = FALSE)
         xlist[[i]] <- hd$breaks
@@ -980,7 +998,7 @@ hist.probability <- function(
         i <- 0L
         for(xx in seq_len(Xlen)){ for(yy in seq_len(Ylen)){
             i <- i + 1L
-            graphics::abline(v = x[['values']][yy, xx],
+            graphics::abline(v = x[['value']][yy, xx],
                 col = adjustcolor(col[(i - 1) %% length(col) + 1],
                     alpha.f * 0.75),
                 lty = lty[(i - 1) %% length(lty) + 1],
@@ -1108,15 +1126,29 @@ hist.mi <- function(
     if(is.null(x[['samples']])) {
         stop('The MI object does not contain any revisability samples')
         }
-    ff <- x[['samples']]
 
     ## Precompute histogram
+    ff <- x[['samples']]
     if(is.null(breaks)){
         rg <- range(ff, na.rm = TRUE)
         if(rg[2] == rg[1]){rg <- c(0, 1)}
-        ## n <- nclass.FD(ff)
-        n <- ceiling(sqrt(length(ff))/2)
+        if(!is.null(x[['quantiles.acc']])){
+            wd <- 4 * max(x[['quantiles.acc']])
+        } else if(!is.null(x[['samples']])){
+            wd <- 4 * max(sapply(X = c(0.055, 0.945),
+                FUN = function(aquant){
+                    temp <- .funMCEQ(x = x[['samples']],
+                        prob = aquant,
+                        Qpair = pnorm(c(-1, 1)))
+                    (temp[2, ] - temp[1, ]) / 2},
+                USE.NAMES = FALSE, simplify = TRUE))
+        } else {
+            wd <- (rg[2] - rg[1]) / ceiling(sqrt(length(ff))/2)
+        }
+        n <- (rg[2] - rg[1]) / wd
         ibreaks <- seq(rg[1], rg[2], length.out = n + 1)
+    } else {
+        ibreaks <- breaks
     }
     hd <- graphics::hist(x = ff, breaks = ibreaks, plot = FALSE)
     xlist <- hd$breaks
@@ -1179,13 +1211,13 @@ hist.mi <- function(
 #' Print an object of class "probability"
 #'
 #' @description
-#' This [base::print()] method is a utility to display selected elements of a "probability" object obtained with [Pr()]; typically its posterior probabilies (element `$values`) and their revisabilities (element `$quantiles`). If the `Y` or `X` variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk `*`.
+#' This [base::print()] method is a utility to display selected elements of a "probability" object obtained with [Pr()]; typically its posterior probabilies (element `'value'`) and their revisabilities (element `'quantiles'`). If the `Y` or `X` variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk `*`.
 #'
 #' @param x Object of class "probability", obtained with [Pr()].
-#' @param elements character or integer vector, or `NULL` (default): elements of the "probability" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `$values` and `$quantiles` are displayed together in a special way.
+#' @param elements character or integer vector, or `NULL` (default): elements of the "probability" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `'value'` and `'quantiles'` are displayed together in a special way.
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
-#' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for elements `$values` and `$quantiles` are determined from their respective `$values.MCaccuracy` and `$quantiles.MCaccuracy` elements of the "probability" object (see [Pr()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `$samples` elements uses `edigits` significant digits.
-#' @param edigits positive integer, default 2: number of significant digits for elements `$values.MCaccuracy` and `$quantiles.MCaccuracy`, if `digits = TRUE`.
+#' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for elements `'value'` and `'quantiles'` are determined from their respective `'value.acc'` and `'quantiles.acc'` elements of the "probability" object (see [Pr()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `'samples'` elements uses `edigits` significant digits.
+#' @param edigits positive integer, default 2: number of significant digits for elements `'value.acc'` and `'quantiles.acc'`, if `digits = TRUE`.
 #' @param ... Other parameters to be passed to [base::print()].
 #'
 #' @return Its `x` argument, [invisibly][base::invisible()]; see [base::print()].
@@ -1215,8 +1247,8 @@ hist.mi <- function(
 #' ## display the values and revisabilities of these probabilities
 #' print(probs)
 #'
-#' ## diplay 'values' only, and only for the species value 'Gentoo'
-#' print(probs, elements = 'values', subset = list(species = 'Gentoo'))
+#' ## diplay 'value' only, and only for the species value 'Gentoo'
+#' print(probs, elements = 'value', subset = list(species = 'Gentoo'))
 #'
 #' @concept display
 #' @export
@@ -1233,27 +1265,27 @@ print.probability <- function(
         x <- .prsubset(x, subset = subset)
     }
 
-    vmca <- x[['values.MCaccuracy']]
+    vmca <- x[['value.acc']]
     if(is.null(vmca)){# output is from qPr()
         hasvmca <- FALSE
         vmca <- 1e-15
     } else {
         hasvmca <- TRUE
     }
-    qmca <- x[['quantiles.MCaccuracy']]
+    qmca <- x[['quantiles.acc']]
     if(is.null(qmca)){# output is from qPr()
         qmca <- 1e-15
     }
 
-    densities <- x[['densities']]
-    if(is.null(densities)){# output is from qPr()
-        densities <- 0
+    density <- x[['density']]
+    if(is.null(density)){# output is from qPr()
+        density <- 0
         oname <- 'quantile'
     } else {
         oname <- 'probability'
     }
     if(isTRUE(digits) && is.null(elements)){
-        vdigits <- edigits - 1 + ceiling(log10(x[['values']])) -
+        vdigits <- edigits - 1 + ceiling(log10(x[['value']])) -
             floor(log10(vmca))
         adigits <- rep.int(x = edigits, times = length(vmca))
         if('quantiles' %in% names(x)){
@@ -1267,24 +1299,24 @@ print.probability <- function(
     }
 
     if(is.null(elements)){
-        totake <- c('values', if(hasvmca){'values.MCaccuracy'}, 'quantiles')
+        totake <- c('value', if(hasvmca){'value.acc'}, 'quantiles')
         ## rearrange and combine values and quantiles in a special way
         temp <- aperm(a = array(data = .signifC(
             x = unname(unlist(x[totake])),
             digits = c(vdigits, if(hasvmca){adigits}, qdigits) ),
-            dim = c(dim(x[['values']]),
+            dim = c(dim(x[['value']]),
             (if(is.null(x[['quantiles']])){0}else{dim(x[['quantiles']])[3]}) +
                 1 + hasvmca),
-            dimnames = c(dimnames(x[['values']]),
+            dimnames = c(dimnames(x[['value']]),
                 setNames(object = list(c('value', if(hasvmca){'+/-'},
                     if(!is.null(x[['quantiles']])){
                         paste0('Q', dimnames(x[['quantiles']])[[3]])
                     }
-                )), nm = paste0(oname, if(any(densities > 0)){' density'}))
+                )), nm = paste0(oname, if(any(density > 0)){' density'}))
                 )),
             perm = c(1,3,2))
-        temp2 <- dimnames(temp)[[1]][densities < max(densities)]
-        dimnames(temp)[[1]][densities < max(densities)] <-
+        temp2 <- dimnames(temp)[[1]][density < max(density)]
+        dimnames(temp)[[1]][density < max(density)] <-
             paste0(temp2, '*')
 
         if(is.null(x$X)){temp <- temp[,,]}
@@ -1305,8 +1337,8 @@ print.probability <- function(
 #' This [base::print()] method is a utility to display value and revisability of an "mi" object obtained with [mutualinfo()].
 #'
 #' @param x Object of class "mi", obtained with [mutualinfo()].
-#' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for element `$value` is determined from is respective `$MCaccuracy`  (see [mutualinfo()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `$quantiles` elements uses `edigits` significant digits.
-#' @param edigits positive integer, default 2: number of significant digits for element `$value` and `$quantiles`, if `digits = TRUE`.
+#' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for element `'value'` are determined from is respective `'value.acc'`  (see [mutualinfo()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `'quantiles'` elements uses `edigits` significant digits.
+#' @param edigits positive integer, default 2: number of significant digits for element `'value'` and `'quantiles'`, if `digits = TRUE`.
 #' @param unit Either `NULL`, or one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used; see analogous argument in [mutualinfo()]. If `NULL` (default), the same unit as in the object `x` is used. Unit conversion is internally performed if this unit is different from that of the object `x`.
 #' @param ... Other parameters to be passed to [base::print()].
 #'
@@ -1379,7 +1411,7 @@ print.mi <- function(
 
     xvalue <- x[['value']] / lbase
     xquants <- x[['quantiles']] / lbase
-    xacc <- x[['MCaccuracy']] / lbase
+    xacc <- x[['value.acc']] / lbase
 
     if(isTRUE(digits)){
         vdigits <- edigits - 1 + ceiling(log10(xvalue)) -
@@ -1477,7 +1509,7 @@ print.K <- function(x, ...){
 ## #'   K = K
 ## #' )
 ## #'
-## #' probs$values
+## #' probs$value
 ## #'
 ## #' ## Subset by retaining the values 'Adelie' and 'Gentoo' for species,
 ## #' ## and 44 for bill length
@@ -1486,7 +1518,7 @@ print.K <- function(x, ...){
 ## #'   subset = list(species = c('Adelie', 'Gentoo'), bill_len = 43)
 ## #' )
 ## #'
-## #' newprobs$values
+## #' newprobs$value
 ## #'
 ## #' ## Plot these conditional probabilities and their revisabilities
 ## #' plot(newprobs)
@@ -1510,15 +1542,15 @@ print.K <- function(x, ...){
     ## subset Y
     for(vrt in vrtnames[vrtnames %in% Ynames]){
         selvals <- x$Y[[vrt]] %in% subset[[vrt]]
-        x$values <- x$values[selvals, , drop = FALSE]
-        if(!is.null(x$values.MCaccuracy)){
-            x$values.MCaccuracy <- x$values.MCaccuracy[selvals, , drop = FALSE]
+        x$value <- x$value[selvals, , drop = FALSE]
+        if(!is.null(x$value.acc)){
+            x$value.acc <- x$value.acc[selvals, , drop = FALSE]
         }
         if(!is.null(x$quantiles)){
             x$quantiles <- x$quantiles[selvals, , , drop = FALSE]
         }
-        if(!is.null(x$quantiles.MCaccuracy)){
-            x$quantiles.MCaccuracy <- x$quantiles.MCaccuracy[selvals, , , drop = FALSE]
+        if(!is.null(x$quantiles.acc)){
+            x$quantiles.acc <- x$quantiles.acc[selvals, , , drop = FALSE]
         }
         if(!is.null(x$samples)){
             x$samples <- x$samples[selvals, , , drop = FALSE]
@@ -1529,15 +1561,15 @@ print.K <- function(x, ...){
     ## subset X
     for(vrt in vrtnames[vrtnames %in% Xnames]){
         selvals <- x$X[[vrt]] %in% subset[[vrt]]
-        x$values <- x$values[, selvals, drop = FALSE]
-        if(!is.null(x$values.MCaccuracy)){
-            x$values.MCaccuracy <- x$values.MCaccuracy[, selvals, drop = FALSE]
+        x$value <- x$value[, selvals, drop = FALSE]
+        if(!is.null(x$value.acc)){
+            x$value.acc <- x$value.acc[, selvals, drop = FALSE]
         }
         if(!is.null(x$quantiles)){
             x$quantiles <- x$quantiles[, selvals, , drop = FALSE]
         }
-        if(!is.null(x$quantiles.MCaccuracy)){
-            x$quantiles.MCaccuracy <- x$quantiles.MCaccuracy[, selvals, , drop = FALSE]
+        if(!is.null(x$quantiles.acc)){
+            x$quantiles.acc <- x$quantiles.acc[, selvals, , drop = FALSE]
         }
         if(!is.null(x$samples)){
             x$samples <- x$samples[, selvals, , drop = FALSE]

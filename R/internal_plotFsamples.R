@@ -142,7 +142,7 @@
                     verbose = FALSE,
                     keepYX = FALSE)
 
-                dim(probabilities$values) <- NULL
+                dim(probabilities$value) <- NULL
 
                 ## Find appropriate plot height across plots
                 if (plotvariability == 'samples') {
@@ -219,7 +219,7 @@
                 if (plotprobability) {
                     pplot(
                         x = Xgrid,
-                        y = probabilities$values,
+                        y = probabilities$value,
                         ## y = rowMeans(probabilities[, , drop = FALSE], na.rm = TRUE),
                         xlim = range(Xgrid), ylim = c(0, ymax),
                         type = 'l', cex = 0.5, lty = 1, lwd = 4,
@@ -265,7 +265,7 @@
                     verbose = FALSE,
                     keepYX = FALSE)
 
-                dim(probabilities$values) <- NULL
+                dim(probabilities$value) <- NULL
 
                 ## Find appropriate plot height across plots
                 if (plotvariability == 'samples') {
@@ -338,7 +338,7 @@
                     if (any(!xin)) {
                         pplot(
                             x = Xgrid[!xin],
-                            y = probabilities$values[!xin] * ymax,
+                            y = probabilities$value[!xin] * ymax,
                             type = 'p', pch = 2, cex = 2,
                             col = adjustcolor(cyan, 1 / 8),
                             family = fontfamily,
@@ -384,7 +384,7 @@
                     if (any(xin)) {
                         pplot(
                             x = Xgrid[xin],
-                            y = probabilities$values[xin],
+                            y = probabilities$value[xin],
                             xlim = range(Xgrid), ylim = c(0, ymax),
                             type = 'l', cex = 0.5, lty = 1, lwd = 4,
                             col = adjustcolor(blue, 0.75),
@@ -400,7 +400,7 @@
                     if (any(!xin)) {
                         pplot(
                             x = Xgrid[!xin],
-                            y = probabilities$values[!xin] * ymax,
+                            y = probabilities$value[!xin] * ymax,
                             type = 'p', pch = 2, cex = 2,
                             col = adjustcolor(blue, 0.75),
                             lty = 1, lwd = 3,
@@ -477,7 +477,7 @@
                     verbose = FALSE,
                     keepYX = FALSE)
 
-                dim(probabilities$values) <- NULL
+                dim(probabilities$value) <- NULL
 
 
                 ## Find appropriate plot height across plots
@@ -567,7 +567,7 @@
                 if (plotprobability) {
                     pplot(
                         x = Xgrid,
-                        y = probabilities$values,
+                        y = probabilities$value,
                         xlim = range(Xgrid), ylim = c(0, ymax),
                         ## xticks = Xticks, xlabels = rownames(Xgrid),
                         type = 'o', pch = 16, cex = 0.5, lty = 1, lwd = 4,

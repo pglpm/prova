@@ -53,13 +53,13 @@ mutualinfo(
 \value{
 An object of class "mi", which is a list consisting of the following elements:
 \itemize{
-\item \verb{$value}, the mutual information between (joint) variates \code{Y1names} and (joint) variates \code{Y2names}.
-\item \verb{$quantiles}, a vector with the revisability quantiles for the mutual information.
-\item \verb{$MCaccuracy}, vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the \code{value} of the mutual information.
-\item \verb{$samples}, a vector with the revisability samples for the mutual information.
-\item \verb{$rGauss}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
-\item \verb{$unit}, \verb{$Y1names}, \verb{$Y1names}, \verb{$tails}: copies of the homonymous input arguments.
-\item \verb{$K}: name of the "Knowledge" object used in the calculation.
+\item \code{'value'}, the mutual information between (joint) variates \code{Y1names} and (joint) variates \code{Y2names}.
+\item \code{'quantiles'}, a vector with the revisability quantiles for the mutual information.
+\item \code{'value.acc'}, \code{quantiles.acc} number and vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the \code{'value'} and the \code{'quantiles'} elements.
+\item \code{'samples'}, a vector with the revisability samples for the mutual information.
+\item \code{'rGauss'}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
+\item \code{'unit'}, \code{'Y1names'}, \code{'Y1names'}, \code{'tails'}: copies of the homonymous input arguments.
+\item \code{'K'}: name of the "Knowledge" object used in the calculation.
 }
 }
 \description{
@@ -92,8 +92,8 @@ K <- Kexample
 ## mutual information between variates 'species' and 'bill_len'
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
 
-## The value and its numerical Monte Carlo error
-c(MI$value, MI$MCaccuracy)
+## The value and its numerical Monte Carlo accuracy
+c(MI$value, MI$value.acc)
 
 ## If we had many more data, we could instead expect to obtain values
 ## within the following probable ranges:

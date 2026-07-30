@@ -429,17 +429,17 @@ The estimated frequency distribution for the species is the central, solid red c
 
 The three estimated frequencies are:
 
-- Adélie: `r printprob(Fspecies10$values['Adelie',1])`
-- Chinstrap: `r printprob(Fspecies10$values['Chinstrap',1])`
-- Gentoo: `r printprob(Fspecies10$values['Gentoo',1])`
+- Adélie: `r printprob(Fspecies10$value['Adelie',1])`
+- Chinstrap: `r printprob(Fspecies10$value['Chinstrap',1])`
+- Gentoo: `r printprob(Fspecies10$value['Gentoo',1])`
 
-and can be read from the `values` element of the `Fspecies10` object, either directly or by using the `print()` function, which by default a number of significant digits corresponding to the Monte Carlo numerical accuracy:
+and can be read from the `value` element of the `Fspecies10` object, either directly or by using the `print()` function, which by default a number of significant digits corresponding to the Monte Carlo numerical accuracy:
 
 ```{r freq10, eval = TRUE}
-Fspecies10$values
+Fspecies10$value
 
 ## or
-print(Fspecies10, 'values')
+print(Fspecies10, 'value')
 ```
 
 These frequency estimates have also another important meaning: they are the *probabilities for the species of the **next** penguin we'll observe*. More generally, they are the probabilities for the next observation. In the present context they are maybe not so relevant -- unless you're placing bets on which data will arrive next with your colleagues -- but in other inference contexts they may be very important. In a clinical setting, for example, where we try to infer some condition about the next patient, these probabilities are used for clinical decision-making; see the textbooks by Sox & al. and by Hunink & al., and the paper by Lindley & Novick in the [references]{#referencesmedical}.
@@ -508,7 +508,7 @@ imputeddata <- Pr(Y = Yimp, X = X, K = K10)
 print(imputeddata)
 ```
 
-We see that penguin #1 might have been female with probability `r printprob(imputeddata$values['female',1])`, although further data might shift that probability somewhere between `r printprob(imputeddata$quantiles['female',1,1])` and `r printprob(imputeddata$quantiles['female',1,4])`.
+We see that penguin #1 might have been female with probability `r printprob(imputeddata$value['female',1])`, although further data might shift that probability somewhere between `r printprob(imputeddata$quantiles['female',1,1])` and `r printprob(imputeddata$quantiles['female',1,4])`.
 
 Now let's take datapoint #6 and infer the value of `bill_len`. We can use the function `vrtgrid()` to generate a grid of realistic values based on the data, and then see the probability distribution over these values:
 
@@ -528,7 +528,7 @@ plot(imputeddata)
 ```
 
 <!-- commented
-The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(Yname = 'bill_len', p = 0.5, X = X, K = K10, parallel = 4)$values[1,1])`.
+The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(Yname = 'bill_len', p = 0.5, X = X, K = K10, parallel = 4)$value[1,1])`.
 commented -->
 
 \
@@ -631,7 +631,7 @@ hist(Fspecies10I, subset = list(island = 'Biscoe'),
     xlim = c(0, 1), legend = 'topright', col = 2:4)
 ```
 
-Note how, according to these preliminary estimates, the frequencies of Adélie and Chinstrap are very close, around `r printprob(mean(c(Fspecies10I$values['Adelie','Biscoe'], Fspecies10I$values['Chinstrap','Biscoe'])),1)`, and quite different from the frequency of Gentoo, around `r printprob(Fspecies10I$values['Gentoo','Biscoe'],1)`. Yet, the probability distributions are wide; each distribution gives a non-zero probability to all three estimates.
+Note how, according to these preliminary estimates, the frequencies of Adélie and Chinstrap are very close, around `r printprob(mean(c(Fspecies10I$value['Adelie','Biscoe'], Fspecies10I$value['Chinstrap','Biscoe'])),1)`, and quite different from the frequency of Gentoo, around `r printprob(Fspecies10I$value['Gentoo','Biscoe'],1)`. Yet, the probability distributions are wide; each distribution gives a non-zero probability to all three estimates.
 
 **For later, keep in mind the following question: *On Biscoe, are the frequencies of Adélie and Chinstrap different?*** The present estimates show almost no difference, but we are warned about a large uncertainty. Will more sampling data confirm "no difference"?
 
@@ -645,7 +645,7 @@ hist(Fspecies10I, subset = list(island = 'Dream'),
 ```
 \
 
-Among other things we see here a larger difference in the estimated frequencies of Adélie, around `r printprob(Fspecies10I$values['Adelie','Dream'])`, and Chinstrap, around `r printprob(Fspecies10I$values['Chinstrap','Dream'])`. Still, the probability distributions are wide.
+Among other things we see here a larger difference in the estimated frequencies of Adélie, around `r printprob(Fspecies10I$value['Adelie','Dream'])`, and Chinstrap, around `r printprob(Fspecies10I$value['Chinstrap','Dream'])`. Still, the probability distributions are wide.
 
 **For later, keep in mind the following question: *On Dream, are the frequencies of Adélie and Chinstrap different?*** The present estimates show a difference, but with large uncertainty. Will more sampling data confirm "difference"?
 
@@ -694,7 +694,7 @@ Fspecies10IS <- Pr(Y = Y, X = X2, K = K10)
 
 ## Display the estimated frequencies of species
 ## within all six combinations of subpopulations
-print(Fspecies10IS, 'values')
+print(Fspecies10IS, 'value')
 ```
 
 
@@ -818,7 +818,7 @@ We see that in our initial inference (top plot) all three probability distributi
 
 In our updated inference (bottom plot) there is still a large overlap for the probabilities of `Adelie` (solid red curve) and `Gentoo` (dot-dashed green curve) frequencies, indicating that we're still very uncertain on whether these frequencies might be very different or not -- we need more sample to resolve this. But we can already conclude, with high probability, that their difference won't be larger than around `r printprob(diff(quantile(Fspecies60$samples['Adelie',1,], c(0.055,0.945))),1)` (the approximate width of their distributions).
 
-But the probability distribution for the `Chinstrap` frequency (dashed blue curve) has now a smaller overlap with the other two: there's an increased probability that this frequency is different by around `r printprob(abs(diff(Fspecies60$values[c('Chinstrap', 'Adelie'),1])),1)` from at least one of the other two. Later on we shall see how to calculate these probabilities exactly.
+But the probability distribution for the `Chinstrap` frequency (dashed blue curve) has now a smaller overlap with the other two: there's an increased probability that this frequency is different by around `r printprob(abs(diff(Fspecies60$value[c('Chinstrap', 'Adelie'),1])),1)` from at least one of the other two. Later on we shall see how to calculate these probabilities exactly.
 
 Our updated quantitative answer to the question "*What's the overall statistical occurrence of the three species in the whole population?*" is as follows:
 
@@ -858,7 +858,7 @@ hist(Fspecies60I, subset = list(island = 'Dream'),
     col = 2:4, main = '60 samples, Dream island')
 ```
 
-The new frequency estimates for `Adelie` (solid red line) and `Chinstrap` (dashed blue line) are now around `r printprob(abs(diff(Fspecies60I$values[c('Adelie','Chinstrap'),'Dream'])),1)` apart; the previous estimates had them around `r printprob(abs(diff(Fspecies10I$values[c('Adelie','Chinstrap'),'Dream'])),1)` apart. This change is not unexpected: the new estimates are well within the previous credibility intervals; we were correctly warned about their possible change.
+The new frequency estimates for `Adelie` (solid red line) and `Chinstrap` (dashed blue line) are now around `r printprob(abs(diff(Fspecies60I$value[c('Adelie','Chinstrap'),'Dream'])),1)` apart; the previous estimates had them around `r printprob(abs(diff(Fspecies10I$value[c('Adelie','Chinstrap'),'Dream'])),1)` apart. This change is not unexpected: the new estimates are well within the previous credibility intervals; we were correctly warned about their possible change.
 
 
 ### For `Biscoe` island: a surprising result {#surprise}
@@ -875,7 +875,7 @@ hist(Fspecies60I, subset = list(island = 'Biscoe'),
     col = 2:4, main = '60 samples, Biscoe island')
 ```
 
-The new frequency estimates for `Adelie` (solid red line) and `Chinstrap` (dashed blue line) are now around `r printprob(abs(diff(Fspecies60I$values[c('Adelie','Chinstrap'),'Biscoe'])),1)` apart, whereas the previous estimates were almost equal. Again this is not unexpected, and these changes are well within the previous credibility intervals.
+The new frequency estimates for `Adelie` (solid red line) and `Chinstrap` (dashed blue line) are now around `r printprob(abs(diff(Fspecies60I$value[c('Adelie','Chinstrap'),'Biscoe'])),1)` apart, whereas the previous estimates were almost equal. Again this is not unexpected, and these changes are well within the previous credibility intervals.
 
 Notably, we see now a clear separation between the probability distribution for the frequency of `Gentoo` (dot-dashed green), and that for `Chinstrap` (dashed blue). This means that these two frequencies must be clearly different. Can we quantify how different, and with which uncertainty?
 
@@ -983,15 +983,15 @@ print(Fspeciesall)
 > From a sample of 344 penguins [add a more thorough specification of population and sampling procedure here], the relative frequencies of the three species in the full population are estimated as follows (obviously the three estimates and uncertainties are not independent, because the frequencies must add up to 1):
 > 
 > Adélie
-> : estimate `r printprob(Fspeciesall$values['Adelie',1])`
+> : estimate `r printprob(Fspeciesall$value['Adelie',1])`
 >  <br>true rel. frequency between `r printprob(Fspeciesall$quantiles['Adelie',1,1])` and `r printprob(Fspeciesall$quantiles['Adelie',1,4])` with 89% probability.
 > 
 > Chinstrap
-> : estimate `r printprob(Fspeciesall$values['Chinstrap',1])`
+> : estimate `r printprob(Fspeciesall$value['Chinstrap',1])`
 >  <br>true rel. frequency between `r printprob(Fspeciesall$quantiles['Chinstrap',1,1])` and `r printprob(Fspeciesall$quantiles['Chinstrap',1,4])` with 89% probability.
 > 
 > Gentoo
-> : estimate `r printprob(Fspeciesall$values['Gentoo',1])`
+> : estimate `r printprob(Fspeciesall$value['Gentoo',1])`
 >  <br>true rel. frequency between `r printprob(Fspeciesall$quantiles['Gentoo',1,1])` and `r printprob(Fspeciesall$quantiles['Gentoo',1,4])` with 89% probability.
 
 
@@ -1035,15 +1035,15 @@ Conclusion:
 > From a sample of 344 penguins, the relative frequencies of the three species **on Biscoe island** are estimated as follows:
 > 
 > Adélie
-> : estimate `r printprob(Fanalysis$values['Adelie',1])`
+> : estimate `r printprob(Fanalysis$value['Adelie',1])`
 >  <br>true rel. frequency between `r printprob(Fanalysis$quantiles['Adelie',1,1])` and `r printprob(Fanalysis$quantiles['Adelie',1,4])` with 89% probability.
 > 
 > Chinstrap
-> : estimate `r printprob(Fanalysis$values['Chinstrap',1])`
+> : estimate `r printprob(Fanalysis$value['Chinstrap',1])`
 >  <br>true rel. frequency between `r printprob(Fanalysis$quantiles['Chinstrap',1,1])` and `r printprob(Fanalysis$quantiles['Chinstrap',1,4])` with 89% probability.
 > 
 > Gentoo
-> : estimate `r printprob(Fanalysis$values['Gentoo',1])`
+> : estimate `r printprob(Fanalysis$value['Gentoo',1])`
 >  <br>true rel. frequency between `r printprob(Fanalysis$quantiles['Gentoo',1,1])` and `r printprob(Fanalysis$quantiles['Gentoo',1,4])` with 89% probability.
 
 Note how our [previous estimates from 60 samples](#surprise) were already quite on the spot.
@@ -1078,15 +1078,15 @@ Conclusions:
 > From a sample of 344 penguins, the distribution of the **Adélie** species on the three islands is estimated as follows:
 > 
 > Biscoe
-> : estimate `r printprob(Fanalysis$values['Biscoe',1])`
+> : estimate `r printprob(Fanalysis$value['Biscoe',1])`
 >  <br>true rel. frequency between `r printprob(Fanalysis$quantiles['Biscoe',1,1])` and `r printprob(Fanalysis$quantiles['Biscoe',1,4])` with 89% probability.
 > 
 > Dream
-> : estimate `r printprob(Fanalysis$values['Dream',1])`
+> : estimate `r printprob(Fanalysis$value['Dream',1])`
 >  <br>true rel. frequency between `r printprob(Fanalysis$quantiles['Dream',1,1])` and `r printprob(Fanalysis$quantiles['Dream',1,4])` with 89% probability.
 > 
 > Torgersen
-> : estimate `r printprob(Fanalysis$values['Torgersen',1])`
+> : estimate `r printprob(Fanalysis$value['Torgersen',1])`
 >  <br>true rel. frequency between `r printprob(Fanalysis$quantiles['Torgersen',1,1])` and `r printprob(Fanalysis$quantiles['Torgersen',1,4])` with 89% probability.
 
 In this case our uncertainties do *not* allow us to exclude the possibility that Adélie penguins are roughly equally distributed on the three islands.

@@ -43,7 +43,7 @@ the joint probability of. One variate per column, one set of values per row.}
 \item \code{TRUE} (default): use the cluster that was set as default with \code{\link[parallel:setDefaultCluster]{parallel::setDefaultCluster()}}; if no such object exists, then generate a cluster with as many nodes as in the \link[base:getOption]{option} "nc.cores"; if this option is unset, then use 2 nodes.
 }}
 
-\item{sep}{character, default \code{','}: character to separate variate names and values}
+\item{sep}{character, default \code{','}: character to separate variate names and values.}
 
 \item{solidus}{character, default \code{'|'}: character prepended to names of the variates in the conditional (typically the \code{X} variates).}
 
@@ -54,13 +54,13 @@ the joint probability of. One variate per column, one set of values per row.}
 \value{
 An object of class "probability", which is a list consisting of the following elements:
 \itemize{
-\item \verb{$values}: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
-\item \verb{$quantiles} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
-\item \verb{$samples} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such probabilities.
-\item \verb{$values.MCaccuracy}, \code{quantiles.MCaccuracy}: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the \code{values} and \code{quantiles} elements.
-\item \verb{$densities}: numerical vector as long as number of rows in \code{Y}, used mainly for \code{\link[=plot.probability]{plot.probability()}}. It is the order of the probability density the \code{Y}-values: values with \code{0} are actual probabilities; values with \code{1} are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with \code{2} are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
-\item \verb{$Y}, \verb{$X}, \verb{$tails}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
-\item \verb{$K}: name of the "Knowledge" object used in the calculation.
+\item \code{'value'}: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
+\item \code{'quantiles'} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
+\item \code{'samples'} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such probabilities.
+\item \code{'value.acc'}, \code{quantiles.acc}: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the \code{'values'} and \code{'quantiles'} elements.
+\item \code{'density'}: numerical vector as long as number of rows in \code{Y}, used mainly for \code{\link[=plot.probability]{plot.probability()}}. It is the order of the probability density the \code{Y}-values: values with \code{0} are actual probabilities; values with \code{1} are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with \code{2} are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
+\item \code{'Y'}, \code{'X'}, \code{'tails'}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
+\item \code{'K'}: name of the "Knowledge" object used in the calculation.
 }
 }
 \description{
@@ -108,7 +108,7 @@ K <- Kexample
 probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
 
 ## display the probability value
-probs$values
+probs$value
 
 ## the full-population frequency of 'Adelie' penguins is unknown;
 ## display the 5.5\%- and 94.5\%-probability values
@@ -129,7 +129,7 @@ probs <- Pr(
 )
 
 ## display the 3 probability values
-probs$values
+probs$value
 
 ## the full-population frequencies of the three species are unknown;
 ## display the 5.5\%- and 94.5\%-probability values
@@ -154,7 +154,7 @@ probs <- Pr(
 )
 
 ## display the probability value
-probs$values
+probs$value
 
 ## the full-subpopulation frequency of 'Adelie' penguins,
 ## among penguins having bill length of 43 mm, is unknown;
@@ -170,7 +170,7 @@ probs$quantiles[, , c('5.5\%', '94.5\%')]
 probs <- Pr(Y = data.frame(species = 'Adelie', bill_len = 43), K = K)
 
 ## display the probability value
-probs$values
+probs$value
 
 ## display the 5.5\%- and 94.5\%-probability values
 ## for the full-population frequency of 'Adelie' penguins with 43 mm bills
@@ -188,7 +188,7 @@ X <- data.frame(bill_len = c(43, 44))
 probs <- Pr(Y = Y, X = X, K = K)
 
 ## display the 3 x 2 probability values
-probs$values
+probs$value
 
 ## display the 5.5\%- and 94.5\%-probability values
 ## for the full-population joint frequencies
@@ -210,7 +210,7 @@ Y <- expand.grid(
 probs <- Pr(Y = Y, K = K)
 
 ## display the 6 joint-probability values
-probs$values
+probs$value
 
 ## display the 5.5\%- and 94.5\%-probability values
 ## for the full-population joint frequencies

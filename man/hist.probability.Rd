@@ -63,7 +63,7 @@ K <- Kexample
 ## calculate the probability, and its revisability,
 ## for the value 'Adelie' of the "species" variate
 probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
-probs$values
+probs$value
 
 ## show the revisability of this probability; equivalently show
 ## the probability distribution for the relative frequency of
