@@ -831,37 +831,121 @@ mutualinfoF <- function(
     tails <- unlist(tails)
 
     ## Calculate probabilities over the domains created with vrtgrid()
-    p1 <- Pr(vrtgrid(vrt = Y1names, K = K), X = X, K = K, parallel = cl)
-    p2 <- Pr(vrtgrid(vrt = Y2names, K = K), X = X, K = K, parallel = cl)
-    p12 <- Pr(vrtgrid(vrt = c(Y1names, Y2names), K = K), X = X, K = K,
+    ## Probabilities for Y1, Y2, Y12 are calculated one at a time
+    ## and immediately added to MI etc, to save memory
+
+    MI <- acc <- array(0, dim = max(1, nrow(X)))
+
+    outsamples <- array(0, dim = c(max(1, nrow(X)), nrow(K$W)))
+
+### Joint
+    pp <- Pr(vrtgrid(vrt = c(Y1names, Y2names), K = K), X = X, K = K,
         parallel = cl)
+    pp[c('density', 'Y', 'tails', 'K')] <- NULL
 
-    ## Calculate MIs as entropy differences
-    ## Important that MI is in *nats* now to calculate rGauss later
-    MI <- colSums(p12[['value']] * log(p12[['value']]), na.rm = TRUE) -
-        colSums(p1[['value']] * log(p1[['value']]), na.rm = TRUE) -
-        colSums(p2[['value']] * log(p2[['value']]), na.rm = TRUE)
+    MI <- MI + colSums(pp[['value']] * log(pp[['value']]), na.rm = TRUE)
+    acc <- acc + colSums(pp[['value.acc']] * abs(1 + log(pp[['value']])),
+        na.rm = TRUE)
 
-    acc <- colSums(abs(
-        p12[['value.acc']] * log(p12[['value']]) +
-            p12[['value']] * log1p(p12[['value.acc']] / p12[['value']])
-    ), na.rm = TRUE) +
-        colSums(abs(
-        p1[['value.acc']] * log(p1[['value']]) +
-            p1[['value']] * log1p(p1[['value.acc']] / p1[['value']])
-        ), na.rm = TRUE) +
-        colSums(abs(
-        p2[['value.acc']] * log(p2[['value']]) +
-            p2[['value']] * log1p(p2[['value.acc']] / p2[['value']])
-    ), na.rm = TRUE)
+    temp <- colSums(pp[['value']], na.rm = TRUE)
+    totake <- (1 - temp > 10 * .Machine$double.eps)
+    if(any(totake)){
+        temp2 <- numeric(length(temp))
+        temp2[totake] <- (1 - temp[totake]) * log(1 - temp[totake])
+        MI <- MI + temp2
+        ##
+        temp2 <- numeric(length(temp))
+        temp2[totake] <- colSums(pp[['value.acc']], na.rm = TRUE)[totake] *
+            abs(1 + log(1 - temp[totake]))
+        acc <- acc + temp2
+        rm(temp2)
+    }
 
-    dim(MI) <- dim(acc) <- length(MI)
+    outsamples <- colSums(pp[['samples']] * log(pp[['samples']]),
+        na.rm = TRUE)
 
-    outsamples <- colSums(p12[['samples']] * log(p12[['samples']]),
-        na.rm = TRUE) -
-        colSums(p1[['samples']] * log(p1[['samples']]), na.rm = TRUE) -
-        colSums(p2[['samples']] * log(p2[['samples']]), na.rm = TRUE)
-    rm(p12, p1, p2)
+    temp <- colSums(pp[['value']], na.rm = TRUE)
+    totake <- (1 - temp > 10 * .Machine$double.eps)
+    if(any(totake)){
+        temp2 <- numeric(length(temp))
+        temp2[totake] <- (1 - temp[totake]) * log(1 - temp[totake])
+        outsamples <- outsamples + temp2
+        rm(temp2)
+    }
+    rm(temp)
+
+### Y1
+    pp <- Pr(vrtgrid(vrt = Y1names, K = K), X = X, K = K,
+        parallel = cl)
+    pp[c('density', 'Y', 'tails', 'K')] <- NULL
+
+    MI <- MI - colSums(pp[['value']] * log(pp[['value']]), na.rm = TRUE)
+    acc <- acc + colSums(pp[['value.acc']] * abs(1 + log(pp[['value']])),
+        na.rm = TRUE)
+
+    temp <- colSums(pp[['value']], na.rm = TRUE)
+    totake <- (1 - temp > 10 * .Machine$double.eps)
+    if(any(totake)){
+        temp2 <- numeric(length(temp))
+        temp2[totake] <- (1 - temp[totake]) * log(1 - temp[totake])
+        MI <- MI - temp2
+        ##
+        temp2 <- numeric(length(temp))
+        temp2[totake] <- colSums(pp[['value.acc']], na.rm = TRUE)[totake] *
+            abs(1 + log(1 - temp[totake]))
+        acc <- acc + temp2
+        rm(temp2)
+    }
+
+    outsamples <- outsamples - colSums(pp[['samples']] * log(pp[['samples']]),
+        na.rm = TRUE)
+
+    temp <- colSums(pp[['value']], na.rm = TRUE)
+    totake <- (1 - temp > 10 * .Machine$double.eps)
+    if(any(totake)){
+        temp2 <- numeric(length(temp))
+        temp2[totake] <- (1 - temp[totake]) * log(1 - temp[totake])
+        outsamples <- outsamples - temp2
+        rm(temp2)
+    }
+    rm(temp)
+
+### Y2
+    pp <- Pr(vrtgrid(vrt = Y2names, K = K), X = X, K = K,
+        parallel = cl)
+    pp[c('density', 'Y', 'tails', 'K')] <- NULL
+
+    MI <- MI - colSums(pp[['value']] * log(pp[['value']]), na.rm = TRUE)
+    acc <- acc + colSums(pp[['value.acc']] * abs(1 + log(pp[['value']])),
+        na.rm = TRUE)
+
+    temp <- colSums(pp[['value']], na.rm = TRUE)
+    totake <- (1 - temp > 10 * .Machine$double.eps)
+    if(any(totake)){
+        temp2 <- numeric(length(temp))
+        temp2[totake] <- (1 - temp[totake]) * log(1 - temp[totake])
+        MI <- MI - temp2
+        ##
+        temp2 <- numeric(length(temp))
+        temp2[totake] <- colSums(pp[['value.acc']], na.rm = TRUE)[totake] *
+            abs(1 + log(1 - temp[totake]))
+        acc <- acc + temp2
+        rm(temp2)
+    }
+
+    outsamples <- outsamples - colSums(pp[['samples']] * log(pp[['samples']]),
+        na.rm = TRUE)
+
+    temp <- colSums(pp[['value']], na.rm = TRUE)
+    totake <- (1 - temp > 10 * .Machine$double.eps)
+    if(any(totake)){
+        temp2 <- numeric(length(temp))
+        temp2[totake] <- (1 - temp[totake]) * log(1 - temp[totake])
+        outsamples <- outsamples - temp2
+        rm(temp2)
+    }
+    rm(temp, pp)
+
 
     ## report whether the probabilities are 'tails' or not
     if(!is.null(tails)){
