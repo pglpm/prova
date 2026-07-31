@@ -909,6 +909,7 @@ mutualinfoF <- function(
         rm(temp2)
     }
     rm(temp)
+    gc(full = TRUE)
 
 ### Y2
     pp <- Pr(vrtgrid(vrt = Y2names, K = K), X = X, K = K,
@@ -945,7 +946,7 @@ mutualinfoF <- function(
         rm(temp2)
     }
     rm(temp, pp)
-
+    gc(full = TRUE)
 
     ## report whether the probabilities are 'tails' or not
     if(!is.null(tails)){
