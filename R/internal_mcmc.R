@@ -177,13 +177,13 @@
 #'
 #' Used in '.combineYX()' in 'Pr()'.
 #'
-#' @param x matrix, each row being a "trace", that is a set of MC samples, whose MCSE is to be estimated.
+#' @param x matrix, each column being a "trace", that is a set of MC samples, whose MCSE is to be estimated.
 #'
 #' @return MCSE estimates, one for each trace. Division by sqrt(N) is already performed.
 #'
 #' @keywords internal
 .funMCSELD <- function(x) {
-    x <- as.matrix(x)
+    if(is.null(dim(x))){ dim(x) <- c(length(x), 1) }
     N <- nrow(x)
     b <- floor(sqrt(N))
     a <- floor(N/b)

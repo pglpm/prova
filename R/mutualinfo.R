@@ -34,6 +34,8 @@
 #' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
 #' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
 #' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "nc.cores"; if this option is unset, then use 2 nodes.
+#' @param sep character, default `','`: character to separate the output's variate names and values.
+#' @param solidus character, default `'|'`: character prepended to the output's names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #' @param keepX Logical, default `TRUE`: keep a copy of the `X` argument in the output? This is used for [hist.mi()].
 #'
@@ -88,6 +90,8 @@ mutualinfo <- function(
     nv = 12,
     unit = 'Sh',
     parallel = TRUE,
+    sep = ',',
+    solidus = '|',
     verbose = FALSE,
     keepX = TRUE
 ){
@@ -558,21 +562,56 @@ mutualinfo <- function(
         outtails <- NULL
     }
 
-    Qerror <- pnorm(c(-1, 1))
-
     ## Output
+    ## Important that MI is in *nats* now to calculate rGauss later
     MI <- mean(out)
     if(MI < 0){ MI <- 0 }
 
+    acc <- .funMCSELD(x = out)
+    ## acc <- sd(out, na.rm = TRUE) / sqrt(ntot)
+    dim(MI) <- dim(acc) <- length(MI)
+
+    outquantiles <- quantile(outsamples, probs = quantiles, type = 6,
+        na.rm = TRUE, names = TRUE)
+
+    Qerror <- pnorm(c(-1, 1))
+    temp <- .funMCEQ(x = outsamples, prob = quantiles, Qpair = Qerror)
+    quantiles.acc <- (temp[2, ] - temp[1, ]) / 2
+
+    qnames <- names(outquantiles) # used later, lost below
+    dim(outquantiles) <- dim(quantiles.acc) <- c(1, length(quantiles))
+    dim(outsamples) <- c(1, length(outsamples))
+
+    ## report whether the probabilities are 'tails' or not
+    if(!is.null(tails)){
+        outtails <- list()
+        outtails[colnames(X)] <- ''
+        outtails[names(tails)[tails == -1]] <- '>'
+        outtails[names(tails)[tails == 1]] <- '<'
+    } else {
+        outtails <- NULL
+    }
+
+    if(!is.null(X)){
+        Xnames <- setNames(object = list(
+            apply(X = X, MARGIN = 1, FUN = paste0, collapse = sep,
+                simplify = TRUE)),
+            nm = paste0(solidus,
+                paste0(colnames(X), outtails[colnames(X)], collapse = sep)) )
+    } else {
+        Xnames <- list(NULL)
+    }
+
+    dimnames(MI) <- dimnames(acc) <- Xnames
+    dimnames(outquantiles) <- dimnames(quantiles.acc) <-
+        c(Xnames, list(qnames))
+    dimnames(outsamples) <- c(Xnames, list(NULL))
+
     out <- c(list(
         value = MI / lbase,
-        value.acc = sd(out, na.rm = TRUE) / (sqrt(ntot) * lbase),
-        quantiles = quantile(outsamples, probs = quantiles,
-            type = 6, na.rm = TRUE, names = TRUE) / lbase,
-        quantiles.acc = {
-            temp <- .funMCEQ(x = outsamples, prob = quantiles, Qpair = Qerror)
-            (temp[2, ] - temp[1, ]) / (2 * lbase)
-        },
+        value.acc = acc / lbase,
+        quantiles = outquantiles / lbase,
+        quantiles.acc = quantiles.acc / lbase,
         samples = outsamples / lbase,
         rGauss = sqrt(1 - exp(-2 * MI)),
         unit = unit,
@@ -599,23 +638,11 @@ mutualinfo <- function(
 #'
 #' @description Calculate the mutual information between two grops of joint variates having finite domains, as well as its revisability.
 #'
-#' @details If \eqn{Y_1} and \eqn{Y_2} are two variates, each of which can be a joint variate such as \eqn{Y_1 = (Y_{1,1}, Y_{1,2}, \dotsc)}, and \eqn{X} a third, also possibly join, variate, then the mutual information \eqn{\mathit{MI}} between \eqn{Y_1} and \eqn{Y_2}, conditional on \eqn{X = x} and the knowledge \eqn{K} about data and metadata, is given by
-#' \deqn{\mathit{MI}(Y_1, Y_2 \vert X = x) \mathrel{:=}
-#' \sum_{y_1, y_2}
-#' \mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x, K)
-#' \log_2\frac{
-#' \mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x, K)
-#' }{
-#' \mathrm{Pr}(Y_1 = y_1 \vert X = x, K)
-#' \cdot
-#' \mathrm{Pr}(Y_2 = y_2 \vert X = x, K)
-#' } \, \mathrm{Sh}
-#' }
-#' an expression which can also be written in several other equivalent ways. It is a model-free information-theoretic measure of association, that is, it does not depend on assumptions such as linearity, gaussianity, and similar. See `vignette('mutualinfo')` for discussion and example uses, and also the "References" section.  If \eqn{Y_1, Y_2} are *jointly gaussian variates*, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output `rGauss` in the "Value" section.
+#' @details This function is a *much* (100 times or more) faster and more accurate implementation of [mutualinfo()]; but it only works correctly with variates having *finite* domain, typically nominal or ordinal variates (see [metadata]).
 #'
-#' The function `mutualinfo()` calculates the mutual information above for the joint variates specified in the arguments `Y1names` and `Y2names`, conditional on the values of the variates specified in the [data frame][base::data.frame()] `X`. If `X` is omitted or `NULL`, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | K)} etc. are used. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails`.
+#' It can also be used with continuous variates, but its results can be in error in this case, and there is no error estimate.
 #'
-#' The computation of these quantities is done via Monte Carlo integration, using the samples produced by the [learn()] function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more nodes (if available) in parallel, through the argument `parallel =`.
+#' See [mutualinfo()] for other details.
 #'
 #' @param Y1names Character vector: first group of joint variates
 #' @param Y2names Character vector or `NULL`: second group of joint variates
@@ -629,8 +656,8 @@ mutualinfo <- function(
 #' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
 #' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
 #' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "nc.cores"; if this option is unset, then use 2 nodes.
-#' @param sep character, default `','`: character to separate variate names and values.
-#' @param solidus character, default `'|'`: character prepended to names of the variates in the conditional (typically the `X` variates).
+#' @param sep character, default `','`: character to separate the output's variate names and values.
+#' @param solidus character, default `'|'`: character prepended to the output's names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #' @param keepX Logical, default `TRUE`: keep a copy of the `X` argument in the output? This is used for [hist.mi()].
 #'
@@ -865,7 +892,7 @@ mutualinfoF <- function(
         parallel = cl)
 
     ## Calculate MIs as entropy differences
-    ## Important that MI is in *nats* now to calculate rGauss
+    ## Important that MI is in *nats* now to calculate rGauss later
     MI <- colSums(p12[['value']] * log(p12[['value']]), na.rm = TRUE) -
         colSums(p1[['value']] * log(p1[['value']]), na.rm = TRUE) -
         colSums(p2[['value']] * log(p2[['value']]), na.rm = TRUE)
@@ -889,7 +916,6 @@ mutualinfoF <- function(
         na.rm = TRUE) -
         colSums(p1[['samples']] * log(p1[['samples']]), na.rm = TRUE) -
         colSums(p2[['samples']] * log(p2[['samples']]), na.rm = TRUE)
-
     rm(p12, p1, p2)
 
     ## report whether the probabilities are 'tails' or not

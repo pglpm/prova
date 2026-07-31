@@ -4,16 +4,16 @@
 \alias{print.mi}
 \title{Print an object of class "mi" (mutual information)}
 \usage{
-\method{print}{mi}(x, digits = TRUE, edigits = 2, unit = NULL, ...)
+\method{print}{mi}(x, elements = NULL, unit = NULL, digits = TRUE, edigits = 2, ...)
 }
 \arguments{
 \item{x}{Object of class "mi", obtained with \code{\link[=mutualinfo]{mutualinfo()}}.}
 
+\item{unit}{Either \code{NULL}, or one of 'Sh' for \emph{shannon} (default), 'Hart' for \emph{hartley}, 'nat' for \emph{natural unit}, or a positive real indicating the base of the logarithms to be used; see analogous argument in \code{\link[=mutualinfo]{mutualinfo()}}. If \code{NULL} (default), the same unit as in the object \code{x} is used. Unit conversion is internally performed if this unit is different from that of the object \code{x}.}
+
 \item{digits}{positive integer or \code{NULL} or \code{TRUE} (default): minimal number of significant digits, see \code{\link[base:print.default]{base::print.default()}}. If value is \code{TRUE}, then the significant digits for element \code{'value'} are determined from is respective \code{'value.acc'}  (see \code{\link[=mutualinfo]{mutualinfo()}}), according to the rules of the \emph{Guide to the expression of Uncertainty in Measurement}, keeping as many digits as given in parameter \code{edigits}; whereas \code{'quantiles'} elements uses \code{edigits} significant digits.}
 
 \item{edigits}{positive integer, default 2: number of significant digits for element \code{'value'} and \code{'quantiles'}, if \code{digits = TRUE}.}
-
-\item{unit}{Either \code{NULL}, or one of 'Sh' for \emph{shannon} (default), 'Hart' for \emph{hartley}, 'nat' for \emph{natural unit}, or a positive real indicating the base of the logarithms to be used; see analogous argument in \code{\link[=mutualinfo]{mutualinfo()}}. If \code{NULL} (default), the same unit as in the object \code{x} is used. Unit conversion is internally performed if this unit is different from that of the object \code{x}.}
 
 \item{...}{Other parameters to be passed to \code{\link[base:print]{base::print()}}.}
 }

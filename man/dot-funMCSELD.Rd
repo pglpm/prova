@@ -7,7 +7,7 @@
 .funMCSELD(x)
 }
 \arguments{
-\item{x}{matrix, each row being a "trace", that is a set of MC samples, whose MCSE is to be estimated.}
+\item{x}{matrix, each column being a "trace", that is a set of MC samples, whose MCSE is to be estimated.}
 }
 \value{
 MCSE estimates, one for each trace. Division by sqrt(N) is already performed.

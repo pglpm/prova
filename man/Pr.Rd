@@ -43,9 +43,9 @@ the joint probability of. One variate per column, one set of values per row.}
 \item \code{TRUE} (default): use the cluster that was set as default with \code{\link[parallel:setDefaultCluster]{parallel::setDefaultCluster()}}; if no such object exists, then generate a cluster with as many nodes as in the \link[base:getOption]{option} "nc.cores"; if this option is unset, then use 2 nodes.
 }}
 
-\item{sep}{character, default \code{','}: character to separate variate names and values.}
+\item{sep}{character, default \code{','}: character to separate the output's variate names and values.}
 
-\item{solidus}{character, default \code{'|'}: character prepended to names of the variates in the conditional (typically the \code{X} variates).}
+\item{solidus}{character, default \code{'|'}: character prepended to the output's names of the variates in the conditional (typically the \code{X} variates).}
 
 \item{verbose}{Logical, default \code{FALSE}: give messages about parallel processing?}
 

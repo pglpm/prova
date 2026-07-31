@@ -1454,7 +1454,7 @@ print.mi <- function(
                 )), nm = oname)
             ))
 
-        ## if(is.null(x$X)){temp <- temp[,]}
+        if(is.null(x$X)){temp <- temp[,]}
 
         print(x = noquote(temp), ...)
 
@@ -1465,66 +1465,66 @@ print.mi <- function(
 }
 
 
-.old.print.mi <- function(
-    x,
-    digits = TRUE,
-    edigits = 2,
-    unit = NULL,
-    ...
-){
-
-    xunit <- x[['unit']]
-    if(is.null(unit) || unit == xunit){
-        unit <- xunit
-        lbase <- 1
-    } else {
-        ## Consistency checks
-        if (unit == 'Sh') {
-            lbase <- log(2)
-        } else if (unit == 'Hart') {
-            lbase <- log(10)
-        } else if (unit == 'nat') {
-            lbase <- 1
-        } else if (is.numeric(unit) && unit > 0) {
-            lbase <- log(unit)
-        } else {
-            stop("unit must be 'Sh', 'Hart', 'nat', or a positive real")
-        }
-
-        ## Convert symbol in x-object to log
-        if (xunit == 'Sh') {
-            xlbase <- log(2)
-        } else if (xunit == 'Hart') {
-            xlbase <- log(10)
-        } else if (xunit == 'nat') {
-            xlbase <- 1
-        } else {
-            xlbase <- log(xunit)
-        }
-
-        lbase <- lbase / xlbase
-    }
-
-    xvalue <- x[['value']] / lbase
-    xquants <- x[['quantiles']] / lbase
-    xacc <- x[['value.acc']] / lbase
-    qacc <- x[['quantiles.acc']] / lbase
-
-    if(isTRUE(digits)){
-        vdigits <- edigits - 1 + ceiling(log10(xvalue)) -
-            floor(log10(xacc))
-        adigits <- edigits
-        qdigits <- edigits - 1 + ceiling(log10(xquants)) -
-            floor(log10(qacc))
-    } else {
-        vdigits <- adigits <- qdigits <- digits
-    }
-
-    temp <- .signifC(x = c(xvalue, xquants),
-        digits = c(vdigits, qdigits))
-    names(temp) <- c(paste0('value/', unit), paste0('Q', names(xquants)))
-    print(x = noquote(temp), ...)
-}
+## .old.print.mi <- function(
+##     x,
+##     digits = TRUE,
+##     edigits = 2,
+##     unit = NULL,
+##     ...
+## ){
+## 
+##     xunit <- x[['unit']]
+##     if(is.null(unit) || unit == xunit){
+##         unit <- xunit
+##         lbase <- 1
+##     } else {
+##         ## Consistency checks
+##         if (unit == 'Sh') {
+##             lbase <- log(2)
+##         } else if (unit == 'Hart') {
+##             lbase <- log(10)
+##         } else if (unit == 'nat') {
+##             lbase <- 1
+##         } else if (is.numeric(unit) && unit > 0) {
+##             lbase <- log(unit)
+##         } else {
+##             stop("unit must be 'Sh', 'Hart', 'nat', or a positive real")
+##         }
+## 
+##         ## Convert symbol in x-object to log
+##         if (xunit == 'Sh') {
+##             xlbase <- log(2)
+##         } else if (xunit == 'Hart') {
+##             xlbase <- log(10)
+##         } else if (xunit == 'nat') {
+##             xlbase <- 1
+##         } else {
+##             xlbase <- log(xunit)
+##         }
+## 
+##         lbase <- lbase / xlbase
+##     }
+## 
+##     xvalue <- x[['value']] / lbase
+##     xquants <- x[['quantiles']] / lbase
+##     xacc <- x[['value.acc']] / lbase
+##     qacc <- x[['quantiles.acc']] / lbase
+## 
+##     if(isTRUE(digits)){
+##         vdigits <- edigits - 1 + ceiling(log10(xvalue)) -
+##             floor(log10(xacc))
+##         adigits <- edigits
+##         qdigits <- edigits - 1 + ceiling(log10(xquants)) -
+##             floor(log10(qacc))
+##     } else {
+##         vdigits <- adigits <- qdigits <- digits
+##     }
+## 
+##     temp <- .signifC(x = c(xvalue, xquants),
+##         digits = c(vdigits, qdigits))
+##     names(temp) <- c(paste0('value/', unit), paste0('Q', names(xquants)))
+##     print(x = noquote(temp), ...)
+## }
 
 
 
