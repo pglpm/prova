@@ -1,3 +1,7 @@
+# Prova v2.2.0
+
+* Introduced the much faster `mutualinfoF()` for variates with finite domains.
+
 # Prova v2.1.0
 
 * The argument `learnt =`, common to many functions, has been changed to `K =` for brevity. Previous "learnt" objects can still be used with the `K =` argument.
