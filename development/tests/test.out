@@ -1,78 +1,18 @@
 2.2.0
-Starting tests 260731T193548
-Quick learn 260731T193548
+Starting tests 260731T220355
+Quick learn 260731T220355
 [1] TRUE
-Full base learn 260731T193606
+Full base learn 260731T220413
 [1] TRUE
-Simple Pr 260731T194310
+Simple Pr 260731T221122
 [1] TRUE
-Various Pr 260731T194408
+Various Pr 260731T221220
 [1] TRUE
-Simple MIs 260731T194456
-[1] FALSE
-$`Simple MIs-B-N-NULL`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-R-NULL`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-N-R-NULL`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-c("N", "B")-R-NULL`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-c("B", "R")-N-NULL`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-c("N", "R")-B-NULL`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-N-list(R = -8)`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-N-list(R = -4)`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-N-list(R = -2)`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-N-list(R = 0)`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-N-list(R = 2)`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-N-list(R = 4)`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-N-list(R = 8)`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-R-list(N = "a")`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-R-list(N = "b")`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-R-list(N = "c")`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-R-list(N = "d")`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-B-R-list(N = "e")`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-N-R-list(B = "y")`
-[1] "target is array, current is numeric"
-
-$`Simple MIs-N-R-list(B = "n")`
-[1] "target is array, current is numeric"
-
-Quick learn autocluster 260731T194741
-[1] FALSE
-Quick learn existing cluster 260731T194801
-[1] FALSE
-All test passed: FALSE
-Done 260731T194820
+Simple MIs 260731T221309
+[1] TRUE
+Quick learn autocluster 260731T221553
+[1] TRUE
+Quick learn existing cluster 260731T221612
+[1] TRUE
+All test passed: TRUE
+Done 260731T221632
