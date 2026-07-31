@@ -580,8 +580,8 @@ qPr <- function(
         params2 <- t(params2[, selsamples])
         lprobX <- t(lprobX[, selsamples])
 
-        Yvals <- rep.int(x = .Machine$double.xmax * c(-0.125, 0.125),
-            times = rep.int(x = nmaxsamples, times = 2))
+        Yvals <- rep(x = .Machine$double.xmax * c(-0.125, 0.125),
+            each = nmaxsamples)
         dim(Yvals) <- c(nmaxsamples, 2)
         sampleseq <- 1:nmaxsamples
 
