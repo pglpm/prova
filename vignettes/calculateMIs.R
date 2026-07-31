@@ -4,26 +4,29 @@ K <- 'Kall.rds'
 
 parallel <- parallel::makeCluster(18)
 
+starttime <- format(Sys.time(), '%y%m%dT%H%M%S')
+message('Starting calcs ', starttime)
+
 temp <- mutualinfo(
     Y1names = 'island', Y2names = 'species',
     K = K, parallel = parallel
 )
 saveRDS(temp, 'MIislandspecies.rds')
-cat('\ndone\n')
+message('done ', format(Sys.time(), '%y%m%dT%H%M%S'))
 
 temp <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'species',
     K = K, parallel = parallel
 )
 saveRDS(temp, 'MIbodymassspecies.rds')
-cat('\ndone\n')
+message('done ', format(Sys.time(), '%y%m%dT%H%M%S'))
 
 temp <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
     K = K, parallel = parallel
 )
 saveRDS(temp, 'MIbodymassbilllen.rds')
-cat('\ndone\n')
+message('done ', format(Sys.time(), '%y%m%dT%H%M%S'))
 
 temp <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
@@ -31,7 +34,7 @@ temp <- mutualinfo(
     K = K, parallel = parallel
 )
 saveRDS(temp, 'MIadelie.rds')
-cat('\ndone\n')
+message('done ', format(Sys.time(), '%y%m%dT%H%M%S'))
 
 temp <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
@@ -39,7 +42,7 @@ temp <- mutualinfo(
     K = K, parallel = parallel
 )
 saveRDS(temp, 'MIchinstrap.rds')
-cat('\ndone\n')
+message('done ', format(Sys.time(), '%y%m%dT%H%M%S'))
 
 temp <- mutualinfo(
     Y1names = 'body_mass', Y2names = 'bill_len',
@@ -47,7 +50,7 @@ temp <- mutualinfo(
     K = K, parallel = parallel
 )
 saveRDS(temp, 'MIgentoo.rds')
+message('done ', format(Sys.time(), '%y%m%dT%H%M%S'))
 
 parallel::stopCluster(parallel)
-cat('\ndone\n')
-cat('\nFinished\n')
+message('Finished ', format(Sys.time(), '%y%m%dT%H%M%S'))
