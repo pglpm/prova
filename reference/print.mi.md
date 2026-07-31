@@ -9,7 +9,7 @@ with
 
 ``` r
 # S3 method for class 'mi'
-print(x, digits = TRUE, edigits = 2, unit = NULL, ...)
+print(x, unit = NULL, elements = NULL, digits = TRUE, edigits = 2, ...)
 ```
 
 ## Arguments
@@ -18,6 +18,23 @@ print(x, digits = TRUE, edigits = 2, unit = NULL, ...)
 
   Object of class "mi", obtained with
   [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md).
+
+- unit:
+
+  Either `NULL`, or one of 'Sh' for *shannon* (default), 'Hart' for
+  *hartley*, 'nat' for *natural unit*, or a positive real indicating the
+  base of the logarithms to be used; see analogous argument in
+  [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md).
+  If `NULL` (default), the same unit as in the object `x` is used. Unit
+  conversion is internally performed if this unit is different from that
+  of the object `x`.
+
+- elements:
+
+  character or integer vector, or `NULL` (default): elements of the
+  "mutual information" object to display. The syntax is the same as with
+  [`[`](https://rdrr.io/r/base/Extract.html). If `NULL`, the elements
+  `'value'` and `'quantiles'` are displayed together in a special way.
 
 - digits:
 
@@ -36,16 +53,6 @@ print(x, digits = TRUE, edigits = 2, unit = NULL, ...)
 
   positive integer, default 2: number of significant digits for element
   `'value'` and `'quantiles'`, if `digits = TRUE`.
-
-- unit:
-
-  Either `NULL`, or one of 'Sh' for *shannon* (default), 'Hart' for
-  *hartley*, 'nat' for *natural unit*, or a positive real indicating the
-  base of the logarithms to be used; see analogous argument in
-  [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md).
-  If `NULL` (default), the same unit as in the object `x` is used. Unit
-  conversion is internally performed if this unit is different from that
-  of the object `x`.
 
 - ...:
 
@@ -80,12 +87,12 @@ MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K)
 
 ## display the value and revisability of the mutual information
 print(MI)
-#> value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#>    0.735    0.313    0.637    0.926    1.046 
+#> value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
+#>    0.735    0.017    0.313    0.637    0.926    1.046 
 
 ## convert to hartleys (base-10 logarithms):
 print(MI, unit = 'Hart')
-#> value/Hart      Q5.5%       Q25%       Q75%     Q94.5% 
-#>     0.2212     0.0943     0.1916     0.2787     0.3150 
+#> value/Hart        +/-      Q5.5%       Q25%       Q75%     Q94.5% 
+#>      0.735      0.017      0.313      0.637      0.926      1.046 
 # }
 ```

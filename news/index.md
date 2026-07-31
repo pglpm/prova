@@ -1,5 +1,11 @@
 # Changelog
 
+## Prova v2.2.0
+
+- Introduced the much faster
+  [`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+  for variates with finite domains.
+
 ## Prova v2.1.0
 
 - The argument `learnt =`, common to many functions, has been changed to

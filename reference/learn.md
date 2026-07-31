@@ -54,8 +54,8 @@ learn(
 
 - metadata:
 
-  [metadata](https://pglpm.github.io/prova/reference/metadatatemplate.md)
-  about the dataset's variates, given either as a [data
+  [metadata](https://pglpm.github.io/prova/reference/metadata.md) about
+  the dataset's variates, given either as a [data
   frame](https://rdrr.io/r/base/data.frame.html) or as a file path to a
   CSV file.
 
@@ -412,7 +412,7 @@ About Markov-chain Monte Carlo and "convergence":
 
 ## See also
 
-[`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadatatemplate.md)
+[`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadata.md)
 to help writing metadata files.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
@@ -426,10 +426,9 @@ datapoints similar to the data processed by `learn()`.
 [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
 to calculate mutual information given the data processed by `learn()`.
 
-[`pread.csv()`](https://pglpm.github.io/prova/reference/prova.data.md)
-and
-[`pwrite.csv()`](https://pglpm.github.io/prova/reference/prova.data.md)
-to read and write CSV files in the format used by `learn()`.
+[`pread.csv()`](https://pglpm.github.io/prova/reference/data.md) and
+[`pwrite.csv()`](https://pglpm.github.io/prova/reference/data.md) to
+read and write CSV files in the format used by `learn()`.
 
 ## Examples
 
@@ -454,8 +453,8 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/Rtmp1Rf8uB/prova-V1_D3_S10_260730T194933_1a957a3c8f02
-#> Prova v2.1.0.
+#> /tmp/Rtmpg193pe/prova-V1_D3_S10_260731T203615_1ab65a496fc5
+#> Prova v2.2.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
@@ -477,9 +476,9 @@ K <- learn(
 #> quantile width: 0.0585 to 0.541
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 34 secs
-#> Average preparation & finalization time: 33 secs.
-#> Average Monte Carlo time per chain: 0.55 secs.
+#> Total computation time: 33 secs
+#> Average preparation & finalization time: 32 secs.
+#> Average Monte Carlo time per chain: 0.56 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -487,7 +486,7 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/Rtmp1Rf8uB/prova-V1_D3_S10_260730T194933_1a957a3c8f02
+#> /tmp/Rtmpg193pe/prova-V1_D3_S10_260731T203615_1ab65a496fc5
 #> **********************************************************
 
 ## Check structure of `K` object:

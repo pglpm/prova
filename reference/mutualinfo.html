@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calculate mutual information between groups of joint variates — mutualinfo"><meta name="description" content="Calculate the mutual information between two grops of joint variates, as well as its revisability."><meta property="og:description" content="Calculate the mutual information between two grops of joint variates, as well as its revisability."></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calculate mutual information between groups of joint variates — mutualinfo"><meta name="description" content='Functions for calculating the mutual information between two grops of joint variates, as well as its revisability. Function mutualinfo() can be used for any variates, but is slower and potentially less accurate. Function mutualinfoF() is meant to be used with variates having a finite domain, but is extremely faster and more accurate. See "Details"'><meta property="og:description" content='Functions for calculating the mutual information between two grops of joint variates, as well as its revisability. Function mutualinfo() can be used for any variates, but is slower and potentially less accurate. Function mutualinfoF() is meant to be used with variates having a finite domain, but is extremely faster and more accurate. See "Details"'></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@
     </div>
 
     <div class="ref-description section level2">
-    <p>Calculate the mutual information between two grops of joint variates, as well as its revisability.</p>
+    <p>Functions for calculating the mutual information between two grops of joint variates, as well as its revisability. Function <code>mutualinfo()</code> can be used for any variates, but is slower and potentially less accurate. Function <code>mutualinfoF()</code> is meant to be used with variates having a finite domain, but is extremely faster and more accurate. See "Details"</p>
     </div>
 
     <div class="section level2">
@@ -61,6 +61,23 @@
 <span>  nv <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  unit <span class="op">=</span> <span class="st">"Sh"</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  solidus <span class="op">=</span> <span class="st">"|"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  keepX <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">mutualinfoF</span><span class="op">(</span></span>
+<span>  <span class="va">Y1names</span>,</span>
+<span>  <span class="va">Y2names</span>,</span>
+<span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">K</span>,</span>
+<span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.055</span>, <span class="fl">0.25</span>, <span class="fl">0.75</span>, <span class="fl">0.945</span><span class="op">)</span>,</span>
+<span>  unit <span class="op">=</span> <span class="st">"Sh"</span>,</span>
+<span>  parallel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">","</span>,</span>
+<span>  solidus <span class="op">=</span> <span class="st">"|"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  keepX <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -114,6 +131,14 @@
 </ul></dd>
 
 
+<dt id="arg-sep">sep<a class="anchor" aria-label="anchor" href="#arg-sep"></a></dt>
+<dd><p>character, default <code>','</code>: character to separate the output's variate names and values.</p></dd>
+
+
+<dt id="arg-solidus">solidus<a class="anchor" aria-label="anchor" href="#arg-solidus"></a></dt>
+<dd><p>character, default <code>'|'</code>: character prepended to the output's names of the variates in the conditional (typically the <code>X</code> variates).</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical, default <code>FALSE</code>: give messages about parallel processing?</p></dd>
 
@@ -146,9 +171,10 @@ $$\mathit{MI}(Y_1, Y_2 \vert X = x) \mathrel{:=}
 \mathrm{Pr}(Y_2 = y_2 \vert X = x, K)
 } \, \mathrm{Sh}
 $$
-an expression which can also be written in several other equivalent ways. It is a model-free information-theoretic measure of association, that is, it does not depend on assumptions such as linearity, gaussianity, and similar. See <code><a href="../articles/mutualinfo.html">vignette('mutualinfo')</a></code> for discussion and example uses, and also the "References" section.  If \(Y_1, Y_2\) are <em>jointly gaussian variates</em>, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output <code>rGauss</code> in the "Value" section.</p>
-<p>The function <code>mutualinfo()</code> calculates the mutual information above for the joint variates specified in the arguments <code>Y1names</code> and <code>Y2names</code>, conditional on the values of the variates specified in the <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> <code>X</code>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probabilities \(\mathrm{Pr}(Y_1 | K)\) etc. are used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
-<p>The computation of these quantities is done via Monte Carlo integration, using the samples produced by the <code><a href="learn.html">learn()</a></code> function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more nodes (if available) in parallel, through the argument <code>parallel =</code>.</p>
+an expression which can also be written in several other equivalent ways. If the variates involved are continuous, the sums are replaced by integrals. Mutual information is a model-free information-theoretic measure of association, that is, it does not depend on assumptions such as linearity, gaussianity, and similar. See <code><a href="../articles/mutualinfo.html">vignette('mutualinfo')</a></code> for discussion and example uses, and also the "References" section.  If \(Y_1, Y_2\) are <em>jointly gaussian variates</em>, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output <code>rGauss</code> in the "Value" section.</p>
+<p>The functions <code>mutualinfo()</code> and <code>mutualinfoF()</code> calculate the mutual information above for the joint variates specified in the arguments <code>Y1names</code> and <code>Y2names</code>, conditional on the values of the variates specified in the <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> <code>X</code>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probabilities \(\mathrm{Pr}(Y_1 | K)\) etc. are used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
+<p>Function <code>mutualinfo()</code> computes the quantities above via Monte Carlo integration; that is, the sums or integrals are approximated by averages over samples drawn with appropriate probabilities. The computation can take tens of minutes if not hours; it can be sped up by using more nodes (if available) in parallel, through the argument <code>parallel =</code>. This function should be used if \(Y_1\) or \(Y_2\) (arguments <code>Y1names</code> and <code>Y2names</code>) include <em>continous</em> variates (see <a href="metadata.html">metadata</a>).</p>
+<p>Function <code>mutualinfoF()</code> computes the quantities above by calculating all required probabilities (a finite number) and performing the exact sums. This can only be done for variates with finite domains. If continuous variates are involved, a set of probabilities is calculated on a finite grid of their domain; for this reason the results may be grossly in error. This function should be used if \(Y_1\) or \(Y_2\) (arguments <code>Y1names</code> and <code>Y2names</code>) include <em>only</em> variates with finite domains, typically nominal or ordinal variates (see <a href="metadata.html">metadata</a>).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -161,21 +187,19 @@ an expression which can also be written in several other equivalent ways. It is 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Load the example `K`nowledge object calculated from the "penguins" dataset;</span></span></span>
-<span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
+<span class="r-in"><span><span class="co">## variates: 'species' (nominal, finite domain)</span></span></span>
+<span class="r-in"><span><span class="co">## and 'bill_len' (continuous rounded, infinite domain)</span></span></span>
 <span class="r-in"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="va">Kexample</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## mutual information between variates 'species' and 'bill_len'</span></span></span>
+<span class="r-in"><span><span class="co">## Mutual information between the two variates;</span></span></span>
+<span class="r-in"><span><span class="co">## use mutualinfo() because 'bill_len' has infinite domain;</span></span></span>
+<span class="r-in"><span><span class="co">## set nv = 2 to reduce accuracy but also computation time</span></span></span>
 <span class="r-in"><span><span class="va">MI</span> <span class="op">&lt;-</span> <span class="fu">mutualinfo</span><span class="op">(</span>Y1names <span class="op">=</span> <span class="st">'species'</span>, Y2names <span class="op">=</span> <span class="st">'bill_len'</span>, K <span class="op">=</span> <span class="va">K</span>, nv <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## The value and its numerical Monte Carlo accuracy</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">MI</span><span class="op">$</span><span class="va">value</span>, <span class="va">MI</span><span class="op">$</span><span class="va">value.acc</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.79723948 0.03379594</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## If we had many more data, we could instead expect to obtain values</span></span></span>
-<span class="r-in"><span><span class="co">## within the following probable ranges:</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">MI</span><span class="op">$</span><span class="va">quantiles</span>, <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5.5%   25%   75% 94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.142 0.706 1.080 1.280 </span>
+<span class="r-in"><span><span class="co">## Print mutual information, its accuracy, and its revisability</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">MI</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.797    0.029     0.14    0.706    1.082    1.277 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

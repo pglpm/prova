@@ -26,6 +26,7 @@
 ## Quantify associations between variates
 
 - [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+  [`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
   : Calculate mutual information between groups of joint variates
 
 ## Plot & print
@@ -48,20 +49,20 @@
 
 ## Handle metadata and data files
 
+- [`pwrite.csv()`](https://pglpm.github.io/prova/reference/data.md)
+  [`pread.csv()`](https://pglpm.github.io/prova/reference/data.md) :
+
+  Write and read CSV files in **Prova**
+
 - [`meta_penguins`](https://pglpm.github.io/prova/reference/meta_penguins.md)
   : Metadata file for "penguins" dataset
 
+- [`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadata.md)
+  : Metadata and helper function to create a template metadata file or
+  object.
+
 - [`metadataExample`](https://pglpm.github.io/prova/reference/metadataExample.md)
   : Example metadata file
-
-- [`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadatatemplate.md)
-  : Metadata and helper function for metadata
-
-- [`pwrite.csv()`](https://pglpm.github.io/prova/reference/prova.data.md)
-  [`pread.csv()`](https://pglpm.github.io/prova/reference/prova.data.md)
-  :
-
-  Write and read CSV files in **Prova**
 
 ## Internal functions
 

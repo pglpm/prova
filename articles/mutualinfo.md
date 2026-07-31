@@ -72,7 +72,7 @@ instance if you have an older R version, you can also download the
 shuffled dataset as the CSV file
 [`penguins_shuffled.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv),
 then load it with the
-[`pread.csv()`](https://pglpm.github.io/prova/reference/prova.data.md)
+[`pread.csv()`](https://pglpm.github.io/prova/reference/data.md)
 function as follows:
 
 ``` r
@@ -491,11 +491,20 @@ strong association between two variates: its input and output messages.
 You can find a brilliant introduction to its meaning and uses in MacKay
 (2005) and Cover & Thomas (2005).
 
-  
-The **Prova** package provides the function
+ The **Prova** package provides the functions
+[`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+and
 [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
 to calculate the mutual information between two variates or two sets of
-joint variates. Its main arguments are the following:
+joint variates. Function
+[`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+can be used only to calculate the mutual information between groups of
+variates that have a *finite number of possible values* (finite domain),
+like the `species` or `island` variates, but it is extremely fast
+(seconds). Function
+[`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+can be used with any kinds of variates, but it is much slower (tens of
+minutes). The main arguments of these functions are the following:
 
 - `Y1names`, `Y2names`: two vectors of variate names; the mutual
   information is calculated between these two sets.
@@ -526,18 +535,14 @@ cl <- parallel::makeCluster(4) ## let's use 4 cores, if we have them
 setDefaultCluster(cl)
 ```
 
-Be aware that the computation can take even tens of minutes if the
-arguments `Y1names` and `Y2names` include multiple joint variates.
-
 Let’s calculate the mutual information between the variates `island` and
-`species`, [previously discussed and visualized](#newsamples):
+`species`, [previously discussed and visualized](#newsamples). These are
+nominal variates with a finite number of possible values, so we can use
+[`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md):
 
 ``` r
 
-MIislandspecies <- mutualinfo(
-    Y1names = 'island', Y2names = 'species',
-    K = K
-)
+MIislandspecies <- mutualinfoF(Y1names = 'island', Y2names = 'species', K = K)
 ```
 
 The resulting object `MIislandspecies` is a list of several quantities;
@@ -547,7 +552,7 @@ the `$unit` element:
 ``` r
 
 MIislandspecies$value
-# [1] 0.629213
+# [1] 0.626638
 
 MIislandspecies$unit
 # [1] "Sh"
@@ -585,9 +590,11 @@ mutual information were \\2\\\mathrm{Sh}\\ instead, then the indicator
 would tell the disease with *certainty*, as it would reduce the four
 possibilities by \\2^{2}\\ (\\4/(2^{2}) = 1\\).
 
-But the function
+But the functions
+[`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+and
 [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
-has an additional output to help you get a rough understanding of the
+have an additional output to help you get a rough understanding of the
 mutual-information value. In the special case of two continuous variates
 having a joint *Gaussian* distribution, there is a precise relationship
 between their mutual information \\I\\ and their Pearson correlation
@@ -612,13 +619,13 @@ corresponding \\\lvert r \rvert\\ value. In the previous case of the
 
 MIislandspecies[c('value', 'unit')]
 # $value
-# [1] 0.629213
+# [1] 0.626638
 # 
 # $unit
 # [1] "Sh"
 
 MIislandspecies$rGauss
-# [1] 0.762889
+# [1] 0.761909
 ```
 
 ### Mutual information for previous examples
@@ -652,14 +659,13 @@ pplot(x = samples$island, y = samples$species,
 
 #### Body mass and species
 
-Calculation of mutual info:
+Calculation of mutual info: “body mass” is a variate with an infinite
+number of possible values, so we use the function
+[`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md):
 
 ``` r
 
-MIbodymassspecies <- mutualinfo(
-    Y1names = 'body_mass', Y2names = 'species',
-    K = K
-)
+MIbodymassspecies <- mutualinfo(Y1names = 'body_mass', Y2names = 'species', K = K)
 ```
 
 Scatter plot:
@@ -692,10 +698,7 @@ Calculation of mutual information:
 
 ``` r
 
-MIbodymassbilllen <- mutualinfo(
-    Y1names = 'body_mass', Y2names = 'bill_len',
-    K = K
-)
+MIbodymassbilllen <- mutualinfo(Y1names = 'body_mass', Y2names = 'bill_len', K = K)
 ```
 
 Scatter plot:
@@ -848,14 +851,14 @@ and can be seen with the utility function
 ``` r
 
 print(MIislandspecies)
-# value/Sh    Q5.5%     Q25%     Q75%   Q94.5% 
-#   0.6292     0.19     0.48     0.82      1.0
+# value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
+#   0.6266   0.0044   0.5530   0.6006   0.6669   0.7075
 ```
 
 which shows that, acquiring more data, we can expect with 89%
-probability a mutual information between 0.19 Sh and 1 Sh. We can also
-visualize our uncertainty about this “long-run” mutual information by
-means of a probability distribution, using the
+probability a mutual information between 0.55 Sh and 0.71 Sh. We can
+also visualize our uncertainty about this “long-run” mutual information
+by means of a probability distribution, using the
 [`hist()`](https://rdrr.io/r/graphics/hist.html) function:
 
 ``` r

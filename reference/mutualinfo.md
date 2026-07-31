@@ -1,7 +1,10 @@
 # Calculate mutual information between groups of joint variates
 
-Calculate the mutual information between two grops of joint variates, as
-well as its revisability.
+Functions for calculating the mutual information between two grops of
+joint variates, as well as its revisability. Function `mutualinfo()` can
+be used for any variates, but is slower and potentially less accurate.
+Function `mutualinfoF()` is meant to be used with variates having a
+finite domain, but is extremely faster and more accurate. See "Details"
 
 ## Usage
 
@@ -17,6 +20,23 @@ mutualinfo(
   nv = 12,
   unit = "Sh",
   parallel = TRUE,
+  sep = ",",
+  solidus = "|",
+  verbose = FALSE,
+  keepX = TRUE
+)
+
+mutualinfoF(
+  Y1names,
+  Y2names,
+  X = NULL,
+  K,
+  tails = NULL,
+  quantiles = c(0.055, 0.25, 0.75, 0.945),
+  unit = "Sh",
+  parallel = TRUE,
+  sep = ",",
+  solidus = "|",
   verbose = FALSE,
   keepX = TRUE
 )
@@ -96,6 +116,16 @@ mutualinfo(
     as in the [option](https://rdrr.io/r/base/options.html) "nc.cores";
     if this option is unset, then use 2 nodes.
 
+- sep:
+
+  character, default `','`: character to separate the output's variate
+  names and values.
+
+- solidus:
+
+  character, default `'|'`: character prepended to the output's names of
+  the variates in the conditional (typically the `X` variates).
+
 - verbose:
 
   Logical, default `FALSE`: give messages about parallel processing?
@@ -148,9 +178,10 @@ and the knowledge \\K\\ about data and metadata, is given by
 \mathrm{Pr}(Y_1 = y_1, Y_2 = y_2 \vert X = x, K) }{ \mathrm{Pr}(Y_1 =
 y_1 \vert X = x, K) \cdot \mathrm{Pr}(Y_2 = y_2 \vert X = x, K) } \\
 \mathrm{Sh} \$\$ an expression which can also be written in several
-other equivalent ways. It is a model-free information-theoretic measure
-of association, that is, it does not depend on assumptions such as
-linearity, gaussianity, and similar. See
+other equivalent ways. If the variates involved are continuous, the sums
+are replaced by integrals. Mutual information is a model-free
+information-theoretic measure of association, that is, it does not
+depend on assumptions such as linearity, gaussianity, and similar. See
 [`vignette('mutualinfo')`](https://pglpm.github.io/prova/articles/mutualinfo.md)
 for discussion and example uses, and also the "References" section. If
 \\Y_1, Y_2\\ are *jointly gaussian variates*, then there is a
@@ -158,22 +189,34 @@ mathematical correspondence between their mutual information and their
 Pearson correlation coefficient; see output `rGauss` in the "Value"
 section.
 
-The function `mutualinfo()` calculates the mutual information above for
-the joint variates specified in the arguments `Y1names` and `Y2names`,
-conditional on the values of the variates specified in the [data
-frame](https://rdrr.io/r/base/data.frame.html) `X`. If `X` is omitted or
-`NULL`, then the posterior probabilities \\\mathrm{Pr}(Y_1 \| K)\\ etc.
-are used. Each variate in the argument `X` can be specified either as a
-point-value \\X = x\\ or as a left-open interval \\X \le x\\ or as a
-right-open interval \\X \ge x\\, through the argument `tails`.
+The functions `mutualinfo()` and `mutualinfoF()` calculate the mutual
+information above for the joint variates specified in the arguments
+`Y1names` and `Y2names`, conditional on the values of the variates
+specified in the [data frame](https://rdrr.io/r/base/data.frame.html)
+`X`. If `X` is omitted or `NULL`, then the posterior probabilities
+\\\mathrm{Pr}(Y_1 \| K)\\ etc. are used. Each variate in the argument
+`X` can be specified either as a point-value \\X = x\\ or as a left-open
+interval \\X \le x\\ or as a right-open interval \\X \ge x\\, through
+the argument `tails`.
 
-The computation of these quantities is done via Monte Carlo integration,
-using the samples produced by the
-[`learn()`](https://pglpm.github.io/prova/reference/learn.md) function.
-The present function also output the numerical error associated with
-this computation. Note that the computation can take tens of minutes; it
-can be sped up by using more nodes (if available) in parallel, through
-the argument `parallel =`.
+Function `mutualinfo()` computes the quantities above via Monte Carlo
+integration; that is, the sums or integrals are approximated by averages
+over samples drawn with appropriate probabilities. The computation can
+take tens of minutes if not hours; it can be sped up by using more nodes
+(if available) in parallel, through the argument `parallel =`. This
+function should be used if \\Y_1\\ or \\Y_2\\ (arguments `Y1names` and
+`Y2names`) include *continous* variates (see
+[metadata](https://pglpm.github.io/prova/reference/metadata.md)).
+
+Function `mutualinfoF()` computes the quantities above by calculating
+all required probabilities (a finite number) and performing the exact
+sums. This can only be done for variates with finite domains. If
+continuous variates are involved, a set of probabilities is calculated
+on a finite grid of their domain; for this reason the results may be
+grossly in error. This function should be used if \\Y_1\\ or \\Y_2\\
+(arguments `Y1names` and `Y2names`) include *only* variates with finite
+domains, typically nominal or ordinal variates (see
+[metadata](https://pglpm.github.io/prova/reference/metadata.md)).
 
 ## See also
 
@@ -193,19 +236,17 @@ generates the `K` objects required by `mutualinfo()`.
 
 ``` r
 ## Load the example `K`nowledge object calculated from the "penguins" dataset;
-## variates: 'species' and 'bill_len'
+## variates: 'species' (nominal, finite domain)
+## and 'bill_len' (continuous rounded, infinite domain)
 K <- Kexample
 
-## mutual information between variates 'species' and 'bill_len'
+## Mutual information between the two variates;
+## use mutualinfo() because 'bill_len' has infinite domain;
+## set nv = 2 to reduce accuracy but also computation time
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
 
-## The value and its numerical Monte Carlo accuracy
-c(MI$value, MI$value.acc)
-#> [1] 0.79723948 0.03379594
-
-## If we had many more data, we could instead expect to obtain values
-## within the following probable ranges:
-signif(MI$quantiles, 3)
-#>  5.5%   25%   75% 94.5% 
-#> 0.142 0.706 1.080 1.280 
+## Print mutual information, its accuracy, and its revisability
+print(MI)
+#> value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
+#>    0.797    0.029     0.14    0.706    1.082    1.277 
 ```

@@ -113,13 +113,13 @@ Pr(
 
 - sep:
 
-  character, default `','`: character to separate variate names and
-  values.
+  character, default `','`: character to separate the output's variate
+  names and values.
 
 - solidus:
 
-  character, default `'|'`: character prepended to names of the variates
-  in the conditional (typically the `X` variates).
+  character, default `'|'`: character prepended to the output's names of
+  the variates in the conditional (typically the `X` variates).
 
 - verbose:
 

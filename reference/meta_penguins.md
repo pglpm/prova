@@ -25,7 +25,7 @@ No return value.
 
 [datasets::penguins](https://rdrr.io/r/datasets/penguins.html) dataset.
 
-[`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadatatemplate.md)
+[`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadata.md)
 which helps producing this kind of metadata files from a given dataset.
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md) which

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,7 @@
 
 
 <dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
-<dd><p><a href="metadatatemplate.html">metadata</a> about the dataset's variates, given either as a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> or as a file path to a CSV file.</p></dd>
+<dd><p><a href="metadata.html">metadata</a> about the dataset's variates, given either as a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> or as a file path to a CSV file.</p></dd>
 
 
 <dt id="arg-auxdata">auxdata<a class="anchor" aria-label="anchor" href="#arg-auxdata"></a></dt>
@@ -261,11 +261,11 @@
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="metadatatemplate.html">metadatatemplate()</a></code> to help writing metadata files.</p>
+    <div class="dont-index"><p><code><a href="metadata.html">metadatatemplate()</a></code> to help writing metadata files.</p>
 <p><code><a href="Pr.html">Pr()</a></code> to calculate probabilities, and <code><a href="qPr.html">qPr()</a></code> to calculate quantiles, given the data processed by <code>learn()</code>.</p>
 <p><code><a href="rPr.html">rPr()</a></code> to generate datapoints similar to the data processed by <code>learn()</code>.</p>
 <p><code><a href="mutualinfo.html">mutualinfo()</a></code> to calculate mutual information given the data processed by <code>learn()</code>.</p>
-<p><code><a href="prova.data.html">pread.csv()</a></code> and <code><a href="prova.data.html">pwrite.csv()</a></code> to read and write CSV files in the format used by <code>learn()</code>.</p></div>
+<p><code><a href="data.html">pread.csv()</a></code> and <code><a href="data.html">pwrite.csv()</a></code> to read and write CSV files in the format used by <code>learn()</code>.</p></div>
     </div>
 
     <div class="section level2">
@@ -290,8 +290,8 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmp1Rf8uB/prova-V1_D3_S10_260730T194933_1a957a3c8f02</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v2.1.0.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmpg193pe/prova-V1_D3_S10_260731T203615_1ab65a496fc5</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v2.2.0.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Registered socket cluster with 1 nodes on host ‘localhost’.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Learning from 3 datapoints, 1 variates.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Monte Carlo sampling of 10 samples by 1 chains</span>
@@ -313,9 +313,9 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> quantile width: 0.0585 to 0.541</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting final Monte Carlo traces and marginal samples...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 34 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 33 secs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.55 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 33 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 32 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.56 secs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max total memory used: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max memory used per core: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Removing temporary output files.</span>
@@ -323,7 +323,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Output saved in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmp1Rf8uB/prova-V1_D3_S10_260730T194933_1a957a3c8f02</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmpg193pe/prova-V1_D3_S10_260731T203615_1ab65a496fc5</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Check structure of `K` object:</span></span></span>

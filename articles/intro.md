@@ -71,10 +71,10 @@ pwrite.csv(penguins_shuffled, file = 'penguins_shuffled.csv')
 ```
 
 The utility function
-[`pwrite.csv()`](https://pglpm.github.io/prova/reference/prova.data.md)
-saves the dataset as a CSV file that respects the [formatting rules
-required by **Prova**](#format). For your convenience you can also
-download the shuffled dataset as the CSV file
+[`pwrite.csv()`](https://pglpm.github.io/prova/reference/data.md) saves
+the dataset as a CSV file that respects the [formatting rules required
+by **Prova**](#format). For your convenience you can also download the
+shuffled dataset as the CSV file
 [`penguins_shuffled.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv).
 We assume that you now have the file `penguins_shuffled.csv` in your
 working directory.
@@ -378,7 +378,7 @@ about the variates, and about any artificial modifications performed on
 their values, such as rounding or pooling.
 
 In order to prepare the metadata file we can use **Prova**’s
-[`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadatatemplate.md)
+[`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadata.md)
 helper function. This function reads the sample data and prepares a
 preliminary file containing heuristic *guesses* about the metadata. We
 must then check and correct this file. The function motivates its
@@ -455,7 +455,7 @@ metadatatemplate(data = datafile, file = metadatafile)
 ```
 
 The preliminary metadata file created by
-[`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadatatemplate.md)
+[`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadata.md)
 looks like this:
 
 | name | type | domainmin | domainmax | datastep | minincluded | maxincluded | V1 | V2 | V3 | V4 | V5 | V6 | V7 | V8 | V9 | V10 | V11 |
@@ -474,7 +474,7 @@ might obtain different guesses. Try to follow the following guidelines
 for the present example.
 
 We see that
-[`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadatatemplate.md)
+[`metadatatemplate()`](https://pglpm.github.io/prova/reference/metadata.md)
 guessed correctly about the `species`, `island`, `sex` variates: they
 are of `'nominal'` type, and all their possible values are correctly
 listed. If any of the possible values are missing from the sample, and

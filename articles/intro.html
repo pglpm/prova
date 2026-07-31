@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,8 +132,8 @@ ordering of its data, and call the new dataset
 <span></span>
 <span><span class="va">penguins_shuffled</span> <span class="op">&lt;-</span> <span class="fu">datesets</span><span class="fu">::</span><span class="va">penguins</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span> <span class="co">## shuffle</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/prova.data.html">pwrite.csv</a></span><span class="op">(</span><span class="va">penguins_shuffled</span>, file <span class="op">=</span> <span class="st">'penguins_shuffled.csv'</span><span class="op">)</span></span></code></pre></div>
-<p>The utility function <code><a href="../reference/prova.data.html">pwrite.csv()</a></code> saves the dataset as a
+<span><span class="fu"><a href="../reference/data.html">pwrite.csv</a></span><span class="op">(</span><span class="va">penguins_shuffled</span>, file <span class="op">=</span> <span class="st">'penguins_shuffled.csv'</span><span class="op">)</span></span></code></pre></div>
+<p>The utility function <code><a href="../reference/data.html">pwrite.csv()</a></code> saves the dataset as a
 CSV file that respects the <a href="#format">formatting rules required
 by <strong>Prova</strong></a>. For your convenience you can also
 download the shuffled dataset as the CSV file <a href="https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv" class="external-link"><code>penguins_shuffled.csv</code></a>.
@@ -311,7 +311,7 @@ them in the file <code>penguins_10.csv</code>, respecting the <a href="#format">
 <strong>Prova</strong></a>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">datafile</span> <span class="op">&lt;-</span> <span class="st">'penguins_10.csv'</span></span>
-<span><span class="fu"><a href="../reference/prova.data.html">pwrite.csv</a></span><span class="op">(</span><span class="va">penguins_shuffled</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span>, <span class="va">datafile</span><span class="op">)</span> <span class="co">## write the first 10 samples</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/data.html">pwrite.csv</a></span><span class="op">(</span><span class="va">penguins_shuffled</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span>, <span class="va">datafile</span><span class="op">)</span> <span class="co">## write the first 10 samples</span></span></code></pre></div>
 <p>Here they are:</p>
 <table class="table">
 <colgroup>
@@ -575,7 +575,7 @@ general information that we ourselves have about the variates, and about
 any artificial modifications performed on their values, such as rounding
 or pooling.</p>
 <p>In order to prepare the metadata file we can use
-<strong>Prova</strong>’s <code><a href="../reference/metadatatemplate.html">metadatatemplate()</a></code> helper
+<strong>Prova</strong>’s <code><a href="../reference/metadata.html">metadatatemplate()</a></code> helper
 function. This function reads the sample data and prepares a preliminary
 file containing heuristic <em>guesses</em> about the metadata. We must
 then check and correct this file. The function motivates its guesses and
@@ -585,7 +585,7 @@ warnings of the helper function:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">metadatafile</span> <span class="op">&lt;-</span> <span class="st">'meta_penguins_temp.csv'</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/metadatatemplate.html">metadatatemplate</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">datafile</span>, file <span class="op">=</span> <span class="va">metadatafile</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/metadata.html">metadatatemplate</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">datafile</span>, file <span class="op">=</span> <span class="va">metadatafile</span><span class="op">)</span></span>
 <span><span class="co"># Analyzing 8 variates for 10 datapoints.</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># * "species" variate:</span></span>
@@ -648,7 +648,7 @@ warnings of the helper function:</p>
 <span><span class="co"># </span></span>
 <span><span class="co"># Saved proposal metadata file as "meta_penguins_temp.csv" </span></span></code></pre></div>
 <p>The preliminary metadata file created by
-<code><a href="../reference/metadatatemplate.html">metadatatemplate()</a></code> looks like this:</p>
+<code><a href="../reference/metadata.html">metadatatemplate()</a></code> looks like this:</p>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="9%">
@@ -856,7 +856,7 @@ warnings of the helper function:</p>
 <p>If you generated the <code>penguins_shuffled</code> dataset yourself,
 then you might obtain different guesses. Try to follow the following
 guidelines for the present example.</p>
-<p>We see that <code><a href="../reference/metadatatemplate.html">metadatatemplate()</a></code> guessed correctly about
+<p>We see that <code><a href="../reference/metadata.html">metadatatemplate()</a></code> guessed correctly about
 the <code>species</code>, <code>island</code>, <code>sex</code>
 variates: they are of <code>'nominal'</code> type, and all their
 possible values are correctly listed. If any of the possible values are
@@ -1742,7 +1742,7 @@ which we add to the 10 we already have. Let’s store the 60 datapoints in
 the file <code>penguins_60.csv</code>:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">datafile</span> <span class="op">&lt;-</span> <span class="st">'penguins_60.csv'</span></span>
-<span><span class="fu"><a href="../reference/prova.data.html">pwrite.csv</a></span><span class="op">(</span><span class="va">penguins_shuffled</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">60</span>, <span class="op">]</span>, <span class="va">datafile</span><span class="op">)</span> <span class="co">## write the first 60 samples</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/data.html">pwrite.csv</a></span><span class="op">(</span><span class="va">penguins_shuffled</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">60</span>, <span class="op">]</span>, <span class="va">datafile</span><span class="op">)</span> <span class="co">## write the first 60 samples</span></span></code></pre></div>
 <p>Feel free to take a look at your extended sample data. There may be
 new datapoints with missing values, but as already discussed this isn’t
 a problem for Bayesian theory and <strong>Prova</strong>.</p>

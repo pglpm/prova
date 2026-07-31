@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@
 
 
 <dt id="arg-length-out">length.out<a class="anchor" aria-label="anchor" href="#arg-length-out"></a></dt>
-<dd><p>Vector or list of positive integer or <code>NA</code> values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in <code>vrt</code>. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of <code>NA</code> values. Default <code>NA</code>.</p></dd>
+<dd><p>Vector or list of positive integers or <code>NA</code> values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in <code>vrt</code>. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of <code>NA</code> values. Default <code>NA</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -76,9 +76,9 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The value ranges are based on the information from data and metadata stored in the <code>K</code>nowledge object (see <code><a href="learn.html">learn()</a></code>) provided in the <code>K =</code> argument; they include, and extend slightly beyond, the ranges observed in the data used in the <code><a href="learn.html">learn()</a></code> function. Variate domains are always respected.</p>
-<p>The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see <a href="metadatatemplate.html">metadata</a>):</p><ul><li><p>For a discrete (nominal or ordinal) variate, all possible values are chosen.</p></li>
-<li><p>For a continuous, <em>non-rounded</em> variate, a number of values as specified in the <code>length.out</code> argument; or 129 values if <code>length.out</code> is missing or <code>NA</code>.</p></li>
-<li><p>For a continuous, <em>rounded</em> variate, a number of values as specified in the <code>length.out</code> argument; or, if <code>length.out</code> is missing or <code>NA</code>, the output values are separated by the variates's rounding interval (field <code>datastep</code> in the <code><a href="metadatatemplate.html">metadata</a></code>).</p></li>
+<p>The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see <a href="metadata.html">metadata</a>):</p><ul><li><p>For a discrete (nominal or ordinal) variate, all possible values are chosen.</p></li>
+<li><p>For a continuous, <em>non-rounded</em> variate, a number of values as specified in the <code>length.out</code> argument; or 257 values if <code>length.out</code> is missing or <code>NA</code>.</p></li>
+<li><p>For a continuous, <em>rounded</em> variate, a number of values as specified in the <code>length.out</code> argument; or, if <code>length.out</code> is missing or <code>NA</code>, the output values are separated by the variates's rounding interval (field <code>datastep</code> in the <code><a href="metadata.html">metadata</a></code>).</p></li>
 </ul><p>The output is a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> that can be used directly in functions like <code><a href="Pr.html">Pr()</a></code>.</p>
     </div>
     <div class="section level2">

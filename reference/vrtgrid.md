@@ -27,7 +27,7 @@ vrtgrid(vrt, K, length.out = NA)
 
 - length.out:
 
-  Vector or list of positive integer or `NA` values, possibly named:
+  Vector or list of positive integers or `NA` values, possibly named:
   number of values to be created for each variate. Elements with names
   are used for the homonymous variates in `vrt`. Unnamed elements are
   used for the remaining variates, recycled as necessary. See "Details"
@@ -51,20 +51,20 @@ Variate domains are always respected.
 
 The set of chosen values, for each variate, depends on the type of
 variate (nominal or continuous, rounded, and so on, see
-[metadata](https://pglpm.github.io/prova/reference/metadatatemplate.md)):
+[metadata](https://pglpm.github.io/prova/reference/metadata.md)):
 
 - For a discrete (nominal or ordinal) variate, all possible values are
   chosen.
 
 - For a continuous, *non-rounded* variate, a number of values as
-  specified in the `length.out` argument; or 129 values if `length.out`
+  specified in the `length.out` argument; or 257 values if `length.out`
   is missing or `NA`.
 
 - For a continuous, *rounded* variate, a number of values as specified
   in the `length.out` argument; or, if `length.out` is missing or `NA`,
   the output values are separated by the variates's rounding interval
   (field `datastep` in the
-  [`metadata`](https://pglpm.github.io/prova/reference/metadatatemplate.md)).
+  [`metadata`](https://pglpm.github.io/prova/reference/metadata.md)).
 
 The output is a [data frame](https://rdrr.io/r/base/data.frame.html)
 that can be used directly in functions like

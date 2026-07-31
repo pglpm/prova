@@ -14,8 +14,8 @@ obtain the `x`-quantile.
 
 - x:
 
-  matrix, each row being a "trace", that is a set of MC samples, whose
-  MCSE is to be estimated.
+  matrix, each column being a "trace", that is a set of MC samples,
+  whose MCSE is to be estimated.
 
 ## Value
 

@@ -9,6 +9,7 @@
 <url><loc>https://pglpm.github.io/prova/news/index.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/Kexample.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/Pr.html</loc></url>
+<url><loc>https://pglpm.github.io/prova/reference/data.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/dot-Pcheckpoints.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/dot-buildauxmetadata.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/dot-cleanup.html</loc></url>
@@ -43,8 +44,8 @@
 <url><loc>https://pglpm.github.io/prova/reference/index.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/learn.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/meta_penguins.html</loc></url>
+<url><loc>https://pglpm.github.io/prova/reference/metadata.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/metadataExample.html</loc></url>
-<url><loc>https://pglpm.github.io/prova/reference/metadatatemplate.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/mutualinfo.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/plot.probability.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/pplot.html</loc></url>
@@ -52,7 +53,6 @@
 <url><loc>https://pglpm.github.io/prova/reference/print.mi.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/print.probability.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/prova-package.html</loc></url>
-<url><loc>https://pglpm.github.io/prova/reference/prova.data.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/qPr.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/rPr.html</loc></url>
 <url><loc>https://pglpm.github.io/prova/reference/vrtgrid.html</loc></url>

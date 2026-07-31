@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -135,10 +135,10 @@ population of penguins, of which we have 344 sample data stored in the
 dataset <code><a href="https://rdrr.io/r/datasets/penguins.html" class="external-link">datasets::penguins</a></code>, included in R version 4.5.0 and
 above. For your convenience, for instance if you have an older R
 version, you can also download the shuffled dataset as the CSV file <a href="https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv" class="external-link"><code>penguins_shuffled.csv</code></a>,
-then load it with the <code><a href="../reference/prova.data.html">pread.csv()</a></code> function as follows:</p>
+then load it with the <code><a href="../reference/data.html">pread.csv()</a></code> function as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">'penguins'</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>    <span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prova.data.html">pread.csv</a></span><span class="op">(</span><span class="st">'penguins_shuffled.csv'</span><span class="op">)</span></span>
+<span>    <span class="va">penguins</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/data.html">pread.csv</a></span><span class="op">(</span><span class="st">'penguins_shuffled.csv'</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>We assume that we have already learned all predictive information
 from this dataset by means of the <strong>Prova</strong> function
@@ -494,11 +494,16 @@ This makes sense: the main requisite of a communication channel is a
 strong association between two variates: its input and output messages.
 You can find a brilliant introduction to its meaning and uses in MacKay
 (2005) and Cover &amp; Thomas (2005).</p>
-<p><br>
-The <strong>Prova</strong> package provides the function
-<code><a href="../reference/mutualinfo.html">mutualinfo()</a></code> to calculate the mutual information between
-two variates or two sets of joint variates. Its main arguments are the
-following:</p>
+<p> The <strong>Prova</strong> package provides the functions
+<code><a href="../reference/mutualinfo.html">mutualinfoF()</a></code> and <code><a href="../reference/mutualinfo.html">mutualinfo()</a></code> to calculate
+the mutual information between two variates or two sets of joint
+variates. Function <code><a href="../reference/mutualinfo.html">mutualinfoF()</a></code> can be used only to
+calculate the mutual information between groups of variates that have a
+<em>finite number of possible values</em> (finite domain), like the
+<code>species</code> or <code>island</code> variates, but it is
+extremely fast (seconds). Function <code><a href="../reference/mutualinfo.html">mutualinfo()</a></code> can be used
+with any kinds of variates, but it is much slower (tens of minutes). The
+main arguments of these functions are the following:</p>
 <ul>
 <li>
 <code>Y1names</code>, <code>Y2names</code>: two vectors of variate
@@ -525,23 +530,19 @@ computation for the moment, just skip this step.</li>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">makeCluster</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span> <span class="co">## let's use 4 cores, if we have them</span></span>
 <span><span class="fu">setDefaultCluster</span><span class="op">(</span><span class="va">cl</span><span class="op">)</span></span></code></pre></div>
-<p>Be aware that the computation can take even tens of minutes if the
-arguments <code>Y1names</code> and <code>Y2names</code> include multiple
-joint variates.</p>
 <p>Let’s calculate the mutual information between the variates
-<code>island</code> and <code>species</code>, <a href="#newsamples">previously discussed and visualized</a>:</p>
+<code>island</code> and <code>species</code>, <a href="#newsamples">previously discussed and visualized</a>. These are
+nominal variates with a finite number of possible values, so we can use
+<code><a href="../reference/mutualinfo.html">mutualinfoF()</a></code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">MIislandspecies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutualinfo.html">mutualinfo</a></span><span class="op">(</span></span>
-<span>    Y1names <span class="op">=</span> <span class="st">'island'</span>, Y2names <span class="op">=</span> <span class="st">'species'</span>,</span>
-<span>    K <span class="op">=</span> <span class="va">K</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">MIislandspecies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutualinfo.html">mutualinfoF</a></span><span class="op">(</span>Y1names <span class="op">=</span> <span class="st">'island'</span>, Y2names <span class="op">=</span> <span class="st">'species'</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></code></pre></div>
 <p>The resulting object <code>MIislandspecies</code> is a list of
 several quantities; the mutual information is given in the
 <code>$value</code> element, and its unit in the <code>$unit</code>
 element:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">MIislandspecies</span><span class="op">$</span><span class="va">value</span></span>
-<span><span class="co"># [1] 0.629213</span></span>
+<span><span class="co"># [1] 0.626638</span></span>
 <span></span>
 <span><span class="va">MIislandspecies</span><span class="op">$</span><span class="va">unit</span></span>
 <span><span class="co"># [1] "Sh"</span></span></code></pre></div>
@@ -576,12 +577,13 @@ the indicator reduces the four possibilities by <span class="math inline">\(2^{0
 information were <span class="math inline">\(2\,\mathrm{Sh}\)</span>
 instead, then the indicator would tell the disease with
 <em>certainty</em>, as it would reduce the four possibilities by <span class="math inline">\(2^{2}\)</span> (<span class="math inline">\(4/(2^{2}) = 1\)</span>).</p>
-<p>But the function <code><a href="../reference/mutualinfo.html">mutualinfo()</a></code> has an additional output
-to help you get a rough understanding of the mutual-information value.
-In the special case of two continuous variates having a joint
-<em>Gaussian</em> distribution, there is a precise relationship between
-their mutual information <span class="math inline">\(I\)</span> and
-their Pearson correlation coefficient <span class="math inline">\(r\)</span>:</p>
+<p>But the functions <code><a href="../reference/mutualinfo.html">mutualinfoF()</a></code> and
+<code><a href="../reference/mutualinfo.html">mutualinfo()</a></code> have an additional output to help you get a
+rough understanding of the mutual-information value. In the special case
+of two continuous variates having a joint <em>Gaussian</em>
+distribution, there is a precise relationship between their mutual
+information <span class="math inline">\(I\)</span> and their Pearson
+correlation coefficient <span class="math inline">\(r\)</span>:</p>
 <p><span class="math display">\[
 I = -\frac{1}{2} \log_{2}\bigl(1 - r^2\bigr)\;\mathrm{Sh}
 \,,\qquad
@@ -602,13 +604,13 @@ have</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">MIislandspecies</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'value'</span>, <span class="st">'unit'</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co"># $value</span></span>
-<span><span class="co"># [1] 0.629213</span></span>
+<span><span class="co"># [1] 0.626638</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># $unit</span></span>
 <span><span class="co"># [1] "Sh"</span></span>
 <span></span>
 <span><span class="va">MIislandspecies</span><span class="op">$</span><span class="va">rGauss</span></span>
-<span><span class="co"># [1] 0.762889</span></span></code></pre></div>
+<span><span class="co"># [1] 0.761909</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="mutual-information-for-previous-examples">Mutual information for previous examples<a class="anchor" aria-label="anchor" href="#mutual-information-for-previous-examples"></a>
@@ -642,12 +644,11 @@ explored previously, and calculate also their mutual information.</p>
 <div class="section level4">
 <h4 id="body-mass-and-species">Body mass and species<a class="anchor" aria-label="anchor" href="#body-mass-and-species"></a>
 </h4>
-<p>Calculation of mutual info:</p>
+<p>Calculation of mutual info: “body mass” is a variate with an infinite
+number of possible values, so we use the function
+<code><a href="../reference/mutualinfo.html">mutualinfo()</a></code>:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">MIbodymassspecies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutualinfo.html">mutualinfo</a></span><span class="op">(</span></span>
-<span>    Y1names <span class="op">=</span> <span class="st">'body_mass'</span>, Y2names <span class="op">=</span> <span class="st">'species'</span>,</span>
-<span>    K <span class="op">=</span> <span class="va">K</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">MIbodymassspecies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutualinfo.html">mutualinfo</a></span><span class="op">(</span>Y1names <span class="op">=</span> <span class="st">'body_mass'</span>, Y2names <span class="op">=</span> <span class="st">'species'</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></code></pre></div>
 <p>Scatter plot:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## mutual info</span></span>
@@ -674,10 +675,7 @@ explored previously, and calculate also their mutual information.</p>
 </h4>
 <p>Calculation of mutual information:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">MIbodymassbilllen</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutualinfo.html">mutualinfo</a></span><span class="op">(</span></span>
-<span>    Y1names <span class="op">=</span> <span class="st">'body_mass'</span>, Y2names <span class="op">=</span> <span class="st">'bill_len'</span>,</span>
-<span>    K <span class="op">=</span> <span class="va">K</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">MIbodymassbilllen</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutualinfo.html">mutualinfo</a></span><span class="op">(</span>Y1names <span class="op">=</span> <span class="st">'body_mass'</span>, Y2names <span class="op">=</span> <span class="st">'bill_len'</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span></code></pre></div>
 <p>Scatter plot:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## mutual info</span></span>
@@ -826,12 +824,12 @@ probability?”. The answer was already calculated by
 <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">MIislandspecies</span><span class="op">)</span></span>
-<span><span class="co"># value/Sh    Q5.5%     Q25%     Q75%   Q94.5% </span></span>
-<span><span class="co">#   0.6292     0.19     0.48     0.82      1.0</span></span></code></pre></div>
+<span><span class="co"># value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% </span></span>
+<span><span class="co">#   0.6266   0.0044   0.5530   0.6006   0.6669   0.7075</span></span></code></pre></div>
 <p>which shows that, acquiring more data, we can expect with 89%
-probability a mutual information between 0.19 Sh and 1 Sh. We can also
-visualize our uncertainty about this “long-run” mutual information by
-means of a probability distribution, using the <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code>
+probability a mutual information between 0.55 Sh and 0.71 Sh. We can
+also visualize our uncertainty about this “long-run” mutual information
+by means of a probability distribution, using the <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code>
 function:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">MIislandspecies</span><span class="op">)</span></span></code></pre></div>
