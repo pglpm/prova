@@ -1304,9 +1304,8 @@ print.probability <- function(
         temp <- aperm(a = array(data = .signifC(
             x = unname(unlist(x[totake])),
             digits = c(vdigits, if(hasvmca){adigits}, qdigits) ),
-            dim = c(dim(x[['value']]),
-            (if(is.null(x[['quantiles']])){0}else{dim(x[['quantiles']])[3]}) +
-                1 + hasvmca),
+            dim = c(dim(x[['value']]), 1 + hasvmca +
+            (if(is.null(x[['quantiles']])){0}else{dim(x[['quantiles']])[3]})),
             dimnames = c(dimnames(x[['value']]),
                 setNames(object = list(c('value', if(hasvmca){'+/-'},
                     if(!is.null(x[['quantiles']])){
@@ -1421,7 +1420,9 @@ print.mi <- function(
         qmca <- 1e-15
     }
 
-    oname <- 'mutual info'
+    oname <- paste0('MI  ',
+        paste0(x[['Y1names']], collapse=','), ' : ',
+        paste0(x[['Y2names']], collapse = ','))
 
     if(isTRUE(digits) && is.null(elements)){
         vdigits <- edigits - 1 + ceiling(log10(x[['value']])) -
@@ -1438,24 +1439,22 @@ print.mi <- function(
     }
 
     if(is.null(elements)){
-        totake <- c(paste0('value/', unit),
-            if(hasvmca){'value.acc'}, 'quantiles')
+        totake <- c('value', if(hasvmca){'value.acc'}, 'quantiles')
         ## rearrange and combine values and quantiles in a special way
         temp <- array(data = .signifC(
             x = unname(unlist(x[totake])),
             digits = c(vdigits, if(hasvmca){adigits}, qdigits) ),
-            dim = c(dim(x[['value']]),
-            (if(is.null(x[['quantiles']])){0}else{dim(x[['quantiles']])[2]}) +
-                1 + hasvmca),
+            dim = c(dim(x[['value']]), 1 + hasvmca +
+            (if(is.null(x[['quantiles']])){0}else{dim(x[['quantiles']])[2]})),
             dimnames = c(dimnames(x[['value']]),
-                setNames(object = list(c('value', if(hasvmca){'+/-'},
+                setNames(object = list(c(paste0('value/', unit), if(hasvmca){'+/-'},
                     if(!is.null(x[['quantiles']])){
                         paste0('Q', dimnames(x[['quantiles']])[[2]])
                     }
                 )), nm = oname)
-                ))
+            ))
 
-        if(is.null(x$X)){temp <- temp[,]}
+        ## if(is.null(x$X)){temp <- temp[,]}
 
         print(x = noquote(temp), ...)
 
