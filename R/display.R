@@ -1287,19 +1287,19 @@ print.probability <- function(
     if(isTRUE(digits) && is.null(elements)){
         vdigits <- edigits - 1 + ceiling(log10(x[['value']])) -
             floor(log10(vmca))
+        vdigits[is.na(vdigits)] <- edigits
         adigits <- rep.int(x = edigits, times = length(vmca))
+        adigits[is.na(adigits)] <- edigits
         if('quantiles' %in% names(x)){
             qdigits <- edigits - 1 + ceiling(log10(x[['quantiles']])) -
                 floor(log10(qmca))
+            qdigits[is.na(qdigits)] <- edigits
         } else {qdigits <- NULL}
     } else if(is.null(elements)){
             vdigits <- adigits <- qdigits <- digits
     } else if(!is.null(elements)){
         digits <- edigits
     }
-    vdigits[is.na(vdigits)] <- edigits
-    adigits[is.na(adigits)] <- edigits
-    qdigits[is.na(qdigits)] <- edigits
 
     if(is.null(elements)){
         totake <- c('value', if(hasvmca){'value.acc'}, 'quantiles')
@@ -1430,19 +1430,19 @@ print.mi <- function(
     if(isTRUE(digits) && is.null(elements)){
         vdigits <- edigits - 1 + ceiling(log10(x[['value']])) -
             floor(log10(vmca))
+        vdigits[is.na(vdigits)] <- edigits
         adigits <- rep.int(x = edigits, times = length(vmca))
+        adigits[is.na(adigits)] <- edigits
         if('quantiles' %in% names(x)){
             qdigits <- edigits - 1 + ceiling(log10(x[['quantiles']])) -
                 floor(log10(qmca))
+            qdigits[is.na(qdigits)] <- edigits
         } else {qdigits <- NULL}
     } else if(is.null(elements)){
             vdigits <- adigits <- qdigits <- digits
     } else if(!is.null(elements)){
         digits <- edigits
     }
-    vdigits[is.na(vdigits)] <- edigits
-    adigits[is.na(adigits)] <- edigits
-    qdigits[is.na(qdigits)] <- edigits
 
     if(is.null(elements)){
         totake <- c('value', if(hasvmca){'value.acc'}, 'quantiles')
