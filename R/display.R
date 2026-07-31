@@ -1339,9 +1339,10 @@ print.probability <- function(
 #' This [base::print()] method is a utility to display value and revisability of an "mi" object obtained with [mutualinfo()].
 #'
 #' @param x Object of class "mi", obtained with [mutualinfo()].
+#' @param unit Either `NULL`, or one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used; see analogous argument in [mutualinfo()]. If `NULL` (default), the same unit as in the object `x` is used. Unit conversion is internally performed if this unit is different from that of the object `x`.
+#' @param elements character or integer vector, or `NULL` (default): elements of the "mutual information" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `'value'` and `'quantiles'` are displayed together in a special way.
 #' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for element `'value'` are determined from is respective `'value.acc'`  (see [mutualinfo()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `'quantiles'` elements uses `edigits` significant digits.
 #' @param edigits positive integer, default 2: number of significant digits for element `'value'` and `'quantiles'`, if `digits = TRUE`.
-#' @param unit Either `NULL`, or one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used; see analogous argument in [mutualinfo()]. If `NULL` (default), the same unit as in the object `x` is used. Unit conversion is internally performed if this unit is different from that of the object `x`.
 #' @param ... Other parameters to be passed to [base::print()].
 #'
 #' @return Its `x` argument, [invisibly][base::invisible()]; see [base::print()].
@@ -1373,8 +1374,8 @@ print.probability <- function(
 #' @export
 print.mi <- function(
     x,
-    elements = NULL,
     unit = NULL,
+    elements = NULL,
     digits = TRUE,
     edigits = 2,
     ...
