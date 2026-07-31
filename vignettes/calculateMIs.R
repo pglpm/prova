@@ -7,7 +7,7 @@ parallel <- parallel::makeCluster(18)
 starttime <- format(Sys.time(), '%y%m%dT%H%M%S')
 message('Starting calcs ', starttime)
 
-temp <- mutualinfo(
+temp <- mutualinfoF(
     Y1names = 'island', Y2names = 'species',
     K = K, parallel = parallel
 )

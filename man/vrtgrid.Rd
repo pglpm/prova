@@ -11,7 +11,7 @@ vrtgrid(vrt, K, length.out = NA)
 
 \item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
 
-\item{length.out}{Vector or list of positive integer or \code{NA} values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in \code{vrt}. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of \code{NA} values. Default \code{NA}.}
+\item{length.out}{Vector or list of positive integers or \code{NA} values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in \code{vrt}. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of \code{NA} values. Default \code{NA}.}
 }
 \value{
 A \link[base:data.frame]{data frame} with columns corresponding to the \code{vrt} argument, and one row for each combination of the variate values.
@@ -25,7 +25,7 @@ The value ranges are based on the information from data and metadata stored in t
 The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see \link{metadata}):
 \itemize{
 \item For a discrete (nominal or ordinal) variate, all possible values are chosen.
-\item For a continuous, \emph{non-rounded} variate, a number of values as specified in the \code{length.out} argument; or 129 values if \code{length.out} is missing or \code{NA}.
+\item For a continuous, \emph{non-rounded} variate, a number of values as specified in the \code{length.out} argument; or 257 values if \code{length.out} is missing or \code{NA}.
 \item For a continuous, \emph{rounded} variate, a number of values as specified in the \code{length.out} argument; or, if \code{length.out} is missing or \code{NA}, the output values are separated by the variates's rounding interval (field \code{datastep} in the \code{\link{metadata}}).
 }
 

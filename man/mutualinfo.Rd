@@ -2,6 +2,7 @@
 % Please edit documentation in R/mutualinfo.R
 \name{mutualinfo}
 \alias{mutualinfo}
+\alias{mutualinfoF}
 \title{Calculate mutual information between groups of joint variates}
 \usage{
 mutualinfo(
@@ -13,6 +14,21 @@ mutualinfo(
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   ns = NULL,
   nv = 12,
+  unit = "Sh",
+  parallel = TRUE,
+  sep = ",",
+  solidus = "|",
+  verbose = FALSE,
+  keepX = TRUE
+)
+
+mutualinfoF(
+  Y1names,
+  Y2names,
+  X = NULL,
+  K,
+  tails = NULL,
+  quantiles = c(0.055, 0.25, 0.75, 0.945),
   unit = "Sh",
   parallel = TRUE,
   sep = ",",
@@ -69,7 +85,7 @@ An object of class "mi", which is a list consisting of the following elements:
 }
 }
 \description{
-Calculate the mutual information between two grops of joint variates, as well as its revisability.
+Functions for calculating the mutual information between two grops of joint variates, as well as its revisability. Function \code{\link[=mutualinfo]{mutualinfo()}} can be used for any variates, but is slower and potentially less accurate. Function \code{\link[=mutualinfoF]{mutualinfoF()}} is meant to be used with variates having a finite domain, but is extremely faster and more accurate. See "Details"
 }
 \details{
 If \eqn{Y_1} and \eqn{Y_2} are two variates, each of which can be a joint variate such as \eqn{Y_1 = (Y_{1,1}, Y_{1,2}, \dotsc)}, and \eqn{X} a third, also possibly join, variate, then the mutual information \eqn{\mathit{MI}} between \eqn{Y_1} and \eqn{Y_2}, conditional on \eqn{X = x} and the knowledge \eqn{K} about data and metadata, is given by
@@ -84,26 +100,27 @@ If \eqn{Y_1} and \eqn{Y_2} are two variates, each of which can be a joint variat
 \mathrm{Pr}(Y_2 = y_2 \vert X = x, K)
 } \, \mathrm{Sh}
 }
-an expression which can also be written in several other equivalent ways. It is a model-free information-theoretic measure of association, that is, it does not depend on assumptions such as linearity, gaussianity, and similar. See \code{vignette('mutualinfo')} for discussion and example uses, and also the "References" section.  If \eqn{Y_1, Y_2} are \emph{jointly gaussian variates}, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output \code{rGauss} in the "Value" section.
+an expression which can also be written in several other equivalent ways. If the variates involved are continuous, the sums are replaced by integrals. Mutual information is a model-free information-theoretic measure of association, that is, it does not depend on assumptions such as linearity, gaussianity, and similar. See \code{vignette('mutualinfo')} for discussion and example uses, and also the "References" section.  If \eqn{Y_1, Y_2} are \emph{jointly gaussian variates}, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output \code{rGauss} in the "Value" section.
 
-The function \code{mutualinfo()} calculates the mutual information above for the joint variates specified in the arguments \code{Y1names} and \code{Y2names}, conditional on the values of the variates specified in the \link[base:data.frame]{data frame} \code{X}. If \code{X} is omitted or \code{NULL}, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | K)} etc. are used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.
+The functions \code{mutualinfo()} and \code{mutualinfoF()} calculate the mutual information above for the joint variates specified in the arguments \code{Y1names} and \code{Y2names}, conditional on the values of the variates specified in the \link[base:data.frame]{data frame} \code{X}. If \code{X} is omitted or \code{NULL}, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | K)} etc. are used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.
 
-The computation of these quantities is done via Monte Carlo integration, using the samples produced by the \code{\link[=learn]{learn()}} function. The present function also output the numerical error associated with this computation. Note that the computation can take tens of minutes; it can be sped up by using more nodes (if available) in parallel, through the argument \verb{parallel =}.
+Function \code{\link[=mutualinfo]{mutualinfo()}} computes the quantities above via Monte Carlo integration; that is, the sums or integrals are approximated by averages over samples drawn with appropriate probabilities. The computation can take tens of minutes if not hours; it can be sped up by using more nodes (if available) in parallel, through the argument \verb{parallel =}. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments \code{Y1names} and \code{Y2names}) include \emph{continous} variates (see \link{metadata}).
+
+Function \code{\link[=mutualinfoF]{mutualinfoF()}} computes the quantities above by calculating all required probabilities (a finite number) and performing the exact sums. This can only be done for variates with finite domains. If continuous variates are involved, a set of probabilities is calculated on a finite grid of their domain; for this reason the results may be grossly in error. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments \code{Y1names} and \code{Y2names}) include \emph{only} variates with finite domains, typically nominal or ordinal variates (see \link{metadata}).
 }
 \examples{
 ## Load the example `K`nowledge object calculated from the "penguins" dataset;
-## variates: 'species' and 'bill_len'
+## variates: 'species' (nominal, finite domain)
+## and 'bill_len' (continuous rounded, infinite domain)
 K <- Kexample
 
-## mutual information between variates 'species' and 'bill_len'
+## Mutual information between the two variates;
+## use mutualinfo() because 'bill_len' has infinite domain;
+## set nv = 2 to reduce accuracy but also computation time
 MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
 
-## The value and its numerical Monte Carlo accuracy
-c(MI$value, MI$value.acc)
-
-## If we had many more data, we could instead expect to obtain values
-## within the following probable ranges:
-signif(MI$quantiles, 3)
+## Print mutual information, its accuracy, and its revisability
+print(MI)
 
 }
 \seealso{

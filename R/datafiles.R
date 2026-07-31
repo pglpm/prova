@@ -1,5 +1,5 @@
-#' @name prova.data
-#' @rdname prova.data
+#' @name data
+#' @rdname data
 #'
 #' @title Write and read CSV files in **Prova**
 #'
@@ -40,7 +40,7 @@
 #' @concept data
 NULL
 
-#' @rdname prova.data
+#' @rdname data
 #'
 #' @import utils
 #'
@@ -55,7 +55,7 @@ pwrite.csv <- function(x, file, ...){
         ...)
 }
 
-#' @rdname prova.data
+#' @rdname data
 #'
 #' @import utils
 #'

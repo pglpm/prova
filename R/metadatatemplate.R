@@ -1,8 +1,8 @@
-#' Metadata and helper function for metadata
+#' @name metadata
 #'
-#' Metadata and helper function to create a template metadata file or object.
+#' @title Metadata and helper function to create a template metadata file or object.
 #'
-#' The [learn()] function needs metadata about the variates present in the data. Such metadata can be provided either as a `csv` file or as a [base::data.frame()]. The function `buildmetadata` creates a template metadata csv-file, or outputs a metadata data.frame, by trying to *guess* metadata information from the dataset.The guesses may be very incorrect (as already said, metadata is information not contained in the data, so no algorithm can exist that extracts it from the data). **The user *must* modify and correct this template, using it as a starting point to prepare the correct metadata information.**
+#' @description The [learn()] function needs metadata about the variates present in the data. Such metadata can be provided either as a `csv` file or as a [base::data.frame()]. The function `buildmetadata` creates a template metadata csv-file, or outputs a metadata data.frame, by trying to *guess* metadata information from the dataset.The guesses may be very incorrect (as already said, metadata is information not contained in the data, so no algorithm can exist that extracts it from the data). **The user *must* modify and correct this template, using it as a starting point to prepare the correct metadata information.**
 #'
 #' @param data A dataset, given as a [data frame][base::data.frame()]
 #' or as a file path to a csv file.
@@ -95,8 +95,6 @@
 #' ## but not the maximum (`NA` is equivalent to `+Inf`)
 #' metadata <- metadatatemplate(data = dataset, file = NULL)
 #' print(metadata)
-#'
-#' @aliases metadata metadatatemplate
 #'
 #' @import stats
 #' @import utils

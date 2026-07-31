@@ -1297,6 +1297,9 @@ print.probability <- function(
     } else if(!is.null(elements)){
         digits <- edigits
     }
+    vdigits[is.na(vdigits)] <- edigits
+    adigits[is.na(adigits)] <- edigits
+    qdigits[is.na(qdigits)] <- edigits
 
     if(is.null(elements)){
         totake <- c('value', if(hasvmca){'value.acc'}, 'quantiles')
@@ -1437,6 +1440,9 @@ print.mi <- function(
     } else if(!is.null(elements)){
         digits <- edigits
     }
+    vdigits[is.na(vdigits)] <- edigits
+    adigits[is.na(adigits)] <- edigits
+    qdigits[is.na(qdigits)] <- edigits
 
     if(is.null(elements)){
         totake <- c('value', if(hasvmca){'value.acc'}, 'quantiles')

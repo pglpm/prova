@@ -7,14 +7,14 @@
 #' The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see [metadata]):
 #'
 #' - For a discrete (nominal or ordinal) variate, all possible values are chosen.
-#' - For a continuous, *non-rounded* variate, a number of values as specified in the `length.out` argument; or 129 values if `length.out` is missing or `NA`.
+#' - For a continuous, *non-rounded* variate, a number of values as specified in the `length.out` argument; or 257 values if `length.out` is missing or `NA`.
 #' - For a continuous, *rounded* variate, a number of values as specified in the `length.out` argument; or, if `length.out` is missing or `NA`, the output values are separated by the variates's rounding interval (field `datastep` in the [`metadata`]).
 #'
 #' The output is a [data frame][base::data.frame()] that can be used directly in functions like [Pr()].
 #'
 #' @param vrt Character vector: names of the variates; they must match variate names in the `metadata` file provided to the [learn()] function.
 #' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
-#' @param length.out Vector or list of positive integer or `NA` values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in `vrt`. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of `NA` values. Default `NA`.
+#' @param length.out Vector or list of positive integers or `NA` values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in `vrt`. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of `NA` values. Default `NA`.
 #'
 #' @return A [data frame][base::data.frame()] with columns corresponding to the `vrt` argument, and one row for each combination of the variate values.
 #'
@@ -69,6 +69,8 @@ vrtgrid <- function(
     K,
     length.out = NA
 ){
+    ## default number of points for continuous non-rounded variates
+    lodefault <- 259
     ## Extract auxmetadata
     ## If K is a string, check if it's a folder name or file name
     if (is.character(K)) {
@@ -107,7 +109,7 @@ vrtgrid <- function(
     adata <- as.list(K$auxmetadata[K$auxmetadata$name == avrt, ])
 
     if(adata$mcmctype %in% c('R', 'C')){
-        if(is.na(length.out[avrt])){length.out[avrt] <- 129}
+        if(is.na(length.out[avrt])){length.out[avrt] <- lodefault}
         temp <- seq(adata$plotmin, adata$plotmax, length.out = length.out[avrt])
     } else if(adata$mcmctype == 'D'){
         if(is.na(length.out[avrt])){
