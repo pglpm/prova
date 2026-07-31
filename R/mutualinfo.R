@@ -361,7 +361,7 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, each = ntot), Ws, sseq)
+        totake <- cbind(rep(x = aux$id, each = ntot), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = ntot * nvrt,
                 mean = K$Rmean[totake],
@@ -376,7 +376,7 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, each = ntot), Ws, sseq)
+        totake <- cbind(rep(x = aux$id, each = ntot), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = ntot * nvrt,
                 mean = K$Cmean[totake],
@@ -391,7 +391,7 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, each = ntot), Ws, sseq)
+        totake <- cbind(rep(x = aux$id, each = ntot), Ws, sseq)
         Yout <- c(Yout,
             rnorm(n = ntot * nvrt,
                 mean = K$Dmean[totake],
@@ -458,7 +458,7 @@ mutualinfo <- function(
     if(nvrt > 0){
         aux <- auxmetadata[toselect, ]
         vYout <- c(vYout, aux$name)
-        totake <- cbind(rep.int(x = aux$id, each = ntot), Ws, sseq)
+        totake <- cbind(rep(x = aux$id, each = ntot), Ws, sseq)
         Yout <- c(Yout,
             rbinom(n = ntot * nvrt, size = 1, prob = K$Bprob[totake])
             ## ## Old version
