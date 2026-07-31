@@ -1371,6 +1371,103 @@ print.probability <- function(
 #' @export
 print.mi <- function(
     x,
+    elements = NULL,
+    unit = NULL,
+    digits = TRUE,
+    edigits = 2,
+    ...
+){
+    xunit <- x[['unit']]
+    if(is.null(unit) || unit == xunit){
+        unit <- xunit
+        lbase <- 1
+    } else {
+        ## Consistency checks
+        if (unit == 'Sh') {
+            lbase <- log(2)
+        } else if (unit == 'Hart') {
+            lbase <- log(10)
+        } else if (unit == 'nat') {
+            lbase <- 1
+        } else if (is.numeric(unit) && unit > 0) {
+            lbase <- log(unit)
+        } else {
+            stop("unit must be 'Sh', 'Hart', 'nat', or a positive real")
+        }
+
+        ## Convert symbol in x-object to log
+        if (xunit == 'Sh') {
+            xlbase <- log(2)
+        } else if (xunit == 'Hart') {
+            xlbase <- log(10)
+        } else if (xunit == 'nat') {
+            xlbase <- 1
+        } else {
+            xlbase <- log(xunit)
+        }
+
+        lbase <- lbase / xlbase
+    }
+
+    vmca <- x[['value.acc']]
+    if(is.null(vmca)){# output is from qPr()
+        hasvmca <- FALSE
+        vmca <- 1e-15
+    } else {
+        hasvmca <- TRUE
+    }
+    qmca <- x[['quantiles.acc']]
+    if(is.null(qmca)){# output is from qPr()
+        qmca <- 1e-15
+    }
+
+    oname <- 'mutual info'
+
+    if(isTRUE(digits) && is.null(elements)){
+        vdigits <- edigits - 1 + ceiling(log10(x[['value']])) -
+            floor(log10(vmca))
+        adigits <- rep.int(x = edigits, times = length(vmca))
+        if('quantiles' %in% names(x)){
+            qdigits <- edigits - 1 + ceiling(log10(x[['quantiles']])) -
+                floor(log10(qmca))
+        } else {qdigits <- NULL}
+    } else if(is.null(elements)){
+            vdigits <- adigits <- qdigits <- digits
+    } else if(!is.null(elements)){
+        digits <- edigits
+    }
+
+    if(is.null(elements)){
+        totake <- c(paste0('value/', unit),
+            if(hasvmca){'value.acc'}, 'quantiles')
+        ## rearrange and combine values and quantiles in a special way
+        temp <- array(data = .signifC(
+            x = unname(unlist(x[totake])),
+            digits = c(vdigits, if(hasvmca){adigits}, qdigits) ),
+            dim = c(dim(x[['value']]),
+            (if(is.null(x[['quantiles']])){0}else{dim(x[['quantiles']])[2]}) +
+                1 + hasvmca),
+            dimnames = c(dimnames(x[['value']]),
+                setNames(object = list(c('value', if(hasvmca){'+/-'},
+                    if(!is.null(x[['quantiles']])){
+                        paste0('Q', dimnames(x[['quantiles']])[[2]])
+                    }
+                )), nm = oname)
+                ))
+
+        if(is.null(x$X)){temp <- temp[,]}
+
+        print(x = noquote(temp), ...)
+
+    } else {
+        print(x = x[elements], digits = digits, ...)
+    }
+    invisible(x)
+}
+
+
+.old.print.mi <- function(
+    x,
     digits = TRUE,
     edigits = 2,
     unit = NULL,

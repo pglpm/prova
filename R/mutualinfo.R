@@ -629,6 +629,8 @@ mutualinfo <- function(
 #' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
 #' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
 #' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "nc.cores"; if this option is unset, then use 2 nodes.
+#' @param sep character, default `','`: character to separate variate names and values.
+#' @param solidus character, default `'|'`: character prepended to names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
 #' @param keepX Logical, default `TRUE`: keep a copy of the `X` argument in the output? This is used for [hist.mi()].
 #'
@@ -681,6 +683,8 @@ mutualinfoF <- function(
     quantiles =  c(0.055, 0.25, 0.75, 0.945),
     unit = 'Sh',
     parallel = TRUE,
+    sep = ',',
+    solidus = '|',
     verbose = FALSE,
     keepX = TRUE
 ){
@@ -753,10 +757,10 @@ mutualinfoF <- function(
     if(all(is.na(X))){X <- NULL}
     if(!is.null(X)){
         X <- as.data.frame(X)
-        if (nrow(X) > 1) {
-            warning('Only the first row of X is considered')
-            X <- X[1, , drop = FALSE]
-        }
+        ## if (nrow(X) > 1) {
+        ##     warning('Only the first row of X is considered')
+        ##     X <- X[1, , drop = FALSE]
+        ## }
     }
     Xv <- colnames(X)
 
@@ -861,7 +865,7 @@ mutualinfoF <- function(
         parallel = cl)
 
     ## Calculate MIs as entropy differences
-
+    ## Important that MI is in *nats* now to calculate rGauss
     MI <- colSums(p12[['value']] * log(p12[['value']]), na.rm = TRUE) -
         colSums(p1[['value']] * log(p1[['value']]), na.rm = TRUE) -
         colSums(p2[['value']] * log(p2[['value']]), na.rm = TRUE)
@@ -879,10 +883,14 @@ mutualinfoF <- function(
             p2[['value']] * log1p(p2[['value.acc']] / p2[['value']])
     ), na.rm = TRUE)
 
+    dim(MI) <- dim(acc) <- length(MI)
+
     outsamples <- colSums(p12[['samples']] * log(p12[['samples']]),
         na.rm = TRUE) -
         colSums(p1[['samples']] * log(p1[['samples']]), na.rm = TRUE) -
         colSums(p2[['samples']] * log(p2[['samples']]), na.rm = TRUE)
+
+    rm(p12, p1, p2)
 
     ## report whether the probabilities are 'tails' or not
     if(!is.null(tails)){
@@ -894,18 +902,47 @@ mutualinfoF <- function(
         outtails <- NULL
     }
 
+    if(!is.null(X)){
+        Xnames <- setNames(object = list(
+            apply(X = X, MARGIN = 1, FUN = paste0, collapse = sep,
+                simplify = TRUE)),
+            nm = paste0(solidus,
+                paste0(colnames(X), outtails[colnames(X)], collapse = sep)) )
+    } else {
+        Xnames <- list(NULL)
+    }
+
+    dimnames(MI) <- dimnames(acc) <- Xnames
+
     Qerror <- pnorm(c(-1, 1))
+    outquantiles <- t(apply(
+        X = outsamples, MARGIN = 1,
+        FUN = function(FF){
+            temp <- .funMCEQ(x = FF, prob = quantiles,
+                Qpair = Qerror)
+            c(
+                quantile(x = FF, probs = quantiles, type = 6,
+                    na.rm = TRUE, names = FALSE),
+                (temp[2, ] - temp[1, ]) / 2
+            )}
+    ))
+
+    temp <- list(Q = rep.int(x = names(quantile(x = NA, probs = quantiles,
+        names = TRUE, na.rm = TRUE)), times = 2))
+    dimnames(outquantiles) <- c(Xnames, temp)
 
     ## Output
     out <- c(list(
         value = MI / lbase,
         value.acc = acc / lbase,
-        quantiles = quantile(outsamples, probs = quantiles,
-            type = 6, na.rm = TRUE, names = TRUE) / lbase,
-        quantiles.acc = {
-            temp <- .funMCEQ(x = outsamples, prob = quantiles, Qpair = Qerror)
-            (temp[2, ] - temp[1, ]) / (2 * lbase)
-        },
+        quantiles = outquantiles[ , seq_along(quantiles), drop = FALSE] / lbase,
+        ## quantile(outsamples, probs = quantiles,
+        ##     type = 6, na.rm = TRUE, names = TRUE) / lbase,
+        quantiles.acc = outquantiles[ , -seq_along(quantiles), drop = FALSE] / lbase,
+        ## {
+        ##     temp <- .funMCEQ(x = outsamples, prob = quantiles, Qpair = Qerror)
+        ##     (temp[2, ] - temp[1, ]) / (2 * lbase)
+        ## },
         samples = outsamples / lbase,
         rGauss = sqrt(1 - exp(-2 * MI)),
         unit = unit,
