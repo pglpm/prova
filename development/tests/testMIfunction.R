@@ -46,6 +46,9 @@ testMI <- function(Y1names, Y2names, X = NULL, nn, K){
         log(colSums(exp(W + lprob2))) +
         log(colSums(exp(W + lprob1 + lprob2)))
     ##
-    list(value = mean(mis, na.rm = TRUE) / log(2),
-        value.acc = sd(mis, na.rm = TRUE)/(sqrt(length(mis)) * log(2)))
+    list(
+        value = array(mean(mis, na.rm = TRUE) / log(2), dim = 1),
+        value.acc = array(sd(mis, na.rm = TRUE)/(sqrt(length(mis)) * log(2)),
+            dim = 1)
+    )
 }
