@@ -311,8 +311,7 @@ with integrals replacing the sums in the case of continuous variates. It is meas
 
 Mutual information is in fact a core quantity of communication theory and information theory. The design and assessment of communication channels, as well as of compression algorithms, depends crucially on it. This makes sense: the main requisite of a communication channel is a strong association between two variates: its input and output messages. You can find a brilliant introduction to its meaning and uses in MacKay (2005) and Cover & Thomas (2005).
 
-\
-The **Prova** package provides the function `mutualinfo()` to calculate the mutual information between two variates or two sets of joint variates. Its main arguments are the following:
+\ The **Prova** package provides the functions `mutualinfoF()` and `mutualinfo()` to calculate the mutual information between two variates or two sets of joint variates. Function `mutualinfoF()` can be used only to calculate the mutual information between groups of variates that have a *finite number of possible values* (finite domain), like the `species` or `island` variates, but it is extremely fast (seconds). Function `mutualinfo()` can be used with any kinds of variates, but it is much slower (tens of minutes). The main arguments of these functions are the following:
 
 - `Y1names`, `Y2names`: two vectors of variate names; the mutual information is calculated between these two sets.
 - `X`: data frame of variate values to restrict the calculation to specific subpopulations.
@@ -325,15 +324,11 @@ cl <- parallel::makeCluster(4) ## let's use 4 cores, if we have them
 setDefaultCluster(cl)
 ```
 
-Be aware that the computation can take even tens of minutes if the arguments `Y1names` and `Y2names` include multiple joint variates.
 
-Let's calculate the mutual information between the variates `island` and `species`, [previously discussed and visualized](#newsamples):
+Let's calculate the mutual information between the variates `island` and `species`, [previously discussed and visualized](#newsamples). These are nominal variates with a finite number of possible values, so we can use `mutualinfoF()`:
 
 ```{r miislandspecies, eval = FALSE}
-MIislandspecies <- mutualinfo(
-    Y1names = 'island', Y2names = 'species',
-    K = K
-)
+MIislandspecies <- mutualinfoF(Y1names = 'island', Y2names = 'species', K = K)
 ```
 
 The resulting object `MIislandspecies` is a list of several quantities; the mutual information is given in the `$value` element, and its unit in the `$unit` element:
@@ -354,7 +349,7 @@ It's important to be fair though. Remember the very first times you learned and 
 
 Mutual information does have an operational meaning. Saying that the mutual information between $X$ and $Y$ is $h\,\mathrm{Sh}$, means that knowledge of $X$ reduces, on average, $2^h$ times the number of uncertain possibilities of $Y$. For example suppose that a clinician during a diagnosis is equally uncertain about four possible diseases. There is a particular clinical indicator associated with the disease and the mutual information between the indicator and the disease is $0.415\,\mathrm{Sh}$. Then, upon testing the clinical indicator, the clinician will be roughly uncertain among *three* possible diseases, rather than four, because knowledge of the indicator reduces the four possibilities by $2^{0.415}$ ($4/(2^{0.415}) \approx 3$). If the mutual information were $2\,\mathrm{Sh}$ instead, then the indicator would tell the disease with *certainty*, as it would reduce the four possibilities by $2^{2}$ ($4/(2^{2}) = 1$).
 
-But the function `mutualinfo()` has an additional output to help you get a rough understanding of the mutual-information value. In the special case of two continuous variates having a joint *Gaussian* distribution, there is a precise relationship between their mutual information $I$ and their Pearson correlation coefficient $r$:
+But the functions `mutualinfoF()` and `mutualinfo()` have an additional output to help you get a rough understanding of the mutual-information value. In the special case of two continuous variates having a joint *Gaussian* distribution, there is a precise relationship between their mutual information $I$ and their Pearson correlation coefficient $r$:
 
 $$
 I = -\frac{1}{2} \log_{2}\bigl(1 - r^2\bigr)\;\mathrm{Sh} 
@@ -403,13 +398,10 @@ pplot(x = samples$island, y = samples$species,
 
 ### Body mass and species
 
-Calculation of mutual info:
+Calculation of mutual info: "body mass" is a variate with an infinite number of possible values, so we use the function `mutualinfo()`:
 
 ```{r mibodymassspecies, eval = FALSE}
-MIbodymassspecies <- mutualinfo(
-    Y1names = 'body_mass', Y2names = 'species',
-    K = K
-)
+MIbodymassspecies <- mutualinfo(Y1names = 'body_mass', Y2names = 'species', K = K)
 ```
 
 Scatter plot:
@@ -435,10 +427,7 @@ pplot(x = samples$body_mass, y = samples$species,
 Calculation of mutual information:
 
 ```{r mibodymassbilllen, eval = FALSE}
-MIbodymassbilllen <- mutualinfo(
-    Y1names = 'body_mass', Y2names = 'bill_len',
-    K = K
-)
+MIbodymassbilllen <- mutualinfo(Y1names = 'body_mass', Y2names = 'bill_len', K = K)
 ```
 
 Scatter plot:
