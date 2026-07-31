@@ -753,10 +753,10 @@ mutualinfoF <- function(
     if(all(is.na(X))){X <- NULL}
     if(!is.null(X)){
         X <- as.data.frame(X)
-        ## if (nrow(X) > 1) {
-        ##     warning('Only the first row of X is considered')
-        ##     X <- X[1, , drop = FALSE]
-        ## }
+        if (nrow(X) > 1) {
+            warning('Only the first row of X is considered')
+            X <- X[1, , drop = FALSE]
+        }
     }
     Xv <- colnames(X)
 
@@ -866,7 +866,21 @@ mutualinfoF <- function(
         colSums(p1[['value']] * log(p1[['value']]), na.rm = TRUE) -
         colSums(p2[['value']] * log(p2[['value']]), na.rm = TRUE)
 
-    outsamples <- colSums(p12[['samples']] * log(p12[['samples']]), na.rm = TRUE) -
+    acc <- colSums(abs(
+        p12[['value.acc']] * log(p12[['value']]) +
+            p12[['value']] * log1p(p12[['value.acc']] / p12[['value']])
+    ), na.rm = TRUE) +
+        colSums(abs(
+        p1[['value.acc']] * log(p1[['value']]) +
+            p1[['value']] * log1p(p1[['value.acc']] / p1[['value']])
+        ), na.rm = TRUE) +
+        colSums(abs(
+        p2[['value.acc']] * log(p2[['value']]) +
+            p2[['value']] * log1p(p2[['value.acc']] / p2[['value']])
+    ), na.rm = TRUE)
+
+    outsamples <- colSums(p12[['samples']] * log(p12[['samples']]),
+        na.rm = TRUE) -
         colSums(p1[['samples']] * log(p1[['samples']]), na.rm = TRUE) -
         colSums(p2[['samples']] * log(p2[['samples']]), na.rm = TRUE)
 
@@ -885,7 +899,7 @@ mutualinfoF <- function(
     ## Output
     out <- c(list(
         value = MI / lbase,
-        value.acc = 0,
+        value.acc = acc / lbase,
         quantiles = quantile(outsamples, probs = quantiles,
             type = 6, na.rm = TRUE, names = TRUE) / lbase,
         quantiles.acc = {
