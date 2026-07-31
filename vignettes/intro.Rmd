@@ -461,8 +461,12 @@ Fspecies10$value
 
 ## or
 print(Fspecies10, 'value')
-# Error:
-# ! object 'vdigits' not found
+# $value
+#            
+# species     [,1]
+#   Adelie     0.3
+#   Chinstrap  0.3
+#   Gentoo     0.4
 ```
 
 These frequency estimates have also another important meaning: they are the *probabilities for the species of the **next** penguin we'll observe*. More generally, they are the probabilities for the next observation. In the present context they are maybe not so relevant -- unless you're placing bets on which data will arrive next with your colleagues -- but in other inference contexts they may be very important. In a clinical setting, for example, where we try to infer some condition about the next patient, these probabilities are used for clinical decision-making; see the textbooks by Sox & al. and by Hunink & al., and the paper by Lindley & Novick in the [references]{#referencesmedical}.
@@ -813,8 +817,17 @@ Fspecies10IS <- Pr(Y = Y, X = X2, K = K10)
 ## Display the estimated frequencies of species
 ## within all six combinations of subpopulations
 print(Fspecies10IS, 'value')
-# Error:
-# ! object 'vdigits' not found
+# $value
+#            |island,sex
+# species     Biscoe,female Dream,female Torgersen,female Biscoe,male Dream,male
+#   Adelie             0.13         0.40             0.48        0.21       0.32
+#   Chinstrap          0.11         0.40             0.27        0.22       0.54
+#   Gentoo             0.76         0.21             0.25        0.57       0.14
+#            |island,sex
+# species     Torgersen,male
+#   Adelie              0.45
+#   Chinstrap           0.38
+#   Gentoo              0.17
 ```
 
 
