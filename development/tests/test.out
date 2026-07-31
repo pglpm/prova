@@ -1,18 +1,78 @@
-2.0.0
-Starting tests 260730T212333
-Quick learn 260730T212333
+2.2.0
+Starting tests 260731T193548
+Quick learn 260731T193548
 [1] TRUE
-Full base learn 260730T212351
+Full base learn 260731T193606
 [1] TRUE
-Simple Pr 260730T213048
+Simple Pr 260731T194310
 [1] TRUE
-Various Pr 260730T213146
+Various Pr 260731T194408
 [1] TRUE
-Simple MIs 260730T213235
-[1] TRUE
-Quick learn autocluster 260730T213518
-[1] TRUE
-Quick learn existing cluster 260730T213537
-[1] TRUE
-All test passed: TRUE
-Done 260730T213557
+Simple MIs 260731T194456
+[1] FALSE
+$`Simple MIs-B-N-NULL`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-R-NULL`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-N-R-NULL`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-c("N", "B")-R-NULL`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-c("B", "R")-N-NULL`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-c("N", "R")-B-NULL`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-N-list(R = -8)`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-N-list(R = -4)`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-N-list(R = -2)`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-N-list(R = 0)`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-N-list(R = 2)`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-N-list(R = 4)`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-N-list(R = 8)`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-R-list(N = "a")`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-R-list(N = "b")`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-R-list(N = "c")`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-R-list(N = "d")`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-B-R-list(N = "e")`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-N-R-list(B = "y")`
+[1] "target is array, current is numeric"
+
+$`Simple MIs-N-R-list(B = "n")`
+[1] "target is array, current is numeric"
+
+Quick learn autocluster 260731T194741
+[1] FALSE
+Quick learn existing cluster 260731T194801
+[1] FALSE
+All test passed: FALSE
+Done 260731T194820
