@@ -18,6 +18,9 @@ reference:
 - title: "Quantify associations between variates"
   contents:
   - has_concept("association")
+- title: "Calculate expected utilities"
+  contents:
+  - has_concept("utility")
 - title: "Plot & print"
   contents:
   - has_concept("display")
