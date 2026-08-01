@@ -134,7 +134,7 @@ metadatatemplate <- function(
         data <- read.csv(datafile,
             na.strings = '', stringsAsFactors = FALSE, tryLogical = FALSE)
     }
-    if(!is.data.frame(data)){ data <- as.data.frame(as.list(data)) }
+    if(!is.data.frame(data)){ data <- as.data.frame(data) }
 
     ## convert factors to strings if necessary
     if(any(sapply(data, is.factor))){

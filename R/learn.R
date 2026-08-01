@@ -447,7 +447,7 @@ learn <- function(
             ))
     }
 
-    if(!is.data.frame(metadata)){ metadata <- as.data.frame(as.list(metadata)) }
+    if(!is.data.frame(metadata)){ metadata <- as.data.frame(metadata) }
 
     ## eliminate possible empty V-columns
     for(i in intersect(paste0('V', 11:3), colnames(metadata))){
@@ -473,7 +473,7 @@ learn <- function(
             }
         }
 
-        if(!is.data.frame(data)){ data <- as.data.frame(as.list(data)) }
+        if(!is.data.frame(data)){ data <- as.data.frame(data) }
         rownames(data) <- NULL
 
         ## convert factors to strings if necessary
@@ -549,7 +549,7 @@ learn <- function(
             }
         }
 
-        if(!is.data.frame(auxdata)){auxdata <- as.data.frame(as.list(auxdata))}
+        if(!is.data.frame(auxdata)){auxdata <- as.data.frame(auxdata)}
 
         ## Consistency checks for auxdata
         ## They should be moved to an external function

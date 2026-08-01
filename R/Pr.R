@@ -297,7 +297,7 @@ Pr <- function(
     K$auxinfo <- NULL
     ncomponents <- nrow(K$W)
     nmcsamples <- ncol(K$W)
-
+    
     if(is.null(nsamples)){
         nsamples <- 0
     } else if(is.numeric(nsamples)){
@@ -310,11 +310,15 @@ Pr <- function(
         nsamples <- nmcsamples
     }
 
-    if(!is.data.frame(Y)){ Y <- as.data.frame(as.list(Y)) }
+print('hey****')
+    str(Y)
+    if(!is.data.frame(Y)){ Y <- as.data.frame(Y) }
     Yv <- colnames(Y)
+print('hey2****')
+    str(Y)
 
     if(all(is.na(X))){X <- NULL}
-    if(!is.null(X) && !is.data.frame(X)){ X <- as.data.frame(as.list(X)) }
+    if(!is.null(X) && !is.data.frame(X)){ X <- as.data.frame(X) }
     Xv <- colnames(X)
 
     if(!is.null(tails)){
