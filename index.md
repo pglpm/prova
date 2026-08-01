@@ -42,10 +42,12 @@ inference. These are its main features:
   [generalizability](https://dictionary.apa.org/generalizability)**
   beyond the finite sample size. In other words, quantification of
   uncertainty of results regarding the whole, unsampled, population.
-- Straightforward use within **decision theory**, such as **clinical
+- Computation of **expected utilities** and more generally
+  straightforward use with **decision theory**, such as **clinical
   decision-making**. Users can immediately combine the probabilistic
   results with any measures of utilities, such as [quality-adjusted life
   years](https://dictionary.apa.org/quality-adjusted-life-years).
+  Uncertainty about long-run expected utilities is also calculated.
 - **Quantification of associations** between any kinds of variates,
   without modelling assumptions (gaussianity, linearity, etc.), thanks
   to the use of [mutual
