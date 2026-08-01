@@ -762,7 +762,6 @@ Fspecies60 <- Pr(Y, K60) # updated inference using K60
 
 ## with three arguments, the second stands for the conditional
 Fspecies60I <- Pr(Y, X, K60) # updated inference using K60
-)
 ```
 
 Just like in the preliminary analysis we can use the `plot()` and `hist()` functions to visualize estimates, credibility intervals, and probability distributions.
@@ -960,7 +959,6 @@ Our final results about the overall relative frequencies of the three species ar
 ## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
 Fspeciesall <- Pr(Y, Kall) # updated inference using Kall
-)
 ```
 
 Let's plot the estimated frequencies with their credibility intervals, and also their probability distributions:
