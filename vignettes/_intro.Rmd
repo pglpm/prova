@@ -667,7 +667,7 @@ Y6imp <- vrtgrid('bill_len', K10)
 X6 <- penguins_shuffled[6, ]
 
 ## drop unknown variates
-X <- X[, !is.na(X)]
+X6 <- X6[, !is.na(X6)]
 print(X6)
 
 imputeddata <- Pr(Y6imp, X6, K10)
