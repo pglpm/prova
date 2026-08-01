@@ -11,7 +11,7 @@ function does not do consistency checks of its arguments.
 ## Usage
 
 ``` r
-.testPr(Y, X = NULL, K, tails = NULL)
+.testPr(Y, X = NULL, K = NULL, tails = NULL)
 ```
 
 ## Arguments

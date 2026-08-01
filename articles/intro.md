@@ -269,7 +269,7 @@ missing variates. But incomplete data are not a problem: inferences can
 still be performed from them, because Bayesian methods and **Prova**
 automatically perform *imputation* of missing data, and they do so in a
 principled way (via the marginalization rule of probability theory). We
-shall see this in a later section.
+shall see this in a [later section](#imputation).
 
 With these datapoints we start our Bayesian nonparametric analysis using
 **Prova**!
@@ -676,7 +676,7 @@ question in the form of:
 
 We discuss both in a moment. First let’s compute them using the
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function. For
-the present question, this function requires three arguments:
+the present question, this function requires two arguments:
 
 - `Y`: a `data.frame` listing the values of the variate we are
   interested in. In the present case the variate is `species` and the
@@ -685,24 +685,25 @@ the present question, this function requires three arguments:
   with the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function, discussed in the previous section. In the present case it’s
   `K10`.
-- Optionally, `parallel`. This argument specifies how many nodes we
-  should use for the computation, or a cluster previously generated with
-  [`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html).
-  If this argument is missing, then the function checks whether a
-  default cluster (set with
-  [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html))
-  exists, and if it doesn’t then it creates a number of nodes equal to
-  the R option ““nc.cores” (see
-  [`getOption()`](https://rdrr.io/r/base/options.html)), or equal to 2,
-  if that option is unset. Let’s create a default parallel cluster with
-  4 nodes, to be used for the remainder of our analysis. If you don’t
-  want to bother with parallel computation for the moment, just skip
-  this step.
+
+*Optionally*, a `parallel =` argument can also be given. This argument
+specifies how many nodes we should use for the computation, or a cluster
+previously generated with
+[`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html).
+If this argument is missing, then the function checks whether a default
+cluster (set with
+[`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html))
+exists, and if it doesn’t then it creates a number of nodes equal to the
+R option “cl.cores” (see
+[`options()`](https://rdrr.io/r/base/options.html)), or equal to 2, if
+that option is unset. In the present example we tell **Prova** that it
+can use up to 4 nodes; change this value to one that works for your
+system – or just skip this step if you don’t want to bother with
+parallel computation for the moment:
 
 ``` r
 
-cl <- parallel::makeCluster(4) ## let's use 4 cores, if we have them
-setDefaultCluster(cl)
+options(cl.cores = 4) # use up to 4 nodes
 ```
 
 Back to our function
@@ -715,8 +716,11 @@ seconds:
 ## data frame with the variate and values we want to know the frequencies of
 Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
-Fspecies10 <- Pr(Y = Y, K = K10)
+Fspecies10 <- Pr(Y, K10)
 ```
+
+This could also be entered more explicitly as
+`Fspecies10 <- Pr(Y = Y, K = K10)`.
 
 The answer to our question is now contained in the `Fspecies10` object
 (we chose this name for “`F`requency distribution of `species`,
@@ -895,67 +899,6 @@ print(Fspecies10)
 #   Gentoo    0.3967 0.0021 0.1921 0.2995 0.4894 0.6183
 ```
 
-### Imputation of missing data
-
-In our initial dataset, datapoint \#1 lacks the value of the `sex`
-variate, and datapoint \#6 lacks the values of variates `bill_len`,
-`bill_dep`, `flipper_len`, `body_mass`. These partial information of
-these two datapoints was nevertheless used to learn about the full
-population. We can probabilistically infer, that is, do imputation, of
-all these missing data.
-
-Let’s take datapoint \#1 for instance, and infer its missing variate
-`sex` from all other, known, variates:
-
-``` r
-
-Yimp <- data.frame(sex = c('female', 'male'))
-
-## Extract data from datapoint #1 of our dataset 'penguins_shuffled'
-## excluding 'sex' variate
-X <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
-
-imputeddata <- Pr(Y = Yimp, X = X, K = K10)
-
-print(imputeddata)
-# , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007
-# 
-#         probability
-# sex      value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   female 0.6739 0.0030 0.239  0.5161 0.8724 0.9735
-#   male   0.3261 0.0030 0.0265 0.1276 0.4839 0.7609
-```
-
-We see that penguin \#1 might have been female with probability 0.67,
-although further data might shift that probability somewhere between
-0.24 and 0.97.
-
-Now let’s take datapoint \#6 and infer the value of `bill_len`. We can
-use the function
-[`vrtgrid()`](https://pglpm.github.io/prova/reference/vrtgrid.md) to
-generate a grid of realistic values based on the data, and then see the
-probability distribution over these values:
-
-``` r
-
-## Generate grid of realistic values for 'bill_len' using vrtgrid()
-Yimp <- vrtgrid(vrt = 'bill_len', K = K10)
-
-## Extract data from datapoint #6 of our dataset 'penguins_shuffled'
-X <- penguins_shuffled[6, ]
-
-## drop unknown variates
-X <- X[, !is.na(X)]
-
-imputeddata <- Pr(Y = Yimp, X = X, K = K10)
-
-plot(imputeddata)
-```
-
-![](figure/imputation6-1.svg)
-
-  
-
 ### A preliminary report on question Q1
 
 We can now give a preliminary answer to our question **Q1**, “what’s the
@@ -1015,7 +958,7 @@ Y2 <- expand.grid(
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspeciessex10 <- Pr(Y = Y2, K = K10)
+Fspeciessex10 <- Pr(Y2, K10)
 
 ## Display the estimated frequencies of all six combinations,
 ## as well as their credibility intervals
@@ -1074,12 +1017,12 @@ is as follows:
 ## data frame with the variate and values of the subpopulations of interest
 X <- data.frame(island = c('Biscoe', 'Dream'))
 
-Fspecies10I <- Pr(
-    Y = Y,
-    X = X, ## argument for conditional inferences
-    K = K10
-)
+## The second argument now denote the conditional
+Fspecies10I <- Pr(Y, X, K10)
 ```
+
+This could also be entered more explicitly as
+`Fspecies10I <- Pr(Y = Y, X = X, K = K10)`.
 
 The answer to our question is now contained in the `Fspecies10I` object
 (we add `I` for “island” to the previous name). The estimates of the
@@ -1277,13 +1220,13 @@ Also in this case we only show the example code for the moment:
 
 ## data frame with all combination of values from 'island' and 'sex'
 ## use base-R function 'expand.grid()'
-X2 <- expand.grid(
+Xdouble <- expand.grid(
     island = c('Biscoe', 'Dream', 'Torgersen'),
     sex = c('female', 'male'),
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspecies10IS <- Pr(Y = Y, X = X2, K = K10)
+Fspecies10IS <- Pr(Y, Xdouble, K10)
 
 ## Display the estimated frequencies of species
 ## within all six combinations of subpopulations
@@ -1300,6 +1243,75 @@ print(Fspecies10IS, 'value')
 #   Chinstrap           0.38
 #   Gentoo              0.17
 ```
+
+### Imputation of missing data
+
+In our dataset, datapoint \#1 lacks the value of the `sex` variate, and
+datapoint \#6 lacks the values of variates `bill_len`, `bill_dep`,
+`flipper_len`, `body_mass`. The partial information in these two
+datapoints was nevertheless still used by the function
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md): the
+datapoints were not discarded.
+
+**Prova** allows you to infer all these missing data; that is, it allows
+you to do data imputation; and this is done in a *principled* way.
+
+Let’s take datapoint \#1 for instance, and infer its missing variate
+`sex` from all other, known, variates:
+
+``` r
+
+## values we want to guess or impute:
+Y1imp <- data.frame(sex = c('female', 'male'))
+
+## Extract data from datapoint #1 of our dataset 'penguins_shuffled'
+## excluding 'sex' variate
+X1 <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
+print(X1)
+#   species    island bill_len bill_dep flipper_len body_mass year
+# 1  Adelie Torgersen     37.8     17.1         186      3300 2007
+
+imputeddata <- Pr(Y1imp, X1, K10)
+
+print(imputeddata)
+# , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007
+# 
+#         probability
+# sex      value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
+#   female 0.6739 0.0030 0.239  0.5161 0.8724 0.9735
+#   male   0.3261 0.0030 0.0265 0.1276 0.4839 0.7609
+```
+
+We see that penguin \#1 might have been female with probability 0.67,
+although further data might shift that probability somewhere between
+0.24 and 0.97.
+
+Now let’s take datapoint \#6 and infer the value of `bill_len`. We can
+use the function
+[`vrtgrid()`](https://pglpm.github.io/prova/reference/vrtgrid.md) to
+generate a grid of realistic values based on the data, and then see the
+probability distribution over these values:
+
+``` r
+
+## Generate grid of realistic values for 'bill_len' using vrtgrid()
+Y6imp <- vrtgrid('bill_len', K10)
+
+## Extract data from datapoint #6 of our dataset 'penguins_shuffled'
+X6 <- penguins_shuffled[6, ]
+
+## drop unknown variates
+X6 <- X6[, !is.na(X6)]
+print(X6)
+#   species island year
+# 6  Gentoo Biscoe 2009
+
+imputeddata <- Pr(Y6imp, X6, K10)
+
+plot(imputeddata)
+```
+
+![](figure/imputation6-1.svg)
 
   
 
@@ -1386,16 +1398,10 @@ calculation for all three questions:
 ## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 ## X <- data.frame(island = c('Biscoe', 'Dream'))
 
-Fspecies60 <- Pr(
-    Y = Y,
-    K = K60 ## updated inference
-)
+Fspecies60 <- Pr(Y, K60) # updated inference using K60
 
-Fspecies60I <- Pr(
-    Y = Y,
-    X = X, ## argument for conditional inferences
-    K = K60 ## updated inference
-)
+## with three arguments, the second stands for the conditional
+Fspecies60I <- Pr(Y, X, K60) # updated inference using K60
 ```
 
 Just like in the preliminary analysis we can use the
@@ -1727,10 +1733,7 @@ species are computed in the usual way:
 ## 'Y' was previously defined with:
 ## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
-Fspeciesall <- Pr(
-    Y = Y,
-    K = Kall ## updated inference
-)
+Fspeciesall <- Pr(Y, Kall) # updated inference using Kall
 ```
 
 Let’s plot the estimated frequencies with their credibility intervals,
@@ -1826,7 +1829,7 @@ generate a grid of all possible realistic values:
 ``` r
 
 ## All values for the variate of interest
-Y <- vrtgrid(vrt = 'species', K = Kall)
+Y <- vrtgrid('species', Kall)
 
 Xvrt <- 'island' ## subpopulation variate
 Xvls <- 'Biscoe' ## subpopulation value or values
@@ -1834,7 +1837,7 @@ Xvls <- 'Biscoe' ## subpopulation value or values
 X <- data.frame(Xvls)
 colnames(X) <- Xvrt
 
-Fanalysis <- Pr(Y = Y, X = X, K = Kall)
+Fanalysis <- Pr(Y, X, Kall)
 ```
 
 Here are the probability distributions and the credibility intervals for
@@ -1890,7 +1893,7 @@ In this case, `Adelie` penguins are our subpopulation:
 
 ``` r
 
-Y <- vrtgrid(vrt = 'island', K = Kall)
+Y <- vrtgrid('island', Kall)
 
 Xvrt <- 'species' ## subpopulation variate
 Xvls <- 'Adelie' ## subpopulation value or values
@@ -1899,7 +1902,7 @@ X <- data.frame(Xvls)
 colnames(X) <- Xvrt
 
 ## NB: rewriting the previous 'Fanalysis' object
-Fanalysis <- Pr(Y = Y, X = X, K = Kall)
+Fanalysis <- Pr(Y, X, Kall)
 ```
 
 Here are the probability distributions and confidence intervals for the
@@ -1959,13 +1962,13 @@ mass in three separate subpopulations: `Adelie`, `Chinstrap`, and
 ``` r
 
 ## Grid of realistic values for 'body_mass'
-Y <- vrtgrid(vrt = 'body_mass', K = Kall)
+Y <- vrtgrid('body_mass', Kall)
 
 ## Grid of values for 'species', the subpopulation variate
-X <- vrtgrid(vrt = 'species', K = Kall)
+X <- vrtgrid('species', Kall)
 
 ## NB: rewriting the previous 'Fanalysis' object
-Fanalysis <- Pr(Y = Y, X = X, K = Kall)
+Fanalysis <- Pr(Y, X, Kall)
 ```
 
 Here is the estimated frequency distribution of body mass within each
@@ -1992,16 +1995,6 @@ very similar values – there’s still some uncertainty there. But in the
 body-mass range around 3750 g there’s a high probability that the two
 distributions clearly differ; we see that their mean estimates are
 outside each other’s 89%-credibility interval.
-
- 
-
-If we created a parallel cluster at the beginning of our analysis, let’s
-close it now.
-
-``` r
-
-parallel::stopCluster(cl)
-```
 
   
 

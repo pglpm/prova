@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,15 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rPr</span><span class="op">(</span><span class="va">n</span>, <span class="va">Ynames</span>, X <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">K</span>, tails <span class="op">=</span> <span class="cn">NULL</span>, mcsamples <span class="op">=</span> <span class="cn">NULL</span>, parallel <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rPr</span><span class="op">(</span></span>
+<span>  <span class="va">n</span>,</span>
+<span>  <span class="va">Ynames</span>,</span>
+<span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  K <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mcsamples <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  parallel <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -92,6 +100,7 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function generates datapoints according to the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, K)\) or \(\mathrm{Pr}(Y = y \vert X \le x, K)\) or combinations thereof, for the variates specified in the argument <code>Y</code>, and conditional on the variate values specified in the argument <code>X</code>. It is somewhat analogous to the <code>rxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probability \(\mathrm{Pr}(Y | K)\) is used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
+<p>If <code>rPr()</code> is called with three unnamed arguments, <code>rPr(..., ..., ...)</code>, then it is interpreted as <code>rPr(n = ..., Ynames = ..., K = ...)</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

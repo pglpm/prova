@@ -13,7 +13,7 @@ mutualinfo(
   Y1names,
   Y2names,
   X = NULL,
-  K,
+  K = NULL,
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   ns = NULL,
@@ -30,7 +30,7 @@ mutualinfoF(
   Y1names,
   Y2names,
   X = NULL,
-  K,
+  K = NULL,
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   unit = "Sh",
@@ -113,7 +113,7 @@ mutualinfoF(
   - `TRUE` (default): use the cluster that was set as default with
     [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
     if no such object exists, then generate a cluster with as many nodes
-    as in the [option](https://rdrr.io/r/base/options.html) "nc.cores";
+    as in the [option](https://rdrr.io/r/base/options.html) "cl.cores";
     if this option is unset, then use 2 nodes.
 
 - sep:
@@ -161,7 +161,7 @@ elements:
   for the `MI` value for people more familiar with Pearson's
   correlation, but should be taken with a grain of salt.
 
-- `'unit'`, `'Y1names'`, `'Y1names'`, `'tails'`: copies of the
+- `'unit'`, `'Y1names'`, `'Y1names'` `'X'`, `'tails'`: copies of the
   homonymous input arguments.
 
 - `'K'`: name of the "Knowledge" object used in the calculation.

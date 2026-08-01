@@ -83,8 +83,8 @@ K <- learn(data = penguins, metadata = meta_penguins)
 # [progress output about the learning computation]
 ```
 
-The object `K` (for “0`K`nowledge” or “`K`nown”) encodes what has been
-learnt from data and metadata.
+The object `K` (for “Knowledge” or “Known”) encodes what has been learnt
+from data and metadata.
 
 Ask a statistical question about the penguin population. For example:
 given the data we have collected, what is the probability that a *new*
@@ -102,9 +102,9 @@ summary of the result:
 ``` r
 
 prob <- Pr(
-    Y = data.frame(species = 'Adelie'), # predictand
-    X = data.frame(bill_len = 45),      # predictor
-    K = K                               # Knowledge from data & metadata
+    data.frame(species = 'Adelie'), # predictand
+    data.frame(bill_len = 45),      # predictor
+    K                               # Knowledge from data & metadata
 )
 
 print(prob)
@@ -147,9 +147,9 @@ the penguin’s bill length:
 ``` r
 
 invprob <- Pr(
-    Y = data.frame(bill_len = seq(30, 50, by = 0.5)), # predictand
-    X = data.frame(species = 'Adelie'),              # predictor
-    K = K                                            # knowledge
+    data.frame(bill_len = seq(30, 50, by = 0.5)), # predictand
+    data.frame(species = 'Adelie'),              # predictor
+    K                                            # knowledge
 )
 
 plot(invprob)

@@ -1,10 +1,13 @@
 # Changelog
 
-## Prova v2.2.0
+## Prova v2.2.2
 
 - Introduced the much faster
   [`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
   for variates with finite domains.
+- Introduced a preliminary version of `eutility()` for the calculation
+  of expected utilities and their revisability.
+- Simplified omission of arguments like `Y =`, `X =`, `K =`.
 
 ## Prova v2.1.0
 

@@ -11,7 +11,7 @@ Monte Carlo Standard Error for the calculated posterior probabilities.
 Pr(
   Y,
   X = NULL,
-  K,
+  K = NULL,
   tails = NULL,
   priorY = NULL,
   nsamples = "all",
@@ -28,24 +28,24 @@ Pr(
 
 - Y:
 
-  Matrix or data.table: set of values of variates of which we want the
-  joint probability of. One variate per column, one set of values per
-  row.
+  Matrix or data.table: set of values of variates whose probabilities
+  are sought. One variate per column, one set of values per row.
 
 - X:
 
-  Matrix or data.table or `NULL` (default): set of values of variates on
-  which we want to condition the joint probability of `Y`. If `NULL`, no
-  conditioning is made (except for conditioning on the learning dataset
-  and prior assumptions). One variate per column, one set of values per
-  row.
+  Matrix or data.table or `NULL` (default): set of values of variates in
+  the conditional of the probability of `Y`. If `NULL`, no conditioning
+  is made (besides the conditioning on knowledge `K`). One variate per
+  column, one set of values per row. See "Details" for the
+  interpretation of unnamed arguments.
 
 - K:
 
   A "Knowledge" object produced by
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
   also be a path to a 'K.rds' file containing such object, or to a
-  directory containing one.
+  directory containing one. See "Details" for the interpretation of
+  unnamed arguments.
 
 - tails:
 
@@ -108,7 +108,7 @@ Pr(
   - `TRUE` (default): use the cluster that was set as default with
     [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
     if no such object exists, then generate a cluster with as many nodes
-    as in the [option](https://rdrr.io/r/base/options.html) "nc.cores";
+    as in the [option](https://rdrr.io/r/base/options.html) "cl.cores";
     if this option is unset, then use 2 nodes.
 
 - sep:
@@ -180,6 +180,13 @@ that this function calculates mixed probabilities such as
 \$\$\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge
 x_2, \dotsc, K)\\ .\$\$ Tail values are inputted via the `'tails'`
 argument; see "Usage".
+
+If `Pr()` is called with two unnamed arguments, `Pr(..., ...)`, then it
+is interpreted as `Pr(Y = ..., K = ...)`. If it is called with three
+unnamed arguments, then it is interpreted as either
+`Pr(Y = ..., X = ..., K = ...)` or `Pr(Y = ..., K = ..., tails = ...)`,
+depending on whether the second argument appears to be a "Knowledge"
+object or not.
 
 This function also outputs the "revisability" of the posterior
 probabilities above, that is, probabilities such as \\\mathrm{Pr}(Y = y

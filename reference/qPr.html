@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
 <span>  p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>,</span>
 <span>  <span class="va">Yname</span>,</span>
 <span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">K</span>,</span>
+<span>  K <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nsamples <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.055</span>, <span class="fl">0.5</span>, <span class="fl">0.945</span><span class="op">)</span>,</span>
@@ -80,11 +80,11 @@
 
 
 <dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Matrix or data.table or <code>NULL</code> (default): set of values of variates on which we want to condition. If <code>NULL</code>, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.</p></dd>
+<dd><p>Matrix or data.table or <code>NULL</code> (default): set of values of variates on which we want to condition. If <code>NULL</code>, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>A "Knowledge" object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.</p></dd>
+<dd><p>A "Knowledge" object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
@@ -103,7 +103,7 @@
 <dd><p>One of the following values:</p><ul><li><p>A "cluster" object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>.</p></li>
 <li><p>Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).</p></li>
 <li><p><code>FALSE</code>: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).</p></li>
-<li><p><code>TRUE</code> (default): use the cluster that was set as default with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>; if no such object exists, then generate a cluster with as many nodes as in the <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores"; if this option is unset, then use 2 nodes.</p></li>
+<li><p><code>TRUE</code> (default): use the cluster that was set as default with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>; if no such object exists, then generate a cluster with as many nodes as in the <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "cl.cores"; if this option is unset, then use 2 nodes.</p></li>
 </ul></dd>
 
 
@@ -138,6 +138,7 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function calculates the quantiles of \(\mathrm{Pr}(Y = y \vert X = x, K)\) or of \(\mathrm{Pr}(Y = y \vert X \le x, K)\) or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \(Y\) having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the <code>qxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. The revisability can be expressed in the form of quantiles, samples, or both, as in the <code><a href="Pr.html">Pr()</a></code> function. If several joint values are given for the probability levels and for <code>X</code>, the function creates a 2D grid of results for all possible combinations of the given probability levels and <code>X</code> values. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
+<p>If <code>qPr()</code> is called with three unnamed arguments, <code>qPr(..., ..., ...)</code>, then it is interpreted as <code>qPr(p = ..., Yname = ..., K = ...)</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

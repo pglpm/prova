@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Pr</span><span class="op">(</span></span>
 <span>  <span class="va">Y</span>,</span>
 <span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">K</span>,</span>
+<span>  K <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  priorY <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nsamples <span class="op">=</span> <span class="st">"all"</span>,</span>
@@ -71,16 +71,15 @@
 
 
 <dl><dt id="arg-y">Y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>Matrix or data.table: set of values of variates of which we want
-the joint probability of. One variate per column, one set of values per row.</p></dd>
+<dd><p>Matrix or data.table: set of values of variates whose probabilities are sought. One variate per column, one set of values per row.</p></dd>
 
 
 <dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Matrix or data.table or <code>NULL</code> (default): set of values of variates on which we want to condition the joint probability of <code>Y</code>. If <code>NULL</code>, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.</p></dd>
+<dd><p>Matrix or data.table or <code>NULL</code> (default): set of values of variates in the conditional of the probability of <code>Y</code>. If <code>NULL</code>, no conditioning is made (besides the conditioning on knowledge <code>K</code>). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>A "Knowledge" object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.</p></dd>
+<dd><p>A "Knowledge" object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
@@ -103,7 +102,7 @@ the joint probability of. One variate per column, one set of values per row.</p>
 <dd><p>One of the following values:</p><ul><li><p>A "cluster" object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>.</p></li>
 <li><p>Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).</p></li>
 <li><p><code>FALSE</code>: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).</p></li>
-<li><p><code>TRUE</code> (default): use the cluster that was set as default with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>; if no such object exists, then generate a cluster with as many nodes as in the <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores"; if this option is unset, then use 2 nodes.</p></li>
+<li><p><code>TRUE</code> (default): use the cluster that was set as default with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>; if no such object exists, then generate a cluster with as many nodes as in the <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "cl.cores"; if this option is unset, then use 2 nodes.</p></li>
 </ul></dd>
 
 
@@ -137,6 +136,7 @@ the joint probability of. One variate per column, one set of values per row.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function calculates the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, K)\), where \(Y = y\) and \(X = x\) are two (non overlapping) sets of joint variate values, inputted as <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> arguments <code>Y</code> and <code>X</code>, and \(K\) is the information in the data and metadata. It is somewhat analogous to the <code>dxxx</code>-variants and <code>pxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probability \(\mathrm{Pr}(Y = y \vert K)\) is calculated.</p>
 <p>For some variates in <code>Y</code> or <code>X</code>, tail values can also be prescribed, so that this function calculates mixed probabilities such as $$\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .$$ Tail values are inputted via the <code>'tails'</code> argument; see "Usage".</p>
+<p>If <code>Pr()</code> is called with two unnamed arguments, <code>Pr(..., ...)</code>, then it is interpreted as <code>Pr(Y = ..., K = ...)</code>. If it is called with three unnamed arguments, then it is interpreted as either <code>Pr(Y = ..., X = ..., K = ...)</code> or <code>Pr(Y = ..., K = ..., tails = ...)</code>, depending on whether the second argument appears to be a "Knowledge" object or not.</p>
 <p>This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \(\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)\) that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:</p><ul><li><p>As samples (default 3600 samples, depending on the 'nsamples' argument given to the <code><a href="learn.html">learn()</a></code> function) of the alternative values that the posterior probability could have.</p></li>
 <li><p>As quantiles (default 5.5%, 25%, 75%, 94.5%) of the possible revisability.</p></li>
 </ul><p>If several joint values are given for <code>Y</code> or <code>X</code>, the function will create a 2D grid of results for all possible combinations of the given <code>Y</code> and <code>X</code> values.</p>

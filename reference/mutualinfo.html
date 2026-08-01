@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
 <span>  <span class="va">Y1names</span>,</span>
 <span>  <span class="va">Y2names</span>,</span>
 <span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">K</span>,</span>
+<span>  K <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.055</span>, <span class="fl">0.25</span>, <span class="fl">0.75</span>, <span class="fl">0.945</span><span class="op">)</span>,</span>
 <span>  ns <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -71,7 +71,7 @@
 <span>  <span class="va">Y1names</span>,</span>
 <span>  <span class="va">Y2names</span>,</span>
 <span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">K</span>,</span>
+<span>  K <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.055</span>, <span class="fl">0.25</span>, <span class="fl">0.75</span>, <span class="fl">0.945</span><span class="op">)</span>,</span>
 <span>  unit <span class="op">=</span> <span class="st">"Sh"</span>,</span>
@@ -127,7 +127,7 @@
 <dd><p>One of the following values:</p><ul><li><p>A "cluster" object previously created with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::makeCluster()</a></code>.</p></li>
 <li><p>Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).</p></li>
 <li><p><code>FALSE</code>: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).</p></li>
-<li><p><code>TRUE</code> (default): use the cluster that was set as default with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>; if no such object exists, then generate a cluster with as many nodes as in the <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "nc.cores"; if this option is unset, then use 2 nodes.</p></li>
+<li><p><code>TRUE</code> (default): use the cluster that was set as default with <code><a href="https://rdrr.io/r/parallel/makeCluster.html" class="external-link">parallel::setDefaultCluster()</a></code>; if no such object exists, then generate a cluster with as many nodes as in the <a href="https://rdrr.io/r/base/options.html" class="external-link">option</a> "cl.cores"; if this option is unset, then use 2 nodes.</p></li>
 </ul></dd>
 
 
@@ -154,7 +154,7 @@
 <li><p><code>'value.acc'</code>, <code>quantiles.acc</code> number and vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the <code>'value'</code> and the <code>'quantiles'</code> elements.</p></li>
 <li><p><code>'samples'</code>, a vector with the revisability samples for the mutual information.</p></li>
 <li><p><code>'rGauss'</code>, a vector of <code>value</code> and <code>accuracy</code>: the absolute value of the Pearson correlation coefficient \(r\) of a <em>multivariate Gaussian distribution</em> having mutual information <code>MI</code>; the two are related by \(\mathrm{MI} = -\ln(1 - r^2)/2\). It may provide a vague intuition for the <code>MI</code> value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.</p></li>
-<li><p><code>'unit'</code>, <code>'Y1names'</code>, <code>'Y1names'</code>, <code>'tails'</code>: copies of the homonymous input arguments.</p></li>
+<li><p><code>'unit'</code>, <code>'Y1names'</code>, <code>'Y1names'</code> <code>'X'</code>, <code>'tails'</code>: copies of the homonymous input arguments.</p></li>
 <li><p><code>'K'</code>: name of the "Knowledge" object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">

@@ -6,7 +6,15 @@ probabilities and posterior conditional probabilities.
 ## Usage
 
 ``` r
-rPr(n, Ynames, X = NULL, K, tails = NULL, mcsamples = NULL, parallel = NULL)
+rPr(
+  n,
+  Ynames,
+  X = NULL,
+  K = NULL,
+  tails = NULL,
+  mcsamples = NULL,
+  parallel = NULL
+)
 ```
 
 ## Arguments
@@ -73,6 +81,9 @@ distribution functions](https://rdrr.io/r/stats/Distributions.html). If
 \| K)\\ is used. Each variate in the argument `X` can be specified
 either as a point-value \\X = x\\ or as a left-open interval \\X \le x\\
 or as a right-open interval \\X \ge x\\, through the argument `tails`.
+
+If `rPr()` is called with three unnamed arguments, `rPr(..., ..., ...)`,
+then it is interpreted as `rPr(n = ..., Ynames = ..., K = ...)`.
 
 ## See also
 

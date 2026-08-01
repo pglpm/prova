@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,7 +105,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/learn.html">learn</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, metadata <span class="op">=</span> <span class="va">meta_penguins</span><span class="op">)</span></span>
 <span><span class="co"># [progress output about the learning computation]</span></span></code></pre></div>
-<p>The object <code>K</code> (for “0<code>K</code>nowledge” or “<code>K</code>nown”) encodes what has been learnt from data and metadata.</p>
+<p>The object <code>K</code> (for “Knowledge” or “Known”) encodes what has been learnt from data and metadata.</p>
 <p>Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a <em>new</em> penguin from this population is of species <em>Adélie</em>, if its bill length is 45 mm? In symbols,</p>
 <p><span class="math display">\[
 \mathrm{Pr}(\text{species = Adelie} \thinspace\vert\thinspace\mathopen{}
@@ -114,9 +114,9 @@
 <p>where <span class="math inline">\(K\)</span> stands for the knowledge acquired from data and metadata. To answer this question, use the function <code><a href="reference/Pr.html">Pr()</a></code>, and print a summary of the result:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Pr.html">Pr</a></span><span class="op">(</span></span>
-<span>    Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="co"># predictand</span></span>
-<span>    X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">45</span><span class="op">)</span>,      <span class="co"># predictor</span></span>
-<span>    K <span class="op">=</span> <span class="va">K</span>                               <span class="co"># Knowledge from data &amp; metadata</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="co"># predictand</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">45</span><span class="op">)</span>,      <span class="co"># predictor</span></span>
+<span>    <span class="va">K</span>                               <span class="co"># Knowledge from data &amp; metadata</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span>
@@ -134,9 +134,9 @@
 <p>The <em>inverse</em> question can also be asked: if we observe a new penguin of <em>Adélie</em> species, what could its bill length be? The answer is uncertain, and <strong>Prova</strong> can calculate the probability distribution of the penguin’s bill length:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">invprob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Pr.html">Pr</a></span><span class="op">(</span></span>
-<span>    Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">50</span>, by <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>, <span class="co"># predictand</span></span>
-<span>    X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,              <span class="co"># predictor</span></span>
-<span>    K <span class="op">=</span> <span class="va">K</span>                                            <span class="co"># knowledge</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">50</span>, by <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>, <span class="co"># predictand</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,              <span class="co"># predictor</span></span>
+<span>    <span class="va">K</span>                                            <span class="co"># knowledge</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">invprob</span><span class="op">)</span></span></code></pre></div>

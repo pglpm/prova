@@ -29,6 +29,11 @@
   [`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
   : Calculate mutual information between groups of joint variates
 
+## Calculate expected utilities
+
+- [`exputility()`](https://pglpm.github.io/prova/reference/exputility.md)
+  : Calculate expected utilities and their uncertainties
+
 ## Plot & print
 
 - [`hist(`*`<mi>`*`)`](https://pglpm.github.io/prova/reference/hist.mi.md)
@@ -116,6 +121,8 @@ For developers (beware!)
   : Calculate quantiles for continuous Y by bisection
 - [`.qYXdiscr()`](https://pglpm.github.io/prova/reference/dot-qYXdiscr.md)
   : Calculate quantiles for discrete Y by bisection
+- [`.retrieveK()`](https://pglpm.github.io/prova/reference/dot-retrieveK.md)
+  : Retrieve a "Knowledge" object
 - [`.rowcumsum()`](https://pglpm.github.io/prova/reference/dot-rowcumsum.md)
   : Cumulative sum along first dimension
 - [`.rowinvcumsum()`](https://pglpm.github.io/prova/reference/dot-rowinvcumsum.md)

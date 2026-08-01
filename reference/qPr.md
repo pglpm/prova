@@ -11,7 +11,7 @@ qPr(
   p = c(0.25, 0.5, 0.75),
   Yname,
   X = NULL,
-  K,
+  K = NULL,
   tails = NULL,
   nsamples = "all",
   quantiles = c(0.055, 0.5, 0.945),
@@ -39,14 +39,16 @@ qPr(
   Matrix or data.table or `NULL` (default): set of values of variates on
   which we want to condition. If `NULL`, no conditioning is made (except
   for conditioning on the learning dataset and prior assumptions). One
-  variate per column, one set of values per row.
+  variate per column, one set of values per row. See "Details" for the
+  interpretation of unnamed arguments.
 
 - K:
 
   A "Knowledge" object produced by
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
   also be a path to a 'K.rds' file containing such object, or to a
-  directory containing one.
+  directory containing one. See "Details" for the interpretation of
+  unnamed arguments.
 
 - tails:
 
@@ -90,7 +92,7 @@ qPr(
   - `TRUE` (default): use the cluster that was set as default with
     [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html);
     if no such object exists, then generate a cluster with as many nodes
-    as in the [option](https://rdrr.io/r/base/options.html) "nc.cores";
+    as in the [option](https://rdrr.io/r/base/options.html) "cl.cores";
     if this option is unset, then use 2 nodes.
 
 - sep:
@@ -155,6 +157,9 @@ of the given probability levels and `X` values. Each variate in the
 argument `X` can be specified either as a point-value \\X = x\\ or as a
 left-open interval \\X \le x\\ or as a right-open interval \\X \ge x\\,
 through the argument `tails`.
+
+If `qPr()` is called with three unnamed arguments, `qPr(..., ..., ...)`,
+then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.
 
 ## References
 

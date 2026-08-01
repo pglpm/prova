@@ -35,7 +35,8 @@ print(x, ...)
 ## Value
 
 Its `x` argument, [invisibly](https://rdrr.io/r/base/invisible.html);
-see [`base::print()`](https://rdrr.io/r/base/print.html).
+the [str](https://rdrr.io/r/utils/str.html)ucture of the corresponding
+"K" object, if it exists, is also displayed.
 
 ## See also
 

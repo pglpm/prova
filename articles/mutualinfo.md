@@ -162,8 +162,7 @@ that its probability is around 0.3%:
 
 ``` r
 
-prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'),
-    K = K)
+prob <- Pr(data.frame(island = 'Torgersen', species = 'Chinstrap'), K)
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
@@ -197,11 +196,7 @@ penguins, as an example:
 
 ``` r
 
-rPr(
-    n = 5,
-    Ynames = c('island', 'species'),
-    K = K
-)
+rPr(5, c('island', 'species'), K)
 #        island   species
 # 644_1   Dream Chinstrap
 # 996_1  Biscoe    Gentoo
@@ -209,6 +204,9 @@ rPr(
 # 2230_1  Dream Chinstrap
 # 3083_1 Biscoe    Adelie
 ```
+
+This could have also be entered more explicitly as
+`rPr(n = 5, Ynames = c('island', 'species'), K = K)`.
 
 The rows of the resulting data frame are named according to the Monte
 Carlo samples used from the `K` object; they can be useful for peculiar
@@ -218,7 +216,7 @@ Now let’s generate 2000 samples, and then plot them in a scatter plot:
 
 ``` r
 
-samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
+samples <- rPr(2000, c('island', 'species'), K)
 
 pplot(x = samples$island, y = samples$species,
     type = 'p', xlab = 'island', ylab = 'species',
@@ -252,9 +250,9 @@ data previously observed:
 
 ``` r
 
-body_massrange <- range(vrtgrid(vrt = 'body_mass', K = K))
+body_massrange <- range(vrtgrid('body_mass', K))
 
-samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
+samples <- rPr(2000, c('body_mass', 'species'), K)
 
 pplot(x = samples$body_mass, y = samples$species,
     type = 'p', xlab = 'body mass / g', ylab = 'species',
@@ -283,9 +281,9 @@ two continuous variates, such as body mass and bill length (`bill_len`):
 
 ``` r
 
-bill_lenrange <- range(vrtgrid(vrt = 'bill_len', K = K))
+bill_lenrange <- range(vrtgrid('bill_len', K))
 
-samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
+samples <- rPr(2000, c('body_mass', 'bill_len'), K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
@@ -320,23 +318,27 @@ Let’s generate sets of samples separately for the species `'Adelie'`,
 
 ``` r
 
-samplesAdelie <- rPr(
-    n = 1000,
-    Ynames = c('body_mass', 'bill_len'),
-    X = data.frame(species = 'Adelie'),
-    K = K)
+samplesAdelie <- rPr(1000,
+    c('body_mass', 'bill_len'),
+    data.frame(species = 'Adelie'),
+    K)
+## ## or more explicictly:
+## samplesAdelie <- rPr(
+##     n = 1000,
+##     Ynames = c('body_mass', 'bill_len'),
+##     X = data.frame(species = 'Adelie'),
+##     K = K)
 
-samplesChinstrap <- rPr(
-    n = 1000,
-    Ynames = c('body_mass', 'bill_len'),
-    X = data.frame(species = 'Chinstrap'),
-    K = K)
 
-samplesGentoo <- rPr(
-    n = 1000,
-    Ynames = c('body_mass', 'bill_len'),
-    X = data.frame(species = 'Gentoo'),
-    K = K)
+samplesChinstrap <- rPr(1000,
+    c('body_mass', 'bill_len'),
+    data.frame(species = 'Chinstrap'),
+    K)
+
+samplesGentoo <- rPr(1000,
+    c('body_mass', 'bill_len'),
+    data.frame(species = 'Gentoo'),
+    K)
 ```
 
 Now we plot these samples together with
@@ -508,31 +510,30 @@ minutes). The main arguments of these functions are the following:
 
 - `Y1names`, `Y2names`: two vectors of variate names; the mutual
   information is calculated between these two sets.
-- `X`: data frame of variate values to restrict the calculation to
-  specific subpopulations.
+- *optionally* `X`: data frame of variate values to restrict the
+  calculation to specific subpopulations.
 - `K`: the object that encodes the `K`nowledge from the computation made
   with the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function.
-- Optionally, `unit`: the mutual information unit; default “shannons”
+- *Optionally*, `unit`: the mutual information unit; default “shannons”
   (Sh).
-- Optionally, `parallel` This argument specifies how many nodes we
+- *Optionally*, `parallel` This argument specifies how many nodes we
   should use for the computation, or a cluster previously generated with
   [`parallel::makeCluster()`](https://rdrr.io/r/parallel/makeCluster.html).
   If this argument is missing, then the function checks whether a
   default cluster (set with
   [`parallel::setDefaultCluster()`](https://rdrr.io/r/parallel/makeCluster.html))
   exists, and if it doesn’t then it creates a number of nodes equal to
-  the R option ““nc.cores” (see
+  the R option “cl.cores” (see
   [`getOption()`](https://rdrr.io/r/base/options.html)), or equal to 2,
-  if that option is unset. Let’s create a default parallel cluster with
-  4 nodes, to be used for the remainder of our analysis. If you don’t
-  want to bother with parallel computation for the moment, just skip
-  this step.
+  if that option is unset. In the present example we tell **Prova** that
+  it can use up to 4 nodes; change this value to one that works for your
+  system – or just skip this step if you don’t want to bother with
+  parallel computation for the moment:
 
 ``` r
 
-cl <- parallel::makeCluster(4) ## let's use 4 cores, if we have them
-setDefaultCluster(cl)
+options(cl.cores = 4) # use up to 4 nodes
 ```
 
 Let’s calculate the mutual information between the variates `island` and
@@ -542,7 +543,7 @@ nominal variates with a finite number of possible values, so we can use
 
 ``` r
 
-MIislandspecies <- mutualinfoF(Y1names = 'island', Y2names = 'species', K = K)
+MIislandspecies <- mutualinfoF('island', 'species', K)
 ```
 
 The resulting object `MIislandspecies` is a list of several quantities;
@@ -643,7 +644,7 @@ mi <- signif(MIislandspecies$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIislandspecies$rGauss, digits = 2)
 
-samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
+samples <- rPr(2000, c('island', 'species'), K)
 
 pplot(x = samples$island, y = samples$species,
     type = 'p', xlab = 'island', ylab = 'species',
@@ -665,7 +666,7 @@ number of possible values, so we use the function
 
 ``` r
 
-MIbodymassspecies <- mutualinfo(Y1names = 'body_mass', Y2names = 'species', K = K)
+MIbodymassspecies <- mutualinfo('body_mass', 'species', K)
 ```
 
 Scatter plot:
@@ -678,7 +679,7 @@ mi <- signif(MIbodymassspecies$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
-samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
+samples <- rPr(2000, c('body_mass', 'species'), K)
 
 pplot(x = samples$body_mass, y = samples$species,
     type = 'p', xlab = 'body mass / g', ylab = 'species',
@@ -698,7 +699,7 @@ Calculation of mutual information:
 
 ``` r
 
-MIbodymassbilllen <- mutualinfo(Y1names = 'body_mass', Y2names = 'bill_len', K = K)
+MIbodymassbilllen <- mutualinfo('body_mass', 'bill_len', K)
 ```
 
 Scatter plot:
@@ -711,7 +712,7 @@ mi <- signif(MIbodymassbilllen$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 
-samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
+samples <- rPr(2000, c('body_mass', 'bill_len'), K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
@@ -761,23 +762,17 @@ computation could take half an hour):
 
 ``` r
 
-MIadelie <- mutualinfo(
-    Y1names = 'body_mass', Y2names = 'bill_len',
-    X = data.frame(species = 'Adelie'), ## choose subpopulation
-    K = K
-)
+MIadelie <- mutualinfo('body_mass', 'bill_len',
+    data.frame(species = 'Adelie'), ## choose subpopulation
+    K)
 
-MIchinstrap <- mutualinfo(
-    Y1names = 'body_mass', Y2names = 'bill_len',
-    X = data.frame(species = 'Chinstrap'), ## choose subpopulation
-    K = K
-)
+MIchinstrap <- mutualinfo('body_mass', 'bill_len',
+    data.frame(species = 'Chinstrap'), ## choose subpopulation
+    K)
 
-MIgentoo <- mutualinfo(
-    Y1names = 'body_mass', Y2names = 'bill_len',
-    X = data.frame(species = 'Gentoo'), ## choose subpopulation
-    K = K
-)
+MIgentoo <- mutualinfo('body_mass', 'bill_len',
+    data.frame(species = 'Gentoo'), ## choose subpopulation
+    K)
 ```
 
 Let’s compare the mutual information between `body_mass` and `bill_len`
@@ -870,16 +865,6 @@ hist(MIislandspecies)
 sample\*\*](figure/histislandspecies-1.svg)
 
 **Revisability of mutual information with a much larger data sample**
-
- 
-
-If we created a parallel cluster at the beginning of our analysis, let’s
-close it now.
-
-``` r
-
-parallel::stopCluster(cl)
-```
 
  
 
