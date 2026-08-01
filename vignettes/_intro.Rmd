@@ -161,7 +161,7 @@ knitr::kable(penguin, row.names = TRUE)
 
 If you generated the `penguins_shuffled` dataset yourself, then your first 10 samples may be different.
 
-Note that in the data above, samples #1 and #6 have one or more missing variates. But incomplete data are not a problem: inferences can still be performed from them, because Bayesian methods and **Prova** automatically perform *imputation* of missing data, and they do so in a principled way (via the marginalization rule of probability theory). We shall see this in a [later section]{#imputation}.
+Note that in the data above, samples #1 and #6 have one or more missing variates. But incomplete data are not a problem: inferences can still be performed from them, because Bayesian methods and **Prova** automatically perform *imputation* of missing data, and they do so in a principled way (via the marginalization rule of probability theory). We shall see this in a [later section](#imputation).
 
 With these datapoints we start our Bayesian nonparametric analysis using **Prova**!
 
@@ -664,8 +664,10 @@ Now let's take datapoint #6 and infer the value of `bill_len`. We can use the fu
 Y6imp <- vrtgrid('bill_len', K10)
 
 ## Extract data from datapoint #6 of our dataset 'penguins_shuffled'
-## variates with missing variates will be automatically discarded
-X6 <- penguins_shuffled[6, colnames(penguins_shuffled) != 'bill_len']
+X6 <- penguins_shuffled[6, ]
+
+## drop unknown variates
+X <- X[, !is.na(X)]
 print(X6)
 
 imputeddata <- Pr(Y6imp, X6, K10)
