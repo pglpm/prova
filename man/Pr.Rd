@@ -7,7 +7,7 @@
 Pr(
   Y,
   X = NULL,
-  K,
+  K = NULL,
   tails = NULL,
   priorY = NULL,
   nsamples = "all",
