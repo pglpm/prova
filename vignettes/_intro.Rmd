@@ -643,14 +643,14 @@ Let's take datapoint #1 for instance, and infer its missing variate `sex` from a
 
 ```{r imputation1, eval = TRUE}
 ## values we want to guess or impute:
-Yimp <- data.frame(sex = c('female', 'male'))
+Y1imp <- data.frame(sex = c('female', 'male'))
 
 ## Extract data from datapoint #1 of our dataset 'penguins_shuffled'
 ## excluding 'sex' variate
-X <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
-print(X)
+X1 <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
+print(X1)
 
-imputeddata <- Pr(Yimp, X, K10)
+imputeddata <- Pr(Y1imp, X1, K10)
 
 print(imputeddata)
 ```
@@ -661,15 +661,13 @@ Now let's take datapoint #6 and infer the value of `bill_len`. We can use the fu
 
 ```{r imputation6, eval = TRUE, fig.cap=''}
 ## Generate grid of realistic values for 'bill_len' using vrtgrid()
-Yimp <- vrtgrid('bill_len', K10)
+Y6imp <- vrtgrid('bill_len', K10)
 
 ## Extract data from datapoint #6 of our dataset 'penguins_shuffled'
-X <- penguins_shuffled[6, ]
+X6 <- penguins_shuffled[6, , colnames(penguins_shuffled) != 'bill_len']
+print(X6)
 
-## drop unknown variates
-X <- X[, !is.na(X)]
-
-imputeddata <- Pr(Yimp, X, K10)
+imputeddata <- Pr(Y6imp, X6, K10)
 
 plot(imputeddata)
 ```
@@ -688,13 +686,13 @@ Also in this case we only show the example code for the moment:
 ```{r islandandsex, eval = TRUE}
 ## data frame with all combination of values from 'island' and 'sex'
 ## use base-R function 'expand.grid()'
-X2 <- expand.grid(
+Xdouble <- expand.grid(
     island = c('Biscoe', 'Dream', 'Torgersen'),
     sex = c('female', 'male'),
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspecies10IS <- Pr(Y, X2, K10)
+Fspecies10IS <- Pr(Y, Xdouble, K10)
 
 ## Display the estimated frequencies of species
 ## within all six combinations of subpopulations
