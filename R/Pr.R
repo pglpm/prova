@@ -310,12 +310,8 @@ Pr <- function(
         nsamples <- nmcsamples
     }
 
-print('hey****')
-    str(Y)
     if(!is.data.frame(Y)){ Y <- as.data.frame(Y) }
     Yv <- colnames(Y)
-print('hey2****')
-    str(Y)
 
     if(all(is.na(X))){X <- NULL}
     if(!is.null(X) && !is.data.frame(X)){ X <- as.data.frame(X) }
