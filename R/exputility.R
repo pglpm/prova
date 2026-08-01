@@ -33,7 +33,7 @@
 #'
 #' @concept utility
 #' @export
-eutility <- function(
+exputility <- function(
     u,
     p
 ){

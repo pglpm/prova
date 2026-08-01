@@ -12,7 +12,7 @@
 \item{...}{Other parameters to be passed to \code{\link[utils:str]{utils::str()}}.}
 }
 \value{
-Its \code{x} argument, \link[base:invisible]{invisibly}; see \code{\link[base:print]{base::print()}}.
+Its \code{x} argument, \link[base:invisible]{invisibly}; the \link[utils:str]{str}ucture of the corresponding "K" object, if it exists, is also displayed.
 }
 \description{
 This \code{\link[base:print]{base::print()}} method is a utility to display a summary of a "Knowledge" object outputted by \code{\link[=learn]{learn()}}, internally using \code{\link[utils:str]{utils::str()}}. It also display a summary if \code{\link[=learn]{learn()}}'s value is only the path to the directory of the rds file containing the "Knowledge" object itself (see argument \verb{valueisK =} in \code{\link[=learn]{learn()}}), by internally retrieving the object. If you want to have a summary of a "K" object in a given directory or rds file, you can explicitly call \verb{print.K(<file path>)}.

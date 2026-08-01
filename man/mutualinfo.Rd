@@ -80,7 +80,7 @@ An object of class "mi", which is a list consisting of the following elements:
 \item \code{'value.acc'}, \code{quantiles.acc} number and vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the \code{'value'} and the \code{'quantiles'} elements.
 \item \code{'samples'}, a vector with the revisability samples for the mutual information.
 \item \code{'rGauss'}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
-\item \code{'unit'}, \code{'Y1names'}, \code{'Y1names'}, \code{'tails'}: copies of the homonymous input arguments.
+\item \code{'unit'}, \code{'Y1names'}, \code{'Y1names'} \code{'X'}, \code{'tails'}: copies of the homonymous input arguments.
 \item \code{'K'}: name of the "Knowledge" object used in the calculation.
 }
 }
