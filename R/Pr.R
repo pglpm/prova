@@ -276,8 +276,8 @@ Pr <- function(
         K <- X
         X <- NULL
         Kname <- Kname[2]
-    } else if(!is.null(X) && !is.null(.retrieveK(X)) &&
-                  !is.null(K) && is.null(tails)){
+    } else if(!is.null(X) && !is.null(K) && is.null(tails) &&
+                  !is.null(.retrieveK(X))){
             tails <- K
             K <- X
             X <- NULL
@@ -297,7 +297,7 @@ Pr <- function(
     K$auxinfo <- NULL
     ncomponents <- nrow(K$W)
     nmcsamples <- ncol(K$W)
-    
+
     if(is.null(nsamples)){
         nsamples <- 0
     } else if(is.numeric(nsamples)){
