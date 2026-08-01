@@ -543,6 +543,11 @@ which shows that, acquiring more data, we can expect with 89% probability a mutu
 hist(MIislandspecies)
 ```
 
+```{r stopcluster, include = FALSE}
+parallel::stopCluster(cl)
+```
+
+
 \ 
 
 # Appendices {#appendix}
