@@ -664,7 +664,8 @@ Now let's take datapoint #6 and infer the value of `bill_len`. We can use the fu
 Y6imp <- vrtgrid('bill_len', K10)
 
 ## Extract data from datapoint #6 of our dataset 'penguins_shuffled'
-X6 <- penguins_shuffled[6, , colnames(penguins_shuffled) != 'bill_len']
+## variates with missing variates will be automatically discarded
+X6 <- penguins_shuffled[6, colnames(penguins_shuffled) != 'bill_len']
 print(X6)
 
 imputeddata <- Pr(Y6imp, X6, K10)
