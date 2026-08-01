@@ -54,9 +54,7 @@
 ) {
     useLquantiles <- TRUE
 
-    if(!is.data.frame(x)){
-        x <- as.data.frame(x)
-    }
+    if(!is.data.frame(x)){ x <- as.data.frame(as.list(x)) }
 
     if (!is.null(variates)) {
         colnames(x) <- variates

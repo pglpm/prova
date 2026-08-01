@@ -446,7 +446,8 @@ learn <- function(
                 maxincluded = 'character'
             ))
     }
-    metadata <- as.data.frame(metadata)
+
+    if(!is.data.frame(metadata)){ metadata <- as.data.frame(as.list(metadata)) }
 
     ## eliminate possible empty V-columns
     for(i in intersect(paste0('V', 11:3), colnames(metadata))){
@@ -471,7 +472,8 @@ learn <- function(
                 stop('Cannot find data file')
             }
         }
-        data <- as.data.frame(data)
+
+        if(!is.data.frame(data)){ data <- as.data.frame(as.list(data)) }
         rownames(data) <- NULL
 
         ## convert factors to strings if necessary
@@ -546,7 +548,8 @@ learn <- function(
                 stop('Cannot find auxdata file')
             }
         }
-        auxdata <- as.data.frame(auxdata)
+
+        if(!is.data.frame(auxdata)){auxdata <- as.data.frame(as.list(auxdata))}
 
         ## Consistency checks for auxdata
         ## They should be moved to an external function

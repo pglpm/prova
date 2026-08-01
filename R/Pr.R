@@ -310,12 +310,11 @@ Pr <- function(
         nsamples <- nmcsamples
     }
 
-
-    Y <- as.data.frame(Y)
+    if(!is.data.frame(Y)){ Y <- as.data.frame(as.list(Y)) }
     Yv <- colnames(Y)
 
     if(all(is.na(X))){X <- NULL}
-    if(!is.null(X)){X <- as.data.frame(X)}
+    if(!is.null(X) && !is.data.frame(X)){ X <- as.data.frame(as.list(X)) }
     Xv <- colnames(X)
 
     if(!is.null(tails)){

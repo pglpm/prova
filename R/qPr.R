@@ -189,7 +189,7 @@ qPr <- function(
     if(length(Yname) > 1){stop('Specify only one variate in "Yname".')}
 
     if(all(is.na(X))){X <- NULL}
-    if(!is.null(X)){X <- as.data.frame(X)}
+    if(!is.null(X) && !is.data.frame(X)){ X <- as.data.frame(as.list(X)) }
     Xv <- colnames(X)
 
     if(!is.null(tails)){

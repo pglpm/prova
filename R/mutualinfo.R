@@ -191,7 +191,7 @@ mutualinfo <- function(
 
     if(all(is.na(X))){X <- NULL}
     if(!is.null(X)){
-        X <- as.data.frame(X)
+        if(!is.data.frame(X)){ X <- as.data.frame(as.list(X)) }
         if (nrow(X) > 1) {
             warning('Only the first row of X is considered')
             X <- X[1, , drop = FALSE]
@@ -701,7 +701,7 @@ mutualinfoF <- function(
 
     if(all(is.na(X))){X <- NULL}
     if(!is.null(X)){
-        X <- as.data.frame(X)
+        if(!is.data.frame(X)){ X <- as.data.frame(as.list(X)) }
         ## if (nrow(X) > 1) {
         ##     warning('Only the first row of X is considered')
         ##     X <- X[1, , drop = FALSE]

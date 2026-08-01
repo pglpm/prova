@@ -11,11 +11,7 @@
 #'
 #' @keywords internal
 .retrieveK <- function(K){
-    if(inherits(K, 'K') ||
-           (is.list(K) && !is.null(K[['W']]) && !is.null(K[['auxmetadata']]))){
-        ## K is K-object
-        K
-    } else if(is.character(K)){
+    if(is.character(K)){
         if(file.exists(paste0(sub('.rds$', '', K), '.rds'))){
             ## K is path to K-file
             K <- readRDS(paste0(sub('.rds$', '', K), '.rds'))
@@ -31,5 +27,11 @@
         } else {
             NULL
         }
+    } else if(inherits(K, 'K') ||
+           (is.list(K) && !is.null(K[['W']]) && !is.null(K[['auxmetadata']]))){
+        ## K is K-object
+        K
+    } else {
+        NULL
     }
 }
