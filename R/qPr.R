@@ -198,7 +198,6 @@ qPr <- function(
             stop('Missing variate names in "tails"')
         }
     }
-
     tailscentre <- list('==', 0, '0', NULL)
     tailsleft <- list('<=', -1, '-1', 'left', 'lower')
     tailsright <- list('>=', 1, '+1', 'right', 'upper')

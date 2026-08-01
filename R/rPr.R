@@ -81,7 +81,7 @@ rPr <- function(
 ) {
 
     ## Check 'K' argument
-    Kname <- deparse(substitute(K))
+    ## Kname <- deparse(substitute(K))
     K <- .retrieveK(K)
     if(is.null(K)){
         stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
