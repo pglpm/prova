@@ -150,8 +150,8 @@ the penguin’s bill length:
 
 invprob <- Pr(
     data.frame(bill_len = seq(30, 50, by = 0.5)), # predictand
-    data.frame(species = 'Adelie'),              # predictor
-    K                                            # knowledge
+    data.frame(species = 'Adelie'),               # predictor
+    K                                             # knowledge
 )
 
 plot(invprob)
