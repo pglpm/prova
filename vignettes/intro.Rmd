@@ -407,7 +407,7 @@ We discuss both in a moment. First let's compute them using the `Pr()` function.
 
 - `Y`: a `data.frame` listing the values of the variate we are interested in. In the present case the variate is `species` and the values are 'Adelie', 'Chinstrap', 'Gentoo'.
 - `K`: the object that encodes the `K`nowledge from the computation made with the `learn()` function, discussed in the previous section. In the present case it's `K10`.
-- Optionally, `parallel`. This argument specifies how many nodes we should use for the computation, or a cluster previously generated with `parallel::makeCluster()`. If this argument is missing, then the function checks whether a default cluster (set with `parallel::setDefaultCluster()`) exists, and if it doesn't then it creates a number of nodes equal to the R option ""nc.cores" (see `getOption()`), or equal to 2, if that option is unset. Let's create a default parallel cluster with 4 nodes, to be used for the remainder of our analysis. If you don't want to bother with parallel computation for the moment, just skip this step.
+- Optionally, `parallel`. This argument specifies how many nodes we should use for the computation, or a cluster previously generated with `parallel::makeCluster()`. If this argument is missing, then the function checks whether a default cluster (set with `parallel::setDefaultCluster()`) exists, and if it doesn't then it creates a number of nodes equal to the R option "cl.cores" (see `getOption()`), or equal to 2, if that option is unset. Let's create a default parallel cluster with 4 nodes, to be used for the remainder of our analysis. If you don't want to bother with parallel computation for the moment, just skip this step.
 
 
 ``` r

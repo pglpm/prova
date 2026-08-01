@@ -19,13 +19,28 @@
 .testPr <- function(
     Y,
     X = NULL,
-    K,
+    K = NULL,
     tails = NULL
 ){
     Qerror <- pnorm(c(-1, 1))
 
+    ## Figure out unnamed arguments
+    Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
+    if(!is.null(X) && is.null(K)){
+        K <- X
+        X <- NULL
+        Kname <- Kname[2]
+    } else if(!is.null(X) && !is.null(K) && is.null(tails) &&
+                  !is.null(.retrieveK(X))){
+            tails <- K
+            K <- X
+            X <- NULL
+            Kname <- Kname[2]
+    } else {
+        Kname <- Kname[1]
+    }
+
     ## Check 'K' argument
-    Kname <- deparse(substitute(K))
     K <- .retrieveK(K)
     if(is.null(K)){
         stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")

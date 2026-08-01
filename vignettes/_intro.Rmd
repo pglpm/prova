@@ -396,15 +396,15 @@ Bayesian nonparametrics and **Prova** give a first answer to this question in th
 - an *estimate* of the whole-population frequency distribution,
 - the *uncertainty* of this estimate.
 
-We discuss both in a moment. First let's compute them using the `Pr()` function. For the present question, this function requires three arguments:
+We discuss both in a moment. First let's compute them using the `Pr()` function. For the present question, this function requires two arguments:
 
 - `Y`: a `data.frame` listing the values of the variate we are interested in. In the present case the variate is `species` and the values are 'Adelie', 'Chinstrap', 'Gentoo'.
 - `K`: the object that encodes the `K`nowledge from the computation made with the `learn()` function, discussed in the previous section. In the present case it's `K10`.
-- Optionally, `parallel`. This argument specifies how many nodes we should use for the computation, or a cluster previously generated with `parallel::makeCluster()`. If this argument is missing, then the function checks whether a default cluster (set with `parallel::setDefaultCluster()`) exists, and if it doesn't then it creates a number of nodes equal to the R option ""nc.cores" (see `getOption()`), or equal to 2, if that option is unset. Let's create a default parallel cluster with 4 nodes, to be used for the remainder of our analysis. If you don't want to bother with parallel computation for the moment, just skip this step.
+
+*Optionally*, a `parallel =` argument can also be given. This argument specifies how many nodes we should use for the computation, or a cluster previously generated with `parallel::makeCluster()`. If this argument is missing, then the function checks whether a default cluster (set with `parallel::setDefaultCluster()`) exists, and if it doesn't then it creates a number of nodes equal to the R option "cl.cores" (see `options()`), or equal to 2, if that option is unset. In the present example we tell **Prova** that it can use up to 4 nodes; change this value to one that works for your system -- or just skip this step if you don't want to bother with parallel computation for the moment:
 
 ```{r makecluster, eval = FALSE}
-cl <- parallel::makeCluster(4) ## let's use 4 cores, if we have them
-setDefaultCluster(cl)
+options(cl.cores = 4) # use up to 4 nodes
 ```
 
 Back to our function `Pr()`: here is a way to call the function; the computation should take at most a couple of seconds:
@@ -413,8 +413,11 @@ Back to our function `Pr()`: here is a way to call the function; the computation
 ## data frame with the variate and values we want to know the frequencies of
 Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
-Fspecies10 <- Pr(Y = Y, K = K10)
+Fspecies10 <- Pr(Y, K10)
 ```
+
+This could also be entered more explicitly as `Fspecies10 <- Pr(Y = Y, K = K10)`.
+
 
 The answer to our question is now contained in the `Fspecies10` object (we chose this name for "`F`requency distribution of `species`, estimated from `10` samples"). The estimate and its uncertainty can be immediately visualized by calling `plot()` with this object:
 
@@ -490,48 +493,6 @@ print(Fspecies10)
 <!-- As the name tells, this element actually report the *quantiles* of the probability. For example, look at the `= 25%` output: among other things it says `Adelie 0.227634`. This means that there's a 25% probability that the frequency of Adélie penguins is below $0.227634$, and thus a 75% probability that it's above $0.227634$.
  -->
 
-## Imputation of missing data {#imputation}
-
-In our initial dataset, datapoint #1 lacks the value of the `sex` variate, and datapoint #6 lacks the values of variates `bill_len`, `bill_dep`, `flipper_len`, `body_mass`. These partial information of these two datapoints was nevertheless used to learn about the full population. We can probabilistically infer, that is, do imputation, of all these missing data.
-
-Let's take datapoint #1 for instance, and infer its missing variate `sex` from all other, known, variates:
-
-```{r imputation1, eval = TRUE}
-Yimp <- data.frame(sex = c('female', 'male'))
-
-## Extract data from datapoint #1 of our dataset 'penguins_shuffled'
-## excluding 'sex' variate
-X <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
-
-imputeddata <- Pr(Y = Yimp, X = X, K = K10)
-
-print(imputeddata)
-```
-
-We see that penguin #1 might have been female with probability `r printprob(imputeddata$value['female',1])`, although further data might shift that probability somewhere between `r printprob(imputeddata$quantiles['female',1,1])` and `r printprob(imputeddata$quantiles['female',1,4])`.
-
-Now let's take datapoint #6 and infer the value of `bill_len`. We can use the function `vrtgrid()` to generate a grid of realistic values based on the data, and then see the probability distribution over these values:
-
-```{r imputation6, eval = TRUE, fig.cap=''}
-## Generate grid of realistic values for 'bill_len' using vrtgrid()
-Yimp <- vrtgrid(vrt = 'bill_len', K = K10)
-
-## Extract data from datapoint #6 of our dataset 'penguins_shuffled'
-X <- penguins_shuffled[6, ]
-
-## drop unknown variates
-X <- X[, !is.na(X)]
-
-imputeddata <- Pr(Y = Yimp, X = X, K = K10)
-
-plot(imputeddata)
-```
-
-<!-- commented
-The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(Yname = 'bill_len', p = 0.5, X = X, K = K10, parallel = 4)$value[1,1])`.
-commented -->
-
-\
 
 ## A preliminary report on question Q1
 
@@ -574,7 +535,7 @@ Y2 <- expand.grid(
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspeciessex10 <- Pr(Y = Y2, K = K10)
+Fspeciessex10 <- Pr(Y2, K10)
 
 ## Display the estimated frequencies of all six combinations,
 ## as well as their credibility intervals
@@ -601,12 +562,10 @@ Bayesian nonparametrics and **Prova** can also draw this kind of inferences. We 
 ## data frame with the variate and values of the subpopulations of interest
 X <- data.frame(island = c('Biscoe', 'Dream'))
 
-Fspecies10I <- Pr(
-    Y = Y,
-    X = X, ## argument for conditional inferences
-    K = K10
-)
+## The second argument now denote the conditional
+Fspecies10I <- Pr(Y, X, K10)
 ```
+This could also be entered more explicitly as `Fspecies10I <- Pr(Y = Y, X = X, K = K10)`.
 
 The answer to our question is now contained in the `Fspecies10I` object (we add `I` for "island" to the previous name). The estimates of the frequencies and their uncertainties can again be visualized by calling `plot()`:
 
@@ -674,6 +633,51 @@ One problem with *p*-values is that if you re-calculate them anew, as new sample
 
 Bayesian estimates don't suffer from this problem. You can update the estimates and their uncertainties as new samples arrive. What happens is that the uncertainties decrease, and the estimates converge to their true values. This feature keeps you safe and gives you greater flexibility in designing your experiments and in changing strategies along the way. We demonstrate this in the next section.
 
+## Imputation of missing data {#imputation}
+
+In our dataset, datapoint #1 lacks the value of the `sex` variate, and datapoint #6 lacks the values of variates `bill_len`, `bill_dep`, `flipper_len`, `body_mass`. The partial information in these two datapoints was nevertheless still used by the function `learn()`: the datapoints were not discarded.
+
+**Prova** allows you to infer all these missing data; that is, it allows you to do data imputation; and this is done in a *principled* way.
+
+Let's take datapoint #1 for instance, and infer its missing variate `sex` from all other, known, variates:
+
+```{r imputation1, eval = TRUE}
+## values we want to guess or impute:
+Yimp <- data.frame(sex = c('female', 'male'))
+
+## Extract data from datapoint #1 of our dataset 'penguins_shuffled'
+## excluding 'sex' variate
+X <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
+print(X)
+
+imputeddata <- Pr(Yimp, X, K10)
+
+print(imputeddata)
+```
+
+We see that penguin #1 might have been female with probability `r printprob(imputeddata$value['female',1])`, although further data might shift that probability somewhere between `r printprob(imputeddata$quantiles['female',1,1])` and `r printprob(imputeddata$quantiles['female',1,4])`.
+
+Now let's take datapoint #6 and infer the value of `bill_len`. We can use the function `vrtgrid()` to generate a grid of realistic values based on the data, and then see the probability distribution over these values:
+
+```{r imputation6, eval = TRUE, fig.cap=''}
+## Generate grid of realistic values for 'bill_len' using vrtgrid()
+Yimp <- vrtgrid('bill_len', K10)
+
+## Extract data from datapoint #6 of our dataset 'penguins_shuffled'
+X <- penguins_shuffled[6, ]
+
+## drop unknown variates
+X <- X[, !is.na(X)]
+
+imputeddata <- Pr(Yimp, X, K10)
+
+plot(imputeddata)
+```
+
+<!-- commented
+The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(Yname = 'bill_len', p = 0.5, X = X, K = K10)$value[1,1])`.
+commented -->
+
 
 ## What if we're interested in combinations of subpopulations? {#twosubgroups}
 
@@ -690,7 +694,7 @@ X2 <- expand.grid(
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspecies10IS <- Pr(Y = Y, X = X2, K = K10)
+Fspecies10IS <- Pr(Y, X2, K10)
 
 ## Display the estimated frequencies of species
 ## within all six combinations of subpopulations
@@ -754,15 +758,10 @@ We can update our answers -- frequency estimates, their credible intervals, and 
 ## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 ## X <- data.frame(island = c('Biscoe', 'Dream'))
 
-Fspecies60 <- Pr(
-    Y = Y,
-    K = K60 ## updated inference
-)
+Fspecies60 <- Pr(Y, K60) # updated inference using K60
 
-Fspecies60I <- Pr(
-    Y = Y,
-    X = X, ## argument for conditional inferences
-    K = K60 ## updated inference
+## with three arguments, the second stands for the conditional
+Fspecies60I <- Pr(Y, X, K60) # updated inference using K60
 )
 ```
 
@@ -960,9 +959,7 @@ Our final results about the overall relative frequencies of the three species ar
 ## 'Y' was previously defined with:
 ## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
-Fspeciesall <- Pr(
-    Y = Y,
-    K = Kall ## updated inference
+Fspeciesall <- Pr(Y, Kall) # updated inference using Kall
 )
 ```
 
@@ -1011,7 +1008,7 @@ We define an object `Y` for the variate we want to know the frequency about, and
 
 ```{r speciesBiscoeF, eval = TRUE}
 ## All values for the variate of interest
-Y <- vrtgrid(vrt = 'species', K = Kall)
+Y <- vrtgrid('species', Kall)
 
 Xvrt <- 'island' ## subpopulation variate
 Xvls <- 'Biscoe' ## subpopulation value or values
@@ -1019,7 +1016,7 @@ Xvls <- 'Biscoe' ## subpopulation value or values
 X <- data.frame(Xvls)
 colnames(X) <- Xvrt
 
-Fanalysis <- Pr(Y = Y, X = X, K = Kall)
+Fanalysis <- Pr(Y, X, Kall)
 ```
 Here are the probability distributions and the credibility intervals for the three frequencies:
 
@@ -1054,7 +1051,7 @@ Note how our [previous estimates from 60 samples](#surprise) were already quite
 In this case, `Adelie` penguins are our subpopulation:
 
 ```{r islandAdelieF, eval = TRUE}
-Y <- vrtgrid(vrt = 'island', K = Kall)
+Y <- vrtgrid('island', Kall)
 
 Xvrt <- 'species' ## subpopulation variate
 Xvls <- 'Adelie' ## subpopulation value or values
@@ -1063,7 +1060,7 @@ X <- data.frame(Xvls)
 colnames(X) <- Xvrt
 
 ## NB: rewriting the previous 'Fanalysis' object
-Fanalysis <- Pr(Y = Y, X = X, K = Kall)
+Fanalysis <- Pr(Y, X, Kall)
 ```
 Here are the probability distributions and confidence intervals for the three frequencies:
 ```{r, eval = TRUE, fig.cap=''}
@@ -1098,13 +1095,13 @@ In this case we are interested in the (continuous) distribution of body mass in 
 
 ```{r bodyspeciesF, eval = TRUE}
 ## Grid of realistic values for 'body_mass'
-Y <- vrtgrid(vrt = 'body_mass', K = Kall)
+Y <- vrtgrid('body_mass', Kall)
 
 ## Grid of values for 'species', the subpopulation variate
-X <- vrtgrid(vrt = 'species', K = Kall)
+X <- vrtgrid('species', Kall)
 
 ## NB: rewriting the previous 'Fanalysis' object
-Fanalysis <- Pr(Y = Y, X = X, K = Kall)
+Fanalysis <- Pr(Y, X, Kall)
 ```
 Here is the estimated frequency distribution of body mass within each species
 ```{r, eval = TRUE, fig.cap=''}

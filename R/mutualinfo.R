@@ -41,7 +41,7 @@
 #' - A "cluster" object previously created with [parallel::makeCluster()].
 #' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
 #' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
-#' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "nc.cores"; if this option is unset, then use 2 nodes.
+#' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "cl.cores"; if this option is unset, then use 2 nodes.
 #' @param sep character, default `','`: character to separate the output's variate names and values.
 #' @param solidus character, default `'|'`: character prepended to the output's names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
@@ -95,7 +95,7 @@ mutualinfo <- function(
     Y1names,
     Y2names,
     X = NULL,
-    K,
+    K = NULL,
     tails = NULL,
     quantiles =  c(0.055, 0.25, 0.75, 0.945),
     ns = NULL,
@@ -181,7 +181,6 @@ mutualinfo <- function(
     }
 
     ## Check 'K' argument
-    Kname <- deparse(substitute(K))
     K <- .retrieveK(K)
     if(is.null(K)){
         stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
@@ -649,7 +648,7 @@ mutualinfoF <- function(
     Y1names,
     Y2names,
     X = NULL,
-    K,
+    K = NULL,
     tails = NULL,
     quantiles =  c(0.055, 0.25, 0.75, 0.945),
     unit = 'Sh',
@@ -703,8 +702,17 @@ mutualinfoF <- function(
         on.exit(closecoresonexit())
     }
 
+    ## Figure out unnamed arguments
+    Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
+    if(!is.null(X) && is.null(K)){
+        K <- X
+        X <- NULL
+        Kname <- Kname[2]
+    } else {
+        Kname <- Kname[1]
+    }
+
     ## Check 'K' argument
-    Kname <- deparse(substitute(K))
     K <- .retrieveK(K)
     if(is.null(K)){
         stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")

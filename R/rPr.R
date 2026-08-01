@@ -76,7 +76,7 @@ rPr <- function(
     n,
     Ynames,
     X = NULL,
-    K,
+    K = NULL,
     tails = NULL,
     mcsamples = NULL,
     parallel = NULL # unused
