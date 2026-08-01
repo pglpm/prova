@@ -24,25 +24,13 @@
 ){
     Qerror <- pnorm(c(-1, 1))
 
-    ## Extract Monte Carlo output & auxmetadata
-    ## If K is a string, check if it's a folder name or file name
-    if (is.character(K)) {
-        ## Check if 'K' is a folder containing K.rds
-        if (file_test('-d', K) &&
-                file.exists(file.path(K, 'K.rds'))) {
-            K <- readRDS(file.path(K, 'K.rds'))
-        } else {
-            ## Assume 'K' the full path of K.rds
-            ## possibly without the file extension '.rds'
-            K <- paste0(sub('.rds$', '', K), '.rds')
-            if (file.exists(K)) {
-                K <- readRDS(K)
-            } else {
-                stop('The argument "K" must be a folder containing K.rds, or the path to an rds-file containing the output from "learn()".')
-            }
-        }
+    ## Check 'K' argument
+    Kname <- deparse(substitute(K))
+    K <- .retrieveK(K)
+    if(is.null(K)){
+        stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
-    ## Add check to see that K is correct type of object?
+
     auxmetadata <- K$auxmetadata
     K$auxmetadata <- NULL
     K$auxinfo <- NULL

@@ -51,7 +51,7 @@
 #' - `'value.acc'`, `quantiles.acc` number and vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the `'value'` and the `'quantiles'` elements.
 #' - `'samples'`, a vector with the revisability samples for the mutual information.
 #' - `'rGauss'`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
-#' - `'unit'`, `'Y1names'`, `'Y1names'`, `'tails'`: copies of the homonymous input arguments.
+#' - `'unit'`, `'Y1names'`, `'Y1names'` `'X'`, `'tails'`: copies of the homonymous input arguments.
 #' - `'K'`: name of the "Knowledge" object used in the calculation.
 #'
 #' @seealso
@@ -167,27 +167,13 @@ mutualinfo <- function(
         on.exit(closecoresonexit())
     }
 
-    ## Extract Monte Carlo output & aux-metadata
-    ## If K is a string, check if it's a folder name or file name
+    ## Check 'K' argument
     Kname <- deparse(substitute(K))
-    if (is.character(K)) {
-        ## Check if 'K' is a folder containing K.rds
-        if (file_test('-d', K) &&
-                file.exists(file.path(K, 'K.rds'))) {
-            K <- readRDS(file.path(K, 'K.rds'))
-        } else {
-            ## Assume 'K' the full path of K.rds
-            ## possibly without the file extension '.rds'
-            K <- paste0(sub('.rds$', '', K), '.rds')
-            if (file.exists(K)) {
-                K <- readRDS(K)
-            } else {
-                stop("The argument 'K' must be a folder containing 'K.rds', or the path to an rds-file containing the output from 'learn()'.")
-            }
-        }
+    K <- .retrieveK(K)
+    if(is.null(K)){
+        stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
-    ## Add check to see that K is correct type of object?
     auxmetadata <- K$auxmetadata
     K$auxmetadata <- NULL
     K$auxinfo <- NULL
@@ -704,24 +690,11 @@ mutualinfoF <- function(
         on.exit(closecoresonexit())
     }
 
-    ## Extract Monte Carlo output & aux-metadata
-    ## If K is a string, check if it's a folder name or file name
+    ## Check 'K' argument
     Kname <- deparse(substitute(K))
-    if (is.character(K)) {
-        ## Check if 'K' is a folder containing K.rds
-        if (file_test('-d', K) &&
-                file.exists(file.path(K, 'K.rds'))) {
-            K <- readRDS(file.path(K, 'K.rds'))
-        } else {
-            ## Assume 'K' the full path of K.rds
-            ## possibly without the file extension '.rds'
-            K <- paste0(sub('.rds$', '', K), '.rds')
-            if (file.exists(K)) {
-                K <- readRDS(K)
-            } else {
-                stop("The argument 'K' must be a folder containing 'K.rds', or the path to an rds-file containing the output from 'learn()'.")
-            }
-        }
+    K <- .retrieveK(K)
+    if(is.null(K)){
+        stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
     auxmetadata <- K$auxmetadata

@@ -1543,7 +1543,7 @@ print.mi <- function(
 #' @param x Object of class "K", output of [learn()].
 #' @param ... Other parameters to be passed to [utils::str()].
 #'
-#' @return Its `x` argument, [invisibly][base::invisible()]; see [base::print()].
+#' @return Its `x` argument, [invisibly][base::invisible()]; the [str][utils::str()]ucture of the corresponding "K" object, if it exists, is also displayed.
 #'
 #' @seealso
 #' [learn()], which generates a "Knowledge" object.
@@ -1559,26 +1559,12 @@ print.mi <- function(
 #' @concept display
 #' @export
 print.K <- function(x, ...){
-    Kname <- deparse(substitute(x))
-    if (is.character(x)) {
-        ## Check if 'x' is a folder containing K.rds
-        if (file_test('-d', x) &&
-                file.exists(file.path(x, 'K.rds'))) {
-            x <- readRDS(file.path(x, 'K.rds'))
-        } else {
-            ## Assume 'x' the full path of K.rds
-            ## possibly without the file extension '.rds'
-            x <- paste0(sub('.rds$', '', x), '.rds')
-            if (file.exists(x)) {
-                x <- readRDS(x)
-            } else {
-                x <- 'Not a "K" object'
-            }
-        }
-    } else if(!is.list(x) || is.null(x[['auxmetadata']])){
-        x <- 'Not a "K" object'
+    K <- .retrieveK(x)
+    if(is.null(K)){
+        message('Not a "K" object')
+    } else {
+        str(object = K, ...)
     }
-    str(object = x, ...)
     invisible(x)
 }
 
