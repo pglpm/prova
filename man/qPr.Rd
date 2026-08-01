@@ -8,7 +8,7 @@ qPr(
   p = c(0.25, 0.5, 0.75),
   Yname,
   X = NULL,
-  K,
+  K = NULL,
   tails = NULL,
   nsamples = "all",
   quantiles = c(0.055, 0.5, 0.945),
@@ -25,9 +25,9 @@ qPr(
 
 \item{Yname}{Character vector: name of variate whose quantiles will be computed.}
 
-\item{X}{Matrix or data.table or \code{NULL} (default): set of values of variates on which we want to condition. If \code{NULL}, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.}
+\item{X}{Matrix or data.table or \code{NULL} (default): set of values of variates on which we want to condition. If \code{NULL}, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.}
 
-\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
+\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
@@ -68,6 +68,8 @@ Calculate the quantiles of posterior probabilities and posterior conditional pro
 }
 \details{
 This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the \code{qxxx}-variants of \link[stats:Distributions]{R distribution functions}. The revisability can be expressed in the form of quantiles, samples, or both, as in the \code{\link[=Pr]{Pr()}} function. If several joint values are given for the probability levels and for \code{X}, the function creates a 2D grid of results for all possible combinations of the given probability levels and \code{X} values. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.
+
+If \code{qPr()} is called with three unnamed arguments, \code{qPr(..., ..., ...)}, then it is interpreted as \code{qPr(p = ..., Yname = ..., K = ...)}.
 }
 \examples{
 ### WARNING: the following examples, if run, might even take a minute or more.

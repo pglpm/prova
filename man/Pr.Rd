@@ -20,12 +20,11 @@ Pr(
 )
 }
 \arguments{
-\item{Y}{Matrix or data.table: set of values of variates of which we want
-the joint probability of. One variate per column, one set of values per row.}
+\item{Y}{Matrix or data.table: set of values of variates whose probabilities are sought. One variate per column, one set of values per row.}
 
-\item{X}{Matrix or data.table or \code{NULL} (default): set of values of variates on which we want to condition the joint probability of \code{Y}. If \code{NULL}, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.}
+\item{X}{Matrix or data.table or \code{NULL} (default): set of values of variates in the conditional of the probability of \code{Y}. If \code{NULL}, no conditioning is made (besides the conditioning on knowledge \code{K}). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.}
 
-\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
+\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{Y} and \code{X}. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for \code{Y} and \code{X} variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by \code{'<='} or \code{'lower'} or\code{'left'} or \code{-1}; a right-open interval \eqn{Y \ge y} is indicated by \code{'>='} or \code{'upper'} or \code{'right'} or \code{+1}. Values \code{NULL}, \code{'=='}, \code{0} indicate that a point value \code{Y = y} (not an interval) should be calculated. \strong{NB}: the semi-open intervals \emph{always} include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to \emph{more} than 1.}
 
@@ -70,6 +69,8 @@ Calculate posterior probabilities and probability densities, cumulative posterio
 This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as \link[base:data.frame]{data frame} arguments \code{Y} and \code{X}, and \eqn{K} is the information in the data and metadata. It is somewhat analogous to the \code{dxxx}-variants and \code{pxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert K)} is calculated.
 
 For some variates in \code{Y} or \code{X}, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .} Tail values are inputted via the \code{'tails'} argument; see "Usage".
+
+If \code{Pr()} is called with two unnamed arguments, \code{Pr(..., ...)}, then it is interpreted as \code{Pr(Y = ..., K = ...)}. If it is called with three unnamed arguments, then it is interpreted as either \code{Pr(Y = ..., X = ..., K = ...)} or \code{Pr(Y = ..., K = ..., tails = ...)}, depending on whether the second argument appears to be a "Knowledge" object or not.
 
 This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:
 \itemize{

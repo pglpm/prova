@@ -29,6 +29,8 @@ Generates datapoints of chosen joint variates, according to posterior probabilit
 }
 \details{
 This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument \code{Y}, and conditional on the variate values specified in the argument \code{X}. It is somewhat analogous to the \code{rxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails}.
+
+If \code{rPr()} is called with three unnamed arguments, \code{rPr(..., ..., ...)}, then it is interpreted as \code{rPr(n = ..., Ynames = ..., K = ...)}.
 }
 \examples{
 ## Load the example `K`nowledge object calculated from the "penguins" dataset;

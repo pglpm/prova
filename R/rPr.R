@@ -4,6 +4,8 @@
 #'
 #' @details This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument `Y`, and conditional on the variate values specified in the argument `X`. It is somewhat analogous to the `rxxx`-variants of [R distribution functions][stats::Distributions]. If `X` is omitted or `NULL`, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails`.
 #'
+#' If `rPr()` is called with three unnamed arguments, `rPr(..., ..., ...)`, then it is interpreted as `rPr(n = ..., Ynames = ..., K = ...)`.
+#'
 #' @param n Positive integer: number of samples to draw.
 #' @param Ynames Character vector: names of variates to draw jointly
 #' @param X List or data.table or `NULL`: set of values of variates on which we want to condition the joint probability for `Y`. If `NULL` (default), no conditioning is made. Any rows beyond the first are discarded
@@ -80,8 +82,13 @@ rPr <- function(
     parallel = NULL # unused
 ) {
 
+    ## Figure out unnamed arguments
+    if(!is.null(X) && is.null(K)){
+        K <- X
+        X <- NULL
+    }
+
     ## Check 'K' argument
-    ## Kname <- deparse(substitute(K))
     K <- .retrieveK(K)
     if(is.null(K)){
         stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
