@@ -9,7 +9,7 @@ mutualinfo(
   Y1names,
   Y2names,
   X = NULL,
-  K,
+  K = NULL,
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   ns = NULL,
@@ -26,7 +26,7 @@ mutualinfoF(
   Y1names,
   Y2names,
   X = NULL,
-  K,
+  K = NULL,
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   unit = "Sh",
@@ -61,7 +61,7 @@ mutualinfoF(
 \item A "cluster" object previously created with \code{\link[parallel:makeCluster]{parallel::makeCluster()}}.
 \item Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
 \item \code{FALSE}: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
-\item \code{TRUE} (default): use the cluster that was set as default with \code{\link[parallel:setDefaultCluster]{parallel::setDefaultCluster()}}; if no such object exists, then generate a cluster with as many nodes as in the \link[base:getOption]{option} "nc.cores"; if this option is unset, then use 2 nodes.
+\item \code{TRUE} (default): use the cluster that was set as default with \code{\link[parallel:setDefaultCluster]{parallel::setDefaultCluster()}}; if no such object exists, then generate a cluster with as many nodes as in the \link[base:getOption]{option} "cl.cores"; if this option is unset, then use 2 nodes.
 }}
 
 \item{sep}{character, default \code{','}: character to separate the output's variate names and values.}

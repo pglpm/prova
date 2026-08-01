@@ -4,7 +4,7 @@
 \alias{.testPr}
 \title{Test posterior probabilities}
 \usage{
-.testPr(Y, X = NULL, K, tails = NULL)
+.testPr(Y, X = NULL, K = NULL, tails = NULL)
 }
 \arguments{
 \item{Y}{named list of values; list names must be valid variate names.}
