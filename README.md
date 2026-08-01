@@ -82,8 +82,8 @@ The *inverse* question can also be asked: if we observe a new penguin of *Adéli
 ```r
 invprob <- Pr(
     data.frame(bill_len = seq(30, 50, by = 0.5)), # predictand
-    data.frame(species = 'Adelie'),              # predictor
-    K                                            # knowledge
+    data.frame(species = 'Adelie'),               # predictor
+    K                                             # knowledge
 )
 
 plot(invprob)
