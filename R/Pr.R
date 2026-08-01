@@ -220,7 +220,7 @@ Pr <- function(
     solidus = '|',
     verbose = FALSE,
     keepYX = TRUE
-) {
+){
     ## #' @param usememory Logical, default `TRUE`: save partial results to disc, to avoid excessive RAM use. (For the moment only possible value is `TRUE`.)
     usememory <- TRUE
 
