@@ -12,7 +12,7 @@
 #'
 #' - `'value'`: a [matrix][base::matrix()] of the expected utilities of the actions. One row for each action, one column for each value of the conditional \eqn{X} in the probability `p`.
 # #' - `'quantiles'`:...
-#' - `'samples'`: an [array][base::array()] of samples of the long-run expeceted utilities of the actions. The first dimension corresponds to the actions, the second to the values of the conditional \enq{X}, and the third the sample index.
+#' - `'samples'`: an [array][base::array()] of samples of the long-run expeceted utilities of the actions. The first dimension corresponds to the actions, the second to the values of the conditional \eqn{X}, and the third the sample index.
 # #' - `'value.acc'`, `quantiles.acc`:...
 #' - `'X'`, `'tails'`, `'K'`: copies of the homonymous values from the probability object `p`.
 #'

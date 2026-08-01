@@ -15,7 +15,7 @@ exputility(u, p)
 A \link[base:list]{list}  of the following elements:
 \itemize{
 \item \code{'value'}: a \link[base:matrix]{matrix} of the expected utilities of the actions. One row for each action, one column for each value of the conditional \eqn{X} in the probability \code{p}.
-\item \code{'samples'}: an \link[base:array]{array} of samples of the long-run expeceted utilities of the actions. The first dimension corresponds to the actions, the second to the values of the conditional \enq{X}, and the third the sample index.
+\item \code{'samples'}: an \link[base:array]{array} of samples of the long-run expeceted utilities of the actions. The first dimension corresponds to the actions, the second to the values of the conditional \eqn{X}, and the third the sample index.
 \item \code{'X'}, \code{'tails'}, \code{'K'}: copies of the homonymous values from the probability object \code{p}.
 }
 }
