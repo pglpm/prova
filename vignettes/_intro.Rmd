@@ -1111,14 +1111,6 @@ Note how the plots above give us much more information than just a set of estima
 Consider also this question: "Do Adélie and Chinstrap penguins have identical body-mass distributions?" The plots show that this question is too generic and ambiguous. In the body-mass range between 4200 g and 5000 g, the two distributions (solid red, dashed blue) could maybe have very similar values -- there's still some uncertainty there. But in the body-mass range around 3750 g there's a high probability that the two distributions clearly differ; we see that their mean estimates are outside each other's 89%-credibility interval.
 
 
-\ 
-
-If we created a parallel cluster at the beginning of our analysis, let's close it now.
-
-```{r stopcluster, eval = TRUE}
-parallel::stopCluster(cl)
-```
-
 <!--
 \ 
 

@@ -317,14 +317,12 @@ Mutual information is in fact a core quantity of communication theory and inform
 - `Y1names`, `Y2names`: two vectors of variate names; the mutual information is calculated between these two sets.
 - *optionally* `X`: data frame of variate values to restrict the calculation to specific subpopulations.
 - `K`: the object that encodes the `K`nowledge from the computation made with the `learn()` function.
-- Optionally, `unit`: the mutual information unit; default "shannons" (Sh).
-- Optionally, `parallel`  This argument specifies how many nodes we should use for the computation, or a cluster previously generated with `parallel::makeCluster()`. If this argument is missing, then the function checks whether a default cluster (set with `parallel::setDefaultCluster()`) exists, and if it doesn't then it creates a number of nodes equal to the R option "cl.cores" (see `getOption()`), or equal to 2, if that option is unset. Let's create a default parallel cluster with 4 nodes, to be used for the remainder of our analysis. If you don't want to bother with parallel computation for the moment, just skip this step.
+- *Optionally*, `unit`: the mutual information unit; default "shannons" (Sh).
+- *Optionally*, `parallel`  This argument specifies how many nodes we should use for the computation, or a cluster previously generated with `parallel::makeCluster()`. If this argument is missing, then the function checks whether a default cluster (set with `parallel::setDefaultCluster()`) exists, and if it doesn't then it creates a number of nodes equal to the R option "cl.cores" (see `getOption()`), or equal to 2, if that option is unset. In the present example we tell **Prova** that it can use up to 4 nodes; change this value to one that works for your system -- or just skip this step if you don't want to bother with parallel computation for the moment:
 
 ```{r makecluster, eval = FALSE}
-cl <- parallel::makeCluster(4) ## let's use 4 cores, if we have them
-setDefaultCluster(cl)
+options(cl.cores = 4) # use up to 4 nodes
 ```
-
 
 Let's calculate the mutual information between the variates `island` and `species`, [previously discussed and visualized](#newsamples). These are nominal variates with a finite number of possible values, so we can use `mutualinfoF()`:
 
@@ -543,14 +541,6 @@ which shows that, acquiring more data, we can expect with 89% probability a mutu
 
 ```{r histislandspecies, eval = TRUE, fig.cap='**Revisability of mutual information with a much larger data sample**'}
 hist(MIislandspecies)
-```
-
-\ 
-
-If we created a parallel cluster at the beginning of our analysis, let's close it now.
-
-```{r stopcluster, eval = TRUE}
-parallel::stopCluster(cl)
 ```
 
 \ 
