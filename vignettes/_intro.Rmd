@@ -633,6 +633,29 @@ One problem with *p*-values is that if you re-calculate them anew, as new sample
 
 Bayesian estimates don't suffer from this problem. You can update the estimates and their uncertainties as new samples arrive. What happens is that the uncertainties decrease, and the estimates converge to their true values. This feature keeps you safe and gives you greater flexibility in designing your experiments and in changing strategies along the way. We demonstrate this in the next section.
 
+
+## What if we're interested in combinations of subpopulations? {#twosubgroups}
+
+We may be interested in the frequencies of the three species in more complex subpopulations, for example the subpopulation of female penguins living on Biscoe island; in other words, penguins with `island` variate equal to `'Biscoe'`, and `sex` variate equal to `'female'`. These cases are also easily handled by **Prova**, for any combination of subpopulations. The procedure is analogous to the one we [previously discussed](#twovariates) very briefly.
+
+Also in this case we only show the example code for the moment:
+
+```{r islandandsex, eval = TRUE}
+## data frame with all combination of values from 'island' and 'sex'
+## use base-R function 'expand.grid()'
+Xdouble <- expand.grid(
+    island = c('Biscoe', 'Dream', 'Torgersen'),
+    sex = c('female', 'male'),
+    stringsAsFactors = FALSE ## important! Prova doesn't use factors
+)
+
+Fspecies10IS <- Pr(Y, Xdouble, K10)
+
+## Display the estimated frequencies of species
+## within all six combinations of subpopulations
+print(Fspecies10IS, 'value')
+```
+
 ## Imputation of missing data {#imputation}
 
 In our dataset, datapoint #1 lacks the value of the `sex` variate, and datapoint #6 lacks the values of variates `bill_len`, `bill_dep`, `flipper_len`, `body_mass`. The partial information in these two datapoints was nevertheless still used by the function `learn()`: the datapoints were not discarded.
@@ -678,29 +701,6 @@ plot(imputeddata)
 <!-- commented
 The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(Yname = 'bill_len', p = 0.5, X = X, K = K10)$value[1,1])`.
 commented -->
-
-
-## What if we're interested in combinations of subpopulations? {#twosubgroups}
-
-We may be interested in the frequencies of the three species in more complex subpopulations, for example the subpopulation of female penguins living on Biscoe island; in other words, penguins with `island` variate equal to `'Biscoe'`, and `sex` variate equal to `'female'`. These cases are also easily handled by **Prova**, for any combination of subpopulations. The procedure is analogous to the one we [previously discussed](#twovariates) very briefly.
-
-Also in this case we only show the example code for the moment:
-
-```{r islandandsex, eval = TRUE}
-## data frame with all combination of values from 'island' and 'sex'
-## use base-R function 'expand.grid()'
-Xdouble <- expand.grid(
-    island = c('Biscoe', 'Dream', 'Torgersen'),
-    sex = c('female', 'male'),
-    stringsAsFactors = FALSE ## important! Prova doesn't use factors
-)
-
-Fspecies10IS <- Pr(Y, Xdouble, K10)
-
-## Display the estimated frequencies of species
-## within all six combinations of subpopulations
-print(Fspecies10IS, 'value')
-```
 
 
 \
