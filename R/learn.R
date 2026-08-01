@@ -1518,7 +1518,6 @@ learn <- function(
     if (isTRUE(valueisK)) {
         K
     } else if (isFALSE(valueisK)) {
-        class(dirname) <- 'K'
         dirname
     }
 }
