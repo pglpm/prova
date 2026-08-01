@@ -70,7 +70,7 @@ vrtgrid <- function(
     length.out = NA
 ){
     ## default number of points for continuous non-rounded variates
-    lodefault <- 257
+    lodefault <- 129
 
     ## Check 'K' argument
     Kname <- deparse(substitute(K))
