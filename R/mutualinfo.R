@@ -25,6 +25,9 @@
 #'
 #' Function [mutualinfoF()] computes the quantities above by calculating all required probabilities (a finite number) and performing the exact sums. This can only be done for variates with finite domains. If continuous variates are involved, a set of probabilities is calculated on a finite grid of their domain; for this reason the results may be grossly in error. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments `Y1names` and `Y2names`) include *only* variates with finite domains, typically nominal or ordinal variates (see [metadata]).
 #'
+# If either function is called with three unnamed arguments, e.g. `mutualinfo(..., ..., ...)`, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ..., K = ...)`.
+
+#'
 #' @param Y1names Character vector: first group of joint variates
 #' @param Y2names Character vector or `NULL`: second group of joint variates
 #' @param X Matrix or data.frame or `NULL`: values of some variates conditional on which we want the probabilities.
@@ -165,6 +168,16 @@ mutualinfo <- function(
             ## parallel::setDefaultCluster(NULL)
         }
         on.exit(closecoresonexit())
+    }
+
+    ## Figure out unnamed arguments
+    Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
+    if(!is.null(X) && is.null(K)){
+        K <- X
+        X <- NULL
+        Kname <- Kname[2]
+    } else {
+        Kname <- Kname[1]
     }
 
     ## Check 'K' argument

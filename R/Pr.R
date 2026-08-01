@@ -6,6 +6,8 @@
 #'
 #' For some variates in `Y` or `X`, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .} Tail values are inputted via the `'tails'` argument; see "Usage".
 #'
+#' If `Pr()` is called with two unnamed arguments, `Pr(..., ...)`, then it is interpreted as `Pr(Y = ..., K = ...)`. If it is called with three unnamed arguments, then it is interpreted as either `Pr(Y = ..., X = ..., K = ...)` or `Pr(Y = ..., K = ..., tails = ...)`, depending on whether the second argument appears to be a "Knowledge" object or not.
+#'
 #' This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:
 #'
 #' - As samples (default 3600 samples, depending on the 'nsamples' argument given to the [learn()] function) of the alternative values that the posterior probability could have.
@@ -30,10 +32,9 @@
 #'
 #' See `vignette('intro')` for example uses.
 #'
-#' @param Y Matrix or data.table: set of values of variates of which we want
-#'   the joint probability of. One variate per column, one set of values per row.
-#' @param X Matrix or data.table or `NULL` (default): set of values of variates on which we want to condition the joint probability of `Y`. If `NULL`, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row.
-#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
+#' @param Y Matrix or data.table: set of values of variates whose probabilities are sought. One variate per column, one set of values per row.
+#' @param X Matrix or data.table or `NULL` (default): set of values of variates in the conditional of the probability of `Y`. If `NULL`, no conditioning is made (besides the conditioning on knowledge `K`). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
+#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **NB**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
 #' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
 #' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the probability for `Y`. If `NULL` or 0, no samples are reported. If `'all'` or `Inf`, all samples obtained by the [learn()] function are used.
