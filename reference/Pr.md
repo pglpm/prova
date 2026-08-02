@@ -275,7 +275,8 @@ datapoints.
 ## Examples
 
 ``` r
-## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample',
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## ## Example 1:
@@ -298,7 +299,8 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 #>      5.5%     94.5% 
 #> 0.3988210 0.4829919 
 
-## we can also plot the probability distribution for this full-population frequency
+## we can also plot the probability distribution
+## for this full-population frequency
 hist(probs, legend = 'topright')
 
 
@@ -307,7 +309,8 @@ hist(probs, legend = 'topright')
 ## Calculate the 3 probabilities that an unknown penguin from this population
 ## is of species 'Adelie', 'Chinstrap', 'Gentoo'
 
-probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), Kexample)
+probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+  Kexample)
 
 ## display the 3 probability values
 probs$value
@@ -341,7 +344,8 @@ hist(probs)
 ## GIVEN that its bill length is 43 mm
 
 ## more explicitly: Pr(Y = ..., X = ..., K = Kexample)
-probs <- Pr(data.frame(species = 'Adelie'), data.frame(bill_len = 43), Kexample)
+probs <- Pr(data.frame(species = 'Adelie'), data.frame(bill_len = 43),
+  Kexample)
 
 ## display the probability value
 probs$value

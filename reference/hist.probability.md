@@ -116,7 +116,8 @@ to plot the posterior probabilities.
 ## Examples
 
 ``` r
-## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample',
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## calculate the probability, and its revisability,

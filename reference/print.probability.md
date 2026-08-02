@@ -84,7 +84,8 @@ to plot the revisability of the probabilities as a distribution.
 ## Examples
 
 ``` r
-## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample',
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## Calculate the 3 x 2 probabilities for the 3 species

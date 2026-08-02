@@ -171,7 +171,8 @@ to plot the revisability of the probabilities as a distribution.
 ## Examples
 
 ``` r
-## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample',
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## create a grid of values for variate "bill length",

@@ -93,7 +93,8 @@ joint and conditional probabilities.
 ## Examples
 
 ``` r
-## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample'
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## define a utility matrix with four actions,
@@ -110,7 +111,8 @@ print(umatrix)
 #> action4 -0.12  0.35  0.62
 
 ## Calculate the probability of the 'species outcomes
-probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), Kexample)
+probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+  Kexample)
 
 ## Calculate the expected utilities of the actions
 eu <- exputility(umatrix, probs)

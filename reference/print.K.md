@@ -49,7 +49,8 @@ example "K" object included with **Prova**.
 ## Examples
 
 ``` r
-## Display a summary of the example "Knowledge" object calculated from the "penguins" dataset
+## Display a summary of the example "Knowledge" object
+## calculated from the "penguins" dataset
 print(Kexample)
 #> List of 7
 #>  $ Dmean      : num [1, 1:64, 1:225] -0.665 3.942 -5.018 1.271 3.742 ...

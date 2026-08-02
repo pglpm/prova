@@ -100,7 +100,8 @@ quantiles.
 ## Examples
 
 ``` r
-## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample'
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## ## Example 1:

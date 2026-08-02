@@ -89,7 +89,8 @@ to plot probabilities and quantiles calculated by
 ## Examples
 
 ``` r
-## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample',
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## set of values for the variate "species";
@@ -138,7 +139,9 @@ print(valuesAll)
 #> 12    Gentoo 64.20000
 
 ## base::expand.grid() would give a similar result
-valuesAll2 <- expand.grid(species = unlist(valuesSpecies), bill_len = unlist(valuesBill))
+valuesAll2 <- expand.grid(
+  species = unlist(valuesSpecies), bill_len = unlist(valuesBill)
+)
 
 print(valuesAll2)
 #>      species bill_len
