@@ -209,7 +209,7 @@ probabilities, based on data and metadata.
 ## Create a preliminary data frame of metadata for the `penguins` dataset
 metadata <- metadatatemplate(data = datasets::penguins, file = NULL)
 #> Converting factors to characters
-#> Analyzing8variates for344datapoints.
+#> Analysing 8 variates for 344 datapoints.
 #> * "species" variate:
 #>   - 3 different values detected:
 #> "Adelie", "Chinstrap", "Gentoo"
@@ -303,7 +303,7 @@ metadata2 <- metadatatemplate(
   includevrt = c('species', 'bill_len')
 )
 #> Converting factors to characters
-#> Analyzing2variates for344datapoints.
+#> Analysing 2 variates for 344 datapoints.
 #> * "species" variate:
 #>   - 3 different values detected:
 #> "Adelie", "Chinstrap", "Gentoo"
@@ -333,7 +333,7 @@ metadata3 <- metadatatemplate(
   excludevrt = 'year'
 )
 #> Converting factors to characters
-#> Analyzing7variates for344datapoints.
+#> Analysing 7 variates for 344 datapoints.
 #> * "species" variate:
 #>   - 3 different values detected:
 #> "Adelie", "Chinstrap", "Gentoo"
@@ -411,7 +411,7 @@ dataset <- runif(10)
 ## `metadatatemplate` correctly guesses the variate minimum,
 ## but not the maximum (`NA` is equivalent to `+Inf`)
 metadata <- metadatatemplate(data = dataset, file = NULL)
-#> Analyzing1variates for10datapoints.
+#> Analysing 1 variates for 10 datapoints.
 #> * "data" variate:
 #>   - Numeric values between 0.19413033593446 and 0.749502155696973
 #>   Assuming variate to be CONTINUOUS.
