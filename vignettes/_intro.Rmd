@@ -29,15 +29,17 @@ parallel::setDefaultCluster(cl)
 printprob <- function(x, d = 2){sprintf(paste0('%.', d, 'f'), x)}
 
 ## Tol colour-blind-friendly palette
-palette(c(black='black',
-        red='#EE6677',
-        blue='#4477AA',
-        green='#228833',
-        yellow='#CCBB44',
-        purple='#AA3377',
-        cyan='#66CCEE',
-        grey='#BBBBBB',
-        midgrey='#888888'))
+palette(c(
+    black = 'black',
+    blue = '#4477AA',
+    red = '#EE6677',
+    green = '#228833',
+    yellow = '#CCBB44',
+    cyan = '#66CCEE',
+    purple = '#AA3377',
+    grey = '#BBBBBB'
+    ## midgrey = '#888888'
+))
 ```
 
 This vignette gives an introduction and guide to the kinds of *Bayesian nonparametric inference* that can be done with **Prova**, by means of a concrete example. It also has the purpose to clarify the terminology used in the **Prova** package.
