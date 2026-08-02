@@ -59,5 +59,10 @@
 #' [metadatatemplate()] which helps producing this kind of metadata files from a given dataset.
 #'
 #' [learn()] which needs this kind of metadata files to "learn" from data.
+#'
+#' @examples
+#'
+#' print(meta_penguins)
+#'
 #' @concept data
 "meta_penguins"

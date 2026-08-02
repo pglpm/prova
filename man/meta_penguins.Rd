@@ -19,6 +19,11 @@ No return value.
 \description{
 A \link[base:data.frame]{data frame} containing the prior information about all variates of the \link[datasets:penguins]{penguins} dataset.
 }
+\examples{
+
+print(meta_penguins)
+
+}
 \seealso{
 \link[datasets:penguins]{datasets::penguins} dataset.
 
