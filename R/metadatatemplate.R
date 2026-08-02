@@ -178,8 +178,8 @@ metadatatemplate <- function(
         variatelist <- setdiff(variatelist, excludevrt)
     }
 
-    if(verbose){message('Analyzing', length(variatelist), 'variates for',
-        nrow(data), 'datapoints.') }
+    if(verbose){message('Analysing ', length(variatelist), ' variates for ',
+        nrow(data), ' datapoints.') }
 
     ## Loop over variates (columns) in data frame
     for (name in variatelist) {
