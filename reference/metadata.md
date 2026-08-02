@@ -212,59 +212,59 @@ metadata <- metadatatemplate(data = datasets::penguins, file = NULL)
 #> Analysing 8 variates for 344 datapoints.
 #> * "species" variate:
 #>   - 3 different values detected:
-#> "Adelie", "Chinstrap", "Gentoo"
+#> "AdelieChinstrapGentoo", 
 #>   which do not seem to refer to an ordered scale.
-#>   Assuming variate to be NOMINAL.
+#>     => Assuming variate to be NOMINAL.
 #> * "island" variate:
 #>   - 3 different values detected:
-#> "Biscoe", "Dream", "Torgersen"
+#> "BiscoeDreamTorgersen", 
 #>   which do not seem to refer to an ordered scale.
-#>   Assuming variate to be NOMINAL.
+#>     => Assuming variate to be NOMINAL.
 #> * "bill_len" variate:
 #>   - Numeric values between 32.1 and 59.6
-#>   Assuming variate to be CONTINUOUS.
+#>     => Assuming variate to be CONTINUOUS.
 #>   - Distance between datapoints is a multiple of 0.1
-#>   Assuming variate to be ROUNDED.
+#>     => Assuming variate to be ROUNDED.
 #>   - All values are positive
-#>   Assuming "domainmin" to be 0
+#>     => Assuming "domainmin" to be 0.
 #> * "bill_dep" variate:
 #>   - Numeric values between 13.1 and 21.5
-#>   Assuming variate to be CONTINUOUS.
+#>     => Assuming variate to be CONTINUOUS.
 #>   - Distance between datapoints is a multiple of 0.1
-#>   Assuming variate to be ROUNDED.
+#>     => Assuming variate to be ROUNDED.
 #>   - All values are positive
-#>   Assuming "domainmin" to be 0
+#>     => Assuming "domainmin" to be 0.
 #> * "flipper_len" variate:
 #>   - Numeric values between 172 and 231
-#>   Assuming variate to be CONTINUOUS.
+#>     => Assuming variate to be CONTINUOUS.
 #>   - Distance between datapoints is a multiple of 1
-#>   Assuming variate to be ROUNDED.
+#>     => Assuming variate to be ROUNDED.
 #>   - All values are positive
-#>   Assuming "domainmin" to be 0
+#>     => Assuming "domainmin" to be 0.
 #> * "body_mass" variate:
 #>   - Numeric values between 2700 and 6300
-#>   Assuming variate to be CONTINUOUS.
+#>     => Assuming variate to be CONTINUOUS.
 #>   - Distance between datapoints is a multiple of 25
-#>   Assuming variate to be ROUNDED.
+#>     => Assuming variate to be ROUNDED.
 #>   - All values are positive
-#>   Assuming "domainmin" to be 0
+#>     => Assuming "domainmin" to be 0.
 #> * "sex" variate:
 #>   - 2 different values detected:
-#> "female", "male"
+#> "femalemale", 
 #>   which do not seem to refer to an ordered scale.
-#>   Assuming variate to be NOMINAL.
+#>     => Assuming variate to be NOMINAL.
 #> * "year" variate:
-#>   - Only3 different numeric values detected:
-#> from 2007 to 2009 in steps of 1
-#>   Assuming variate to be ORDINAL.
+#>   - Only 3 different numeric values detected:
+#>     from 2007 to 2009 in steps of 1
+#>     => Assuming variate to be ORDINAL.
 #> =========
 #> WARNINGS - please make sure to check these variates in the metadata file:
 #> 
 #> * "flipper_len" variate appears to be continuous and rounded,
-#> but it could also be an ordinal variate
+#> but it could also be an ordinal variate.
 #> 
 #> * "body_mass" variate appears to be continuous and rounded,
-#> but it could also be an ordinal variate
+#> but it could also be an ordinal variate.
 #> 
 #> * "year" variate appears to have been rounded
 #> and then transformed to logarithmic scale.
@@ -306,16 +306,16 @@ metadata2 <- metadatatemplate(
 #> Analysing 2 variates for 344 datapoints.
 #> * "species" variate:
 #>   - 3 different values detected:
-#> "Adelie", "Chinstrap", "Gentoo"
+#> "AdelieChinstrapGentoo", 
 #>   which do not seem to refer to an ordered scale.
-#>   Assuming variate to be NOMINAL.
+#>     => Assuming variate to be NOMINAL.
 #> * "bill_len" variate:
 #>   - Numeric values between 32.1 and 59.6
-#>   Assuming variate to be CONTINUOUS.
+#>     => Assuming variate to be CONTINUOUS.
 #>   - Distance between datapoints is a multiple of 0.1
-#>   Assuming variate to be ROUNDED.
+#>     => Assuming variate to be ROUNDED.
 #>   - All values are positive
-#>   Assuming "domainmin" to be 0
+#>     => Assuming "domainmin" to be 0.
 
 print(metadata2)
 #>       name       type domainmin domainmax datastep minincluded maxincluded
@@ -336,55 +336,55 @@ metadata3 <- metadatatemplate(
 #> Analysing 7 variates for 344 datapoints.
 #> * "species" variate:
 #>   - 3 different values detected:
-#> "Adelie", "Chinstrap", "Gentoo"
+#> "AdelieChinstrapGentoo", 
 #>   which do not seem to refer to an ordered scale.
-#>   Assuming variate to be NOMINAL.
+#>     => Assuming variate to be NOMINAL.
 #> * "island" variate:
 #>   - 3 different values detected:
-#> "Biscoe", "Dream", "Torgersen"
+#> "BiscoeDreamTorgersen", 
 #>   which do not seem to refer to an ordered scale.
-#>   Assuming variate to be NOMINAL.
+#>     => Assuming variate to be NOMINAL.
 #> * "bill_len" variate:
 #>   - Numeric values between 32.1 and 59.6
-#>   Assuming variate to be CONTINUOUS.
+#>     => Assuming variate to be CONTINUOUS.
 #>   - Distance between datapoints is a multiple of 0.1
-#>   Assuming variate to be ROUNDED.
+#>     => Assuming variate to be ROUNDED.
 #>   - All values are positive
-#>   Assuming "domainmin" to be 0
+#>     => Assuming "domainmin" to be 0.
 #> * "bill_dep" variate:
 #>   - Numeric values between 13.1 and 21.5
-#>   Assuming variate to be CONTINUOUS.
+#>     => Assuming variate to be CONTINUOUS.
 #>   - Distance between datapoints is a multiple of 0.1
-#>   Assuming variate to be ROUNDED.
+#>     => Assuming variate to be ROUNDED.
 #>   - All values are positive
-#>   Assuming "domainmin" to be 0
+#>     => Assuming "domainmin" to be 0.
 #> * "flipper_len" variate:
 #>   - Numeric values between 172 and 231
-#>   Assuming variate to be CONTINUOUS.
+#>     => Assuming variate to be CONTINUOUS.
 #>   - Distance between datapoints is a multiple of 1
-#>   Assuming variate to be ROUNDED.
+#>     => Assuming variate to be ROUNDED.
 #>   - All values are positive
-#>   Assuming "domainmin" to be 0
+#>     => Assuming "domainmin" to be 0.
 #> * "body_mass" variate:
 #>   - Numeric values between 2700 and 6300
-#>   Assuming variate to be CONTINUOUS.
+#>     => Assuming variate to be CONTINUOUS.
 #>   - Distance between datapoints is a multiple of 25
-#>   Assuming variate to be ROUNDED.
+#>     => Assuming variate to be ROUNDED.
 #>   - All values are positive
-#>   Assuming "domainmin" to be 0
+#>     => Assuming "domainmin" to be 0.
 #> * "sex" variate:
 #>   - 2 different values detected:
-#> "female", "male"
+#> "femalemale", 
 #>   which do not seem to refer to an ordered scale.
-#>   Assuming variate to be NOMINAL.
+#>     => Assuming variate to be NOMINAL.
 #> =========
 #> WARNINGS - please make sure to check these variates in the metadata file:
 #> 
 #> * "flipper_len" variate appears to be continuous and rounded,
-#> but it could also be an ordinal variate
+#> but it could also be an ordinal variate.
 #> 
 #> * "body_mass" variate appears to be continuous and rounded,
-#> but it could also be an ordinal variate
+#> but it could also be an ordinal variate.
 #> =========
 
 print(metadata3)
@@ -414,9 +414,9 @@ metadata <- metadatatemplate(data = dataset, file = NULL)
 #> Analysing 1 variates for 10 datapoints.
 #> * "data" variate:
 #>   - Numeric values between 0.19413033593446 and 0.749502155696973
-#>   Assuming variate to be CONTINUOUS.
+#>     => Assuming variate to be CONTINUOUS.
 #>   - All values are positive
-#>   Assuming "domainmin" to be 0
+#>     => Assuming "domainmin" to be 0.
 #>   with 0 excluded from domain.
 print(metadata)
 #>   name       type domainmin domainmax datastep minincluded maxincluded V1 V2 V3
