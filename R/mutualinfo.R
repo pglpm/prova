@@ -67,7 +67,8 @@
 #' [learn()], which generates the `K` objects required by `mutualinfo()`.
 #'
 #' @examples
-#' ## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
+#' ## Use the example "Knowledge" object 'Kexample'
+#' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' (nominal, finite domain)
 #' ## and 'bill_len' (continuous rounded, infinite domain)
 #'

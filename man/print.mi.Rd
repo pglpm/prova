@@ -29,7 +29,8 @@ This \code{\link[base:print]{base::print()}} method is a utility to display valu
 \donttest{
 ### WARNING: the following example, if run, might even take a minute or more.
 
-## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample',
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## Calculate the mutual information between variates 'species' and 'bill_len'

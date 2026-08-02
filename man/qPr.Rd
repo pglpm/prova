@@ -75,7 +75,8 @@ If \code{qPr()} is called with three unnamed arguments, \code{qPr(..., ..., ...)
 ### WARNING: the following examples, if run, might even take a minute or more.
 
 \donttest{
-## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample'
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## ## Example 1:
@@ -88,7 +89,8 @@ quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', Kexample)
 quants$value
 
 ## verify these values, within numerical error, using Pr():
-probs <- Pr(data.frame(bill_len = c(quants$value)), Kexample, tails = list(bill_len = -1))
+probs <- Pr(data.frame(bill_len = c(quants$value)), Kexample,
+  tails = list(bill_len = -1))
 probs$value
 
 ## display the revisability about the quantiles
@@ -98,14 +100,15 @@ quants$quantiles
 ## ## Example 2:
 ## Calculate the 25\%-, 50\%-, and 75\%-quantiles for the variate "bill length",
 ## for the subpopulation of species 'Adelie':
-quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', data.frame(species = 'Adelie'), Kexample)
+quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', data.frame(species = 'Adelie'),
+  Kexample)
 
 ## display the quantile values
 quants$value
 
 ## verify these values, within numerical error, using Pr():
-probs <- Pr(data.frame(bill_len = c(quants$value)), data.frame(species = 'Adelie'),
-  Kexample, tails = list(bill_len = -1))
+probs <- Pr(data.frame(bill_len = c(quants$value)),
+  data.frame(species = 'Adelie'), Kexample, tails = list(bill_len = -1))
 probs$value
 }
 

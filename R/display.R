@@ -467,7 +467,8 @@ pplot <- function(
 #' [pplot()] (on which `plot.probability()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+#' ## Use the "Knowledge" object 'Kexample',
+#' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
 #' ## create a grid of values for variate "bill length",
@@ -868,7 +869,8 @@ plot.probability <- function(
 #' [pplot()] (on which `hist.probability()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+#' ## Use the "Knowledge" object 'Kexample',
+#' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
 #' ## calculate the probability, and its revisability,
@@ -1077,7 +1079,8 @@ hist.probability <- function(
 #' [pplot()] (on which `hist.mi()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+#' ## Use the "Knowledge" object 'Kexample',
+#' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
 #' ## calculate the mutual information and its revisability
@@ -1229,7 +1232,8 @@ hist.mi <- function(
 #' [hist.probability()] to plot the revisability of the probabilities as a distribution.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+#' ## Use the "Knowledge" object 'Kexample',
+#' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
 #' ## Calculate the 3 x 2 probabilities for the 3 species
@@ -1352,7 +1356,8 @@ print.probability <- function(
 #' \donttest{
 #' ### WARNING: the following example, if run, might even take a minute or more.
 #'
-#' ## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+#' ## Use the "Knowledge" object 'Kexample',
+#' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
 #' ## Calculate the mutual information between variates 'species' and 'bill_len'
@@ -1546,7 +1551,8 @@ print.mi <- function(
 #' [Kexample] an example "K" object included with **Prova**.
 #'
 #' @examples
-#' ## Display a summary of the example "Knowledge" object calculated from the "penguins" dataset
+#' ## Display a summary of the example "Knowledge" object
+#' ## calculated from the "penguins" dataset
 #' print(Kexample)
 #'
 #' @import utils

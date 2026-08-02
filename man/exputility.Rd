@@ -29,7 +29,8 @@ This functions calculates the expected utilities of each action or decision corr
 This function calculates...
 }
 \examples{
-## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample'
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## define a utility matrix with four actions,
@@ -41,7 +42,8 @@ umatrix <- matrix(c(
 print(umatrix)
 
 ## Calculate the probability of the 'species outcomes
-probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), Kexample)
+probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+  Kexample)
 
 ## Calculate the expected utilities of the actions
 eu <- exputility(umatrix, probs)

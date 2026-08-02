@@ -41,7 +41,8 @@ This function generates datapoints according to the posterior probability \eqn{\
 If \code{rPr()} is called with three unnamed arguments, \code{rPr(..., ..., ...)}, then it is interpreted as \code{rPr(n = ..., Ynames = ..., K = ...)}.
 }
 \examples{
-## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample'
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## ## Example 1:

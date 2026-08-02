@@ -26,7 +26,8 @@ Its \code{x} argument, \link[base:invisible]{invisibly}; see \code{\link[base:pr
 This \code{\link[base:print]{base::print()}} method is a utility to display selected elements of a "probability" object obtained with \code{\link[=Pr]{Pr()}}; typically its posterior probabilies (element \code{'value'}) and their revisabilities (element \code{'quantiles'}). If the \code{Y} or \code{X} variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk \code{*}.
 }
 \examples{
-## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample',
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## Calculate the 3 x 2 probabilities for the 3 species

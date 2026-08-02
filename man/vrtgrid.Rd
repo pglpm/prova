@@ -32,7 +32,8 @@ The set of chosen values, for each variate, depends on the type of variate (nomi
 The output is a \link[base:data.frame]{data frame} that can be used directly in functions like \code{\link[=Pr]{Pr()}}.
 }
 \examples{
-## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample',
+## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## set of values for the variate "species";
@@ -59,7 +60,9 @@ valuesAll <- vrtgrid(c('species', 'bill_len'), Kexample, length.out = 4)
 print(valuesAll)
 
 ## base::expand.grid() would give a similar result
-valuesAll2 <- expand.grid(species = unlist(valuesSpecies), bill_len = unlist(valuesBill))
+valuesAll2 <- expand.grid(
+  species = unlist(valuesSpecies), bill_len = unlist(valuesBill)
+)
 
 print(valuesAll2)
 
