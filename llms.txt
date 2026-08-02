@@ -105,7 +105,7 @@ summary of the result:
 
 prob <- Pr(
     data.frame(species = 'Adelie'), # predictand
-    data.frame(bill_len = 45),      # predictor
+    data.frame(bill_len = 40),      # predictor
     K                               # Knowledge from data & metadata
 )
 
@@ -149,7 +149,7 @@ the penguin’s bill length:
 ``` r
 
 invprob <- Pr(
-    data.frame(bill_len = seq(30, 50, by = 0.5)), # predictand
+    data.frame(bill_len = seq(30, 60, by = 0.5)), # predictand
     data.frame(species = 'Adelie'),               # predictor
     K                                             # knowledge
 )
