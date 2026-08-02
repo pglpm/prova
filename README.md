@@ -57,7 +57,7 @@ where $K$ stands for the knowledge acquired from data and metadata. To answer th
 ```r
 prob <- Pr(
     data.frame(species = 'Adelie'), # predictand
-    data.frame(bill_len = 45),      # predictor
+    data.frame(bill_len = 40),      # predictor
     K                               # Knowledge from data & metadata
 )
 
@@ -81,7 +81,7 @@ The plot shows that this full-population frequency is most likely (with roughly 
 The *inverse* question can also be asked: if we observe a new penguin of *Adélie* species, what could its bill length be? The answer is uncertain, and **Prova** can calculate the probability distribution of the penguin's bill length:
 ```r
 invprob <- Pr(
-    data.frame(bill_len = seq(30, 50, by = 0.5)), # predictand
+    data.frame(bill_len = seq(30, 60, by = 0.5)), # predictand
     data.frame(species = 'Adelie'),               # predictor
     K                                             # knowledge
 )
