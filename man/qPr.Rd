@@ -5,7 +5,7 @@
 \title{Calculate quantiles}
 \usage{
 qPr(
-  p = c(0.25, 0.5, 0.75),
+  p,
   Yname,
   X = NULL,
   K = NULL,
@@ -21,7 +21,7 @@ qPr(
 )
 }
 \arguments{
-\item{p}{Numeric vector of probability levels. Default: \code{c(0.25, 0.5, 0.75)}.}
+\item{p}{Numeric vector of probability levels.}
 
 \item{Yname}{Character vector: name of variate whose quantiles will be computed.}
 
@@ -79,10 +79,10 @@ If \code{qPr()} is called with three unnamed arguments, \code{qPr(..., ..., ...)
 ## variates: 'species' and 'bill_len'
 
 ## ## Example 1:
-## Calculate the 5.5\%-, 50\%-, and 94.5\%-quantiles for the variate "bill lengt",
-## that is, the values of "bill length" having such cumulative probabilities
+## Calculate the 25\%-, 50\%-, and 75\%-quantiles for the variate "bill length",
+## that is, the values of "bill length" having such cumulative probabilities:
 
-quants <- qPr('bill_len', Kexample)
+quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', Kexample)
 
 ## display the quantile values
 quants$value
@@ -96,10 +96,9 @@ quants$quantiles
 
 
 ## ## Example 2:
-## Calculate the 5.5\%-, 50\%-, and 94.5\%-quantiles for the variate "bill lengt",
-## for the subpopulation of species 'Adelie'
-
-quants <- qPr('bill_len', data.frame(species = 'Adelie'), Kexample)
+## Calculate the 25\%-, 50\%-, and 75\%-quantiles for the variate "bill length",
+## for the subpopulation of species 'Adelie':
+quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', data.frame(species = 'Adelie'), Kexample)
 
 ## display the quantile values
 quants$value

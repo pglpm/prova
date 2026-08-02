@@ -6,7 +6,7 @@
 #'
 #' If `qPr()` is called with three unnamed arguments, `qPr(..., ..., ...)`, then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.
 #'
-#' @param p Numeric vector of probability levels. Default: `c(0.25, 0.5, 0.75)`.
+#' @param p Numeric vector of probability levels.
 #' @param Yname Character vector: name of variate whose quantiles will be computed.
 #' @param X Matrix or data.table or `NULL` (default): set of values of variates on which we want to condition. If `NULL`, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
 #' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.
@@ -51,10 +51,10 @@
 #' ## variates: 'species' and 'bill_len'
 #'
 #' ## ## Example 1:
-#' ## Calculate the 5.5%-, 50%-, and 94.5%-quantiles for the variate "bill lengt",
-#' ## that is, the values of "bill length" having such cumulative probabilities
+#' ## Calculate the 25%-, 50%-, and 75%-quantiles for the variate "bill length",
+#' ## that is, the values of "bill length" having such cumulative probabilities:
 #'
-#' quants <- qPr('bill_len', Kexample)
+#' quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', Kexample)
 #'
 #' ## display the quantile values
 #' quants$value
@@ -68,10 +68,9 @@
 #'
 #'
 #' ## ## Example 2:
-#' ## Calculate the 5.5%-, 50%-, and 94.5%-quantiles for the variate "bill lengt",
-#' ## for the subpopulation of species 'Adelie'
-#'
-#' quants <- qPr('bill_len', data.frame(species = 'Adelie'), Kexample)
+#' ## Calculate the 25%-, 50%-, and 75%-quantiles for the variate "bill length",
+#' ## for the subpopulation of species 'Adelie':
+#' quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', data.frame(species = 'Adelie'), Kexample)
 #'
 #' ## display the quantile values
 #' quants$value
@@ -89,7 +88,7 @@
 #' @concept probability
 #' @export
 qPr <- function(
-    p = c(0.25, 0.5, 0.75),
+    p,
     Yname,
     X = NULL,
     K = NULL,
