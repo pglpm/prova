@@ -290,7 +290,7 @@ metadatatemplate <- function(
         ##     if(verbose){
         ##         message('  Two different values detected:\n',
         ##             paste0('"', datavalues, '"', collapse=', '))
-        ##         message('  Assuming variate to be BINARY.')
+        ##         message('    => Assuming variate to be BINARY.')
         ##     }
         ##
         ## } else
@@ -314,10 +314,10 @@ metadatatemplate <- function(
             names(datavalues) <- paste0('V', 1:Nvalues)
             ##
             if(verbose){
-                message('  - ', Nvalues, ' different values detected:\n',
-                    paste0('"', datavalues, '"', collapse = ', '))
+                message('  - ', Nvalues, ' different values detected:')
+                message('"', datavalues, '"', collapse = ', ')
                 message('  which do not seem to refer to an ordered scale.')
-                message('  Assuming variate to be NOMINAL.')
+                message('    => Assuming variate to be NOMINAL.')
             }
 
         } else if (!is.numeric(x)) {
@@ -338,10 +338,10 @@ metadatatemplate <- function(
             names(datavalues) <- paste0('V', 1:Nvalues)
             ##
             if(verbose){
-                message('  - ', Nvalues, ' different non-numeric values detected:\n',
-                    paste0('"', datavalues, '"', collapse = ', '))
+                message('  - ', Nvalues, ' different non-numeric values detected:')
+                message('   ', paste0('"', datavalues, '"', collapse = ', '))
                 message('  which seem to refer to an ordered scale.')
-                message('  Assuming variate to be ORDINAL.')
+                message('    => Assuming variate to be ORDINAL.')
                 message('  Please appropriately reorder its values in metadata file.')
             }
             warninglist <- c(warninglist,
@@ -380,14 +380,14 @@ metadatatemplate <- function(
             ## plotmax <- NA
             ##
             if(verbose){
-                message('  - Only', Nvalues, ' different numeric values detected:\n')
+                message('  - Only ', Nvalues, ' different numeric values detected:')
                 if(jumpquantum == round(jumpquantum)) {
-                    message('from ', domainmin, ' to ', domainmax,
+                    message('    from ', domainmin, ' to ', domainmax,
                         ' in steps of ', jumpquantum)
                 } else {
-                    message(paste0('"', datavalues, '"', collapse = ', '))
+                    message('   ', paste0('"', datavalues, '"', collapse = ', '))
                 }
-                message('  Assuming variate to be ORDINAL.')
+                message('    => Assuming variate to be ORDINAL.')
             }
 
             ## #### This categorization is not used in the present version
@@ -411,7 +411,7 @@ metadatatemplate <- function(
             ##         message(' - ', Nvalues, ' different numeric values detected')
             ##         message('  distance between datapoints is a multiple of integer',
             ##             jumpquantum)
-            ##         message('  Assuming variate to be ORDINAL.')
+            ##         message('    => Assuming variate to be ORDINAL.')
             ##     }
             ##     warninglist <- c(warninglist,
             ##         paste0('* "', name, '" variate',
@@ -451,7 +451,7 @@ metadatatemplate <- function(
             if(verbose){
                 message('  - Numeric values between ',
                     datamin, ' and ', datamax)
-                message('  Assuming variate to be CONTINUOUS.')
+                message('    => Assuming variate to be CONTINUOUS.')
             }
 
             roundedflag <- FALSE
@@ -482,13 +482,13 @@ metadatatemplate <- function(
                 if(verbose){
                     message('  - Distance between datapoints is a multiple of ',
                         jumpquantum)
-                    message('  Assuming variate to be ROUNDED.')
+                    message('    => Assuming variate to be ROUNDED.')
                 }
                 if(jumpquantum >=1) {
                     warninglist <- c(warninglist,
                         paste0('\n* "', name, '" variate',
                             ' appears to be continuous and rounded,',
-                            '\nbut it could also be an ordinal variate'))
+                            '\nbut it could also be an ordinal variate.'))
                 }
                 ## domainmin <- signif(datamin - 4 * rangex, 1)
                 ## domainmax <- signif(datamax + 4 * rangex, 1)
@@ -512,7 +512,7 @@ metadatatemplate <- function(
                 if(verbose){
                     message('  - Several datapoints have minimum value ',
                         datamin)
-                    message('  Assuming "domainmin" to be this minimum observed value')
+                    message('    => Assuming "domainmin" to be this minimum observed value.')
                     if(!roundedflag){
                         message('  and to be included in the domain (singular probabilities there).')
                     }
@@ -527,7 +527,7 @@ metadatatemplate <- function(
                 ##
                 if(verbose){
                     message('  - All values are positive')
-                    message('  Assuming "domainmin" to be 0')
+                    message('    => Assuming "domainmin" to be 0.')
                     if(!roundedflag){
                         message('  with 0 excluded from domain.')
                     }
@@ -542,7 +542,7 @@ metadatatemplate <- function(
                 ##
                 if(verbose){
                     message('  - All values are non-negative')
-                    message('  Assuming "domainmin" to be 0')
+                    message('    => Assuming "domainmin" to be 0.')
                     if(!roundedflag){
                         message('  with 0 included in the domain.')
                     }
@@ -560,7 +560,7 @@ metadatatemplate <- function(
                 if(verbose){
                     message('  - Many datapoints have maximum value ',
                         datamax)
-                    message('  Assuming "domainmax" to be this maximum observed value')
+                    message('    => Assuming "domainmax" to be this maximum observed value.')
                     if(!roundedflag){
                         message('  and to be included in the domain (singular probabilities there).')
                     }
