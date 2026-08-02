@@ -29,12 +29,11 @@ This \code{\link[base:print]{base::print()}} method is a utility to display valu
 \donttest{
 ### WARNING: the following example, if run, might even take a minute or more.
 
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-K <- Kexample
 
 ## Calculate the mutual information between variates 'species' and 'bill_len'
-MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K)
+MI <- mutualinfo('species', 'bill_len', Kexample)
 
 ## display the value and revisability of the mutual information
 print(MI)

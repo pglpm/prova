@@ -41,19 +41,14 @@ This function generates datapoints according to the posterior probability \eqn{\
 If \code{rPr()} is called with three unnamed arguments, \code{rPr(..., ..., ...)}, then it is interpreted as \code{rPr(n = ..., Ynames = ..., K = ...)}.
 }
 \examples{
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-K <- Kexample
 
 ## ## Example 1:
 ## Generate 10 values of the 'species' variate,
 ## according to the frequency distribution estimated from the data
 
-datapoints <- rPr(
-  n = 10,
-  Ynames = 'species',
-  K = K
-)
+datapoints <- rPr(10, 'species', Kexample)
 
 c(datapoints)
 
@@ -61,11 +56,7 @@ c(datapoints)
 ## ## Example 2:
 ## Generate 5 joint values of the 'species' and 'bill_len' variates.
 
-datapoints <- rPr(
-  n = 5,
-  Ynames = c('species', 'bill_len'),
-  K = K
-)
+datapoints <- rPr(5, c('species', 'bill_len'), Kexample)
 
 print(datapoints, row.names = FALSE) ## row names give MCMC information
 
@@ -74,13 +65,8 @@ print(datapoints, row.names = FALSE) ## row names give MCMC information
 ## Generate 5 values of the 'species' variate,
 ## for the subpopulation of penguins having bill length shorter than 40 mm
 
-datapoints <- rPr(
-  n = 5,
-  Ynames = 'species',
-  X = data.frame(bill_len = 40),
-  tails = list(bill_len = 'lower'),
-  K = K
-)
+datapoints <- rPr(5, 'species', data.frame(bill_len = 40), Kexample,
+  tails = list(bill_len = 'lower'))
 
 c(datapoints)
 

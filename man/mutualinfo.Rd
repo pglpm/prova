@@ -109,15 +109,14 @@ Function \code{\link[=mutualinfo]{mutualinfo()}} computes the quantities above v
 Function \code{\link[=mutualinfoF]{mutualinfoF()}} computes the quantities above by calculating all required probabilities (a finite number) and performing the exact sums. This can only be done for variates with finite domains. If continuous variates are involved, a set of probabilities is calculated on a finite grid of their domain; for this reason the results may be grossly in error. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments \code{Y1names} and \code{Y2names}) include \emph{only} variates with finite domains, typically nominal or ordinal variates (see \link{metadata}).
 }
 \examples{
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
 ## variates: 'species' (nominal, finite domain)
 ## and 'bill_len' (continuous rounded, infinite domain)
-K <- Kexample
 
 ## Mutual information between the two variates;
 ## use mutualinfo() because 'bill_len' has infinite domain;
 ## set nv = 2 to reduce accuracy but also computation time
-MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
+MI <- mutualinfo('species', 'bill_len',  Kexample, nv = 2)
 
 ## Print mutual information, its accuracy, and its revisability
 print(MI)

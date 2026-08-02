@@ -15,18 +15,45 @@ exputility(u, p)
 A \link[base:list]{list}  of the following elements:
 \itemize{
 \item \code{'value'}: a \link[base:matrix]{matrix} of the expected utilities of the actions. One row for each action, one column for each value of the conditional \eqn{X} in the probability \code{p}.
-\item \code{'samples'}: an \link[base:array]{array} of samples of the long-run expeceted utilities of the actions. The first dimension corresponds to the actions, the second to the values of the conditional \eqn{X}, and the third the sample index.
+\item \code{'samples'}: an \link[base:array]{array} of samples of the expeceted utilities that the actions would have, if many more sample data were available. The first dimension corresponds to the actions, the second to the values of the conditional \eqn{X}, and the third the sample index.
+\item \code{'value.acc'}: numerical accuracies of \code{'value'} elements.
+\item \verb{'optimal}': \link[base:list]{list} of actions having maximal expected utility, one list element per column of \code{p} (that is, its conditional values \code{X}). If there are ties, all actions in the tie are reported.
+\item \code{'optimal.samples'}: \link[base:matrix]{matrix} of samples of actions having maximal expected utility, if many more sample data were available. Each row correspond to a column of \code{p} (that is, its conditional values \code{X}); each column is a sample. In case of ties, one action is unsystematically selected via \code{\link[base:sample]{base::sample()}}.
 \item \code{'X'}, \code{'tails'}, \code{'K'}: copies of the homonymous values from the probability object \code{p}.
 }
 }
 \description{
-This functions calculates the expected utilities of each action or decision corresponding to a given utility matrix. The long-run utilities are also calculated.
+This functions calculates the expected utilities of each action or decision corresponding to a given utility matrix. The long-run probable utilities are also calculated.
 }
 \details{
 This function calculates...
 }
 \examples{
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
+## variates: 'species' and 'bill_len'
+
+## define a utility matrix with four actions,
+## and outcomes depending on the variate 'species'
+umatrix <- matrix(c(
+ 1.80, 0.42, 1.60, -0.12, -1.10, 0.20, -0.51, 0.35, -0.49, 0.35, -0.48, 0.62
+ ), nrow = 4, ncol = 3, dimnames = list(paste0('action', 1:4), NULL))
+
+print(umatrix)
+
+## Calculate the probability of the 'species outcomes
+probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), Kexample)
+
+## Calculate the expected utilities of the actions
+eu <- exputility(umatrix, probs)
+
+eu$value
+
+## optimal action:
+eu$optimal
+
+## Tabulate probabilities of what optimal action would be
+## if many more sample data were available
+signif(table(eu$optimal.samples)/ncol(eu$optimal.samples), 2)
 
 }
 \references{

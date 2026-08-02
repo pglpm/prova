@@ -75,25 +75,20 @@ If \code{qPr()} is called with three unnamed arguments, \code{qPr(..., ..., ...)
 ### WARNING: the following examples, if run, might even take a minute or more.
 
 \donttest{
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-K <- Kexample
 
 ## ## Example 1:
 ## Calculate the 5.5\%-, 50\%-, and 94.5\%-quantiles for the variate "bill lengt",
 ## that is, the values of "bill length" having such cumulative probabilities
 
-quants <- qPr(Yname = 'bill_len', K = K)
+quants <- qPr('bill_len', Kexample)
 
 ## display the quantile values
 quants$value
 
 ## verify these values, within numerical error, using Pr():
-probs <- Pr(
-  Y = data.frame(bill_len = c(quants$value)),
-  tails = list(bill_len = -1),
-  K = K
-)
+probs <- Pr(data.frame(bill_len = c(quants$value)), Kexample, tails = list(bill_len = -1))
 probs$value
 
 ## display the revisability about the quantiles
@@ -104,17 +99,14 @@ quants$quantiles
 ## Calculate the 5.5\%-, 50\%-, and 94.5\%-quantiles for the variate "bill lengt",
 ## for the subpopulation of species 'Adelie'
 
-quants <- qPr(Yname = 'bill_len', X = data.frame(species = 'Adelie'), K = K)
+quants <- qPr('bill_len', data.frame(species = 'Adelie'), Kexample)
 
 ## display the quantile values
 quants$value
 
 ## verify these values, within numerical error, using Pr():
-probs <- Pr(
-  Y = data.frame(bill_len = c(quants$value)),
-  X = data.frame(species = 'Adelie'),
-  tails = list(bill_len = -1),
-  K = K)
+probs <- Pr(data.frame(bill_len = c(quants$value)), data.frame(species = 'Adelie'),
+  Kexample, tails = list(bill_len = -1))
 probs$value
 }
 

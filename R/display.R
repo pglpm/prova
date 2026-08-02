@@ -467,16 +467,15 @@ pplot <- function(
 #' [pplot()] (on which `plot.probability()` is based) for more general plots.
 #'
 #' @examples
-#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
+#' ## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' K <- Kexample
 #'
 #' ## create a grid of values for variate "bill length",
 #' ## based on the information in the dataset and metadata:
-#' valuesBill <- vrtgrid(vrt = 'bill_len', K = K)
+#' valuesBill <- vrtgrid('bill_len', Kexample)
 #'
 #' ## calculate the probabilities and quantiles
-#' probs <- Pr(Y = valuesBill, K = K)
+#' probs <- Pr(valuesBill, Kexample)
 #'
 #' ## plot the probabilities and quantiles
 #' plot(probs)
@@ -869,13 +868,12 @@ plot.probability <- function(
 #' [pplot()] (on which `hist.probability()` is based) for more general plots.
 #'
 #' @examples
-#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
+#' ## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' K <- Kexample
 #'
 #' ## calculate the probability, and its revisability,
 #' ## for the value 'Adelie' of the "species" variate
-#' probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
+#' probs <- Pr(data.frame(species = 'Adelie'), Kexample)
 #' probs$value
 #'
 #' ## show the revisability of this probability; equivalently show
@@ -1079,12 +1077,11 @@ hist.probability <- function(
 #' [pplot()] (on which `hist.mi()` is based) for more general plots.
 #'
 #' @examples
-#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
+#' ## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' K <- Kexample
 #'
 #' ## calculate the mutual information and its revisability
-#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
+#' MI <- mutualinfo('species', 'bill_len', Kexample, nv = 2)
 #'
 #' ## show the possible revisability of the mutual information,
 #' ## if a much larger data sample were collected
@@ -1232,9 +1229,8 @@ hist.mi <- function(
 #' [hist.probability()] to plot the revisability of the probabilities as a distribution.
 #'
 #' @examples
-#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
+#' ## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' K <- Kexample
 #'
 #' ## Calculate the 3 x 2 probabilities for the 3 species
 #' ## given bill-lengths of 43 mm and 44 mm
@@ -1242,7 +1238,7 @@ hist.mi <- function(
 #' Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 #' X <- data.frame(bill_len = c(43, 44))
 #'
-#' probs <- Pr(Y = Y, X = X, K = K)
+#' probs <- Pr(Y, X, Kexample)
 #'
 #' ## display the values and revisabilities of these probabilities
 #' print(probs)
@@ -1356,12 +1352,11 @@ print.probability <- function(
 #' \donttest{
 #' ### WARNING: the following example, if run, might even take a minute or more.
 #'
-#' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
+#' ## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
-#' K <- Kexample
 #'
 #' ## Calculate the mutual information between variates 'species' and 'bill_len'
-#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K)
+#' MI <- mutualinfo('species', 'bill_len', Kexample)
 #'
 #' ## display the value and revisability of the mutual information
 #' print(MI)

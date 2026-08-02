@@ -46,12 +46,11 @@ The mutual information calculated with the \code{\link[=mutualinfo]{mutualinfo()
 The \code{hist()} method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely such change would be. The distribution is represented by a histogram formed from samples of revised mutual information. The bin size is chosen according to the Monte Carlo accuracy.
 }
 \examples{
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-K <- Kexample
 
 ## calculate the mutual information and its revisability
-MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
+MI <- mutualinfo('species', 'bill_len', Kexample, nv = 2)
 
 ## show the possible revisability of the mutual information,
 ## if a much larger data sample were collected
