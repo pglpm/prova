@@ -89,13 +89,12 @@ to plot probabilities and quantiles calculated by
 ## Examples
 
 ``` r
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-K <- Kexample
 
 ## set of values for the variate "species";
 ## since this variate is of a nominal kind, all values are included
-valuesSpecies <- vrtgrid(vrt = 'species', K = K)
+valuesSpecies <- vrtgrid('species', Kexample)
 
 print(valuesSpecies)
 #>     species
@@ -105,7 +104,7 @@ print(valuesSpecies)
 
 ## create a small set of values for the variate "bill length";
 ## this variate is continuous and rounded
-valuesBill <- vrtgrid(vrt = 'bill_len', K = K, length.out = 4)
+valuesBill <- vrtgrid('bill_len', Kexample, length.out = 4)
 
 print(valuesBill)
 #>   bill_len
@@ -116,12 +115,12 @@ print(valuesBill)
 
 ## calculate the conditional probabilities for the 'bill_len' values above,
 ## given the values of 'species'
-probs <- Pr(Y = valuesBill, X = valuesSpecies, K = K)
+probs <- Pr(valuesBill, valuesSpecies, Kexample)
 
 
 ## Create a data frame with all possible combinations of the values above;
 ## the 'length.out' argument does not apply to the discrete variate 'species'
-valuesAll <- vrtgrid(vrt = c('species', 'bill_len'), K = K, length.out = 4)
+valuesAll <- vrtgrid(c('species', 'bill_len'), Kexample, length.out = 4)
 
 print(valuesAll)
 #>      species bill_len

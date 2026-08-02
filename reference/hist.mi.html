@@ -116,12 +116,11 @@ The hist() method for a "mi" object is a utility to visualize this kind of revis
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Load the example `K`nowledge object calculated from the "penguins" dataset;</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
-<span class="r-in"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="va">Kexample</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## calculate the mutual information and its revisability</span></span></span>
-<span class="r-in"><span><span class="va">MI</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutualinfo.html">mutualinfo</a></span><span class="op">(</span>Y1names <span class="op">=</span> <span class="st">'species'</span>, Y2names <span class="op">=</span> <span class="st">'bill_len'</span>, K <span class="op">=</span> <span class="va">K</span>, nv <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">MI</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutualinfo.html">mutualinfo</a></span><span class="op">(</span><span class="st">'species'</span>, <span class="st">'bill_len'</span>, <span class="va">Kexample</span>, nv <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## show the possible revisability of the mutual information,</span></span></span>
 <span class="r-in"><span><span class="co">## if a much larger data sample were collected</span></span></span>

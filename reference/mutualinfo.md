@@ -235,18 +235,17 @@ generates the `K` objects required by `mutualinfo()`.
 ## Examples
 
 ``` r
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
 ## variates: 'species' (nominal, finite domain)
 ## and 'bill_len' (continuous rounded, infinite domain)
-K <- Kexample
 
 ## Mutual information between the two variates;
 ## use mutualinfo() because 'bill_len' has infinite domain;
 ## set nv = 2 to reduce accuracy but also computation time
-MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K, nv = 2)
+MI <- mutualinfo('species', 'bill_len',  Kexample, nv = 2)
 
 ## Print mutual information, its accuracy, and its revisability
 print(MI)
 #> value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-#>    0.797    0.029     0.14    0.706    1.082    1.277 
+#>    0.694    0.048        0    0.632    1.047    1.247 
 ```

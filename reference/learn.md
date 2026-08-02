@@ -453,7 +453,7 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpjXSn0R/prova-V1_D3_S10_260801T213253_1a9f73ed51ee
+#> /tmp/Rtmprf6eRv/prova-V1_D3_S10_260802T102814_19d437a884a5
 #> Prova v2.2.2.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -469,16 +469,16 @@ K <- learn(
 #> 
 #> Checking test data
 #> (#1 #2 #3):
-#> rel. quantile error: 0.341 to 0.816
+#> rel. quantile error: 0.274 to 0.819
 #> ESS: 6.13 to 8.59
-#> needed thinning: 1.05 to 5.99
-#> average: 0.0919 to 0.187
-#> quantile width: 0.0585 to 0.541
+#> needed thinning: 1.05 to 6.03
+#> average: 0.0791 to 0.454
+#> quantile width: 0.0823 to 1.37
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 34 secs
-#> Average preparation & finalization time: 33 secs.
-#> Average Monte Carlo time per chain: 0.56 secs.
+#> Total computation time: 32 secs
+#> Average preparation & finalization time: 30 secs.
+#> Average Monte Carlo time per chain: 0.69 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -486,15 +486,15 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpjXSn0R/prova-V1_D3_S10_260801T213253_1a9f73ed51ee
+#> /tmp/Rtmprf6eRv/prova-V1_D3_S10_260802T102814_19d437a884a5
 #> **********************************************************
 
 ## Check structure of `K` object:
 str(K)
 #> List of 6
-#>  $ Rmean      : num [1, 1:64, 1:9] -1.047 3.247 2.547 -2.543 -0.296 ...
-#>  $ Rsd        : num [1, 1:64, 1:9] 8.224 0.227 1.145 0.638 7.141 ...
-#>  $ W          : num [1:64, 1:9] 4.10e-13 4.32e-10 6.51e-28 1.31e-262 2.73e-28 ...
+#>  $ Rmean      : num [1, 1:64, 1:9] -2.32 -3.69 2.92 2.92 -1.05 ...
+#>  $ Rsd        : num [1, 1:64, 1:9] 0.249 2.446 0.629 1.453 0.298 ...
+#>  $ W          : num [1:64, 1:9] 2.40e-13 2.53e-10 3.81e-28 7.68e-263 1.60e-28 ...
 #>  $ MCindex    : num [1:9(1d)] 1 2 3 4 6 7 8 9 10
 #>  $ auxmetadata:'data.frame': 1 obs. of  24 variables:
 #>   ..$ name             : chr "V"
@@ -515,10 +515,10 @@ str(K)
 #>   ..$ domainmaxminushs : num Inf
 #>   ..$ tdomainminplushs : num -Inf
 #>   ..$ tdomainmaxminushs: num Inf
-#>   ..$ tlocation        : num -0.59
-#>   ..$ tscale           : num 0.0508
-#>   ..$ plotmin          : num -0.815
-#>   ..$ plotmax          : num -0.381
+#>   ..$ tlocation        : num -0.476
+#>   ..$ tscale           : num 0.574
+#>   ..$ plotmin          : num -2.76
+#>   ..$ plotmax          : num 2.14
 #>   ..$ V1               : logi NA
 #>   ..$ V2               : logi NA
 #>  $ auxinfo    :List of 12
@@ -550,15 +550,15 @@ str(K)
 #>   ..$ maxusedcomponents  : num 3
 #>   ..$ nonfinitechains    : num 0
 #>   ..$ stoppedchains      : num 0
-#>   ..$ rel. quantile error: Named num [1:4] 0.341 0.573 0.426 0.816
+#>   ..$ rel. quantile error: Named num [1:4] 0.483 0.274 0.659 0.819
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ ESS                : Named num [1:4] 8.59 6.13 8.59 8.59
+#>   ..$ ESS                : Named num [1:4] 8.59 8.59 6.13 8.59
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ needed thinning    : Named num [1:4] 1.05 2.96 1.64 5.99
+#>   ..$ needed thinning    : Named num [1:4] 2.1 1.05 3.91 6.03
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ average            : Named num [1:4] 0.1168 0.1558 0.0919 0.1865
+#>   ..$ average            : Named num [1:4] 0.1073 0.0928 0.4542 0.0791
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ quantile width     : Named num [1:4] 0.0585 0.231 0.1549 0.5406
+#>   ..$ quantile width     : Named num [1:4] 0.0823 0.1452 1.3658 0.2341
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
 #>  - attr(*, "class")= chr "K"
 # }

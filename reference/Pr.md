@@ -275,15 +275,15 @@ datapoints.
 ## Examples
 
 ``` r
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-K <- Kexample
 
 ## ## Example 1:
 ## Calculate the probability that an unknown penguin from this population
 ## is of species 'Adelie'
 
-probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
+## more explicitly: Pr(Y = data.frame(species = 'Adelie'), K = Kexample)
+probs <- Pr(data.frame(species = 'Adelie'), Kexample)
 
 ## display the probability value
 probs$value
@@ -307,10 +307,7 @@ hist(probs, legend = 'topright')
 ## Calculate the 3 probabilities that an unknown penguin from this population
 ## is of species 'Adelie', 'Chinstrap', 'Gentoo'
 
-probs <- Pr(
-  Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-  K = K
-)
+probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), Kexample)
 
 ## display the 3 probability values
 probs$value
@@ -343,11 +340,8 @@ hist(probs)
 ## Calculate the probability that an unknown penguin is of species 'Adelie'
 ## GIVEN that its bill length is 43 mm
 
-probs <- Pr(
-  Y = data.frame(species = 'Adelie'),
-  X = data.frame(bill_len = 43),
-  K = K
-)
+## more explicitly: Pr(Y = ..., X = ..., K = Kexample)
+probs <- Pr(data.frame(species = 'Adelie'), data.frame(bill_len = 43), Kexample)
 
 ## display the probability value
 probs$value
@@ -368,7 +362,7 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 ## Calculate the probability that
 ## an unknown penguin is of species 'Adelie' AND its bill length is 43 mm
 
-probs <- Pr(Y = data.frame(species = 'Adelie', bill_len = 43), K = K)
+probs <- Pr(data.frame(species = 'Adelie', bill_len = 43), Kexample)
 
 ## display the probability value
 probs$value
@@ -391,7 +385,7 @@ Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
 X <- data.frame(bill_len = c(43, 44))
 
-probs <- Pr(Y = Y, X = X, K = K)
+probs <- Pr(Y, X, Kexample)
 
 ## display the 3 x 2 probability values
 probs$value
@@ -435,7 +429,7 @@ Y <- expand.grid(
   bill_len = c(43, 44)
 )
 
-probs <- Pr(Y = Y, K = K)
+probs <- Pr(Y, Kexample)
 
 ## display the 6 joint-probability values
 probs$value

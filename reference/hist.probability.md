@@ -116,13 +116,12 @@ to plot the posterior probabilities.
 ## Examples
 
 ``` r
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-K <- Kexample
 
 ## calculate the probability, and its revisability,
 ## for the value 'Adelie' of the "species" variate
-probs <- Pr(Y = data.frame(species = 'Adelie'), K = K)
+probs <- Pr(data.frame(species = 'Adelie'), Kexample)
 probs$value
 #>         
 #> species      [,1]

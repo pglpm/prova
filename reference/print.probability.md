@@ -84,9 +84,8 @@ to plot the revisability of the probabilities as a distribution.
 ## Examples
 
 ``` r
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-K <- Kexample
 
 ## Calculate the 3 x 2 probabilities for the 3 species
 ## given bill-lengths of 43 mm and 44 mm
@@ -94,7 +93,7 @@ K <- Kexample
 Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 X <- data.frame(bill_len = c(43, 44))
 
-probs <- Pr(Y = Y, X = X, K = K)
+probs <- Pr(Y, X, Kexample)
 
 ## display the values and revisabilities of these probabilities
 print(probs)

@@ -78,21 +78,20 @@ plot the revisability of the mutual information.
 # \donttest{
 ### WARNING: the following example, if run, might even take a minute or more.
 
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the "Knowledge" object 'Kexample', calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-K <- Kexample
 
 ## Calculate the mutual information between variates 'species' and 'bill_len'
-MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = K)
+MI <- mutualinfo('species', 'bill_len', Kexample)
 
 ## display the value and revisability of the mutual information
 print(MI)
 #> value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-#>    0.735    0.017    0.313    0.637    0.926    1.046 
+#>    0.765    0.015    0.361    0.675    0.939    1.050 
 
 ## convert to hartleys (base-10 logarithms):
 print(MI, unit = 'Hart')
 #> value/Hart        +/-      Q5.5%       Q25%       Q75%     Q94.5% 
-#>      0.735      0.017      0.313      0.637      0.926      1.046 
+#>      0.765      0.015      0.361      0.675      0.939      1.050 
 # }
 ```

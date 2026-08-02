@@ -8,7 +8,7 @@ more training data were available.
 
 ``` r
 qPr(
-  p = c(0.25, 0.5, 0.75),
+  p,
   Yname,
   X = NULL,
   K = NULL,
@@ -28,7 +28,7 @@ qPr(
 
 - p:
 
-  Numeric vector of probability levels. Default: `c(0.25, 0.5, 0.75)`.
+  Numeric vector of probability levels.
 
 - Yname:
 
@@ -183,15 +183,14 @@ datapoints.
 ### WARNING: the following examples, if run, might even take a minute or more.
 
 # \donttest{
-## Load the example `K`nowledge object calculated from the "penguins" dataset;
+## Use the example "Knowledge" object 'Kexample' calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
-K <- Kexample
 
 ## ## Example 1:
-## Calculate the 5.5%-, 50%-, and 94.5%-quantiles for the variate "bill lengt",
-## that is, the values of "bill length" having such cumulative probabilities
+## Calculate the 25%-, 50%-, and 75%-quantiles for the variate "bill length",
+## that is, the values of "bill length" having such cumulative probabilities:
 
-quants <- qPr(Yname = 'bill_len', K = K)
+quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', Kexample)
 
 ## display the quantile values
 quants$value
@@ -202,11 +201,7 @@ quants$value
 #>     0.75 48.3
 
 ## verify these values, within numerical error, using Pr():
-probs <- Pr(
-  Y = data.frame(bill_len = c(quants$value)),
-  tails = list(bill_len = -1),
-  K = K
-)
+probs <- Pr(data.frame(bill_len = c(quants$value)), Kexample, tails = list(bill_len = -1))
 probs$value
 #>          
 #> bill_len<      [,1]
@@ -243,10 +238,9 @@ quants$quantiles
 
 
 ## ## Example 2:
-## Calculate the 5.5%-, 50%-, and 94.5%-quantiles for the variate "bill lengt",
-## for the subpopulation of species 'Adelie'
-
-quants <- qPr(Yname = 'bill_len', X = data.frame(species = 'Adelie'), K = K)
+## Calculate the 25%-, 50%-, and 75%-quantiles for the variate "bill length",
+## for the subpopulation of species 'Adelie':
+quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', data.frame(species = 'Adelie'), Kexample)
 
 ## display the quantile values
 quants$value
@@ -257,11 +251,8 @@ quants$value
 #>     0.75   40.6
 
 ## verify these values, within numerical error, using Pr():
-probs <- Pr(
-  Y = data.frame(bill_len = c(quants$value)),
-  X = data.frame(species = 'Adelie'),
-  tails = list(bill_len = -1),
-  K = K)
+probs <- Pr(data.frame(bill_len = c(quants$value)), data.frame(species = 'Adelie'),
+  Kexample, tails = list(bill_len = -1))
 probs$value
 #>          |species
 #> bill_len<    Adelie
