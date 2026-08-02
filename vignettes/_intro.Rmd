@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 )
 options(knitr.kable.NA = '')
 
-cl <- parallel::makeCluster(8)
+cl <- parallel::makeCluster(6)
 parallel::setDefaultCluster(cl)
 
 printprob <- function(x, d = 2){sprintf(paste0('%.', d, 'f'), x)}
