@@ -86,7 +86,7 @@ invprob <- Pr(
     K                                             # knowledge
 )
 
-plot(invprob)
+plot(invprob, col = 2)
 ```
 <img src="man/figures/README-plot-1.svg" alt="probability distribution for bill length" width="100%"/>
 
