@@ -731,7 +731,7 @@ object:
 
 ``` r
 
-plot(Fspecies10)
+plot(Fspecies10, col = 8)
 ```
 
 ![\*\*Estimates and uncertainty of relative frequencies of penguin
@@ -845,7 +845,7 @@ each species. We can plot the probabilities of the frequencies of the
 ## select only Adelie by means of argument 'subset ='
 hist(Fspecies10,
     subset = list(species = 'Adelie'),
-    xlim = c(0, 1), legend = 'topright', col = 2)
+    xlim = c(0, 1), legend = 'topright', col = 1)
 ```
 
 ![\*\*Probability distribution for the frequency of Adelie
@@ -920,7 +920,7 @@ distributions for all three frequencies:
 
 ``` r
 
-hist(Fspecies10, legend = 'topright', col = 2:4)
+hist(Fspecies10, legend = 'topright', col = 1:3)
 ```
 
 ![\*\*Probability distribution for the rel. requencies of penguin
@@ -1031,7 +1031,7 @@ frequencies and their uncertainties can again be visualized by calling
 
 ``` r
 
-plot(Fspecies10I, col = 5:6)
+plot(Fspecies10I, col = 4:5)
 ```
 
 ![\*\*Estimates and uncertainty of conditional
@@ -1083,7 +1083,7 @@ For Biscoe island we find
 
 ## select only Biscoe
 hist(Fspecies10I, subset = list(island = 'Biscoe'),
-    xlim = c(0, 1), legend = 'topright', col = 2:4)
+    xlim = c(0, 1), legend = 'topright', col = 1:3)
 ```
 
 ![\*\*Probability distribution for species frequencies on
@@ -1109,7 +1109,7 @@ For Dream island we find
 
 ## select only Dream
 hist(Fspecies10I, subset = list(island = 'Dream'),
-    xlim = c(0, 1), legend = 'topright', col = 2:4)
+    xlim = c(0, 1), legend = 'topright', col = 1:3)
 ```
 
 ![\*\*Probability distribution for species frequencies on
@@ -1308,7 +1308,7 @@ print(X6)
 
 imputeddata <- Pr(Y6imp, X6, K10)
 
-plot(imputeddata)
+plot(imputeddata, col = 8, legend = 'topleft')
 ```
 
 ![](figure/imputation6-1.svg)
@@ -1415,7 +1415,7 @@ species. Let’s plot the new estimates and their credibility intervals:
 
 ``` r
 
-plot(Fspecies60)
+plot(Fspecies60, col = 8)
 ```
 
 ![\*\*Updated frequency estimates of penguin
@@ -1435,13 +1435,13 @@ initial and updated inferences, to better see how they got updated:
 ymax <- max(Fspecies10$quantiles, Fspecies60$quantiles)
 
 plot(Fspecies10, ylim = c(0, ymax), grid = FALSE,
-    col = 2, lty = 2, lwd = 3, pch = 2) ## distinguish the two plots
+    col = 1, lty = 2, lwd = 3, pch = 2) ## distinguish the two plots
 
 plot(Fspecies60, ylim = c(0, ymax), grid = FALSE, add = TRUE,
-    col = 1, lty = 1, lwd = 2, pch = 1) ## distinguish the two plots
+    col = 2, lty = 1, lwd = 2, pch = 1) ## distinguish the two plots
 
 legend('top', c('10 samples', '60 samples'),
-    col = 2:1, lty = 2:1, pch = 2:1, bty = 'n')
+    col = 1:2, lty = 2:1, pch = 2:1, bty = 'n')
 ```
 
 ![](figure/vis60compare-1.svg)
@@ -1471,7 +1471,7 @@ ones to highlight the changes:
 
 hist(Fspecies10, legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 10), ## y-range same for both plots
-    col = 2:4, main = '10 samples')
+    col = 1:3, main = '10 samples')
 ```
 
 ![](figure/hist60-1.svg)
@@ -1481,7 +1481,7 @@ hist(Fspecies10, legend = 'topright', xlim = c(0, 1),
 
 hist(Fspecies60, legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 10), ## y-range same for both plots
-    col = 2:4, main = '60 samples')
+    col = 1:3, main = '60 samples')
 ```
 
 ![](figure/hist60-2.svg)
@@ -1542,7 +1542,7 @@ inference.
 hist(Fspecies10I, subset = list(island = 'Dream'),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 13), ## same y-range
-    col = 2:4, main = '10 samples, Dream island')
+    col = 1:3, main = '10 samples, Dream island')
 ```
 
 ![](figure/hist60Dream-1.svg)
@@ -1553,7 +1553,7 @@ hist(Fspecies10I, subset = list(island = 'Dream'),
 hist(Fspecies60I, subset = list(island = 'Dream'),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 13), ## same y-range
-    col = 2:4, main = '60 samples, Dream island')
+    col = 1:3, main = '60 samples, Dream island')
 ```
 
 ![](figure/hist60Dream-2.svg)
@@ -1571,7 +1571,7 @@ were correctly warned about their possible change.
 hist(Fspecies10I, subset = list(island = 'Biscoe'),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 17), ## same y-range from previous plot
-    col = 2:4, main = '10 samples, Biscoe island')
+    col = 1:3, main = '10 samples, Biscoe island')
 ```
 
 ![](figure/hist60Biscoe-1.svg)
@@ -1582,7 +1582,7 @@ hist(Fspecies10I, subset = list(island = 'Biscoe'),
 hist(Fspecies60I, subset = list(island = 'Biscoe'),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 17), ## same y-range from previous plot
-    col = 2:4, main = '60 samples, Biscoe island')
+    col = 1:3, main = '60 samples, Biscoe island')
 ```
 
 ![](figure/hist60Biscoe-2.svg)
@@ -1608,7 +1608,7 @@ freqdiff <- Fspecies60I$samples['Gentoo', 'Biscoe',] -
 
 hist(freqdiff, plot = TRUE, xlim = c(-0.5, 1), breaks = 'FD',
     xlab = 'frequency difference', ylab = 'probability density',
-    main = NULL)
+    col = 7, main = NULL)
 ```
 
 ![\*\*probability of frequency difference between Gentoo and
@@ -1741,7 +1741,7 @@ and also their probability distributions:
 
 ``` r
 
-plot(Fspeciesall, ylim = c(0, 1))
+plot(Fspeciesall, ylim = c(0, 1), col = 8)
 ```
 
 ![](figure/visall-1.svg)
@@ -1749,7 +1749,7 @@ plot(Fspeciesall, ylim = c(0, 1))
 ``` r
 
 
-hist(Fspeciesall, xlim = c(0, 1), legend = 'topright')
+hist(Fspeciesall, xlim = c(0, 1), col = 1:3, legend = 'topright')
 ```
 
 ![](figure/visall-2.svg)
@@ -1845,7 +1845,7 @@ the three frequencies:
 
 ``` r
 
-hist(Fanalysis, xlim = c(0, 1), col = 2:4, ## same colours as before!
+hist(Fanalysis, xlim = c(0, 1), col = 1:3, # same colours as before!
     legend = 'topright')
 ```
 
@@ -1910,8 +1910,7 @@ three frequencies:
 
 ``` r
 
-hist(Fanalysis, xlim = c(0, 1), col = 5:7,
-    legend = 'topright')
+hist(Fanalysis, xlim = c(0, 1), col = 4:6, legend = 'topright')
 ```
 
 ![](figure/unnamed-chunk-9-1.svg)
@@ -1976,7 +1975,7 @@ species
 
 ``` r
 
-plot(Fanalysis, col = 2:4, legend = 'topright')
+plot(Fanalysis, col = 1:3, legend = 'topright')
 ```
 
 ![](figure/unnamed-chunk-10-1.svg)

@@ -153,7 +153,7 @@ set</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="st">'Kall.rds'</span></span></code></pre></div>
 <p>in this case <code>K</code> is just a character string pointing to
-the file containing the actual “K”nowledge object.</p>
+the file containing the actual “Knowledge” object.</p>
 </div>
 <div class="section level3">
 <h3 id="newsamples">Generating new samples<a class="anchor" aria-label="anchor" href="#newsamples"></a>
@@ -164,17 +164,17 @@ variates. Each variate has three possible values;
 us to create a vector of all possible values of each variate, which are
 stored in the metadata of the <code>K</code> object:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">islandvalues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'island'</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">islandvalues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span><span class="st">'island'</span>, <span class="va">K</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># [1] "Biscoe"    "Dream"     "Torgersen"</span></span>
 <span></span>
-<span><span class="va">speciesvalues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span>vrt <span class="op">=</span> <span class="st">'species'</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">speciesvalues</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span><span class="st">'species'</span>, <span class="va">K</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># [1] "Adelie"    "Chinstrap" "Gentoo"</span></span></code></pre></div>
 <p>The function <code><a href="../reference/pplot.html">pplot()</a></code> allows us to display the
 <code>island</code> and <code>species</code> variates against each
 other, for all <em>sample</em> data, as a scatter plot:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pplot.html">pplot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">penguins</span><span class="op">$</span><span class="va">island</span>, y <span class="op">=</span> <span class="va">penguins</span><span class="op">$</span><span class="va">species</span>,</span>
-<span>    type <span class="op">=</span> <span class="st">'p'</span>, xlab <span class="op">=</span> <span class="st">'island'</span>, ylab <span class="op">=</span> <span class="st">'species'</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">'p'</span>, col <span class="op">=</span> <span class="fl">4</span>, xlab <span class="op">=</span> <span class="st">'island'</span>, ylab <span class="op">=</span> <span class="st">'species'</span>,</span>
 <span>    xdomain <span class="op">=</span> <span class="va">islandvalues</span>, ydomain <span class="op">=</span> <span class="va">speciesvalues</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/vissample-1.svg" alt="**Scatter plot of sample data**" width="100%"><p class="caption">
@@ -255,7 +255,8 @@ plot:</p>
 <code class="sourceCode R"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rPr.html">rPr</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'island'</span>, <span class="st">'species'</span><span class="op">)</span>, <span class="va">K</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/pplot.html">pplot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">island</span>, y <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">species</span>,</span>
-<span>    type <span class="op">=</span> <span class="st">'p'</span>, xlab <span class="op">=</span> <span class="st">'island'</span>, ylab <span class="op">=</span> <span class="st">'species'</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">'p'</span>, col <span class="op">=</span> <span class="fl">4</span>, alpha.f <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">'island'</span>, ylab <span class="op">=</span> <span class="st">'species'</span>,</span>
 <span>    xdomain <span class="op">=</span> <span class="va">islandvalues</span>, ydomain <span class="op">=</span> <span class="va">speciesvalues</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/gensamplesplot-1.svg" alt="**Scatter plot for *whole* population**" width="100%"><p class="caption">
@@ -286,7 +287,8 @@ data previously observed:</p>
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rPr.html">rPr</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'body_mass'</span>, <span class="st">'species'</span><span class="op">)</span>, <span class="va">K</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/pplot.html">pplot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">body_mass</span>, y <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">species</span>,</span>
-<span>    type <span class="op">=</span> <span class="st">'p'</span>, xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'species'</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">'p'</span>, col <span class="op">=</span> <span class="fl">5</span>, alpha.f <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'species'</span>,</span>
 <span>    xlim <span class="op">=</span> <span class="va">body_massrange</span>, ydomain <span class="op">=</span> <span class="va">speciesvalues</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/gensamplesplotbodymassspecies-1.svg" alt="**Scatter plot for body mass and species**" width="100%"><p class="caption">
@@ -314,7 +316,8 @@ of two continuous variates, such as body mass and bill length
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rPr.html">rPr</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'body_mass'</span>, <span class="st">'bill_len'</span><span class="op">)</span>, <span class="va">K</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/pplot.html">pplot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">body_mass</span>, y <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">bill_len</span>,</span>
-<span>    type <span class="op">=</span> <span class="st">'p'</span>, xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'bill length / mm'</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">'p'</span>, col <span class="op">=</span> <span class="fl">6</span>, alpha.f <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'bill length / mm'</span>,</span>
 <span>    xlim <span class="op">=</span> <span class="va">body_massrange</span>, ylim <span class="op">=</span> <span class="va">bill_lenrange</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/gensamplesplotbodybilllen-1.svg" alt="**Scatter plot of body mass and bill length**" width="100%"><p class="caption">
@@ -372,11 +375,11 @@ points don’t completely cover one another:</p>
 <span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">samplesAdelie</span><span class="op">$</span><span class="va">bill_len</span>,</span>
 <span>        <span class="va">samplesChinstrap</span><span class="op">$</span><span class="va">bill_len</span>,</span>
 <span>        <span class="va">samplesGentoo</span><span class="op">$</span><span class="va">bill_len</span><span class="op">)</span>,</span>
-<span>    type <span class="op">=</span> <span class="st">'p'</span>, xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'bill length / mm'</span>,</span>
-<span>    xlim <span class="op">=</span> <span class="va">body_massrange</span>, ylim <span class="op">=</span> <span class="va">bill_lenrange</span>,</span>
-<span>    pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, alpha.f <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
+<span>    type <span class="op">=</span> <span class="st">'p'</span>, pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, alpha.f <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'bill length / mm'</span>,</span>
+<span>    xlim <span class="op">=</span> <span class="va">body_massrange</span>, ylim <span class="op">=</span> <span class="va">bill_lenrange</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="va">speciesvalues</span>, pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">'top'</span>, <span class="va">speciesvalues</span>, pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
 <span>    horiz <span class="op">=</span> <span class="cn">TRUE</span>, bty <span class="op">=</span> <span class="st">'n'</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/plotbodybilllen3-1.svg" alt="**Scatter plot for species subpopulations**" width="100%"><p class="caption">
@@ -427,9 +430,9 @@ example plot and value:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span>
 <span><span class="co"># [1] 0</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/pplot.html">pplot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Y1</span>, y <span class="op">=</span> <span class="va">Y2</span>, type <span class="op">=</span> <span class="st">'p'</span>,</span>
+<span><span class="fu"><a href="../reference/pplot.html">pplot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Y1</span>, y <span class="op">=</span> <span class="va">Y2</span>, type <span class="op">=</span> <span class="st">'p'</span>, col <span class="op">=</span> <span class="fl">7</span>,</span>
 <span>    xlab <span class="op">=</span> <span class="st">'Y1'</span>, ylab <span class="op">=</span> <span class="st">'Y2'</span>,</span>
-<span>    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Pearson correlation: '</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">r</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'Pearson correlation of this dataset: '</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">r</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/pearsonplot-1.svg" alt="**Perfect correlation from $Y_1$ to $Y_2$, with zero Pearson correlation coefficient**" width="100%"><p class="caption">
 <strong>Perfect correlation from <span class="math inline">\(Y_1\)</span> to <span class="math inline">\(Y_2\)</span>, with zero Pearson correlation
@@ -633,9 +636,10 @@ explored previously, and calculate also their mutual information.</p>
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rPr.html">rPr</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'island'</span>, <span class="st">'species'</span><span class="op">)</span>, <span class="va">K</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/pplot.html">pplot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">island</span>, y <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">species</span>,</span>
-<span>    type <span class="op">=</span> <span class="st">'p'</span>, xlab <span class="op">=</span> <span class="st">'island'</span>, ylab <span class="op">=</span> <span class="st">'species'</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">'p'</span>, col <span class="op">=</span> <span class="fl">4</span>, alpha.f <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">'island'</span>, ylab <span class="op">=</span> <span class="st">'species'</span>,</span>
 <span>    xdomain <span class="op">=</span> <span class="va">islandvalues</span>, ydomain <span class="op">=</span> <span class="va">speciesvalues</span>,</span>
-<span>    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'mutual info: '</span>, <span class="va">mi</span>, <span class="st">' Sh'</span>,</span>
+<span>    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'mutual information: '</span>, <span class="va">mi</span>, <span class="st">' Sh'</span>,</span>
 <span>        <span class="st">'  (rough r-equiv: '</span>, <span class="va">r</span>, <span class="st">')'</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/gensamplesplotbis-1.svg" alt="**Scatter plot for `island` and `species`**" width="100%"><p class="caption">
@@ -663,9 +667,10 @@ number of possible values, so we use the function
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rPr.html">rPr</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'body_mass'</span>, <span class="st">'species'</span><span class="op">)</span>, <span class="va">K</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/pplot.html">pplot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">body_mass</span>, y <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">species</span>,</span>
-<span>    type <span class="op">=</span> <span class="st">'p'</span>, xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'species'</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">'p'</span>, col <span class="op">=</span> <span class="fl">5</span>, alpha.f <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'species'</span>,</span>
 <span>    xlim <span class="op">=</span> <span class="va">body_massrange</span>, ydomain <span class="op">=</span> <span class="va">speciesvalues</span>,</span>
-<span>    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'mutual info: '</span>, <span class="va">mi</span>, <span class="st">' Sh'</span>,</span>
+<span>    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'mutual information: '</span>, <span class="va">mi</span>, <span class="st">' Sh'</span>,</span>
 <span>        <span class="st">'  (rough r-equiv: '</span>, <span class="va">r</span>, <span class="st">')'</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/gensamplesplotbodymassspeciesbis-1.svg" alt="**Scatter plot and mutual info for body mass and species**" width="100%"><p class="caption">
@@ -690,9 +695,10 @@ number of possible values, so we use the function
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rPr.html">rPr</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'body_mass'</span>, <span class="st">'bill_len'</span><span class="op">)</span>, <span class="va">K</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/pplot.html">pplot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">body_mass</span>, y <span class="op">=</span> <span class="va">samples</span><span class="op">$</span><span class="va">bill_len</span>,</span>
-<span>    type <span class="op">=</span> <span class="st">'p'</span>, xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'bill length / mm'</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">'p'</span>, col <span class="op">=</span> <span class="fl">6</span>, alpha.f <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'bill length / mm'</span>,</span>
 <span>    xlim <span class="op">=</span> <span class="va">body_massrange</span>, ylim <span class="op">=</span> <span class="va">bill_lenrange</span>,</span>
-<span>    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'mutual info: '</span>, <span class="va">mi</span>, <span class="st">' Sh'</span>,</span>
+<span>    main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'mutual information: '</span>, <span class="va">mi</span>, <span class="st">' Sh'</span>,</span>
 <span>        <span class="st">'  (rough r-equiv: '</span>, <span class="va">r</span>, <span class="st">')'</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/gensamplesplotbodymassbilllenbis-1.svg" alt="**Scatter plot and mutual info for body mass and bill length**" width="100%"><p class="caption">
@@ -757,13 +763,14 @@ together with the previous scatter plot:</p>
 <span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">samplesAdelie</span><span class="op">$</span><span class="va">bill_len</span>,</span>
 <span>        <span class="va">samplesChinstrap</span><span class="op">$</span><span class="va">bill_len</span>,</span>
 <span>        <span class="va">samplesGentoo</span><span class="op">$</span><span class="va">bill_len</span><span class="op">)</span>,</span>
-<span>    type <span class="op">=</span> <span class="st">'p'</span>, xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'bill length / mm'</span>,</span>
-<span>    xlim <span class="op">=</span> <span class="va">body_massrange</span>, ylim <span class="op">=</span> <span class="va">bill_lenrange</span>,</span>
-<span>    pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, alpha.f <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
+<span>    type <span class="op">=</span> <span class="st">'p'</span>, pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, alpha.f <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">'body mass / g'</span>, ylab <span class="op">=</span> <span class="st">'bill length / mm'</span>,</span>
+<span>    main <span class="op">=</span> <span class="st">"mutual information between 'body_mass' and 'bill_len' in different subpopulations"</span>,</span>
+<span>    xlim <span class="op">=</span> <span class="va">body_massrange</span>, ylim <span class="op">=</span> <span class="va">bill_lenrange</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">'top'</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">speciesvalues</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">mispecies</span>, <span class="st">' Sh'</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">': '</span><span class="op">)</span>,</span>
-<span>    pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>    pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
 <span>    horiz <span class="op">=</span> <span class="cn">TRUE</span>, bty <span class="op">=</span> <span class="st">'n'</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/plotbodybilllen3mi-1.svg" alt="**Scatter plot and mutual info for species subpopulations**" width="100%"><p class="caption">
@@ -829,7 +836,7 @@ also visualize our uncertainty about this “long-run” mutual information
 by means of a probability distribution, using the <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code>
 function:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">MIislandspecies</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">MIislandspecies</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/histislandspecies-1.svg" alt="**Revisability of mutual information with a much larger data sample**" width="100%"><p class="caption">
 <strong>Revisability of mutual information with a much larger data

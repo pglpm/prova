@@ -289,17 +289,17 @@
 <use xlink:href="#glyph-2-8" x="12.708984" y="173.300781"/>
 </g>
 <path fill-rule="nonzero" fill="rgb(80%, 73.333333%, 26.666667%)" fill-opacity="0.25098" d="M 77.066406 319.390625 L 302.398438 320.03125 L 527.734375 210.265625 L 527.734375 69.207031 L 302.398438 221.21875 L 77.066406 220.828125 Z M 77.066406 319.390625 "/>
-<path fill-rule="nonzero" fill="rgb(66.666667%, 20%, 46.666667%)" fill-opacity="0.25098" d="M 77.066406 295.269531 L 302.398438 273.066406 L 527.734375 318.214844 L 527.734375 210.605469 L 302.398438 114.378906 L 77.066406 145.914062 Z M 77.066406 295.269531 "/>
+<path fill-rule="nonzero" fill="rgb(40%, 80%, 93.333333%)" fill-opacity="0.25098" d="M 77.066406 295.269531 L 302.398438 273.066406 L 527.734375 318.214844 L 527.734375 210.605469 L 302.398438 114.378906 L 77.066406 145.914062 Z M 77.066406 295.269531 "/>
 <path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(80%, 73.333333%, 26.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 84.265625 284.277344 L 295.199219 286.289062 "/>
 <path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(80%, 73.333333%, 26.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 308.308594 282.242188 L 521.824219 133.570312 "/>
 <path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(80%, 73.333333%, 26.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 79.765625 284.210938 C 79.765625 287.808594 74.367188 287.808594 74.367188 284.210938 C 74.367188 280.609375 79.765625 280.609375 79.765625 284.210938 "/>
 <path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(80%, 73.333333%, 26.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 305.101562 286.359375 C 305.101562 289.957031 299.699219 289.957031 299.699219 286.359375 C 299.699219 282.757812 305.101562 282.757812 305.101562 286.359375 "/>
 <path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(80%, 73.333333%, 26.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 530.433594 129.457031 C 530.433594 133.054688 525.035156 133.054688 525.035156 129.457031 C 525.035156 125.855469 530.433594 125.855469 530.433594 129.457031 "/>
-<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(66.666667%, 20%, 46.666667%)" stroke-opacity="1" stroke-dasharray="6 6" stroke-miterlimit="10" d="M 84.199219 225.621094 L 295.269531 196.152344 "/>
-<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(66.666667%, 20%, 46.666667%)" stroke-opacity="1" stroke-dasharray="6 6" stroke-miterlimit="10" d="M 309.15625 197.648438 L 520.976562 275.757812 "/>
-<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(66.666667%, 20%, 46.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 77.066406 222.417969 L 80.703125 228.714844 L 73.429688 228.714844 Z M 77.066406 222.417969 "/>
-<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(66.666667%, 20%, 46.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 302.398438 190.957031 L 306.035156 197.257812 L 298.765625 197.257812 Z M 302.398438 190.957031 "/>
-<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(66.666667%, 20%, 46.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 527.734375 274.050781 L 531.371094 280.347656 L 524.097656 280.347656 Z M 527.734375 274.050781 "/>
+<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(40%, 80%, 93.333333%)" stroke-opacity="1" stroke-dasharray="6 6" stroke-miterlimit="10" d="M 84.199219 225.621094 L 295.269531 196.152344 "/>
+<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(40%, 80%, 93.333333%)" stroke-opacity="1" stroke-dasharray="6 6" stroke-miterlimit="10" d="M 309.15625 197.648438 L 520.976562 275.757812 "/>
+<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(40%, 80%, 93.333333%)" stroke-opacity="1" stroke-miterlimit="10" d="M 77.066406 222.417969 L 80.703125 228.714844 L 73.429688 228.714844 Z M 77.066406 222.417969 "/>
+<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(40%, 80%, 93.333333%)" stroke-opacity="1" stroke-miterlimit="10" d="M 302.398438 190.957031 L 306.035156 197.257812 L 298.765625 197.257812 Z M 302.398438 190.957031 "/>
+<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(40%, 80%, 93.333333%)" stroke-opacity="1" stroke-miterlimit="10" d="M 527.734375 274.050781 L 531.371094 280.347656 L 524.097656 280.347656 Z M 527.734375 274.050781 "/>
 <g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-1-5" x="59.566406" y="359.228516"/>
 <use xlink:href="#glyph-1-6" x="67.566406" y="359.228516"/>
@@ -377,7 +377,7 @@
 <path fill="none" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(0%, 0%, 0%)" stroke-opacity="0.133333" stroke-miterlimit="10" d="M 527.734375 333.558594 L 527.734375 59.039062 "/>
 </g>
 <path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(80%, 73.333333%, 26.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 424.960938 73.441406 L 446.558594 73.441406 "/>
-<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(66.666667%, 20%, 46.666667%)" stroke-opacity="1" stroke-dasharray="6 6" stroke-miterlimit="10" d="M 424.960938 87.839844 L 446.558594 87.839844 "/>
+<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(40%, 80%, 93.333333%)" stroke-opacity="1" stroke-dasharray="6 6" stroke-miterlimit="10" d="M 424.960938 87.839844 L 446.558594 87.839844 "/>
 <g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-1-4" x="457.359375" y="77.689453"/>
 <use xlink:href="#glyph-1-0" x="460.359375" y="77.689453"/>

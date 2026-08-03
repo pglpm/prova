@@ -100,7 +100,7 @@ K <- 'Kall.rds'
 ```
 
 in this case `K` is just a character string pointing to the file
-containing the actual “K”nowledge object.
+containing the actual “Knowledge” object.
 
 ### Generating new samples
 
@@ -112,10 +112,10 @@ stored in the metadata of the `K` object:
 
 ``` r
 
-islandvalues <- unlist(vrtgrid(vrt = 'island', K = K))
+islandvalues <- unlist(vrtgrid('island', K))
 # [1] "Biscoe"    "Dream"     "Torgersen"
 
-speciesvalues <- unlist(vrtgrid(vrt = 'species', K = K))
+speciesvalues <- unlist(vrtgrid('species', K))
 # [1] "Adelie"    "Chinstrap" "Gentoo"
 ```
 
@@ -127,7 +127,7 @@ all *sample* data, as a scatter plot:
 ``` r
 
 pplot(x = penguins$island, y = penguins$species,
-    type = 'p', xlab = 'island', ylab = 'species',
+    type = 'p', col = 4, xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues)
 ```
 
@@ -219,7 +219,8 @@ Now let’s generate 2000 samples, and then plot them in a scatter plot:
 samples <- rPr(2000, c('island', 'species'), K)
 
 pplot(x = samples$island, y = samples$species,
-    type = 'p', xlab = 'island', ylab = 'species',
+    type = 'p', col = 4, alpha.f = 0.5,
+    xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues)
 ```
 
@@ -255,7 +256,8 @@ body_massrange <- range(vrtgrid('body_mass', K))
 samples <- rPr(2000, c('body_mass', 'species'), K)
 
 pplot(x = samples$body_mass, y = samples$species,
-    type = 'p', xlab = 'body mass / g', ylab = 'species',
+    type = 'p', col = 5, alpha.f = 0.5,
+    xlab = 'body mass / g', ylab = 'species',
     xlim = body_massrange, ydomain = speciesvalues)
 ```
 
@@ -286,7 +288,8 @@ bill_lenrange <- range(vrtgrid('bill_len', K))
 samples <- rPr(2000, c('body_mass', 'bill_len'), K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
-    type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
+    type = 'p', col = 6, alpha.f = 0.5,
+    xlab = 'body mass / g', ylab = 'bill length / mm',
     xlim = body_massrange, ylim = bill_lenrange)
 ```
 
@@ -356,11 +359,11 @@ pplot(
     y = list(samplesAdelie$bill_len,
         samplesChinstrap$bill_len,
         samplesGentoo$bill_len),
-    type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
-    xlim = body_massrange, ylim = bill_lenrange,
-    pch = c(0, 2, 5), col = 2:4, alpha.f = 0.2)
+    type = 'p', pch = c(0, 2, 5), col = 1:3, alpha.f = 0.2,
+    xlab = 'body mass / g', ylab = 'bill length / mm',
+    xlim = body_massrange, ylim = bill_lenrange)
 
-legend('top', speciesvalues, pch = c(0, 2, 5), col = 2:4,
+legend('top', speciesvalues, pch = c(0, 2, 5), col = 1:3,
     horiz = TRUE, bty = 'n')
 ```
 
@@ -415,9 +418,9 @@ r <- cor(Y1, Y2, method = 'pearson')
 print(r)
 # [1] 0
 
-pplot(x = Y1, y = Y2, type = 'p',
+pplot(x = Y1, y = Y2, type = 'p', col = 7,
     xlab = 'Y1', ylab = 'Y2',
-    main = paste0('Pearson correlation: ', signif(r, 2)))
+    main = paste0('Pearson correlation of this dataset: ', signif(r, 2)))
 ```
 
 ![\*\*Perfect correlation from \$Y_1\$ to \$Y_2\$, with zero Pearson
@@ -647,9 +650,10 @@ r <- signif(MIislandspecies$rGauss, digits = 2)
 samples <- rPr(2000, c('island', 'species'), K)
 
 pplot(x = samples$island, y = samples$species,
-    type = 'p', xlab = 'island', ylab = 'species',
+    type = 'p', col = 4, alpha.f = 0.5,
+    xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues,
-    main = paste0('mutual info: ', mi, ' Sh',
+    main = paste0('mutual information: ', mi, ' Sh',
         '  (rough r-equiv: ', r, ')') )
 ```
 
@@ -682,9 +686,10 @@ r <- signif(MIbodymassspecies$rGauss, digits = 2)
 samples <- rPr(2000, c('body_mass', 'species'), K)
 
 pplot(x = samples$body_mass, y = samples$species,
-    type = 'p', xlab = 'body mass / g', ylab = 'species',
+    type = 'p', col = 5, alpha.f = 0.5,
+    xlab = 'body mass / g', ylab = 'species',
     xlim = body_massrange, ydomain = speciesvalues,
-    main = paste0('mutual info: ', mi, ' Sh',
+    main = paste0('mutual information: ', mi, ' Sh',
         '  (rough r-equiv: ', r, ')') )
 ```
 
@@ -715,9 +720,10 @@ r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 samples <- rPr(2000, c('body_mass', 'bill_len'), K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
-    type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
+    type = 'p', col = 6, alpha.f = 0.5,
+    xlab = 'body mass / g', ylab = 'bill length / mm',
     xlim = body_massrange, ylim = bill_lenrange,
-    main = paste0('mutual info: ', mi, ' Sh',
+    main = paste0('mutual information: ', mi, ' Sh',
         '  (rough r-equiv: ', r, ')') )
 ```
 
@@ -795,13 +801,14 @@ pplot(
     y = list(samplesAdelie$bill_len,
         samplesChinstrap$bill_len,
         samplesGentoo$bill_len),
-    type = 'p', xlab = 'body mass / g', ylab = 'bill length / mm',
-    xlim = body_massrange, ylim = bill_lenrange,
-    pch = c(0, 2, 5), col = 2:4, alpha.f = 0.2)
+    type = 'p', pch = c(0, 2, 5), col = 1:3, alpha.f = 0.2,
+    xlab = 'body mass / g', ylab = 'bill length / mm',
+    main = "mutual information between 'body_mass' and 'bill_len' in different subpopulations",
+    xlim = body_massrange, ylim = bill_lenrange)
 
 legend('top',
     paste(speciesvalues, paste0(mispecies, ' Sh'), sep = ': '),
-    pch = c(0, 2, 5), col = 2:4,
+    pch = c(0, 2, 5), col = 1:3,
     horiz = TRUE, bty = 'n')
 ```
 
@@ -858,7 +865,7 @@ by means of a probability distribution, using the
 
 ``` r
 
-hist(MIislandspecies)
+hist(MIislandspecies, col = 4)
 ```
 
 ![\*\*Revisability of mutual information with a much larger data

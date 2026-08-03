@@ -154,7 +154,7 @@ invprob <- Pr(
     K                                             # knowledge
 )
 
-plot(invprob)
+plot(invprob, col = 2)
 ```
 
 ![probability distribution for bill
