@@ -585,6 +585,7 @@ plot.probability <- function(
         ## Y is x-axis, one plot for each X
         vals <- x$Y
         lgnd <- x$X
+        solidus <- '|'
         tempxlab <- 'Y'
         nplots <- Xlen
         pdeltas <- (x$density < max(x$density))
@@ -594,6 +595,7 @@ plot.probability <- function(
         ## X is x-axis, one plot for each Y
         vals <- x$X
         lgnd <- x$Y
+        solidus <- ''
         tempxlab <- 'X'
         nplots <- Ylen
         ## It's unusual to plot probabilities of a continous variate against X
@@ -626,12 +628,25 @@ plot.probability <- function(
         }
     }
 
+    if(is.null(ylab) || (ypdeltas && is.null(ylab2))){
+        tails <- list()
+        tails[c(names(x$Y), names(x$X))] <- ''
+        tails[names(x$tails)] <- x$tails
+    }
+
     ## Different denominations if there are singular-probability points
     if(ypdeltas){
         if(is.null(ylab2)){
-            ylab2 <- paste0('probability',
-                if(max(x$density[-which.max(x$density)]) == 0){' density'},
-                ' at singular points')
+            ylab2 <- paste0(if(
+                max(x$density[-which(x$density == max(x$density))]) == 0
+            ){'P'}else{'p'},
+                '(',
+            paste0(names(x$Y), tails[names(x$Y)], collapse = ', '),
+            ' | ',
+            if(!is.null(x$X)){ paste0(
+                paste0(names(x$X), tails[names(x$X)], collapse = ', '),
+            ', ')},
+            x$K, ')  singular points')
         }
         oldpar <- par(mar = par('mar') + c(0, 0, 0, 1.5))
         on.exit(par(oldpar))
@@ -700,7 +715,9 @@ plot.probability <- function(
                 probs = 0.945, na.rm = TRUE, names = FALSE, type = 6
             )},
             na.rm = TRUE)
-        temp <-  0.04 * (ylim[2] - ylim[1])
+        ## ## extending range this way can plot outside margin
+        ## temp <-  0.04 * (ylim[2] - ylim[1])
+        temp <-  0
         pticks <- axisTicks(usr = ylim + c(-temp, temp), log = FALSE)
         pdivs <- length(pticks) - 1
         ploc <- min(pticks)
@@ -712,26 +729,23 @@ plot.probability <- function(
 
     ## Prepare axes labels and title
     if(is.null(xlab)){xlab <- tempxlab}
-    if(is.null(main)){
-        tails <- list()
-        tails[c(names(x$Y), names(x$X))] <- ''
-        tails[names(x$tails)] <- x$tails
-        main <- paste0('P(',
+
+    if(is.null(ylab)){
+        ylab <- paste0(
+            if(isdensity){'p'}else{'P'},
+                '(',
             paste0(names(x$Y), tails[names(x$Y)], collapse = ', '),
             ' | ',
             if(!is.null(x$X)){ paste0(
                 paste0(names(x$X), tails[names(x$X)], collapse = ', '),
             ', ')},
             x$K, ')')
-        if(qspread){
-            main <- paste0(main, '\nquantiles: ',
-                paste0(round(qnames, 1), '%', collapse = ', '))
-        } else if(sspread){
-            main <- paste0(main, '\n', nsamples.spread, ' samples')
-        }
-    }
-    if(is.null(ylab)){
-        ylab <- paste0('probability', if(isdensity){' density'})
+        ## if(qspread){
+        ##     ylab <- paste0(ylab, '\nquantiles: ',
+        ##         paste0(round(qnames, 1), '%', collapse = ', '))
+        ## } else if(sspread){
+        ##     ylab <- paste0(main, '\n', nsamples.spread, ' samples')
+        ## }
     }
 
     ## Function to create repetitions of args
@@ -815,6 +829,18 @@ plot.probability <- function(
         mtext(ylab2, side = 4, line = 2.25)
     }
 
+    if(qspread){
+        mtext(paste0('Q: ', paste0(round(qnames, 1), '%', collapse = ', ')),
+            side = 2, line = -0.25, cex = 0.75)
+        ## legend(x = 'bottomleft', inset = c(-0.02, -0.03), cex = 0.75,
+        ##     bty = 'n', xpd = TRUE,
+        ##     legend =  paste0('Q: ',
+        ##         paste0(round(qnames, 1), '%', collapse = ', ')))
+        } else if(sspread){
+            mtext(paste0(nsamples.spread, ' samples'),
+            side = 2, line = -0.25, cex = 0.75)
+        }
+
     ## Plot legends
     if(!is.null(lgnd)){
         ##  && is.character(legend) &&
@@ -827,7 +853,7 @@ plot.probability <- function(
         graphics::legend(x = legend,
             legend = apply(lgnd, 1, function(xx){
                 nxx <- names(xx)
-                paste0(paste0(nxx, ' ', tails[nxx], ' ', xx),
+                paste0(solidus, paste0(nxx, ' ', tails[nxx], ' ', xx),
                     collapse = ', ')
             }),
             bty = 'n',
@@ -967,9 +993,17 @@ hist.probability <- function(
     nplots <- length(xlist)
 
     if(is.null(xlab)){
-        xlab <- 'long-run relative frequency'
+        tails <- list()
+        tails[c(names(x$Y), names(x$X))] <- ''
+        tails[names(x$tails)] <- x$tails
+        xlab <- paste0('long-run relative frequency of: ',
+            paste0(names(x$Y), tails[names(x$Y)], collapse = ', '),
+            if(!is.null(x$X)){paste0(' | ',
+                paste0(names(x$X), tails[names(x$X)], collapse = ', ')
+            )}
+            )
     }
-    if(is.null(ylab)){ylab <- 'probability density'}
+    if(is.null(ylab)){ylab <- paste0('p( long-run rel. freq. | ', x$K, ')')}
     if(isFALSE(alpha.f.fill) || !is.numeric(alpha.f.fill)){alpha.f.fill <- 0}
 
     if(missing(xlim)){xlim <- range(unlist(xlist))}
@@ -1155,26 +1189,23 @@ hist.mi <- function(
     densitylist <- hd$density
 
     if(is.null(xlab)){
-        xlab <- paste0('long-run mutual information / ', x$unit)
-    }
-
-    if(is.null(ylab)){ylab <- 'probability density'}
-    if(isFALSE(alpha.f.fill) || !is.numeric(alpha.f.fill)){alpha.f.fill <- 0}
-    if(missing(xlim)){xlim <- range(xlist)}
-    if(is.null(main)){
         tails <- list()
         tails[names(x$X)] <- ''
         tails[names(x$tails)] <- x$tails
-        main <- paste0('long-run MI(',
+        xlab <- paste0('long-run MI(',
             paste0(x$Y1names, collapse = ', '),
             ' : ',
             paste0(x$Y2names, collapse = ', '),
-            ' | ',
-            if(!is.null(x$X)){ paste0(
-                paste0(names(x$X), tails[names(x$X)], collapse = ', '),
-            ', ')},
-            x$K, ')')
+            if(!is.null(x$X)){paste0(' | ',
+                paste0(names(x$X), tails[names(x$X)], collapse = ', ')
+                )},
+            ')'
+            )
     }
+
+    if(is.null(ylab)){ylab <- paste0('p( long-run MI | ', x$K, ')')}
+    if(isFALSE(alpha.f.fill) || !is.numeric(alpha.f.fill)){alpha.f.fill <- 0}
+    if(missing(xlim)){xlim <- range(xlist)}
 
     nplots <- 1
 
