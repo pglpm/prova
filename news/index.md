@@ -1,7 +1,8 @@
 # Changelog
 
-## Prova v2.2.2
+## Prova v2.2.3
 
+- Improved plot labels.
 - Introduced the much faster
   [`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
   for variates with finite domains.
