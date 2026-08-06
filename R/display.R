@@ -840,8 +840,8 @@ plot.prova_pr <- function(
         graphics::legend(x = legend,
             legend = apply(lgnd, 1, function(xx){
                 nxx <- names(xx)
-                paste0(solidus, paste0(nxx, ' ', tails[nxx], ' ', xx),
-                    collapse = ', ')
+                paste0(solidus, paste0(nxx, ' ', tails[nxx], ' ', xx,
+                    collapse = ', '))
             }),
             bty = 'n',
             col = col,
@@ -1517,19 +1517,27 @@ print.prova_mi <- function(
 #' [pplot()] (on which `plot.prova_eu()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the "prova_K" (knowledge) object 'Kexample',
+#' ## Use the example "prova_K" (knowledge) object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
-#' ## create a grid of values for variate "bill length",
-#' ## based on the information in the dataset and metadata:
-#' valuesBill <- vrtgrid('bill_len', Kexample)
+#' ## define a utility matrix with four actions,
+#' ## and outcomes depending on the variate 'species'
+#' umatrix <- matrix(c(
+#'  1.80, 0.42, 1.60, -0.12, -1.10, 0.20, -0.51, 0.35, -0.49, 0.35, -0.48, 0.62
+#'  ), nrow = 4, ncol = 3, dimnames = list(actions = paste0('A', 1:4), NULL))
 #'
-#' ## calculate the probabilities and quantiles
-#' probs <- Pr(valuesBill, Kexample)
+#' print(umatrix)
 #'
-#' ## plot the probabilities and quantiles
-#' plot(probs)
+#' ## Calculate the probability of the 'species outcomes
+#' probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+#'   Kexample)
+#'
+#' ## Calculate the expected utilities of the actions
+#' eu <- exputility(umatrix, probs)
+#'
+#' ## plot the expected utilities and their revisability
+#' plot(eu)
 #'
 #' @import grDevices
 #'
