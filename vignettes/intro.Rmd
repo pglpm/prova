@@ -768,15 +768,15 @@ Fspecies10IS <- Pr(Y, Xdouble, K10)
 print(Fspecies10IS, 'value')
 # $value
 #            |island,sex
-# species     Biscoe,female Dream,female Torgersen,female Biscoe,male
-#   Adelie             0.13         0.40             0.48        0.21
-#   Chinstrap          0.11         0.40             0.27        0.22
-#   Gentoo             0.76         0.21             0.25        0.57
+# species     Biscoe,female Dream,female Torgersen,female Biscoe,male Dream,male
+#   Adelie             0.13         0.40             0.48        0.21       0.32
+#   Chinstrap          0.11         0.40             0.27        0.22       0.54
+#   Gentoo             0.76         0.21             0.25        0.57       0.14
 #            |island,sex
-# species     Dream,male Torgersen,male
-#   Adelie          0.32           0.45
-#   Chinstrap       0.54           0.38
-#   Gentoo          0.14           0.17
+# species     Torgersen,male
+#   Adelie              0.45
+#   Chinstrap           0.38
+#   Gentoo              0.17
 ```
 
 ## Imputation of missing data {#imputation}

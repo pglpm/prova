@@ -279,7 +279,7 @@ print(r)
 
 pplot(x = Y1, y = Y2, type = 'p', col = 7,
     xlab = 'Y1', ylab = 'Y2',
-    main = paste0('Pearson correlation of this dataset: ', signif(r, 2)))
+    main = paste0('Pearson correlation for this dataset: ', signif(r, 2)))
 ```
 
 Similar limitations of the Pearson correlation coefficient are demonstrated by the "Anscombe quartet" of datasets (Anscombe 1973).
