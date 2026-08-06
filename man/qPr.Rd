@@ -119,7 +119,7 @@ probs$value
 }
 }
 \seealso{
-\code{\link[=learn]{learn()}}, which generates the \code{K} objects required by \code{qPr()}.
+\code{\link[=learn]{learn()}}, which generates the "prova_K" (knowledge) objects required by \code{qPr()}.
 
 \code{\link[=Pr]{Pr()}} to calculate joint and conditional probabilities.
 

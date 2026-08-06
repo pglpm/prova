@@ -17,7 +17,7 @@ Kexample
 No return value.
 }
 \description{
-An example \code{K} object obtained by means of the \code{\link[=learn]{learn()}} function, using the \link[datasets:penguins]{datasets::penguins} dataset and the metadata in \link{metadataExample}, according to the call
+An example "prova_K" (knowledge) object obtained by means of the \code{\link[=learn]{learn()}} function, using the \link[datasets:penguins]{datasets::penguins} dataset and the metadata in \link{metadataExample}, according to the call
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{learn(data = penguins, metadata = metadataExample,
   nsamples = 225, nchains = 15)

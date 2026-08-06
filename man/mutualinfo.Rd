@@ -130,6 +130,6 @@ print(MI)
 
 \code{\link[=Pr]{Pr()}} to calculate probabilities and their revisability.
 
-\code{\link[=learn]{learn()}}, which generates the \code{K} objects required by \code{mutualinfo()}.
+\code{\link[=learn]{learn()}}, which generates the "prova_K" (knowledge) objects required by \code{mutualinfo()}.
 }
 \concept{association}
