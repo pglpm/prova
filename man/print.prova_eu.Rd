@@ -2,12 +2,12 @@
 % Please edit documentation in R/display.R
 \name{print.prova_eu}
 \alias{print.prova_eu}
-\title{Print an object of class "eutility" (expected utility)}
+\title{Print an object of class "prova_eu" (expected utility)}
 \usage{
 \method{print}{prova_eu}(x, elements = NULL, digits = TRUE, edigits = 2, ...)
 }
 \arguments{
-\item{x}{Object of class "eutility", obtained with \code{\link[=exputility]{exputility()}}.}
+\item{x}{Object of class "prova_eu" (expected utility), obtained with \code{\link[=exputility]{exputility()}}.}
 
 \item{elements}{character or integer vector, or \code{NULL} (default): elements of the "expected utility" object to display. The syntax is the same as with \code{\link[base:Extract]{[}}. If \code{NULL}, the elements \code{'value'}, \code{'value.acc'}, \code{'optimal.probs'} are displayed together in a special way.}
 

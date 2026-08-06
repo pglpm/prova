@@ -2,6 +2,7 @@
 
 S3method(hist,prova_mi)
 S3method(hist,prova_pr)
+S3method(plot,prova_eu)
 S3method(plot,prova_pr)
 S3method(print,prova_K)
 S3method(print,prova_eu)

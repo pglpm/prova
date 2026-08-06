@@ -425,6 +425,7 @@ pplot <- function(
 
 
 
+
 #' Plot an object of class "prova_pr" (probability)
 #'
 #' @description
@@ -656,25 +657,27 @@ plot.prova_pr <- function(
         nsamples.spread <- min(nsamples.spread, temp)
         ispread <- round(seq.int(from = 1, to = temp,
             length.out = nsamples.spread))
-        if(is.null(alpha.f.spread)){alpha.f.spread <- 1/ceiling(sqrt(temp))}
+        if(is.null(alpha.f.spread)){
+            alpha.f.spread <- 1/ceiling(sqrt(nsamples.spread))
+        }
         ## if(is.null(alpha.f.spread)){alpha.f.spread <- 1/10}
     }
 
     ## y-range
     if(npdeltas){
-        pmax <- max(x[['value']][!pdeltas, ], na.rm = TRUE)
+        plotmax <- max(x[['value']][!pdeltas, ], na.rm = TRUE)
     } else {
-        pmax <- max(x[['value']][pdeltas, ], na.rm = TRUE)
+        plotmax <- max(x[['value']][pdeltas, ], na.rm = TRUE)
     }
     if(qspread){
         if(npdeltas){
-            pmax <- max(pmax, x[[spread]][!pdeltas, , ], na.rm = TRUE)
+            plotmax <- max(plotmax, x[[spread]][!pdeltas, , ], na.rm = TRUE)
         } else {
-            pmax <- max(pmax, x[[spread]][pdeltas, , ], na.rm = TRUE)
+            plotmax <- max(plotmax, x[[spread]][pdeltas, , ], na.rm = TRUE)
         }
     } else if(sspread){
         ## Some samples can have very high peaks; choose those within 94.5%
-        pmax <- max(pmax, apply(
+        plotmax <- max(plotmax, apply(
             X = if(npdeltas){
                 x[[spread]][!pdeltas, , , drop = FALSE]
             } else {
@@ -685,7 +688,7 @@ plot.prova_pr <- function(
         ))
     }
 
-    if(!is.finite(ylim[2])){ ylim[2] <- pmax }
+    if(!is.finite(ylim[2])){ ylim[2] <- plotmax }
     if(!is.finite(ylim[1])){ ylim[1] <- 0 }
 
     ## compute max probability of singular points, if any,
@@ -843,6 +846,8 @@ plot.prova_pr <- function(
             bty = 'n',
             col = col,
             lty = lty,
+            pch = if(any(largs('qx', 'qx', type.spread, 'p', type, 'p') %in%
+                             c('p', 'b'))){pch},
             lwd = lwd,
             ...)
     }
@@ -1065,326 +1070,6 @@ hist.prova_pr <- function(
 }
 
 
-#' Plot an object of class "prova_eu" (expected utility) and its revisability
-#'
-#' @description
-#' This [base::plot()] method is a utility to plot probabilities obtained with [Pr()], as well as their revisabilities. The probabilities are plotted either against `Y`, with one curve for each value of `X`, or vice versa.
-#'
-#' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
-#' @param type `NULL` (default) or character vector or indicating the type of plot for the main probability distribution; see [base::plot()]. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
-#' @param lty Analogous to argument `lty` (line style) in [graphics::matplot()], used for the main probability distributions.
-#' @param lwd Analogous to argument `lwd` (line width) in [graphics::matplot()], used for the main probability distributions.
-#' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'top'`.
-#' @param alpha.f Numeric, default `1`: opacity of the colours of lines or markers, `0` being completely invisible and `1` completely opaque.
-#' @param nsamples.spread Integer, default 360: number of samples of long-run frequencies to display.
-#' @param type.spread `NULL` (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
-#' @param lty.spread Same as parameter `lty` (line style), but for the line type of the long-run-frequency samples.
-#' @param lwd.spread Same as parameter `lwd` (line width), but for the line type of the long-run-frequency samples.
-#' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` means `0.25` if `spread = 'quantiles'`; and an appropriate value if `spread = 'samples'`,dependent on the number of samples (more samples, less opacity).
-#' @param pch,col,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
-#' @param ... Other parameters to be passed to [pplot()].
-#'
-#' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
-#'
-#' @seealso
-#' [Pr()] to calculate posterior probabilities and quantiles.
-#'
-#' [hist.prova_pr()] to plot the revisability of the probabilities as a distribution.
-#'
-#' [pplot()] (on which `plot.prova_pr()` is based) for more general plots.
-#'
-#' @examples
-#' ## Use the "prova_K" (knowledge) object 'Kexample',
-#' ## calculated from the "penguins" dataset;
-#' ## variates: 'species' and 'bill_len'
-#'
-#' ## create a grid of values for variate "bill length",
-#' ## based on the information in the dataset and metadata:
-#' valuesBill <- vrtgrid('bill_len', Kexample)
-#'
-#' ## calculate the probabilities and quantiles
-#' probs <- Pr(valuesBill, Kexample)
-#'
-#' ## plot the probabilities and quantiles
-#' plot(probs)
-#'
-#' @import grDevices
-#'
-#' @concept display
-#' @export
-plot.prova_pr <- function(
-    x,
-    type = NULL,
-    lty = c(1, 2, 4, 3, 6, 5),
-    pch = c(1, 2, 0, 5, 6, 3), #, 4,
-    lwd = 2,
-    col = palette(),
-    xlab = NULL, ylab = NULL,
-    xlim = NULL, ylim = NULL,
-    legend = 'topright',
-    add = FALSE,
-    alpha.f = 1,
-    grid = TRUE,
-    lwd.grid = NULL,
-    col.grid = '#00000022',
-    axes = FALSE,
-    main = NULL,
-    type.spread = NULL,
-    lty.spread = c(1, 2, 4, 3, 6, 5),
-    lwd.spread = NULL,
-    alpha.f.spread = NULL,
-    nsamples.spread = 360,
-    ...
-){
-    nact <- nrow(x[['value']])
-    nX <- ncol(x[[['value']])
-    anames <- dimnames(x[['value']])[1]
-
-    ## Handle the case of missing X items in 'x'
-    if(Xlen > 1 && is.null(x$X)){
-        x$X <- data.frame(X = paste0('X', seq_len(Xlen)))
-        lgnd <- x$X
-    } else {lgnd <- NULL}
-
-    solidus <- '|'
-
-    pplot(x = anames,
-        y =
-            )
-
-    ## Different denominations if there are singular-probability points
-    if(ypdeltas){
-        if(is.null(ylab2)){
-            ylab2 <- paste0(if(
-                max(x$density[-which(x$density == max(x$density))]) == 0
-            ){'P'}else{'p'},
-                '(',
-            paste0(names(x$Y), tails[names(x$Y)], collapse = ', '),
-            ' | ',
-            if(!is.null(x$X)){ paste0(
-                paste0(names(x$X), tails[names(x$X)], collapse = ', '),
-            ', ')},
-            x$K, ')  singular points')
-        }
-        oldpar <- par(mar = par('mar') + c(0, 0, 0, 1.5))
-        on.exit(par(oldpar))
-    }
-
-    ## Rename the revisability object so as to avoid if-else below
-    if(qspread){
-        mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
-        ## if we are plotting more than one curve, keep only the 89% band
-        temp <- dimnames(x[['quantiles']])[[3]]
-        qnames <- as.numeric(sub('%', '', temp))
-        if(Xlen > 1 && Ylen > 1){
-            ispread <- sapply(mainpercentiles,
-                function(xx){which.min(abs(qnames - xx))})
-        } else {
-            ispread <- TRUE
-        }
-        qnames <- qnames[ispread]
-        if(is.null(alpha.f.spread)){alpha.f.spread <- 0.25}
-
-    } else if(sspread){
-        temp <- dim(x[['samples']])[3]
-        nsamples.spread <- min(nsamples.spread, temp)
-        ispread <- round(seq.int(from = 1, to = temp,
-            length.out = nsamples.spread))
-        if(is.null(alpha.f.spread)){alpha.f.spread <- 1/ceiling(sqrt(temp))}
-        ## if(is.null(alpha.f.spread)){alpha.f.spread <- 1/10}
-    }
-
-    ## y-range
-    if(npdeltas){
-        pmax <- max(x[['value']][!pdeltas, ], na.rm = TRUE)
-    } else {
-        pmax <- max(x[['value']][pdeltas, ], na.rm = TRUE)
-    }
-    if(qspread){
-        if(npdeltas){
-            pmax <- max(pmax, x[[spread]][!pdeltas, , ], na.rm = TRUE)
-        } else {
-            pmax <- max(pmax, x[[spread]][pdeltas, , ], na.rm = TRUE)
-        }
-    } else if(sspread){
-        ## Some samples can have very high peaks; choose those within 94.5%
-        pmax <- max(pmax, apply(
-            X = if(npdeltas){
-                x[[spread]][!pdeltas, , , drop = FALSE]
-            } else {
-                x[[spread]][pdeltas, , , drop = FALSE]
-            },
-            MARGIN = c(1, 2), FUN = quantile,
-            probs = 0.945, na.rm = TRUE, names = FALSE, type = 6
-        ))
-    }
-
-    if(!is.finite(ylim[2])){ ylim[2] <- pmax }
-    if(!is.finite(ylim[1])){ ylim[1] <- 0 }
-
-    ## compute max probability of singular points, if any,
-    ## and find conversion scale
-    if(ypdeltas){
-        maxpdelta <- max(x[['value']][pdeltas, ],
-            x[['quantiles']][pdeltas, , ],
-            if(sspread){apply(
-                X = x[[spread]][pdeltas, , , drop = FALSE],
-                MARGIN = c(1, 2), FUN = quantile,
-                probs = 0.945, na.rm = TRUE, names = FALSE, type = 6
-            )},
-            na.rm = TRUE)
-        ## ## extending range this way can plot outside margin
-        ## temp <-  0.04 * (ylim[2] - ylim[1])
-        temp <-  0
-        pticks <- axisTicks(usr = ylim + c(-temp, temp), log = FALSE)
-        pdivs <- length(pticks) - 1
-        ploc <- min(pticks)
-        pscale <- signif(x = maxpdelta / pdivs, digits = 1)
-        pscale <- (max(pticks) - ploc) / (pscale * pdivs)
-        ## ceiling(pscale * 10^(-floor(log10(pscale)) + 1)) *
-        ##     10^(floor(log10(pscale)) - 1) * pdivs
-    }
-
-    ## Prepare axes labels and title
-    if(is.null(xlab)){xlab <- tempxlab}
-
-    if(is.null(ylab)){
-        ylab <- paste0(
-            if(isdensity){'p'}else{'P'},
-                '(',
-            paste0(names(x$Y), tails[names(x$Y)], collapse = ', '),
-            ' | ',
-            if(!is.null(x$X)){ paste0(
-                paste0(names(x$X), tails[names(x$X)], collapse = ', '),
-            ', ')},
-            x$K, ')')
-        ## if(qspread){
-        ##     ylab <- paste0(ylab, '\nquantiles: ',
-        ##         paste0(round(qnames, 1), '%', collapse = ', '))
-        ## } else if(sspread){
-        ##     ylab <- paste0(main, '\n', nsamples.spread, ' samples')
-        ## }
-    }
-
-    ## Function to create repetitions of args
-    largs <- function(qn, qy, sn, sy, vn, vy){c(
-        rbind(
-            rep(qn, length.out = qspread * npdeltas * nplots),
-            rep(qy, length.out = qspread * ypdeltas * nplots)
-        ),
-        rbind(
-            rep(sn, length.out = sspread * npdeltas * nplots),
-            rep(sy, length.out = sspread * ypdeltas * nplots)
-        ),
-        rbind(
-            rep(vn, length.out = npdeltas * nplots),
-            rep(vy, length.out = ypdeltas * nplots)
-        )
-    )}
-
-    ## Special graphical-parameter values
-    if(is.null(type)){type <- if(is.character(vals)){'b'} else {'l'}}
-    if(is.null(type.spread)){type.spread <- if(is.character(vals)){'b'} else {'l'}}
-    if(is.null(lwd.spread)){ lwd.spread <- if(qspread){15}else{1} }
-    ## 'pch' needs to be list to mix characters and numbers
-    pchlist <- as.list(largs(pch, NA, pch, -1, pch, pch))
-    pchlist[pchlist == -1] <- '-'
-
-    ## Plot
-    pplot(
-        x = c(
-            if(npdeltas){ list(vals[qnpds]) },
-            if(ypdeltas){ list(vals[qypds]) }
-        ),
-        y = c(
-            if(qspread || sspread){rbind(
-                if(npdeltas){
-                    apply(X = x[[spread]][qnpds, , ispread, drop = FALSE],
-                        MARGIN = pvsyi, FUN = identity, simplify = FALSE)
-                },
-                if(ypdeltas){
-                    apply(X = pscale * x[[spread]][qypds, , ispread, drop = FALSE] + ploc,
-                        MARGIN = pvsyi, FUN = identity, simplify = FALSE)
-                }
-            )},
-            rbind(
-                if(npdeltas){
-                    apply(X = x[['value']][qnpds, , drop = FALSE],
-                        MARGIN = pvsyi, FUN = identity, simplify = FALSE)
-                },
-                if(ypdeltas){
-                    apply(X =  pscale * x[['value']][qypds, , drop = FALSE] + ploc,
-                        MARGIN = pvsyi, FUN = identity, simplify = FALSE)
-                }
-            )
-        ),
-        type = largs('qx', 'qx', type.spread, 'p', type, 'p'),
-        lty = largs(lty.spread, lty.spread, lty.spread, lty.spread, lty, lty),
-        lwd = largs(1, lwd.spread, lwd.spread, lwd.spread, lwd, lwd),
-        pch = pchlist,
-        col = largs(col, col, col, col, col, col),
-        alpha.f = largs(alpha.f.spread, alpha.f.spread,
-            alpha.f.spread, alpha.f.spread, alpha.f, alpha.f),
-        fill = NA,
-        xlab = xlab,
-        ylab = ylab,
-        xlim = xlim,
-        ylim = ylim,
-        main = main,
-        grid = grid,
-        lwd.grid = lwd.grid,
-        col.grid = col.grid,
-        axes = axes,
-        add = add,
-        ...
-    )
-
-    ## add axis for singular probability values
-    pticks <- axTicks(side = 4)
-    if(ypdeltas){
-        graphics::axis(side = 4, at = pticks, labels = (pticks - ploc) / pscale,
-            tick = !grid, col = 'black', lwd = 1, lty = 1)
-        mtext(ylab2, side = 4, line = 2.25)
-    }
-
-    if(qspread){
-        mtext(paste0('Q: ', paste0(round(qnames, 1), '%', collapse = ', ')),
-            side = 2, line = -0.25, cex = 0.75)
-        ## legend(x = 'bottomleft', inset = c(-0.02, -0.03), cex = 0.75,
-        ##     bty = 'n', xpd = TRUE,
-        ##     legend =  paste0('Q: ',
-        ##         paste0(round(qnames, 1), '%', collapse = ', ')))
-        } else if(sspread){
-            mtext(paste0(nsamples.spread, ' samples'),
-            side = 2, line = -0.25, cex = 0.75)
-        }
-
-    ## Plot legends
-    if(!is.null(lgnd)){
-        ##  && is.character(legend) &&
-        ## (legend %in%
-        ##      c("bottomright", "bottom", "bottomleft", "left", "topleft",
-        ##          "top", "topright", "right", "center"))
-        tails <- list()
-        tails[names(lgnd)] <- '='
-        tails[names(x$tails)] <- x$tails
-        graphics::legend(x = legend,
-            legend = apply(lgnd, 1, function(xx){
-                nxx <- names(xx)
-                paste0(solidus, paste0(nxx, ' ', tails[nxx], ' ', xx),
-                    collapse = ', ')
-            }),
-            bty = 'n',
-            col = col,
-            lty = lty,
-            lwd = lwd,
-            ...)
-    }
-    invisible()
-}
-
-
-
 #' Print an object of class "prova_pr" (probability)
 #'
 #' @description
@@ -1508,6 +1193,155 @@ print.prova_pr <- function(
     invisible(x)
 }
 
+
+
+#' Plot the revisability of an object of class "prova_mi" (mutual information) as a histogram
+#'
+#' @description
+#' The mutual information calculated with the [mutualinfo()] function, and outputted as a "prova_mi" (mutual information) object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
+#'
+#' The `hist()` method for a "prova_mi" (mutual information) object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely such change would be. The distribution is represented by a histogram formed from samples of revised mutual information. The bin size is chosen according to the Monte Carlo accuracy.
+#'
+#' @param x Object of class "prova_mi" (mutual information), obtained with [mutualinfo()].
+#' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` determines the bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).
+#' @param alpha.f.fill Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
+#' @param showvalue Logical, default `TRUE`: show the mutual information obtained from the current data sample?
+#' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,axes,add see analogous arguments in [graphics::matplot()]
+#' @param ... Other parameters to be passed to [pplot()].
+#'
+#' @return [Invisibly][base::invisible()], an object of class ["histogram"][graphics::hist()].
+#'
+#' @seealso
+#' [mutualinfo()] to calculate mutual information and its revisability.
+#'
+#' [print.prova_mi()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
+#'
+#' [pplot()] (on which `hist.prova_mi()` is based) for more general plots.
+#'
+#' @examples
+#' ## Use the "prova_K" (knowledge) object 'Kexample',
+#' ## calculated from the "penguins" dataset;
+#' ## variates: 'species' and 'bill_len'
+#'
+#' ## calculate the mutual information and its revisability
+#' MI <- mutualinfo('species', 'bill_len', Kexample, nv = 2)
+#'
+#' ## show the possible revisability of the mutual information,
+#' ## if a much larger data sample were collected
+#' hist(MI)
+#'
+#' @import graphics
+#'
+#' @concept display
+#' @export
+hist.prova_mi <- function(
+    x,
+    breaks = NULL,
+    lty = c(1, 2, 4, 3, 6, 5),
+    lwd = 2,
+    col = palette(),
+    alpha.f = 1,
+    alpha.f.fill = 0.125,
+    showvalue = TRUE,
+    ##     c( ## Tol's colour-blind-safe scheme, or palette()
+    ##     '#4477AA',
+    ##     '#EE6677',
+    ##     '#228833',
+    ##     '#CCBB44',
+    ##     '#66CCEE',
+    ##     '#AA3377' #, '#BBBBBB'
+    ## ),
+    xlab = NULL,
+    ylab = NULL,
+    xlim = NULL,
+    ylim = c(0, NA),
+    main = NULL,
+    grid = TRUE,
+    axes = FALSE,
+    add = FALSE,
+    ...
+){
+
+    ## Check that samples are available in the HI object
+    if(is.null(x[['samples']])) {
+        stop('The MI object does not contain any revisability samples')
+        }
+
+    ## Precompute histogram
+    ff <- x[['samples']]
+    if(is.null(breaks)){
+        rg <- range(ff, na.rm = TRUE)
+        if(rg[2] == rg[1]){rg <- c(0, 1)}
+        if(!is.null(x[['quantiles.acc']])){
+            wd <- 4 * max(x[['quantiles.acc']])
+        } else if(!is.null(x[['samples']])){
+            wd <- 4 * max(sapply(X = c(0.055, 0.945),
+                FUN = function(aquant){
+                    temp <- .funMCEQ(x = x[['samples']],
+                        prob = aquant,
+                        Qpair = pnorm(c(-1, 1)))
+                    (temp[2, ] - temp[1, ]) / 2},
+                USE.NAMES = FALSE, simplify = TRUE))
+        } else {
+            wd <- (rg[2] - rg[1]) / ceiling(sqrt(length(ff))/2)
+        }
+        n <- (rg[2] - rg[1]) / wd
+        ibreaks <- seq(rg[1], rg[2], length.out = n + 1)
+    } else {
+        ibreaks <- breaks
+    }
+    hd <- graphics::hist(x = ff, breaks = ibreaks, plot = FALSE)
+    xlist <- hd$breaks
+    densitylist <- hd$density
+
+    if(is.null(xlab)){
+        tails <- list()
+        tails[names(x$X)] <- '='
+        tails[names(x$tails)] <- x$tails
+        xlab <- paste0('long-run MI(',
+            paste0(x$Y1names, collapse = ', '),
+            ' : ',
+            paste0(x$Y2names, collapse = ', '),
+            if(!is.null(x$X)){paste0(' | ',
+                paste0(names(x$X), ' ', tails[names(x$X)], ' ', x$X)
+                )},
+            ')'
+            )
+    }
+
+    if(is.null(ylab)){ylab <- paste0('p( long-run MI | ', x$K, ')')}
+    if(isFALSE(alpha.f.fill) || !is.numeric(alpha.f.fill)){alpha.f.fill <- 0}
+    if(missing(xlim)){xlim <- range(xlist)}
+
+    nplots <- 1
+
+    pplot(x = xlist,
+        y = densitylist,
+        type = 'hx',
+        lty = rep(lty, length.out = nplots),
+        lwd = rep(lwd, length.out = nplots),
+        col = rep(col, length.out = nplots),
+        xlab = xlab, ylab = ylab,
+        xlim = xlim, ylim = ylim,
+        add = add,
+        alpha.f = alpha.f,
+        xjitter = FALSE, yjitter = FALSE,
+        fill = NA,
+        alpha.f.fill = alpha.f.fill,
+        grid = grid,
+        axes = axes,
+        main = main,
+        ...
+    )
+    if(isTRUE(showvalue)){
+        graphics::abline(v = x[['value']],
+            col = adjustcolor(col, alpha.f * 0.75),
+            lty = lty,
+            lwd = lwd * 0.75)
+    }
+
+    invisible(hd)
+}
 
 
 #' Print an object of class "prova_mi" (mutual information) (mutual information)
@@ -1650,6 +1484,197 @@ print.prova_mi <- function(
         print(x = x[elements], digits = digits, ...)
     }
     invisible(x)
+}
+
+
+
+#' Plot an object of class "prova_eu" (expected utility) and its revisability
+#'
+#' @description
+#' This [base::plot()] method is a utility to plot probabilities obtained with [Pr()], as well as their revisabilities. The probabilities are plotted either against `Y`, with one curve for each value of `X`, or vice versa.
+#'
+#' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
+#' @param type `NULL` (default) or character vector or indicating the type of plot for the main probability distribution; see [base::plot()]. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
+#' @param lty Analogous to argument `lty` (line style) in [graphics::matplot()], used for the main probability distributions.
+#' @param lwd Analogous to argument `lwd` (line width) in [graphics::matplot()], used for the main probability distributions.
+#' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'top'`.
+#' @param alpha.f Numeric, default `1`: opacity of the colours of lines or markers, `0` being completely invisible and `1` completely opaque.
+#' @param nsamples.spread Integer, default 360: number of samples of long-run frequencies to display.
+#' @param type.spread `NULL` (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
+#' @param lty.spread Same as parameter `lty` (line style), but for the line type of the long-run-frequency samples.
+#' @param lwd.spread Same as parameter `lwd` (line width), but for the line type of the long-run-frequency samples.
+#' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` means `0.25` if `spread = 'quantiles'`; and an appropriate value if `spread = 'samples'`,dependent on the number of samples (more samples, less opacity).
+#' @param pch,col,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
+#' @param ... Other parameters to be passed to [pplot()].
+#'
+#' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
+#'
+#' @seealso
+#' [exputility()] to calculate expected utilities and their revisability.
+#'
+#' [print.prova_eu()] to print a summary of expected utilities and their revisability.
+#'
+#' [pplot()] (on which `plot.prova_eu()` is based) for more general plots.
+#'
+#' @examples
+#' ## Use the "prova_K" (knowledge) object 'Kexample',
+#' ## calculated from the "penguins" dataset;
+#' ## variates: 'species' and 'bill_len'
+#'
+#' ## create a grid of values for variate "bill length",
+#' ## based on the information in the dataset and metadata:
+#' valuesBill <- vrtgrid('bill_len', Kexample)
+#'
+#' ## calculate the probabilities and quantiles
+#' probs <- Pr(valuesBill, Kexample)
+#'
+#' ## plot the probabilities and quantiles
+#' plot(probs)
+#'
+#' @import grDevices
+#'
+#' @concept display
+#' @export
+plot.prova_eu <- function(
+    x,
+    type = 'b',
+    lty = c(1, 2, 4, 3, 6, 5),
+    pch = c(1, 2, 0, 5, 6, 3), #, 4,
+    lwd = 2,
+    col = palette(),
+    xlab = NULL, ylab = NULL,
+    xlim = NULL, ylim = NULL,
+    legend = 'topright',
+    add = FALSE,
+    alpha.f = 1,
+    grid = TRUE,
+    lwd.grid = NULL,
+    col.grid = '#00000022',
+    axes = FALSE,
+    main = NULL,
+    type.spread = 'b',
+    lty.spread = c(1, 2, 4, 3, 6, 5),
+    lwd.spread = 1,
+    alpha.f.spread = NULL,
+    nsamples.spread = 360,
+    ...
+){
+    nact <- nrow(x[['value']])
+    nplots <- ncol(x[['value']])
+    nsamples <- ncol(x[['samples']])
+    anames <- dimnames(x[['value']])[1]
+    if(is.null(names(anames))){names(anames) <- 'action'}
+
+    ## Handle the case of missing X items in 'x'
+    if(nplots > 1){
+        if(is.null(x$X)){ x$X <- data.frame(X = paste0('X', seq_len(nplots))) }
+        lgnd <- x$X
+    } else {
+        lgnd <- NULL
+    }
+
+    solidus <- '|'
+    temp <- dim(x[['samples']])[3]
+    nsamples.spread <- min(nsamples.spread, temp)
+    sseq <- round(seq.int(from = 1, to = temp, length.out = nsamples.spread))
+    if(is.null(alpha.f.spread)){
+        alpha.f.spread <- 1/ceiling(sqrt(nsamples.spread))
+    }
+
+    ## y-range
+    if(is.null(ylim)){ylim <- c(NA, NA)}
+    if(!is.finite(ylim[2])){
+        ylim[2] <- max(x[['value']], x[['samples']][,,sseq], na.rm = TRUE)
+    }
+    if(!is.finite(ylim[1])){
+        ylim[1] <- min(x[['value']], x[['samples']][,,sseq], na.rm = TRUE)
+    }
+
+    ## Prepare axes labels and title
+    if(is.null(xlab)){xlab <- names(anames)}
+
+    if(is.null(ylab)){
+        tails <- list()
+        tails[names(x$X)] <- ''
+        tails[names(x$tails)] <- x$tails
+
+        ylab <- paste0('EU(', names(anames),
+            ' | ',
+            if(!is.null(x$X)){ paste0(
+                paste0(names(x$X), tails[names(x$X)], collapse = ', '),
+            ', ')},
+            x$K, ')')
+    }
+
+    ## Function to create repetitions of args
+    largs <- function(sn, vn){c(
+            rep(sn, length.out = nplots),
+            rep(vn, length.out = nplots)
+    )}
+
+    ## Special graphical-parameter values
+    if(is.null(type)){type <- 'b'}
+    if(is.null(type.spread)){type.spread <- type}
+
+    pplot(x = anames,
+        y =  c(
+            apply(X = x[['samples']][ , , sseq, drop = FALSE],
+                MARGIN = 2, FUN = identity, simplify = FALSE),
+            apply(X = x[['value']][, , drop = FALSE],
+                MARGIN = 2, FUN = identity, simplify = FALSE)
+            ),
+        type = largs(type.spread, type),
+        lty = largs(lty.spread, lty),
+        lwd = largs(lwd.spread, lwd),
+        pch = largs(pch, pch),
+        col = largs(col, col),
+        alpha.f = largs(alpha.f.spread, alpha.f),
+        fill = NA,
+        xlab = xlab,
+        ylab = ylab,
+        xlim = xlim,
+        ylim = ylim,
+        main = main,
+        grid = grid,
+        lwd.grid = lwd.grid,
+        col.grid = col.grid,
+        axes = axes,
+        add = add,
+        ...
+    )
+
+    mtext(paste0(nsamples.spread, ' samples'),
+        side = 2, line = -0.25, cex = 0.75)
+
+    for(i in seq_len(nact)){
+        text(x = i, y = ylim[1],
+            labels = paste0(signif(x[['optimal.probs']][i,], 2),
+                collapse = '\n'),
+        cex = 0.75, pos = 1, offset = 0.5, xpd = TRUE)
+    }
+    ## Plot legends
+    if(!is.null(lgnd)){
+        ##  && is.character(legend) &&
+        ## (legend %in%
+        ##      c("bottomright", "bottom", "bottomleft", "left", "topleft",
+        ##          "top", "topright", "right", "center"))
+        tails <- list()
+        tails[names(lgnd)] <- '='
+        tails[names(x$tails)] <- x$tails
+        graphics::legend(x = legend,
+            legend = apply(lgnd, 1, function(xx){
+                nxx <- names(xx)
+                paste0(solidus, paste0(nxx, ' ', tails[nxx], ' ', xx),
+                    collapse = ', ')
+            }),
+            bty = 'n',
+            col = col,
+            lty = lty,
+            pch = pch,
+            lwd = lwd,
+            ...)
+    }
+    invisible()
 }
 
 
