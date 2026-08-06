@@ -18,6 +18,7 @@ A \link[base:list]{list}  of the following elements:
 \item \code{'samples'}: an \link[base:array]{array} of samples of the expeceted utilities that the actions would have, if many more sample data were available. The first dimension corresponds to the actions, the second to the values of the conditional \eqn{X}, and the third the sample index.
 \item \code{'value.acc'}: numerical accuracies of \code{'value'} elements.
 \item \verb{'optimal}': \link[base:list]{list} of actions having maximal expected utility, one list element per column of \code{p} (that is, its conditional values \code{X}). If there are ties, all actions in the tie are reported.
+\item \code{'optimal.samples'}: \link[base:matrix]{matrix} with the probabilities that each action would be chosen as the optimal one, if more data were available. One row for each action, one column for each column of \code{p} (that is, its conditional values \code{X}).
 \item \code{'optimal.samples'}: \link[base:matrix]{matrix} of samples of actions having maximal expected utility, if many more sample data were available. Each row correspond to a column of \code{p} (that is, its conditional values \code{X}); each column is a sample. In case of ties, one action is unsystematically selected via \code{\link[base:sample]{base::sample()}}.
 \item \code{'X'}, \code{'tails'}, \code{'K'}: copies of the homonymous values from the probability object \code{p}.
 }
@@ -37,7 +38,7 @@ This function calculates...
 ## and outcomes depending on the variate 'species'
 umatrix <- matrix(c(
  1.80, 0.42, 1.60, -0.12, -1.10, 0.20, -0.51, 0.35, -0.49, 0.35, -0.48, 0.62
- ), nrow = 4, ncol = 3, dimnames = list(paste0('action', 1:4), NULL))
+ ), nrow = 4, ncol = 3, dimnames = list(actions = paste0('A', 1:4), NULL))
 
 print(umatrix)
 
@@ -53,9 +54,9 @@ eu$value
 ## optimal action:
 eu$optimal
 
-## Tabulate probabilities of what optimal action would be
+## Probabilities for the actions to be judged as optimal
 ## if many more sample data were available
-signif(table(eu$optimal.samples)/ncol(eu$optimal.samples), 2)
+eu$optimal.probs
 
 }
 \references{

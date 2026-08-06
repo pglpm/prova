@@ -1371,12 +1371,16 @@ print.probability <- function(
 #'
 #' @param x Object of class "mi", obtained with [mutualinfo()].
 #' @param unit Either `NULL`, or one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used; see analogous argument in [mutualinfo()]. If `NULL` (default), the same unit as in the object `x` is used. Unit conversion is internally performed if this unit is different from that of the object `x`.
-#' @param elements character or integer vector, or `NULL` (default): elements of the "mutual information" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `'value'` and `'quantiles'` are displayed together in a special way.
+#' @param elements character or integer vector, or `NULL` (default): elements of the "mutual information" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `'value'`, `'value.acc'`, `'quantiles'` are displayed together in a special way.
 #' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for element `'value'` are determined from is respective `'value.acc'`  (see [mutualinfo()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `'quantiles'` elements uses `edigits` significant digits.
 #' @param edigits positive integer, default 2: number of significant digits for element `'value'` and `'quantiles'`, if `digits = TRUE`.
 #' @param ... Other parameters to be passed to [base::print()].
 #'
 #' @return Its `x` argument, [invisibly][base::invisible()]; see [base::print()].
+#'
+#' @references
+#'
+#' - Joint Committee for Guides in Metrology (2008): *Guide to the expression of uncertainty in measurement*, <doi:10.59161/JCGM100-2008E>, <https://www.iso.org/sites/JCGM/GUM-JCGM100.htm>.
 #'
 #' @seealso
 #' [mutualinfo()] to calculate mutual information.
@@ -1508,30 +1512,45 @@ print.mi <- function(
 #' @description
 #' This [base::print()] method is a utility to display value and revisability of an "mi" object obtained with [mutualinfo()].
 #'
-#' @param x Object of class "mi", obtained with [mutualinfo()].
+#' @param x Object of class "eutility", obtained with [exputility()].
+#' @param elements character or integer vector, or `NULL` (default): elements of the "expected utility" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `'value'`, `'value.acc'`, `'optimal.probs'` are displayed together in a special way.
 #' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for element `'value'` are determined from is respective `'value.acc'`  (see [exputility()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`.
 #' @param edigits positive integer, default 2: number of significant digits for element `'value'` and `'quantiles'`, if `digits = TRUE`.
 #' @param ... Other parameters to be passed to [base::print()].
 #'
 #' @return Its `x` argument, [invisibly][base::invisible()]; see [base::print()].
 #'
+#' @references
+#'
+#' - Joint Committee for Guides in Metrology (2008): *Guide to the expression of uncertainty in measurement*, <doi:10.59161/JCGM100-2008E>, <https://www.iso.org/sites/JCGM/GUM-JCGM100.htm>.
+#'
 #' @seealso
 #' [exputility()] to calculate expected utilities and their revisability.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample',
+#' ## Use the example "Knowledge" object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
-#' ## Calculate the mutual information between variates 'species' and 'bill_len'
-#' MI <- mutualinfo('species', 'bill_len', Kexample)
+#' ## define a utility matrix with four actions,
+#' ## and outcomes depending on the variate 'species'
+#' umatrix <- matrix(c(
+#'  1.80, 0.42, 1.60, -0.12, -1.10, 0.20, -0.51, 0.35, -0.49, 0.35, -0.48, 0.62
+#'  ), nrow = 4, ncol = 3, dimnames = list(actions = paste0('A', 1:4), NULL))
 #'
-#' ## display the value and revisability of the mutual information
-#' print(MI)
+#' print(umatrix)
 #'
-#' ## convert to hartleys (base-10 logarithms):
-#' print(MI, unit = 'Hart')
-#' }
+#' ## Calculate the probability of the 'species outcomes
+#' probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+#'   Kexample)
+#'
+#' ## Calculate the expected utilities of the actions
+#' eu <- exputility(umatrix, probs)
+#'
+#' ## Print the expected utility of each action, its numerical accuracy,
+#' ## and the probability that it would be optimal if more data were available
+#'
+#' print(eu)
 #'
 #' @concept display
 #' @export
@@ -1576,7 +1595,7 @@ print.eutility <- function(
             dimnames = c(dimnames(x[['value']]),
                 setNames(object = list(c('EU',
                     if(hasvmca){'+/-'},
-                    paste0('prob. long-run')
+                    paste0('prob.')
                 )), nm = oname)
             )), perm = c(1, 3, 2))
 
