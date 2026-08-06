@@ -1,4 +1,4 @@
-Log core 3 - Current time: 2026-08-02 11:56:17 
+Log core 3 - Current time: 2026-08-06 21:44:00 
 nimble version 1.4.2 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -101,7 +101,7 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 41 secs 
+Setup time 42 secs 
 
 ###########################################################
 Chain # 3 (chain 1 of 1 for this core)
@@ -113,8 +113,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:57:03
-MCMC time 6.1 secs 
+Current time: 2026-08-06 21:44:48
+MCMC time 6.4 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -124,7 +124,7 @@ ESS: 314
 needed thinning: 113
 average: 0.00229
 quantile width: 0.00771
-Diagnostics time 1.2 secs 
+Diagnostics time 1.1 secs 
 
 Total iterations 3600 - require further 47627 - continue for 47627 
 
@@ -134,7 +134,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:57:14
+Current time: 2026-08-06 21:44:59
 MCMC time 17 secs 
 
 USED COMPONENTS: 2 OF 64 
@@ -145,7 +145,7 @@ ESS: 443
 needed thinning: 277
 average: 0.00308
 quantile width: 0.0108
-Diagnostics time 0.87 secs 
+Diagnostics time 0.84 secs 
 
 Total iterations 7200 - require further 118088 - continue for 118088 
 
@@ -155,8 +155,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:57:22
-MCMC time 24 secs 
+Current time: 2026-08-06 21:45:07
+MCMC time 25 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -176,8 +176,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:57:29
-MCMC time 32 secs 
+Current time: 2026-08-06 21:45:14
+MCMC time 33 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -187,7 +187,7 @@ ESS: 1020
 needed thinning: 274
 average: 0.00324
 quantile width: 0.0115
-Diagnostics time 0.78 secs 
+Diagnostics time 0.85 secs 
 
 Total iterations 14400 - require further 109502 - continue for 109502 
 
@@ -197,8 +197,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:57:36
-MCMC time 38 secs 
+Current time: 2026-08-06 21:45:21
+MCMC time 40 secs 
 
 USED COMPONENTS: 2 OF 64 
 
@@ -208,7 +208,7 @@ ESS: 1250
 needed thinning: 272
 average: 0.00313
 quantile width: 0.0111
-Diagnostics time 0.78 secs 
+Diagnostics time 0.77 secs 
 
 Total iterations 18000 - require further 105089 - continue for 105089 
 
@@ -218,8 +218,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:57:42
-MCMC time 45 secs 
+Current time: 2026-08-06 21:45:28
+MCMC time 47 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -229,7 +229,7 @@ ESS: 1410
 needed thinning: 299
 average: 0.00344
 quantile width: 0.012
-Diagnostics time 0.75 secs 
+Diagnostics time 0.73 secs 
 
 Total iterations 21600 - require further 113388 - continue for 113388 
 
@@ -239,8 +239,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:57:48
-MCMC time 51 secs 
+Current time: 2026-08-06 21:45:35
+MCMC time 53 secs 
 
 USED COMPONENTS: 2 OF 64 
 
@@ -250,7 +250,7 @@ ESS: 1580
 needed thinning: 309
 average: 0.00351
 quantile width: 0.0119
-Diagnostics time 0.76 secs 
+Diagnostics time 0.74 secs 
 
 Total iterations 25200 - require further 114585 - continue for 114585 
 
@@ -260,8 +260,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:57:55
-MCMC time 58 secs 
+Current time: 2026-08-06 21:45:42
+MCMC time 60 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -271,7 +271,7 @@ ESS: 1770
 needed thinning: 280
 average: 0.00352
 quantile width: 0.0119
-Diagnostics time 0.71 secs 
+Diagnostics time 0.72 secs 
 
 Total iterations 28800 - require further 97541 - continue for 97541 
 
@@ -281,7 +281,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:58:02
+Current time: 2026-08-06 21:45:48
 MCMC time 1.1 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -292,7 +292,7 @@ ESS: 2150
 needed thinning: 307
 average: 0.00352
 quantile width: 0.0119
-Diagnostics time 0.71 secs 
+Diagnostics time 0.74 secs 
 
 Total iterations 32400 - require further 106472 - continue for 106472 
 
@@ -302,7 +302,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:58:10
+Current time: 2026-08-06 21:45:54
 MCMC time 1.2 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -323,7 +323,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:58:17
+Current time: 2026-08-06 21:46:01
 MCMC time 1.3 mins 
 
 USED COMPONENTS: 2 OF 64 
@@ -334,7 +334,7 @@ ESS: 2640
 needed thinning: 320
 average: 0.00364
 quantile width: 0.0121
-Diagnostics time 0.79 secs 
+Diagnostics time 0.75 secs 
 
 Total iterations 39600 - require further 105117 - continue for 105117 
 
@@ -344,8 +344,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:58:25
-MCMC time 1.5 mins 
+Current time: 2026-08-06 21:46:08
+MCMC time 1.4 mins 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -355,7 +355,7 @@ ESS: 2910
 needed thinning: 303
 average: 0.00357
 quantile width: 0.0119
-Diagnostics time 0.75 secs 
+Diagnostics time 0.72 secs 
 
 Total iterations 43200 - require further 93871 - continue for 93871 
 
@@ -365,7 +365,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:58:32
+Current time: 2026-08-06 21:46:15
 MCMC time 1.6 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -376,7 +376,7 @@ ESS: 3170
 needed thinning: 300
 average: 0.00357
 quantile width: 0.012
-Diagnostics time 0.79 secs 
+Diagnostics time 0.84 secs 
 
 Total iterations 46800 - require further 88661 - continue for 88661 
 
@@ -386,7 +386,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:58:39
+Current time: 2026-08-06 21:46:22
 MCMC time 1.7 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -397,7 +397,7 @@ ESS: 3440
 needed thinning: 280
 average: 0.00351
 quantile width: 0.0118
-Diagnostics time 0.76 secs 
+Diagnostics time 0.8 secs 
 
 Total iterations 50400 - require further 75943 - continue for 75943 
 
@@ -407,7 +407,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:58:47
+Current time: 2026-08-06 21:46:29
 MCMC time 1.8 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -418,7 +418,7 @@ ESS: 3610
 needed thinning: 304
 average: 0.00348
 quantile width: 0.0117
-Diagnostics time 0.76 secs 
+Diagnostics time 0.8 secs 
 
 Total iterations 54000 - require further 83382 - continue for 83382 
 
@@ -428,7 +428,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:58:54
+Current time: 2026-08-06 21:46:36
 MCMC time 1.9 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -439,7 +439,7 @@ ESS: 3850
 needed thinning: 282
 average: 0.00351
 quantile width: 0.0119
-Diagnostics time 0.78 secs 
+Diagnostics time 0.77 secs 
 
 Total iterations 57600 - require further 69943 - continue for 69943 
 
@@ -449,8 +449,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:59:01
-MCMC time 2.1 mins 
+Current time: 2026-08-06 21:46:43
+MCMC time 2 mins 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -460,7 +460,7 @@ ESS: 3770
 needed thinning: 314
 average: 0.00355
 quantile width: 0.012
-Diagnostics time 0.83 secs 
+Diagnostics time 0.76 secs 
 
 Total iterations 61200 - require further 80792 - continue for 80792 
 
@@ -470,8 +470,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:59:08
-MCMC time 2.2 mins 
+Current time: 2026-08-06 21:46:49
+MCMC time 2.1 mins 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -491,8 +491,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:59:15
-MCMC time 2.3 mins 
+Current time: 2026-08-06 21:46:56
+MCMC time 2.2 mins 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -502,7 +502,7 @@ ESS: 4490
 needed thinning: 296
 average: 0.00353
 quantile width: 0.0118
-Diagnostics time 0.78 secs 
+Diagnostics time 0.8 secs 
 
 Total iterations 68400 - require further 65365 - continue for 65365 
 
@@ -512,7 +512,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:59:21
+Current time: 2026-08-06 21:47:03
 MCMC time 2.4 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -523,7 +523,7 @@ ESS: 4730
 needed thinning: 297
 average: 0.00349
 quantile width: 0.0117
-Diagnostics time 0.8 secs 
+Diagnostics time 0.75 secs 
 
 Total iterations 72000 - require further 62437 - continue for 62437 
 
@@ -533,7 +533,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:59:28
+Current time: 2026-08-06 21:47:10
 MCMC time 2.5 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -554,7 +554,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:59:35
+Current time: 2026-08-06 21:47:18
 MCMC time 2.6 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -565,7 +565,7 @@ ESS: 5360
 needed thinning: 281
 average: 0.0034
 quantile width: 0.0115
-Diagnostics time 0.72 secs 
+Diagnostics time 0.79 secs 
 
 Total iterations 79200 - require further 47875 - continue for 47875 
 
@@ -575,7 +575,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:59:41
+Current time: 2026-08-06 21:47:25
 MCMC time 2.7 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -586,7 +586,7 @@ ESS: 5670
 needed thinning: 261
 average: 0.00338
 quantile width: 0.0115
-Diagnostics time 0.78 secs 
+Diagnostics time 0.8 secs 
 
 Total iterations 82800 - require further 35289 - continue for 35289 
 
@@ -596,8 +596,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:59:49
-MCMC time 2.9 mins 
+Current time: 2026-08-06 21:47:33
+MCMC time 2.8 mins 
 
 USED COMPONENTS: 2 OF 64 
 
@@ -607,7 +607,7 @@ ESS: 5820
 needed thinning: 257
 average: 0.00333
 quantile width: 0.0114
-Diagnostics time 0.81 secs 
+Diagnostics time 0.83 secs 
 
 Total iterations 86400 - require further 29594 - continue for 29594 
 
@@ -617,7 +617,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 11:59:56
+Current time: 2026-08-06 21:47:39
 MCMC time 3 mins 
 
 USED COMPONENTS: 2 OF 64 
@@ -628,7 +628,7 @@ ESS: 6000
 needed thinning: 277
 average: 0.00331
 quantile width: 0.0113
-Diagnostics time 0.76 secs 
+Diagnostics time 0.83 secs 
 
 Total iterations 90000 - require further 35281 - continue for 35281 
 
@@ -638,7 +638,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 12:00:03
+Current time: 2026-08-06 21:47:46
 MCMC time 3.1 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -649,7 +649,7 @@ ESS: 6340
 needed thinning: 279
 average: 0.0033
 quantile width: 0.0113
-Diagnostics time 0.8 secs 
+Diagnostics time 0.84 secs 
 
 Total iterations 93600 - require further 32428 - continue for 32428 
 
@@ -659,7 +659,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 12:00:10
+Current time: 2026-08-06 21:47:53
 MCMC time 3.2 mins 
 
 USED COMPONENTS: 2 OF 64 
@@ -670,7 +670,7 @@ ESS: 6470
 needed thinning: 283
 average: 0.00331
 quantile width: 0.0113
-Diagnostics time 0.8 secs 
+Diagnostics time 0.84 secs 
 
 Total iterations 97200 - require further 30667 - continue for 30667 
 
@@ -680,7 +680,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 12:00:17
+Current time: 2026-08-06 21:48:00
 MCMC time 3.3 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -691,7 +691,7 @@ ESS: 6630
 needed thinning: 283
 average: 0.00329
 quantile width: 0.0113
-Diagnostics time 0.8 secs 
+Diagnostics time 0.82 secs 
 
 Total iterations 100800 - require further 27184 - continue for 27184 
 
@@ -701,7 +701,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 12:00:24
+Current time: 2026-08-06 21:48:07
 MCMC time 3.4 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -712,7 +712,7 @@ ESS: 7080
 needed thinning: 282
 average: 0.00328
 quantile width: 0.0113
-Diagnostics time 0.79 secs 
+Diagnostics time 0.8 secs 
 
 Total iterations 104400 - require further 23145 - continue for 23145 
 
@@ -722,8 +722,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 12:00:31
-MCMC time 3.6 mins 
+Current time: 2026-08-06 21:48:13
+MCMC time 3.5 mins 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -733,7 +733,7 @@ ESS: 7450
 needed thinning: 268
 average: 0.0033
 quantile width: 0.0113
-Diagnostics time 0.8 secs 
+Diagnostics time 0.77 secs 
 
 Total iterations 108000 - require further 13167 - continue for 13167 
 
@@ -743,8 +743,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 12:00:38
-MCMC time 3.7 mins 
+Current time: 2026-08-06 21:48:20
+MCMC time 3.6 mins 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -754,7 +754,7 @@ ESS: 7610
 needed thinning: 272
 average: 0.00332
 quantile width: 0.0114
-Diagnostics time 0.81 secs 
+Diagnostics time 0.78 secs 
 
 Total iterations 111600 - require further 11454 - continue for 11454 
 
@@ -764,7 +764,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 12:00:45
+Current time: 2026-08-06 21:48:27
 MCMC time 3.8 mins 
 
 USED COMPONENTS: 2 OF 64 
@@ -775,7 +775,7 @@ ESS: 7740
 needed thinning: 271
 average: 0.00333
 quantile width: 0.0114
-Diagnostics time 0.81 secs 
+Diagnostics time 0.78 secs 
 
 Total iterations 115200 - require further 7240 - continue for 7240 
 
@@ -785,7 +785,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 12:00:52
+Current time: 2026-08-06 21:48:34
 MCMC time 3.9 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -796,7 +796,7 @@ ESS: 7760
 needed thinning: 279
 average: 0.00333
 quantile width: 0.0114
-Diagnostics time 0.82 secs 
+Diagnostics time 0.8 secs 
 
 Total iterations 118800 - require further 7111 - continue for 7111 
 
@@ -806,7 +806,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 12:00:59
+Current time: 2026-08-06 21:48:41
 MCMC time 4 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -817,7 +817,7 @@ ESS: 8180
 needed thinning: 285
 average: 0.00336
 quantile width: 0.0115
-Diagnostics time 0.63 secs 
+Diagnostics time 0.72 secs 
 
 Total iterations 122400 - require further 6470 - continue for 6470 
 
@@ -827,7 +827,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-08-02 12:01:06
+Current time: 2026-08-06 21:48:48
 MCMC time 4.1 mins 
 
 USED COMPONENTS: 3 OF 64 
@@ -838,14 +838,14 @@ ESS: 8530
 needed thinning: 267
 average: 0.00335
 quantile width: 0.0115
-Diagnostics time 0.75 secs 
+Diagnostics time 0.77 secs 
 
 Total iterations 126000 - require further 0 - continue for 0 
 
 Keeping  450 
 
-Current time: 2026-08-02 12:01:16
+Current time: 2026-08-06 21:48:58
 MCMC + diagnostics time 4.3 mins 
 
-Current time: 2026-08-02 12:01:16
+Current time: 2026-08-06 21:48:58
 Total time 5 mins 
