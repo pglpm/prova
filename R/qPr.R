@@ -37,7 +37,7 @@
 #' - Porta Mana (2025): *What's special about 89% credibility intervals?* <doi:10.5281/zenodo.17072199>.
 #'
 #' @seealso
-#' [learn()], which generates the `K` objects required by `qPr()`.
+#' [learn()], which generates the "prova_K" (knowledge) objects required by `qPr()`.
 #'
 #' [Pr()] to calculate joint and conditional probabilities.
 #'

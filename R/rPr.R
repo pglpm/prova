@@ -17,7 +17,7 @@
 #' @return A [data frame][base::data.frame()] of joint draws of the variates `Ynames` from the posterior distribution, conditional on `X`. The row names of the data frame report the Monte Carlo sample (from [learn()]) used for that draw, and the total number of draws from that sample so far.
 #'
 #' @seealso
-#' [learn()], which generates the `K` objects required by `qPr()`.
+#' [learn()], which generates the "prova_K" (knowledge) objects required by `qPr()`.
 #'
 #' [Pr()] to calculate joint and conditional probabilities.
 #'

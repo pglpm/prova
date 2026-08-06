@@ -19,7 +19,7 @@
 #' Example `K`nowledge object produced by learn()
 #'
 #' @description
-#' An example `K` object obtained by means of the [learn()] function, using the [datasets::penguins] dataset and the metadata in [metadataExample], according to the call
+#' An example "prova_K" (knowledge) object obtained by means of the [learn()] function, using the [datasets::penguins] dataset and the metadata in [metadataExample], according to the call
 #'
 #' ```
 #' learn(data = penguins, metadata = metadataExample,

@@ -19,7 +19,7 @@
 #' @return A [data frame][base::data.frame()] with columns corresponding to the `vrt` argument, and one row for each combination of the variate values.
 #'
 #' @seealso
-#' [learn()], which generates the `K` objects required by `vrtgrid()`.
+#' [learn()], which generates the "prova_K" (knowledge) objects required by `vrtgrid()`.
 #'
 #' [Pr()] to calculate probabilities and their revisabilities.
 #'

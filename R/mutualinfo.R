@@ -64,7 +64,7 @@
 #'
 #' [Pr()] to calculate probabilities and their revisability.
 #'
-#' [learn()], which generates the `K` objects required by `mutualinfo()`.
+#' [learn()], which generates the "prova_K" (knowledge) objects required by `mutualinfo()`.
 #'
 #' @examples
 #' ## Use the example "prova_K" (knowledge) object 'Kexample'
