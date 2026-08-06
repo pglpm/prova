@@ -1586,14 +1586,21 @@ print.eutility <- function(
     }
 
     if(is.null(elements)){
+        ## create asterisks to mark the optimal actions
+        ast <- character(length(x[['value']]))
+        dim(ast) <- dim(x[['value']])
+        for(i in seq_along(x[['optimal']])){
+            ast[which(rownames(x[['value']]) %in% x[['optimal']][i]), i] <- '*'
+        }
+
         totake <- c('value', if(hasvmca){'value.acc'}, 'optimal.probs')
         ## rearrange and combine values and quantiles in a special way
-        temp <- aperm(a = array(data = .signifC(
+        temp <- aperm(a = array(data = c(ast, .signifC(
             x = unname(unlist(x[totake])),
-            digits = c(vdigits, if(hasvmca){adigits}, odigits) ),
-            dim = c(dim(x[['value']]), 1 + hasvmca + 1),
+            digits = c(vdigits, if(hasvmca){adigits}, odigits) )),
+            dim = c(dim(x[['value']]), 2 + hasvmca + 1),
             dimnames = c(dimnames(x[['value']]),
-                setNames(object = list(c('EU',
+                setNames(object = list(c('', 'EU',
                     if(hasvmca){'+/-'},
                     paste0('prob.')
                 )), nm = oname)
