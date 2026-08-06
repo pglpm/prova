@@ -78,10 +78,10 @@ exputility <- function(
         stop("Number of columns of 'u' and number of Y-values of 'p' must be the same.")
     }
 
-    anames <- rownames(u)
+    anames <- dimnames(u)[1]
     if(is.null(anames)){
-        anames <- seq_len(nrow(u))
-        rownames(u) <- anames
+        anames <- list(action = paste0('act', seq_len(nrow(u))))
+        dimnames(u) <- c(anames, dimnames(u)[-1])
     }
 
     value <- u %*% p[['value']]
@@ -92,15 +92,19 @@ exputility <- function(
     dim(samples) <- c(dim(samples)[1], prod(temp))
     samples <- u %*% samples
     dim(samples) <- c(nrow(u), temp)
-    dimnames(samples) <- c(list(anames), temp2)
+    dimnames(samples) <- c(anames, temp2)
 
-    osamples <- anames[c(
-        apply(X = samples, MARGIN = c(2, 3),
-            FUN = function(xx){sample(
-                x = rep.int(x = which(xx == max(xx, na.rm = TRUE)),
-                    times = 2),
-                size = 1, replace = FALSE, prob = NULL)}, simplify = TRUE)
-    )]
+    osamples <- apply(X = samples, MARGIN = c(2, 3),
+        FUN = function(xx){sample(
+            x = rep.int(x = which(xx == max(xx, na.rm = TRUE)),
+                times = 2),
+            size = 1, replace = FALSE, prob = NULL)}, simplify = TRUE)
+
+    oprobs <- apply(X = osamples, MARGIN = 1,
+        FUN = tabulate, nbins = nrow(u)
+            ) / ncol(osamples)
+    dimnames(oprobs) <- dimnames(value)
+    osamples <- anames[[1]][c(osamples)]
     dim(osamples) <- dim(samples)[-1]
     dimnames(osamples) <- dimnames(samples)[-1]
 
@@ -110,8 +114,10 @@ exputility <- function(
             value.acc = abs(u) %*% p[['value.acc']],
             samples = samples,
             optimal = apply(X = value, MARGIN = 2,
-                FUN = function(xx){anames[which(xx == max(xx, na.rm = TRUE))]},
-                simplify = FALSE),
+                FUN = function(xx){
+                    anames[[1]][which(xx == max(xx, na.rm = TRUE))]
+                }, simplify = FALSE),
+            optimal.probs = oprobs,
             optimal.samples = osamples
         ),
         p[c('X', 'tails', 'K')]

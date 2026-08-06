@@ -1503,67 +1503,92 @@ print.mi <- function(
 }
 
 
-## .old.print.mi <- function(
-##     x,
-##     digits = TRUE,
-##     edigits = 2,
-##     unit = NULL,
-##     ...
-## ){
-## 
-##     xunit <- x[['unit']]
-##     if(is.null(unit) || unit == xunit){
-##         unit <- xunit
-##         lbase <- 1
-##     } else {
-##         ## Consistency checks
-##         if (unit == 'Sh') {
-##             lbase <- log(2)
-##         } else if (unit == 'Hart') {
-##             lbase <- log(10)
-##         } else if (unit == 'nat') {
-##             lbase <- 1
-##         } else if (is.numeric(unit) && unit > 0) {
-##             lbase <- log(unit)
-##         } else {
-##             stop("unit must be 'Sh', 'Hart', 'nat', or a positive real")
-##         }
-## 
-##         ## Convert symbol in x-object to log
-##         if (xunit == 'Sh') {
-##             xlbase <- log(2)
-##         } else if (xunit == 'Hart') {
-##             xlbase <- log(10)
-##         } else if (xunit == 'nat') {
-##             xlbase <- 1
-##         } else {
-##             xlbase <- log(xunit)
-##         }
-## 
-##         lbase <- lbase / xlbase
-##     }
-## 
-##     xvalue <- x[['value']] / lbase
-##     xquants <- x[['quantiles']] / lbase
-##     xacc <- x[['value.acc']] / lbase
-##     qacc <- x[['quantiles.acc']] / lbase
-## 
-##     if(isTRUE(digits)){
-##         vdigits <- edigits - 1 + ceiling(log10(xvalue)) -
-##             floor(log10(xacc))
-##         adigits <- edigits
-##         qdigits <- edigits - 1 + ceiling(log10(xquants)) -
-##             floor(log10(qacc))
-##     } else {
-##         vdigits <- adigits <- qdigits <- digits
-##     }
-## 
-##     temp <- .signifC(x = c(xvalue, xquants),
-##         digits = c(vdigits, qdigits))
-##     names(temp) <- c(paste0('value/', unit), paste0('Q', names(xquants)))
-##     print(x = noquote(temp), ...)
-## }
+#' Print an object of class "eutility" (expected utility)
+#'
+#' @description
+#' This [base::print()] method is a utility to display value and revisability of an "mi" object obtained with [mutualinfo()].
+#'
+#' @param x Object of class "mi", obtained with [mutualinfo()].
+#' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for element `'value'` are determined from is respective `'value.acc'`  (see [exputility()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`.
+#' @param edigits positive integer, default 2: number of significant digits for element `'value'` and `'quantiles'`, if `digits = TRUE`.
+#' @param ... Other parameters to be passed to [base::print()].
+#'
+#' @return Its `x` argument, [invisibly][base::invisible()]; see [base::print()].
+#'
+#' @seealso
+#' [exputility()] to calculate expected utilities and their revisability.
+#'
+#' @examples
+#' ## Use the "Knowledge" object 'Kexample',
+#' ## calculated from the "penguins" dataset;
+#' ## variates: 'species' and 'bill_len'
+#'
+#' ## Calculate the mutual information between variates 'species' and 'bill_len'
+#' MI <- mutualinfo('species', 'bill_len', Kexample)
+#'
+#' ## display the value and revisability of the mutual information
+#' print(MI)
+#'
+#' ## convert to hartleys (base-10 logarithms):
+#' print(MI, unit = 'Hart')
+#' }
+#'
+#' @concept display
+#' @export
+print.eutility <- function(
+    x,
+    elements = NULL,
+    digits = TRUE,
+    edigits = 2,
+    ...
+){
+    vmca <- x[['value.acc']]
+    if(is.null(vmca)){# output is from qPr()
+        hasvmca <- FALSE
+        vmca <- 1e-15
+    } else {
+        hasvmca <- TRUE
+    }
 
+    oname <- ''
+
+    if(isTRUE(digits) && is.null(elements)){
+        vdigits <- edigits - 1 + ceiling(log10(abs(x[['value']]))) -
+            floor(log10(vmca))
+        vdigits[is.na(vdigits)] <- edigits
+        adigits <- rep.int(x = edigits, times = length(vmca))
+        adigits[is.na(adigits)] <- edigits
+        odigits <- rep.int(x = edigits,
+            times = length(x[['optimal.probs']]))
+    } else if(is.null(elements)){
+            vdigits <- adigits <- odigits <- digits
+    } else if(!is.null(elements)){
+        digits <- edigits
+    }
+
+    if(is.null(elements)){
+        totake <- c('value', if(hasvmca){'value.acc'}, 'optimal.probs')
+        ## rearrange and combine values and quantiles in a special way
+        temp <- aperm(a = array(data = .signifC(
+            x = unname(unlist(x[totake])),
+            digits = c(vdigits, if(hasvmca){adigits}, odigits) ),
+            dim = c(dim(x[['value']]), 1 + hasvmca + 1),
+            dimnames = c(dimnames(x[['value']]),
+                setNames(object = list(c('EU',
+                    if(hasvmca){'+/-'},
+                    paste0('prob. long-run')
+                )), nm = oname)
+            )), perm = c(1, 3, 2))
+
+        if(is.null(x$X)){temp <- temp[,]}
+
+        print(x = noquote(temp), ...)
+
+    } else {
+        print(x = x[elements], digits = digits, ...)
+    }
+    invisible(x)
+}
 
 
 #' Print summary of a "Knowledge" object
