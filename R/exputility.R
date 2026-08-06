@@ -123,7 +123,8 @@ exputility <- function(
             optimal.probs = oprobs,
             optimal.samples = osamples
         ),
-        p[c('X', 'tails', 'K')]
+        if(!is.null(p[['X']])){p['X']},
+        p[c('tails', 'K')]
     )
 
     class(out) <- 'eutility'

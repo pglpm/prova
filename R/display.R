@@ -1606,7 +1606,7 @@ print.eutility <- function(
                 )), nm = oname)
             )), perm = c(1, 3, 2))
 
-        if(is.null(x$X)){temp <- temp[,]}
+        if(is.null(x$X)){temp <- temp[,,]}
 
         print(x = noquote(temp), ...)
 
