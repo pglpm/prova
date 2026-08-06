@@ -69,11 +69,11 @@ exputility <- function(
     ## example reversal
     ## 0.47 -0.15  2.0
     ## 0.30  2.00 -0.7
-    if(!inherits(p, 'probability')){
+    if(!inherits(p, 'prova_pr')){
         stop("Argument 'p' is not an object of class 'prova_pr'.")
     }
-    if(length(dim(u)) != 2){
-        stop("Argument 'u' must be a utility matrix.")
+    if(length(dim(u)) != 2 || dim(u)[1] == 1){
+        stop("Argument 'u' must be a utility matrix with at least two actions (rows).")
     }
     if(ncol(u) != nrow(p[['value']])){
         stop("Number of columns of 'u' and number of Y-values of 'p' must be the same.")

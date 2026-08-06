@@ -22,12 +22,12 @@
             K <- NULL
         }
         ## test if K has class 'prova_K' (knowledge)
-        if(inherits(K, 'K')){
+        if(inherits(K, 'prova_K')){
             K
         } else {
             NULL
         }
-    } else if(inherits(K, 'K') ||
+    } else if(inherits(K, 'prova_K') ||
            (is.list(K) && !is.null(K[['W']]) && !is.null(K[['auxmetadata']]))){
         ## K is K-object
         K
