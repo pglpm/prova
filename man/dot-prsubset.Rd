@@ -2,19 +2,19 @@
 % Please edit documentation in R/display.R
 \name{.prsubset}
 \alias{.prsubset}
-\title{Subset variates of an object of class "probability"}
+\title{Subset variates of an object of class "prova_pr" (probability)}
 \usage{
 .prsubset(x, subset)
 }
 \arguments{
-\item{x}{Object of class "probability", obtained with \code{\link[=Pr]{Pr()}}.}
+\item{x}{Object of class "prova_pr" (probability), obtained with \code{\link[=Pr]{Pr()}}.}
 
 \item{subset}{Named list or named vector: variates to subset, given as list names, and corresponding values to subset.}
 }
 \value{
-An object of class "probability", identical to the original object \code{x} except for a reduced range of values in some if its variates.
+An object of class "prova_pr" (probability), identical to the original object \code{x} except for a reduced range of values in some if its variates.
 }
 \description{
-An object of class "probability", obtained with the \code{\link[=Pr]{Pr()}} function, holds the probabilities for all possible combinations of values of a set of joint variates \code{Y} conditional on a set of joint variates \code{X}, together with the revisabilities of these probabilities and some other information. In some cases one may wish to exclude some of the values of the \code{Y} or \code{X} variates. For instance \code{Y} in the probability-class object could include the variate "age" with values from 18 to 100, and one may want to retain the values from 60 to 80.
+An object of class "prova_pr" (probability), obtained with the \code{\link[=Pr]{Pr()}} function, holds the probabilities for all possible combinations of values of a set of joint variates \code{Y} conditional on a set of joint variates \code{X}, together with the revisabilities of these probabilities and some other information. In some cases one may wish to exclude some of the values of the \code{Y} or \code{X} variates. For instance \code{Y} in the probability-class object could include the variate "age" with values from 18 to 100, and one may want to retain the values from 60 to 80.
 }
 \keyword{internal}

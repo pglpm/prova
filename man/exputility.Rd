@@ -7,9 +7,9 @@
 exputility(u, p)
 }
 \arguments{
-\item{u}{a utility matrix given as a \code{\link[base:matrix]{base::matrix()}} or as a \code{\link[base:data.frame]{base::data.frame()}} (internally converted into a matrix). Each row of the matrix corresponds to a possible action; each row to an uncertain outcome \eqn{Y}. The number of columns must be equal to the number of \eqn{Y}-values of the "probability" object of argument \code{p}.}
+\item{u}{a utility matrix given as a \code{\link[base:matrix]{base::matrix()}} or as a \code{\link[base:data.frame]{base::data.frame()}} (internally converted into a matrix). Each row of the matrix corresponds to a possible action; each row to an uncertain outcome \eqn{Y}. The number of columns must be equal to the number of \eqn{Y}-values of the "prova_pr" (probability) object of argument \code{p}.}
 
-\item{p}{A "probability" object, obtained from \code{\link[=Pr]{Pr()}}. The number of \eqn{Y}-values of this object must be equal to the number of columens of the utility matrix of argument \code{um}.}
+\item{p}{A "prova_pr" (probability) object, obtained from \code{\link[=Pr]{Pr()}}. The number of \eqn{Y}-values of this object must be equal to the number of columens of the utility matrix of argument \code{um}.}
 }
 \value{
 A \link[base:list]{list}  of the following elements:
@@ -30,7 +30,7 @@ This functions calculates the expected utilities of each action or decision corr
 This function calculates...
 }
 \examples{
-## Use the example "Knowledge" object 'Kexample'
+## Use the example "prova_K" (knowledge) object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 

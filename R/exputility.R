@@ -4,9 +4,9 @@
 #'
 #' @details This function calculates...
 #'
-#' @param u a utility matrix given as a [base::matrix()] or as a [base::data.frame()] (internally converted into a matrix). Each row of the matrix corresponds to a possible action; each row to an uncertain outcome \eqn{Y}. The number of columns must be equal to the number of \eqn{Y}-values of the "probability" object of argument `p`.
+#' @param u a utility matrix given as a [base::matrix()] or as a [base::data.frame()] (internally converted into a matrix). Each row of the matrix corresponds to a possible action; each row to an uncertain outcome \eqn{Y}. The number of columns must be equal to the number of \eqn{Y}-values of the "prova_pr" (probability) object of argument `p`.
 #'
-#' @param p A "probability" object, obtained from [Pr()]. The number of \eqn{Y}-values of this object must be equal to the number of columens of the utility matrix of argument `um`.
+#' @param p A "prova_pr" (probability) object, obtained from [Pr()]. The number of \eqn{Y}-values of this object must be equal to the number of columens of the utility matrix of argument `um`.
 #'
 #' @return A [list][base::list()]  of the following elements:
 #'
@@ -32,7 +32,7 @@
 #' [Pr()] to calculate joint and conditional probabilities.
 #'
 #' @examples
-#' ## Use the example "Knowledge" object 'Kexample'
+#' ## Use the example "prova_K" (knowledge) object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -70,7 +70,7 @@ exputility <- function(
     ## 0.47 -0.15  2.0
     ## 0.30  2.00 -0.7
     if(!inherits(p, 'probability')){
-        stop("Argument 'p' is not an object of class 'probability'.")
+        stop("Argument 'p' is not an object of class 'prova_pr'.")
     }
     if(length(dim(u)) != 2){
         stop("Argument 'u' must be a utility matrix.")
@@ -127,6 +127,6 @@ exputility <- function(
         p[c('tails', 'K')]
     )
 
-    class(out) <- 'eutility'
+    class(out) <- 'prova_eu'
     out
 }

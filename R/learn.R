@@ -8,7 +8,7 @@
 #'
 #' This function takes as main inputs a set of data and metadata, and computes the full joint probability distribution for new data, including its "revisability". From this full joint distribution any other distributions of interest can subsequently be computed; see [Pr()] and related functions. This computation can also be interpreted as an estimation of the full joint frequency distribution of the variates in the *whole population*, beyond the sample data, together with its uncertainty. The computation allows for the use of datapoints with partially missing variables: imputation is automatically made. This imputation is *principled*, made according to the rules of probability theory.
 #'
-#' The output is a "knowledge" object, typically saved in a `K.rds` file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.
+#' The output is a "prova_K" (knowledge) object, typically saved in a `K.rds` file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.
 #'
 #' See `vignette('intro')` for introductory examples.
 #'
@@ -76,7 +76,7 @@
 #' @param showAlphatraces Logical, default `FALSE`: save plots of the Monte Carlo traces of the Alpha parameter?
 #' @param hyperparams List: hyperparameters of the hyperprior; see values in "Usage".
 #'
-#' @returns A "knowledge" object, or name of directory containing such an object and other output files, or `NULL`, depending on argument `valueisK`.
+#' @returns A "prova_K" (knowledge) object, or name of directory containing such an object and other output files, or `NULL`, depending on argument `valueisK`.
 #'
 #' `learn()` saves several files in a directory. By default this output directory is a temporary directory within the one used by [base::tempdir()], but an alternative one can be chosen with the argument `outputdir =`. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
 #'
@@ -1250,7 +1250,7 @@ learn <- function(
         )
     ))
     rm(mcsamples)
-    ## The 'K' object is preliminarily saved as soon as possible,
+    ## The 'prova_K' (knowledge) object is preliminarily saved as soon as possible,
     ## in case something crashes during subsequent diagnostics
     saveRDS(K,
         file = file.path(dirname, paste0('___K', dashnameroot, '.rds'))
@@ -1318,7 +1318,7 @@ learn <- function(
         names(K)[which(names(K) == 'Dvar')] <- 'Dsd'
     }
 
-    ## Save 'K' object
+    ## Save 'prova_K' (knowledge) object
     saveRDS(K,
         file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
     )
@@ -1400,7 +1400,7 @@ learn <- function(
         'quantile width' = jointdiagn[4, ]
     )
     K$auxinfo <- c(K$auxinfo, toprint)
-    class(K) <- 'K'
+    class(K) <- 'prova_K'
     saveRDS(K,
         file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
     )

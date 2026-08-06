@@ -24,7 +24,7 @@ Pr(
 
 \item{X}{Matrix or data.table or \code{NULL} (default): set of values of variates in the conditional of the probability of \code{Y}. If \code{NULL}, no conditioning is made (besides the conditioning on knowledge \code{K}). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.}
 
-\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.}
+\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{Y} and \code{X}. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for \code{Y} and \code{X} variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by \code{'<='} or \code{'lower'} or\code{'left'} or \code{-1}; a right-open interval \eqn{Y \ge y} is indicated by \code{'>='} or \code{'upper'} or \code{'right'} or \code{+1}. Values \code{NULL}, \code{'=='}, \code{0} indicate that a point value \code{Y = y} (not an interval) should be calculated. \strong{NB}: the semi-open intervals \emph{always} include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to \emph{more} than 1.}
 
@@ -48,18 +48,18 @@ Pr(
 
 \item{verbose}{Logical, default \code{FALSE}: give messages about parallel processing?}
 
-\item{keepYX}{Logical, default \code{TRUE}: keep a copy of the \code{Y} and \code{X} arguments in the output? This is used for \code{\link[=plot.probability]{plot.probability()}}.}
+\item{keepYX}{Logical, default \code{TRUE}: keep a copy of the \code{Y} and \code{X} arguments in the output? This is used for \code{\link[=plot.prova_pr]{plot.prova_pr()}}.}
 }
 \value{
-An object of class "probability", which is a list consisting of the following elements:
+An object of class "prova_pr" (probability), which is a list consisting of the following elements:
 \itemize{
 \item \code{'value'}: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
 \item \code{'quantiles'} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
 \item \code{'samples'} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such probabilities.
 \item \code{'value.acc'}, \code{quantiles.acc}: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the \code{'values'} and \code{'quantiles'} elements.
-\item \code{'density'}: numerical vector as long as number of rows in \code{Y}, used mainly for \code{\link[=plot.probability]{plot.probability()}}. It is the order of the probability density the \code{Y}-values: values with \code{0} are actual probabilities; values with \code{1} are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with \code{2} are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
+\item \code{'density'}: numerical vector as long as number of rows in \code{Y}, used mainly for \code{\link[=plot.prova_pr]{plot.prova_pr()}}. It is the order of the probability density the \code{Y}-values: values with \code{0} are actual probabilities; values with \code{1} are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with \code{2} are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
 \item \code{'Y'}, \code{'X'}, \code{'tails'}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
-\item \code{'K'}: name of the "Knowledge" object used in the calculation.
+\item \code{'K'}: name of the "prova_K" (knowledge) object used in the calculation.
 }
 }
 \description{
@@ -70,7 +70,7 @@ This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert 
 
 For some variates in \code{Y} or \code{X}, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .} Tail values are inputted via the \code{'tails'} argument; see "Usage".
 
-If \code{Pr()} is called with two unnamed arguments, \code{Pr(..., ...)}, then it is interpreted as \code{Pr(Y = ..., K = ...)}. If it is called with three unnamed arguments, then it is interpreted as either \code{Pr(Y = ..., X = ..., K = ...)} or \code{Pr(Y = ..., K = ..., tails = ...)}, depending on whether the second argument appears to be a "Knowledge" object or not.
+If \code{Pr()} is called with two unnamed arguments, \code{Pr(..., ...)}, then it is interpreted as \code{Pr(Y = ..., K = ...)}. If it is called with three unnamed arguments, then it is interpreted as either \code{Pr(Y = ..., X = ..., K = ...)} or \code{Pr(Y = ..., K = ..., tails = ...)}, depending on whether the second argument appears to be a "prova_K" (knowledge) object or not.
 
 This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:
 \itemize{
@@ -98,7 +98,7 @@ Each variate in each argument \code{Y}, \code{X} can be specified either as a po
 See \code{vignette('intro')} for example uses.
 }
 \examples{
-## Use the "Knowledge" object 'Kexample',
+## Use the "prova_K" (knowledge) object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -230,11 +230,11 @@ probs$quantiles[, , c('5.5\%', '94.5\%')]
 \seealso{
 \code{\link[=learn]{learn()}}, which generates the \code{K}nowledge objects required by \code{Pr()}.
 
-\code{\link[=plot.probability]{plot.probability()}} to plot probabilities and quantiles calculated by \code{Pr()}.
+\code{\link[=plot.prova_pr]{plot.prova_pr()}} to plot probabilities and quantiles calculated by \code{Pr()}.
 
-\code{\link[=hist.probability]{hist.probability()}} to plot histograms of the probability distributions calculated by \code{Pr()}.
+\code{\link[=hist.prova_pr]{hist.prova_pr()}} to plot histograms of the probability distributions calculated by \code{Pr()}.
 
-\code{\link[=print.probability]{print.probability()}} to print the main elements of the probabilities calculated by \code{Pr()}.
+\code{\link[=print.prova_pr]{print.prova_pr()}} to print the main elements of the probabilities calculated by \code{Pr()}.
 
 \code{\link[=qPr]{qPr()}} to calculate quantiles for a specific variate, that is, the variate values having given probabilities.
 

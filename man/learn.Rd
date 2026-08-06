@@ -103,7 +103,7 @@ learn(
 \item{hyperparams}{List: hyperparameters of the hyperprior; see values in "Usage".}
 }
 \value{
-A "knowledge" object, or name of directory containing such an object and other output files, or \code{NULL}, depending on argument \code{valueisK}.
+A "prova_K" (knowledge) object, or name of directory containing such an object and other output files, or \code{NULL}, depending on argument \code{valueisK}.
 
 \code{learn()} saves several files in a directory. By default this output directory is a temporary directory within the one used by \code{\link[base:tempdir]{base::tempdir()}}, but an alternative one can be chosen with the argument \verb{outputdir =}. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
 \itemize{
@@ -124,7 +124,7 @@ To use this function, the package \href{https://cran.r-project.org/package=nimbl
 
 This function takes as main inputs a set of data and metadata, and computes the full joint probability distribution for new data, including its "revisability". From this full joint distribution any other distributions of interest can subsequently be computed; see \code{\link[=Pr]{Pr()}} and related functions. This computation can also be interpreted as an estimation of the full joint frequency distribution of the variates in the \emph{whole population}, beyond the sample data, together with its uncertainty. The computation allows for the use of datapoints with partially missing variables: imputation is automatically made. This imputation is \emph{principled}, made according to the rules of probability theory.
 
-The output is a "knowledge" object, typically saved in a \code{K.rds} file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.
+The output is a "prova_K" (knowledge) object, typically saved in a \code{K.rds} file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.
 
 See \code{vignette('intro')} for introductory examples.
 

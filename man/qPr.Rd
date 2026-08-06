@@ -27,7 +27,7 @@ qPr(
 
 \item{X}{Matrix or data.table or \code{NULL} (default): set of values of variates on which we want to condition. If \code{NULL}, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.}
 
-\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.}
+\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
@@ -49,7 +49,7 @@ qPr(
 
 \item{verbose}{Logical, default \code{FALSE}: give messages about parallel processing?}
 
-\item{keepYX}{Logical, default \code{TRUE}: keep a copy of the \code{Yname} and \code{X} arguments in the output? This is used for \code{\link[=plot.probability]{plot.probability()}}.}
+\item{keepYX}{Logical, default \code{TRUE}: keep a copy of the \code{Yname} and \code{X} arguments in the output? This is used for \code{\link[=plot.prova_pr]{plot.prova_pr()}}.}
 
 \item{tol}{numeric positive: tolerance in the calculation of quantiles. Default: \code{.Machine$double.eps * 10} (typically \code{2.22045e-15}).}
 }
@@ -60,7 +60,7 @@ A list of the following elements:
 \item \code{'quantiles'} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the \code{'value'} element.
 \item \code{'samples'} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such quantiles.
 \item \code{'Y'}, \code{'X'} \code{'tails'}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
-\item \code{'K'}: name of the "Knowledge" object used in the calculation.
+\item \code{'K'}: name of the "prova_K" (knowledge) object used in the calculation.
 }
 }
 \description{
@@ -75,7 +75,7 @@ If \code{qPr()} is called with three unnamed arguments, \code{qPr(..., ..., ...)
 ### WARNING: the following examples, if run, might even take a minute or more.
 
 \donttest{
-## Use the example "Knowledge" object 'Kexample'
+## Use the example "prova_K" (knowledge) object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 

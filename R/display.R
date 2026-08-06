@@ -39,9 +39,9 @@
 #' @seealso
 #' [Pr()] to calculate posterior probabilities and quantiles.
 #'
-#' [plot.probability()] to directly plot posterior probabilities and quantiles contained in a probability object.
+#' [plot.prova_pr()] to directly plot posterior probabilities and quantiles contained in a probability object.
 #'
-#' [hist.probability()] to plot the revisability of the probabilities as a distribution.
+#' [hist.prova_pr()] to plot the revisability of the probabilities as a distribution.
 #'
 #' @examples
 #' ## Scatter plot of 'island' vs 'species' variates of the 'penguins' dataset;
@@ -433,12 +433,12 @@ pplot <- function(
 
 
 
-#' Plot an object of class "probability"
+#' Plot an object of class "prova_pr" (probability)
 #'
 #' @description
 #' This [base::plot()] method is a utility to plot probabilities obtained with [Pr()], as well as their revisabilities. The probabilities are plotted either against `Y`, with one curve for each value of `X`, or vice versa.
 #'
-#' @param x Object of class "probability", obtained with [Pr()].
+#' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
 #' @param spread One of the values `'quantiles'`, `'samples'`, `'none'` (equivalent to `NA` or `FALSE`), or `NULL` (default), in which case the revisability available in `p` is used. This argument chooses how to represent the revisability of the probability; see [Pr()]. If the requested representation is not available in the object `x`, then a warning is issued and no revisability is plotted.
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
 #'
@@ -462,12 +462,12 @@ pplot <- function(
 #' @seealso
 #' [Pr()] to calculate posterior probabilities and quantiles.
 #'
-#' [hist.probability()] to plot the revisability of the probabilities as a distribution.
+#' [hist.prova_pr()] to plot the revisability of the probabilities as a distribution.
 #'
-#' [pplot()] (on which `plot.probability()` is based) for more general plots.
+#' [pplot()] (on which `plot.prova_pr()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample',
+#' ## Use the "prova_K" (knowledge) object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -485,7 +485,7 @@ pplot <- function(
 #'
 #' @concept display
 #' @export
-plot.probability <- function(
+plot.prova_pr <- function(
     x,
     spread = NULL,
     subset = NULL,
@@ -555,7 +555,7 @@ plot.probability <- function(
         (spread == 'quantiles' && is.null(x[['quantiles']])) ||
             (spread == 'samples' && is.null(x[['samples']]))
         ) {
-            warning("Requested 'spread' not available in this 'probability' object.")
+            warning("Requested 'spread' not available in this 'prova_pr' object.")
             spread <- 'none'
         }
     }
@@ -866,17 +866,17 @@ plot.probability <- function(
 }
 
 
-#' Plot the revisability of an object of class "probability" as a histogram
+#' Plot the revisability of an object of class "prova_pr" (probability) as a histogram
 #'
 #' @description
-#' The posterior probabilities calculated with the [Pr()] function, and outputted as a "probability" object, have an associated "revisability" that comes from the finite size of the data sample. This revisability can be interpreted in two ways:
+#' The posterior probabilities calculated with the [Pr()] function, and outputted as a "prova_pr" (probability) object, have an associated "revisability" that comes from the finite size of the data sample. This revisability can be interpreted in two ways:
 #'
 #' - How the probabilities could change, if we collected a much larger (infinite) data sample, and how likely would such change be;
 #' - The relative frequency of a particular variate value in the full (sampled and unsampled) population is unknown; we can quantify our uncertainty about this relative frequency with a probability distribution.
 #'
-#' The `hist()` method for a "probability" object is a utility to visualize this kind of revisability, in the form of a distribution. This distribution is represented by a histogram formed from samples of revised proobabilities (or long-run frequencies). The bin size is chosen according to the Monte Carlo accuracy.
+#' The `hist()` method for a "prova_pr" (probability) object is a utility to visualize this kind of revisability, in the form of a distribution. This distribution is represented by a histogram formed from samples of revised proobabilities (or long-run frequencies). The bin size is chosen according to the Monte Carlo accuracy.
 #'
-#' @param x Object of class "probability", obtained with [Pr()].
+#' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
 #' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` determines bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).
 #' @param alpha.f.fill Numeric, default `0.125`: opacity of the histogram filling, `0` being completely invisible and `1` completely opaque.
@@ -890,12 +890,12 @@ plot.probability <- function(
 #' @seealso
 #' [Pr()] to calculate posterior probabilities and quantiles.
 #'
-#' [plot.probability()] to plot the posterior probabilities.
+#' [plot.prova_pr()] to plot the posterior probabilities.
 #'
-#' [pplot()] (on which `hist.probability()` is based) for more general plots.
+#' [pplot()] (on which `hist.prova_pr()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample',
+#' ## Use the "prova_K" (knowledge) object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -913,7 +913,7 @@ plot.probability <- function(
 #'
 #' @concept display
 #' @export
-hist.probability <- function(
+hist.prova_pr <- function(
     x,
     subset = NULL,
     breaks = NULL,
@@ -949,7 +949,7 @@ hist.probability <- function(
 
     ## Check that samples are available in the probability object
     if(is.null(x[['samples']])) {
-        stop('The "probability" object does not contain any revisability samples')
+        stop('The "prova_pr" object does not contain any revisability samples')
         }
     Ylen <- nrow(x[['value']])
     Xlen <- ncol(x[['value']])
@@ -1089,14 +1089,14 @@ hist.probability <- function(
 }
 
 
-#' Plot the revisability of an object of class "mi" as a histogram
+#' Plot the revisability of an object of class "prova_mi" (mutual information) as a histogram
 #'
 #' @description
-#' The mutual information calculated with the [mutualinfo()] function, and outputted as a "mi" object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
+#' The mutual information calculated with the [mutualinfo()] function, and outputted as a "prova_mi" (mutual information) object, has an associated "revisability" that comes from the finite size of the data sample. A much larger sample might reveal a different value of mutual information.
 #'
-#' The `hist()` method for a "mi" object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely such change would be. The distribution is represented by a histogram formed from samples of revised mutual information. The bin size is chosen according to the Monte Carlo accuracy.
+#' The `hist()` method for a "prova_mi" (mutual information) object is a utility to visualize this kind of revisability, in the form of a distribution: it shows how the mutual information could change, if we collected a much larger (infinite) data sample, and how likely such change would be. The distribution is represented by a histogram formed from samples of revised mutual information. The bin size is chosen according to the Monte Carlo accuracy.
 #'
-#' @param x Object of class "mi", obtained with [mutualinfo()].
+#' @param x Object of class "prova_mi" (mutual information), obtained with [mutualinfo()].
 #' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` determines the bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).
 #' @param alpha.f.fill Numeric, default 0.125: opacity of the histogram filling. `0` means no filling.
 #' @param showvalue Logical, default `TRUE`: show the mutual information obtained from the current data sample?
@@ -1108,12 +1108,12 @@ hist.probability <- function(
 #' @seealso
 #' [mutualinfo()] to calculate mutual information and its revisability.
 #'
-#' [print.mi()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
+#' [print.prova_mi()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
 #'
-#' [pplot()] (on which `hist.mi()` is based) for more general plots.
+#' [pplot()] (on which `hist.prova_mi()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample',
+#' ## Use the "prova_K" (knowledge) object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -1128,7 +1128,7 @@ hist.probability <- function(
 #'
 #' @concept display
 #' @export
-hist.mi <- function(
+hist.prova_mi <- function(
     x,
     breaks = NULL,
     lty = c(1, 2, 4, 3, 6, 5),
@@ -1239,15 +1239,15 @@ hist.mi <- function(
 
 
 
-#' Print an object of class "probability"
+#' Print an object of class "prova_pr" (probability)
 #'
 #' @description
-#' This [base::print()] method is a utility to display selected elements of a "probability" object obtained with [Pr()]; typically its posterior probabilies (element `'value'`) and their revisabilities (element `'quantiles'`). If the `Y` or `X` variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk `*`.
+#' This [base::print()] method is a utility to display selected elements of a "prova_pr" (probability) object obtained with [Pr()]; typically its posterior probabilies (element `'value'`) and their revisabilities (element `'quantiles'`). If the `Y` or `X` variates are joint variates, this method also allow to display only selected values of them. Singular probabilities, such as the probability of a censored value for a continuous variate, are indicated with an asterisk `*`.
 #'
-#' @param x Object of class "probability", obtained with [Pr()].
-#' @param elements character or integer vector, or `NULL` (default): elements of the "probability" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `'value'` and `'quantiles'` are displayed together in a special way.
+#' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
+#' @param elements character or integer vector, or `NULL` (default): elements of the "prova_pr" (probability) object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `'value'` and `'quantiles'` are displayed together in a special way.
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
-#' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for elements `'value'` and `'quantiles'` are determined from their respective `'value.acc'` and `'quantiles.acc'` elements of the "probability" object (see [Pr()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `'samples'` elements uses `edigits` significant digits.
+#' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for elements `'value'` and `'quantiles'` are determined from their respective `'value.acc'` and `'quantiles.acc'` elements of the "prova_pr" (probability) object (see [Pr()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `'samples'` elements uses `edigits` significant digits.
 #' @param edigits positive integer, default 2: number of significant digits for elements `'value.acc'` and `'quantiles.acc'`, if `digits = TRUE`.
 #' @param ... Other parameters to be passed to [base::print()].
 #'
@@ -1259,11 +1259,11 @@ hist.mi <- function(
 #' @seealso
 #' [Pr()] to calculate posterior probabilities and quantiles.
 #'
-#' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()'.
-#' [hist.probability()] to plot the revisability of the probabilities as a distribution.
+#' [plot.prova_pr()] to plot probabilities and quantiles calculated by `Pr()'.
+#' [hist.prova_pr()] to plot the revisability of the probabilities as a distribution.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample',
+#' ## Use the "prova_K" (knowledge) object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -1283,7 +1283,7 @@ hist.mi <- function(
 #'
 #' @concept display
 #' @export
-print.probability <- function(
+print.prova_pr <- function(
     x,
     elements = NULL,
     subset = NULL,
@@ -1364,12 +1364,12 @@ print.probability <- function(
 
 
 
-#' Print an object of class "mi" (mutual information)
+#' Print an object of class "prova_mi" (mutual information) (mutual information)
 #'
 #' @description
-#' This [base::print()] method is a utility to display value and revisability of an "mi" object obtained with [mutualinfo()].
+#' This [base::print()] method is a utility to display value and revisability of an "prova_mi" (mutual information) object obtained with [mutualinfo()].
 #'
-#' @param x Object of class "mi", obtained with [mutualinfo()].
+#' @param x Object of class "prova_mi" (mutual information), obtained with [mutualinfo()].
 #' @param unit Either `NULL`, or one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used; see analogous argument in [mutualinfo()]. If `NULL` (default), the same unit as in the object `x` is used. Unit conversion is internally performed if this unit is different from that of the object `x`.
 #' @param elements character or integer vector, or `NULL` (default): elements of the "mutual information" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `'value'`, `'value.acc'`, `'quantiles'` are displayed together in a special way.
 #' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for element `'value'` are determined from is respective `'value.acc'`  (see [mutualinfo()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `'quantiles'` elements uses `edigits` significant digits.
@@ -1385,13 +1385,13 @@ print.probability <- function(
 #' @seealso
 #' [mutualinfo()] to calculate mutual information.
 #'
-#' [hist.mi()] to plot the revisability of the mutual information.
+#' [hist.prova_mi()] to plot the revisability of the mutual information.
 #'
 #' @examples
 #' \donttest{
 #' ### WARNING: the following example, if run, might even take a minute or more.
 #'
-#' ## Use the "Knowledge" object 'Kexample',
+#' ## Use the "prova_K" (knowledge) object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -1407,7 +1407,7 @@ print.probability <- function(
 #'
 #' @concept display
 #' @export
-print.mi <- function(
+print.prova_mi <- function(
     x,
     unit = NULL,
     elements = NULL,
@@ -1507,12 +1507,12 @@ print.mi <- function(
 }
 
 
-#' Print an object of class "eutility" (expected utility)
+#' Print an object of class "prova_eu" (expected utility)
 #'
 #' @description
-#' This [base::print()] method is a utility to display value and revisability of an "mi" object obtained with [mutualinfo()].
+#' This [base::print()] method is a utility to display value and revisability of an "prova_mi" (mutual information) object obtained with [mutualinfo()].
 #'
-#' @param x Object of class "eutility", obtained with [exputility()].
+#' @param x Object of class "prova_eu" (expected utility), obtained with [exputility()].
 #' @param elements character or integer vector, or `NULL` (default): elements of the "expected utility" object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `'value'`, `'value.acc'`, `'optimal.probs'` are displayed together in a special way.
 #' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for element `'value'` are determined from is respective `'value.acc'`  (see [exputility()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`.
 #' @param edigits positive integer, default 2: number of significant digits for element `'value'` and `'quantiles'`, if `digits = TRUE`.
@@ -1528,7 +1528,7 @@ print.mi <- function(
 #' [exputility()] to calculate expected utilities and their revisability.
 #'
 #' @examples
-#' ## Use the example "Knowledge" object 'Kexample'
+#' ## Use the example "prova_K" (knowledge) object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -1554,7 +1554,7 @@ print.mi <- function(
 #'
 #' @concept display
 #' @export
-print.eutility <- function(
+print.prova_eu <- function(
     x,
     elements = NULL,
     digits = TRUE,
@@ -1617,23 +1617,23 @@ print.eutility <- function(
 }
 
 
-#' Print summary of a "Knowledge" object
+#' Print summary of a "prova_K" (knowledge) object
 #'
 #' @description
-#' This [base::print()] method is a utility to display a summary of a "Knowledge" object outputted by [learn()], internally using [utils::str()]. It also display a summary if [learn()]'s value is only the path to the directory of the rds file containing the "Knowledge" object itself (see argument `valueisK =` in [learn()]), by internally retrieving the object. If you want to have a summary of a "K" object in a given directory or rds file, you can explicitly call `print.K(<file path>)`.
+#' This [base::print()] method is a utility to display a summary of a "prova_K" (knowledge) object outputted by [learn()], internally using [utils::str()]. It also display a summary if [learn()]'s value is only the path to the directory of the rds file containing the "prova_K" (knowledge) object itself (see argument `valueisK =` in [learn()]), by internally retrieving the object. If you want to have a summary of a "prova_K" (knowledge) object in a given directory or rds file, you can explicitly call `print.prova_K(<file path>)`.
 #'
-#' @param x Object of class "K", output of [learn()].
+#' @param x Object of class "prova_K" (knowledge), output of [learn()].
 #' @param ... Other parameters to be passed to [utils::str()].
 #'
-#' @return Its `x` argument, [invisibly][base::invisible()]; the [str][utils::str()]ucture of the corresponding "K" object, if it exists, is also displayed.
+#' @return Its `x` argument, [invisibly][base::invisible()]; the [str][utils::str()]ucture of the corresponding "prova_K" (knowledge) object, if it exists, is also displayed.
 #'
 #' @seealso
-#' [learn()], which generates a "Knowledge" object.
+#' [learn()], which generates a "prova_K" (knowledge) object.
 #'
-#' [Kexample] an example "K" object included with **Prova**.
+#' [Kexample] an example "prova_K" (knowledge) object included with **Prova**.
 #'
 #' @examples
-#' ## Display a summary of the example "Knowledge" object
+#' ## Display a summary of the example "prova_K" (knowledge) object
 #' ## calculated from the "penguins" dataset
 #' print(Kexample)
 #'
@@ -1641,10 +1641,10 @@ print.eutility <- function(
 #'
 #' @concept display
 #' @export
-print.K <- function(x, ...){
+print.prova_K <- function(x, ...){
     K <- .retrieveK(x)
     if(is.null(K)){
-        message('Not a "K" object')
+        message('Not a "prova_K" object')
     } else {
         str(object = K, ...)
     }
@@ -1653,21 +1653,21 @@ print.K <- function(x, ...){
 
 
 
-#' Subset variates of an object of class "probability"
+#' Subset variates of an object of class "prova_pr" (probability)
 #'
-#' An object of class "probability", obtained with the [Pr()] function, holds the probabilities for all possible combinations of values of a set of joint variates `Y` conditional on a set of joint variates `X`, together with the revisabilities of these probabilities and some other information. In some cases one may wish to exclude some of the values of the `Y` or `X` variates. For instance `Y` in the probability-class object could include the variate "age" with values from 18 to 100, and one may want to retain the values from 60 to 80.
+#' An object of class "prova_pr" (probability), obtained with the [Pr()] function, holds the probabilities for all possible combinations of values of a set of joint variates `Y` conditional on a set of joint variates `X`, together with the revisabilities of these probabilities and some other information. In some cases one may wish to exclude some of the values of the `Y` or `X` variates. For instance `Y` in the probability-class object could include the variate "age" with values from 18 to 100, and one may want to retain the values from 60 to 80.
 #'
-#' @param x Object of class "probability", obtained with [Pr()].
+#' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
 #' @param subset Named list or named vector: variates to subset, given as list names, and corresponding values to subset.
 #'
-#' @return An object of class "probability", identical to the original object `x` except for a reduced range of values in some if its variates.
+#' @return An object of class "prova_pr" (probability), identical to the original object `x` except for a reduced range of values in some if its variates.
 #'
 ## #' @seealso
 ## #' [Pr()], which generates probability objects.
 ## #'
-## #' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()'.
+## #' [plot.prova_pr()] to plot probabilities and quantiles calculated by `Pr()'.
 ## #'
-## #' [hist.probability()] to plot histograms of the probability distributions calculated by `Pr()`.
+## #' [hist.prova_pr()] to plot histograms of the probability distributions calculated by `Pr()`.
 ## #'
 ## #' @examples
 ## #' ## Load the example `K`nowledge object calculated from the "penguins" dataset;

@@ -6,7 +6,7 @@
 #'
 #' For some variates in `Y` or `X`, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .} Tail values are inputted via the `'tails'` argument; see "Usage".
 #'
-#' If `Pr()` is called with two unnamed arguments, `Pr(..., ...)`, then it is interpreted as `Pr(Y = ..., K = ...)`. If it is called with three unnamed arguments, then it is interpreted as either `Pr(Y = ..., X = ..., K = ...)` or `Pr(Y = ..., K = ..., tails = ...)`, depending on whether the second argument appears to be a "Knowledge" object or not.
+#' If `Pr()` is called with two unnamed arguments, `Pr(..., ...)`, then it is interpreted as `Pr(Y = ..., K = ...)`. If it is called with three unnamed arguments, then it is interpreted as either `Pr(Y = ..., X = ..., K = ...)` or `Pr(Y = ..., K = ..., tails = ...)`, depending on whether the second argument appears to be a "prova_K" (knowledge) object or not.
 #'
 #' This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:
 #'
@@ -34,7 +34,7 @@
 #'
 #' @param Y Matrix or data.table: set of values of variates whose probabilities are sought. One variate per column, one set of values per row.
 #' @param X Matrix or data.table or `NULL` (default): set of values of variates in the conditional of the probability of `Y`. If `NULL`, no conditioning is made (besides the conditioning on knowledge `K`). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
-#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **NB**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
 #' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
 #' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the probability for `Y`. If `NULL` or 0, no samples are reported. If `'all'` or `Inf`, all samples obtained by the [learn()] function are used.
@@ -47,17 +47,17 @@
 #' @param sep character, default `','`: character to separate the output's variate names and values.
 #' @param solidus character, default `'|'`: character prepended to the output's names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
-#' @param keepYX Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in the output? This is used for [plot.probability()].
+#' @param keepYX Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in the output? This is used for [plot.prova_pr()].
 #'
-#' @return An object of class "probability", which is a list consisting of the following elements:
+#' @return An object of class "prova_pr" (probability), which is a list consisting of the following elements:
 #'
 #' - `'value'`: a matrix with the probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, for all joint values \eqn{y} of the \eqn{Y}-variates (rows) and  all joint values \eqn{x} of the \eqn{X}-variates (columns).
 #' - `'quantiles'` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.
 #' - `'samples'` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such probabilities.
 #' - `'value.acc'`, `quantiles.acc`: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the `'values'` and `'quantiles'` elements.
-#' - `'density'`: numerical vector as long as number of rows in `Y`, used mainly for [plot.probability()]. It is the order of the probability density the `Y`-values: values with `0` are actual probabilities; values with `1` are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with `2` are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
+#' - `'density'`: numerical vector as long as number of rows in `Y`, used mainly for [plot.prova_pr()]. It is the order of the probability density the `Y`-values: values with `0` are actual probabilities; values with `1` are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with `2` are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
 #' - `'Y'`, `'X'`, `'tails'`: copies of the `Y`, `X`, `tails` arguments.
-#' - `'K'`: name of the "Knowledge" object used in the calculation.
+#' - `'K'`: name of the "prova_K" (knowledge) object used in the calculation.
 #'
 #' @references
 #'
@@ -71,18 +71,18 @@
 #' @seealso
 #' [learn()], which generates the `K`nowledge objects required by `Pr()`.
 #'
-#' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()`.
+#' [plot.prova_pr()] to plot probabilities and quantiles calculated by `Pr()`.
 #'
-#' [hist.probability()] to plot histograms of the probability distributions calculated by `Pr()`.
+#' [hist.prova_pr()] to plot histograms of the probability distributions calculated by `Pr()`.
 #'
-#' [print.probability()] to print the main elements of the probabilities calculated by `Pr()`.
+#' [print.prova_pr()] to print the main elements of the probabilities calculated by `Pr()`.
 #'
 #' [qPr()] to calculate quantiles for a specific variate, that is, the variate values having given probabilities.
 #'
 #' [rPr()] to generate datapoints.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample',
+#' ## Use the "prova_K" (knowledge) object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -288,7 +288,7 @@ Pr <- function(
     ## Check 'K' argument
     K <- .retrieveK(K)
     if(is.null(K)){
-        stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
+        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
     auxmetadata <- K$auxmetadata
@@ -727,6 +727,6 @@ Pr <- function(
     }
     out$K <- Kname
 
-    class(out) <- 'probability'
+    class(out) <- 'prova_pr'
     out
 }

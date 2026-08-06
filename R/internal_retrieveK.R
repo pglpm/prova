@@ -1,11 +1,11 @@
-#' Retrieve a "Knowledge" object
+#' Retrieve a "prova_K" (knowledge) object
 #'
 #' @details
-#' Retrieves a "Knowledge" object if given as a path to directory or file.
+#' Retrieves a "prova_K" (knowledge) object if given as a path to directory or file.
 #'
-#' @param K either a "Knowledge" object, or a character string with the path to an rds file with such an object or a directory containing one.
+#' @param K either a "prova_K" (knowledge) object, or a character string with the path to an rds file with such an object or a directory containing one.
 #'
-#' @return The actual "Knowledge" object or `NULL` if none was found.
+#' @return The actual "prova_K" (knowledge) object or `NULL` if none was found.
 #'
 #' @import utils
 #'
@@ -21,7 +21,7 @@
         } else {
             K <- NULL
         }
-        ## test if K has class 'K'
+        ## test if K has class 'prova_K' (knowledge)
         if(inherits(K, 'K')){
             K
         } else {

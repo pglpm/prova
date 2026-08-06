@@ -115,8 +115,8 @@ pplot(x = histo$breaks, y = histo$density, type = 'hx')
 \seealso{
 \code{\link[=Pr]{Pr()}} to calculate posterior probabilities and quantiles.
 
-\code{\link[=plot.probability]{plot.probability()}} to directly plot posterior probabilities and quantiles contained in a probability object.
+\code{\link[=plot.prova_pr]{plot.prova_pr()}} to directly plot posterior probabilities and quantiles contained in a probability object.
 
-\code{\link[=hist.probability]{hist.probability()}} to plot the revisability of the probabilities as a distribution.
+\code{\link[=hist.prova_pr]{hist.prova_pr()}} to plot the revisability of the probabilities as a distribution.
 }
 \concept{display}

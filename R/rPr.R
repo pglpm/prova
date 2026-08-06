@@ -9,7 +9,7 @@
 #' @param n Positive integer: number of samples to draw.
 #' @param Ynames Character vector: names of variates to draw jointly
 #' @param X List or data.table or `NULL`: set of values of variates on which we want to condition the joint probability for `Y`. If `NULL` (default), no conditioning is made. Any rows beyond the first are discarded
-#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param mcsamples Vector of integers, or `'all'`, or `NULL` (default): which Monte Carlo samples calculated by the [learn()] function should be used to draw the variate values. The default is to choose a random subset if `n` is smaller than their number, otherwise to recycle them as necessary.
 #' @param parallel Not used: this function does not use parallelization.
@@ -24,7 +24,7 @@
 #' [qPr()] to calculate quantiles.
 #'
 #' @examples
-#' ## Use the example "Knowledge" object 'Kexample'
+#' ## Use the example "prova_K" (knowledge) object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -78,7 +78,7 @@ rPr <- function(
     ## Check 'K' argument
     K <- .retrieveK(K)
     if(is.null(K)){
-        stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
+        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
     auxmetadata <- K$auxmetadata

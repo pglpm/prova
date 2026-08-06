@@ -9,7 +9,7 @@ vrtgrid(vrt, K, length.out = NA)
 \arguments{
 \item{vrt}{Character vector: names of the variates; they must match variate names in the \code{metadata} file provided to the \code{\link[=learn]{learn()}} function.}
 
-\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
+\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
 
 \item{length.out}{Vector or list of positive integers or \code{NA} values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in \code{vrt}. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of \code{NA} values. Default \code{NA}.}
 }
@@ -32,7 +32,7 @@ The set of chosen values, for each variate, depends on the type of variate (nomi
 The output is a \link[base:data.frame]{data frame} that can be used directly in functions like \code{\link[=Pr]{Pr()}}.
 }
 \examples{
-## Use the "Knowledge" object 'Kexample',
+## Use the "prova_K" (knowledge) object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -74,6 +74,6 @@ print(valuesAll2)
 
 \code{\link[base:expand.grid]{base::expand.grid()}} to create a data frame with combination of specified values of several variates.
 
-\code{\link[=plot.probability]{plot.probability()}} to plot probabilities and quantiles calculated by \code{Pr()}.
+\code{\link[=plot.prova_pr]{plot.prova_pr()}} to plot probabilities and quantiles calculated by \code{Pr()}.
 }
 \concept{probability}

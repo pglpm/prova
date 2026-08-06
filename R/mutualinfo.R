@@ -31,11 +31,11 @@
 #' @param Y1names Character vector: first group of joint variates
 #' @param Y2names Character vector or `NULL`: second group of joint variates
 #' @param X Matrix or data.frame or `NULL`: values of some variates conditional on which we want the probabilities.
-#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param quantiles Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in [Pr()].
-#' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "K" object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "K" object.
-#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "K" object to use for calculating the revisability of the mutual information.
+#' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "prova_K" (knowledge) object.
+#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the revisability of the mutual information.
 #' @param unit Either one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used.
 #' @param parallel One of the following values:
 #' - A "cluster" object previously created with [parallel::makeCluster()].
@@ -45,9 +45,9 @@
 #' @param sep character, default `','`: character to separate the output's variate names and values.
 #' @param solidus character, default `'|'`: character prepended to the output's names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
-#' @param keepX Logical, default `TRUE`: keep a copy of the `X` argument in the output? This is used for [hist.mi()].
+#' @param keepX Logical, default `TRUE`: keep a copy of the `X` argument in the output? This is used for [hist.prova_mi()].
 #'
-#' @return An object of class "mi", which is a list consisting of the following elements:
+#' @return An object of class "prova_mi" (mutual information), which is a list consisting of the following elements:
 #'
 #' - `'value'`, the mutual information between (joint) variates `Y1names` and (joint) variates `Y2names`.
 #' - `'quantiles'`, a vector with the revisability quantiles for the mutual information.
@@ -55,19 +55,19 @@
 #' - `'samples'`, a vector with the revisability samples for the mutual information.
 #' - `'rGauss'`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
 #' - `'unit'`, `'Y1names'`, `'Y1names'` `'X'`, `'tails'`: copies of the homonymous input arguments.
-#' - `'K'`: name of the "Knowledge" object used in the calculation.
+#' - `'K'`: name of the "prova_K" (knowledge) object used in the calculation.
 #'
 #' @seealso
-#' [print.mi()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
+#' [print.prova_mi()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
 #'
-#' [hist.mi()] to plot the revisability of the mutual information.
+#' [hist.prova_mi()] to plot the revisability of the mutual information.
 #'
 #' [Pr()] to calculate probabilities and their revisability.
 #'
 #' [learn()], which generates the `K` objects required by `mutualinfo()`.
 #'
 #' @examples
-#' ## Use the example "Knowledge" object 'Kexample'
+#' ## Use the example "prova_K" (knowledge) object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' (nominal, finite domain)
 #' ## and 'bill_len' (continuous rounded, infinite domain)
@@ -183,7 +183,7 @@ mutualinfo <- function(
     ## Check 'K' argument
     K <- .retrieveK(K)
     if(is.null(K)){
-        stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
+        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
     auxmetadata <- K$auxmetadata
@@ -631,7 +631,7 @@ mutualinfo <- function(
     list(K = Kname)
     )
 
-    class(out) <- 'mi'
+    class(out) <- 'prova_mi'
     out
 }
 
@@ -715,7 +715,7 @@ mutualinfoF <- function(
     ## Check 'K' argument
     K <- .retrieveK(K)
     if(is.null(K)){
-        stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
+        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
     auxmetadata <- K$auxmetadata
@@ -1007,6 +1007,6 @@ mutualinfoF <- function(
     list(K = Kname)
     )
 
-    class(out) <- 'mi'
+    class(out) <- 'prova_mi'
     out
 }

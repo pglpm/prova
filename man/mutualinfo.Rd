@@ -44,15 +44,15 @@ mutualinfoF(
 
 \item{X}{Matrix or data.frame or \code{NULL}: values of some variates conditional on which we want the probabilities.}
 
-\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
+\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
 \item{quantiles}{Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default \code{c(0.055, 0.25, 0.75, 0.945)}, that is, the 5.5\%, 25\%, 75\%, 94.5\% quantiles. See similar argument in \code{\link[=Pr]{Pr()}}.}
 
-\item{ns}{Integer or \code{Inf} or \code{NULL} (default): number of Monte Carlo samples in the "K" object to use for calculating the mutual information. If \code{Inf} or \code{NULL}, use all Monte Carlo samples available in the "K" object.}
+\item{ns}{Integer or \code{Inf} or \code{NULL} (default): number of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the mutual information. If \code{Inf} or \code{NULL}, use all Monte Carlo samples available in the "prova_K" (knowledge) object.}
 
-\item{nv}{Integer, default 12: number of \emph{duplicates} of Monte Carlo samples in the "K" object to use for calculating the revisability of the mutual information.}
+\item{nv}{Integer, default 12: number of \emph{duplicates} of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the revisability of the mutual information.}
 
 \item{unit}{Either one of 'Sh' for \emph{shannon} (default), 'Hart' for \emph{hartley}, 'nat' for \emph{natural unit}, or a positive real indicating the base of the logarithms to be used.}
 
@@ -70,10 +70,10 @@ mutualinfoF(
 
 \item{verbose}{Logical, default \code{FALSE}: give messages about parallel processing?}
 
-\item{keepX}{Logical, default \code{TRUE}: keep a copy of the \code{X} argument in the output? This is used for \code{\link[=hist.mi]{hist.mi()}}.}
+\item{keepX}{Logical, default \code{TRUE}: keep a copy of the \code{X} argument in the output? This is used for \code{\link[=hist.prova_mi]{hist.prova_mi()}}.}
 }
 \value{
-An object of class "mi", which is a list consisting of the following elements:
+An object of class "prova_mi" (mutual information), which is a list consisting of the following elements:
 \itemize{
 \item \code{'value'}, the mutual information between (joint) variates \code{Y1names} and (joint) variates \code{Y2names}.
 \item \code{'quantiles'}, a vector with the revisability quantiles for the mutual information.
@@ -81,7 +81,7 @@ An object of class "mi", which is a list consisting of the following elements:
 \item \code{'samples'}, a vector with the revisability samples for the mutual information.
 \item \code{'rGauss'}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
 \item \code{'unit'}, \code{'Y1names'}, \code{'Y1names'} \code{'X'}, \code{'tails'}: copies of the homonymous input arguments.
-\item \code{'K'}: name of the "Knowledge" object used in the calculation.
+\item \code{'K'}: name of the "prova_K" (knowledge) object used in the calculation.
 }
 }
 \description{
@@ -109,7 +109,7 @@ Function \code{\link[=mutualinfo]{mutualinfo()}} computes the quantities above v
 Function \code{\link[=mutualinfoF]{mutualinfoF()}} computes the quantities above by calculating all required probabilities (a finite number) and performing the exact sums. This can only be done for variates with finite domains. If continuous variates are involved, a set of probabilities is calculated on a finite grid of their domain; for this reason the results may be grossly in error. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments \code{Y1names} and \code{Y2names}) include \emph{only} variates with finite domains, typically nominal or ordinal variates (see \link{metadata}).
 }
 \examples{
-## Use the example "Knowledge" object 'Kexample'
+## Use the example "prova_K" (knowledge) object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' (nominal, finite domain)
 ## and 'bill_len' (continuous rounded, infinite domain)
@@ -124,9 +124,9 @@ print(MI)
 
 }
 \seealso{
-\code{\link[=print.mi]{print.mi()}} ] to plot mutual information and quantiles calculated by \code{mutualinfo()}
+\code{\link[=print.prova_mi]{print.prova_mi()}} ] to plot mutual information and quantiles calculated by \code{mutualinfo()}
 
-\code{\link[=hist.mi]{hist.mi()}} to plot the revisability of the mutual information.
+\code{\link[=hist.prova_mi]{hist.prova_mi()}} to plot the revisability of the mutual information.
 
 \code{\link[=Pr]{Pr()}} to calculate probabilities and their revisability.
 

@@ -13,7 +13,7 @@
 #' The output is a [data frame][base::data.frame()] that can be used directly in functions like [Pr()].
 #'
 #' @param vrt Character vector: names of the variates; they must match variate names in the `metadata` file provided to the [learn()] function.
-#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
 #' @param length.out Vector or list of positive integers or `NA` values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in `vrt`. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of `NA` values. Default `NA`.
 #'
 #' @return A [data frame][base::data.frame()] with columns corresponding to the `vrt` argument, and one row for each combination of the variate values.
@@ -25,10 +25,10 @@
 #'
 #' [base::expand.grid()] to create a data frame with combination of specified values of several variates.
 #'
-#' [plot.probability()] to plot probabilities and quantiles calculated by `Pr()`.
+#' [plot.prova_pr()] to plot probabilities and quantiles calculated by `Pr()`.
 #'
 #' @examples
-#' ## Use the "Knowledge" object 'Kexample',
+#' ## Use the "prova_K" (knowledge) object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -78,7 +78,7 @@ vrtgrid <- function(
     Kname <- deparse(substitute(K))
     K <- .retrieveK(K)
     if(is.null(K)){
-        stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
+        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
     ## Consistency checks

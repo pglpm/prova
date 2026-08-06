@@ -21,7 +21,7 @@ rPr(
 
 \item{X}{List or data.table or \code{NULL}: set of values of variates on which we want to condition the joint probability for \code{Y}. If \code{NULL} (default), no conditioning is made. Any rows beyond the first are discarded}
 
-\item{K}{A "Knowledge" object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
+\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
@@ -41,7 +41,7 @@ This function generates datapoints according to the posterior probability \eqn{\
 If \code{rPr()} is called with three unnamed arguments, \code{rPr(..., ..., ...)}, then it is interpreted as \code{rPr(n = ..., Ynames = ..., K = ...)}.
 }
 \examples{
-## Use the example "Knowledge" object 'Kexample'
+## Use the example "prova_K" (knowledge) object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 

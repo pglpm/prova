@@ -9,7 +9,7 @@
 #' @param p Numeric vector of probability levels.
 #' @param Yname Character vector: name of variate whose quantiles will be computed.
 #' @param X Matrix or data.table or `NULL` (default): set of values of variates on which we want to condition. If `NULL`, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
-#' @param K A "Knowledge" object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 ## #' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal. For the moment only the value `NULL` is accepted.
 #' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the quantile for `Y`. If `NULL`, no samples are reported. If `'all'` (or `Inf`), all samples obtained by the [learn()] function are used.
@@ -22,7 +22,7 @@
 #' @param sep character, default `','`: character to separate the output's variate names and values.
 #' @param solidus character, default `'|'`: character prepended to the output's names of the variates in the conditional (typically the `X` variates).
 #' @param verbose Logical, default `FALSE`: give messages about parallel processing?
-#' @param keepYX Logical, default `TRUE`: keep a copy of the `Yname` and `X` arguments in the output? This is used for [plot.probability()].
+#' @param keepYX Logical, default `TRUE`: keep a copy of the `Yname` and `X` arguments in the output? This is used for [plot.prova_pr()].
 #' @param tol numeric positive: tolerance in the calculation of quantiles. Default: `.Machine$double.eps * 10` (typically `2.22045e-15`).
 
 #'
@@ -31,7 +31,7 @@
 #' - `'quantiles'` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the `'value'` element.
 #' - `'samples'` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such quantiles.
 #' - `'Y'`, `'X'` `'tails'`: copies of the `Y`, `X`, `tails` arguments.
-#' - `'K'`: name of the "Knowledge" object used in the calculation.
+#' - `'K'`: name of the "prova_K" (knowledge) object used in the calculation.
 #'
 #' @references
 #' - Porta Mana (2025): *What's special about 89% credibility intervals?* <doi:10.5281/zenodo.17072199>.
@@ -47,7 +47,7 @@
 #' ### WARNING: the following examples, if run, might even take a minute or more.
 #'
 #' \donttest{
-#' ## Use the example "Knowledge" object 'Kexample'
+#' ## Use the example "prova_K" (knowledge) object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -169,7 +169,7 @@ qPr <- function(
     ## Check 'K' argument
     K <- .retrieveK(K)
     if(is.null(K)){
-        stop("Argument 'K' must be a 'Knowledge' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
+        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
     auxmetadata <- K$auxmetadata
@@ -492,7 +492,7 @@ qPr <- function(
     }
     out$K <- Kname
 
-    class(out) <- 'probability'
+    class(out) <- 'prova_pr'
     out
 }
 

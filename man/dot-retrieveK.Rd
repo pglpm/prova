@@ -2,20 +2,20 @@
 % Please edit documentation in R/internal_retrieveK.R
 \name{.retrieveK}
 \alias{.retrieveK}
-\title{Retrieve a "Knowledge" object}
+\title{Retrieve a "prova_K" (knowledge) object}
 \usage{
 .retrieveK(K)
 }
 \arguments{
-\item{K}{either a "Knowledge" object, or a character string with the path to an rds file with such an object or a directory containing one.}
+\item{K}{either a "prova_K" (knowledge) object, or a character string with the path to an rds file with such an object or a directory containing one.}
 }
 \value{
-The actual "Knowledge" object or \code{NULL} if none was found.
+The actual "prova_K" (knowledge) object or \code{NULL} if none was found.
 }
 \description{
-Retrieve a "Knowledge" object
+Retrieve a "prova_K" (knowledge) object
 }
 \details{
-Retrieves a "Knowledge" object if given as a path to directory or file.
+Retrieves a "prova_K" (knowledge) object if given as a path to directory or file.
 }
 \keyword{internal}
