@@ -84,6 +84,7 @@ exputility <- function(
         anames <- list(action = paste0('act', seq_len(nrow(u))))
         dimnames(u) <- c(anames, dimnames(u)[-1])
     }
+    nact <- nrow(u)
 
     value <- u %*% p[['value']]
 
@@ -92,7 +93,7 @@ exputility <- function(
     temp2 <- dimnames(samples)[-1]
     dim(samples) <- c(dim(samples)[1], prod(temp))
     samples <- u %*% samples
-    dim(samples) <- c(nrow(u), temp)
+    dim(samples) <- c(nact, temp)
     dimnames(samples) <- c(anames, temp2)
 
     osamples <- apply(X = samples, MARGIN = c(2, 3),
@@ -101,9 +102,10 @@ exputility <- function(
                 times = 2),
             size = 1, replace = FALSE, prob = NULL)}, simplify = TRUE)
 
-    oprobs <- apply(X = osamples, MARGIN = 1,
-        FUN = tabulate, nbins = nrow(u)
-            ) / ncol(osamples)
+    ## this is faster than apply(..., MARGIN = 1)
+    oprobs <- vapply(X = seq_len(nrow(osamples)),
+        FUN = function(i){tabulate(bin = osamples[i, ], nbins = nact)},
+        FUN.VALUE = numeric(nact)) / ncol(osamples)
     dimnames(oprobs) <- dimnames(value)
     osamples <- anames[[1]][c(osamples)]
     dim(osamples) <- dim(samples)[-1]
