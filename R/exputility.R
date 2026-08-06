@@ -81,7 +81,7 @@ exputility <- function(
 
     anames <- dimnames(u)[1]
     if(is.null(anames)){
-        anames <- list(action = paste0('act', seq_len(nrow(u))))
+        anames <- list(action = paste0('action', seq_len(nrow(u))))
         dimnames(u) <- c(anames, dimnames(u)[-1])
     }
     nact <- nrow(u)
