@@ -431,19 +431,35 @@ pplot <- function(
 #' @description
 #' This [base::plot()] method is a utility to plot probabilities obtained with [Pr()], as well as their revisabilities. The probabilities are plotted either against `Y`, with one curve for each value of `X`, or vice versa.
 #'
+#' @details For a collection of probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} with several values \eqn{y} and \eqn{x}, this plot method with argument `PvsY` set to `TRUE` shows the probabilities on the y-axis, while the x-axis spans the \eqn{y} values, the curve thus showing the probability distribution (the area underneath is 1, except for possibly omitted tails). One such curve is displayed for each \eqn{x} value. If the argument `PvsY` is `FALSE`, then the x-axis spans the \eqn{x} values instead -- thus the displayed curve is *not* a probability distribution (area underneath is not 1). One such curve is displayed for each \eqn{y} value. Which kind of plot is best depends on whether one needs to visualize how the probabilities depend on variate \eqn{Y} or on the conditioning variate \eqn{X}. The default `PvsY` value `NULL` tries to guess the desider behaviour depending on how many different values \eqn{y} and \eqn{x} are contained in the probability object `x`; the variate with the largest number of values is displayed on the x-axis, so as to clutter as little as possible the plot window with multiple curves.
+#'
+#' The revisabilities of the probabilities can be visualized in two different ways, determined by the argument `spread`:
+#'
+#' - `spread = 'quantiles'`: shows the revisabilities as "quantile bands" around the probability curves. Which quantiles are shown depends on the `quantiles.spread` argument.
+#' - `spread = 'samples'`: shows the revisabilities as a sample of alternative probability curves, which can also be interpreted as possible "long-run frequencies". The number of samples is determined by the argument `nsamples.spread`.
+#' - `spread = 'none'` or `NA` or `FALSE`: does not show any revisability.
+#' - `spread = NULL` (default): shows quantiles, if available; otherwise samples, if available, otherwise nothing.
+#'
+#' Information about the revisability, such as quantiles or number of samples displayed, is shown by the left y-axis. While quantile bands look neat, they do not show important details about revised probabilities (long-run frequencies), such as persistent modes. Such details are better grasped by looking at samples. It is recommended to always take a look at both visualizations of revisability.
+#'
+#' The label on the left y-axis is by default the text `Pr(`\eqn{Y}` | `\eqn{X}`, `\eqn{K}`)`, displaying the actual \eqn{Y} and \eqn{X} variates present in the probability object `x`. If the displayed probabilities are densities (this means that some \eqn{Y} variates are continuous and not rounded), then lowercase `p` is used istead of `Pr`.
+#'
+#' Continuous variates with bounded domains, such as censored variates, may have singular probability values -- concentrated probability mass -- at the boundary points. When such singular points are present, their probability scale is shown in the *right* y-axis.
+#'
 #' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
 #' @param spread One of the values `'quantiles'`, `'samples'`, `'none'` (equivalent to `NA` or `FALSE`), or `NULL` (default), in which case the revisability available in `p` is used. This argument chooses how to represent the revisability of the probability; see [Pr()]. If the requested representation is not available in the object `x`, then a warning is issued and no revisability is plotted.
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
 #'
 #' @param PvsY Logical or `NULL`: should probabilities be plotted against their `Y` argument? If `NULL`, the argument between `Y` and `X` having larger number of values is chosen. As many probability curves will be plotted as the number of values of the other argument.
 #' @param ylab2 A title for the y-axis on the right side of the plot, if displayed.
-#' @param type `NULL` (default) or character vector or indicating the type of plot for the main probability distribution; see [base::plot()]. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
+#' @param type `NULL` (default) or character vector or list indicating the type of plot for the main probability distribution; see [base::plot()]. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
 #' @param lty Analogous to argument `lty` (line style) in [graphics::matplot()], used for the main probability distributions.
 #' @param lwd Analogous to argument `lwd` (line width) in [graphics::matplot()], used for the main probability distributions.
 #' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'top'`.
 #' @param alpha.f Numeric, default `1`: opacity of the colours of lines or markers, `0` being completely invisible and `1` completely opaque.
+#' @param quantiles.spread Numeric vector or `NULL` (default): revisability quantiles to display. Value `NULL` uses all quantiles available in the `x` object, or just extreme quantiles if multiple probability curves are shown.
 #' @param nsamples.spread Integer, default 360: number of samples of long-run frequencies to display.
-#' @param type.spread `NULL` (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
+#' @param type.spread `NULL` (default) or character vector or list indicating the type of plot for the long-run-frequency samples; see. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
 #' @param lty.spread Same as parameter `lty` (line style), but for the line type of the long-run-frequency samples.
 #' @param lwd.spread Same as parameter `lwd` (line width), but for the line type of the long-run-frequency samples.
 #' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` means `0.25` if `spread = 'quantiles'`; and an appropriate value if `spread = 'samples'`,dependent on the number of samples (more samples, less opacity).
@@ -503,6 +519,7 @@ plot.prova_pr <- function(
     lty.spread = c(1, 2, 4, 3, 6, 5),
     lwd.spread = NULL,
     alpha.f.spread = NULL,
+    quantiles.spread = NULL,
     nsamples.spread = 360,
     ...
 ){
@@ -524,23 +541,32 @@ plot.prova_pr <- function(
         ## We choose 'quantiles' or what's available
         if(!is.null(x[['quantiles']])) {
             spread <- 'quantiles'
+            quantiles.spread <- NULL
         } else if(!is.null(x[['samples']])){
             spread <- 'samples'
         } else {
             spread <- 'none'
         }
-    } else { # User is choosing
-        if(is.na(spread) || isFALSE(spread)){ spread <- 'none'}
-
+    } else if(is.na(spread) || isFALSE(spread)){
+        spread <- 'none'
+    } else {
         ## handle shortenings
         spread <- match.arg(spread, c('quantiles', 'samples', 'none'))
 
         ## handle impossible requests
-        if(
-        (spread == 'quantiles' && is.null(x[['quantiles']])) ||
-            (spread == 'samples' && is.null(x[['samples']]))
-        ) {
-            warning("Requested 'spread' not available in this 'prova_pr' object.")
+        if(spread == 'quantiles' && is.null(x[['quantiles']])){
+            warning("Revisability quantiles not available in the 'x' object.")
+            spread <- 'none'
+        }
+
+        qnames <- as.numeric(sub('%', '', dimnames(x[['quantiles']])[[3]]))
+        if(spread == 'quantiles' && !is.null(quantiles.spread) &&
+               !all(quantiles.spread %in% qnames)){
+            warning("Requested quantiles not available in the 'x' object.")
+            quantiles.spread <- NULL
+        }
+        if(spread == 'samples' && is.null(x[['samples']])){
+            warning("Revisability samples not available in the 'x' object.")
             spread <- 'none'
         }
     }
@@ -624,7 +650,7 @@ plot.prova_pr <- function(
         if(is.null(ylab2)){
             ylab2 <- paste0(if(
                 max(x$density[-which(x$density == max(x$density))]) == 0
-            ){'P'}else{'p'},
+            ){'Pr'}else{'p'},
                 '(',
             paste0(names(x$Y), tails[names(x$Y)], collapse = ', '),
             ' | ',
@@ -639,15 +665,19 @@ plot.prova_pr <- function(
 
     ## Rename the revisability object so as to avoid if-else below
     if(qspread){
-        mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
-        ## if we are plotting more than one curve, keep only the 89% band
-        temp <- dimnames(x[['quantiles']])[[3]]
-        qnames <- as.numeric(sub('%', '', temp))
-        if(Xlen > 1 && Ylen > 1){
-            ispread <- sapply(mainpercentiles,
-                function(xx){which.min(abs(qnames - xx))})
+        qnames <- as.numeric(sub('%', '', dimnames(x[['quantiles']])[[3]]))
+        if(is.null(quantiles.spread)){
+            mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
+            ## if we are plotting more than one curve, keep only the 89% band
+            if(Xlen > 1 && Ylen > 1){
+                ispread <- sapply(mainpercentiles,
+                    function(xx){which.min(abs(qnames - xx))})
+            } else {
+                ispread <- TRUE
+            }
         } else {
-            ispread <- TRUE
+            ## Previously checked that all requested quantiles exist
+            ispread <- which(qnames %in% quantiles.spread)
         }
         qnames <- qnames[ispread]
         if(is.null(alpha.f.spread)){alpha.f.spread <- 0.25}
@@ -719,7 +749,7 @@ plot.prova_pr <- function(
 
     if(is.null(ylab)){
         ylab <- paste0(
-            if(isdensity){'p'}else{'P'},
+            if(isdensity){'p'}else{'Pr'},
                 '(',
             paste0(names(x$Y), tails[names(x$Y)], collapse = ', '),
             ' | ',
@@ -1491,19 +1521,23 @@ print.prova_mi <- function(
 #' Plot an object of class "prova_eu" (expected utility) and its revisability
 #'
 #' @description
-#' This [base::plot()] method is a utility to plot probabilities obtained with [Pr()], as well as their revisabilities. The probabilities are plotted either against `Y`, with one curve for each value of `X`, or vice versa.
+#' This [base::plot()] method is a utility to plot the expected utilities obtained with [exputility()], as well as their revisabilities.
 #'
-#' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
-#' @param type `NULL` (default) or character vector or indicating the type of plot for the main probability distribution; see [base::plot()]. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
+#' @details The x-axis spans the possible actions, and the y-axis their expected utilities. Their revisabilities are shown as a sample of 360 (default number) alternative plots; the number of samples is indicated by the left y-axis. If any conditioning variate \eqn{X} was used for the probabilities, \eqn{\mathrm{Pr}(\dotso \vert X = x, \dotso)}, then one such plot is displayed for each conditioning value \eqn{x}.
+#'
+#' The probability that an action would still be considered optimal if many moro learning data were collected is indicated above the x-axis label corresponding to that action. An asterisk `*` marks the optimal actions. If any conditioning variate \eqn{X} was used, then one such probability is shown for each conditioning value.
+#'
+#' @param x Object of class "prova_eu" (expected utility), obtained with [exputility()].
+#' @param type Character vector (default `'b'`) or list indicating the type of plot for the main probability distribution; see [base::plot()].
 #' @param lty Analogous to argument `lty` (line style) in [graphics::matplot()], used for the main probability distributions.
 #' @param lwd Analogous to argument `lwd` (line width) in [graphics::matplot()], used for the main probability distributions.
-#' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'top'`.
+#' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'topright'`.
 #' @param alpha.f Numeric, default `1`: opacity of the colours of lines or markers, `0` being completely invisible and `1` completely opaque.
 #' @param nsamples.spread Integer, default 360: number of samples of long-run frequencies to display.
-#' @param type.spread `NULL` (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
-#' @param lty.spread Same as parameter `lty` (line style), but for the line type of the long-run-frequency samples.
-#' @param lwd.spread Same as parameter `lwd` (line width), but for the line type of the long-run-frequency samples.
-#' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` means `0.25` if `spread = 'quantiles'`; and an appropriate value if `spread = 'samples'`,dependent on the number of samples (more samples, less opacity).
+#' @param type.spread character vector (default `'b'`) or list indicating the type of plot for the revisability samples; see argument `type`.
+#' @param lty.spread Same as parameter `lty` (line style), but for the line type of the revisability samples.
+#' @param lwd.spread Same as parameter `lwd` (line width), but for the line type of the revisability samples.
+#' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` determines a value dependent on the number of samples (more samples, less opacity).
 #' @param pch,col,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
 #' @param ... Other parameters to be passed to [pplot()].
 #'
@@ -1651,14 +1685,21 @@ plot.prova_eu <- function(
         ...
     )
 
+    ## print info on samples
     mtext(paste0(nsamples.spread, ' samples'),
         side = 2, line = -0.25, cex = 0.75)
 
+    ## print revisabilities and mark optimal actions
     for(i in seq_len(nact)){
-        text(x = i, y = ylim[1],
-            labels = paste0(signif(x[['optimal.probs']][i,], 2),
+        temp <- sapply(X = x[['optimal']],
+            FUN = function(xx){if(anames[[1]][i] %in% xx){' *'}else{''}},
+            USE.NAMES = FALSE, simplify = TRUE)
+        text(x = i, y = par('usr')[3],
+            labels = paste0(
+                signif(100 * x[['optimal.probs']][i,], digits = 2), '%',
+                   temp,
                 collapse = '\n'),
-        cex = 0.75, pos = 1, offset = 0.5, xpd = TRUE)
+        cex = 0.75, pos = 1, offset = -0.25, xpd = TRUE)
     }
     ## Plot legends
     if(!is.null(lgnd)){

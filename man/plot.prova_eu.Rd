@@ -32,9 +32,9 @@
 )
 }
 \arguments{
-\item{x}{Object of class "prova_pr" (probability), obtained with \code{\link[=Pr]{Pr()}}.}
+\item{x}{Object of class "prova_eu" (expected utility), obtained with \code{\link[=exputility]{exputility()}}.}
 
-\item{type}{\code{NULL} (default) or character vector or indicating the type of plot for the main probability distribution; see \code{\link[base:plot]{base::plot()}}. The default \code{NULL} value uses type \code{'l'} (lines) for continuous variates, and \code{'b'} (points and lines) for discrete variates.}
+\item{type}{Character vector (default \code{'b'}) or list indicating the type of plot for the main probability distribution; see \code{\link[base:plot]{base::plot()}}.}
 
 \item{lty}{Analogous to argument \code{lty} (line style) in \code{\link[graphics:matplot]{graphics::matplot()}}, used for the main probability distributions.}
 
@@ -42,17 +42,17 @@
 
 \item{lwd}{Analogous to argument \code{lwd} (line width) in \code{\link[graphics:matplot]{graphics::matplot()}}, used for the main probability distributions.}
 
-\item{legend}{One of the values \code{'bottomright'}, \code{'bottom'}, \code{'bottomleft'}, \code{'left'}, \code{'topleft'}, \code{'top'}, \code{'topright'}, \code{'right'}, \code{'center'} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{'top'}.}
+\item{legend}{One of the values \code{'bottomright'}, \code{'bottom'}, \code{'bottomleft'}, \code{'left'}, \code{'topleft'}, \code{'top'}, \code{'topright'}, \code{'right'}, \code{'center'} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{'topright'}.}
 
 \item{alpha.f}{Numeric, default \code{1}: opacity of the colours of lines or markers, \code{0} being completely invisible and \code{1} completely opaque.}
 
-\item{type.spread}{\code{NULL} (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default \code{NULL} value uses type \code{'l'} (lines) for continuous variates, and \code{'b'} (points and lines) for discrete variates.}
+\item{type.spread}{character vector (default \code{'b'}) or list indicating the type of plot for the revisability samples; see argument \code{type}.}
 
-\item{lty.spread}{Same as parameter \code{lty} (line style), but for the line type of the long-run-frequency samples.}
+\item{lty.spread}{Same as parameter \code{lty} (line style), but for the line type of the revisability samples.}
 
-\item{lwd.spread}{Same as parameter \code{lwd} (line width), but for the line type of the long-run-frequency samples.}
+\item{lwd.spread}{Same as parameter \code{lwd} (line width), but for the line type of the revisability samples.}
 
-\item{alpha.f.spread}{Numeric or \code{NULL} (default): opacity of the quantile bands or of the long-run-frequency samples, similar to \code{alpha.f}. \code{NULL} means \code{0.25} if \code{spread = 'quantiles'}; and an appropriate value if \code{spread = 'samples'},dependent on the number of samples (more samples, less opacity).}
+\item{alpha.f.spread}{Numeric or \code{NULL} (default): opacity of the quantile bands or of the long-run-frequency samples, similar to \code{alpha.f}. \code{NULL} determines a value dependent on the number of samples (more samples, less opacity).}
 
 \item{nsamples.spread}{Integer, default 360: number of samples of long-run frequencies to display.}
 
@@ -62,7 +62,12 @@
 \code{NULL}, \link[base:invisible]{invisibly}; produces a plot, see \code{\link[graphics:matplot]{graphics::matplot()}}.
 }
 \description{
-This \code{\link[base:plot]{base::plot()}} method is a utility to plot probabilities obtained with \code{\link[=Pr]{Pr()}}, as well as their revisabilities. The probabilities are plotted either against \code{Y}, with one curve for each value of \code{X}, or vice versa.
+This \code{\link[base:plot]{base::plot()}} method is a utility to plot the expected utilities obtained with \code{\link[=exputility]{exputility()}}, as well as their revisabilities.
+}
+\details{
+The x-axis spans the possible actions, and the y-axis their expected utilities. Their revisabilities are shown as a sample of 360 (default number) alternative plots; the number of samples is indicated by the left y-axis. If any conditioning variate \eqn{X} was used for the probabilities, \eqn{\mathrm{Pr}(\dotso \vert X = x, \dotso)}, then one such plot is displayed for each conditioning value \eqn{x}.
+
+The probability that an action would still be considered optimal if many moro learning data were collected is indicated above the x-axis label corresponding to that action. An asterisk \code{*} marks the optimal actions. If any conditioning variate \eqn{X} was used, then one such probability is shown for each conditioning value.
 }
 \examples{
 ## Use the example "prova_K" (knowledge) object 'Kexample'

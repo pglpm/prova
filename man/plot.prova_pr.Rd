@@ -31,6 +31,7 @@
   lty.spread = c(1, 2, 4, 3, 6, 5),
   lwd.spread = NULL,
   alpha.f.spread = NULL,
+  quantiles.spread = NULL,
   nsamples.spread = 360,
   ...
 )
@@ -44,7 +45,7 @@
 
 \item{PvsY}{Logical or \code{NULL}: should probabilities be plotted against their \code{Y} argument? If \code{NULL}, the argument between \code{Y} and \code{X} having larger number of values is chosen. As many probability curves will be plotted as the number of values of the other argument.}
 
-\item{type}{\code{NULL} (default) or character vector or indicating the type of plot for the main probability distribution; see \code{\link[base:plot]{base::plot()}}. The default \code{NULL} value uses type \code{'l'} (lines) for continuous variates, and \code{'b'} (points and lines) for discrete variates.}
+\item{type}{\code{NULL} (default) or character vector or list indicating the type of plot for the main probability distribution; see \code{\link[base:plot]{base::plot()}}. The default \code{NULL} value uses type \code{'l'} (lines) for continuous variates, and \code{'b'} (points and lines) for discrete variates.}
 
 \item{lty}{Analogous to argument \code{lty} (line style) in \code{\link[graphics:matplot]{graphics::matplot()}}, used for the main probability distributions.}
 
@@ -58,13 +59,15 @@
 
 \item{ylab2}{A title for the y-axis on the right side of the plot, if displayed.}
 
-\item{type.spread}{\code{NULL} (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default \code{NULL} value uses type \code{'l'} (lines) for continuous variates, and \code{'b'} (points and lines) for discrete variates.}
+\item{type.spread}{\code{NULL} (default) or character vector or list indicating the type of plot for the long-run-frequency samples; see. The default \code{NULL} value uses type \code{'l'} (lines) for continuous variates, and \code{'b'} (points and lines) for discrete variates.}
 
 \item{lty.spread}{Same as parameter \code{lty} (line style), but for the line type of the long-run-frequency samples.}
 
 \item{lwd.spread}{Same as parameter \code{lwd} (line width), but for the line type of the long-run-frequency samples.}
 
 \item{alpha.f.spread}{Numeric or \code{NULL} (default): opacity of the quantile bands or of the long-run-frequency samples, similar to \code{alpha.f}. \code{NULL} means \code{0.25} if \code{spread = 'quantiles'}; and an appropriate value if \code{spread = 'samples'},dependent on the number of samples (more samples, less opacity).}
+
+\item{quantiles.spread}{Numeric vector or \code{NULL} (default): revisability quantiles to display. Value \code{NULL} uses all quantiles available in the \code{x} object, or just extreme quantiles if multiple probability curves are shown.}
 
 \item{nsamples.spread}{Integer, default 360: number of samples of long-run frequencies to display.}
 
@@ -75,6 +78,23 @@
 }
 \description{
 This \code{\link[base:plot]{base::plot()}} method is a utility to plot probabilities obtained with \code{\link[=Pr]{Pr()}}, as well as their revisabilities. The probabilities are plotted either against \code{Y}, with one curve for each value of \code{X}, or vice versa.
+}
+\details{
+For a collection of probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} with several values \eqn{y} and \eqn{x}, this plot method with argument \code{PvsY} set to \code{TRUE} shows the probabilities on the y-axis, while the x-axis spans the \eqn{y} values, the curve thus showing the probability distribution (the area underneath is 1, except for possibly omitted tails). One such curve is displayed for each \eqn{x} value. If the argument \code{PvsY} is \code{FALSE}, then the x-axis spans the \eqn{x} values instead -- thus the displayed curve is \emph{not} a probability distribution (area underneath is not 1). One such curve is displayed for each \eqn{y} value. Which kind of plot is best depends on whether one needs to visualize how the probabilities depend on variate \eqn{Y} or on the conditioning variate \eqn{X}. The default \code{PvsY} value \code{NULL} tries to guess the desider behaviour depending on how many different values \eqn{y} and \eqn{x} are contained in the probability object \code{x}; the variate with the largest number of values is displayed on the x-axis, so as to clutter as little as possible the plot window with multiple curves.
+
+The revisabilities of the probabilities can be visualized in two different ways, determined by the argument \code{spread}:
+\itemize{
+\item \code{spread = 'quantiles'}: shows the revisabilities as "quantile bands" around the probability curves. Which quantiles are shown depends on the \code{quantiles.spread} argument.
+\item \code{spread = 'samples'}: shows the revisabilities as a sample of alternative probability curves, which can also be interpreted as possible "long-run frequencies". The number of samples is determined by the argument \code{nsamples.spread}.
+\item \code{spread = 'none'} or \code{NA} or \code{FALSE}: does not show any revisability.
+\item \code{spread = NULL} (default): shows quantiles, if available; otherwise samples, if available, otherwise nothing.
+}
+
+Information about the revisability, such as quantiles or number of samples displayed, is shown by the left y-axis. While quantile bands look neat, they do not show important details about revised probabilities (long-run frequencies), such as persistent modes. Such details are better grasped by looking at samples. It is recommended to always take a look at both visualizations of revisability.
+
+The label on the left y-axis is by default the text \verb{Pr(}\eqn{Y}\code{|}\eqn{X}\verb{, }\eqn{K}\verb{)}, displaying the actual \eqn{Y} and \eqn{X} variates present in the probability object \code{x}. If the displayed probabilities are densities (this means that some \eqn{Y} variates are continuous and not rounded), then lowercase \code{p} is used istead of \code{Pr}.
+
+Continuous variates with bounded domains, such as censored variates, may have singular probability values -- concentrated probability mass -- at the boundary points. When such singular points are present, their probability scale is shown in the \emph{right} y-axis.
 }
 \examples{
 ## Use the "prova_K" (knowledge) object 'Kexample',

@@ -4,6 +4,7 @@
 * Introduced the function `eutility()` for the calculation of expected utilities and their revisability, together with `plot()` and `print()` methods.
 * Changed the name of internal S3 classes to avoid clashes with other packages.
 * Improved plot labels.
+* Updated and corrected documentation.
 * Simplified omission of arguments like `Y =`, `X =`, `K =`.
 
 # Prova v2.1.0
