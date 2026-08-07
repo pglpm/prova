@@ -5,14 +5,16 @@
 - Introduced the much faster
   [`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
   for variates with finite domains.
-- Introduced the function `eutility()` for the calculation of expected
-  utilities and their revisability, together with
-  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) and
-  [`print()`](https://rdrr.io/r/base/print.html) methods.
+- Introduced the function
+  [`exputility()`](https://pglpm.github.io/prova/reference/exputility.md)
+  for the calculation of expected utilities and their revisability,
+  together with [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+  and [`print()`](https://rdrr.io/r/base/print.html) methods.
 - Changed the name of internal S3 classes to avoid clashes with other
   packages.
 - Improved plot labels.
 - Updated and corrected documentation.
+- Updated introductory vignette.
 - Simplified omission of arguments like `Y =`, `X =`, `K =`.
 
 ## Prova v2.1.0
