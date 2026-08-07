@@ -20,11 +20,11 @@ exputility(u, p)
   (internally converted into a matrix). Each row of the matrix
   corresponds to a possible action; each row to an uncertain outcome
   \\Y\\. The number of columns must be equal to the number of
-  \\Y\\-values of the "probability" object of argument `p`.
+  \\Y\\-values of the "prova_pr" (probability) object of argument `p`.
 
 - p:
 
-  A "probability" object, obtained from
+  A "prova_pr" (probability) object, obtained from
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md). The number of
   \\Y\\-values of this object must be equal to the number of columens of
   the utility matrix of argument `um`.
@@ -49,6 +49,11 @@ A [list](https://rdrr.io/r/base/list.html) of the following elements:
   having maximal expected utility, one list element per column of `p`
   (that is, its conditional values `X`). If there are ties, all actions
   in the tie are reported.
+
+- `'optimal.samples'`: [matrix](https://rdrr.io/r/base/matrix.html) with
+  the probabilities that each action would be chosen as the optimal one,
+  if more data were available. One row for each action, one column for
+  each column of `p` (that is, its conditional values `X`).
 
 - `'optimal.samples'`: [matrix](https://rdrr.io/r/base/matrix.html) of
   samples of actions having maximal expected utility, if many more
@@ -93,7 +98,7 @@ joint and conditional probabilities.
 ## Examples
 
 ``` r
-## Use the example "Knowledge" object 'Kexample'
+## Use the example "prova_K" (knowledge) object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -101,14 +106,15 @@ joint and conditional probabilities.
 ## and outcomes depending on the variate 'species'
 umatrix <- matrix(c(
  1.80, 0.42, 1.60, -0.12, -1.10, 0.20, -0.51, 0.35, -0.49, 0.35, -0.48, 0.62
- ), nrow = 4, ncol = 3, dimnames = list(paste0('action', 1:4), NULL))
+ ), nrow = 4, ncol = 3, dimnames = list(actions = paste0('A', 1:4), NULL))
 
 print(umatrix)
-#>          [,1]  [,2]  [,3]
-#> action1  1.80 -1.10 -0.49
-#> action2  0.42  0.20  0.35
-#> action3  1.60 -0.51 -0.48
-#> action4 -0.12  0.35  0.62
+#>        
+#> actions  [,1]  [,2]  [,3]
+#>      A1  1.80 -1.10 -0.49
+#>      A2  0.42  0.20  0.35
+#>      A3  1.60 -0.51 -0.48
+#>      A4 -0.12  0.35  0.62
 
 ## Calculate the probability of the 'species outcomes
 probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
@@ -118,23 +124,26 @@ probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
 eu <- exputility(umatrix, probs)
 
 eu$value
-#>          
-#>                [,1]
-#>   action1 0.3981347
-#>   action2 0.3510855
-#>   action3 0.4306723
-#>   action4 0.2403208
+#>        
+#> actions      [,1]
+#>      A1 0.3981347
+#>      A2 0.3510855
+#>      A3 0.4306723
+#>      A4 0.2403208
 
 ## optimal action:
 eu$optimal
 #> [[1]]
-#> [1] "action3"
+#> [1] "A3"
 #> 
 
-## Tabulate probabilities of what optimal action would be
+## Probabilities for the actions to be judged as optimal
 ## if many more sample data were available
-signif(table(eu$optimal.samples)/ncol(eu$optimal.samples), 2)
-#> 
-#> action1 action2 action3 
-#>   0.013   0.058   0.930 
+eu$optimal.probs
+#>        
+#> actions       [,1]
+#>      A1 0.01333333
+#>      A2 0.05777778
+#>      A3 0.92888889
+#>      A4 0.00000000
 ```

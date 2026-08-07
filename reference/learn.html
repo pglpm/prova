@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -208,7 +208,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A "knowledge" object, or name of directory containing such an object and other output files, or <code>NULL</code>, depending on argument <code>valueisK</code>.</p>
+    <p>A "prova_K" (knowledge) object, or name of directory containing such an object and other output files, or <code>NULL</code>, depending on argument <code>valueisK</code>.</p>
 <p><code>learn()</code> saves several files in a directory. By default this output directory is a temporary directory within the one used by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">base::tempdir()</a></code>, but an alternative one can be chosen with the argument <code>outputdir =</code>. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:</p><ul><li><p><code>MCtraces.pdf</code>: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file <code>MCtraces.rds</code>.</p></li>
 <li><p><code>plotsamples_learn.pdf</code>, <code>plotquantiles_learn.pdf</code>: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).</p></li>
 <li><p><code>log-1.out</code>, <code>log-2.out</code>, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.</p></li>
@@ -220,7 +220,7 @@
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>To use this function, the package <a href="https://cran.r-project.org/package=nimble" class="external-link"><strong>Nimble</strong></a> needs to be installed.</p>
 <p>This function takes as main inputs a set of data and metadata, and computes the full joint probability distribution for new data, including its "revisability". From this full joint distribution any other distributions of interest can subsequently be computed; see <code><a href="Pr.html">Pr()</a></code> and related functions. This computation can also be interpreted as an estimation of the full joint frequency distribution of the variates in the <em>whole population</em>, beyond the sample data, together with its uncertainty. The computation allows for the use of datapoints with partially missing variables: imputation is automatically made. This imputation is <em>principled</em>, made according to the rules of probability theory.</p>
-<p>The output is a "knowledge" object, typically saved in a <code>K.rds</code> file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.</p>
+<p>The output is a "prova_K" (knowledge) object, typically saved in a <code>K.rds</code> file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.</p>
 <p>See <code><a href="../articles/intro.html">vignette('intro')</a></code> for introductory examples.</p>
 <p>The computation is "non-parametric": probability or frequency distributions are not assumed to be Gaussian or of any other specific shape; no "model" is assumed. The mathematical representation of the space of joint frequency distributions follows ideas of Dunson &amp; Bhattacharya (2011); see <a href="https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf" class="external-link">technical manual</a> for details.</p>
 <p>The computation is done via Markov-chain Monte Carlo, using the package <strong>Nimble</strong>. "Convergence" of the Monte Carlo computation is automatically assessed with methods described in Vehtari &amp; al. (2021) and Kwon &amp; al. (2025); see <a href="https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf" class="external-link">technical manual</a> for details. The default values for convergence require that all of the following three conditions be fulilled:</p><ul><li><p>The computation's numerical error (Monte-Carlo Standard Error) for the posterior probability must be smaller than 4.7% of the standard deviation of the posterior's variability.</p></li>
@@ -290,8 +290,8 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpioKCWc/prova-V1_D3_S10_260803T201131_1b1228a3f5ba</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v2.2.3.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpNGLmYx/prova-V1_D3_S10_260807T043439_1ae732d6854b</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v2.3.0.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Registered socket cluster with 1 nodes on host ‘localhost’.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Learning from 3 datapoints, 1 variates.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Monte Carlo sampling of 10 samples by 1 chains</span>
@@ -313,9 +313,9 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> quantile width: 0.0823 to 1.37</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting final Monte Carlo traces and marginal samples...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 34 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 33 secs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.73 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 35 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 34 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.57 secs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max total memory used: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max memory used per core: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Removing temporary output files.</span>
@@ -323,7 +323,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Output saved in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpioKCWc/prova-V1_D3_S10_260803T201131_1b1228a3f5ba</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpNGLmYx/prova-V1_D3_S10_260807T043439_1ae732d6854b</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Check structure of `K` object:</span></span></span>
@@ -397,7 +397,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ quantile width     : Named num [1:4] 0.0823 0.1452 1.3658 0.2341</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "K"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "prova_K"</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

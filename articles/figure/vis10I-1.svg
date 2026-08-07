@@ -329,6 +329,8 @@
 </g>
 <path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(80%, 73.333333%, 26.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 421.960938 73.441406 L 443.558594 73.441406 "/>
 <path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(40%, 80%, 93.333333%)" stroke-opacity="1" stroke-dasharray="6 6" stroke-miterlimit="10" d="M 421.960938 87.839844 L 443.558594 87.839844 "/>
+<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(80%, 73.333333%, 26.666667%)" stroke-opacity="1" stroke-miterlimit="10" d="M 435.460938 73.441406 C 435.460938 77.039062 430.058594 77.039062 430.058594 73.441406 C 430.058594 69.839844 435.460938 69.839844 435.460938 73.441406 "/>
+<path fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="rgb(40%, 80%, 93.333333%)" stroke-opacity="1" stroke-miterlimit="10" d="M 432.761719 83.640625 L 436.394531 89.9375 L 429.125 89.9375 Z M 432.761719 83.640625 "/>
 <g fill="rgb(0%, 0%, 0%)" fill-opacity="1">
 <use xlink:href="#glyph-0-16" x="454.359375" y="77.689453"/>
 <use xlink:href="#glyph-0-4" x="457.359375" y="77.689453"/>

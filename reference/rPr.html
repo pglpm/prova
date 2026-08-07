@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,7 @@
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>A "Knowledge" object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.</p></dd>
+<dd><p>A "prova_K" (knowledge) object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
@@ -111,7 +111,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the example "Knowledge" object 'Kexample'</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the example "prova_K" (knowledge) object 'Kexample'</span></span></span>
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span></span></span>
@@ -123,8 +123,8 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">datapoints</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Adelie"    "Chinstrap" "Gentoo"    "Gentoo"    "Chinstrap" "Adelie"   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "Gentoo"    "Adelie"    "Adelie"    "Adelie"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Adelie" "Gentoo" "Adelie" "Adelie" "Adelie" "Adelie" "Gentoo" "Gentoo"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "Gentoo" "Gentoo"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -135,11 +135,11 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">datapoints</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">## row names give MCMC information</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    species bill_len</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo     48.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo     49.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     44.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Chinstrap     57.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     37.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     37.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     42.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Chinstrap     50.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     44.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo     51.6</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 3:</span></span></span>

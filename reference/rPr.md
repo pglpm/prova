@@ -35,7 +35,7 @@ rPr(
 
 - K:
 
-  A "Knowledge" object produced by
+  A "prova_K" (knowledge) object produced by
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
   also be a path to a 'K.rds' file containing such object, or to a
   directory containing one.
@@ -100,7 +100,7 @@ quantiles.
 ## Examples
 
 ``` r
-## Use the example "Knowledge" object 'Kexample'
+## Use the example "prova_K" (knowledge) object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -112,8 +112,8 @@ datapoints <- rPr(10, 'species', Kexample)
 
 c(datapoints)
 #> $species
-#>  [1] "Adelie"    "Chinstrap" "Gentoo"    "Gentoo"    "Chinstrap" "Adelie"   
-#>  [7] "Gentoo"    "Adelie"    "Adelie"    "Adelie"   
+#>  [1] "Adelie" "Gentoo" "Adelie" "Adelie" "Adelie" "Adelie" "Gentoo" "Gentoo"
+#>  [9] "Gentoo" "Gentoo"
 #> 
 
 
@@ -124,11 +124,11 @@ datapoints <- rPr(5, c('species', 'bill_len'), Kexample)
 
 print(datapoints, row.names = FALSE) ## row names give MCMC information
 #>    species bill_len
-#>     Gentoo     48.2
-#>     Gentoo     49.2
-#>     Adelie     44.3
-#>  Chinstrap     57.3
-#>     Adelie     37.7
+#>     Adelie     37.9
+#>     Adelie     42.0
+#>  Chinstrap     50.9
+#>     Adelie     44.0
+#>     Gentoo     51.6
 
 
 ## ## Example 3:

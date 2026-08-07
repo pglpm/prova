@@ -44,7 +44,7 @@ qPr(
 
 - K:
 
-  A "Knowledge" object produced by
+  A "prova_K" (knowledge) object produced by
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
   also be a path to a 'K.rds' file containing such object, or to a
   directory containing one. See "Details" for the interpretation of
@@ -113,7 +113,7 @@ qPr(
 
   Logical, default `TRUE`: keep a copy of the `Yname` and `X` arguments
   in the output? This is used for
-  [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md).
+  [`plot.prova_pr()`](https://pglpm.github.io/prova/reference/plot.prova_pr.md).
 
 - tol:
 
@@ -137,7 +137,8 @@ A list of the following elements:
 
 - `'Y'`, `'X'` `'tails'`: copies of the `Y`, `X`, `tails` arguments.
 
-- `'K'`: name of the "Knowledge" object used in the calculation.
+- `'K'`: name of the "prova_K" (knowledge) object used in the
+  calculation.
 
 ## Details
 
@@ -183,7 +184,7 @@ datapoints.
 ### WARNING: the following examples, if run, might even take a minute or more.
 
 # \donttest{
-## Use the example "Knowledge" object 'Kexample'
+## Use the example "prova_K" (knowledge) object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 

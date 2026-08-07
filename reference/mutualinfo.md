@@ -59,7 +59,7 @@ mutualinfoF(
 
 - K:
 
-  A "Knowledge" object produced by
+  A "prova_K" (knowledge) object produced by
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
   also be a path to a 'K.rds' file containing such object, or to a
   directory containing one.
@@ -82,14 +82,15 @@ mutualinfoF(
 - ns:
 
   Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in
-  the "K" object to use for calculating the mutual information. If `Inf`
-  or `NULL`, use all Monte Carlo samples available in the "K" object.
+  the "prova_K" (knowledge) object to use for calculating the mutual
+  information. If `Inf` or `NULL`, use all Monte Carlo samples available
+  in the "prova_K" (knowledge) object.
 
 - nv:
 
   Integer, default 12: number of *duplicates* of Monte Carlo samples in
-  the "K" object to use for calculating the revisability of the mutual
-  information.
+  the "prova_K" (knowledge) object to use for calculating the
+  revisability of the mutual information.
 
 - unit:
 
@@ -134,12 +135,12 @@ mutualinfoF(
 
   Logical, default `TRUE`: keep a copy of the `X` argument in the
   output? This is used for
-  [`hist.mi()`](https://pglpm.github.io/prova/reference/hist.mi.md).
+  [`hist.prova_mi()`](https://pglpm.github.io/prova/reference/hist.prova_mi.md).
 
 ## Value
 
-An object of class "mi", which is a list consisting of the following
-elements:
+An object of class "prova_mi" (mutual information), which is a list
+consisting of the following elements:
 
 - `'value'`, the mutual information between (joint) variates `Y1names`
   and (joint) variates `Y2names`.
@@ -164,7 +165,8 @@ elements:
 - `'unit'`, `'Y1names'`, `'Y1names'` `'X'`, `'tails'`: copies of the
   homonymous input arguments.
 
-- `'K'`: name of the "Knowledge" object used in the calculation.
+- `'K'`: name of the "prova_K" (knowledge) object used in the
+  calculation.
 
 ## Details
 
@@ -220,11 +222,11 @@ domains, typically nominal or ordinal variates (see
 
 ## See also
 
-[`print.mi()`](https://pglpm.github.io/prova/reference/print.mi.md) \]
-to plot mutual information and quantiles calculated by `mutualinfo()`
+[`print.prova_mi()`](https://pglpm.github.io/prova/reference/print.prova_mi.md)
+\] to plot mutual information and quantiles calculated by `mutualinfo()`
 
-[`hist.mi()`](https://pglpm.github.io/prova/reference/hist.mi.md) to
-plot the revisability of the mutual information.
+[`hist.prova_mi()`](https://pglpm.github.io/prova/reference/hist.prova_mi.md)
+to plot the revisability of the mutual information.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 probabilities and their revisability.
@@ -235,7 +237,7 @@ generates the `K` objects required by `mutualinfo()`.
 ## Examples
 
 ``` r
-## Use the example "Knowledge" object 'Kexample'
+## Use the example "prova_K" (knowledge) object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' (nominal, finite domain)
 ## and 'bill_len' (continuous rounded, infinite domain)

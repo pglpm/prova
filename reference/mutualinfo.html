@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,7 +100,7 @@
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>A "Knowledge" object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.</p></dd>
+<dd><p>A "prova_K" (knowledge) object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
@@ -112,11 +112,11 @@
 
 
 <dt id="arg-ns">ns<a class="anchor" aria-label="anchor" href="#arg-ns"></a></dt>
-<dd><p>Integer or <code>Inf</code> or <code>NULL</code> (default): number of Monte Carlo samples in the "K" object to use for calculating the mutual information. If <code>Inf</code> or <code>NULL</code>, use all Monte Carlo samples available in the "K" object.</p></dd>
+<dd><p>Integer or <code>Inf</code> or <code>NULL</code> (default): number of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the mutual information. If <code>Inf</code> or <code>NULL</code>, use all Monte Carlo samples available in the "prova_K" (knowledge) object.</p></dd>
 
 
 <dt id="arg-nv">nv<a class="anchor" aria-label="anchor" href="#arg-nv"></a></dt>
-<dd><p>Integer, default 12: number of <em>duplicates</em> of Monte Carlo samples in the "K" object to use for calculating the revisability of the mutual information.</p></dd>
+<dd><p>Integer, default 12: number of <em>duplicates</em> of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the revisability of the mutual information.</p></dd>
 
 
 <dt id="arg-unit">unit<a class="anchor" aria-label="anchor" href="#arg-unit"></a></dt>
@@ -144,18 +144,18 @@
 
 
 <dt id="arg-keepx">keepX<a class="anchor" aria-label="anchor" href="#arg-keepx"></a></dt>
-<dd><p>Logical, default <code>TRUE</code>: keep a copy of the <code>X</code> argument in the output? This is used for <code><a href="hist.mi.html">hist.mi()</a></code>.</p></dd>
+<dd><p>Logical, default <code>TRUE</code>: keep a copy of the <code>X</code> argument in the output? This is used for <code><a href="hist.prova_mi.html">hist.prova_mi()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class "mi", which is a list consisting of the following elements:</p><ul><li><p><code>'value'</code>, the mutual information between (joint) variates <code>Y1names</code> and (joint) variates <code>Y2names</code>.</p></li>
+    <p>An object of class "prova_mi" (mutual information), which is a list consisting of the following elements:</p><ul><li><p><code>'value'</code>, the mutual information between (joint) variates <code>Y1names</code> and (joint) variates <code>Y2names</code>.</p></li>
 <li><p><code>'quantiles'</code>, a vector with the revisability quantiles for the mutual information.</p></li>
 <li><p><code>'value.acc'</code>, <code>quantiles.acc</code> number and vector with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculation for the <code>'value'</code> and the <code>'quantiles'</code> elements.</p></li>
 <li><p><code>'samples'</code>, a vector with the revisability samples for the mutual information.</p></li>
 <li><p><code>'rGauss'</code>, a vector of <code>value</code> and <code>accuracy</code>: the absolute value of the Pearson correlation coefficient \(r\) of a <em>multivariate Gaussian distribution</em> having mutual information <code>MI</code>; the two are related by \(\mathrm{MI} = -\ln(1 - r^2)/2\). It may provide a vague intuition for the <code>MI</code> value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.</p></li>
 <li><p><code>'unit'</code>, <code>'Y1names'</code>, <code>'Y1names'</code> <code>'X'</code>, <code>'tails'</code>: copies of the homonymous input arguments.</p></li>
-<li><p><code>'K'</code>: name of the "Knowledge" object used in the calculation.</p></li>
+<li><p><code>'K'</code>: name of the "prova_K" (knowledge) object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -178,15 +178,15 @@ an expression which can also be written in several other equivalent ways. If the
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="print.mi.html">print.mi()</a></code> ] to plot mutual information and quantiles calculated by <code>mutualinfo()</code></p>
-<p><code><a href="hist.mi.html">hist.mi()</a></code> to plot the revisability of the mutual information.</p>
+    <div class="dont-index"><p><code><a href="print.prova_mi.html">print.prova_mi()</a></code> ] to plot mutual information and quantiles calculated by <code>mutualinfo()</code></p>
+<p><code><a href="hist.prova_mi.html">hist.prova_mi()</a></code> to plot the revisability of the mutual information.</p>
 <p><code><a href="Pr.html">Pr()</a></code> to calculate probabilities and their revisability.</p>
 <p><code><a href="learn.html">learn()</a></code>, which generates the <code>K</code> objects required by <code>mutualinfo()</code>.</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the example "Knowledge" object 'Kexample'</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the example "prova_K" (knowledge) object 'Kexample'</span></span></span>
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' (nominal, finite domain)</span></span></span>
 <span class="r-in"><span><span class="co">## and 'bill_len' (continuous rounded, infinite domain)</span></span></span>

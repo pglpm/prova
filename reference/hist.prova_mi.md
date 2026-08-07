@@ -1,0 +1,109 @@
+# Plot the revisability of an object of class "prova_mi" (mutual information) as a histogram
+
+The mutual information calculated with the
+[`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+function, and outputted as a "prova_mi" (mutual information) object, has
+an associated "revisability" that comes from the finite size of the data
+sample. A much larger sample might reveal a different value of mutual
+information.
+
+The [`hist()`](https://rdrr.io/r/graphics/hist.html) method for a
+"prova_mi" (mutual information) object is a utility to visualize this
+kind of revisability, in the form of a distribution: it shows how the
+mutual information could change, if we collected a much larger
+(infinite) data sample, and how likely such change would be. The
+distribution is represented by a histogram formed from samples of
+revised mutual information. The bin size is chosen according to the
+Monte Carlo accuracy.
+
+## Usage
+
+``` r
+# S3 method for class 'prova_mi'
+hist(
+  x,
+  breaks = NULL,
+  lty = c(1, 2, 4, 3, 6, 5),
+  lwd = 2,
+  col = palette(),
+  alpha.f = 1,
+  alpha.f.fill = 0.125,
+  showvalue = TRUE,
+  xlab = NULL,
+  ylab = NULL,
+  xlim = NULL,
+  ylim = c(0, NA),
+  main = NULL,
+  grid = TRUE,
+  axes = FALSE,
+  add = FALSE,
+  ...
+)
+```
+
+## Arguments
+
+- x:
+
+  Object of class "prova_mi" (mutual information), obtained with
+  [`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md).
+
+- breaks:
+
+  as in function
+  [`graphics::hist()`](https://rdrr.io/r/graphics/hist.html), or `NULL`
+  (default). Value `NULL` determines the bin width from the Monte Carlo
+  accuracy (roughly speaking, each bin spans two standard deviations).
+
+- lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add:
+
+  see analogous arguments in
+  [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html)
+
+- alpha.f.fill:
+
+  Numeric, default 0.125: opacity of the histogram filling. `0` means no
+  filling.
+
+- showvalue:
+
+  Logical, default `TRUE`: show the mutual information obtained from the
+  current data sample?
+
+- ...:
+
+  Other parameters to be passed to
+  [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md).
+
+## Value
+
+[Invisibly](https://rdrr.io/r/base/invisible.html), an object of class
+["histogram"](https://rdrr.io/r/graphics/hist.html).
+
+## See also
+
+[`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+to calculate mutual information and its revisability.
+
+[`print.prova_mi()`](https://pglpm.github.io/prova/reference/print.prova_mi.md)
+\] to plot mutual information and quantiles calculated by
+[`mutualinfo()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
+
+[`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) (on which
+`hist.prova_mi()` is based) for more general plots.
+
+## Examples
+
+``` r
+## Use the "prova_K" (knowledge) object 'Kexample',
+## calculated from the "penguins" dataset;
+## variates: 'species' and 'bill_len'
+
+## calculate the mutual information and its revisability
+MI <- mutualinfo('species', 'bill_len', Kexample, nv = 2)
+
+## show the possible revisability of the mutual information,
+## if a much larger data sample were collected
+hist(MI)
+
+```

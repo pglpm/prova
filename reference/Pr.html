@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,7 @@
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>A "Knowledge" object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.</p></dd>
+<dd><p>A "prova_K" (knowledge) object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
@@ -119,24 +119,24 @@
 
 
 <dt id="arg-keepyx">keepYX<a class="anchor" aria-label="anchor" href="#arg-keepyx"></a></dt>
-<dd><p>Logical, default <code>TRUE</code>: keep a copy of the <code>Y</code> and <code>X</code> arguments in the output? This is used for <code><a href="plot.probability.html">plot.probability()</a></code>.</p></dd>
+<dd><p>Logical, default <code>TRUE</code>: keep a copy of the <code>Y</code> and <code>X</code> arguments in the output? This is used for <code><a href="plot.prova_pr.html">plot.prova_pr()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class "probability", which is a list consisting of the following elements:</p><ul><li><p><code>'value'</code>: a matrix with the probabilities \(\mathrm{Pr}(Y = y \vert X = x, K)\), for all joint values \(y\) of the \(Y\)-variates (rows) and  all joint values \(x\) of the \(X\)-variates (columns).</p></li>
+    <p>An object of class "prova_pr" (probability), which is a list consisting of the following elements:</p><ul><li><p><code>'value'</code>: a matrix with the probabilities \(\mathrm{Pr}(Y = y \vert X = x, K)\), for all joint values \(y\) of the \(Y\)-variates (rows) and  all joint values \(x\) of the \(X\)-variates (columns).</p></li>
 <li><p><code>'quantiles'</code> (possibly <code>NULL</code>): an array with the revisability quantiles (3rd dimension of the array) for such probabilities.</p></li>
 <li><p><code>'samples'</code> (possibly <code>NULL</code>): an array with the revisability samples (3rd dimension of the array) for such probabilities.</p></li>
 <li><p><code>'value.acc'</code>, <code>quantiles.acc</code>: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the <code>'values'</code> and <code>'quantiles'</code> elements.</p></li>
-<li><p><code>'density'</code>: numerical vector as long as number of rows in <code>Y</code>, used mainly for <code><a href="plot.probability.html">plot.probability()</a></code>. It is the order of the probability density the <code>Y</code>-values: values with <code>0</code> are actual probabilities; values with <code>1</code> are one-dimensional probability densities \(\mathrm{p}(\dotso)\,\mathrm{d}y\); values with <code>2</code> are two-dimensional probability densities \(\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2\); and so on.</p></li>
+<li><p><code>'density'</code>: numerical vector as long as number of rows in <code>Y</code>, used mainly for <code><a href="plot.prova_pr.html">plot.prova_pr()</a></code>. It is the order of the probability density the <code>Y</code>-values: values with <code>0</code> are actual probabilities; values with <code>1</code> are one-dimensional probability densities \(\mathrm{p}(\dotso)\,\mathrm{d}y\); values with <code>2</code> are two-dimensional probability densities \(\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2\); and so on.</p></li>
 <li><p><code>'Y'</code>, <code>'X'</code>, <code>'tails'</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
-<li><p><code>'K'</code>: name of the "Knowledge" object used in the calculation.</p></li>
+<li><p><code>'K'</code>: name of the "prova_K" (knowledge) object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function calculates the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, K)\), where \(Y = y\) and \(X = x\) are two (non overlapping) sets of joint variate values, inputted as <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> arguments <code>Y</code> and <code>X</code>, and \(K\) is the information in the data and metadata. It is somewhat analogous to the <code>dxxx</code>-variants and <code>pxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probability \(\mathrm{Pr}(Y = y \vert K)\) is calculated.</p>
 <p>For some variates in <code>Y</code> or <code>X</code>, tail values can also be prescribed, so that this function calculates mixed probabilities such as $$\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .$$ Tail values are inputted via the <code>'tails'</code> argument; see "Usage".</p>
-<p>If <code>Pr()</code> is called with two unnamed arguments, <code>Pr(..., ...)</code>, then it is interpreted as <code>Pr(Y = ..., K = ...)</code>. If it is called with three unnamed arguments, then it is interpreted as either <code>Pr(Y = ..., X = ..., K = ...)</code> or <code>Pr(Y = ..., K = ..., tails = ...)</code>, depending on whether the second argument appears to be a "Knowledge" object or not.</p>
+<p>If <code>Pr()</code> is called with two unnamed arguments, <code>Pr(..., ...)</code>, then it is interpreted as <code>Pr(Y = ..., K = ...)</code>. If it is called with three unnamed arguments, then it is interpreted as either <code>Pr(Y = ..., X = ..., K = ...)</code> or <code>Pr(Y = ..., K = ..., tails = ...)</code>, depending on whether the second argument appears to be a "prova_K" (knowledge) object or not.</p>
 <p>This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \(\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)\) that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:</p><ul><li><p>As samples (default 3600 samples, depending on the 'nsamples' argument given to the <code><a href="learn.html">learn()</a></code> function) of the alternative values that the posterior probability could have.</p></li>
 <li><p>As quantiles (default 5.5%, 25%, 75%, 94.5%) of the possible revisability.</p></li>
 </ul><p>If several joint values are given for <code>Y</code> or <code>X</code>, the function will create a 2D grid of results for all possible combinations of the given <code>Y</code> and <code>X</code> values.</p>
@@ -168,16 +168,16 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, which generates the <code>K</code>nowledge objects required by <code>Pr()</code>.</p>
-<p><code><a href="plot.probability.html">plot.probability()</a></code> to plot probabilities and quantiles calculated by <code>Pr()</code>.</p>
-<p><code><a href="hist.probability.html">hist.probability()</a></code> to plot histograms of the probability distributions calculated by <code>Pr()</code>.</p>
-<p><code><a href="print.probability.html">print.probability()</a></code> to print the main elements of the probabilities calculated by <code>Pr()</code>.</p>
+<p><code><a href="plot.prova_pr.html">plot.prova_pr()</a></code> to plot probabilities and quantiles calculated by <code>Pr()</code>.</p>
+<p><code><a href="hist.prova_pr.html">hist.prova_pr()</a></code> to plot histograms of the probability distributions calculated by <code>Pr()</code>.</p>
+<p><code><a href="print.prova_pr.html">print.prova_pr()</a></code> to print the main elements of the probabilities calculated by <code>Pr()</code>.</p>
 <p><code><a href="qPr.html">qPr()</a></code> to calculate quantiles for a specific variate, that is, the variate values having given probabilities.</p>
 <p><code><a href="rPr.html">rPr()</a></code> to generate datapoints.</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the "Knowledge" object 'Kexample',</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the "prova_K" (knowledge) object 'Kexample',</span></span></span>
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span></span></span>

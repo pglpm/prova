@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,7 @@
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>A "Knowledge" object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.</p></dd>
+<dd><p>A "prova_K" (knowledge) object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
@@ -120,7 +120,7 @@
 
 
 <dt id="arg-keepyx">keepYX<a class="anchor" aria-label="anchor" href="#arg-keepyx"></a></dt>
-<dd><p>Logical, default <code>TRUE</code>: keep a copy of the <code>Yname</code> and <code>X</code> arguments in the output? This is used for <code><a href="plot.probability.html">plot.probability()</a></code>.</p></dd>
+<dd><p>Logical, default <code>TRUE</code>: keep a copy of the <code>Yname</code> and <code>X</code> arguments in the output? This is used for <code><a href="plot.prova_pr.html">plot.prova_pr()</a></code>.</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
@@ -133,7 +133,7 @@
 <li><p><code>'quantiles'</code> (possibly <code>NULL</code>): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the <code>'value'</code> element.</p></li>
 <li><p><code>'samples'</code> (possibly <code>NULL</code>): an array with the revisability samples (3rd dimension of the array) for such quantiles.</p></li>
 <li><p><code>'Y'</code>, <code>'X'</code> <code>'tails'</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
-<li><p><code>'K'</code>: name of the "Knowledge" object used in the calculation.</p></li>
+<li><p><code>'K'</code>: name of the "prova_K" (knowledge) object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -157,7 +157,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">### WARNING: the following examples, if run, might even take a minute or more.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co">## Use the example "Knowledge" object 'Kexample'</span></span></span>
+<span class="r-in"><span><span class="co">## Use the example "prova_K" (knowledge) object 'Kexample'</span></span></span>
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span></span></span>

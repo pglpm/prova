@@ -36,21 +36,28 @@
 
 ## Plot & print
 
-- [`hist(`*`<mi>`*`)`](https://pglpm.github.io/prova/reference/hist.mi.md)
-  : Plot the revisability of an object of class "mi" as a histogram
-- [`hist(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/hist.probability.md)
-  : Plot the revisability of an object of class "probability" as a
-  histogram
-- [`plot(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/plot.probability.md)
-  : Plot an object of class "probability"
+- [`hist(`*`<prova_mi>`*`)`](https://pglpm.github.io/prova/reference/hist.prova_mi.md)
+  : Plot the revisability of an object of class "prova_mi" (mutual
+  information) as a histogram
+- [`hist(`*`<prova_pr>`*`)`](https://pglpm.github.io/prova/reference/hist.prova_pr.md)
+  : Plot the revisability of an object of class "prova_pr" (probability)
+  as a histogram
+- [`plot(`*`<prova_eu>`*`)`](https://pglpm.github.io/prova/reference/plot.prova_eu.md)
+  : Plot an object of class "prova_eu" (expected utility) and its
+  revisability
+- [`plot(`*`<prova_pr>`*`)`](https://pglpm.github.io/prova/reference/plot.prova_pr.md)
+  : Plot an object of class "prova_pr" (probability)
 - [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) : Plot
   numeric or character values
-- [`print(`*`<K>`*`)`](https://pglpm.github.io/prova/reference/print.K.md)
-  : Print summary of a "Knowledge" object
-- [`print(`*`<mi>`*`)`](https://pglpm.github.io/prova/reference/print.mi.md)
-  : Print an object of class "mi" (mutual information)
-- [`print(`*`<probability>`*`)`](https://pglpm.github.io/prova/reference/print.probability.md)
-  : Print an object of class "probability"
+- [`print(`*`<prova_K>`*`)`](https://pglpm.github.io/prova/reference/print.prova_K.md)
+  : Print summary of a "prova_K" (knowledge) object
+- [`print(`*`<prova_eu>`*`)`](https://pglpm.github.io/prova/reference/print.prova_eu.md)
+  : Print an object of class "prova_eu" (expected utility)
+- [`print(`*`<prova_mi>`*`)`](https://pglpm.github.io/prova/reference/print.prova_mi.md)
+  : Print an object of class "prova_mi" (mutual information) (mutual
+  information)
+- [`print(`*`<prova_pr>`*`)`](https://pglpm.github.io/prova/reference/print.prova_pr.md)
+  : Print an object of class "prova_pr" (probability)
 
 ## Handle metadata and data files
 
@@ -116,13 +123,13 @@ For developers (beware!)
 - [`.prepPcheckpoints()`](https://pglpm.github.io/prova/reference/dot-prepPcheckpoints.md)
   : Format datapoints used for MCMC monitoring
 - [`.prsubset()`](https://pglpm.github.io/prova/reference/dot-prsubset.md)
-  : Subset variates of an object of class "probability"
+  : Subset variates of an object of class "prova_pr" (probability)
 - [`.qYXcont()`](https://pglpm.github.io/prova/reference/dot-qYXcont.md)
   : Calculate quantiles for continuous Y by bisection
 - [`.qYXdiscr()`](https://pglpm.github.io/prova/reference/dot-qYXdiscr.md)
   : Calculate quantiles for discrete Y by bisection
 - [`.retrieveK()`](https://pglpm.github.io/prova/reference/dot-retrieveK.md)
-  : Retrieve a "Knowledge" object
+  : Retrieve a "prova_K" (knowledge) object
 - [`.rowcumsum()`](https://pglpm.github.io/prova/reference/dot-rowcumsum.md)
   : Cumulative sum along first dimension
 - [`.rowinvcumsum()`](https://pglpm.github.io/prova/reference/dot-rowinvcumsum.md)

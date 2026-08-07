@@ -41,7 +41,7 @@ Pr(
 
 - K:
 
-  A "Knowledge" object produced by
+  A "prova_K" (knowledge) object produced by
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
   also be a path to a 'K.rds' file containing such object, or to a
   directory containing one. See "Details" for the interpretation of
@@ -129,12 +129,12 @@ Pr(
 
   Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in
   the output? This is used for
-  [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md).
+  [`plot.prova_pr()`](https://pglpm.github.io/prova/reference/plot.prova_pr.md).
 
 ## Value
 
-An object of class "probability", which is a list consisting of the
-following elements:
+An object of class "prova_pr" (probability), which is a list consisting
+of the following elements:
 
 - `'value'`: a matrix with the probabilities \\\mathrm{Pr}(Y = y \vert X
   = x, K)\\, for all joint values \\y\\ of the \\Y\\-variates (rows) and
@@ -152,7 +152,7 @@ following elements:
 
 - `'density'`: numerical vector as long as number of rows in `Y`, used
   mainly for
-  [`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md).
+  [`plot.prova_pr()`](https://pglpm.github.io/prova/reference/plot.prova_pr.md).
   It is the order of the probability density the `Y`-values: values with
   `0` are actual probabilities; values with `1` are one-dimensional
   probability densities \\\mathrm{p}(\dotso)\\\mathrm{d}y\\; values with
@@ -161,7 +161,8 @@ following elements:
 
 - `'Y'`, `'X'`, `'tails'`: copies of the `Y`, `X`, `tails` arguments.
 
-- `'K'`: name of the "Knowledge" object used in the calculation.
+- `'K'`: name of the "prova_K" (knowledge) object used in the
+  calculation.
 
 ## Details
 
@@ -185,8 +186,8 @@ If `Pr()` is called with two unnamed arguments, `Pr(..., ...)`, then it
 is interpreted as `Pr(Y = ..., K = ...)`. If it is called with three
 unnamed arguments, then it is interpreted as either
 `Pr(Y = ..., X = ..., K = ...)` or `Pr(Y = ..., K = ..., tails = ...)`,
-depending on whether the second argument appears to be a "Knowledge"
-object or not.
+depending on whether the second argument appears to be a "prova_K"
+(knowledge) object or not.
 
 This function also outputs the "revisability" of the posterior
 probabilities above, that is, probabilities such as \\\mathrm{Pr}(Y = y
@@ -255,14 +256,14 @@ for example uses.
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
 generates the `K`nowledge objects required by `Pr()`.
 
-[`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md)
+[`plot.prova_pr()`](https://pglpm.github.io/prova/reference/plot.prova_pr.md)
 to plot probabilities and quantiles calculated by `Pr()`.
 
-[`hist.probability()`](https://pglpm.github.io/prova/reference/hist.probability.md)
+[`hist.prova_pr()`](https://pglpm.github.io/prova/reference/hist.prova_pr.md)
 to plot histograms of the probability distributions calculated by
 `Pr()`.
 
-[`print.probability()`](https://pglpm.github.io/prova/reference/print.probability.md)
+[`print.prova_pr()`](https://pglpm.github.io/prova/reference/print.prova_pr.md)
 to print the main elements of the probabilities calculated by `Pr()`.
 
 [`qPr()`](https://pglpm.github.io/prova/reference/qPr.md) to calculate
@@ -275,7 +276,7 @@ datapoints.
 ## Examples
 
 ``` r
-## Use the "Knowledge" object 'Kexample',
+## Use the "prova_K" (knowledge) object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 

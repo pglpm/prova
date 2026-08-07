@@ -236,8 +236,9 @@ learn(
 
 ## Value
 
-A "knowledge" object, or name of directory containing such an object and
-other output files, or `NULL`, depending on argument `valueisK`.
+A "prova_K" (knowledge) object, or name of directory containing such an
+object and other output files, or `NULL`, depending on argument
+`valueisK`.
 
 `learn()` saves several files in a directory. By default this output
 directory is a temporary directory within the one used by
@@ -286,10 +287,10 @@ computation allows for the use of datapoints with partially missing
 variables: imputation is automatically made. This imputation is
 *principled*, made according to the rules of probability theory.
 
-The output is a "knowledge" object, typically saved in a `K.rds` file,
-which is used in all subsequent probabilistic computations. Other
-information about the computation is provided in logs and plots, saved
-in a directory specified by the user.
+The output is a "prova_K" (knowledge) object, typically saved in a
+`K.rds` file, which is used in all subsequent probabilistic
+computations. Other information about the computation is provided in
+logs and plots, saved in a directory specified by the user.
 
 See
 [`vignette('intro')`](https://pglpm.github.io/prova/articles/intro.md)
@@ -453,8 +454,8 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpioKCWc/prova-V1_D3_S10_260803T201131_1b1228a3f5ba
-#> Prova v2.2.3.
+#> /tmp/RtmpNGLmYx/prova-V1_D3_S10_260807T043439_1ae732d6854b
+#> Prova v2.3.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
@@ -476,9 +477,9 @@ K <- learn(
 #> quantile width: 0.0823 to 1.37
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 34 secs
-#> Average preparation & finalization time: 33 secs.
-#> Average Monte Carlo time per chain: 0.73 secs.
+#> Total computation time: 35 secs
+#> Average preparation & finalization time: 34 secs.
+#> Average Monte Carlo time per chain: 0.57 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -486,7 +487,7 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpioKCWc/prova-V1_D3_S10_260803T201131_1b1228a3f5ba
+#> /tmp/RtmpNGLmYx/prova-V1_D3_S10_260807T043439_1ae732d6854b
 #> **********************************************************
 
 ## Check structure of `K` object:
@@ -560,6 +561,6 @@ str(K)
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
 #>   ..$ quantile width     : Named num [1:4] 0.0823 0.1452 1.3658 0.2341
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>  - attr(*, "class")= chr "K"
+#>  - attr(*, "class")= chr "prova_K"
 # }
 ```

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,11 +58,11 @@
 
 
 <dl><dt id="arg-u">u<a class="anchor" aria-label="anchor" href="#arg-u"></a></dt>
-<dd><p>a utility matrix given as a <code><a href="https://rdrr.io/r/base/matrix.html" class="external-link">base::matrix()</a></code> or as a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">base::data.frame()</a></code> (internally converted into a matrix). Each row of the matrix corresponds to a possible action; each row to an uncertain outcome \(Y\). The number of columns must be equal to the number of \(Y\)-values of the "probability" object of argument <code>p</code>.</p></dd>
+<dd><p>a utility matrix given as a <code><a href="https://rdrr.io/r/base/matrix.html" class="external-link">base::matrix()</a></code> or as a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">base::data.frame()</a></code> (internally converted into a matrix). Each row of the matrix corresponds to a possible action; each row to an uncertain outcome \(Y\). The number of columns must be equal to the number of \(Y\)-values of the "prova_pr" (probability) object of argument <code>p</code>.</p></dd>
 
 
 <dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
-<dd><p>A "probability" object, obtained from <code><a href="Pr.html">Pr()</a></code>. The number of \(Y\)-values of this object must be equal to the number of columens of the utility matrix of argument <code>um</code>.</p></dd>
+<dd><p>A "prova_pr" (probability) object, obtained from <code><a href="Pr.html">Pr()</a></code>. The number of \(Y\)-values of this object must be equal to the number of columens of the utility matrix of argument <code>um</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -71,6 +71,7 @@
 <li><p><code>'samples'</code>: an <a href="https://rdrr.io/r/base/array.html" class="external-link">array</a> of samples of the expeceted utilities that the actions would have, if many more sample data were available. The first dimension corresponds to the actions, the second to the values of the conditional \(X\), and the third the sample index.</p></li>
 <li><p><code>'value.acc'</code>: numerical accuracies of <code>'value'</code> elements.</p></li>
 <li><p><code>'optimal</code>': <a href="https://rdrr.io/r/base/list.html" class="external-link">list</a> of actions having maximal expected utility, one list element per column of <code>p</code> (that is, its conditional values <code>X</code>). If there are ties, all actions in the tie are reported.</p></li>
+<li><p><code>'optimal.samples'</code>: <a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a> with the probabilities that each action would be chosen as the optimal one, if more data were available. One row for each action, one column for each column of <code>p</code> (that is, its conditional values <code>X</code>).</p></li>
 <li><p><code>'optimal.samples'</code>: <a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a> of samples of actions having maximal expected utility, if many more sample data were available. Each row correspond to a column of <code>p</code> (that is, its conditional values <code>X</code>); each column is a sample. In case of ties, one action is unsystematically selected via <code><a href="https://rdrr.io/r/base/sample.html" class="external-link">base::sample()</a></code>.</p></li>
 <li><p><code>'X'</code>, <code>'tails'</code>, <code>'K'</code>: copies of the homonymous values from the probability object <code>p</code>.</p></li>
 </ul></div>
@@ -95,7 +96,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the example "Knowledge" object 'Kexample'</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the example "prova_K" (knowledge) object 'Kexample'</span></span></span>
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span></span></span>
@@ -103,14 +104,15 @@
 <span class="r-in"><span><span class="co">## and outcomes depending on the variate 'species'</span></span></span>
 <span class="r-in"><span><span class="va">umatrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span> <span class="fl">1.80</span>, <span class="fl">0.42</span>, <span class="fl">1.60</span>, <span class="op">-</span><span class="fl">0.12</span>, <span class="op">-</span><span class="fl">1.10</span>, <span class="fl">0.20</span>, <span class="op">-</span><span class="fl">0.51</span>, <span class="fl">0.35</span>, <span class="op">-</span><span class="fl">0.49</span>, <span class="fl">0.35</span>, <span class="op">-</span><span class="fl">0.48</span>, <span class="fl">0.62</span></span></span>
-<span class="r-in"><span> <span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">4</span>, ncol <span class="op">=</span> <span class="fl">3</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'action'</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">4</span>, ncol <span class="op">=</span> <span class="fl">3</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>actions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">'A'</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">umatrix</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,1]  [,2]  [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> action1  1.80 -1.10 -0.49</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> action2  0.42  0.20  0.35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> action3  1.60 -0.51 -0.48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> action4 -0.12  0.35  0.62</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> actions  [,1]  [,2]  [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A1  1.80 -1.10 -0.49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A2  0.42  0.20  0.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A3  1.60 -0.51 -0.48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A4 -0.12  0.35  0.62</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Calculate the probability of the 'species outcomes</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Adelie'</span>, <span class="st">'Chinstrap'</span>, <span class="st">'Gentoo'</span><span class="op">)</span><span class="op">)</span>,</span></span>
@@ -120,25 +122,28 @@
 <span class="r-in"><span><span class="va">eu</span> <span class="op">&lt;-</span> <span class="fu">exputility</span><span class="op">(</span><span class="va">umatrix</span>, <span class="va">probs</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">eu</span><span class="op">$</span><span class="va">value</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                [,1]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   action1 0.3981347</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   action2 0.3510855</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   action3 0.4306723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   action4 0.2403208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> actions      [,1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A1 0.3981347</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A2 0.3510855</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A3 0.4306723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A4 0.2403208</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## optimal action:</span></span></span>
 <span class="r-in"><span><span class="va">eu</span><span class="op">$</span><span class="va">optimal</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "action3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Tabulate probabilities of what optimal action would be</span></span></span>
+<span class="r-in"><span><span class="co">## Probabilities for the actions to be judged as optimal</span></span></span>
 <span class="r-in"><span><span class="co">## if many more sample data were available</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">eu</span><span class="op">$</span><span class="va">optimal.samples</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">eu</span><span class="op">$</span><span class="va">optimal.samples</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> action1 action2 action3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.013   0.058   0.930 </span>
+<span class="r-in"><span><span class="va">eu</span><span class="op">$</span><span class="va">optimal.probs</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> actions       [,1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A1 0.01333333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A2 0.05777778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A3 0.92888889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A4 0.00000000</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

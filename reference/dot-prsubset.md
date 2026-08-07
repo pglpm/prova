@@ -1,6 +1,6 @@
-# Subset variates of an object of class "probability"
+# Subset variates of an object of class "prova_pr" (probability)
 
-An object of class "probability", obtained with the
+An object of class "prova_pr" (probability), obtained with the
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function, holds
 the probabilities for all possible combinations of values of a set of
 joint variates `Y` conditional on a set of joint variates `X`, together
@@ -20,7 +20,7 @@ one may want to retain the values from 60 to 80.
 
 - x:
 
-  Object of class "probability", obtained with
+  Object of class "prova_pr" (probability), obtained with
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 
 - subset:
@@ -30,5 +30,5 @@ one may want to retain the values from 60 to 80.
 
 ## Value
 
-An object of class "probability", identical to the original object `x`
-except for a reduced range of values in some if its variates.
+An object of class "prova_pr" (probability), identical to the original
+object `x` except for a reduced range of values in some if its variates.

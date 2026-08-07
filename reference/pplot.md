@@ -206,11 +206,11 @@ See the package's vignettes for more examples.
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 posterior probabilities and quantiles.
 
-[`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md)
+[`plot.prova_pr()`](https://pglpm.github.io/prova/reference/plot.prova_pr.md)
 to directly plot posterior probabilities and quantiles contained in a
 probability object.
 
-[`hist.probability()`](https://pglpm.github.io/prova/reference/hist.probability.md)
+[`hist.prova_pr()`](https://pglpm.github.io/prova/reference/hist.prova_pr.md)
 to plot the revisability of the probabilities as a distribution.
 
 ## Examples

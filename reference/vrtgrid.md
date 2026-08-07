@@ -20,7 +20,7 @@ vrtgrid(vrt, K, length.out = NA)
 
 - K:
 
-  A "Knowledge" object produced by
+  A "prova_K" (knowledge) object produced by
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
   also be a path to a 'K.rds' file containing such object, or to a
   directory containing one.
@@ -82,14 +82,14 @@ probabilities and their revisabilities.
 create a data frame with combination of specified values of several
 variates.
 
-[`plot.probability()`](https://pglpm.github.io/prova/reference/plot.probability.md)
+[`plot.prova_pr()`](https://pglpm.github.io/prova/reference/plot.prova_pr.md)
 to plot probabilities and quantiles calculated by
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 
 ## Examples
 
 ``` r
-## Use the "Knowledge" object 'Kexample',
+## Use the "prova_K" (knowledge) object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
