@@ -745,8 +745,9 @@ The x-axis of this plot shows the three possible values of the `species`
 variate. The y-axis reports fractions which may be read as *frequencies*
 or *probabilities*.
 
-The estimated frequency distribution for the species is the central,
-solid red curve with small circles. (You may be used to frequency
+For the moment, disregard the grey bands, which we discuss later. The
+estimated frequency distribution for the species is the central, solid
+black curve with small circles. (You may be used to frequency
 distributions as histograms, rather than as a broken line like in the
 plot above. The present visualization is more advantageous when we want
 to compare several frequency distributions, as we’ll do later.)
@@ -795,27 +796,27 @@ the paper by Lindley & Novick in the references.
 
 For the moment we focus on the “frequency estimate” meaning.
 
-What about the uncertainty of these estimates?
+What about the *uncertainty* of these estimates?
 
-### Uncertainty of estimates: credibility intervals and probabilities
+### Uncertainty of estimates: credibility intervals
 
 In Bayesian theory, a compact way of expressing the uncertainty in a
-quantity is by means of a **credibility interval** with a given
-probability. For instance, if we say that a particular quantity has a
-70%-credibility interval equal to \\(0.41, 0.69)\\, what we mean is that
-there’s an 70% probability that the true value of that quantity is
-between \\0.41\\ and \\0.69\\ – pretty straightforward! *Please be
-careful not to confuse the Bayesian credibility interval with a
-“confidence interval”*: the latter has a much more involved and less
-straightforward meaning.
+quantity is by means of a **credibility interval** (also called
+*coverage interval*, see JCGM 2012) having a given probability. For
+instance, if we say that a particular quantity has a 70%-credibility
+interval equal to \\(0.41, 0.69)\\, what we mean is that there’s a 70%
+probability that the true value of that quantity is between \\0.41\\ and
+\\0.69\\ – quite straightforward! *Please be careful not to confuse the
+Bayesian credibility interval with a “confidence interval”*: the latter
+has a much more involved and less straightforward meaning.
 
 The [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function by
 default calculates two credibility intervals for each frequency
 estimate: a 50% one, and an 89% one (why? see references for an
 explanation). In our present inference, the 50%-credibility intervals
 are shown in the plot above as the darker grey band, and the
-89%-credibility intervals as the lighter grey band. These intervals
-contain the 50% ones.
+89%-credibility intervals as the lighter grey band; these latter
+intervals contain the 50% ones.
 
 For instance, the plot indicates that there’s a 50% probability that the
 relative frequency of all `Adelie` penguins is roughly between 0.21 and
@@ -826,7 +827,45 @@ For the `Gentoo` species, there’s a 50% probability that its relative
 frequency is roughly between 0.30 and 0.49; and an 89% probability that
 their relative frequency is roughly between 0.19 and 0.62.
 
-We can Actually do more: we can plot the probabilities of all possible
+A different way of visualizing the uncertainty about the long-run
+frequency distributions is by displaying *probable samples* of such
+distributions. This visualization can be obtained with the argument
+`spread = 'samples'` in the
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) function. Let’s
+compare the two visualizations, by quantile bands and by samples:
+
+``` r
+
+plot(Fspecies10, col = 8)
+plot(Fspecies10, col = 8, spread = 'samples')
+```
+
+![\*\*Uncertainty of relative frequencies displayed as quantile bands
+and samples\*\*](figure/vis10bis-1.svg)![\*\*Uncertainty of relative
+frequencies displayed as quantile bands and
+samples\*\*](figure/vis10bis-2.svg)
+
+**Uncertainty of relative frequencies displayed as quantile bands and
+samples**
+
+The visualization by quantile bands often looks neater, but keep in mind
+that it leaves out important details, such as the presence of probable
+peaks; such details are instead shown by the visualization by samples.
+For example, in the bottom plot above, we see that the long-run
+frequency distribution is likely to have a maximum at the Chinstrap
+species (∧-shaped lines), or a mininum at the Chinstrap species
+(∨-shaped lines), and less likely to have a maximum or minimum at the
+other two species (which would appear as like /-shaped or \\shaped
+lines). It is recommended to always take a look at both kinds of
+visualization. In the following we shall use only quantile bands, but
+feel free to call the
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html)s also with the
+`spread = 'samples'` argument.
+
+  
+
+We can also have a finer visualization of the uncertainty about the
+long-run frequencies. We can plot the probabilities of all possible such
 frequencies. To understand this idea, let’s ask: what is the relative
 frequency of Adélie penguins in the whole population? Possible values
 could be anything between 0 and 1. But some of these values may be more
@@ -1043,7 +1082,7 @@ frequencies\*\*](figure/vis10I-1.svg)
 
 The estimated frequencies for the `Biscoe` subpopulation are shown by
 the solid yellow curve with small circles; those for the `Dream`
-subpopulation by the dashed purple curve with small squares. More
+subpopulation by the dashed light-blue curve with small squares. More
 precise values are contained in the `values` element of the
 `Fspecies10I` object:
 
@@ -1233,15 +1272,15 @@ Fspecies10IS <- Pr(Y, Xdouble, K10)
 print(Fspecies10IS, 'value')
 # $value
 #            |island,sex
-# species     Biscoe,female Dream,female Torgersen,female Biscoe,male Dream,male
-#   Adelie             0.13         0.40             0.48        0.21       0.32
-#   Chinstrap          0.11         0.40             0.27        0.22       0.54
-#   Gentoo             0.76         0.21             0.25        0.57       0.14
+# species     Biscoe,female Dream,female Torgersen,female Biscoe,male
+#   Adelie             0.13         0.40             0.48        0.21
+#   Chinstrap          0.11         0.40             0.27        0.22
+#   Gentoo             0.76         0.21             0.25        0.57
 #            |island,sex
-# species     Torgersen,male
-#   Adelie              0.45
-#   Chinstrap           0.38
-#   Gentoo              0.17
+# species     Dream,male Torgersen,male
+#   Adelie          0.32           0.45
+#   Chinstrap       0.54           0.38
+#   Gentoo          0.14           0.17
 ```
 
 ### Imputation of missing data
@@ -1452,13 +1491,13 @@ We notice the following differences, among others:
   differ by around 10% from the previous ones (triangles). The estimate
   for `Gentoo` is around the same.
 
-- The new credibility intervals (grey bands) are narrower than the
-  previous ones (red bands).
+- The new credibility intervals (red bands) are narrower than the
+  previous ones (blue bands).
 
 - All new estimates (circles) are almost or fully within the
-  50%-credibility intervals of the previous estimates (darker-red
+  50%-credibility intervals of the previous estimates (darker-blue
   bands). All new estimates are fully within the previous
-  89%-credibility intervals (lighter-red bands). These changes are
+  89%-credibility intervals (lighter-blue bands). These changes are
   consistent with the meaning of the credibility intervals: one every
   two estimates can end outside the 50%-credibility interval, and 1 out
   of 10 can end outside the 89%-credibility interval.
@@ -1491,7 +1530,7 @@ distributions largely overlapped, indicating our uncertainty on whether
 any of these frequencies might be very different from the others.
 
 In our updated inference (bottom plot) there is still a large overlap
-for the probabilities of `Adelie` (solid red curve) and `Gentoo`
+for the probabilities of `Adelie` (solid blue curve) and `Gentoo`
 (dot-dashed green curve) frequencies, indicating that we’re still very
 uncertain on whether these frequencies might be very different or not –
 we need more sample to resolve this. But we can already conclude, with
@@ -1499,7 +1538,7 @@ high probability, that their difference won’t be larger than around 0.2
 (the approximate width of their distributions).
 
 But the probability distribution for the `Chinstrap` frequency (dashed
-blue curve) has now a smaller overlap with the other two: there’s an
+red curve) has now a smaller overlap with the other two: there’s an
 increased probability that this frequency is different by around 0.2
 from at least one of the other two. Later on we shall see how to
 calculate these probabilities exactly.
@@ -1558,8 +1597,8 @@ hist(Fspecies60I, subset = list(island = 'Dream'),
 
 ![](figure/hist60Dream-2.svg)
 
-The new frequency estimates for `Adelie` (solid red line) and
-`Chinstrap` (dashed blue line) are now around 0.2 apart; the previous
+The new frequency estimates for `Adelie` (solid blue line) and
+`Chinstrap` (dashed red line) are now around 0.2 apart; the previous
 estimates had them around 0.1 apart. This change is not unexpected: the
 new estimates are well within the previous credibility intervals; we
 were correctly warned about their possible change.
@@ -1587,15 +1626,15 @@ hist(Fspecies60I, subset = list(island = 'Biscoe'),
 
 ![](figure/hist60Biscoe-2.svg)
 
-The new frequency estimates for `Adelie` (solid red line) and
-`Chinstrap` (dashed blue line) are now around 0.2 apart, whereas the
+On Biscoe, the new frequency estimates for `Adelie` (solid blue line)
+and `Chinstrap` (dashed red line) are now around 0.2 apart, whereas the
 previous estimates were almost equal. Again this is not unexpected, and
 these changes are well within the previous credibility intervals.
 
 Notably, we see now a clear separation between the probability
 distribution for the frequency of `Gentoo` (dot-dashed green), and that
-for `Chinstrap` (dashed blue). This means that these two frequencies
-must be clearly different. Can we quantify how different, and with which
+for `Chinstrap` (dashed red). This means that these two frequencies must
+be clearly different. Can we quantify how different, and with which
 uncertainty?
 
 Yes, the probability of their difference can be calculated and
@@ -1989,7 +2028,7 @@ statistically heavier than Adélie or Chinstrap ones.
 Consider also this question: “Do Adélie and Chinstrap penguins have
 identical body-mass distributions?” The plots show that this question is
 too generic and ambiguous. In the body-mass range between 4200 g and
-5000 g, the two distributions (solid red, dashed blue) could maybe have
+5000 g, the two distributions (solid blue, dashed red) could maybe have
 very similar values – there’s still some uncertainty there. But in the
 body-mass range around 3750 g there’s a high probability that the two
 distributions clearly differ; we see that their mean estimates are
@@ -2041,6 +2080,14 @@ outside each other’s 89%-credibility interval.
 
 - [*What’s special about 89% credibility
   intervals?*](https://doi.org/10.5281/zenodo.17072199)
+
+#### Credibility and coverage intervals
+
+- Joint Committee for Guides in Metrology JCGM (2012): [*International
+  vocabulary of metrology – Basic and general concepts and associated
+  terms
+  (VIM)*](https://www.bipm.org/documents/20126/2071204/JCGM_200_2012.pdf).
+  See especially Definition 2.36.
 
 #### On medical decision-making:
 

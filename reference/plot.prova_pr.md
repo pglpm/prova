@@ -37,6 +37,7 @@ plot(
   lty.spread = c(1, 2, 4, 3, 6, 5),
   lwd.spread = NULL,
   alpha.f.spread = NULL,
+  quantiles.spread = NULL,
   nsamples.spread = 360,
   ...
 )
@@ -74,8 +75,8 @@ plot(
 
 - type:
 
-  `NULL` (default) or character vector or indicating the type of plot
-  for the main probability distribution; see
+  `NULL` (default) or character vector or list indicating the type of
+  plot for the main probability distribution; see
   [`base::plot()`](https://rdrr.io/r/base/plot.html). The default `NULL`
   value uses type `'l'` (lines) for continuous variates, and `'b'`
   (points and lines) for discrete variates.
@@ -118,9 +119,9 @@ plot(
 
 - type.spread:
 
-  `NULL` (default) or character vector or indicating the type of plot
-  for the long-run-frequency samples; see. The default `NULL` value uses
-  type `'l'` (lines) for continuous variates, and `'b'` (points and
+  `NULL` (default) or character vector or list indicating the type of
+  plot for the long-run-frequency samples; see. The default `NULL` value
+  uses type `'l'` (lines) for continuous variates, and `'b'` (points and
   lines) for discrete variates.
 
 - lty.spread:
@@ -141,6 +142,12 @@ plot(
   `spread = 'samples'`,dependent on the number of samples (more samples,
   less opacity).
 
+- quantiles.spread:
+
+  Numeric vector or `NULL` (default): revisability quantiles to display.
+  Value `NULL` uses all quantiles available in the `x` object, or just
+  extreme quantiles if multiple probability curves are shown.
+
 - nsamples.spread:
 
   Integer, default 360: number of samples of long-run frequencies to
@@ -156,6 +163,60 @@ plot(
 `NULL`, [invisibly](https://rdrr.io/r/base/invisible.html); produces a
 plot, see
 [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html).
+
+## Details
+
+For a collection of probabilities \\\mathrm{Pr}(Y = y \vert X = x, K)\\
+with several values \\y\\ and \\x\\, this plot method with argument
+`PvsY` set to `TRUE` shows the probabilities on the y-axis, while the
+x-axis spans the \\y\\ values, the curve thus showing the probability
+distribution (the area underneath is 1, except for possibly omitted
+tails). One such curve is displayed for each \\x\\ value. If the
+argument `PvsY` is `FALSE`, then the x-axis spans the \\x\\ values
+instead – thus the displayed curve is *not* a probability distribution
+(area underneath is not 1). One such curve is displayed for each \\y\\
+value. Which kind of plot is best depends on whether one needs to
+visualize how the probabilities depend on variate \\Y\\ or on the
+conditioning variate \\X\\. The default `PvsY` value `NULL` tries to
+guess the desider behaviour depending on how many different values \\y\\
+and \\x\\ are contained in the probability object `x`; the variate with
+the largest number of values is displayed on the x-axis, so as to
+clutter as little as possible the plot window with multiple curves.
+
+The revisabilities of the probabilities can be visualized in two
+different ways, determined by the argument `spread`:
+
+- `spread = 'quantiles'`: shows the revisabilities as "quantile bands"
+  around the probability curves. Which quantiles are shown depends on
+  the `quantiles.spread` argument.
+
+- `spread = 'samples'`: shows the revisabilities as a sample of
+  alternative probability curves, which can also be interpreted as
+  possible "long-run frequencies". The number of samples is determined
+  by the argument `nsamples.spread`.
+
+- `spread = 'none'` or `NA` or `FALSE`: does not show any revisability.
+
+- `spread = NULL` (default): shows quantiles, if available; otherwise
+  samples, if available, otherwise nothing.
+
+Information about the revisability, such as quantiles or number of
+samples displayed, is shown by the left y-axis. While quantile bands
+look neat, they do not show important details about revised
+probabilities (long-run frequencies), such as persistent modes. Such
+details are better grasped by looking at samples. It is recommended to
+always take a look at both visualizations of revisability.
+
+The label on the left y-axis is by default the text
+`Pr(`\\Y\\`|`\\X\\`, `\\K\\`)`, displaying the actual \\Y\\ and \\X\\
+variates present in the probability object `x`. If the displayed
+probabilities are densities (this means that some \\Y\\ variates are
+continuous and not rounded), then lowercase `p` is used istead of `Pr`.
+
+Continuous variates with bounded domains, such as censored variates, may
+have singular probability values – concentrated probability mass – at
+the boundary points. When such singular points are present, their
+probability scale is shown in the *right* y-axis.
 
 ## See also
 

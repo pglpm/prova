@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Plot an object of class " prova_eu utility and its revisability plot.prova_eu><meta name="description" content="This base::plot() method is a utility to plot probabilities obtained with Pr(), as well as their revisabilities. The probabilities are plotted either against Y, with one curve for each value of X, or vice versa."><meta property="og:description" content="This base::plot() method is a utility to plot probabilities obtained with Pr(), as well as their revisabilities. The probabilities are plotted either against Y, with one curve for each value of X, or vice versa."></head><body>
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Plot an object of class " prova_eu utility and its revisability plot.prova_eu><meta name="description" content="This base::plot() method is a utility to plot the expected utilities obtained with exputility(), as well as their revisabilities."><meta property="og:description" content="This base::plot() method is a utility to plot the expected utilities obtained with exputility(), as well as their revisabilities."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -45,7 +45,7 @@
     </div>
 
     <div class="ref-description section level2">
-    <p>This <code><a href="https://rdrr.io/r/base/plot.html" class="external-link">base::plot()</a></code> method is a utility to plot probabilities obtained with <code><a href="Pr.html">Pr()</a></code>, as well as their revisabilities. The probabilities are plotted either against <code>Y</code>, with one curve for each value of <code>X</code>, or vice versa.</p>
+    <p>This <code><a href="https://rdrr.io/r/base/plot.html" class="external-link">base::plot()</a></code> method is a utility to plot the expected utilities obtained with <code><a href="exputility.html">exputility()</a></code>, as well as their revisabilities.</p>
     </div>
 
     <div class="section level2">
@@ -84,11 +84,11 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Object of class "prova_pr" (probability), obtained with <code><a href="Pr.html">Pr()</a></code>.</p></dd>
+<dd><p>Object of class "prova_eu" (expected utility), obtained with <code><a href="exputility.html">exputility()</a></code>.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p><code>NULL</code> (default) or character vector or indicating the type of plot for the main probability distribution; see <code><a href="https://rdrr.io/r/base/plot.html" class="external-link">base::plot()</a></code>. The default <code>NULL</code> value uses type <code>'l'</code> (lines) for continuous variates, and <code>'b'</code> (points and lines) for discrete variates.</p></dd>
+<dd><p>Character vector (default <code>'b'</code>) or list indicating the type of plot for the main probability distribution; see <code><a href="https://rdrr.io/r/base/plot.html" class="external-link">base::plot()</a></code>.</p></dd>
 
 
 <dt id="arg-lty">lty<a class="anchor" aria-label="anchor" href="#arg-lty"></a></dt>
@@ -104,7 +104,7 @@
 
 
 <dt id="arg-legend">legend<a class="anchor" aria-label="anchor" href="#arg-legend"></a></dt>
-<dd><p>One of the values <code>'bottomright'</code>, <code>'bottom'</code>, <code>'bottomleft'</code>, <code>'left'</code>, <code>'topleft'</code>, <code>'top'</code>, <code>'topright'</code>, <code>'right'</code>, <code>'center'</code> (see <code><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">graphics::legend()</a></code>): plot a legend at that position. A value <code>FALSE</code> or any other does not plot any legend. Default <code>'top'</code>.</p></dd>
+<dd><p>One of the values <code>'bottomright'</code>, <code>'bottom'</code>, <code>'bottomleft'</code>, <code>'left'</code>, <code>'topleft'</code>, <code>'top'</code>, <code>'topright'</code>, <code>'right'</code>, <code>'center'</code> (see <code><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">graphics::legend()</a></code>): plot a legend at that position. A value <code>FALSE</code> or any other does not plot any legend. Default <code>'topright'</code>.</p></dd>
 
 
 <dt id="arg-alpha-f">alpha.f<a class="anchor" aria-label="anchor" href="#arg-alpha-f"></a></dt>
@@ -112,19 +112,19 @@
 
 
 <dt id="arg-type-spread">type.spread<a class="anchor" aria-label="anchor" href="#arg-type-spread"></a></dt>
-<dd><p><code>NULL</code> (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default <code>NULL</code> value uses type <code>'l'</code> (lines) for continuous variates, and <code>'b'</code> (points and lines) for discrete variates.</p></dd>
+<dd><p>character vector (default <code>'b'</code>) or list indicating the type of plot for the revisability samples; see argument <code>type</code>.</p></dd>
 
 
 <dt id="arg-lty-spread">lty.spread<a class="anchor" aria-label="anchor" href="#arg-lty-spread"></a></dt>
-<dd><p>Same as parameter <code>lty</code> (line style), but for the line type of the long-run-frequency samples.</p></dd>
+<dd><p>Same as parameter <code>lty</code> (line style), but for the line type of the revisability samples.</p></dd>
 
 
 <dt id="arg-lwd-spread">lwd.spread<a class="anchor" aria-label="anchor" href="#arg-lwd-spread"></a></dt>
-<dd><p>Same as parameter <code>lwd</code> (line width), but for the line type of the long-run-frequency samples.</p></dd>
+<dd><p>Same as parameter <code>lwd</code> (line width), but for the line type of the revisability samples.</p></dd>
 
 
 <dt id="arg-alpha-f-spread">alpha.f.spread<a class="anchor" aria-label="anchor" href="#arg-alpha-f-spread"></a></dt>
-<dd><p>Numeric or <code>NULL</code> (default): opacity of the quantile bands or of the long-run-frequency samples, similar to <code>alpha.f</code>. <code>NULL</code> means <code>0.25</code> if <code>spread = 'quantiles'</code>; and an appropriate value if <code>spread = 'samples'</code>,dependent on the number of samples (more samples, less opacity).</p></dd>
+<dd><p>Numeric or <code>NULL</code> (default): opacity of the quantile bands or of the long-run-frequency samples, similar to <code>alpha.f</code>. <code>NULL</code> determines a value dependent on the number of samples (more samples, less opacity).</p></dd>
 
 
 <dt id="arg-nsamples-spread">nsamples.spread<a class="anchor" aria-label="anchor" href="#arg-nsamples-spread"></a></dt>
@@ -138,6 +138,11 @@
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p><code>NULL</code>, <a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisibly</a>; produces a plot, see <code><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">graphics::matplot()</a></code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>The x-axis spans the possible actions, and the y-axis their expected utilities. Their revisabilities are shown as a sample of 360 (default number) alternative plots; the number of samples is indicated by the left y-axis. If any conditioning variate \(X\) was used for the probabilities, \(\mathrm{Pr}(\dotso \vert X = x, \dotso)\), then one such plot is displayed for each conditioning value \(x\).</p>
+<p>The probability that an action would still be considered optimal if many moro learning data were collected is indicated above the x-axis label corresponding to that action. An asterisk <code>*</code> marks the optimal actions. If any conditioning variate \(X\) was used, then one such probability is shown for each conditioning value.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

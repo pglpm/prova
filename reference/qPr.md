@@ -170,7 +170,7 @@ then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.
 ## See also
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the `K` objects required by `qPr()`.
+generates the "prova_K" (knowledge) objects required by `qPr()`.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 joint and conditional probabilities.

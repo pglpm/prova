@@ -1,6 +1,6 @@
 # Example `K`nowledge object produced by learn()
 
-An example `K` object obtained by means of the
+An example "prova_K" (knowledge) object obtained by means of the
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function,
 using the [datasets::penguins](https://rdrr.io/r/datasets/penguins.html)
 dataset and the metadata in

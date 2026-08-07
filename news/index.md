@@ -2,7 +2,6 @@
 
 ## Prova v2.3.0
 
-- Improved plot labels.
 - Introduced the much faster
   [`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
   for variates with finite domains.
@@ -10,6 +9,10 @@
   utilities and their revisability, together with
   [`plot()`](https://rdrr.io/r/graphics/plot.default.html) and
   [`print()`](https://rdrr.io/r/base/print.html) methods.
+- Changed the name of internal S3 classes to avoid clashes with other
+  packages.
+- Improved plot labels.
+- Updated and corrected documentation.
 - Simplified omission of arguments like `Y =`, `X =`, `K =`.
 
 ## Prova v2.1.0

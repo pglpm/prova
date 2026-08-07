@@ -78,6 +78,7 @@
 <span>  lty.spread <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">5</span><span class="op">)</span>,</span>
 <span>  lwd.spread <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alpha.f.spread <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quantiles.spread <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nsamples.spread <span class="op">=</span> <span class="fl">360</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -104,7 +105,7 @@
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p><code>NULL</code> (default) or character vector or indicating the type of plot for the main probability distribution; see <code><a href="https://rdrr.io/r/base/plot.html" class="external-link">base::plot()</a></code>. The default <code>NULL</code> value uses type <code>'l'</code> (lines) for continuous variates, and <code>'b'</code> (points and lines) for discrete variates.</p></dd>
+<dd><p><code>NULL</code> (default) or character vector or list indicating the type of plot for the main probability distribution; see <code><a href="https://rdrr.io/r/base/plot.html" class="external-link">base::plot()</a></code>. The default <code>NULL</code> value uses type <code>'l'</code> (lines) for continuous variates, and <code>'b'</code> (points and lines) for discrete variates.</p></dd>
 
 
 <dt id="arg-lty">lty<a class="anchor" aria-label="anchor" href="#arg-lty"></a></dt>
@@ -132,7 +133,7 @@
 
 
 <dt id="arg-type-spread">type.spread<a class="anchor" aria-label="anchor" href="#arg-type-spread"></a></dt>
-<dd><p><code>NULL</code> (default) or character vector or indicating the type of plot for the long-run-frequency samples; see. The default <code>NULL</code> value uses type <code>'l'</code> (lines) for continuous variates, and <code>'b'</code> (points and lines) for discrete variates.</p></dd>
+<dd><p><code>NULL</code> (default) or character vector or list indicating the type of plot for the long-run-frequency samples; see. The default <code>NULL</code> value uses type <code>'l'</code> (lines) for continuous variates, and <code>'b'</code> (points and lines) for discrete variates.</p></dd>
 
 
 <dt id="arg-lty-spread">lty.spread<a class="anchor" aria-label="anchor" href="#arg-lty-spread"></a></dt>
@@ -147,6 +148,10 @@
 <dd><p>Numeric or <code>NULL</code> (default): opacity of the quantile bands or of the long-run-frequency samples, similar to <code>alpha.f</code>. <code>NULL</code> means <code>0.25</code> if <code>spread = 'quantiles'</code>; and an appropriate value if <code>spread = 'samples'</code>,dependent on the number of samples (more samples, less opacity).</p></dd>
 
 
+<dt id="arg-quantiles-spread">quantiles.spread<a class="anchor" aria-label="anchor" href="#arg-quantiles-spread"></a></dt>
+<dd><p>Numeric vector or <code>NULL</code> (default): revisability quantiles to display. Value <code>NULL</code> uses all quantiles available in the <code>x</code> object, or just extreme quantiles if multiple probability curves are shown.</p></dd>
+
+
 <dt id="arg-nsamples-spread">nsamples.spread<a class="anchor" aria-label="anchor" href="#arg-nsamples-spread"></a></dt>
 <dd><p>Integer, default 360: number of samples of long-run frequencies to display.</p></dd>
 
@@ -158,6 +163,17 @@
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p><code>NULL</code>, <a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisibly</a>; produces a plot, see <code><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">graphics::matplot()</a></code>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>For a collection of probabilities \(\mathrm{Pr}(Y = y \vert X = x, K)\) with several values \(y\) and \(x\), this plot method with argument <code>PvsY</code> set to <code>TRUE</code> shows the probabilities on the y-axis, while the x-axis spans the \(y\) values, the curve thus showing the probability distribution (the area underneath is 1, except for possibly omitted tails). One such curve is displayed for each \(x\) value. If the argument <code>PvsY</code> is <code>FALSE</code>, then the x-axis spans the \(x\) values instead – thus the displayed curve is <em>not</em> a probability distribution (area underneath is not 1). One such curve is displayed for each \(y\) value. Which kind of plot is best depends on whether one needs to visualize how the probabilities depend on variate \(Y\) or on the conditioning variate \(X\). The default <code>PvsY</code> value <code>NULL</code> tries to guess the desider behaviour depending on how many different values \(y\) and \(x\) are contained in the probability object <code>x</code>; the variate with the largest number of values is displayed on the x-axis, so as to clutter as little as possible the plot window with multiple curves.</p>
+<p>The revisabilities of the probabilities can be visualized in two different ways, determined by the argument <code>spread</code>:</p><ul><li><p><code>spread = 'quantiles'</code>: shows the revisabilities as "quantile bands" around the probability curves. Which quantiles are shown depends on the <code>quantiles.spread</code> argument.</p></li>
+<li><p><code>spread = 'samples'</code>: shows the revisabilities as a sample of alternative probability curves, which can also be interpreted as possible "long-run frequencies". The number of samples is determined by the argument <code>nsamples.spread</code>.</p></li>
+<li><p><code>spread = 'none'</code> or <code>NA</code> or <code>FALSE</code>: does not show any revisability.</p></li>
+<li><p><code>spread = NULL</code> (default): shows quantiles, if available; otherwise samples, if available, otherwise nothing.</p></li>
+</ul><p>Information about the revisability, such as quantiles or number of samples displayed, is shown by the left y-axis. While quantile bands look neat, they do not show important details about revised probabilities (long-run frequencies), such as persistent modes. Such details are better grasped by looking at samples. It is recommended to always take a look at both visualizations of revisability.</p>
+<p>The label on the left y-axis is by default the text <code>Pr(</code>\(Y\)<code>|</code>\(X\)<code>, </code>\(K\)<code>)</code>, displaying the actual \(Y\) and \(X\) variates present in the probability object <code>x</code>. If the displayed probabilities are densities (this means that some \(Y\) variates are continuous and not rounded), then lowercase <code>p</code> is used istead of <code>Pr</code>.</p>
+<p>Continuous variates with bounded domains, such as censored variates, may have singular probability values – concentrated probability mass – at the boundary points. When such singular points are present, their probability scale is shown in the <em>right</em> y-axis.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

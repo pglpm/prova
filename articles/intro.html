@@ -1223,8 +1223,9 @@ species</strong>
 <p>The x-axis of this plot shows the three possible values of the
 <code>species</code> variate. The y-axis reports fractions which may be
 read as <em>frequencies</em> or <em>probabilities</em>.</p>
-<p>The estimated frequency distribution for the species is the central,
-solid red curve with small circles. (You may be used to frequency
+<p>For the moment, disregard the grey bands, which we discuss later. The
+estimated frequency distribution for the species is the central, solid
+black curve with small circles. (You may be used to frequency
 distributions as histograms, rather than as a broken line like in the
 plot above. The present visualization is more advantageous when we want
 to compare several frequency distributions, as we’ll do later.)</p>
@@ -1265,18 +1266,18 @@ some condition about the next patient, these probabilities are used for
 clinical decision-making; see the textbooks by Sox &amp; al. and by
 Hunink &amp; al., and the paper by Lindley &amp; Novick in the <span id="referencesmedical">references</span>.</p>
 <p>For the moment we focus on the “frequency estimate” meaning.</p>
-<p>What about the uncertainty of these estimates?</p>
+<p>What about the <em>uncertainty</em> of these estimates?</p>
 </div>
 <div class="section level3">
-<h3 id="uncertainty-of-estimates-credibility-intervals-and-probabilities">Uncertainty of estimates: credibility intervals and
-probabilities<a class="anchor" aria-label="anchor" href="#uncertainty-of-estimates-credibility-intervals-and-probabilities"></a>
+<h3 id="uncertainty-of-estimates-credibility-intervals">Uncertainty of estimates: credibility intervals<a class="anchor" aria-label="anchor" href="#uncertainty-of-estimates-credibility-intervals"></a>
 </h3>
 <p>In Bayesian theory, a compact way of expressing the uncertainty in a
-quantity is by means of a <strong>credibility interval</strong> with a
-given probability. For instance, if we say that a particular quantity
-has a 70%-credibility interval equal to <span class="math inline">\((0.41, 0.69)\)</span>, what we mean is that
-there’s an 70% probability that the true value of that quantity is
-between <span class="math inline">\(0.41\)</span> and <span class="math inline">\(0.69\)</span> – pretty straightforward! <em>Please
+quantity is by means of a <strong>credibility interval</strong> (also
+called <em>coverage interval</em>, see JCGM 2012) having a given
+probability. For instance, if we say that a particular quantity has a
+70%-credibility interval equal to <span class="math inline">\((0.41,
+0.69)\)</span>, what we mean is that there’s a 70% probability that the
+true value of that quantity is between <span class="math inline">\(0.41\)</span> and <span class="math inline">\(0.69\)</span> – quite straightforward! <em>Please
 be careful not to confuse the Bayesian credibility interval with a
 “confidence interval”</em>: the latter has a much more involved and less
 straightforward meaning.</p>
@@ -1285,7 +1286,7 @@ intervals for each frequency estimate: a 50% one, and an 89% one (why?
 see <span id="referencesbayes">references</span> for an explanation). In
 our present inference, the 50%-credibility intervals are shown in the
 plot above as the darker grey band, and the 89%-credibility intervals as
-the lighter grey band. These intervals contain the 50% ones.</p>
+the lighter grey band; these latter intervals contain the 50% ones.</p>
 <p>For instance, the plot indicates that there’s a 50% probability that
 the relative frequency of all <code>Adelie</code> penguins is roughly
 between 0.21 and 0.38; and an 89% probability that their relative
@@ -1294,19 +1295,48 @@ frequency is roughly between 0.12 and 0.51.</p>
 its relative frequency is roughly between 0.30 and 0.49; and an 89%
 probability that their relative frequency is roughly between 0.19 and
 0.62.</p>
-<p>We can Actually do more: we can plot the probabilities of all
-possible frequencies. To understand this idea, let’s ask: what is the
-relative frequency of Adélie penguins in the whole population? Possible
-values could be anything between 0 and 1. But some of these values may
-be more probable than others. If we look at our 10 samples, we see that
-3 out of 10 are <code>Adelie</code>. So a relative frequency around 0.3
-is a little more probable, although there’s still a lot of uncertainty
+<p>A different way of visualizing the uncertainty about the long-run
+frequency distributions is by displaying <em>probable samples</em> of
+such distributions. This visualization can be obtained with the argument
+<code>spread = 'samples'</code> in the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> function.
+Let’s compare the two visualizations, by quantile bands and by
+samples:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Fspecies10</span>, col <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Fspecies10</span>, col <span class="op">=</span> <span class="fl">8</span>, spread <span class="op">=</span> <span class="st">'samples'</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<img src="figure/vis10bis-1.svg" alt="**Uncertainty of relative frequencies displayed as quantile bands and samples**" width="75%"><img src="figure/vis10bis-2.svg" alt="**Uncertainty of relative frequencies displayed as quantile bands and samples**" width="75%"><p class="caption">
+<strong>Uncertainty of relative frequencies displayed as quantile bands
+and samples</strong>
+</p>
+</div>
+<p>The visualization by quantile bands often looks neater, but keep in
+mind that it leaves out important details, such as the presence of
+probable peaks; such details are instead shown by the visualization by
+samples. For example, in the bottom plot above, we see that the long-run
+frequency distribution is likely to have a maximum at the Chinstrap
+species (∧-shaped lines), or a mininum at the Chinstrap species
+(∨-shaped lines), and less likely to have a maximum or minimum at the
+other two species (which would appear as like /-shaped or \-shaped
+lines). It is recommended to always take a look at both kinds of
+visualization. In the following we shall use only quantile bands, but
+feel free to call the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>s also with the
+<code>spread = 'samples'</code> argument.</p>
+<p><br></p>
+<p>We can also have a finer visualization of the uncertainty about the
+long-run frequencies. We can plot the probabilities of all possible such
+frequencies. To understand this idea, let’s ask: what is the relative
+frequency of Adélie penguins in the whole population? Possible values
+could be anything between 0 and 1. But some of these values may be more
+probable than others. If we look at our 10 samples, we see that 3 out of
+10 are <code>Adelie</code>. So a relative frequency around 0.3 is a
+little more probable, although there’s still a lot of uncertainty
 because this is just a small sample.</p>
 <p>The <code><a href="../reference/Pr.html">Pr()</a></code> function has actually calculated the
 probabilities for all possible frequencies of each species. We can plot
 the probabilities of the frequencies of the <code>Adelie</code> species
 only, as follows:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## select only Adelie by means of argument 'subset ='</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10</span>,</span>
 <span>    subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span>
@@ -1336,7 +1366,7 @@ The credibility intervals are calculated from the probability
 distribution above. They can be quickly obtained from the
 <code>quantiles</code> element of the <code>Fspecies10</code> object.
 For instance, we can read the 89%-credibility intervals as follows:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Fspecies10</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#            Q</span></span>
 <span><span class="co"># species         5.5%    94.5%</span></span>
@@ -1345,7 +1375,7 @@ For instance, we can read the 89%-credibility intervals as follows:</p>
 <span><span class="co">#   Gentoo    0.192130 0.618288</span></span></code></pre></div>
 <p>or we can use the <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> function to display values and
 quantiles together:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspecies10</span><span class="op">)</span></span>
 <span><span class="co">#            probability</span></span>
 <span><span class="co"># species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%</span></span>
@@ -1383,7 +1413,7 @@ rel. frequency between 0.19 and 0.62, with 89% probability.
 </blockquote>
 <p>But we can also give a fuller answer by displaying the probability
 distributions for all three frequencies:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10</span>, legend <span class="op">=</span> <span class="st">'topright'</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/hist10-1.svg" alt="**Probability distribution for the rel. requencies of penguin species**" width="100%"><p class="caption">
@@ -1412,7 +1442,7 @@ what the relative frequencies of all six possibilities –
 so on – could be. This can also be done with <strong>Prova</strong>,
 with any number of variates. For the moment we only show the example
 code for such an analysis:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## data frame with all combination of values from 'species' and 'sex'</span></span>
 <span><span class="co">## use base-R function 'expand.grid()'</span></span>
 <span><span class="va">Y2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span>
@@ -1471,7 +1501,7 @@ which subpopulations we want to focus on. For simplicity, let’s say that
 we want to focus on penguins living on Biscoe or Dream, that is, those
 whose <code>island</code> variate has the values <code>'Biscoe</code> or
 <code>'Dream'</code>. The code is as follows:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## data frame with the variate and values of the subpopulations of interest</span></span>
 <span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>island <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Biscoe'</span>, <span class="st">'Dream'</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -1484,7 +1514,7 @@ whose <code>island</code> variate has the values <code>'Biscoe</code> or
 the previous name). The estimates of the frequencies and their
 uncertainties can again be visualized by calling
 <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/vis10I-1.svg" alt="**Estimates and uncertainty of conditional frequencies**" width="100%"><p class="caption">
@@ -1494,10 +1524,10 @@ uncertainties can again be visualized by calling
 <p><br></p>
 <p>The estimated frequencies for the <code>Biscoe</code> subpopulation
 are shown by the solid yellow curve with small circles; those for the
-<code>Dream</code> subpopulation by the dashed purple curve with small
-squares. More precise values are contained in the <code>values</code>
-element of the <code>Fspecies10I</code> object:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code>Dream</code> subpopulation by the dashed light-blue curve with
+small squares. More precise values are contained in the
+<code>values</code> element of the <code>Fspecies10I</code> object:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspecies10I</span><span class="op">)</span></span>
 <span><span class="co"># , , |island = Biscoe</span></span>
 <span><span class="co"># </span></span>
@@ -1523,7 +1553,7 @@ frequency are quite wide. Also in this case we can get a better picture
 by displaying the probability distribution of each frequency, by means
 of the <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code> function, and see how much they overlap.</p>
 <p>For Biscoe island we find</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## select only Biscoe</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Biscoe'</span><span class="op">)</span>,</span>
 <span>    xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, legend <span class="op">=</span> <span class="st">'topright'</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -1545,7 +1575,7 @@ difference, but we are warned about a large uncertainty. Will more
 sampling data confirm “no difference”?</p>
 <p><br>
 For Dream island we find</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## select only Dream</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Dream'</span><span class="op">)</span>,</span>
 <span>    xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, legend <span class="op">=</span> <span class="st">'topright'</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -1574,7 +1604,7 @@ estimates, but full probability distributions showing their
 uncertainties.</p>
 <p>A more compact summary can again be given with credibility intervals.
 We can produce it with the <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> function as usual:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspecies10I</span><span class="op">)</span></span>
 <span><span class="co"># , , |island = Biscoe</span></span>
 <span><span class="co"># </span></span>
@@ -1645,7 +1675,7 @@ living on Biscoe island; in other words, penguins with
 also easily handled by <strong>Prova</strong>, for any combination of
 subpopulations. The procedure is analogous to the one we <a href="#twovariates">previously discussed</a> very briefly.</p>
 <p>Also in this case we only show the example code for the moment:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## data frame with all combination of values from 'island' and 'sex'</span></span>
 <span><span class="co">## use base-R function 'expand.grid()'</span></span>
 <span><span class="va">Xdouble</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span>
@@ -1661,15 +1691,15 @@ subpopulations. The procedure is analogous to the one we <a href="#twovariates">
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspecies10IS</span>, <span class="st">'value'</span><span class="op">)</span></span>
 <span><span class="co"># $value</span></span>
 <span><span class="co">#            |island,sex</span></span>
-<span><span class="co"># species     Biscoe,female Dream,female Torgersen,female Biscoe,male Dream,male</span></span>
-<span><span class="co">#   Adelie             0.13         0.40             0.48        0.21       0.32</span></span>
-<span><span class="co">#   Chinstrap          0.11         0.40             0.27        0.22       0.54</span></span>
-<span><span class="co">#   Gentoo             0.76         0.21             0.25        0.57       0.14</span></span>
+<span><span class="co"># species     Biscoe,female Dream,female Torgersen,female Biscoe,male</span></span>
+<span><span class="co">#   Adelie             0.13         0.40             0.48        0.21</span></span>
+<span><span class="co">#   Chinstrap          0.11         0.40             0.27        0.22</span></span>
+<span><span class="co">#   Gentoo             0.76         0.21             0.25        0.57</span></span>
 <span><span class="co">#            |island,sex</span></span>
-<span><span class="co"># species     Torgersen,male</span></span>
-<span><span class="co">#   Adelie              0.45</span></span>
-<span><span class="co">#   Chinstrap           0.38</span></span>
-<span><span class="co">#   Gentoo              0.17</span></span></code></pre></div>
+<span><span class="co"># species     Dream,male Torgersen,male</span></span>
+<span><span class="co">#   Adelie          0.32           0.45</span></span>
+<span><span class="co">#   Chinstrap       0.54           0.38</span></span>
+<span><span class="co">#   Gentoo          0.14           0.17</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="imputation">Imputation of missing data<a class="anchor" aria-label="anchor" href="#imputation"></a>
@@ -1685,7 +1715,7 @@ that is, it allows you to do data imputation; and this is done in a
 <em>principled</em> way.</p>
 <p>Let’s take datapoint #1 for instance, and infer its missing variate
 <code>sex</code> from all other, known, variates:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## values we want to guess or impute:</span></span>
 <span><span class="va">Y1imp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'female'</span>, <span class="st">'male'</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -1712,7 +1742,7 @@ although further data might shift that probability somewhere between
 <code>bill_len</code>. We can use the function <code><a href="../reference/vrtgrid.html">vrtgrid()</a></code> to
 generate a grid of realistic values based on the data, and then see the
 probability distribution over these values:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Generate grid of realistic values for 'bill_len' using vrtgrid()</span></span>
 <span><span class="va">Y6imp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span><span class="st">'bill_len'</span>, <span class="va">K10</span><span class="op">)</span></span>
 <span></span>
@@ -1749,7 +1779,7 @@ analysis and hypotheses had very large uncertainties.</p>
 <p>Now imagine that our sampling colleagues send us 50 more datapoints,
 which we add to the 10 we already have. Let’s store the 60 datapoints in
 the file <code>penguins_60.csv</code>:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">datafile</span> <span class="op">&lt;-</span> <span class="st">'penguins_60.csv'</span></span>
 <span><span class="fu"><a href="../reference/data.html">pwrite.csv</a></span><span class="op">(</span><span class="va">penguins_shuffled</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">60</span>, <span class="op">]</span>, <span class="va">datafile</span><span class="op">)</span> <span class="co">## write the first 60 samples</span></span></code></pre></div>
 <p>Feel free to take a look at your extended sample data. There may be
@@ -1759,7 +1789,7 @@ a problem for Bayesian theory and <strong>Prova</strong>.</p>
 done again with the <code><a href="../reference/learn.html">learn()</a></code> function. <em>Please wait
 before running this code</em>, it might take longer time on your
 computer:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">K60</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/learn.html">learn</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">datafile</span>,</span>
 <span>    metadata <span class="op">=</span> <span class="va">meta_penguins</span>,</span>
@@ -1775,7 +1805,7 @@ compressed file <code>K.rds</code> within the new output directory. For
 your convenience the object produced by the computation above can be
 downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/K60.rds" class="external-link"><code>K60.rds</code></a>.
 Once you have downloaded it in your working directory, invoke</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">K60</span> <span class="op">&lt;-</span> <span class="st">'K60.rds'</span></span></code></pre></div>
 <p>which we now use to update our analysis.</p>
 </div>
@@ -1797,7 +1827,7 @@ sample, using the <code><a href="../reference/Pr.html">Pr()</a></code> function 
 before</a>. In the <code>K =</code> argument we must now use the new
 <code>K60</code> object, which points to the updated inference. Here is
 the calculation for all three questions:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## 'Y' and 'X' were previously defined with:</span></span>
 <span><span class="co">## Y &lt;- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))</span></span>
 <span><span class="co">## X &lt;- data.frame(island = c('Biscoe', 'Dream'))</span></span>
@@ -1813,7 +1843,7 @@ estimates, credibility intervals, and probability distributions.</p>
 Consider the first question: overall statistical occurrence of the three
 species. Let’s plot the new estimates and their credibility
 intervals:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Fspecies60</span>, col <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/vis60-1.svg" alt="**Updated frequency estimates of penguin species**" width="100%"><p class="caption">
@@ -1825,7 +1855,7 @@ intervals:</p>
 to those of the previous estimates. Let’s actually overlap the plots of
 the initial and updated inferences, to better see how they got
 updated:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## find common y-maximum for correct visual comparison</span></span>
 <span><span class="va">ymax</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">Fspecies10</span><span class="op">$</span><span class="va">quantiles</span>, <span class="va">Fspecies60</span><span class="op">$</span><span class="va">quantiles</span><span class="op">)</span></span>
 <span></span>
@@ -1844,12 +1874,12 @@ updated:</p>
 <code>Chinstrap</code> differ by around 10% from the previous ones
 (triangles). The estimate for <code>Gentoo</code> is around the
 same.</p></li>
-<li><p>The new credibility intervals (grey bands) are narrower than the
-previous ones (red bands).</p></li>
+<li><p>The new credibility intervals (red bands) are narrower than the
+previous ones (blue bands).</p></li>
 <li><p>All new estimates (circles) are almost or fully within the
-50%-credibility intervals of the previous estimates (darker-red bands).
+50%-credibility intervals of the previous estimates (darker-blue bands).
 All new estimates are fully within the previous 89%-credibility
-intervals (lighter-red bands). These changes are consistent with the
+intervals (lighter-blue bands). These changes are consistent with the
 meaning of the credibility intervals: one every two estimates can end
 outside the 50%-credibility interval, and 1 out of 10 can end outside
 the 89%-credibility interval.</p></li>
@@ -1857,12 +1887,12 @@ the 89%-credibility interval.</p></li>
 <!-- These observations demonstrate the [features previously discussed](#nht): as the sample size increases, the uncertainty decreases, but without leading to spurious "effects". --><p>We can also plot the updated probability distributions for the
 relative frequencies of the three species. Let’s plot them below the
 previous ones to highlight the changes:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10</span>, legend <span class="op">=</span> <span class="st">'topright'</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, <span class="co">## y-range same for both plots</span></span>
 <span>    col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, main <span class="op">=</span> <span class="st">'10 samples'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/hist60-1.svg" alt="" width="100%"></p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies60</span>, legend <span class="op">=</span> <span class="st">'topright'</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, <span class="co">## y-range same for both plots</span></span>
@@ -1872,7 +1902,7 @@ previous ones to highlight the changes:</p>
 distributions largely overlapped, indicating our uncertainty on whether
 any of these frequencies might be very different from the others.</p>
 <p>In our updated inference (bottom plot) there is still a large overlap
-for the probabilities of <code>Adelie</code> (solid red curve) and
+for the probabilities of <code>Adelie</code> (solid blue curve) and
 <code>Gentoo</code> (dot-dashed green curve) frequencies, indicating
 that we’re still very uncertain on whether these frequencies might be
 very different or not – we need more sample to resolve this. But we can
@@ -1880,14 +1910,14 @@ already conclude, with high probability, that their difference won’t be
 larger than around 0.2 (the approximate width of their
 distributions).</p>
 <p>But the probability distribution for the <code>Chinstrap</code>
-frequency (dashed blue curve) has now a smaller overlap with the other
+frequency (dashed red curve) has now a smaller overlap with the other
 two: there’s an increased probability that this frequency is different
 by around 0.2 from at least one of the other two. Later on we shall see
 how to calculate these probabilities exactly.</p>
 <p>Our updated quantitative answer to the question “<em>What’s the
 overall statistical occurrence of the three species in the whole
 population?</em>” is as follows:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspecies60</span><span class="op">)</span></span>
 <span><span class="co">#            probability</span></span>
 <span><span class="co"># species     value   +/-     Q5.5%  Q25%   Q75%   Q94.5%</span></span>
@@ -1926,21 +1956,21 @@ previous inference.</p>
 <div class="section level4">
 <h4 id="for-dream-island">For <code>Dream</code> island<a class="anchor" aria-label="anchor" href="#for-dream-island"></a>
 </h4>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Dream'</span><span class="op">)</span>,</span>
 <span>    legend <span class="op">=</span> <span class="st">'topright'</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">13</span><span class="op">)</span>, <span class="co">## same y-range</span></span>
 <span>    col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, main <span class="op">=</span> <span class="st">'10 samples, Dream island'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/hist60Dream-1.svg" alt="" width="100%"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies60I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Dream'</span><span class="op">)</span>,</span>
 <span>    legend <span class="op">=</span> <span class="st">'topright'</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">13</span><span class="op">)</span>, <span class="co">## same y-range</span></span>
 <span>    col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, main <span class="op">=</span> <span class="st">'60 samples, Dream island'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/hist60Dream-2.svg" alt="" width="100%"></p>
-<p>The new frequency estimates for <code>Adelie</code> (solid red line)
-and <code>Chinstrap</code> (dashed blue line) are now around 0.2 apart;
+<p>The new frequency estimates for <code>Adelie</code> (solid blue line)
+and <code>Chinstrap</code> (dashed red line) are now around 0.2 apart;
 the previous estimates had them around 0.1 apart. This change is not
 unexpected: the new estimates are well within the previous credibility
 intervals; we were correctly warned about their possible change.</p>
@@ -1948,32 +1978,32 @@ intervals; we were correctly warned about their possible change.</p>
 <div class="section level4">
 <h4 id="surprise">For <code>Biscoe</code> island: a surprising result<a class="anchor" aria-label="anchor" href="#surprise"></a>
 </h4>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Biscoe'</span><span class="op">)</span>,</span>
 <span>    legend <span class="op">=</span> <span class="st">'topright'</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">17</span><span class="op">)</span>, <span class="co">## same y-range from previous plot</span></span>
 <span>    col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, main <span class="op">=</span> <span class="st">'10 samples, Biscoe island'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/hist60Biscoe-1.svg" alt="" width="100%"></p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies60I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Biscoe'</span><span class="op">)</span>,</span>
 <span>    legend <span class="op">=</span> <span class="st">'topright'</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">17</span><span class="op">)</span>, <span class="co">## same y-range from previous plot</span></span>
 <span>    col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, main <span class="op">=</span> <span class="st">'60 samples, Biscoe island'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/hist60Biscoe-2.svg" alt="" width="100%"></p>
-<p>The new frequency estimates for <code>Adelie</code> (solid red line)
-and <code>Chinstrap</code> (dashed blue line) are now around 0.2 apart,
-whereas the previous estimates were almost equal. Again this is not
-unexpected, and these changes are well within the previous credibility
-intervals.</p>
+<p>On Biscoe, the new frequency estimates for <code>Adelie</code> (solid
+blue line) and <code>Chinstrap</code> (dashed red line) are now around
+0.2 apart, whereas the previous estimates were almost equal. Again this
+is not unexpected, and these changes are well within the previous
+credibility intervals.</p>
 <p>Notably, we see now a clear separation between the probability
 distribution for the frequency of <code>Gentoo</code> (dot-dashed
-green), and that for <code>Chinstrap</code> (dashed blue). This means
+green), and that for <code>Chinstrap</code> (dashed red). This means
 that these two frequencies must be clearly different. Can we quantify
 how different, and with which uncertainty?</p>
 <p>Yes, the probability of their difference can be calculated and
 visualized as follows:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">freqdiff</span> <span class="op">&lt;-</span> <span class="va">Fspecies60I</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span><span class="st">'Gentoo'</span>, <span class="st">'Biscoe'</span>,<span class="op">]</span> <span class="op">-</span></span>
 <span>    <span class="va">Fspecies60I</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span><span class="st">'Chinstrap'</span>, <span class="st">'Biscoe'</span>,<span class="op">]</span></span>
 <span></span>
@@ -1990,7 +2020,7 @@ Chinstrap</strong>
 is larger than <code>Chinstrap</code> frequency, on <code>Biscoe</code>
 island. We can report an estimate (median) and an 89%-credibility
 interval about this difference:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">freqdiff</span><span class="op">)</span></span>
 <span><span class="co"># [1] 0.704726</span></span>
 <span></span>
@@ -2004,7 +2034,7 @@ of <code>Gentoo</code> species and <code>Chinstrap</code> species, on
 between 0.54 and 0.83 with 89% probability.</p>
 </blockquote>
 <p>Maybe you prefer a ratio between the two frequencies:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">freqratio</span> <span class="op">&lt;-</span> <span class="va">Fspecies60I</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span><span class="st">'Gentoo'</span>, <span class="st">'Biscoe'</span>,<span class="op">]</span> <span class="op">/</span></span>
 <span>    <span class="va">Fspecies60I</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span><span class="st">'Chinstrap'</span>, <span class="st">'Biscoe'</span>,<span class="op">]</span></span>
 <span></span>
@@ -2062,7 +2092,7 @@ the dataset does not matter.</p>
 <p>As usual we perform the updated inference with the
 <code><a href="../reference/learn.html">learn()</a></code> function (and as usual please wait before running
 the code below); this time we use 8 parallel cores:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Kall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/learn.html">learn</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">penguins</span>, <span class="co"># or 'data = penguins_shuffled'</span></span>
 <span>    metadata <span class="op">=</span> <span class="va">meta_penguins</span>,</span>
@@ -2076,7 +2106,7 @@ the code below); this time we use 8 parallel cores:</p>
 <code>K.rds</code> within the new output directory. The object produced
 by the computation above can be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds" class="external-link"><code>Kall.rds</code></a>.
 Once you have downloaded it in your working directory, invoke</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Kall</span> <span class="op">&lt;-</span> <span class="st">'Kall.rds'</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -2084,17 +2114,17 @@ Once you have downloaded it in your working directory, invoke</p>
 </h3>
 <p>Our final results about the overall relative frequencies of the three
 species are computed in the usual way:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## 'Y' was previously defined with:</span></span>
 <span><span class="co">## Y &lt;- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))</span></span>
 <span></span>
 <span><span class="va">Fspeciesall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">Kall</span><span class="op">)</span> <span class="co"># updated inference using Kall</span></span></code></pre></div>
 <p>Let’s plot the estimated frequencies with their credibility
 intervals, and also their probability distributions:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Fspeciesall</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/visall-1.svg" alt="" width="100%"></p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspeciesall</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, legend <span class="op">=</span> <span class="st">'topright'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/visall-2.svg" alt="" width="100%"></p>
@@ -2103,7 +2133,7 @@ research question <strong>Q1</strong>: “<em>What’s the overall
 statistical occurrence of the three species in the whole
 population?</em>”. A quantitative summary can be extracted from the
 <code>Fspeciesall</code> in the usual way:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspeciesall</span><span class="op">)</span></span>
 <span><span class="co">#            probability</span></span>
 <span><span class="co"># species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% </span></span>
@@ -2174,7 +2204,7 @@ the frequency about, and an object <code>X</code> for the
 <em>subpopulation</em> we’re restricting our analysis to. Recall that we
 can use the function <code><a href="../reference/vrtgrid.html">vrtgrid()</a></code> to generate a grid of all
 possible realistic values:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## All values for the variate of interest</span></span>
 <span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span><span class="st">'species'</span>, <span class="va">Kall</span><span class="op">)</span></span>
 <span></span>
@@ -2187,11 +2217,11 @@ possible realistic values:</p>
 <span><span class="va">Fanalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">X</span>, <span class="va">Kall</span><span class="op">)</span></span></code></pre></div>
 <p>Here are the probability distributions and the credibility intervals
 for the three frequencies:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fanalysis</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="co"># same colours as before!</span></span>
 <span>    legend <span class="op">=</span> <span class="st">'topright'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/unnamed-chunk-8-1.svg" alt="" width="100%"></p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fanalysis</span><span class="op">)</span></span>
 <span><span class="co"># , , |island = Biscoe</span></span>
@@ -2231,7 +2261,7 @@ probability.
 <strong>Q2b</strong>: Adélie on three islands<a class="anchor" aria-label="anchor" href="#q2b-ad%C3%A9lie-on-three-islands"></a>
 </h4>
 <p>In this case, <code>Adelie</code> penguins are our subpopulation:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span><span class="st">'island'</span>, <span class="va">Kall</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Xvrt</span> <span class="op">&lt;-</span> <span class="st">'species'</span> <span class="co">## subpopulation variate</span></span>
@@ -2244,10 +2274,10 @@ probability.
 <span><span class="va">Fanalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">X</span>, <span class="va">Kall</span><span class="op">)</span></span></code></pre></div>
 <p>Here are the probability distributions and confidence intervals for
 the three frequencies:</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fanalysis</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">6</span>, legend <span class="op">=</span> <span class="st">'topright'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/unnamed-chunk-9-1.svg" alt="" width="100%"></p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fanalysis</span><span class="op">)</span></span>
 <span><span class="co"># , , |species = Adelie</span></span>
@@ -2291,7 +2321,7 @@ the three islands.</p>
 <p>In this case we are interested in the (continuous) distribution of
 body mass in three separate subpopulations: <code>Adelie</code>,
 <code>Chinstrap</code>, and <code>Gentoo</code> penguins.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Grid of realistic values for 'body_mass'</span></span>
 <span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vrtgrid.html">vrtgrid</a></span><span class="op">(</span><span class="st">'body_mass'</span>, <span class="va">Kall</span><span class="op">)</span></span>
 <span></span>
@@ -2302,7 +2332,7 @@ body mass in three separate subpopulations: <code>Adelie</code>,
 <span><span class="va">Fanalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">X</span>, <span class="va">Kall</span><span class="op">)</span></span></code></pre></div>
 <p>Here is the estimated frequency distribution of body mass within each
 species</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Fanalysis</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, legend <span class="op">=</span> <span class="st">'topright'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/unnamed-chunk-10-1.svg" alt="" width="100%"></p>
 <p>Note how the plots above give us much more information than just a
@@ -2313,7 +2343,7 @@ statistically heavier than Adélie or Chinstrap ones.</p>
 <p>Consider also this question: “Do Adélie and Chinstrap penguins have
 identical body-mass distributions?” The plots show that this question is
 too generic and ambiguous. In the body-mass range between 4200 g and
-5000 g, the two distributions (solid red, dashed blue) could maybe have
+5000 g, the two distributions (solid blue, dashed red) could maybe have
 very similar values – there’s still some uncertainty there. But in the
 body-mass range around 3750 g there’s a high probability that the two
 distributions clearly differ; we see that their mean estimates are
@@ -2370,6 +2400,15 @@ special about 89% credibility intervals?</em></a></p></li>
 </ul>
 </div>
 <div class="section level4">
+<h4 id="referencescoverage">Credibility and coverage intervals<a class="anchor" aria-label="anchor" href="#referencescoverage"></a>
+</h4>
+<ul>
+<li>Joint Committee for Guides in Metrology JCGM (2012): <a href="https://www.bipm.org/documents/20126/2071204/JCGM_200_2012.pdf" class="external-link"><em>International
+vocabulary of metrology – Basic and general concepts and associated
+terms (VIM)</em></a>. See especially Definition 2.36.</li>
+</ul>
+</div>
+<div class="section level4">
 <h4 id="referencesmedical">On medical decision-making:<a class="anchor" aria-label="anchor" href="#referencesmedical"></a>
 </h4>
 <ul>
@@ -2418,7 +2457,7 @@ launch the function in the background and the progress can be
 periodically monitored.</p>
 <p>For example, a script ‘launch_learn.R’ could be prepared, having the
 following structure:</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://pglpm.github.io/prova/">'prova'</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/learn.html">learn</a></span><span class="op">(</span></span>
@@ -2430,12 +2469,12 @@ following structure:</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>The script ‘launch_learn.R’ could then be called to work on the
 background on a bash session with</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="ex">$</span> Rscript myscript.R <span class="op">&gt;</span> logfile.log <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">&amp;</span></span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="ex">$</span> Rscript myscript.R <span class="op">&gt;</span> logfile.log <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="kw">&amp;</span></span></code></pre></div>
 <p>The file ‘logfile.log’ will then contain messages about the progress
 of the computation, and an estimated end time, updated regularly. When
 desired, this file can be simply opened and inspected, for instance with
 the bash command <code>tail</code>:</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="ex">$</span> tail logfile.log</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="ex">$</span> tail logfile.log</span></code></pre></div>
 <p>This is just an example; the details and correct procedure will
 depend on your operating system and computing environment.</p>
 <p><br></p>

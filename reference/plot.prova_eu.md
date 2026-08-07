@@ -1,10 +1,9 @@
 # Plot an object of class "prova_eu" (expected utility) and its revisability
 
 This [`base::plot()`](https://rdrr.io/r/base/plot.html) method is a
-utility to plot probabilities obtained with
-[`Pr()`](https://pglpm.github.io/prova/reference/Pr.md), as well as
-their revisabilities. The probabilities are plotted either against `Y`,
-with one curve for each value of `X`, or vice versa.
+utility to plot the expected utilities obtained with
+[`exputility()`](https://pglpm.github.io/prova/reference/exputility.md),
+as well as their revisabilities.
 
 ## Usage
 
@@ -42,16 +41,14 @@ plot(
 
 - x:
 
-  Object of class "prova_pr" (probability), obtained with
-  [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
+  Object of class "prova_eu" (expected utility), obtained with
+  [`exputility()`](https://pglpm.github.io/prova/reference/exputility.md).
 
 - type:
 
-  `NULL` (default) or character vector or indicating the type of plot
+  Character vector (default `'b'`) or list indicating the type of plot
   for the main probability distribution; see
-  [`base::plot()`](https://rdrr.io/r/base/plot.html). The default `NULL`
-  value uses type `'l'` (lines) for continuous variates, and `'b'`
-  (points and lines) for discrete variates.
+  [`base::plot()`](https://rdrr.io/r/base/plot.html).
 
 - lty:
 
@@ -78,7 +75,7 @@ plot(
   `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'`
   (see [`graphics::legend()`](https://rdrr.io/r/graphics/legend.html)):
   plot a legend at that position. A value `FALSE` or any other does not
-  plot any legend. Default `'top'`.
+  plot any legend. Default `'topright'`.
 
 - alpha.f:
 
@@ -87,28 +84,24 @@ plot(
 
 - type.spread:
 
-  `NULL` (default) or character vector or indicating the type of plot
-  for the long-run-frequency samples; see. The default `NULL` value uses
-  type `'l'` (lines) for continuous variates, and `'b'` (points and
-  lines) for discrete variates.
+  character vector (default `'b'`) or list indicating the type of plot
+  for the revisability samples; see argument `type`.
 
 - lty.spread:
 
   Same as parameter `lty` (line style), but for the line type of the
-  long-run-frequency samples.
+  revisability samples.
 
 - lwd.spread:
 
   Same as parameter `lwd` (line width), but for the line type of the
-  long-run-frequency samples.
+  revisability samples.
 
 - alpha.f.spread:
 
   Numeric or `NULL` (default): opacity of the quantile bands or of the
-  long-run-frequency samples, similar to `alpha.f`. `NULL` means `0.25`
-  if `spread = 'quantiles'`; and an appropriate value if
-  `spread = 'samples'`,dependent on the number of samples (more samples,
-  less opacity).
+  long-run-frequency samples, similar to `alpha.f`. `NULL` determines a
+  value dependent on the number of samples (more samples, less opacity).
 
 - nsamples.spread:
 
@@ -125,6 +118,21 @@ plot(
 `NULL`, [invisibly](https://rdrr.io/r/base/invisible.html); produces a
 plot, see
 [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html).
+
+## Details
+
+The x-axis spans the possible actions, and the y-axis their expected
+utilities. Their revisabilities are shown as a sample of 360 (default
+number) alternative plots; the number of samples is indicated by the
+left y-axis. If any conditioning variate \\X\\ was used for the
+probabilities, \\\mathrm{Pr}(\dotso \vert X = x, \dotso)\\, then one
+such plot is displayed for each conditioning value \\x\\.
+
+The probability that an action would still be considered optimal if many
+moro learning data were collected is indicated above the x-axis label
+corresponding to that action. An asterisk `*` marks the optimal actions.
+If any conditioning variate \\X\\ was used, then one such probability is
+shown for each conditioning value.
 
 ## See also
 

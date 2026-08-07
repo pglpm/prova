@@ -73,7 +73,7 @@ that can be used directly in functions like
 ## See also
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the `K` objects required by `vrtgrid()`.
+generates the "prova_K" (knowledge) objects required by `vrtgrid()`.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 probabilities and their revisabilities.
