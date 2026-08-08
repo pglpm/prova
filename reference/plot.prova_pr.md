@@ -34,7 +34,7 @@ plot(
   ylab2 = NULL,
   main = NULL,
   type.spread = NULL,
-  lty.spread = c(1, 2, 4, 3, 6, 5),
+  lty.spread = 1,
   lwd.spread = NULL,
   alpha.f.spread = NULL,
   quantiles.spread = NULL,
@@ -106,7 +106,7 @@ plot(
   `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'`
   (see [`graphics::legend()`](https://rdrr.io/r/graphics/legend.html)):
   plot a legend at that position. A value `FALSE` or any other does not
-  plot any legend. Default `'top'`.
+  plot any legend. Default `'topright'`.
 
 - alpha.f:
 

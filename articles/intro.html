@@ -2331,10 +2331,12 @@ body mass in three separate subpopulations: <code>Adelie</code>,
 <span><span class="co">## NB: rewriting the previous 'Fanalysis' object</span></span>
 <span><span class="va">Fanalysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pr.html">Pr</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">X</span>, <span class="va">Kall</span><span class="op">)</span></span></code></pre></div>
 <p>Here is the estimated frequency distribution of body mass within each
-species</p>
+species, showing the uncertainty about long-run frequencies both as
+quantile bands and as samples:</p>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Fanalysis</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, legend <span class="op">=</span> <span class="st">'topright'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/unnamed-chunk-10-1.svg" alt="" width="100%"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Fanalysis</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, legend <span class="op">=</span> <span class="st">'topright'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">Fanalysis</span>, spread <span class="op">=</span> <span class="st">'samples'</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, legend <span class="op">=</span> <span class="st">'topright'</span><span class="op">)</span></span></code></pre></div>
+<p><img src="figure/unnamed-chunk-10-1.svg" alt="" width="100%"><img src="figure/unnamed-chunk-10-2.svg" alt="" width="100%"></p>
 <p>Note how the plots above give us much more information than just a
 set of estimates about medians and quantiles, or means and standard
 deviations. Note also how the distributions are not Gaussian. We can

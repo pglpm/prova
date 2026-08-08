@@ -29,7 +29,7 @@ plot(
   axes = FALSE,
   main = NULL,
   type.spread = "b",
-  lty.spread = c(1, 2, 4, 3, 6, 5),
+  lty.spread = 1,
   lwd.spread = 1,
   alpha.f.spread = NULL,
   nsamples.spread = 360,

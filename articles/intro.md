@@ -2010,14 +2010,16 @@ Fanalysis <- Pr(Y, X, Kall)
 ```
 
 Here is the estimated frequency distribution of body mass within each
-species
+species, showing the uncertainty about long-run frequencies both as
+quantile bands and as samples:
 
 ``` r
 
 plot(Fanalysis, col = 1:3, legend = 'topright')
+plot(Fanalysis, spread = 'samples', col = 1:3, legend = 'topright')
 ```
 
-![](figure/unnamed-chunk-10-1.svg)
+![](figure/unnamed-chunk-10-1.svg)![](figure/unnamed-chunk-10-2.svg)
 
 Note how the plots above give us much more information than just a set
 of estimates about medians and quantiles, or means and standard
