@@ -455,7 +455,7 @@ pplot <- function(
 #' @param type `NULL` (default) or character vector or list indicating the type of plot for the main probability distribution; see [base::plot()]. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
 #' @param lty Analogous to argument `lty` (line style) in [graphics::matplot()], used for the main probability distributions.
 #' @param lwd Analogous to argument `lwd` (line width) in [graphics::matplot()], used for the main probability distributions.
-#' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'top'`.
+#' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'topright'`.
 #' @param alpha.f Numeric, default `1`: opacity of the colours of lines or markers, `0` being completely invisible and `1` completely opaque.
 #' @param quantiles.spread Numeric vector or `NULL` (default): revisability quantiles to display. Value `NULL` uses all quantiles available in the `x` object, or just extreme quantiles if multiple probability curves are shown.
 #' @param nsamples.spread Integer, default 360: number of samples of long-run frequencies to display.
@@ -516,7 +516,7 @@ plot.prova_pr <- function(
     ylab2 = NULL,
     main = NULL,
     type.spread = NULL,
-    lty.spread = c(1, 2, 4, 3, 6, 5),
+    lty.spread = 1, #c(1, 2, 4, 3, 6, 5),
     lwd.spread = NULL,
     alpha.f.spread = NULL,
     quantiles.spread = NULL,
@@ -1595,7 +1595,7 @@ plot.prova_eu <- function(
     axes = FALSE,
     main = NULL,
     type.spread = 'b',
-    lty.spread = c(1, 2, 4, 3, 6, 5),
+    lty.spread = 1, # c(1, 2, 4, 3, 6, 5),
     lwd.spread = 1,
     alpha.f.spread = NULL,
     nsamples.spread = 360,
