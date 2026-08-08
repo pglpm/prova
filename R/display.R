@@ -435,12 +435,12 @@ pplot <- function(
 #'
 #' The revisabilities of the probabilities can be visualized in two different ways, determined by the argument `spread`:
 #'
-#' - `spread = 'quantiles'`: shows the revisabilities as "quantile bands" around the probability curves. Which quantiles are shown depends on the `quantiles.spread` argument.
-#' - `spread = 'samples'`: shows the revisabilities as a sample of alternative probability curves, which can also be interpreted as possible "long-run frequencies". The number of samples is determined by the argument `nsamples.spread`.
+#' - `spread = 'quantiles'`: shows the revisabilities as quantile bands around the probability curves. Which quantiles are shown depends on the `quantiles.spread` argument.
+#' - `spread = 'samples'`: shows the revisabilities as an ensemble of alternative probability curves, which can also be interpreted as possible "long-run frequencies". The number of samples in the ensemble is determined by the argument `nsamples.spread`.
 #' - `spread = 'none'` or `NA` or `FALSE`: does not show any revisability.
-#' - `spread = NULL` (default): shows quantiles, if available; otherwise samples, if available, otherwise nothing.
+#' - `spread = NULL` (default): use the quantile plot, if quantiles are available; otherwise the ensemble plot, if samples are available; otherwise nothing.
 #'
-#' Information about the revisability, such as quantiles or number of samples displayed, is shown by the left y-axis. While quantile bands look neat, they do not show important details about revised probabilities (long-run frequencies), such as persistent modes. Such details are better grasped by looking at samples. It is recommended to always take a look at both visualizations of revisability.
+#' Information about the revisability, such as quantiles or number of samples displayed, is shown beside the left y-axis. While quantile bands look neat, they do not show important details about revised probabilities (long-run frequencies), such as persistent modes. Such details are better displayed in the ensemble plot. It is recommended to always take a look at both visualizations of revisability.
 #'
 #' The label on the left y-axis is by default the text `Pr(`\eqn{Y}` | `\eqn{X}`, `\eqn{K}`)`, displaying the actual \eqn{Y} and \eqn{X} variates present in the probability object `x`. If the displayed probabilities are densities (this means that some \eqn{Y} variates are continuous and not rounded), then lowercase `p` is used istead of `Pr`.
 #'
@@ -1523,9 +1523,9 @@ print.prova_mi <- function(
 #' @description
 #' This [base::plot()] method is a utility to plot the expected utilities obtained with [exputility()], as well as their revisabilities.
 #'
-#' @details The x-axis spans the possible actions, and the y-axis their expected utilities. Their revisabilities are shown as a sample of 360 (default number) alternative plots; the number of samples is indicated by the left y-axis. If any conditioning variate \eqn{X} was used for the probabilities, \eqn{\mathrm{Pr}(\dotso \vert X = x, \dotso)}, then one such plot is displayed for each conditioning value \eqn{x}.
+#' @details The x-axis spans the possible actions, and the y-axis their expected utilities. Their revisabilities are shown as an ensemble of 360 (default number) expected-utility curves; the number of samples in the ensemble is indicated beside the left y-axis. If any conditioning variate \eqn{X} was used for the probabilities, \eqn{\mathrm{Pr}(\dotso \vert X = x, \dotso)}, then one such plot is displayed for each conditioning value \eqn{x}.
 #'
-#' The probability that an action would still be considered optimal if many moro learning data were collected is indicated above the x-axis label corresponding to that action. An asterisk `*` marks the optimal actions. If any conditioning variate \eqn{X} was used, then one such probability is shown for each conditioning value.
+#' The probability that an action would still be considered optimal, if many moro learning data were collected, is indicated above the x-axis label corresponding to that action. An asterisk `*` marks the optimal actions. If any conditioning variate \eqn{X} was used, then one such probability is shown for each conditioning value.
 #'
 #' @param x Object of class "prova_eu" (expected utility), obtained with [exputility()].
 #' @param type Character vector (default `'b'`) or list indicating the type of plot for the main probability distribution; see [base::plot()].

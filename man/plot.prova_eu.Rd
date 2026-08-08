@@ -65,9 +65,9 @@
 This \code{\link[base:plot]{base::plot()}} method is a utility to plot the expected utilities obtained with \code{\link[=exputility]{exputility()}}, as well as their revisabilities.
 }
 \details{
-The x-axis spans the possible actions, and the y-axis their expected utilities. Their revisabilities are shown as a sample of 360 (default number) alternative plots; the number of samples is indicated by the left y-axis. If any conditioning variate \eqn{X} was used for the probabilities, \eqn{\mathrm{Pr}(\dotso \vert X = x, \dotso)}, then one such plot is displayed for each conditioning value \eqn{x}.
+The x-axis spans the possible actions, and the y-axis their expected utilities. Their revisabilities are shown as an ensemble of 360 (default number) expected-utility curves; the number of samples in the ensemble is indicated beside the left y-axis. If any conditioning variate \eqn{X} was used for the probabilities, \eqn{\mathrm{Pr}(\dotso \vert X = x, \dotso)}, then one such plot is displayed for each conditioning value \eqn{x}.
 
-The probability that an action would still be considered optimal if many moro learning data were collected is indicated above the x-axis label corresponding to that action. An asterisk \code{*} marks the optimal actions. If any conditioning variate \eqn{X} was used, then one such probability is shown for each conditioning value.
+The probability that an action would still be considered optimal, if many moro learning data were collected, is indicated above the x-axis label corresponding to that action. An asterisk \code{*} marks the optimal actions. If any conditioning variate \eqn{X} was used, then one such probability is shown for each conditioning value.
 }
 \examples{
 ## Use the example "prova_K" (knowledge) object 'Kexample'

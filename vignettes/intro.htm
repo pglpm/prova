@@ -1542,11 +1542,11 @@ its relative frequency is roughly between 0.30 and 0.49; and an 89%
 probability that their relative frequency is roughly between 0.19 and
 0.62.</p>
 <p>A different way of visualizing the uncertainty about the long-run
-frequency distributions is by displaying <em>probable samples</em> of
-such distributions. This visualization can be obtained with the argument
-<code>spread = &#39;samples&#39;</code> in the <code>plot()</code> function.
-Let’s compare the two visualizations, by quantile bands and by
-samples:</p>
+frequency distribution is by displaying an ensemble of <em>probable
+alternatives</em> of the distribution. This visualization can be
+obtained with the argument <code>spread = &#39;samples&#39;</code> in the
+<code>plot()</code> function. Let’s compare the two visualizations, by
+quantile bands and by ensemble:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">plot</span>(Fspecies10, <span class="at">col =</span> <span class="dv">8</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">plot</span>(Fspecies10, <span class="at">col =</span> <span class="dv">8</span>, <span class="at">spread =</span> <span class="st">&#39;samples&#39;</span>)</span></code></pre></div>
 <div class="figure">
@@ -1556,29 +1556,31 @@ samples:</p>
 and samples</strong>
 </p>
 </div>
-<p>The visualization by quantile bands often looks neater, but keep in
+<p>The visualization by quantile bands often looks neater; but keep in
 mind that it leaves out important details, such as the presence of
-probable peaks; such details are instead shown by the visualization by
-samples. For example, in the bottom plot above, we see that the long-run
-frequency distribution is likely to have a maximum at the Chinstrap
-species (∧-shaped lines), or a mininum at the Chinstrap species
-(∨-shaped lines), and less likely to have a maximum or minimum at the
-other two species (which would appear as like /-shaped or \-shaped
-lines). It is recommended to always take a look at both kinds of
-visualization. In the following we shall use only quantile bands, but
-feel free to call the <code>plot()</code>s also with the
+probable peaks; such details are instead shown by the ensemble
+visualization. For example in the ensemble plot above we see that the
+long-run frequency distribution is likely to have a maximum at the
+Chinstrap species (∧-shaped lines), or a mininum at the Chinstrap
+species (∨-shaped lines), and less likely to have a maximum or minimum
+at the other two species (which would appear as like /-shaped or
+\-shaped lines). This aspect is not visible in the quantile-band plot.
+It is recommended to always take a look at both kinds of visualization.
+In the following we shall use only quantile bands for simplicity, but
+feel free to call all following <code>plot()</code>s also with the
 <code>spread = &#39;samples&#39;</code> argument.</p>
 <p><br />
 </p>
-<p>We can also have a finer visualization of the uncertainty about the
-long-run frequencies. We can plot the probabilities of all possible such
-frequencies. To understand this idea, let’s ask: what is the relative
-frequency of Adélie penguins in the whole population? Possible values
-could be anything between 0 and 1. But some of these values may be more
-probable than others. If we look at our 10 samples, we see that 3 out of
-10 are <code>Adelie</code>. So a relative frequency around 0.3 is a
-little more probable, although there’s still a lot of uncertainty
-because this is just a small sample.</p>
+<p><strong>Prova</strong> makes also available a finer visualization of
+the uncertainty about the long-run frequencies. We can plot the
+probabilities of all possible such frequencies. To understand this idea,
+let’s ask: what is the relative frequency of Adélie penguins in the
+whole population? Possible values could be anything between 0 and 1. But
+some of these values may be more probable than others. If we look at our
+10 samples, we see that 3 out of 10 are <code>Adelie</code>. So a
+relative frequency around 0.3 is a little more probable, although
+there’s still a lot of uncertainty because this is just a small
+sample.</p>
 <p>The <code>Pr()</code> function has actually calculated the
 probabilities for all possible frequencies of each species. We can plot
 the probabilities of the frequencies of the <code>Adelie</code> species

@@ -84,13 +84,13 @@ For a collection of probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} with s
 
 The revisabilities of the probabilities can be visualized in two different ways, determined by the argument \code{spread}:
 \itemize{
-\item \code{spread = 'quantiles'}: shows the revisabilities as "quantile bands" around the probability curves. Which quantiles are shown depends on the \code{quantiles.spread} argument.
-\item \code{spread = 'samples'}: shows the revisabilities as a sample of alternative probability curves, which can also be interpreted as possible "long-run frequencies". The number of samples is determined by the argument \code{nsamples.spread}.
+\item \code{spread = 'quantiles'}: shows the revisabilities as quantile bands around the probability curves. Which quantiles are shown depends on the \code{quantiles.spread} argument.
+\item \code{spread = 'samples'}: shows the revisabilities as an ensemble of alternative probability curves, which can also be interpreted as possible "long-run frequencies". The number of samples in the ensemble is determined by the argument \code{nsamples.spread}.
 \item \code{spread = 'none'} or \code{NA} or \code{FALSE}: does not show any revisability.
-\item \code{spread = NULL} (default): shows quantiles, if available; otherwise samples, if available, otherwise nothing.
+\item \code{spread = NULL} (default): use the quantile plot, if quantiles are available; otherwise the ensemble plot, if samples are available; otherwise nothing.
 }
 
-Information about the revisability, such as quantiles or number of samples displayed, is shown by the left y-axis. While quantile bands look neat, they do not show important details about revised probabilities (long-run frequencies), such as persistent modes. Such details are better grasped by looking at samples. It is recommended to always take a look at both visualizations of revisability.
+Information about the revisability, such as quantiles or number of samples displayed, is shown beside the left y-axis. While quantile bands look neat, they do not show important details about revised probabilities (long-run frequencies), such as persistent modes. Such details are better displayed in the ensemble plot. It is recommended to always take a look at both visualizations of revisability.
 
 The label on the left y-axis is by default the text \verb{Pr(}\eqn{Y}\code{|}\eqn{X}\verb{, }\eqn{K}\verb{)}, displaying the actual \eqn{Y} and \eqn{X} variates present in the probability object \code{x}. If the displayed probabilities are densities (this means that some \eqn{Y} variates are continuous and not rounded), then lowercase \code{p} is used istead of \code{Pr}.
 
