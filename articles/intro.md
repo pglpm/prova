@@ -828,11 +828,11 @@ frequency is roughly between 0.30 and 0.49; and an 89% probability that
 their relative frequency is roughly between 0.19 and 0.62.
 
 A different way of visualizing the uncertainty about the long-run
-frequency distributions is by displaying *probable samples* of such
-distributions. This visualization can be obtained with the argument
-`spread = 'samples'` in the
+frequency distribution is by displaying an ensemble of *probable
+alternatives* of the distribution. This visualization can be obtained
+with the argument `spread = 'samples'` in the
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) function. Let’s
-compare the two visualizations, by quantile bands and by samples:
+compare the two visualizations, by quantile bands and by ensemble:
 
 ``` r
 
@@ -848,31 +848,31 @@ samples\*\*](figure/vis10bis-2.svg)
 **Uncertainty of relative frequencies displayed as quantile bands and
 samples**
 
-The visualization by quantile bands often looks neater, but keep in mind
+The visualization by quantile bands often looks neater; but keep in mind
 that it leaves out important details, such as the presence of probable
-peaks; such details are instead shown by the visualization by samples.
-For example, in the bottom plot above, we see that the long-run
-frequency distribution is likely to have a maximum at the Chinstrap
-species (∧-shaped lines), or a mininum at the Chinstrap species
-(∨-shaped lines), and less likely to have a maximum or minimum at the
-other two species (which would appear as like /-shaped or \\shaped
-lines). It is recommended to always take a look at both kinds of
-visualization. In the following we shall use only quantile bands, but
-feel free to call the
-[`plot()`](https://rdrr.io/r/graphics/plot.default.html)s also with the
-`spread = 'samples'` argument.
+peaks; such details are instead shown by the ensemble visualization. For
+example in the ensemble plot above we see that the long-run frequency
+distribution is likely to have a maximum at the Chinstrap species
+(∧-shaped lines), or a mininum at the Chinstrap species (∨-shaped
+lines), and less likely to have a maximum or minimum at the other two
+species (which would appear as like /-shaped or \\shaped lines). This
+aspect is not visible in the quantile-band plot. It is recommended to
+always take a look at both kinds of visualization. In the following we
+shall use only quantile bands for simplicity, but feel free to call all
+following [`plot()`](https://rdrr.io/r/graphics/plot.default.html)s also
+with the `spread = 'samples'` argument.
 
   
 
-We can also have a finer visualization of the uncertainty about the
-long-run frequencies. We can plot the probabilities of all possible such
-frequencies. To understand this idea, let’s ask: what is the relative
-frequency of Adélie penguins in the whole population? Possible values
-could be anything between 0 and 1. But some of these values may be more
-probable than others. If we look at our 10 samples, we see that 3 out of
-10 are `Adelie`. So a relative frequency around 0.3 is a little more
-probable, although there’s still a lot of uncertainty because this is
-just a small sample.
+**Prova** makes also available a finer visualization of the uncertainty
+about the long-run frequencies. We can plot the probabilities of all
+possible such frequencies. To understand this idea, let’s ask: what is
+the relative frequency of Adélie penguins in the whole population?
+Possible values could be anything between 0 and 1. But some of these
+values may be more probable than others. If we look at our 10 samples,
+we see that 3 out of 10 are `Adelie`. So a relative frequency around 0.3
+is a little more probable, although there’s still a lot of uncertainty
+because this is just a small sample.
 
 The [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function has
 actually calculated the probabilities for all possible frequencies of

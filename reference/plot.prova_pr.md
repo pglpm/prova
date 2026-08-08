@@ -186,25 +186,26 @@ clutter as little as possible the plot window with multiple curves.
 The revisabilities of the probabilities can be visualized in two
 different ways, determined by the argument `spread`:
 
-- `spread = 'quantiles'`: shows the revisabilities as "quantile bands"
+- `spread = 'quantiles'`: shows the revisabilities as quantile bands
   around the probability curves. Which quantiles are shown depends on
   the `quantiles.spread` argument.
 
-- `spread = 'samples'`: shows the revisabilities as a sample of
+- `spread = 'samples'`: shows the revisabilities as an ensemble of
   alternative probability curves, which can also be interpreted as
-  possible "long-run frequencies". The number of samples is determined
-  by the argument `nsamples.spread`.
+  possible "long-run frequencies". The number of samples in the ensemble
+  is determined by the argument `nsamples.spread`.
 
 - `spread = 'none'` or `NA` or `FALSE`: does not show any revisability.
 
-- `spread = NULL` (default): shows quantiles, if available; otherwise
-  samples, if available, otherwise nothing.
+- `spread = NULL` (default): use the quantile plot, if quantiles are
+  available; otherwise the ensemble plot, if samples are available;
+  otherwise nothing.
 
 Information about the revisability, such as quantiles or number of
-samples displayed, is shown by the left y-axis. While quantile bands
+samples displayed, is shown beside the left y-axis. While quantile bands
 look neat, they do not show important details about revised
 probabilities (long-run frequencies), such as persistent modes. Such
-details are better grasped by looking at samples. It is recommended to
+details are better displayed in the ensemble plot. It is recommended to
 always take a look at both visualizations of revisability.
 
 The label on the left y-axis is by default the text
