@@ -855,10 +855,10 @@ example in the ensemble plot above we see that the long-run frequency
 distribution is likely to have a maximum at the Chinstrap species
 (∧-shaped lines), or a mininum at the Chinstrap species (∨-shaped
 lines), and less likely to have a maximum or minimum at the other two
-species (which would appear as like /-shaped or \\shaped lines). This
-aspect is not visible in the quantile-band plot. It is recommended to
-always take a look at both kinds of visualization. In the following we
-shall use only quantile bands for simplicity, but feel free to call all
+species (which would appear as /-shaped or \\shaped lines). This aspect
+is not visible in the quantile-band plot. It is recommended to always
+take a look at both kinds of visualization. In the following we shall
+use only quantile bands for simplicity, but feel free to call all
 following [`plot()`](https://rdrr.io/r/graphics/plot.default.html)s also
 with the `spread = 'samples'` argument.
 
