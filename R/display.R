@@ -9,7 +9,7 @@
 #' - Either or both `x` and `y` arguments can be [list][base::list()]s. In this case, the first element of `x` is plotted against the first element of `y`, and so on, recycling as necessary. This allows for plots having different numbers of base points. The specifications in arguments like `type`, `lty`, `col`, `alpha.f`, `xjitter`, and similar apply to each list element in turn.
 #' - Argument `x`, or each element in `x` if it is a list, can be of class [`base::character`]. In this case, x-axis labels as given in `xdomain` are used, or the unique values in `x` if `xdomain` is `NULL`. Similarly for `y` and `ydomain`. This feature makes it easier to plot nominal and ordinal non-numeric variates.
 #' - Additional plot `type`s are available: `'hx'`, `'qx'`, `'hy'`, `'qy'` (internally they use [graphics::polygon()]):
-#'   - `'hx'` plots shaded histograms. Argument `x` must be a list of `breaks`, and `y` a list of `counts` or `densities`, for example produced by by [graphics::hist()].
+#'   - `'hx'` plots shaded histograms. Argument `x` must be a list of `breaks`, and `y` a list of `counts` or `densities`, for example produced by by [graphics::hist()]. If the number of rows of `x` exceeds that of `y` by one, then this is automatically recognized as a histogram plot.
 #'   - `'qx'` plots shaded bands. The first band extends from the line defined by the first column of `y`, to the line defined by the *last* column; the second band is similarly delimited by the second and second-last columns of `y`, and so on (if `y` has an odd number of columns, the central one defines a line rather than a band). The x-values are the corresponding columns of `x`, recycled if necessary. This plot `type` is useful for plotting quantile bands calculated with [Pr()].
 #'   - `'hy'`, `'qy'` are analogous `type`s, but with the roles of `x` and `y` switched.
 #' - A jitter can be added to each plot, via the `xjitter` and `yjitter` vectors of switches. When either of these arguments is `NA`, it is internally assessed whether jitter is necessary. This feature makes it easier to generate scatter plots of nominal, ordinal, or rounded-continuous variates.
@@ -104,18 +104,36 @@ pplot <- function(
         if(is.list(x[[aplot]])){x[[aplot]] <- unlist(x[[aplot]],
             recursive = TRUE, use.names = TRUE)}
         if(is.factor(x[[aplot]])){x[[aplot]] <- as.character(x[[aplot]])}
-        if(anyDuplicated(x[[aplot]]) && is.character(x[[aplot]])){
-            if(is.na(xjitter[[aplot]])){ xjitter[[aplot]] <- TRUE }
-            if(is.na(type[[aplot]])){ type[[aplot]] <- 'p' }
+        if(is.na(type[[(aplot - 1) %% length(type) + 1]]) &&
+               NROW(x[[aplot]]) == NROW(y[[(aplot - 1) %% length(y) + 1]]) + 1){
+            type[[(aplot - 1) %% length(type) + 1]] <- 'hx'
+        }
+        if(is.character(x[[aplot]]) &&
+               (anyDuplicated(x[[aplot]]) || length(x[[aplot]]) == 1)){
+            if(is.na(xjitter[[(aplot - 1) %% length(xjitter) + 1]])){
+                xjitter[[(aplot - 1) %% length(xjitter) + 1]] <- TRUE
+            }
+            if(is.na(type[[(aplot - 1) %% length(type) + 1]])){
+                type[[(aplot - 1) %% length(type) + 1]] <- 'p'
+            }
         }
     }
     for(aplot in seq_along(y)){
         if(is.list(y[[aplot]])){y[[aplot]] <- unlist(y[[aplot]],
             recursive = TRUE, use.names = TRUE)}
         if(is.factor(y[[aplot]])){y[[aplot]] <- as.character(y[[aplot]])}
-        if(anyDuplicated(y[[aplot]]) && is.character(y[[aplot]])){
-            if(is.na(yjitter[[aplot]])){ yjitter[[aplot]] <- TRUE }
-            if(is.na(type[[aplot]])){ type[[aplot]] <- 'p' }
+        if(is.na(type[[(aplot - 1) %% length(type) + 1]]) &&
+               NROW(y[[aplot]]) == NROW(x[[(aplot - 1) %% length(x) + 1]]) + 1){
+            type[[(aplot - 1) %% length(type) + 1]] <- 'hy'
+        }
+        if(is.character(y[[aplot]]) &&
+               (anyDuplicated(y[[aplot]]) || length(y[[aplot]]) == 1)){
+            if(is.na(yjitter[[(aplot - 1) %% length(yjitter) + 1]])){
+                yjitter[[(aplot - 1) %% length(yjitter) + 1]] <- TRUE
+            }
+            if(is.na(type[[(aplot - 1) %% length(type) + 1]])){
+                type[[(aplot - 1) %% length(type) + 1]] <- 'p'
+            }
         }
     }
 
@@ -125,6 +143,18 @@ pplot <- function(
     ## Find NULL elements for special handling later
     xnull <- vapply(X = x, FUN = is.null, FUN.VALUE = FALSE, USE.NAMES = FALSE)
     ynull <- vapply(X = y, FUN = is.null, FUN.VALUE = FALSE, USE.NAMES = FALSE)
+
+    ## Handle special case of NA: 1D ensemble plot
+    if(length(x) == 1 && is.na(x)){
+        x <- 0
+        if(is.null(xdomain)){ xdomain <- NA }
+        if(is.na(type)){ type <- 'p' }
+    }
+    if(length(y) == 1 && is.na(y)){
+        y <- 0
+        if(is.null(ydomain)){ ydomain <- NA }
+        if(is.na(type)){ type <- 'p' }
+    }
 
     ## Check consistency of x, y args; find ranges
     if(all(xnull)){
@@ -208,6 +238,10 @@ pplot <- function(
         if(any(xjitter)){ rgx[2] <- rgx[2] + 1/3 }
         xlim[2] <- max(rgx)
     }
+    if(xlim[1] == xlim[2]){
+        xlim[1] <- xlim[1] - 1/3
+        xlim[2] <- xlim[2] + 1/3
+    }
 
     if(!isTRUE(is.finite(ylim[1]))){
         if(any(yjitter)){ rgy[1] <- rgy[1] - 1/3 }
@@ -217,6 +251,10 @@ pplot <- function(
     if(!isTRUE(is.finite(ylim[2]))){
         if(any(yjitter)){ rgy[2] <- rgy[2] + 1/3 }
         ylim[2] <- max(rgy)
+    }
+    if(ylim[1] == ylim[2]){
+        ylim[1] <- ylim[1] - 1/3
+        ylim[2] <- ylim[2] + 1/3
     }
 
     ## Parameters for q-type plots
@@ -252,6 +290,17 @@ pplot <- function(
         ## thisy <- drop(y[[aplot]])
         thisx <- x[[(aplot - 1) %% length(x) + 1]]
         thisy <- y[[(aplot - 1) %% length(y) + 1]]
+        thistype <- type[[(aplot - 1) %% length(type) + 1]]
+
+        ## If only one coordinate is given, it's meant for all points
+        ## need duplicating in order to have different jitters
+        if(length(thisy) == 1 && NROW(thisx) > 1){
+            thisy <- rep.int(x = thisy, times = NROW(thisx))
+            if(is.na(thistype)){ thistype <- 'p' }
+        } else if(length(thisx) == 1 && NROW(thisy) > 1){
+            thisx <- rep.int(x = thisx, times = NROW(thisy))
+            if(is.na(thistype)){ thistype <- 'p' }
+        }
 
         ## convert characters to integers, according to domains
         if(xcha){
@@ -275,16 +324,26 @@ pplot <- function(
         ## Check if jitter needed
         thisxjitter <- xjitter[[(aplot - 1) %% length(xjitter) + 1]]
         if((is.na(thisxjitter) && anyDuplicated(thisx)) || isTRUE(thisxjitter)){
-            thisx <- jitter(thisx, factor = 5/3)
+            ## handle different jitter logic for one-number-only
+            if(any(thisx != thisx[1])){
+                thisx <- jitter(thisx, factor = 5/3)
+            } else {
+                thisx <- jitter(thisx, amount = 1/3)
+            }
         }
+
         thisyjitter <- yjitter[[(aplot - 1) %% length(yjitter) + 1]]
         if((is.na(thisyjitter) && anyDuplicated(thisy)) || isTRUE(thisyjitter)){
-            thisy <- jitter(thisy, factor = 5/3)
+            ## handle different jitter logic for one-number-only
+            if(any(thisy != thisy[1])){
+                thisy <- jitter(thisy, factor = 5/3)
+            } else {
+                thisy <- jitter(thisy, amount = 1/3)
+            }
         }
 
         ## Plot
         ## checks for type = 'q'
-        thistype <- type[[(aplot - 1) %% length(type) + 1]]
 
         if(thistype %in% c('hx', 'hy')){
             if(thistype == 'hx'){
