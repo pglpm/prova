@@ -165,7 +165,9 @@ provided by `pplot` are the following:
   - `'hx'` plots shaded histograms. Argument `x` must be a list of
     `breaks`, and `y` a list of `counts` or `densities`, for example
     produced by by
-    [`graphics::hist()`](https://rdrr.io/r/graphics/hist.html).
+    [`graphics::hist()`](https://rdrr.io/r/graphics/hist.html). If the
+    number of rows of `x` exceeds that of `y` by one, then this is
+    automatically recognized as a histogram plot.
 
   - `'qx'` plots shaded bands. The first band extends from the line
     defined by the first column of `y`, to the line defined by the
@@ -241,7 +243,8 @@ pplot(x = xgrid, y = dnorm(xgrid), ylim = c(0, NA))
 
 
 ## Draw a shaded histogram
+## type 'hx' is automatically recognized
 histo <- hist(rnorm(1000), breaks = 'FD', plot = FALSE)
-pplot(x = histo$breaks, y = histo$density, type = 'hx')
+pplot(x = histo$breaks, y = histo$density)
 
 ```
