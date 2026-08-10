@@ -108,8 +108,9 @@ xgrid <- seq(from = -2, to = 2, length.out = 65)
 pplot(x = xgrid, y = dnorm(xgrid), ylim = c(0, NA))
 
 ## Draw a shaded histogram
+## type 'hx' is automatically recognized
 histo <- hist(rnorm(1000), breaks = 'FD', plot = FALSE)
-pplot(x = histo$breaks, y = histo$density, type = 'hx')
+pplot(x = histo$breaks, y = histo$density)
 
 }
 \seealso{
