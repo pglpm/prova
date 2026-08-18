@@ -315,7 +315,7 @@ metadatatemplate <- function(
             ##
             if(verbose){
                 message('  - ', Nvalues, ' different values detected:')
-                message('"', datavalues, '"', collapse = ', ')
+                message(paste0('"', datavalues, '"', collapse = ', '))
                 message('  which do not seem to refer to an ordered scale.')
                 message('    => Assuming variate to be NOMINAL.')
             }
