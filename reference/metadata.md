@@ -212,12 +212,12 @@ metadata <- metadatatemplate(data = datasets::penguins, file = NULL)
 #> Analysing 8 variates for 344 datapoints.
 #> * "species" variate:
 #>   - 3 different values detected:
-#> "AdelieChinstrapGentoo", 
+#> "Adelie", "Chinstrap", "Gentoo"
 #>   which do not seem to refer to an ordered scale.
 #>     => Assuming variate to be NOMINAL.
 #> * "island" variate:
 #>   - 3 different values detected:
-#> "BiscoeDreamTorgersen", 
+#> "Biscoe", "Dream", "Torgersen"
 #>   which do not seem to refer to an ordered scale.
 #>     => Assuming variate to be NOMINAL.
 #> * "bill_len" variate:
@@ -250,7 +250,7 @@ metadata <- metadatatemplate(data = datasets::penguins, file = NULL)
 #>     => Assuming "domainmin" to be 0.
 #> * "sex" variate:
 #>   - 2 different values detected:
-#> "femalemale", 
+#> "female", "male"
 #>   which do not seem to refer to an ordered scale.
 #>     => Assuming variate to be NOMINAL.
 #> * "year" variate:
@@ -306,7 +306,7 @@ metadata2 <- metadatatemplate(
 #> Analysing 2 variates for 344 datapoints.
 #> * "species" variate:
 #>   - 3 different values detected:
-#> "AdelieChinstrapGentoo", 
+#> "Adelie", "Chinstrap", "Gentoo"
 #>   which do not seem to refer to an ordered scale.
 #>     => Assuming variate to be NOMINAL.
 #> * "bill_len" variate:
@@ -336,12 +336,12 @@ metadata3 <- metadatatemplate(
 #> Analysing 7 variates for 344 datapoints.
 #> * "species" variate:
 #>   - 3 different values detected:
-#> "AdelieChinstrapGentoo", 
+#> "Adelie", "Chinstrap", "Gentoo"
 #>   which do not seem to refer to an ordered scale.
 #>     => Assuming variate to be NOMINAL.
 #> * "island" variate:
 #>   - 3 different values detected:
-#> "BiscoeDreamTorgersen", 
+#> "Biscoe", "Dream", "Torgersen"
 #>   which do not seem to refer to an ordered scale.
 #>     => Assuming variate to be NOMINAL.
 #> * "bill_len" variate:
@@ -374,7 +374,7 @@ metadata3 <- metadatatemplate(
 #>     => Assuming "domainmin" to be 0.
 #> * "sex" variate:
 #>   - 2 different values detected:
-#> "femalemale", 
+#> "female", "male"
 #>   which do not seem to refer to an ordered scale.
 #>     => Assuming variate to be NOMINAL.
 #> =========
