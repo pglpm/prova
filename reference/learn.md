@@ -29,7 +29,7 @@ learn(
   ncheckpoints = 12,
   maxrelMCSE = +Inf,
   minESS = 450,
-  initES = 2,
+  initES = 8,
   thinning = NULL,
   verbose = TRUE,
   plottraces = !cleanup,
@@ -199,7 +199,7 @@ learn(
 
 - initES:
 
-  Numeric positive, default 2: number of initial "burn-in" samples,
+  Numeric positive, default 8: number of initial "burn-in" samples,
   separated by the Expected Sample Size, to be discarded. Note that the
   Monte Carlo chain typically starts in a high-probability region, so
   there is no reason to discard many initial samples.
@@ -454,7 +454,7 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpEap8mj/prova-V1_D3_S10_260818T112122_1a57743bf536
+#> /tmp/RtmpTUcmbr/prova-V1_D3_S10_260818T122411_195f71d54331
 #> Prova v2.3.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -477,9 +477,9 @@ K <- learn(
 #> quantile width: 0.0823 to 1.37
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 36 secs
-#> Average preparation & finalization time: 35 secs.
-#> Average Monte Carlo time per chain: 0.61 secs.
+#> Total computation time: 28 secs
+#> Average preparation & finalization time: 27 secs.
+#> Average Monte Carlo time per chain: 0.65 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -487,7 +487,7 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpEap8mj/prova-V1_D3_S10_260818T112122_1a57743bf536
+#> /tmp/RtmpTUcmbr/prova-V1_D3_S10_260818T122411_195f71d54331
 #> **********************************************************
 
 ## Check structure of `K` object:
