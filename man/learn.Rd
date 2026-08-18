@@ -26,7 +26,7 @@ learn(
   ncheckpoints = 12,
   maxrelMCSE = +Inf,
   minESS = 450,
-  initES = 2,
+  initES = 8,
   thinning = NULL,
   verbose = TRUE,
   plottraces = !cleanup,
@@ -88,7 +88,7 @@ learn(
 
 \item{minESS}{Numeric positive or \code{NULL}, default 450: desired minimal Monte Carlo \emph{Expected Sample Size}. If \code{NULL}, it is equal to the final \code{nsamplesperchain}. \code{minESS} is related to \code{maxrelMCSE} by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}}.}
 
-\item{initES}{Numeric positive, default 2: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.}
+\item{initES}{Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.}
 
 \item{thinning}{Integer or \code{NULL} (default): thin out the Monte Carlo samples by this value. If \code{NULL}: let the diagnostics decide the thinning value.}
 

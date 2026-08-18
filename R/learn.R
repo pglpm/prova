@@ -68,7 +68,7 @@
 #' @param ncheckpoints Integer or `NULL`, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If `NULL`, this is equal to number of variates + 2. If Inf, use all datapoints.
 #' @param maxrelMCSE Numeric positive, default `+Inf`: desired maximal *relative Monte Carlo Standard Error* of calculated probabilities. The default `+Inf` means that `minESS` is used instead. `maxrelMCSE` is related to `minESS` by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}}.
 #' @param minESS Numeric positive or `NULL`, default 450: desired minimal Monte Carlo *Expected Sample Size*. If `NULL`, it is equal to the final `nsamplesperchain`. `minESS` is related to `maxrelMCSE` by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}}.
-#' @param initES Numeric positive, default 2: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.
+#' @param initES Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.
 #' @param thinning Integer or `NULL` (default): thin out the Monte Carlo samples by this value. If `NULL`: let the diagnostics decide the thinning value.
 #' @param verbose Logical, default `TRUE`: output the progress to terminal? If `FALSE`, the progress is outputted to the file `'main.out'` in the `outputdir` directory.
 #' @param plottraces Logical, default `TRUE`: save plots of the Monte Carlo traces of diagnostic values?
@@ -184,7 +184,7 @@ learn <- function(
     ncheckpoints = 12,
     maxrelMCSE = +Inf,
     minESS = 450,
-    initES = 2,
+    initES = 8,
     thinning = NULL,
     verbose = TRUE,
     plottraces = !cleanup,
@@ -1084,7 +1084,7 @@ learn <- function(
 
     ## Close output to main log file
     close(maincon0)
-    
+
 #####################################################
 #### BEGINNING OF PARALLEL LOOP OVER CORES
 #####################################################
@@ -1176,19 +1176,22 @@ learn <- function(
             ))
     }
 
-    ## Read the samples saved by each chain and concatenate them
-    ## could be moved to a separate file?
+    ## Function for reading & concatenating samples saved by each chain
     joinmc <- function(mc1, mc2) {
-        mapply(
-            function(xx, yy) {
-                temp <- c(xx, yy)
-                dx <- dim(yy)[-length(dim(yy))]
-                dim(temp) <- c(dx, length(temp) / prod(dx))
-                temp
-            },
-            mc1, mc2,
-            SIMPLIFY = FALSE
-        )
+        if(is.null(mc1)){
+            mc2
+        }else{
+            mapply(
+                function(xx, yy) {
+                    temp <- c(xx, yy)
+                    dx <- dim(yy)[-length(dim(yy))]
+                    dim(temp) <- c(dx, length(temp) / prod(dx))
+                    temp
+                },
+                mc1, mc2,
+                SIMPLIFY = FALSE
+            )
+        }
     }
 
 ## mcsamples0 <- foreach(chainnumber = 1:nchains,
@@ -1201,21 +1204,16 @@ learn <- function(
 ##             ))
 ##         }
 
-    for(chainnumber in 1:nchains){
-        padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'), chainnumber)
-        if(chainnumber == 1){
-            mcsamples <- readRDS(file = file.path(dirname,
+    mcsamples <- NULL
+    for(chainnumber in seq_len(nchains)){
+        padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'),
+            chainnumber)
+        mcsamples <- joinmc(mcsamples,
+            readRDS(file = file.path(dirname,
                 paste0('___mcsamples', dashnameroot, '--',
                     padchainnumber, '.rds')
             ))
-        } else {
-            mcsamples <- joinmc(mcsamples,
-                readRDS(file = file.path(dirname,
-                    paste0('___mcsamples', dashnameroot, '--',
-                        padchainnumber, '.rds')
-                ))
-            )
-        }
+        )
     }
 
     ## chainnumber <- 1
