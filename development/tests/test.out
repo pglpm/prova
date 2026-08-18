@@ -1,18 +1,18 @@
-2.2.3
-Starting tests 260806T214342
-Quick learn 260806T214342
+2.3.0
+Starting tests 260818T142304
+Quick learn 260818T142304
 [1] TRUE
-Full base learn 260806T214400
+Full base learn 260818T142322
 [1] TRUE
-Simple Pr 260806T215109
+Simple Pr 260818T143035
 [1] TRUE
-Various Pr 260806T215208
+Various Pr 260818T143133
 [1] TRUE
-Simple MIs 260806T215256
+Simple MIs 260818T143221
 [1] TRUE
-Quick learn autocluster 260806T215544
+Quick learn autocluster 260818T143506
 [1] TRUE
-Quick learn existing cluster 260806T215603
+Quick learn existing cluster 260818T143525
 [1] TRUE
 All test passed: TRUE
-Done 260806T215622
+Done 260818T143545
