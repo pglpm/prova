@@ -1,0 +1,48 @@
+
+Saving output in directory
+penguin_inference_60-V8_D60_S3600_260818T144017
+
+Prova v2.3.0.
+Registered socket cluster with 4 nodes on host ‘localhost’.
+Learning from 60 datapoints, 8 variates.
+Starting Monte Carlo sampling of 3600 samples by 8 chains
+in a space of 1023 (effectively 16706) dimensions.
+Using 4 cores: 450 samples per chain, max 2 chains per core.
+Requested:   ESS 450   rel.MCSE 0.0467.
+Core logs are being saved in individual files.
+C-compiling samplers appropriate to the variates (Nimble v1.4.2)
+this can take tens of minutes. Please wait...
+Compiled core 1. Number of samplers: 1328.             
+Estimating remaining time, please be patient...Sampling. Core 1 estimated end time: 2026-08-18 14:55   Sampling. Core 3 estimated end time: 2026-08-18 14:53   Sampling. Core 2 estimated end time: 2026-08-18 15:41   Sampling. Core 4 estimated end time: 2026-08-18 14:48   Sampling. Core 1 estimated end time: 2026-08-18 14:55   Sampling. Core 2 estimated end time: 2026-08-18 15:35   Sampling. Core 3 estimated end time: 2026-08-18 14:55   Sampling. Core 4 estimated end time: 2026-08-18 14:49   Sampling. Core 2 estimated end time: 2026-08-18 15:23   Sampling. Core 1 estimated end time: 2026-08-18 14:53   Sampling. Core 3 estimated end time: 2026-08-18 14:55   Sampling. Core 4 estimated end time: 2026-08-18 14:49   Core 4 finished.                                        
+Sampling. Estimating remaining time...Sampling. Core 2 estimated end time: 2026-08-18 15:16   Sampling. Core 1 estimated end time: 2026-08-18 14:55   Sampling. Core 2 estimated end time: 2026-08-18 15:10   Sampling. Core 3 estimated end time: 2026-08-18 14:56   Sampling. Core 2 estimated end time: 2026-08-18 15:03   Sampling. Core 1 estimated end time: 2026-08-18 14:55   Sampling. Core 2 estimated end time: 2026-08-18 15:01   Sampling. Core 3 estimated end time: 2026-08-18 14:58   Sampling. Core 2 estimated end time: 2026-08-18 15:01   Sampling. Core 2 estimated end time: 2026-08-18 15:01   Sampling. Core 2 estimated end time: 2026-08-18 15:01   Sampling. Core 1 estimated end time: 2026-08-18 14:54   Core 1 finished.                                        
+Sampling. Estimating remaining time...Sampling. Core 3 estimated end time: 2026-08-18 15:01   Sampling. Core 2 estimated end time: 2026-08-18 15:01   Sampling. Core 3 estimated end time: 2026-08-18 15:03   Sampling. Core 2 estimated end time: 2026-08-18 14:58   Sampling. Core 2 estimated end time: 2026-08-18 14:57   Core 2 finished.                                        
+Sampling. Estimating remaining time...Sampling. Core 3 estimated end time: 2026-08-18 15:03   Sampling. Core 3 estimated end time: 2026-08-18 15:02   Sampling. Core 3 estimated end time: 2026-08-18 15:05   Sampling. Core 3 estimated end time: 2026-08-18 15:05   Sampling. Core 3 estimated end time: 2026-08-18 15:05   Sampling. Core 3 estimated end time: 2026-08-18 15:04   Sampling. Core 3 estimated end time: 2026-08-18 15:03   Core 3 finished.                                        
+Sampling. Estimating remaining time...                                                               
+
+Finished Monte Carlo sampling.
+Highest number of Monte Carlo iterations across chains: 39600.
+Highest number of used mixture components: 7.
+
+Checking test data
+(#3 #8 #11 #16 #18 #27 #31 #46 #48 #50 #52 #57):
+rel. quantile error: 0.0426 to 0.119
+ESS: 2660 to 3810
+needed thinning: 6.53 to 51.2
+average: 1.82e-09 to 1.52e-07
+quantile width: 4.24e-09 to 3.24e-07
+
+Plotting final Monte Carlo traces and marginal samples...
+
+Total computation time: 15 mins
+Average preparation & finalization time: 2.7 mins.
+Average Monte Carlo time per chain: 3.7 mins.
+Max total memory used: approx 3200MB.
+Max memory used per core: approx 840MB.
+Removing temporary output files.
+Finished.
+
+***********************************************
+Output saved in directory
+penguin_inference_60-V8_D60_S3600_260818T144017
+***********************************************
+
