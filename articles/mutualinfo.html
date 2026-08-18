@@ -208,7 +208,7 @@ shows that its probability is around 0.3%:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span>
 <span><span class="co">#    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% </span></span>
-<span><span class="co"># 0.002958 0.000048 0.000408 0.001190 0.003974  0.00778</span></span></code></pre></div>
+<span><span class="co"># 0.002944 0.000036 0.000430 0.001191 0.003999  0.00777</span></span></code></pre></div>
 <p><br>
 This example shows the limitations of using sample data for visualizing
 features of the <em>whole</em> population. How would a scatter plot
@@ -710,7 +710,7 @@ length</strong>
 <code>body_mass</code> and <code>bill_len</code> is</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">samples</span><span class="op">$</span><span class="va">body_mass</span>, <span class="va">samples</span><span class="op">$</span><span class="va">bill_len</span>, method <span class="op">=</span> <span class="st">'pearson'</span><span class="op">)</span></span>
-<span><span class="co"># [1] 0.582938</span></span></code></pre></div>
+<span><span class="co"># [1] 0.575441</span></span></code></pre></div>
 <p>which is different from the rough <span class="math inline">\(r\)</span>-equivalent 0.67.</p>
 <p><br></p>
 </div>
@@ -788,15 +788,15 @@ It is interesting to contrast this result with values of the Pearson correlation
 ``` r
 ## Pearson r for Adelie subpopulation:
 cor(samplesAdelie$body_mass, samplesAdelie$bill_len, method = 'pearson')
-# [1] 0.501561
+# [1] 0.453664
 
 ## Pearson r for Chinstrap subpopulation:
 cor(samplesChinstrap$body_mass, samplesChinstrap$bill_len, method = 'pearson')
-# [1] 0.355749
+# [1] 0.300012
 
 ## Pearson r for Gentoo subpopulation:
 cor(samplesGentoo$body_mass, samplesGentoo$bill_len, method = 'pearson')
-# [1] 0.508308
+# [1] 0.53322
 ```
 
 The Pearson correlation yields the same the association *ranking* as the mutual information does (first Gentoo, then Adélie, then Chinstrap), but it yields the association for the Adélie subpopulation to be closer to the Gentoo one than to the Chinstrap one. The mutual information yields the opposite.

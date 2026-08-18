@@ -166,7 +166,7 @@ prob <- Pr(data.frame(island = 'Torgersen', species = 'Chinstrap'), K)
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-# 0.002958 0.000048 0.000408 0.001190 0.003974  0.00778
+# 0.002944 0.000036 0.000430 0.001191 0.003999  0.00777
 ```
 
   
@@ -738,7 +738,7 @@ Note that in this case the Pearson correlation between `body_mass` and
 ``` r
 
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.582938
+# [1] 0.575441
 ```
 
 which is different from the rough \\r\\-equivalent 0.67.
