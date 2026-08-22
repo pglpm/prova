@@ -1,4 +1,4 @@
-# ***Prova***: Probabilistic-statistical variate analysis nonparametric and with automated Markov-chain Monte Carlo
+# ***Prova***: Probabilistic-statistical variate analysis
 
 ![Ensemble of densities](reference/figures/prova_logo.jpg)
 
@@ -15,9 +15,6 @@
 An R package to perform probabilistic and statistical data analysis and
 inference. These are its main features:
 
-- Any combination of **binary**, **nominal**, **ordinal**,
-  **continuous**, **discrete** data. Continuous data can be bounded,
-  unbounded, **censored**, and rounded.
 - **No modelling assumptions** such as gaussianity, linearity, or any
   other kind of model. The analysis and inferences are fully
   [nonparametric](https://dictionary.apa.org/nonparametric).
@@ -25,6 +22,9 @@ inference. These are its main features:
   The analysis and inferences are therefore more general than those by
   neural networks, random forests, or similar machine-learning
   algorithms.
+- Any combination of **binary**, **nominal**, **ordinal**,
+  **continuous**, **discrete** data. Continuous data can be bounded,
+  unbounded, **censored**, and rounded.
 - **Automatic [imputation](https://dictionary.apa.org/imputation)** of
   missing data: all sample data are used, even those that lacks some
   variate values. The imputation is done with a principled method (the
