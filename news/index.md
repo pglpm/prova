@@ -2,6 +2,8 @@
 
 ## Prova v2.3.0
 
+CRAN release: 2026-08-20
+
 - Introduced the much faster
   [`mutualinfoF()`](https://pglpm.github.io/prova/reference/mutualinfo.md)
   for variates with finite domains.
