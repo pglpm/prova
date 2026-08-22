@@ -12,15 +12,15 @@
 - [(verb)](https://dictionary.cambridge.org/dictionary/italian-english/provare): test!, try out!, assess!, attempt!, prove!, demonstrate!, show!
 
 
-# ***Prova***: <br> Probabilistic-statistical variate analysis <br> nonparametric and with automated Markov-chain Monte Carlo
+# ***Prova***: Probabilistic-statistical variate analysis
 
 ("What's a variate?" Answer here[^1])
 
 An R package to perform probabilistic and statistical data analysis and inference. These are its main features:
 
-- Any combination of **binary**, **nominal**, **ordinal**, **continuous**, **discrete** data. Continuous data can be bounded, unbounded, **censored**, and rounded.
 - **No modelling assumptions** such as gaussianity, linearity, or any other kind of model. The analysis and inferences are fully [nonparametric](https://dictionary.apa.org/nonparametric).
 - **No assumptions about functional dependence** between data variates. The analysis and inferences are therefore more general than those by neural networks, random forests, or similar machine-learning algorithms.
+- Any combination of **binary**, **nominal**, **ordinal**, **continuous**, **discrete** data. Continuous data can be bounded, unbounded, **censored**, and rounded.
 - **Automatic [imputation](https://dictionary.apa.org/imputation)** of missing data: all sample data are used, even those that lacks some variate values. The imputation is done with a principled method (the marginalization rule of probability theory), rather than ad-hoc procedures.
 - Easy and straightforward **subgroup analyses** and **stratified analyses**, for any division of variates, with full statistical details.
 - **No hard-coded distinction between "predictor" and "predictand"/target variates** during learning. Any group of variates can be chosen as predictors, and any other group as targets, *on the fly* in each application, without need to re-learn from the training data.

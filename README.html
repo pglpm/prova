@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>readme</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="README_files/libs/clipboard/clipboard.min.js"></script>
+<script src="README_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="README_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="README_files/libs/quarto-html/popper.min.js"></script>
+<script src="README_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="README_files/libs/quarto-html/anchor.min.js"></script>
+<link href="README_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="README_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="README_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="README_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="README_files/libs/bootstrap/bootstrap-f0d716fb43965662ee7c3b603c5827f1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<!-- badges: start -->
+<p><a href="https://CRAN.R-project.org/package=prova"><img src="https://www.r-pkg.org/badges/version/prova.png" class="img-fluid" alt="CRAN status"></a> <a href="https://doi.org/10.5281/zenodo.17226082"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.17226082.svg" class="img-fluid" alt="Zenodo"></a> <a href="https://pglpm.r-universe.dev/prova"><img src="https://pglpm.r-universe.dev/prova/badges/version.png" class="img-fluid" alt="r-universe version"></a> <!-- badges: end --></p>
+<p><img src="man/figures/prova_logo.jpg" alt="Ensemble of densities" width="100%"></p>
+<p>“prova” /’prɔva/ (Italian)</p>
+<ul>
+<li><a href="https://dictionary.cambridge.org/dictionary/italian-english/prova">(noun)</a>: test, trial, assessment, proof, evidence, sign, indication, try, attempt.</li>
+<li><a href="https://dictionary.cambridge.org/dictionary/italian-english/provare">(verb)</a>: test!, try out!, assess!, attempt!, prove!, demonstrate!, show!</li>
+</ul>
+<section id="prova-probabilistic-statistical-variate-analysis" class="level1">
+<h1><strong><em>Prova</em></strong>: <br> Probabilistic-statistical variate analysis</h1>
+<p>(“What’s a variate?” Answer here<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>)</p>
+<p>An R package to perform probabilistic and statistical data analysis and inference. These are its main features:</p>
+<ul>
+<li><strong>No modelling assumptions</strong> such as gaussianity, linearity, or any other kind of model. The analysis and inferences are fully <a href="https://dictionary.apa.org/nonparametric">nonparametric</a>.</li>
+<li><strong>No assumptions about functional dependence</strong> between data variates. The analysis and inferences are therefore more general than those by neural networks, random forests, or similar machine-learning algorithms.</li>
+<li>Any combination of <strong>binary</strong>, <strong>nominal</strong>, <strong>ordinal</strong>, <strong>continuous</strong>, <strong>discrete</strong> data. Continuous data can be bounded, unbounded, <strong>censored</strong>, and rounded.</li>
+<li><strong>Automatic <a href="https://dictionary.apa.org/imputation">imputation</a></strong> of missing data: all sample data are used, even those that lacks some variate values. The imputation is done with a principled method (the marginalization rule of probability theory), rather than ad-hoc procedures.</li>
+<li>Easy and straightforward <strong>subgroup analyses</strong> and <strong>stratified analyses</strong>, for any division of variates, with full statistical details.</li>
+<li><strong>No hard-coded distinction between “predictor” and “predictand”/target variates</strong> during learning. Any group of variates can be chosen as predictors, and any other group as targets, <em>on the fly</em> in each application, without need to re-learn from the training data.</li>
+<li><strong>Quantification of <a href="https://dictionary.apa.org/generalizability">generalizability</a></strong> beyond the finite sample size. In other words, quantification of uncertainty of results regarding the whole, unsampled, population.</li>
+<li><strong>Computation of expected utilities</strong> and more generally straightforward use with <strong>decision theory</strong>, such as <strong>clinical decision-making</strong>. Users can immediately combine the probabilistic results with any measures of utilities, such as <a href="https://dictionary.apa.org/quality-adjusted-life-years">quality-adjusted life years</a>. Uncertainty about long-run expected utilities is also calculated.</li>
+<li><strong>Quantification of associations</strong> between any kinds of variates, without modelling assumptions (gaussianity, linearity, etc.), thanks to the use of <a href="https://electropedia.org/iev/iev.nsf/display?openform&amp;ievref=171-07-26">mutual information</a>.</li>
+<li><strong><a href="https://dictionary.apa.org/base-rate-fallacy">Base-rate</a> correction</strong> for inferences about out-of-population data, by means of Bayes’s theorem.</li>
+<li><strong>Automated Markov-chain Monte Carlo</strong> computation. Users unfamiliar with Monte Carlo methods don’t have to worry, because the computations are handled automatically.</li>
+</ul>
+<p>The package essentially performs Bayesian nonparametric inference (also called “density inference” or “inference under exchangeability”), which makes most features above possible.</p>
+<p><br></p>
+<section id="minimal-example" class="level2">
+<h2 class="anchored" data-anchor-id="minimal-example">Minimal example</h2>
+<p>Use the <a href="https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html">R <code>penguins</code> dataset</a> (or download a shuffled version from <a href="https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv">here</a>), together with the metadata <code>meta_penguins</code> available in <strong>Prova</strong>. Metadata contain the characteristics of the dataset’s variates.</p>
+<p>“Learn” from this dataset using the function <code>learn()</code>. Note that the dataset has partially missing values (datapoint #4 for instance), but this is not a problem for <strong>Prova</strong>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">learn</span>(<span class="at">data =</span> penguins, <span class="at">metadata =</span> meta_penguins)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># [progress output about the learning computation]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The object <code>K</code> (for “Knowledge” or “Known”) encodes what has been learnt from data and metadata.</p>
+<p>Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a <em>new</em> penguin from this population is of species <em>Adélie</em>, if its bill length is 45 mm? In symbols,</p>
+<p><span class="math display">\[
+\mathrm{Pr}(\text{species = Adelie} \thinspace\vert\thinspace\mathopen{}
+\text{bill len = 45 mm}, K)
+\]</span></p>
+<p>where <span class="math inline">\(K\)</span> stands for the knowledge acquired from data and metadata. To answer this question, use the function <code>Pr()</code>, and print a summary of the result:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> <span class="fu">Pr</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">species =</span> <span class="st">'Adelie'</span>), <span class="co"># predictand</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">bill_len =</span> <span class="dv">40</span>),      <span class="co"># predictor</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    K                               <span class="co"># Knowledge from data &amp; metadata</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(prob)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># , , |bill_len = 45</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#         probability</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># species  value   +/-     Q5.5%   Q25%    Q75%    Q94.5%</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   Adelie 0.09857 0.00053 0.05337 0.07534 0.11893 0.1527</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The answer is that there is roughly a 10% probability that a new penguin, among those with a 45 mm bill length, is of species <em>Adélie</em>.</p>
+<p>Now ask: what is the relative frequency of <em>Adélie</em> species <em>in the whole subpopulation</em> (including unsampled penguins), of penguins having bill length of 45 mm? This cannot be answered with certainty, because we have only a sample of the full population. But <strong>Prova</strong> can calculate the <em>probability distribution</em> for this full-population frequency. In fact, it has already been calculated by the function <code>Pr()</code> above, and we can visualize it with a plot:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(prob)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="man/figures/README-hist-1.svg" alt="probability of long-run frequency" width="100%"></p>
+<p>The plot shows that this full-population frequency is most likely (with roughly 90% probability) between 0.05 and 0.15. These are the values shown by <code>print(prob)</code> above.</p>
+<p>The <em>inverse</em> question can also be asked: if we observe a new penguin of <em>Adélie</em> species, what could its bill length be? The answer is uncertain, and <strong>Prova</strong> can calculate the probability distribution of the penguin’s bill length:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>invprob <span class="ot">&lt;-</span> <span class="fu">Pr</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">bill_len =</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">60</span>, <span class="at">by =</span> <span class="fl">0.5</span>)), <span class="co"># predictand</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">species =</span> <span class="st">'Adelie'</span>),               <span class="co"># predictor</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    K                                             <span class="co"># knowledge</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(invprob, <span class="at">col =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="man/figures/README-plot-1.svg" alt="probability distribution for bill length" width="100%"></p>
+<p>this probability distribution has a peak between 35 mm and 40 mm and it’s slightly skewed.</p>
+<p>This distribution is not the <em>frequency</em> distribution of bill length in the whole subpopulation of <em>Adélie</em> penguins; the latter is uncertain because we have only a sample. But the plot above shows that the full-population frequency distribution is somewhere between the grey bands.</p>
+<p><br></p>
+<p>This was just a minimal example, just touching on the basic functionality. More complex combinations of variates and more complex probabilistic-statistical questions can be approached.</p>
+<p>The <a href="https://pglpm.github.io/prova/articles/intro.html">introductory vignette</a> explains, with a guided example, most of the features above, as well as the main ideas and functions. It can be particularly useful for researchers who are more familiar with traditional “frequentist” statistics but would like to try the Bayesian approach. See the <a href="https://www.apadivisions.org/division-7/publications/newsletters/developmental/2018/07/bayesian-statistics">post</a> by Barbara W. Sarnecka, frequentist statistician turned Bayesian, for a brilliant overview of the Bayesian advantages. The <a href="https://pglpm.github.io/prova/articles/mutualinfo.html">vignette about mutual information</a> explains the use of this powerful measure of association.</p>
+<p>The package is under continuous development, but the core functionalities work and have been tested in concrete research projects; see <a href="#example-applications">example applications</a> below.</p>
+<p>The package internally does the computations necessary for Bayesian inference by means of Monte Carlo methods thanks to the R package <a href="https://r-nimble.org/"><strong>Nimble</strong></a>. As already mentioned, this computation is automated. Users familiar with Monte Carlo methods can still access computational details and can even change some of the computation hyperparameters.</p>
+</section>
+<section id="installation" class="level2">
+<h2 class="anchored" data-anchor-id="installation">Installation</h2>
+<p><strong>You need to have installed the package <a href="https://r-nimble.org/"><strong>Nimble</strong></a>, <em>at least version 1.4.2</em>.</strong> Please follow <a href="https://r-nimble.org/manual/cha-installing-nimble.html">Nimble’s installation instructions</a> for your operating system.</p>
+<p>Then <strong>Prova</strong> can be installed from <a href="https://CRAN.R-project.org/package=prova">CRAN</a> with</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'prova'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In case of a newer version not yet on CRAN, it can be installed with</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">'pglpm/prova'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="documentation" class="level2">
+<h2 class="anchored" data-anchor-id="documentation">Documentation</h2>
+<p>The vignette <a href="https://pglpm.github.io/prova/articles/intro.html"><em>An introduction to probabilistic-statistical variate analysis</em></a> is a step-by-step introduction to <strong>Prova</strong> and also to Bayesian nonparametrics. It guides you through a concrete example with various kinds of inferences. You may also try to follow it using a dataset of your own.</p>
+<p>Other tutorials are available at <a href="https://pglpm.github.io/prova/">pglpm.github.io/prova</a>, or can be accessed in an R session with <code>browseVignettes('prova')</code>.</p>
+<p>A summary of the theoretical foundations, including further references, is available in <a href="https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf">this draft</a>. The main idea for the internal mathematical representation comes from <a href="https://doi.org/10.1093/acprof:oso/9780199694587.003.0005">Dunson &amp; Bhattacharya</a> and <a href="https://doi.org/10.2307/3315951">Ishwaran &amp; Zarepour</a>.</p>
+<p>For a low-level course on Bayesian nonparametric inference and Decision Theory see <a href="https://pglpm.github.io/ADA511/">Data Science and AI Prototyping</a>.</p>
+</section>
+<section id="example-applications" class="level2">
+<h2 class="anchored" data-anchor-id="example-applications">Example applications</h2>
+<ul>
+<li><p><a href="https://doi.org/10.31219/osf.io/8nr56"><em>Personalized prognosis &amp; treatment using an optimal predictor machine: An example study on conversion from Mild Cognitive Impairment to Alzheimer’s Disease</em></a>.</p></li>
+<li><p><a href="https://doi.org/10.31219/osf.io/vct9y"><em>Don’t guess what’s true: choose what’s optimal. A probability transducer for machine-learning classifiers</em></a></p></li>
+<li><p><a href="https://doi.org/10.31219/osf.io/7rz8t"><em>Does the evaluation stand up to evaluation? A first-principle approach to the evaluation of classifiers</em></a></p></li>
+<li><p><a href="https://doi.org/10.1088/2632-2153/ae45ed"><em>Calibrated and uncertain? Evaluating uncertainty estimates in binary classification models</em></a></p></li>
+</ul>
+</section>
+<section id="projects-using-prova" class="level2">
+<h2 class="anchored" data-anchor-id="projects-using-prova">Projects using <strong>Prova</strong>:</h2>
+<ul>
+<li><a href="https://inferno.m4siko.cc/">InfernoCalibNet</a>: uncertainty-aware predictions for medical AI using CNN and Bayesian nonparametrics framework</li>
+<li><a href="https://github.com/pglpm/parkinsonbayes/">parkinsonbayes</a>: Examples of Bayesian nonparametric inference for studies of Parkinson’s Disease</li>
+<li><a href="https://github.com/Myddis/Inferno-App/">Inferno-App</a>: PySide6 application that integrates Python and R functionality using the <strong>Inferno</strong> (old version of <strong>Prova</strong>) R package.</li>
+</ul>
+</section>
+<section id="contact" class="level2">
+<h2 class="anchored" data-anchor-id="contact">Contact</h2>
+<p>Please report bugs and request features or specific documentation on <a href="https://github.com/pglpm/prova/issues">GitHub Issues</a>. If you have other questions about application, theory, technical implementation, feel free to contact Luca <a href="mailto:pglXYZ@portamanaXYZ.org" class="email">pglXYZ@portamanaXYZ.org</a> (remove ‘XYZ’ for anti-spam purposes).</p>
+</section>
+<section id="disclaimer" class="level2">
+<h2 class="anchored" data-anchor-id="disclaimer">Disclaimer</h2>
+<p>No large language models were used in the production of this software and of its documents.</p>
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><a href="https://archive.org/details/conciseoxfordeng0000unse_i8l8/page/1598/mode/1up"><em>variate</em></a>: “a quantity having a numerical value for each member of a group, especially one whose values occur according to a frequency distribution.” (Concise Oxford English Dictionary).<br><a href="https://archive.org/details/conciseoxfordeng0000unse_i8l8/page/1598/mode/1up"><em>variable</em></a>: “a factor or quantity able to assume different numerical values” (Concise Oxford English Dictionary).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
