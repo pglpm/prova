@@ -167,7 +167,16 @@ This distribution is not the *frequency* distribution of bill length in
 the whole subpopulation of *Adélie* penguins; the latter is uncertain
 because we have only a sample. But the plot above shows that the
 full-population frequency distribution is somewhere between the grey
-bands.
+bands. Alternatively we can display this uncertainty with an ensemble
+plot of probable frequency distributions:
+
+``` r
+
+plot(invprob, col = 2, spread = 'samples')
+```
+
+![probability distribution for bill length, ensemble
+plot](reference/figures/README-plotens-1.svg)
 
 This was just a minimal example, just touching on the basic
 functionality. More complex combinations of variates and more complex
