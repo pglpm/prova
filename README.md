@@ -92,7 +92,12 @@ plot(invprob, col = 2)
 
 this probability distribution has a peak between 35 mm and 40 mm and it's slightly skewed.
 
-This distribution is not the *frequency* distribution of bill length in the whole subpopulation of *Adélie* penguins; the latter is uncertain because we have only a sample. But the plot above shows that the full-population frequency distribution is somewhere between the grey bands.
+This distribution is not the *frequency* distribution of bill length in the whole subpopulation of *Adélie* penguins; the latter is uncertain because we have only a sample. But the plot above shows that the full-population frequency distribution is somewhere between the grey bands. Alternatively we can display this uncertainty with an ensemble plot of probable frequency distributions:
+```r
+plot(invprob, col = 2, spread = 'samples')
+```
+<img src="man/figures/README-plotens-1.svg" alt="probability distribution for bill length, ensemble plot" width="100%"/>
+
 
 </br>
 
