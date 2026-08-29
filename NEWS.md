@@ -1,3 +1,8 @@
+# Prova v2.3.1
+
+* Corrected behaviour of argument `cex = ` in plot functions.
+
+
 # Prova v2.3.0
 
 * Introduced the much faster `mutualinfoF()` for variates with finite domains.

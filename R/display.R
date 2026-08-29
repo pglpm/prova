@@ -31,7 +31,7 @@
 #' @param grid Logical, default `TRUE`: plot a light grid?
 #' @param lwd.grid Numeric, default 1: width of grid lines.
 #' @param col.grid Color of grid lines, default `'#00000022'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()].
-#' @param lty,lwd,pch,lend,col,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()]; defaults are different (see "Usage").
+#' @param lty,lwd,pch,lend,col,cex,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()]; defaults are different (see "Usage").
 #' @param ... Other parameters to be passed to [graphics::matplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
@@ -81,6 +81,7 @@ pplot <- function(
     lend = par('lend'),
     pch = c(1, 2, 0, 5, 6, 3), #, 4,
     col = palette(),
+    cex = NULL,
     xlab = NA, ylab = NA,
     xlim = NULL, ylim = NULL,
     add = FALSE,
@@ -378,6 +379,7 @@ pplot <- function(
                 lend = lend[[(aplot - 1) %% length(lend) + 1]],
                 pch = pch[[(aplot - 1) %% length(pch) + 1]],
                 col = adjustcolor(thiscol, alpha.f = thisalpha.f),
+                cex = cex[[(aplot - 1) %% length(cex) + 1]],
                 add = TRUE, ...)
 
         }
@@ -523,7 +525,7 @@ pplot <- function(
 #' @param lty.spread Same as parameter `lty` (line style), but for the line type of the long-run-frequency samples.
 #' @param lwd.spread Same as parameter `lwd` (line width), but for the line type of the long-run-frequency samples.
 #' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` means `0.25` if `spread = 'quantiles'`; and an appropriate value if `spread = 'samples'`,dependent on the number of samples (more samples, less opacity).
-#' @param pch,col,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
+#' @param pch,col,cex,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
 #' @param ... Other parameters to be passed to [pplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
@@ -564,6 +566,7 @@ plot.prova_pr <- function(
     pch = c(1, 2, 0, 5, 6, 3), #, 4,
     lwd = 2,
     col = palette(),
+    cex = NULL,
     xlab = NULL, ylab = NULL,
     xlim = NULL, ylim = c(0, NA),
     legend = 'topright',
@@ -882,6 +885,7 @@ plot.prova_pr <- function(
         lwd = largs(1, lwd.spread, lwd.spread, lwd.spread, lwd, lwd),
         pch = pchlist,
         col = largs(col, col, col, col, col, col),
+        cex = largs(cex, cex, cex, cex, cex, cex),
         alpha.f = largs(alpha.f.spread, alpha.f.spread,
             alpha.f.spread, alpha.f.spread, alpha.f, alpha.f),
         fill = NA,
@@ -1598,7 +1602,7 @@ print.prova_mi <- function(
 #' @param lty.spread Same as parameter `lty` (line style), but for the line type of the revisability samples.
 #' @param lwd.spread Same as parameter `lwd` (line width), but for the line type of the revisability samples.
 #' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` determines a value dependent on the number of samples (more samples, less opacity).
-#' @param pch,col,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
+#' @param pch,col,cex,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
 #' @param ... Other parameters to be passed to [pplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
@@ -1644,6 +1648,7 @@ plot.prova_eu <- function(
     pch = c(1, 2, 0, 5, 6, 3), #, 4,
     lwd = 2,
     col = palette(),
+    cex = NULL,
     xlab = NULL, ylab = NULL,
     xlim = NULL, ylim = NULL,
     legend = 'topright',
@@ -1730,6 +1735,7 @@ plot.prova_eu <- function(
         lwd = largs(lwd.spread, lwd),
         pch = largs(pch, pch),
         col = largs(col, col),
+        cex = largs(cex, cex),
         alpha.f = largs(alpha.f.spread, alpha.f),
         fill = NA,
         xlab = xlab,

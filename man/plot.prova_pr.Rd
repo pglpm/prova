@@ -14,6 +14,7 @@
   pch = c(1, 2, 0, 5, 6, 3),
   lwd = 2,
   col = palette(),
+  cex = NULL,
   xlab = NULL,
   ylab = NULL,
   xlim = NULL,
@@ -49,7 +50,7 @@
 
 \item{lty}{Analogous to argument \code{lty} (line style) in \code{\link[graphics:matplot]{graphics::matplot()}}, used for the main probability distributions.}
 
-\item{pch, col, xlab, ylab, main, xlim, ylim, grid, axes, add, lwd.grid, col.grid}{see analogous arguments in \code{\link[graphics:plot.default]{graphics::plot.default()}} and \code{\link[graphics:matplot]{graphics::matplot()}}.}
+\item{pch, col, cex, xlab, ylab, main, xlim, ylim, grid, axes, add, lwd.grid, col.grid}{see analogous arguments in \code{\link[graphics:plot.default]{graphics::plot.default()}} and \code{\link[graphics:matplot]{graphics::matplot()}}.}
 
 \item{lwd}{Analogous to argument \code{lwd} (line width) in \code{\link[graphics:matplot]{graphics::matplot()}}, used for the main probability distributions.}
 

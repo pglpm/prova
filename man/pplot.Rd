@@ -13,6 +13,7 @@ pplot(
   lend = par("lend"),
   pch = c(1, 2, 0, 5, 6, 3),
   col = palette(),
+  cex = NULL,
   xlab = NA,
   ylab = NA,
   xlim = NULL,
@@ -40,7 +41,7 @@ pplot(
 
 \item{type}{Character vector or list indicating the type of plot for each element of \code{x} and \code{y}. The types of plot are the same as in \code{\link[base:plot]{base::plot()}}, in particular \code{'p'} for points, \code{'l'} for lines, \code{'b'} for both points and lines, \code{'c'} for empty points joined by lines, \code{'o'} for overplotted points and lines, ``n'\verb{for empty plot. Additional special types}'hx'`, `'qx'`, `'hy'`, `'qy'` are available for plotting histograms and quantile bands; see "Details".}
 
-\item{lty, lwd, pch, lend, col, xlab, ylab, add, axes, cex.main}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}} and \code{\link[graphics:plot.default]{graphics::plot.default()}}; defaults are different (see "Usage").}
+\item{lty, lwd, pch, lend, col, cex, xlab, ylab, add, axes, cex.main}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}} and \code{\link[graphics:plot.default]{graphics::plot.default()}}; defaults are different (see "Usage").}
 
 \item{xlim, ylim}{\code{NULL} (default) or a vector of two values. If non-\code{NULL} and any of the two values is not finite (including \code{NA} or \code{NULL}), then the \code{min} or \code{max} \code{x}- or \code{y}-coordinates of the plotted points are used.}
 
