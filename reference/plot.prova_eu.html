@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,7 @@
 <span>  pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>  lwd <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palette.html" class="external-link">palette</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  cex <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -95,7 +96,7 @@
 <dd><p>Analogous to argument <code>lty</code> (line style) in <code><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">graphics::matplot()</a></code>, used for the main probability distributions.</p></dd>
 
 
-<dt id="arg-pch-col-xlab-ylab-main-xlim-ylim-grid-axes-add-lwd-grid-col-grid">pch, col, xlab, ylab, main, xlim, ylim, grid, axes, add, lwd.grid, col.grid<a class="anchor" aria-label="anchor" href="#arg-pch-col-xlab-ylab-main-xlim-ylim-grid-axes-add-lwd-grid-col-grid"></a></dt>
+<dt id="arg-pch-col-cex-xlab-ylab-main-xlim-ylim-grid-axes-add-lwd-grid-col-grid">pch, col, cex, xlab, ylab, main, xlim, ylim, grid, axes, add, lwd.grid, col.grid<a class="anchor" aria-label="anchor" href="#arg-pch-col-cex-xlab-ylab-main-xlim-ylim-grid-axes-add-lwd-grid-col-grid"></a></dt>
 <dd><p>see analogous arguments in <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">graphics::plot.default()</a></code> and <code><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">graphics::matplot()</a></code>.</p></dd>
 
 
@@ -180,6 +181,8 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## plot the expected utilities and their revisability</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">eu</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'x' is NULL so the result will be NULL</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'x' is NULL so the result will be NULL</span>
 <span class="r-plt img"><img src="plot.prova_eu-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

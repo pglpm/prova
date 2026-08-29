@@ -1,5 +1,9 @@
 # Changelog
 
+## Prova v2.3.1
+
+- Corrected behaviour of argument `cex =` in plot functions.
+
 ## Prova v2.3.0
 
 CRAN release: 2026-08-20

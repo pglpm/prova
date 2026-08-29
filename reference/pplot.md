@@ -16,6 +16,7 @@ pplot(
   lend = par("lend"),
   pch = c(1, 2, 0, 5, 6, 3),
   col = palette(),
+  cex = NULL,
   xlab = NA,
   ylab = NA,
   xlim = NULL,
@@ -62,7 +63,7 @@ pplot(
   \`'qx'\`, \`'hy'\`, \`'qy'\` are available for plotting histograms and
   quantile bands; see "Details".
 
-- lty, lwd, pch, lend, col, xlab, ylab, add, axes, cex.main:
+- lty, lwd, pch, lend, col, cex, xlab, ylab, add, axes, cex.main:
 
   see analogous arguments in
   [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html) and

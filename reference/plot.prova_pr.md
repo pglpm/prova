@@ -20,6 +20,7 @@ plot(
   pch = c(1, 2, 0, 5, 6, 3),
   lwd = 2,
   col = palette(),
+  cex = NULL,
   xlab = NULL,
   ylab = NULL,
   xlim = NULL,
@@ -87,8 +88,8 @@ plot(
   [`graphics::matplot()`](https://rdrr.io/r/graphics/matplot.html), used
   for the main probability distributions.
 
-- pch, col, xlab, ylab, main, xlim, ylim, grid, axes, add, lwd.grid,
-  col.grid:
+- pch, col, cex, xlab, ylab, main, xlim, ylim, grid, axes, add,
+  lwd.grid, col.grid:
 
   see analogous arguments in
   [`graphics::plot.default()`](https://rdrr.io/r/graphics/plot.default.html)
@@ -246,5 +247,7 @@ probs <- Pr(valuesBill, Kexample)
 
 ## plot the probabilities and quantiles
 plot(probs)
+#> Warning: 'x' is NULL so the result will be NULL
+#> Warning: 'x' is NULL so the result will be NULL
 
 ```
