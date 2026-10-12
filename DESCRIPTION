@@ -1,6 +1,6 @@
 Package: prova
 Title: Nonparametric Probabilistic-Statistical Variate Analysis
-Version: 2.3.1
+Version: 2.3.2
 Authors@R: c(
   person("PierGianLuca", "Porta Mana", ,
   "pgl@portamana.org", role = c("aut", "cre", "cph"),
@@ -30,5 +30,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1
 LazyData: true

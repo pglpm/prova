@@ -14,7 +14,7 @@
   pch = c(1, 2, 0, 5, 6, 3),
   lwd = 2,
   col = palette(),
-  cex = NULL,
+  cex = 1,
   xlab = NULL,
   ylab = NULL,
   xlim = NULL,
