@@ -29,8 +29,8 @@ Other contributors:
   \item Aurora Grefsrud \email{agre@hvl.no} (\href{https://orcid.org/0009-0005-9063-4131}{ORCID}) [contributor]
   \item Håkon Mydland \email{haakon.mydland@gmail.com} (\href{https://orcid.org/0009-0004-9558-8894}{ORCID}) [contributor]
   \item Maksim Ohvrill \email{maksimohvrill@hotmail.com} [contributor]
-  \item Torstein Sleire \email{tor-sle@hotmail.com} [contributor]
   \item Simen Hesthamar Hauge \email{simen@hhnet.no} (\href{https://orcid.org/0009-0005-6158-2846}{ORCID}) [contributor]
+  \item Torstein Sleire \email{tor-sle@hotmail.com} (\href{https://orcid.org/0009-0004-4040-2458}{ORCID}) [contributor]
 }
 
 }
