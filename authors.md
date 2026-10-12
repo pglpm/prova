@@ -13,10 +13,11 @@
 
 - **Maksim Ohvrill**. Contributor.
 
-- **Torstein Sleire**. Contributor.
-
 - **Simen Hesthamar Hauge**. Contributor.
   [](https://orcid.org/0009-0005-6158-2846)
+
+- **Torstein Sleire**. Contributor.
+  [](https://orcid.org/0009-0004-4040-2458)
 
 ## Citation
 
