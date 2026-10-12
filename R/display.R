@@ -917,7 +917,7 @@ plot.prova_pr <- function(
     }
 
     if(qspread){
-        mtext(paste0('Q: ', paste0(round(qvalues, 1), '%', collapse = ', ')),
+        mtext(paste0('Q: ', paste0(round(qvalues * 100, 1), '%', collapse = ', ')),
             side = 2, line = -0.25, cex = 0.75)
         ## legend(x = 'bottomleft', inset = c(-0.02, -0.03), cex = 0.75,
         ##     bty = 'n', xpd = TRUE,
