@@ -1,8 +1,9 @@
 # Changelog
 
-## Prova v2.3.1
+## Prova v2.3.2
 
-- Corrected behaviour of argument `cex =` in plot functions.
+- Corrected behaviour of argument `cex =` in plot functions, and a bug
+  introduced by the correction.
 
 ## Prova v2.3.0
 

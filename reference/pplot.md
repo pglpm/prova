@@ -16,7 +16,7 @@ pplot(
   lend = par("lend"),
   pch = c(1, 2, 0, 5, 6, 3),
   col = palette(),
-  cex = NULL,
+  cex = 1,
   xlab = NA,
   ylab = NA,
   xlim = NULL,

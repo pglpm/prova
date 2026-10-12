@@ -20,7 +20,7 @@ plot(
   pch = c(1, 2, 0, 5, 6, 3),
   lwd = 2,
   col = palette(),
-  cex = NULL,
+  cex = 1,
   xlab = NULL,
   ylab = NULL,
   xlim = NULL,
@@ -247,7 +247,5 @@ probs <- Pr(valuesBill, Kexample)
 
 ## plot the probabilities and quantiles
 plot(probs)
-#> Warning: 'x' is NULL so the result will be NULL
-#> Warning: 'x' is NULL so the result will be NULL
 
 ```

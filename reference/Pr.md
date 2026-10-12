@@ -333,8 +333,6 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 
 ## plot the probabilities and quantiles
 plot(probs)
-#> Warning: 'x' is NULL so the result will be NULL
-#> Warning: 'x' is NULL so the result will be NULL
 
 
 ## plot the probability distribution for the full-population frequency
@@ -424,8 +422,6 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 
 ## plot the probabilities and quantiles
 plot(probs)
-#> Warning: 'x' is NULL so the result will be NULL
-#> Warning: 'x' is NULL so the result will be NULL
 
 
 
