@@ -519,7 +519,7 @@ pplot <- function(
 #' @param lwd Analogous to argument `lwd` (line width) in [graphics::matplot()], used for the main probability distributions.
 #' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'topright'`.
 #' @param alpha.f Numeric, default `1`: opacity of the colours of lines or markers, `0` being completely invisible and `1` completely opaque.
-#' @param quantiles.spread Numeric vector or `NULL` (default): revisability quantiles to display. Value `NULL` uses all quantiles available in the `x` object, or just extreme quantiles if multiple probability curves are shown.
+#' @param quantiles.spread Numeric vector or `TRUE` or `NULL` (default): revisability quantiles to display. Value `TRUE` uses all quantiles available in the `x` object. Value `NULL` uses all quantiles available in the `x` object, or just extreme quantiles if multiple probability curves are shown.
 #' @param nsamples.spread Integer, default 360: number of samples of long-run frequencies to display.
 #' @param type.spread `NULL` (default) or character vector or list indicating the type of plot for the long-run-frequency samples; see. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
 #' @param lty.spread Same as parameter `lty` (line style), but for the line type of the long-run-frequency samples.
@@ -604,7 +604,7 @@ plot.prova_pr <- function(
         ## We choose 'quantiles' or what's available
         if(!is.null(x[['quantiles']])) {
             spread <- 'quantiles'
-            quantiles.spread <- NULL
+#            quantiles.spread <- NULL
         } else if(!is.null(x[['samples']])){
             spread <- 'samples'
         } else {
@@ -617,17 +617,23 @@ plot.prova_pr <- function(
         spread <- match.arg(spread, c('quantiles', 'samples', 'none'))
 
         ## handle impossible requests
-        if(spread == 'quantiles' && is.null(x[['quantiles']])){
-            warning("Revisability quantiles not available in the 'x' object.")
-            spread <- 'none'
+        if(spread == 'quantiles'){
+            if(is.null(x[['quantiles']])){
+                warning("Revisability quantiles not available in the 'x' object.")
+                spread <- 'none'
+            } else {
+                qvalues <- as.numeric(
+                    sub('%', '', dimnames(x[['quantiles']])[[3]])) / 100
+                if(isTRUE(quantiles.spread)){
+                    quantiles.spread <- qvalues
+                } else if(!is.null(quantiles.spread) &&
+                              !all(quantiles.spread %in% qvalues)){
+                    warning("Requested quantiles not available in the 'x' object.")
+                    quantiles.spread <- NULL
+                }
+            }
         }
 
-        qnames <- as.numeric(sub('%', '', dimnames(x[['quantiles']])[[3]]))
-        if(spread == 'quantiles' && !is.null(quantiles.spread) &&
-               !all(quantiles.spread %in% qnames)){
-            warning("Requested quantiles not available in the 'x' object.")
-            quantiles.spread <- NULL
-        }
         if(spread == 'samples' && is.null(x[['samples']])){
             warning("Revisability samples not available in the 'x' object.")
             spread <- 'none'
@@ -728,21 +734,22 @@ plot.prova_pr <- function(
 
     ## Rename the revisability object so as to avoid if-else below
     if(qspread){
-        qnames <- as.numeric(sub('%', '', dimnames(x[['quantiles']])[[3]]))
+        qvalues <- as.numeric(sub('%', '', dimnames(x[['quantiles']])[[3]])) / 100
+        if(isTRUE(quantiles.spread)){ quantiles.spread <- qvalues }
         if(is.null(quantiles.spread)){
             mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
             ## if we are plotting more than one curve, keep only the 89% band
             if(Xlen > 1 && Ylen > 1){
                 ispread <- sapply(mainpercentiles,
-                    function(xx){which.min(abs(qnames - xx))})
+                    function(xx){which.min(abs(qvalues - xx))})
             } else {
                 ispread <- TRUE
             }
         } else {
             ## Previously checked that all requested quantiles exist
-            ispread <- which(qnames %in% quantiles.spread)
+            ispread <- which(qvalues %in% quantiles.spread)
         }
-        qnames <- qnames[ispread]
+        qvalues <- qvalues[ispread]
         if(is.null(alpha.f.spread)){alpha.f.spread <- 0.25}
 
     } else if(sspread){
@@ -822,7 +829,7 @@ plot.prova_pr <- function(
             x$K, ')')
         ## if(qspread){
         ##     ylab <- paste0(ylab, '\nquantiles: ',
-        ##         paste0(round(qnames, 1), '%', collapse = ', '))
+        ##         paste0(round(qvalues, 1), '%', collapse = ', '))
         ## } else if(sspread){
         ##     ylab <- paste0(main, '\n', nsamples.spread, ' samples')
         ## }
@@ -911,12 +918,12 @@ plot.prova_pr <- function(
     }
 
     if(qspread){
-        mtext(paste0('Q: ', paste0(round(qnames, 1), '%', collapse = ', ')),
+        mtext(paste0('Q: ', paste0(round(qvalues, 1), '%', collapse = ', ')),
             side = 2, line = -0.25, cex = 0.75)
         ## legend(x = 'bottomleft', inset = c(-0.02, -0.03), cex = 0.75,
         ##     bty = 'n', xpd = TRUE,
         ##     legend =  paste0('Q: ',
-        ##         paste0(round(qnames, 1), '%', collapse = ', ')))
+        ##         paste0(round(qvalues, 1), '%', collapse = ', ')))
         } else if(sspread){
             mtext(paste0(nsamples.spread, ' samples'),
             side = 2, line = -0.25, cex = 0.75)

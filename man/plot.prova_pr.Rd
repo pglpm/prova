@@ -68,7 +68,7 @@
 
 \item{alpha.f.spread}{Numeric or \code{NULL} (default): opacity of the quantile bands or of the long-run-frequency samples, similar to \code{alpha.f}. \code{NULL} means \code{0.25} if \code{spread = 'quantiles'}; and an appropriate value if \code{spread = 'samples'},dependent on the number of samples (more samples, less opacity).}
 
-\item{quantiles.spread}{Numeric vector or \code{NULL} (default): revisability quantiles to display. Value \code{NULL} uses all quantiles available in the \code{x} object, or just extreme quantiles if multiple probability curves are shown.}
+\item{quantiles.spread}{Numeric vector or \code{TRUE} or \code{NULL} (default): revisability quantiles to display. Value \code{TRUE} uses all quantiles available in the \code{x} object. Value \code{NULL} uses all quantiles available in the \code{x} object, or just extreme quantiles if multiple probability curves are shown.}
 
 \item{nsamples.spread}{Integer, default 360: number of samples of long-run frequencies to display.}
 
