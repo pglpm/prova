@@ -145,9 +145,10 @@ plot(
 
 - quantiles.spread:
 
-  Numeric vector or `NULL` (default): revisability quantiles to display.
-  Value `NULL` uses all quantiles available in the `x` object, or just
-  extreme quantiles if multiple probability curves are shown.
+  Numeric vector or `TRUE` or `NULL` (default): revisability quantiles
+  to display. Value `TRUE` uses all quantiles available in the `x`
+  object. Value `NULL` uses all quantiles available in the `x` object,
+  or just extreme quantiles if multiple probability curves are shown.
 
 - nsamples.spread:
 
