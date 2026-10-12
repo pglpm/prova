@@ -604,7 +604,6 @@ plot.prova_pr <- function(
         ## We choose 'quantiles' or what's available
         if(!is.null(x[['quantiles']])) {
             spread <- 'quantiles'
-#            quantiles.spread <- NULL
         } else if(!is.null(x[['samples']])){
             spread <- 'samples'
         } else {
@@ -737,7 +736,7 @@ plot.prova_pr <- function(
         qvalues <- as.numeric(sub('%', '', dimnames(x[['quantiles']])[[3]])) / 100
         if(isTRUE(quantiles.spread)){ quantiles.spread <- qvalues }
         if(is.null(quantiles.spread)){
-            mainpercentiles <- c(5.5, 94.5) # By default we choose an 89% band
+            mainpercentiles <- c(0.055, 0.945) # By default we choose an 89% band
             ## if we are plotting more than one curve, keep only the 89% band
             if(Xlen > 1 && Ylen > 1){
                 ispread <- sapply(mainpercentiles,
