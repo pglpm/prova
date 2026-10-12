@@ -50,5 +50,7 @@ Other contributors:
 
 - Maksim Ohvrill <maksimohvrill@hotmail.com> \[contributor\]
 
+- Torstein Sleire <tor-sle@hotmail.com> \[contributor\]
+
 - Simen Hesthamar Hauge <simen@hhnet.no>
   ([ORCID](https://orcid.org/0009-0005-6158-2846)) \[contributor\]

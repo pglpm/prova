@@ -454,7 +454,7 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpcQF91I/prova-V1_D3_S10_261012T074514_19dd709be216
+#> /tmp/Rtmp5lZaL6/prova-V1_D3_S10_261012T121155_1cf72aa0e79e
 #> Prova v2.3.2.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -477,9 +477,9 @@ K <- learn(
 #> quantile width: 0.0823 to 1.37
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 36 secs
-#> Average preparation & finalization time: 35 secs.
-#> Average Monte Carlo time per chain: 0.63 secs.
+#> Total computation time: 34 secs
+#> Average preparation & finalization time: 33 secs.
+#> Average Monte Carlo time per chain: 0.74 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per core: approx 340MB.
 #> Removing temporary output files.
@@ -487,7 +487,7 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpcQF91I/prova-V1_D3_S10_261012T074514_19dd709be216
+#> /tmp/Rtmp5lZaL6/prova-V1_D3_S10_261012T121155_1cf72aa0e79e
 #> **********************************************************
 
 ## Check structure of `K` object:
