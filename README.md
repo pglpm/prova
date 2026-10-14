@@ -37,6 +37,12 @@ The package essentially performs Bayesian nonparametric inference (also called "
 
 ## Minimal example
 
+Load the package:
+
+```r
+library('prova')
+```
+
 Use the [R `penguins` dataset](https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html) (or download a shuffled version from [here](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv)), together with the metadata `meta_penguins` available in **Prova**. Metadata contain the characteristics of the dataset's variates.
 
 "Learn" from this dataset using the function `learn()`. Note that the dataset has partially missing values (datapoint #4 for instance), but this is not a problem for **Prova**:
