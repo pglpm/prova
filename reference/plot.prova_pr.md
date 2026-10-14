@@ -106,8 +106,8 @@ plot(
   One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`,
   `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'`
   (see [`graphics::legend()`](https://rdrr.io/r/graphics/legend.html)):
-  plot a legend at that position. A value `FALSE` or any other does not
-  plot any legend. Default `'topright'`.
+  plot a legend at that position. Value `FALSE` or `NA` does not plot
+  any legend. Default `'topright'`.
 
 - alpha.f:
 

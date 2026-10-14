@@ -70,11 +70,11 @@ hist(
 
 - legend:
 
-  One of the values `"bottomright"`, `"bottom"`, `"bottomleft"`,
-  `"left"`, `"topleft"`, `"top"`, `"topright"`, `"right"`, `"center"`
+  One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`,
+  `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'`
   (see [`graphics::legend()`](https://rdrr.io/r/graphics/legend.html)):
-  plot a legend at that position. A value `FALSE` or any other does not
-  plot any legend. Default `"top"`.
+  plot a legend at that position. Value `FALSE` or `NA` does not plot
+  any legend. Default `'topright'`.
 
 - lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add:
 
