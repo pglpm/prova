@@ -53,11 +53,11 @@ K <- learn(data = penguins, metadata = meta_penguins)
 
 The object `K` (for "Knowledge" or "Known") encodes what has been learnt from data and metadata.
 
-Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 45 mm? In symbols,
+Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 40 mm? In symbols,
 
 $$
 \mathrm{Pr}(\text{species = Adelie} \thinspace\vert\thinspace\mathopen{}
-\text{bill len = 45 mm}, K)
+\text{bill len = 40 mm}, K)
 $$
 
 where $K$ stands for the knowledge acquired from data and metadata. To answer this question, use the function `Pr()`, and print a summary of the result:
@@ -69,15 +69,15 @@ prob <- Pr(
 )
 
 print(prob)
-# , , |bill_len = 45
-#
+# , , |bill_len = 40
+# 
 #         probability
-# species  value   +/-     Q5.5%   Q25%    Q75%    Q94.5%
-#   Adelie 0.09857 0.00053 0.05337 0.07534 0.11893 0.1527
+# species  value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
+#   Adelie 0.94832 0.00035 0.91207 0.93725 0.96282 0.97525
 ```
-The answer is that there is roughly a 10% probability that a new penguin, among those with a 45 mm bill length, is of species *Adélie*.
+The answer is that there is roughly a 10% probability that a new penguin, among those with a 40 mm bill length, is of species *Adélie*.
 
-Now ask: what is the relative frequency of *Adélie* species *in the whole subpopulation* (including unsampled penguins), of penguins having bill length of 45 mm? This cannot be answered with certainty, because we have only a sample of the full population. But **Prova** can calculate the *probability distribution* for this full-population frequency. In fact, it has already been calculated by the function `Pr()` above, and we can visualize it with a plot:
+Now ask: what is the relative frequency of *Adélie* species *in the whole subpopulation* (including unsampled penguins), of penguins having bill length of 40 mm? This cannot be answered with certainty, because we have only a sample of the full population. But **Prova** can calculate the *probability distribution* for this full-population frequency. In fact, it has already been calculated by the function `Pr()` above, and we can visualize it with a plot:
 ```r
 hist(prob)
 ```
