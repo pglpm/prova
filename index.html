@@ -101,9 +101,12 @@
 <div class="section level2">
 <h2 id="minimal-example">Minimal example<a class="anchor" aria-label="anchor" href="#minimal-example"></a>
 </h2>
+<p>Load the package:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://pglpm.github.io/prova/">'prova'</a></span><span class="op">)</span></span></code></pre></div>
 <p>Use the <a href="https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html" class="external-link">R <code>penguins</code> dataset</a> (or download a shuffled version from <a href="https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv" class="external-link">here</a>), together with the metadata <code>meta_penguins</code> available in <strong>Prova</strong>. Metadata contain the characteristics of the dataset’s variates.</p>
 <p>“Learn” from this dataset using the function <code><a href="reference/learn.html">learn()</a></code>. Note that the dataset has partially missing values (datapoint #4 for instance), but this is not a problem for <strong>Prova</strong>:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">K</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/learn.html">learn</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">penguins</span>, metadata <span class="op">=</span> <span class="va">meta_penguins</span><span class="op">)</span></span>
 <span><span class="co"># [progress output about the learning computation]</span></span></code></pre></div>
 <p>The object <code>K</code> (for “Knowledge” or “Known”) encodes what has been learnt from data and metadata.</p>
@@ -113,7 +116,7 @@
 \text{bill len = 45 mm}, K)
 \]</span></p>
 <p>where <span class="math inline">\(K\)</span> stands for the knowledge acquired from data and metadata. To answer this question, use the function <code><a href="reference/Pr.html">Pr()</a></code>, and print a summary of the result:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="co"># predictand</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">40</span><span class="op">)</span>,      <span class="co"># predictor</span></span>
@@ -128,12 +131,12 @@
 <span><span class="co">#   Adelie 0.09857 0.00053 0.05337 0.07534 0.11893 0.1527</span></span></code></pre></div>
 <p>The answer is that there is roughly a 10% probability that a new penguin, among those with a 45 mm bill length, is of species <em>Adélie</em>.</p>
 <p>Now ask: what is the relative frequency of <em>Adélie</em> species <em>in the whole subpopulation</em> (including unsampled penguins), of penguins having bill length of 45 mm? This cannot be answered with certainty, because we have only a sample of the full population. But <strong>Prova</strong> can calculate the <em>probability distribution</em> for this full-population frequency. In fact, it has already been calculated by the function <code><a href="reference/Pr.html">Pr()</a></code> above, and we can visualize it with a plot:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-hist-1.svg" alt="probability of long-run frequency" width="100%"></p>
 <p>The plot shows that this full-population frequency is most likely (with roughly 90% probability) between 0.05 and 0.15. These are the values shown by <code>print(prob)</code> above.</p>
 <p>The <em>inverse</em> question can also be asked: if we observe a new penguin of <em>Adélie</em> species, what could its bill length be? The answer is uncertain, and <strong>Prova</strong> can calculate the probability distribution of the penguin’s bill length:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">invprob</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/Pr.html">Pr</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">60</span>, by <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>, <span class="co"># predictand</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,               <span class="co"># predictor</span></span>
@@ -144,7 +147,7 @@
 <p><img src="reference/figures/README-plot-1.svg" alt="probability distribution for bill length" width="100%"></p>
 <p>this probability distribution has a peak between 35 mm and 40 mm and it’s slightly skewed.</p>
 <p>This distribution is not the <em>frequency</em> distribution of bill length in the whole subpopulation of <em>Adélie</em> penguins; the latter is uncertain because we have only a sample. But the plot above shows that the full-population frequency distribution is somewhere between the grey bands. Alternatively we can display this uncertainty with an ensemble plot of probable frequency distributions:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">invprob</span>, col <span class="op">=</span> <span class="fl">2</span>, spread <span class="op">=</span> <span class="st">'samples'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plotens-1.svg" alt="probability distribution for bill length, ensemble plot" width="100%"></p>
 <p></p>
@@ -158,10 +161,10 @@
 </h2>
 <p><strong>You need to have installed the package <a href="https://r-nimble.org/" class="external-link"><strong>Nimble</strong></a>, <em>at least version 1.4.2</em>.</strong> Please follow <a href="https://r-nimble.org/manual/cha-installing-nimble.html" class="external-link">Nimble’s installation instructions</a> for your operating system.</p>
 <p>Then <strong>Prova</strong> can be installed from <a href="https://CRAN.R-project.org/package=prova" class="external-link">CRAN</a> with</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'prova'</span><span class="op">)</span></span></code></pre></div>
 <p>In case of a newer version not yet on CRAN, it can be installed with</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'pglpm/prova'</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">

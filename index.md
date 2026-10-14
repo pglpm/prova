@@ -67,6 +67,13 @@ makes most features above possible.
 
 ## Minimal example
 
+Load the package:
+
+``` r
+
+library('prova')
+```
+
 Use the [R `penguins`
 dataset](https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/penguins.html)
 (or download a shuffled version from
