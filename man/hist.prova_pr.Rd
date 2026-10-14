@@ -33,7 +33,7 @@
 
 \item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} determines bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).}
 
-\item{legend}{One of the values \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"}, \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"}, \code{"right"}, \code{"center"} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{"top"}.}
+\item{legend}{One of the values \code{'bottomright'}, \code{'bottom'}, \code{'bottomleft'}, \code{'left'}, \code{'topleft'}, \code{'top'}, \code{'topright'}, \code{'right'}, \code{'center'} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. Value \code{FALSE} or \code{NA} does not plot any legend. Default \code{'topright'}.}
 
 \item{lty, lwd, col, alpha.f, xlab, ylab, xlim, ylim, main, grid, axes, add}{see analogous arguments in \code{\link[graphics:matplot]{graphics::matplot()}}}
 

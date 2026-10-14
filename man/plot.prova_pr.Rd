@@ -54,7 +54,7 @@
 
 \item{lwd}{Analogous to argument \code{lwd} (line width) in \code{\link[graphics:matplot]{graphics::matplot()}}, used for the main probability distributions.}
 
-\item{legend}{One of the values \code{'bottomright'}, \code{'bottom'}, \code{'bottomleft'}, \code{'left'}, \code{'topleft'}, \code{'top'}, \code{'topright'}, \code{'right'}, \code{'center'} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. A value \code{FALSE} or any other does not plot any legend. Default \code{'topright'}.}
+\item{legend}{One of the values \code{'bottomright'}, \code{'bottom'}, \code{'bottomleft'}, \code{'left'}, \code{'topleft'}, \code{'top'}, \code{'topright'}, \code{'right'}, \code{'center'} (see \code{\link[graphics:legend]{graphics::legend()}}): plot a legend at that position. Value \code{FALSE} or \code{NA} does not plot any legend. Default \code{'topright'}.}
 
 \item{alpha.f}{Numeric, default \code{1}: opacity of the colours of lines or markers, \code{0} being completely invisible and \code{1} completely opaque.}
 

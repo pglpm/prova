@@ -517,7 +517,7 @@ pplot <- function(
 #' @param type `NULL` (default) or character vector or list indicating the type of plot for the main probability distribution; see [base::plot()]. The default `NULL` value uses type `'l'` (lines) for continuous variates, and `'b'` (points and lines) for discrete variates.
 #' @param lty Analogous to argument `lty` (line style) in [graphics::matplot()], used for the main probability distributions.
 #' @param lwd Analogous to argument `lwd` (line width) in [graphics::matplot()], used for the main probability distributions.
-#' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `'topright'`.
+#' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. Value `FALSE` or `NA` does not plot any legend. Default `'topright'`.
 #' @param alpha.f Numeric, default `1`: opacity of the colours of lines or markers, `0` being completely invisible and `1` completely opaque.
 #' @param quantiles.spread Numeric vector or `TRUE` or `NULL` (default): revisability quantiles to display. Value `TRUE` uses all quantiles available in the `x` object. Value `NULL` uses all quantiles available in the `x` object, or just extreme quantiles if multiple probability curves are shown.
 #' @param nsamples.spread Integer, default 360: number of samples of long-run frequencies to display.
@@ -680,6 +680,11 @@ plot.prova_pr <- function(
         ## It's unusual to plot probabilities of a continous variate against X
         pdeltas <- FALSE
         pvsyi <- 1
+    }
+    if(isFALSE(legend) || is.na(legend)){
+        lgnd <- NULL
+    } else if(isTRUE(legend)){
+        legend <- 'top'
     }
     npdeltas <- any(!pdeltas)
     ypdeltas <- any(pdeltas)
@@ -969,7 +974,7 @@ plot.prova_pr <- function(
 #' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
 #' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` determines bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).
 #' @param alpha.f.fill Numeric, default `0.125`: opacity of the histogram filling, `0` being completely invisible and `1` completely opaque.
-#' @param legend One of the values `"bottomright"`, `"bottom"`, `"bottomleft"`, `"left"`, `"topleft"`, `"top"`, `"topright"`, `"right"`, `"center"` (see [graphics::legend()]): plot a legend at that position. A value `FALSE` or any other does not plot any legend. Default `"top"`.
+#' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. Value `FALSE` or `NA` does not plot any legend. Default `'topright'`.
 #' @param showmean Logical, default `TRUE`: show the means of the probability distributions? The means correspond to the probabilities about the next observed unit.
 #' @param lty,lwd,col,alpha.f,xlab,ylab,xlim,ylim,main,grid,axes,add see analogous arguments in [graphics::matplot()]
 #' @param ... Other parameters to be passed to [pplot()].
@@ -1122,7 +1127,7 @@ hist.prova_pr <- function(
     }
 
     ## Plot legends
-    if(is.character(legend) &&
+    if(!isFALSE(legend) && !is.na(legend) && is.character(legend) &&
            (legend %in%
                  c("bottomright", "bottom", "bottomleft", "left", "topleft",
                      "top", "topright", "right", "center"))){
