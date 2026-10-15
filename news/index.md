@@ -1,11 +1,12 @@
 # Changelog
 
-## Prova v2.3.3
+## Prova v2.3.4
 
 - Corrected behaviour of argument `cex =` in plot functions, and a bug
   introduced by the correction.
 - New possible value for `quantiles.spread` and corrected behaviour of
   this argument.
+- New available values `FALSE` and `NA` for plot() `legend =` argument.
 
 ## Prova v2.3.0
 
