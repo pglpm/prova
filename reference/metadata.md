@@ -121,8 +121,8 @@ lower-case).
   the levels of some quantities, with values "low", "medium", "high"; or
   a variate having a numeric scale with values from 1 to 10. Whether a
   variate is nominal or ordinal often depends on the context. The
-  possible values of the variate but be given in either one (but not
-  both) or two ways: (1) in the fields `V1`, `V2`, ..., as for nominal
+  possible values of the variate must be given in either (but not both)
+  or two ways: (1) in the fields `V1`, `V2`, ..., as for nominal
   variates; (2) as the fields `domainmin`, `domainmax`, `datastep`.
   Option (2) only works with numeric, equally spaced values: it assumes
   that the first value is `domainmin`, the second is
