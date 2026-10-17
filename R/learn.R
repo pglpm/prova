@@ -88,7 +88,7 @@
 #'
 #' It is recommended that you give an explicit argument `outputdir =` and save the directory with the files above for future reference. In particular, the `MCtraces.pdf` plot and `MCtraces.rds` data can be useful to report Monte Carlo convergence in any work of yours that used **Prova**.
 #'
-#' During operation, the computation progress and estimated remaining times for each node's computation are outputted to the file `'main.out'` in the output directory, and also to the console if argument `verbose` is `TRUE`. Note that the estimated remaining times are very approximate and often quite **conservatives** (a node may report an end time of one day at first, but then actually finish in the next couple of hours).
+#' During operation, computation progress and estimated end times for each node's computation are outputted to the file `'main.out'` in the output directory, and also to the console if argument `verbose` is `TRUE`. Note that the estimated end times are very approximate and often quite **conservatives** (a node may report an end time of 24 hours at first, but then actually finish in the next couple of hours).
 #'
 #' @references
 #'
