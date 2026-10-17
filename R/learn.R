@@ -82,7 +82,7 @@
 #'
 #' - `MCtraces.pdf`: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file `MCtraces.rds`.
 #' - `plotsamples_learn.pdf`, `plotquantiles_learn.pdf`: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
-#' - `log-1.out`, `log-2.out`, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.
+#' - `log-1.out`, `log-2.out`, ... one for each parallel node; report the progress of each parallel Monte Carlo computation and notes about it.
 #' - `rng_seed.rds`: the state of the pseudorandom seed (see [base::Random]) when `learn()` was called.
 #' - `metadata.csv`: a copy of the metadata.
 #'
@@ -311,7 +311,7 @@ learn <- function(
 #### Argument-consistency checks
 ##################################################
 
-#### Consistency checks for numbers of samples, chains, cores
+#### Consistency checks for numbers of samples, chains, nodes
     ## The defaults are 3600 samples from 8 chains, 450 samples per chain
     ## The user can choose any two
     ## nsamples = nchains * nsamplesperchain
@@ -353,8 +353,8 @@ learn <- function(
     ## Parallellisation is done in any case,
     ## so that objects from the Monte Carlo simulation are not left in memory.
 
-    ## Number of cores is reduced if larger than 'nchains':
-    ## doesn't make sense to have more cores than chains
+    ## Number of nodes is reduced if larger than 'nchains':
+    ## doesn't make sense to have more nodes than chains
     closeexit <- FALSE
     if (inherits(parallel, "cluster")){
         ## user provides a cluster object
@@ -364,10 +364,10 @@ learn <- function(
         cl <- cl0[seq_len(ncores)]
     } else if (isTRUE(parallel)) {
         ## user wants us to check for or register a parallel backend
-        ## and to choose number of cores
+        ## and to choose number of nodes
         cl0 <- parallel::getDefaultCluster()
         if(is.null(cl0)){
-            ncores <- min(nchains, getOption("cl.cores", 2))
+            ncores <- min(nchains, getOption('cl.cores', 2))
             cl0 <- cl <- parallel::makeCluster(ncores)
             closeexit <- TRUE
             predirmsgs <- c(predirmsgs, list(
@@ -384,7 +384,7 @@ learn <- function(
         closeexit <- TRUE
     } else if (is.numeric(parallel) &&
                    is.finite(parallel) && parallel >= 1) {
-        ## user wants us to register 'parallel' # of cores
+        ## user wants us to register 'parallel' number of nodes
         ncores <- min(nchains, parallel)
         cl0 <- cl <- parallel::makeCluster(ncores)
         closeexit <- TRUE
@@ -1070,12 +1070,12 @@ learn <- function(
     print2user('in a space of ', samplespacedims, ' (effectively ',
         samplespacedims + samplespacexdims, ') dimensions.')
 
-    print2user('Using ', ncores, ' cores: ',
+    print2user('Using ', ncores, ' nodes: ',
         nsamplesperchain, ' samples per chain, max ',
-        minchainspercore + (coreswithextrachain > 0), ' chains per core.')
+        minchainspercore + (coreswithextrachain > 0), ' chains per node.')
     print2user('Requested:   ESS ', round(minESS),
         '   rel.MCSE ', signif(maxrelMCSE, 3), '.')
-    print2user('Core logs are being saved in individual files.')
+    print2user('Node logs are being saved in individual files.')
 
     ## function  to format printing of time
     printtimediff <- function(tim) {
@@ -1138,6 +1138,7 @@ learn <- function(
         family = family,
         mainlog = mainlog,
         verbose = verbose,
+        ncores = ncores,
         ##
         chunk.size = NULL
     )
@@ -1486,7 +1487,7 @@ learn <- function(
             difftime(headertimestart + MCtime, headertimestart, units = 'auto')
         ), '.',
         '\nMax total memory used: approx ', signif(totusedmem, 2), 'MB.',
-        '\nMax memory used per core: approx ', signif(maxusedmem, 2), 'MB.'
+        '\nMax memory used per node: approx ', signif(maxusedmem, 2), 'MB.'
     )
 
 #### Remove partial files if required
@@ -1567,7 +1568,8 @@ learn <- function(
     printtimediff,
     family,
     mainlog,
-    verbose
+    verbose,
+    ncores
 ){
     ## Handles R CMD check:
     ## these are variables or functions handled in a special way by Nimble
@@ -1605,7 +1607,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
     maincon <- file(mainlog, open = 'a')
     ## Restore sink in case of exit or error
     closecons <- function(){
-        ## Close output to core log files
+        ## Close output to node log files
         flush(outcon)
         sink(file = NULL, type = 'output')
         sink(file = NULL, type = 'message')
@@ -1616,7 +1618,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
     }
     on.exit(closecons())
 
-    ## We need to send some messages to individual core-log files,
+    ## We need to send some messages to individual node-log files,
     ## others to the main log file (and to terminal if verbose = TRUE)
     ## This is done by changing output sink:
     if(verbose){
@@ -1629,7 +1631,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             sink(file = maincon, type = 'message')
             message(..., appendLF = FALSE)
             flush(maincon)
-            ## redirect to core log file
+            ## redirect to node log file
             sink(file = outcon, type = 'message')
         }
     }else{
@@ -1639,7 +1641,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             sink(file = maincon, type = 'message')
             message(..., appendLF = FALSE)
             flush(maincon)
-            ## redirect to core log file
+            ## redirect to node log file
             sink(file = outcon, type = 'message')
         }
     }
@@ -1648,7 +1650,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
     ## Timer
     headertimestart <- Sys.time()
-    cat('Log core', acore)
+    cat('Log node', acore)
     cat(' - Current time:',
         strftime(as.POSIXlt(headertimestart), '%Y-%m-%d %H:%M:%S'), '\n')
 
@@ -2926,17 +2928,20 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
     headertime <- difftime(Sys.time(), headertimestart, units = 'secs')
 
 
-    ## Inform user that compilation is done, if core 1:
+    ## Inform user that compilation is done, if node 1:
     if (acore == 1) {
-        print2user(paste0('\rCompiled core ', acore, '. ',
+        print2user(paste0(
+            '\rCompiled node ', acore, '. ',
             'Number of samplers: ',
             length(confnimble$samplerExecutionOrder), '.             \n',
-            'Estimating remaining time, please be patient...'))
-    }
+            'Estimated remaining times:\n',
+            paste0('Node ', 1:ncores, ': estimating...\n', collapse = '')
+            ))
+    } else {Sys.sleep(1)}
 
     ## cat('Loop over chains')
 ##################################################
-#### LOOP OVER CHAINS (WITHIN ONE CORE)
+#### LOOP OVER CHAINS (WITHIN ONE NODE)
 ##################################################
     ## Start timer
     MCtimestart <- Sys.time()
@@ -2949,9 +2954,8 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
     stoppedchains <- 0L
     usedmem <- max(usedmem, sum(gc(full = TRUE)[,6])) #garbage collection
 
-#### LOOP OVER CHAINS IN CORE
+#### LOOP OVER CHAINS IN NODE
     nchainsperthiscore <- minchainspercore + (acore <= coreswithextrachain)
-    ## print2user(paste0('\ncore ',acore,': ',nchainsperthiscore,'\n'))
 
     for (achain in 1:nchainsperthiscore) {
 
@@ -2985,7 +2989,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
         flagnonfinite <- FALSE
         cat('\n###########################################################\nChain #',
             chainnumber,
-            '(chain', achain, 'of', nchainsperthiscore, 'for this core)\n'
+            '(chain', achain, 'of', nchainsperthiscore, 'for this node)\n'
         )
         ## Read data to be used in log-likelihood
         testdata <- readRDS(file = file.path(dirname,
@@ -3317,7 +3321,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 subiter <- subiter + 1L
                 cat('\nChain #', chainnumber, '- chunk', subiter,
                     '(chain', achain, 'of', nchainsperthiscore,
-                    'for this core): increasing by', niter, '\n'
+                    'for this node): increasing by', niter, '\n'
                 )
             }
 
@@ -3352,7 +3356,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 legend(x = 'left', bty = 'n', cex = 0.75,
                     legend = c(
                         paste0('Chain ', chainnumber, ' - ',
-                            achain, ' of core ', acore),
+                            achain, ' of node ', acore),
                         ##
                         paste0('Test points ',
                             paste0('#', testdata$pointsid, collapse=' ')
@@ -3449,8 +3453,12 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 ( (nchainsperthiscore + (acore > coreswithextrachain) - fracchain) *
                       difftime(Sys.time(), MCtimestart) / fracchain )
             print2user(paste0(
-                '\rSampling. Core ', acore, ' estimated end time: ',
-                format(endTime, format='%Y-%m-%d %H:%M'), '   '
+                '\r',
+                '\033[', ncores - acore + 1, 'A',
+                'Node ', acore, ': ',
+                format(endTime, format='%Y-%m-%d %H:%M'),
+                '\033[', ncores - acore + 1, 'B',
+                '\r'
                 ))
 
             reset <- FALSE
@@ -3525,7 +3533,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
         maxusedcomponents <- max(maxusedcomponents, usedcomponents)
         maxiterations <- max(maxiterations, nitertot)
     }
-#### END LOOP OVER CHAINS (WITHIN ONE CORE)
+#### END LOOP OVER CHAINS (WITHIN ONE NODE)
 
     ##
     cat('\nCurrent time:', format(Sys.time(), '%Y-%m-%d %H:%M:%S'))
@@ -3534,13 +3542,17 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
         printtimediff(difftime(Sys.time(), headertimestart, units = 'auto')),
         '\n')
 
-#### Inform user that this core has finished
-    ## ## timing text, for white spaces:
-    ## ## "Sampling. Core 2 estimated end time: xxxx-xx-xx xx:xx   "
-    print2user(paste0('\rCore ', acore,
-        ' finished.                                        \nSampling. Estimating remaining time...'))
+#### Inform user that this node has finished
+    print2user(paste0(
+        '\r',
+        '\033[', ncores - acore + 1, 'A',
+        'Node ', acore, ': ',
+        'finished.        ',
+        '\033[', ncores - acore + 1, 'B',
+        '\r'
+    ))
 
-    ## output information from a core,
+    ## output information from a node,
     ## passed to the originally calling process
     cbind(
         maxusedcomponents = maxusedcomponents,
