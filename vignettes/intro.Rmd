@@ -337,17 +337,17 @@ K10 <- learn(
 ## 
 ## Starting Monte Carlo sampling of 3600 samples by 8 chains
 ## in a space of 1023 (effectively 3856) dimensions.
-## Using 4 cores: 450 samples per chain, max 2 chains per core.
+## Using 4 nodes: 450 samples per chain, max 2 chains per node.
 ## Requested:   ESS 450   rel.MCSE 0.047.
-## Core logs are being saved in individual files.
+## Node logs are being saved in individual files.
 ## C-compiling samplers appropriate to the variates (Nimble v1.4.2)
 ## this can take tens of minutes. Please wait...
-## Compiled core 1. Number of samplers: 1078.             
-## Estimating remaining time, please be patient...
-## Core 2 finished.                                        
-## Core 4 finished.                                        
-## Core 1 finished.                                        
-## Core 3 finished.                                        
+## Compiled node 1. Number of samplers: 1078.             
+## Estimated remaining times:
+## Node 1 finished.                                        
+## Node 2 finished.                                        
+## Node 3 finished.                                        
+## Node 4 finished.                                        
 ## Finished Monte Carlo sampling.
 ## Highest number of Monte Carlo iterations across chains: 115200.
 ## Highest number of used mixture components: 5.
@@ -366,7 +366,7 @@ K10 <- learn(
 ## Average preparation & finalization time: 1.7 mins.
 ## Average Monte Carlo time per chain: 5.5 mins.
 ## Max total memory used: approx 3100MB.
-## Max memory used per core: approx 770MB.
+## Max memory used per node: approx 770MB.
 ## Removing temporary output files.
 ## Finished.
 ## 
@@ -375,7 +375,7 @@ K10 <- learn(
 ## __penguin_inference_10-V8_D10_S3600_260621T120628
 ## *************************************************
 ## 
-## Closing connections to cores.
+## Closing connections to nodes.
 ```
 
 The initial output gives a summary of the sample size, number of variates, saving directory, and other computational details. An "`estimated end time`" line (not appearing in the output above) is updated from time to time with a better estimate of the computation's end time. Once the computation is finished, some final information about the underlying Monte Carlo computation and time and memory use is provided.^[The Monte Carlo expert will notice that the effective sample size is around 3000 or more. The Monte Carlo sampling is designed to stop when 3600 samples have been obtained from 8 chains, each with an effective sample size of at least 450, or equivalently a relative Monte Carlo standard error under 0.047. This is enough, considering that the statistical uncertainty in the results can be tens or hundreds of times larger than this. The desired number of samples and maximal Monte Carlo standard error can be specified with the `nsamples`, `minESS`, and `maxrelMCSE` arguments.] The inference above, with 10 datasamples and 8 variates, took around 3 GB and 15 minutes to complete on 4 cores.
@@ -785,15 +785,15 @@ Fspecies10IS <- Pr(Y, Xdouble, K10)
 print(Fspecies10IS, 'value')
 # $value
 #            |island,sex
-# species     Biscoe,female Dream,female Torgersen,female Biscoe,male Dream,male
-#   Adelie             0.13         0.39             0.48        0.21       0.32
-#   Chinstrap          0.11         0.40             0.27        0.22       0.55
-#   Gentoo             0.76         0.21             0.25        0.57       0.14
+# species     Biscoe,female Dream,female Torgersen,female Biscoe,male
+#   Adelie             0.13         0.39             0.48        0.21
+#   Chinstrap          0.11         0.40             0.27        0.22
+#   Gentoo             0.76         0.21             0.25        0.57
 #            |island,sex
-# species     Torgersen,male
-#   Adelie              0.44
-#   Chinstrap           0.38
-#   Gentoo              0.17
+# species     Dream,male Torgersen,male
+#   Adelie          0.32           0.44
+#   Chinstrap       0.55           0.38
+#   Gentoo          0.14           0.17
 ```
 
 ## Imputation of missing data {#imputation}
@@ -1150,7 +1150,7 @@ Kall <- learn(
     data = penguins, # or 'data = penguins_shuffled'
     metadata = meta_penguins,
     outputdir = 'penguin_inference',
-    parallel = 8 ## how many cores to use for the computation
+    parallel = 8 ## how many nodes to use for the computation
 )
 ## [Output omitted]
 ```

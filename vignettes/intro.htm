@@ -1333,17 +1333,17 @@ longer time on your computer:</p>
 <span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="do">## Starting Monte Carlo sampling of 3600 samples by 8 chains</span></span>
 <span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="do">## in a space of 1023 (effectively 3856) dimensions.</span></span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="do">## Using 4 cores: 450 samples per chain, max 2 chains per core.</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="do">## Using 4 nodes: 450 samples per chain, max 2 chains per node.</span></span>
 <span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="do">## Requested:   ESS 450   rel.MCSE 0.047.</span></span>
-<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="do">## Core logs are being saved in individual files.</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="do">## Node logs are being saved in individual files.</span></span>
 <span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="do">## C-compiling samplers appropriate to the variates (Nimble v1.4.2)</span></span>
 <span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="do">## this can take tens of minutes. Please wait...</span></span>
-<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="do">## Compiled core 1. Number of samplers: 1078.             </span></span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="do">## Estimating remaining time, please be patient...</span></span>
-<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="do">## Core 2 finished.                                        </span></span>
-<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="do">## Core 4 finished.                                        </span></span>
-<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="do">## Core 1 finished.                                        </span></span>
-<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="do">## Core 3 finished.                                        </span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="do">## Compiled node 1. Number of samplers: 1078.             </span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="do">## Estimated remaining times:</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="do">## Node 1 finished.                                        </span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="do">## Node 2 finished.                                        </span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="do">## Node 3 finished.                                        </span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="do">## Node 4 finished.                                        </span></span>
 <span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="do">## Finished Monte Carlo sampling.</span></span>
 <span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="do">## Highest number of Monte Carlo iterations across chains: 115200.</span></span>
 <span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="do">## Highest number of used mixture components: 5.</span></span>
@@ -1362,7 +1362,7 @@ longer time on your computer:</p>
 <span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a><span class="do">## Average preparation &amp; finalization time: 1.7 mins.</span></span>
 <span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a><span class="do">## Average Monte Carlo time per chain: 5.5 mins.</span></span>
 <span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a><span class="do">## Max total memory used: approx 3100MB.</span></span>
-<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a><span class="do">## Max memory used per core: approx 770MB.</span></span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a><span class="do">## Max memory used per node: approx 770MB.</span></span>
 <span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a><span class="do">## Removing temporary output files.</span></span>
 <span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a><span class="do">## Finished.</span></span>
 <span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a><span class="do">## </span></span>
@@ -1371,7 +1371,7 @@ longer time on your computer:</p>
 <span id="cb5-53"><a href="#cb5-53" tabindex="-1"></a><span class="do">## __penguin_inference_10-V8_D10_S3600_260621T120628</span></span>
 <span id="cb5-54"><a href="#cb5-54" tabindex="-1"></a><span class="do">## *************************************************</span></span>
 <span id="cb5-55"><a href="#cb5-55" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb5-56"><a href="#cb5-56" tabindex="-1"></a><span class="do">## Closing connections to cores.</span></span></code></pre></div>
+<span id="cb5-56"><a href="#cb5-56" tabindex="-1"></a><span class="do">## Closing connections to nodes.</span></span></code></pre></div>
 <p>The initial output gives a summary of the sample size, number of
 variates, saving directory, and other computational details. An
 “<code>estimated end time</code>” line (not appearing in the output
@@ -1937,15 +1937,15 @@ subpopulations. The procedure is analogous to the one we <a href="#twovariates">
 <span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a><span class="fu">print</span>(Fspecies10IS, <span class="st">&#39;value&#39;</span>)</span>
 <span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a><span class="co"># $value</span></span>
 <span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a><span class="co">#            |island,sex</span></span>
-<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a><span class="co"># species     Biscoe,female Dream,female Torgersen,female Biscoe,male Dream,male</span></span>
-<span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a><span class="co">#   Adelie             0.13         0.39             0.48        0.21       0.32</span></span>
-<span id="cb23-18"><a href="#cb23-18" tabindex="-1"></a><span class="co">#   Chinstrap          0.11         0.40             0.27        0.22       0.55</span></span>
-<span id="cb23-19"><a href="#cb23-19" tabindex="-1"></a><span class="co">#   Gentoo             0.76         0.21             0.25        0.57       0.14</span></span>
+<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a><span class="co"># species     Biscoe,female Dream,female Torgersen,female Biscoe,male</span></span>
+<span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a><span class="co">#   Adelie             0.13         0.39             0.48        0.21</span></span>
+<span id="cb23-18"><a href="#cb23-18" tabindex="-1"></a><span class="co">#   Chinstrap          0.11         0.40             0.27        0.22</span></span>
+<span id="cb23-19"><a href="#cb23-19" tabindex="-1"></a><span class="co">#   Gentoo             0.76         0.21             0.25        0.57</span></span>
 <span id="cb23-20"><a href="#cb23-20" tabindex="-1"></a><span class="co">#            |island,sex</span></span>
-<span id="cb23-21"><a href="#cb23-21" tabindex="-1"></a><span class="co"># species     Torgersen,male</span></span>
-<span id="cb23-22"><a href="#cb23-22" tabindex="-1"></a><span class="co">#   Adelie              0.44</span></span>
-<span id="cb23-23"><a href="#cb23-23" tabindex="-1"></a><span class="co">#   Chinstrap           0.38</span></span>
-<span id="cb23-24"><a href="#cb23-24" tabindex="-1"></a><span class="co">#   Gentoo              0.17</span></span></code></pre></div>
+<span id="cb23-21"><a href="#cb23-21" tabindex="-1"></a><span class="co"># species     Dream,male Torgersen,male</span></span>
+<span id="cb23-22"><a href="#cb23-22" tabindex="-1"></a><span class="co">#   Adelie          0.32           0.44</span></span>
+<span id="cb23-23"><a href="#cb23-23" tabindex="-1"></a><span class="co">#   Chinstrap       0.55           0.38</span></span>
+<span id="cb23-24"><a href="#cb23-24" tabindex="-1"></a><span class="co">#   Gentoo          0.14           0.17</span></span></code></pre></div>
 </div>
 <div id="imputation" class="section level2" number="5.5">
 <h2><span class="header-section-number">5.5</span> Imputation of missing
@@ -2328,7 +2328,7 @@ the code below); this time we use 8 parallel cores:</p>
 <span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a>    <span class="at">data =</span> penguins, <span class="co"># or &#39;data = penguins_shuffled&#39;</span></span>
 <span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a>    <span class="at">metadata =</span> meta_penguins,</span>
 <span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a>    <span class="at">outputdir =</span> <span class="st">&#39;penguin_inference&#39;</span>,</span>
-<span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">8</span> <span class="do">## how many cores to use for the computation</span></span>
+<span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">8</span> <span class="do">## how many nodes to use for the computation</span></span>
 <span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a>)</span>
 <span id="cb42-7"><a href="#cb42-7" tabindex="-1"></a><span class="do">## [Output omitted]</span></span></code></pre></div>
 <p>The calculation with 344 datasamples took around 7 GB and
