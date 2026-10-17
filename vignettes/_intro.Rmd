@@ -339,7 +339,7 @@ K10 <- learn(
 ## C-compiling samplers appropriate to the variates (Nimble v1.4.2)
 ## this can take tens of minutes. Please wait...
 ## Compiled node 1. Number of samplers: 1078.             
-## Estimated remaining times:
+## Estimated remaining times (periodically updated):
 ## Node 1 finished.                                        
 ## Node 2 finished.                                        
 ## Node 3 finished.                                        
