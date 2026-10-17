@@ -92,7 +92,7 @@ learn(
 
 \item{thinning}{Integer or \code{NULL} (default): thin out the Monte Carlo samples by this value. If \code{NULL}: let the diagnostics decide the thinning value.}
 
-\item{verbose}{Logical, default \code{TRUE}: output the progress to terminal? If \code{FALSE}, the progress is outputted to the file \code{'main.out'} in the \code{outputdir} directory.}
+\item{verbose}{Logical, default \code{TRUE}: output the progress also to terminal? If \code{FALSE}, the progress is outputted only to the file \code{'main.out'} in the \code{outputdir} directory.}
 
 \item{plottraces}{Logical, default \code{TRUE}: save plots of the Monte Carlo traces of diagnostic values?}
 
@@ -115,6 +115,8 @@ A "prova_K" (knowledge) object, or name of directory containing such an object a
 }
 
 It is recommended that you give an explicit argument \verb{outputdir =} and save the directory with the files above for future reference. In particular, the \code{MCtraces.pdf} plot and \code{MCtraces.rds} data can be useful to report Monte Carlo convergence in any work of yours that used \strong{Prova}.
+
+During operation, the computation progress and estimated remaining times for each node's computation are outputted to the file \code{'main.out'} in the output directory, and also to the console if argument \code{verbose} is \code{TRUE}. Note that the estimated remaining times are very approximate and often quite \strong{conservatives} (a node may report an end time of one day at first, but then actually finish in the next couple of hours).
 }
 \description{
 Compute the posterior joint probability distribution of the variates conditional on the given data, by means of Markov-chain Monte Carlo, using the package \strong{Nimble}.
