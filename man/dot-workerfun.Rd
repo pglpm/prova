@@ -39,7 +39,8 @@
   printtimediff,
   family,
   mainlog,
-  verbose
+  verbose,
+  ncores
 )
 }
 \description{

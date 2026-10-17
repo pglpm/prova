@@ -109,7 +109,7 @@ A "prova_K" (knowledge) object, or name of directory containing such an object a
 \itemize{
 \item \code{MCtraces.pdf}: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file \code{MCtraces.rds}.
 \item \code{plotsamples_learn.pdf}, \code{plotquantiles_learn.pdf}: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
-\item \verb{log-1.out}, \verb{log-2.out}, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.
+\item \verb{log-1.out}, \verb{log-2.out}, ... one for each parallel node; report the progress of each parallel Monte Carlo computation and notes about it.
 \item \code{rng_seed.rds}: the state of the pseudorandom seed (see \link[base:Random]{base::Random}) when \code{learn()} was called.
 \item \code{metadata.csv}: a copy of the metadata.
 }
