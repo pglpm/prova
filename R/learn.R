@@ -2936,7 +2936,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             '\rCompiled node ', acore, '. ',
             'Number of samplers: ',
             length(confnimble$samplerExecutionOrder), '.             \n',
-            'Estimated remaining times (periodically updated):\n',
+            'Estimated end times (periodically updated):\n',
             paste0('Node ', 1:ncores, ': estimating...\n', collapse = '')
             ))
     } else {Sys.sleep(1)}
