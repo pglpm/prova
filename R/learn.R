@@ -1258,7 +1258,7 @@ learn <- function(
     )
 
     ## This is to delete the last 'estimated end time'
-    print2user('\r                                                               \n')
+    print2user('\r\033[', ncores, 'B\n')
 
     print2user('Finished Monte Carlo sampling.')
 
@@ -2936,8 +2936,10 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             '\rCompiled node ', acore, '. ',
             'Number of samplers: ',
             length(confnimble$samplerExecutionOrder), '.             \n',
-            'Estimated end times (periodically updated):\n',
-            paste0('Node ', 1:ncores, ': estimating...\n', collapse = '')
+            'Estimated end times, updated ',
+            format(Sys.time(), format='%Y-%m-%d %H:%M'), ':\n',
+            paste0('Node ', 1:ncores, ': estimating...\n', collapse = ''),
+            '\r\033[', ncores + 1, 'A\r'
             ))
     } else {Sys.sleep(1)}
 
@@ -3455,12 +3457,12 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 ( (nchainsperthiscore + (acore > coreswithextrachain) - fracchain) *
                       difftime(Sys.time(), MCtimestart) / fracchain )
             print2user(paste0(
-                '\r',
-                '\033[', ncores - acore + 1, 'A',
+                '\rEstimated end times, updated ',
+                format(Sys.time(), format='%Y-%m-%d %H:%M'), ':\r',
+                '\033[', acore, 'B',
                 'Node ', acore, ': ',
                 format(endTime, format='%Y-%m-%d %H:%M'),
-                '\033[', ncores - acore + 1, 'B',
-                '\r'
+                '\r\033[', acore, 'A\r'
                 ))
 
             reset <- FALSE
@@ -3546,12 +3548,12 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
 #### Inform user that this node has finished
     print2user(paste0(
-        '\r',
-        '\033[', ncores - acore + 1, 'A',
+        '\rEstimated end times, updated ',
+        format(Sys.time(), format='%Y-%m-%d %H:%M'), ':\r',
+        '\033[', acore, 'B',
         'Node ', acore, ': ',
         'finished.        ',
-        '\033[', ncores - acore + 1, 'B',
-        '\r'
+        '\r\033[', acore, 'A\r'
     ))
 
     ## output information from a node,
