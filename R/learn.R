@@ -1258,9 +1258,7 @@ learn <- function(
     )
 
     ## This is to delete the last 'estimated end time'
-    print2user('\r\033[', ncores, 'B\n')
-
-    print2user('Finished Monte Carlo sampling.')
+    print2user('\nFinished Monte Carlo sampling.')
 
     print2user(
         'Highest number of Monte Carlo iterations across chains: ',
@@ -2939,8 +2937,8 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             length(confnimble$samplerExecutionOrder), '.             \n',
             'Estimated end times, updated ',
             format(Sys.time(), format='%Y-%m-%d %H:%M'), ':\n',
-            paste0('Node ', 1:ncores, ': estimating...\n', collapse = ''),
-            '\r\033[', ncores + 1, 'A\r'
+            paste0('Node ', 1:ncores, ': estimating...\n', collapse = '')
+           ## , '\r\033[', ncores + 1, 'A\r'
             ))
     } else {Sys.sleep(1)}
 
@@ -3456,12 +3454,13 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 ( (nchainsperthiscore + (acore > coreswithextrachain) - fracchain) *
                       difftime(Sys.time(), MCtimestart) / fracchain )
             print2user(paste0(
+                '\r\033[', ncores + 1, 'A',
                 '\rEstimated end times, updated ',
                 format(Sys.time(), format='%Y-%m-%d %H:%M'), ':\r',
                 '\033[', acore, 'B',
                 'Node ', acore, ': ',
                 format(endTime, format='%Y-%m-%d %H:%M'),
-                '\r\033[', acore, 'A\r'
+                '\r\033[', ncores - acore + 1, 'B\r'
                 ))
 
             reset <- FALSE
@@ -3547,12 +3546,13 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
 #### Inform user that this node has finished
     print2user(paste0(
+        '\r\033[', ncores + 1, 'A',
         '\rEstimated end times, updated ',
         format(Sys.time(), format='%Y-%m-%d %H:%M'), ':\r',
         '\033[', acore, 'B',
         'Node ', acore, ': ',
         'finished.        ',
-        '\r\033[', acore, 'A\r'
+        '\r\033[', ncores - acore + 1, 'B\r'
     ))
 
     ## output information from a node,
