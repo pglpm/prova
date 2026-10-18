@@ -4,6 +4,7 @@
 * New possible value for `quantiles.spread` and corrected behaviour of this argument.
 * New available values `FALSE` and `NA` for plot() `legend =` argument.
 * Modified progress output of `learn()`.
+* Slightly modified convergence criterion in `learn()`, now more robust to numerical singularities.
 
 
 # Prova v2.3.0
