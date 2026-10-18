@@ -88,7 +88,7 @@
 #'
 #' It is recommended that you give an explicit argument `outputdir =` and save the directory with the files above for future reference. In particular, the `MCtraces.pdf` plot and `MCtraces.rds` data can be useful to report Monte Carlo convergence in any work of yours that used **Prova**.
 #'
-#' During operation, computation progress and estimated end times for each node's computation are outputted to the file `'main.out'` in the output directory, and also to the console if argument `verbose` is `TRUE`. Note that the estimated end times are very approximate and often quite **conservatives** (a node may report an end time of 24 hours at first, but then actually finish in the next couple of hours).
+#' During operation, computation progress and estimated end times for each node's computation are outputted to the file `'main.out'` in the output directory, and also to the console if argument `verbose` is `TRUE`. Note that the estimated end times are very approximate and often quite conservative.
 #'
 #' @references
 #'
@@ -1327,7 +1327,7 @@ learn <- function(
 
     oktraces <- cbind(
         rowMeans(log(oktraces), na.rm = TRUE), # geometric mean
-        oktraces
+        log(oktraces)
     )
 
     oktraces <- oktraces[apply(oktraces, 1, function(x) { all(is.finite(x)) }), ,
@@ -1441,10 +1441,9 @@ learn <- function(
             ## col = 1:6, # to evidence consecutive chains
             main = paste0('#', colnames(oktraces)[avar], ': ',
                 paste(
-                    names(toprint),
-                    sapply(toprint, function(xx){
-                        signif(xx[avar], 3)
-                    }),
+                    names(toprint[c('rel. quantile error', 'ESS')]),
+                    sapply(toprint[c('rel. quantile error', 'ESS')],
+                        function(xx){ signif(xx[avar], 3) }),
                     collapse = ' | ', sep = ': '
                 )),
             cex.main = 1.25,
@@ -3124,7 +3123,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
             ll <- cbind(
                 rowMeans(log(ll), na.rm = TRUE), # geometric mean
-                ll
+                log(ll)
             )
             colnames(ll) <- c('gmean', testdata$pointsid)
 

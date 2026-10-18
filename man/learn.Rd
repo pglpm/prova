@@ -116,7 +116,7 @@ A "prova_K" (knowledge) object, or name of directory containing such an object a
 
 It is recommended that you give an explicit argument \verb{outputdir =} and save the directory with the files above for future reference. In particular, the \code{MCtraces.pdf} plot and \code{MCtraces.rds} data can be useful to report Monte Carlo convergence in any work of yours that used \strong{Prova}.
 
-During operation, computation progress and estimated end times for each node's computation are outputted to the file \code{'main.out'} in the output directory, and also to the console if argument \code{verbose} is \code{TRUE}. Note that the estimated end times are very approximate and often quite \strong{conservatives} (a node may report an end time of 24 hours at first, but then actually finish in the next couple of hours).
+During operation, computation progress and estimated end times for each node's computation are outputted to the file \code{'main.out'} in the output directory, and also to the console if argument \code{verbose} is \code{TRUE}. Note that the estimated end times are very approximate and often quite conservative.
 }
 \description{
 Compute the posterior joint probability distribution of the variates conditional on the given data, by means of Markov-chain Monte Carlo, using the package \strong{Nimble}.
