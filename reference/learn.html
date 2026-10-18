@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -187,7 +187,7 @@
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical, default <code>TRUE</code>: output the progress to terminal? If <code>FALSE</code>, the progress is outputted to the file <code>'main.out'</code> in the <code>outputdir</code> directory.</p></dd>
+<dd><p>Logical, default <code>TRUE</code>: output the progress also to terminal? If <code>FALSE</code>, the progress is outputted only to the file <code>'main.out'</code> in the <code>outputdir</code> directory.</p></dd>
 
 
 <dt id="arg-plottraces">plottraces<a class="anchor" aria-label="anchor" href="#arg-plottraces"></a></dt>
@@ -211,10 +211,11 @@
     <p>A "prova_K" (knowledge) object, or name of directory containing such an object and other output files, or <code>NULL</code>, depending on argument <code>valueisK</code>.</p>
 <p><code>learn()</code> saves several files in a directory. By default this output directory is a temporary directory within the one used by <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">base::tempdir()</a></code>, but an alternative one can be chosen with the argument <code>outputdir =</code>. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:</p><ul><li><p><code>MCtraces.pdf</code>: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file <code>MCtraces.rds</code>.</p></li>
 <li><p><code>plotsamples_learn.pdf</code>, <code>plotquantiles_learn.pdf</code>: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).</p></li>
-<li><p><code>log-1.out</code>, <code>log-2.out</code>, ... one for each parallel core; report the progress of each parallel Monte Carlo computation and notes about it.</p></li>
+<li><p><code>log-1.out</code>, <code>log-2.out</code>, ... one for each parallel node; report the progress of each parallel Monte Carlo computation and notes about it.</p></li>
 <li><p><code>rng_seed.rds</code>: the state of the pseudorandom seed (see <a href="https://rdrr.io/r/base/Random.html" class="external-link">base::Random</a>) when <code>learn()</code> was called.</p></li>
 <li><p><code>metadata.csv</code>: a copy of the metadata.</p></li>
 </ul><p>It is recommended that you give an explicit argument <code>outputdir =</code> and save the directory with the files above for future reference. In particular, the <code>MCtraces.pdf</code> plot and <code>MCtraces.rds</code> data can be useful to report Monte Carlo convergence in any work of yours that used <strong>Prova</strong>.</p>
+<p>During operation, computation progress and estimated end times for each node's computation are outputted to the file <code>'main.out'</code> in the output directory, and also to the console if argument <code>verbose</code> is <code>TRUE</code>. Note that the estimated end times are very approximate and often quite conservative.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -290,41 +291,43 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpWIN2jY/prova-V1_D3_S10_261016T130753_19d31b9ceb37</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v2.3.4.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpLkfTSY/prova-V1_D3_S10_261018T164735_19f323df564</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v2.3.5.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Registered socket cluster with 1 nodes on host ‘localhost’.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Learning from 3 datapoints, 1 variates.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Monte Carlo sampling of 10 samples by 1 chains</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> in a space of 191 (effectively 259) dimensions.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 cores: 10 samples per chain, max 1 chains per core.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using 1 nodes: 10 samples per chain, max 1 chains per node.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Requested:   ESS 0   rel.MCSE Inf.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Core logs are being saved in individual files.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>                                                                </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Node logs are being saved in individual files.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finished Monte Carlo sampling.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Highest number of Monte Carlo iterations across chains: 10.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Highest number of used mixture components: 3.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Checking test data</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> (#1 #2 #3):</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> rel. quantile error: 0.274 to 0.819</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> abs. quantile error: 0.285 to 1.58</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> quantile width: 0.774 to 3.54</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> rel. quantile error: 0.12 to 0.448</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ESS from rel. qt. error: 4.98 to 69</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ESS: 6.13 to 8.59</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> needed thinning: 1.05 to 6.03</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> average: 0.0791 to 0.454</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> quantile width: 0.0823 to 1.37</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> needed thinning: 1.05 to 1.81</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> log-average: -2.95 to -1.21</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting final Monte Carlo traces and marginal samples...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 37 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 36 secs</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 35 secs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.7 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.54 secs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max total memory used: approx 340MB.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Max memory used per core: approx 340MB.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Max memory used per node: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Removing temporary output files.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finished.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> *********************************************************</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Output saved in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpWIN2jY/prova-V1_D3_S10_261016T130753_19d31b9ceb37</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmpLkfTSY/prova-V1_D3_S10_261018T164735_19f323df564</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> *********************************************************</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Check structure of `K` object:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">K</span><span class="op">)</span></span></span>
@@ -358,10 +361,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ plotmax          : num 2.14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ V1               : logi NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ V2               : logi NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ auxinfo    :List of 12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nchains            : num 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ npoints            : int 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ hyperparams        :List of 21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ auxinfo    :List of 14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nchains                : num 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ npoints                : int 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ hyperparams            :List of 21</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ncomponents : num 64</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ minalpha    : num -4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ maxalpha    : num 4</span>
@@ -383,19 +386,23 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Nprior      : chr "Hadamard"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ initmethod  : chr "datacentre"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Qerror      : num [1:2] 0.159 0.841</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxiterations      : num 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxusedcomponents  : num 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nonfinitechains    : num 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ stoppedchains      : num 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rel. quantile error: Named num [1:4] 0.483 0.274 0.659 0.819</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxiterations          : num 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxusedcomponents      : num 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nonfinitechains        : num 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ stoppedchains          : num 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ abs. quantile error    : Named num [1:4] 0.301 0.285 0.971 1.583</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ESS                : Named num [1:4] 8.59 8.59 6.13 8.59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ quantile width         : Named num [1:4] 0.774 2.366 2.851 3.535</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ needed thinning    : Named num [1:4] 2.1 1.05 3.91 6.03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rel. quantile error    : Named num [1:4] 0.389 0.12 0.341 0.448</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ average            : Named num [1:4] 0.1073 0.0928 0.4542 0.0791</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ESS from rel. qt. error: Named num [1:4] 6.6 68.97 8.62 4.98</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ quantile width     : Named num [1:4] 0.0823 0.1452 1.3658 0.2341</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ESS                    : Named num [1:4] 8.59 8.59 6.13 8.59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ needed thinning        : Named num [1:4] 1.36 1.05 1.47 1.81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ log-average            : Named num [1:4] -2.26 -2.62 -1.21 -2.95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "prova_K"</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>

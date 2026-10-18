@@ -42,6 +42,7 @@ parallel workes into the main R session, with waste of memory.
   printtimediff,
   family,
   mainlog,
-  verbose
+  verbose,
+  ncores
 )
 ```

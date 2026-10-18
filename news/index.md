@@ -1,12 +1,17 @@
 # Changelog
 
-## Prova v2.3.4
+## Prova v2.3.5
 
 - Corrected behaviour of argument `cex =` in plot functions, and a bug
   introduced by the correction.
 - New possible value for `quantiles.spread` and corrected behaviour of
   this argument.
 - New available values `FALSE` and `NA` for plot() `legend =` argument.
+- Modified progress output of
+  [`learn()`](https://pglpm.github.io/prova/reference/learn.md).
+- Slightly modified convergence criterion in
+  [`learn()`](https://pglpm.github.io/prova/reference/learn.md), now
+  more robust to numerical singularities.
 
 ## Prova v2.3.0
 

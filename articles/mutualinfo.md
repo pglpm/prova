@@ -166,7 +166,7 @@ prob <- Pr(data.frame(island = 'Torgersen', species = 'Chinstrap'), K)
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-# 0.002944 0.000036 0.000430 0.001191 0.003999  0.00777
+# 0.002930 0.000055 0.000375 0.001150 0.003893  0.00764
 ```
 
   
@@ -197,12 +197,12 @@ penguins, as an example:
 ``` r
 
 rPr(5, c('island', 'species'), K)
-#        island   species
-# 644_1   Dream Chinstrap
-# 996_1  Biscoe    Gentoo
-# 1228_1  Dream Chinstrap
-# 2230_1  Dream Chinstrap
-# 3083_1 Biscoe    Adelie
+#           island   species
+# 644_1      Dream Chinstrap
+# 996_1      Dream Chinstrap
+# 1228_1     Dream Chinstrap
+# 2230_1     Dream Chinstrap
+# 3083_1 Torgersen    Adelie
 ```
 
 This could have also be entered more explicitly as
@@ -738,7 +738,7 @@ Note that in this case the Pearson correlation between `body_mass` and
 ``` r
 
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.575441
+# [1] 0.559465
 ```
 
 which is different from the rough \\r\\-equivalent 0.67.

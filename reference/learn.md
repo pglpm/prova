@@ -211,9 +211,9 @@ learn(
 
 - verbose:
 
-  Logical, default `TRUE`: output the progress to terminal? If `FALSE`,
-  the progress is outputted to the file `'main.out'` in the `outputdir`
-  directory.
+  Logical, default `TRUE`: output the progress also to terminal? If
+  `FALSE`, the progress is outputted only to the file `'main.out'` in
+  the `outputdir` directory.
 
 - plottraces:
 
@@ -254,7 +254,7 @@ computation; in particular:
   posterior distributions of each individual variate, together with
   their "revisability" (as samples or quantiles).
 
-- `log-1.out`, `log-2.out`, ... one for each parallel core; report the
+- `log-1.out`, `log-2.out`, ... one for each parallel node; report the
   progress of each parallel Monte Carlo computation and notes about it.
 
 - `rng_seed.rds`: the state of the pseudorandom seed (see
@@ -268,6 +268,12 @@ save the directory with the files above for future reference. In
 particular, the `MCtraces.pdf` plot and `MCtraces.rds` data can be
 useful to report Monte Carlo convergence in any work of yours that used
 **Prova**.
+
+During operation, computation progress and estimated end times for each
+node's computation are outputted to the file `'main.out'` in the output
+directory, and also to the console if argument `verbose` is `TRUE`. Note
+that the estimated end times are very approximate and often quite
+conservative.
 
 ## Details
 
@@ -454,41 +460,43 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpWIN2jY/prova-V1_D3_S10_261016T130753_19d31b9ceb37
-#> Prova v2.3.4.
+#> /tmp/RtmpLkfTSY/prova-V1_D3_S10_261018T164735_19f323df564
+#> Prova v2.3.5.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
 #> in a space of 191 (effectively 259) dimensions.
-#> Using 1 cores: 10 samples per chain, max 1 chains per core.
+#> Using 1 nodes: 10 samples per chain, max 1 chains per node.
 #> Requested:   ESS 0   rel.MCSE Inf.
-#> Core logs are being saved in individual files.
-#>                                                                
+#> Node logs are being saved in individual files.
+#> 
 #> Finished Monte Carlo sampling.
 #> Highest number of Monte Carlo iterations across chains: 10.
 #> Highest number of used mixture components: 3.
 #> 
 #> Checking test data
 #> (#1 #2 #3):
-#> rel. quantile error: 0.274 to 0.819
+#> abs. quantile error: 0.285 to 1.58
+#> quantile width: 0.774 to 3.54
+#> rel. quantile error: 0.12 to 0.448
+#> ESS from rel. qt. error: 4.98 to 69
 #> ESS: 6.13 to 8.59
-#> needed thinning: 1.05 to 6.03
-#> average: 0.0791 to 0.454
-#> quantile width: 0.0823 to 1.37
+#> needed thinning: 1.05 to 1.81
+#> log-average: -2.95 to -1.21
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 37 secs
+#> Total computation time: 36 secs
 #> Average preparation & finalization time: 35 secs.
-#> Average Monte Carlo time per chain: 0.7 secs.
+#> Average Monte Carlo time per chain: 0.54 secs.
 #> Max total memory used: approx 340MB.
-#> Max memory used per core: approx 340MB.
+#> Max memory used per node: approx 340MB.
 #> Removing temporary output files.
 #> Finished.
 #> 
-#> **********************************************************
+#> *********************************************************
 #> Output saved in directory
-#> /tmp/RtmpWIN2jY/prova-V1_D3_S10_261016T130753_19d31b9ceb37
-#> **********************************************************
+#> /tmp/RtmpLkfTSY/prova-V1_D3_S10_261018T164735_19f323df564
+#> *********************************************************
 
 ## Check structure of `K` object:
 str(K)
@@ -522,10 +530,10 @@ str(K)
 #>   ..$ plotmax          : num 2.14
 #>   ..$ V1               : logi NA
 #>   ..$ V2               : logi NA
-#>  $ auxinfo    :List of 12
-#>   ..$ nchains            : num 1
-#>   ..$ npoints            : int 3
-#>   ..$ hyperparams        :List of 21
+#>  $ auxinfo    :List of 14
+#>   ..$ nchains                : num 1
+#>   ..$ npoints                : int 3
+#>   ..$ hyperparams            :List of 21
 #>   .. ..$ ncomponents : num 64
 #>   .. ..$ minalpha    : num -4
 #>   .. ..$ maxalpha    : num 4
@@ -547,19 +555,23 @@ str(K)
 #>   .. ..$ Nprior      : chr "Hadamard"
 #>   .. ..$ initmethod  : chr "datacentre"
 #>   .. ..$ Qerror      : num [1:2] 0.159 0.841
-#>   ..$ maxiterations      : num 10
-#>   ..$ maxusedcomponents  : num 3
-#>   ..$ nonfinitechains    : num 0
-#>   ..$ stoppedchains      : num 0
-#>   ..$ rel. quantile error: Named num [1:4] 0.483 0.274 0.659 0.819
+#>   ..$ maxiterations          : num 10
+#>   ..$ maxusedcomponents      : num 3
+#>   ..$ nonfinitechains        : num 0
+#>   ..$ stoppedchains          : num 0
+#>   ..$ abs. quantile error    : Named num [1:4] 0.301 0.285 0.971 1.583
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ ESS                : Named num [1:4] 8.59 8.59 6.13 8.59
+#>   ..$ quantile width         : Named num [1:4] 0.774 2.366 2.851 3.535
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ needed thinning    : Named num [1:4] 2.1 1.05 3.91 6.03
+#>   ..$ rel. quantile error    : Named num [1:4] 0.389 0.12 0.341 0.448
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ average            : Named num [1:4] 0.1073 0.0928 0.4542 0.0791
+#>   ..$ ESS from rel. qt. error: Named num [1:4] 6.6 68.97 8.62 4.98
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ quantile width     : Named num [1:4] 0.0823 0.1452 1.3658 0.2341
+#>   ..$ ESS                    : Named num [1:4] 8.59 8.59 6.13 8.59
+#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
+#>   ..$ needed thinning        : Named num [1:4] 1.36 1.05 1.47 1.81
+#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
+#>   ..$ log-average            : Named num [1:4] -2.26 -2.62 -1.21 -2.95
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
 #>  - attr(*, "class")= chr "prova_K"
 # }
