@@ -1431,7 +1431,7 @@ learn <- function(
         ## Do not join separate chains in the plot
         division <- (if(N > nchains) nchains else 1)
         pplot(
-            y = 10*log10(oktraces[is.finite(oktraces[, avar]), avar]),
+            y = 10*(oktraces[is.finite(oktraces[, avar]), avar])/log(10),
             ## x = matrix(seq_len(nsamples), ncol = division),
             ## y = matrix(10*log10(oktraces[, avar]), ncol = division),
             type = 'l', lty = 1, col = 1,
@@ -3392,7 +3392,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
                 for (avar in 1:ncol(traces)) {
                     pplot(
-                        y = 10*log10(traces[is.finite(traces[, avar]), avar]),
+                        y = 10*(traces[is.finite(traces[, avar]), avar])/log(10),
                         type = 'l', lty = 1, col = 1,
                         main = paste0('#', colnames(traces)[avar], ': ',
                             paste(
