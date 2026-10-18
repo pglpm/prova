@@ -1431,7 +1431,8 @@ learn <- function(
         ## Do not join separate chains in the plot
         division <- (if(N > nchains) nchains else 1)
         pplot(
-            y = 10*(oktraces[is.finite(oktraces[, avar]), avar])/log(10),
+            y = 4.343 * (oktraces[is.finite(oktraces[, avar]), avar]),
+            ## 4.343 is 10/log(10)
             ## x = matrix(seq_len(nsamples), ncol = division),
             ## y = matrix(10*log10(oktraces[, avar]), ncol = division),
             type = 'l', lty = 1, col = 1,
@@ -3217,12 +3218,13 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
             ## Output available diagnostics
             toprint <- list(
+                'abs. quantile error' = max(wXlo, wXhi),
+                'quantile width' = qwidth,
                 'rel. quantile error' = max(relmcse[-1]),
                 'ESS from rel. qt. error' = (1/max(relmcse[-1]))^2,
                 'ESS' = essnrmean,
                 'needed thinning' = autothinning,
-                'average' = mean(oktraces),
-                'quantile width' = qwidth
+                'average' = mean(oktraces)
             )
 
 ####
@@ -3391,8 +3393,9 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 ## on.exit(par(oldpar), add = TRUE)
 
                 for (avar in 1:ncol(traces)) {
+                    ## 4.343 is 10/log(10)
                     pplot(
-                        y = 10*(traces[is.finite(traces[, avar]), avar])/log(10),
+                        y = 4.343 * (traces[is.finite(traces[, avar]), avar]),
                         type = 'l', lty = 1, col = 1,
                         main = paste0('#', colnames(traces)[avar], ': ',
                             paste(
