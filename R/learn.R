@@ -1389,16 +1389,18 @@ learn <- function(
 
 ### same as within cores
 
-        c(max(relmcse[-1]), essnrmean, autothinning, qwidth)
+        c(max(relmcse[-1]), essnrmean, autothinning, qwidth, max(wXhi, wXlo))
     })
 
     ## Output available diagnostics
     toprint <- list(
+        'abs. quantile error' = jointdiagn[5, ],
+        'quantile width' = jointdiagn[4, ],
         'rel. quantile error' = jointdiagn[1, ],
+        'ESS from rel. qt. error' = (1/jointdiagn[1, ])^2,
         'ESS' = jointdiagn[2, ],
         'needed thinning' = jointdiagn[3, ],
-        'average' = colMeans(oktraces),
-        'quantile width' = jointdiagn[4, ]
+        'log-average' = colMeans(oktraces)
     )
     K$auxinfo <- c(K$auxinfo, toprint)
     class(K) <- 'prova_K'
@@ -1446,9 +1448,7 @@ learn <- function(
                     collapse = ' | ', sep = ': '
                 )),
             cex.main = 1.25,
-            ylab = paste0('log_F(#',
-                colnames(oktraces)[avar],
-                ')/dHart'),
+            ylab = paste0('log_F(testpoints)/dHart'),
             xlab = 'sample', family = family
             ## mar = c(NA, 6, NA, NA)
         )
@@ -3224,7 +3224,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 'ESS from rel. qt. error' = (1/max(relmcse[-1]))^2,
                 'ESS' = essnrmean,
                 'needed thinning' = autothinning,
-                'average' = mean(oktraces)
+                'log-average' = mean(oktraces)
             )
 
 ####
@@ -3382,7 +3382,10 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                         },
                         if (flagll) {
                             'non-finite values in diagnostics'
-                        }
+                        },
+                        paste0(names(toprint), ': ',
+                            sapply(toprint, function(xx){ signif(xx, 3) })
+                        )
                     )
                 )
 
@@ -3397,18 +3400,9 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                     pplot(
                         y = 4.343 * (traces[is.finite(traces[, avar]), avar]),
                         type = 'l', lty = 1, col = 1,
-                        main = paste0('#', colnames(traces)[avar], ': ',
-                            paste(
-                                names(toprint),
-                                sapply(toprint, function(xx){
-                                    signif(xx[avar], 3)
-                                }),
-                                collapse = ' | ', sep = ': '
-                            )),
+                        main = paste0('#', colnames(traces)[avar]),
                         cex.main = 1.25,
-                        ylab = paste0('log_F(#',
-                            colnames(traces)[avar],
-                            ')/dHart'),
+                        ylab = paste0('log_F(testpoints)/dHart'),
                         xlab = 'Monte Carlo sample',
                         family = family
                         ## mar = c(NA, 6, NA, NA)
