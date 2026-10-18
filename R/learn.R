@@ -3125,7 +3125,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 rowMeans(ll, na.rm = TRUE), # geometric mean
                 ll
             )
-            print(ll[1:10,])
+
             colnames(ll) <- c('gmean', testdata$pointsid)
 
             if(plottraces){
