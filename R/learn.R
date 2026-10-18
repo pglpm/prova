@@ -1300,10 +1300,11 @@ learn <- function(
     print2user('\nChecking test data\n(',
         paste0('#', testdata$pointsid, collapse = ' '), '):')
 
-    oktraces <- .Pcheckpoints(
+    ## .Pcheckpoints() outputs log-probabilities
+    oktraces <- log(.Pcheckpoints(
         testdata = testdata,
         K = K
-    )
+    ))
 
     ## Substitute variances for standard deviations
     if(!is.null(K$Rvar)){
@@ -1326,8 +1327,8 @@ learn <- function(
 
 
     oktraces <- cbind(
-        rowMeans(log(oktraces), na.rm = TRUE), # geometric mean
-        log(oktraces)
+        rowMeans(oktraces, na.rm = TRUE), # geometric mean
+        oktraces
     )
 
     oktraces <- oktraces[apply(oktraces, 1, function(x) { all(is.finite(x)) }), ,
@@ -3116,15 +3117,17 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             diagntime <- Sys.time()
             ##
 
-            ll <- .Pcheckpoints(
+            ## .Pcheckpoints() outputs log-probabilities
+            ll <- log(.Pcheckpoints(
                 testdata = testdata,
                 K = mcsamples
-            )
+            ))
 
             ll <- cbind(
-                rowMeans(log(ll), na.rm = TRUE), # geometric mean
-                log(ll)
+                rowMeans(ll, na.rm = TRUE), # geometric mean
+                ll
             )
+            print(ll[1:10,])
             colnames(ll) <- c('gmean', testdata$pointsid)
 
             if(plottraces){

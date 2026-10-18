@@ -312,7 +312,8 @@
                         logW = lprobX,
                         temporarydir = NULL
                     )
-                   ## Output: rows=components, columns=samples
+                    ## Output: rows=components, columns=samples
+                    ## log(colSums(exp(lprobY))) - log(colSums(W))
                     colSums(exp(lprobY)) / colSums(W)
                 })
             )
