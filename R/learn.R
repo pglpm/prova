@@ -1326,7 +1326,7 @@ learn <- function(
 
 
     oktraces <- cbind(
-        exp(rowMeans(log(oktraces), na.rm = TRUE)), # geometric mean
+        rowMeans(log(oktraces), na.rm = TRUE), # geometric mean
         oktraces
     )
 
@@ -3122,7 +3122,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             )
 
             ll <- cbind(
-                exp(rowMeans(log(ll), na.rm = TRUE)), # geometric mean
+                rowMeans(log(ll), na.rm = TRUE), # geometric mean
                 ll
             )
             colnames(ll) <- c('gmean', testdata$pointsid)
