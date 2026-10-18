@@ -309,11 +309,11 @@ which is included in **Prova** as the data frame `meta_penguins`, which you can 
 
 Now comes the essential part of our analysis: from the sample data and the metadata information,**Prova** will draw inferences about the *whole* population of penguins, including new penguins (from the same population) that we shall observe in the future. Subsequent analyses are based on this main inference. The general theory behind this kind of inference, based on the property of *exchangeability* and related mathematical theorems, is explained in the [references](#references).
 
-This inference is performed by calling the `learn()` function. Its minimal arguments are three: the sample `data`, the `metadata`, and the name `outputdir` of a directory where the inference results should be saved; some additional information will be suffixed to this directory name. We can give a `parallel` argument specifying the number of cores to be used for parallel computation, or alternatively a "cluster" object previously created with `parallel::makeCluster()`. A `seed` argument can also be given if we want to reproduce the same output in another run; or alternatively we can first call `set.seed()` in the usual R-way, as we did at the beginning of this vignette. (The function `learn()` in any case always saves the current random-seed status in its output directory, in the file `rng_seed.rds`, so it's always possible to recover its initial state.)
+This inference is performed by calling the `learn()` function. Its minimal arguments are three: the sample `data`, the `metadata`, and the name `outputdir` of a directory where the inference results should be saved; some additional information will be suffixed to this directory name. We can give a `parallel` argument specifying the number of nodes to be used for parallel computation, or alternatively a "cluster" object previously created with `parallel::makeCluster()`. A `seed` argument can also be given if we want to reproduce the same output in another run; or alternatively we can first call `set.seed()` in the usual R-way, as we did at the beginning of this vignette. (The function `learn()` in any case always saves the current random-seed status in its output directory, in the file `rng_seed.rds`, so it's always possible to recover its initial state.)
 
-This function in fact does Monte Carlo sampling and is computationally expensive. It may take minutes, hours, or days to run, depending on the amount of sample data and the number of variates. In order to speed up its computations, it tries to use any multi-cores capabilities of the machine it runs in, or the number of cores specified in the `parallel` argument (which shouldn't be larger than the number of cores you actually have!).
+This function in fact does Monte Carlo sampling and is computationally expensive. It may take minutes, hours, or days to run, depending on the amount of sample data and the number of variates. In order to speed up its computations, it tries to use any multi-cores capabilities of the machine it runs in, or the number of nodes specified in the `parallel` argument (which shouldn't be larger than the number of cores you actually have!).
 
-The output below was obtained from running `learn()` on 4 cores -- *please wait before running this code*, it might take longer time on your computer:
+The output below was obtained from running `learn()` on 4 nodes -- *please wait before running this code*, it might take longer time on your computer:
 
 ```{r eval = FALSE}
 ## set.seed() already called
@@ -322,7 +322,7 @@ K10 <- learn(
     data = datafile,
     metadata = meta_penguins, # included in 'Prova'
     outputdir = 'penguin_inference',
-    parallel = 4 ## how many cores to use for the computation
+    parallel = 4 ## how many nodes to use for the computation
 )
 ## Registered socket cluster with 4 nodes on host ‘localhost’.
 ## 
@@ -336,14 +336,15 @@ K10 <- learn(
 ## Using 4 nodes: 450 samples per chain, max 2 chains per node.
 ## Requested:   ESS 450   rel.MCSE 0.047.
 ## Node logs are being saved in individual files.
-## C-compiling samplers appropriate to the variates (Nimble v1.4.2)
+## C-compiling samplers appropriate to the variates (Nimble v1.4.3)
 ## this can take tens of minutes. Please wait...
 ## Compiled node 1. Number of samplers: 1078.             
-## Estimated end times (periodically updated):
+## Estimated end times, updated [yyyy-mm-dd HH:MM]:
 ## Node 1 finished.                                        
 ## Node 2 finished.                                        
 ## Node 3 finished.                                        
 ## Node 4 finished.                                        
+## 
 ## Finished Monte Carlo sampling.
 ## Highest number of Monte Carlo iterations across chains: 115200.
 ## Highest number of used mixture components: 5.
@@ -368,13 +369,13 @@ K10 <- learn(
 ## 
 ## *************************************************
 ##  Output saved in directory
-## __penguin_inference_10-V8_D10_S3600_260621T120628
+## penguin_inference_10-V8_D10_S3600_[yymmddTHHMMSS]
 ## *************************************************
 ## 
 ## Closing connections to nodes.
 ```
 
-The initial output gives a summary of the sample size, number of variates, saving directory, and other computational details. An "`estimated end time`" line (not appearing in the output above) is updated from time to time with a better estimate of the computation's end time. Once the computation is finished, some final information about the underlying Monte Carlo computation and time and memory use is provided.^[The Monte Carlo expert will notice that the effective sample size is around 3000 or more. The Monte Carlo sampling is designed to stop when 3600 samples have been obtained from 8 chains, each with an effective sample size of at least 450, or equivalently a relative Monte Carlo standard error under 0.047. This is enough, considering that the statistical uncertainty in the results can be tens or hundreds of times larger than this. The desired number of samples and maximal Monte Carlo standard error can be specified with the `nsamples`, `minESS`, and `maxrelMCSE` arguments.] The inference above, with 10 datasamples and 8 variates, took around 3 GB and 15 minutes to complete on 4 cores.
+The initial output gives a summary of the sample size, number of variates, saving directory, and other computational details. Estimated end times, one for each computation node, are periodically updated. Once the computation is finished, some final information about the underlying Monte Carlo computation and time and memory use is provided.^[The Monte Carlo expert will notice that the effective sample size is around 3000 or more. The Monte Carlo sampling is designed to stop when 3600 samples have been obtained from 8 chains, each with an effective sample size of at least 450, or equivalently a relative Monte Carlo standard error under 0.047. This is enough, considering that the statistical uncertainty in the results can be tens or hundreds of times larger than this. The desired number of samples and maximal Monte Carlo standard error can be specified with the `nsamples`, `minESS`, and `maxrelMCSE` arguments.] The inference above, with 10 datasamples and 8 variates, took around 3 GB and 15 minutes to complete on 4 cores.
 
 The results of this main inference are now stored in the compressed file `K.rds` (around 32 MB) within the specified output directory. The name of this directory is also saved as the final value of the `learn()` function. We saved this directory name in the `K10` variable in the code above, by invoking `K10 <- learn(...)`.
 
