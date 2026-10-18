@@ -370,7 +370,7 @@ K10 <- learn(
 ## ***********************************************
 ```
 
-The initial output gives a summary of the sample size, number of variates, saving directory, and other computational details. Estimated end times, one for each computation node, are periodically updated. Once the computation is finished, some final information about the underlying Monte Carlo computation and time and memory use is provided.^[The Monte Carlo expert will notice that the effective sample size is around 3000 or more. The Monte Carlo sampling is designed to stop when 3600 samples have been obtained from 8 chains, each with an effective sample size of at least 450, or equivalently a relative Monte Carlo standard error under 0.047. This is enough, considering that the statistical uncertainty in the results can be tens or hundreds of times larger than this. The desired number of samples and maximal Monte Carlo standard error can be specified with the `nsamples`, `minESS`, and `maxrelMCSE` arguments.] The inference above, with 10 datasamples and 8 variates, took around 3 GB and 15 minutes to complete on 4 cores.
+The initial output gives a summary of the sample size, number of variates, saving directory, and other computational details. Estimated end times, one for each computation node, are periodically updated. Once the computation is finished, some final information about the underlying Monte Carlo computation and time and memory use is provided.^[The Monte Carlo expert will notice that the effective sample size is around 3000 or more. The Monte Carlo sampling is designed to stop when 3600 samples have been obtained from 8 chains, each with an effective sample size of at least 450, or equivalently a relative Monte Carlo standard error under 0.047. This is enough, considering that the statistical uncertainty in the results can be tens or hundreds of times larger than this. The desired number of samples and maximal Monte Carlo standard error can be specified with the `nsamples`, `minESS`, and `maxrelMCSE` arguments.] The inference above, with 10 datasamples and 8 variates, took around 3 GB and 10 minutes to complete on 4 cores.
 
 The results of this main inference are now stored in the compressed file `K.rds` (around 32 MB) within the specified output directory. The name of this directory is also saved as the final value of the `learn()` function. We saved this directory name in the `K10` variable in the code above, by invoking `K10 <- learn(...)`.
 
@@ -952,7 +952,7 @@ Kall <- learn(
 ## [Output omitted]
 ```
 
-The calculation with 344 datasamples took around 7 GB and 17 hours.
+The calculation with 344 datasamples took around 7 GB and 50 min.
 
 The results of this final inference are stored in the compressed file `K.rds` within the new output directory. The object produced by the computation above can be downloaded as the file [`Kall.rds`](https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds). Once you have downloaded it in your working directory, invoke
 

@@ -1,0 +1,468 @@
+Log node 3 - Current time: 2026-10-18 17:15:01 
+nimble version 1.4.3 is loaded.
+For more information on NIMBLE and a User Manual,
+please visit https://R-nimble.org.
+
+Attaching package: ‘nimble’
+
+The following object is masked from ‘package:stats’:
+
+    simulate
+
+The following object is masked from ‘package:base’:
+
+    declare
+
+Loaded Nimble v1.4.3 
+Defining model
+  [Note] 'Dlatinit' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Ncards' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Ocards' is provided in 'constants' but not used in the model code and is being ignored.
+Building model
+Setting data and initial values
+Running calculate on model
+  [Note] Any error reports that follow may simply reflect missing values in model variables.
+Checking model sizes and dimensions
+  [Note] This model is not fully initialized. This is not an error.
+         To see which variables are not initialized, use model$initializeInfo().
+         For more information on model initialization, see help(modelInitialization).
+Compiling
+  [Note] This may take a minute.
+  [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+===== Monitors =====
+thin = 1: Bprob, Dmean, Dvar, Nprob, Oprob, W
+thin2 = 1: K
+===== Samplers =====
+posterior_predictive sampler (19)
+  - Bdata[]  (11 elements)
+  - Dlat[]  (8 elements)
+conjugate sampler (1025)
+  - Dmean[]  (256 elements)
+  - Drate[]  (256 elements)
+  - Bprob[]  (64 elements)
+  - Dvar[]  (256 elements)
+  - Oprob[]  (64 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
+  - W[1:64] 
+categorical sampler (345)
+  - Alpha
+  - K[]  (344 elements)
+RW sampler (1368)
+  - Dlat[]  (1368 elements)
+===== Comments =====
+  [Note] Additional downstream predictive nodes are also being sampled by posterior_predictive sampler.
+  [Note] Reordering posterior_predictive samplers to execute last
+===== Monitors =====
+thin = 1: Bprob, Dmean, Dvar, Nprob, Oprob, W
+thin2 = 1: K
+===== Samplers =====
+posterior_predictive sampler (19)
+  - Bdata[]  (11 elements)
+  - Dlat[]  (8 elements)
+conjugate sampler (1025)
+  - Dmean[]  (256 elements)
+  - Drate[]  (256 elements)
+  - Bprob[]  (64 elements)
+  - Dvar[]  (256 elements)
+  - W
+  - Oprob[]  (64 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
+categorical sampler (345)
+  - Alpha
+  - K[]  (344 elements)
+RW sampler (1368)
+  - Dlat[]  (1368 elements)
+===== Comments =====
+  [Note] Additional downstream predictive nodes are also being sampled by posterior_predictive sampler.
+Compiling
+  [Note] This may take a minute.
+  [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+
+Setup time 6 mins 
+
+###########################################################
+Chain # 3 (chain 1 of 1 for this node)
+
+Datapoints for testing chain behaviour:
+ #28 #31 #32 #87 #123 #124 #195 #199 #263 #319 #322 #333 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:23:40
+MCMC time 2.6 mins 
+
+USED COMPONENTS: 8 OF 64 
+
+abs. quantile error: 0.0573
+quantile width: 0.586
+rel. quantile error: 0.0978
+ESS from rel. qt. error: 105
+ESS: 119
+needed thinning: 34.4
+log-average: -18.6
+Diagnostics time 1.9 secs 
+
+Total iterations 3600 - require further 12177 - continue for 12177 
+
+Chain # 3 - chunk 2 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:26:15
+MCMC time 5.2 mins 
+
+USED COMPONENTS: 7 OF 64 
+
+abs. quantile error: 0.0435
+quantile width: 0.568
+rel. quantile error: 0.0766
+ESS from rel. qt. error: 170
+ESS: 102
+needed thinning: 70.5
+log-average: -18.6
+Diagnostics time 1.7 secs 
+
+Total iterations 7200 - require further 25073 - continue for 25073 
+
+Chain # 3 - chunk 3 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:28:42
+MCMC time 7.7 mins 
+
+USED COMPONENTS: 7 OF 64 
+
+abs. quantile error: 0.0343
+quantile width: 0.558
+rel. quantile error: 0.0614
+ESS from rel. qt. error: 265
+ESS: 102
+needed thinning: 106
+log-average: -18.6
+Diagnostics time 1.6 secs 
+
+Total iterations 10800 - require further 37714 - continue for 37714 
+
+Chain # 3 - chunk 4 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:31:02
+MCMC time 10 mins 
+
+USED COMPONENTS: 8 OF 64 
+
+abs. quantile error: 0.029
+quantile width: 0.556
+rel. quantile error: 0.0521
+ESS from rel. qt. error: 368
+ESS: 179
+needed thinning: 80.5
+log-average: -18.6
+Diagnostics time 1.5 secs 
+
+Total iterations 14400 - require further 22488 - continue for 22488 
+
+Chain # 3 - chunk 5 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:33:18
+MCMC time 12 mins 
+
+USED COMPONENTS: 9 OF 64 
+
+abs. quantile error: 0.0327
+quantile width: 0.542
+rel. quantile error: 0.0604
+ESS from rel. qt. error: 274
+ESS: 230
+needed thinning: 78.2
+log-average: -18.6
+Diagnostics time 1.5 secs 
+
+Total iterations 18000 - require further 17829 - continue for 17829 
+
+Chain # 3 - chunk 6 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:35:35
+MCMC time 15 mins 
+
+USED COMPONENTS: 8 OF 64 
+
+abs. quantile error: 0.0286
+quantile width: 0.548
+rel. quantile error: 0.0522
+ESS from rel. qt. error: 366
+ESS: 252
+needed thinning: 85.9
+log-average: -18.6
+Diagnostics time 1.5 secs 
+
+Total iterations 21600 - require further 17724 - continue for 17724 
+
+Chain # 3 - chunk 7 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:37:51
+MCMC time 17 mins 
+
+USED COMPONENTS: 9 OF 64 
+
+abs. quantile error: 0.0265
+quantile width: 0.545
+rel. quantile error: 0.0486
+ESS from rel. qt. error: 424
+ESS: 294
+needed thinning: 85.6
+log-average: -18.6
+Diagnostics time 1.5 secs 
+
+Total iterations 25200 - require further 14009 - continue for 14009 
+
+Chain # 3 - chunk 8 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:40:07
+MCMC time 19 mins 
+
+USED COMPONENTS: 7 OF 64 
+
+abs. quantile error: 0.024
+quantile width: 0.541
+rel. quantile error: 0.0445
+ESS from rel. qt. error: 506
+ESS: 348
+needed thinning: 82.8
+log-average: -18.6
+Diagnostics time 1.5 secs 
+
+Total iterations 28800 - require further 9122 - continue for 9122 
+
+Chain # 3 - chunk 9 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:42:24
+MCMC time 21 mins 
+
+USED COMPONENTS: 7 OF 64 
+
+abs. quantile error: 0.0245
+quantile width: 0.536
+rel. quantile error: 0.0457
+ESS from rel. qt. error: 478
+ESS: 427
+needed thinning: 75.9
+log-average: -18.6
+Diagnostics time 1.5 secs 
+
+Total iterations 32400 - require further 2361 - continue for 2361 
+
+Chain # 3 - chunk 10 (chain 1 of 1 for this node): increasing by 2362 
+
+Iterations: 2362 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:43:54
+MCMC time 23 mins 
+
+USED COMPONENTS: 8 OF 64 
+
+abs. quantile error: 0.0254
+quantile width: 0.533
+rel. quantile error: 0.0476
+ESS from rel. qt. error: 441
+ESS: 411
+needed thinning: 84.6
+log-average: -18.6
+Diagnostics time 0.82 secs 
+
+Total iterations 34762 - require further 4000 - continue for 4000 
+
+Chain # 3 - chunk 11 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:46:09
+MCMC time 25 mins 
+
+USED COMPONENTS: 7 OF 64 
+
+abs. quantile error: 0.0258
+quantile width: 0.529
+rel. quantile error: 0.0488
+ESS from rel. qt. error: 420
+ESS: 431
+needed thinning: 91.4
+log-average: -18.6
+Diagnostics time 1.7 secs 
+
+Total iterations 38362 - require further 3514 - continue for 3514 
+
+Chain # 3 - chunk 12 (chain 1 of 1 for this node): increasing by 3515 
+
+Iterations: 3515 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:48:22
+MCMC time 27 mins 
+
+USED COMPONENTS: 7 OF 64 
+
+abs. quantile error: 0.0266
+quantile width: 0.525
+rel. quantile error: 0.0507
+ESS from rel. qt. error: 389
+ESS: 461
+needed thinning: 108
+log-average: -18.6
+Diagnostics time 1.4 secs 
+
+Total iterations 41877 - require further 7485 - continue for 7485 
+
+Chain # 3 - chunk 13 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+Warning: value of thin2 is being changed, in the midst of a thinning interval.
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:50:38
+MCMC time 30 mins 
+
+USED COMPONENTS: 7 OF 64 
+
+abs. quantile error: 0.0257
+quantile width: 0.522
+rel. quantile error: 0.0493
+ESS from rel. qt. error: 412
+ESS: 494
+needed thinning: 110
+log-average: -18.6
+Diagnostics time 1.6 secs 
+
+Total iterations 45477 - require further 5108 - continue for 5108 
+
+Chain # 3 - chunk 14 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:52:54
+MCMC time 32 mins 
+
+USED COMPONENTS: 7 OF 64 
+
+abs. quantile error: 0.0257
+quantile width: 0.52
+rel. quantile error: 0.0495
+ESS from rel. qt. error: 409
+ESS: 532
+needed thinning: 120
+log-average: -18.6
+Diagnostics time 1.6 secs 
+
+Total iterations 49077 - require further 5917 - continue for 5917 
+
+Chain # 3 - chunk 15 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:55:11
+MCMC time 34 mins 
+
+USED COMPONENTS: 8 OF 64 
+
+abs. quantile error: 0.0252
+quantile width: 0.518
+rel. quantile error: 0.0486
+ESS from rel. qt. error: 423
+ESS: 580
+needed thinning: 124
+log-average: -18.6
+Diagnostics time 1.6 secs 
+
+Total iterations 52677 - require further 4312 - continue for 4312 
+
+Chain # 3 - chunk 16 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:57:26
+MCMC time 36 mins 
+
+USED COMPONENTS: 9 OF 64 
+
+abs. quantile error: 0.0259
+quantile width: 0.523
+rel. quantile error: 0.0495
+ESS from rel. qt. error: 408
+ESS: 539
+needed thinning: 138
+log-average: -18.6
+Diagnostics time 1.5 secs 
+
+Total iterations 56277 - require further 6910 - continue for 6910 
+
+Chain # 3 - chunk 17 (chain 1 of 1 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-10-18 17:59:44
+MCMC time 39 mins 
+
+USED COMPONENTS: 8 OF 64 
+
+abs. quantile error: 0.0243
+quantile width: 0.525
+rel. quantile error: 0.0464
+ESS from rel. qt. error: 465
+ESS: 664
+needed thinning: 129
+log-average: -18.6
+Diagnostics time 1.8 secs 
+
+Total iterations 59877 - require further 0 - continue for 0 
+
+Keeping  450 
+
+Current time: 2026-10-18 17:59:50
+MCMC + diagnostics time 39 mins 
+
+Current time: 2026-10-18 17:59:50
+Total time 45 mins 
