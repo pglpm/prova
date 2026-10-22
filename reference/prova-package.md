@@ -8,10 +8,9 @@ types. Data imputation is automatic and done in a principled way.
 Markov-chain Monte Carlo calculations are automatically handled and do
 not require user supervision. Applications range from statistical
 estimation, hypothesis testing, and association studies, to subgroup
-analysis, risk analysis, and probability calibration for
-machine-learning algorithms. Application disciplines range from
-astrophysics to medicine. For more details and examples see for instance
-Porta Mana & al. (2026)
+analysis, risk analysis, and probability calibration of machine-learning
+algorithms. Application disciplines range from astrophysics to medicine.
+For more details and examples see for instance Porta Mana & al. (2026)
 [doi:10.31219/osf.io/8nr56](https://doi.org/10.31219/osf.io/8nr56) ,
 Dunson & Bhattacharya (2011)
 [doi:10.1093/acprof:oso/9780199694587.003.0005](https://doi.org/10.1093/acprof%3Aoso/9780199694587.003.0005)

@@ -68,6 +68,7 @@ makes most features above possible.
 Use examples (see literature below for concrete examples):
 
 - Inference and prediction, classification, regression.
+- Hypothesis testing.
 - Association studies.
 - Subgroup analysis and stratified analysis.
 - Medical & clinical decision making.
