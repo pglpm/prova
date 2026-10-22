@@ -35,6 +35,17 @@ The package essentially performs Bayesian nonparametric inference (also called "
 
 <br>
 
+Use examples (see literature below for concrete examples):
+
+- Inference and prediction, classification, regression.
+- Association studies.
+- Subgroup analysis and stratified analysis.
+- Medical & clinical decision making.
+- Risk analysis.
+- Probability calibration of machine-learning algorithms.
+
+<br>
+
 ## Minimal example
 
 Load the package:
