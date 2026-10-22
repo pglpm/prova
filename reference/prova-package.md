@@ -7,8 +7,9 @@ any combination of nominal, ordinal, continuous, censored, rounded
 types. Data imputation is automatic and done in a principled way.
 Markov-chain Monte Carlo calculations are automatically handled and do
 not require user supervision. Applications range from statistical
-estimation and probabilistic hypothesis testing to evidence-based
-inference and decision making, in a wide range of disciplines from
+estimation, hypothesis testing, and association studies, to subgroup
+analysis, risk analysis, and probability calibration for
+machine-learning algorithms. Application disciplines range from
 astrophysics to medicine. For more details and examples see for instance
 Porta Mana & al. (2026)
 [doi:10.31219/osf.io/8nr56](https://doi.org/10.31219/osf.io/8nr56) ,
