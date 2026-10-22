@@ -70,6 +70,7 @@ Use examples (see literature below for concrete examples):
 - Inference and prediction, classification, regression.
 - Hypothesis testing.
 - Association studies.
+- Data imputation.
 - Subgroup analysis and stratified analysis.
 - Medical & clinical decision making.
 - Risk analysis.
