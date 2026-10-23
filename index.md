@@ -2,13 +2,11 @@
 
 ![Ensemble of densities](reference/figures/prova_logo.jpg)
 
-“prova” /’prɔva/ (Italian)
-
-- [(noun)](https://dictionary.cambridge.org/dictionary/italian-english/prova):
-  test, trial, assessment, proof, evidence, sign, indication, try,
-  attempt.
-- [(verb)](https://dictionary.cambridge.org/dictionary/italian-english/provare):
-  test!, try out!, assess!, attempt!, prove!, demonstrate!, show!
+“prova” /’prɔva/
+[(noun)](https://dictionary.cambridge.org/dictionary/italian-english/prova)
+test, trial, assessment, proof, evidence, sign, indication, try,
+attempt;[(verb)](https://dictionary.cambridge.org/dictionary/italian-english/provare)
+test!, try out!, assess!, attempt!, prove!, demonstrate!, show!
 
 (“What’s a variate?” Answer here[^1])
 
