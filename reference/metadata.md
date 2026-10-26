@@ -127,7 +127,10 @@ lower-case).
   Option (2) only works with numeric, equally spaced values: it assumes
   that the first value is `domainmin`, the second is
   `domainmin`+`datastep`, the third is `domainmin`+2\*`datastep`, and so
-  on up to the last value, `domainmax`.
+  on up to the last value, `domainmax`. A naturally *integer* variate
+  (for example "number of children" or "number of hospital visits", but
+  not "age", which is actually a naturally continuous variate, just
+  rounded) should be treated as ordinal.
 
 - A *continuous* variate has a continuum of values with an intrinsic
   ordering. Examples could be a variate related to the width of an

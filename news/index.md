@@ -1,6 +1,6 @@
 # Changelog
 
-## Prova v2.3.5
+## Prova v2.3.6
 
 - Corrected behaviour of argument `cex =` in plot functions, and a bug
   introduced by the correction.
@@ -12,6 +12,7 @@
 - Slightly modified convergence criterion in
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md), now
   more robust to numerical singularities.
+- Improved documentation.
 
 ## Prova v2.3.0
 
