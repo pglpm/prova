@@ -14,7 +14,7 @@
 
 ("What's a variate?" Answer here[^1])
 
-An R package to perform probabilistic and statistical data analysis and inference. These are its main features:
+An R package for general-purpose probabilistic and statistical data analysis and inference, including specialized kinds of analysis. These are its main features:
 
 - **No modelling assumptions** such as gaussianity, linearity, or any other kind of model. The analysis and inferences are fully [nonparametric](https://dictionary.apa.org/nonparametric).
 - **No assumptions about functional dependence** between data variates. The analysis and inferences are therefore more general than those by neural networks, random forests, or similar machine-learning algorithms.
