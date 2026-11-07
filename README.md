@@ -14,10 +14,11 @@
 
 ("What's a variate?" Answer here[^1])
 
-An R package for general-purpose probabilistic and statistical data analysis and inference, including specialized kinds of analysis. These are its main features:
+A versatile R package for general-purpose probabilistic and statistical data analysis and inference, including specialized kinds of analysis. These are its main features:
 
-- **No modelling assumptions** such as gaussianity, linearity, or any other kind of model. The analysis and inferences are fully [nonparametric](https://dictionary.apa.org/nonparametric).
-- **No assumptions about functional dependence** between data variates. The analysis and inferences are therefore more general than those by neural networks, random forests, or similar machine-learning algorithms.
+- **No modelling assumptions** such as gaussianity, linearity, or any other kind of parametric model. The analysis and inferences are fully [nonparametric](https://dictionary.apa.org/nonparametric).
+- **No assumptions about functional dependence** between data variates. The analysis and inferences are therefore more general than those by neural networks, random forests, regression trees, or similar algorithms.
+- **No approximations** such as Laplace's approximation, variational inference, and similar.
 - Any combination of **binary**, **nominal**, **ordinal**, **continuous**, **discrete** data. Continuous data can be bounded, unbounded, **censored**, and rounded.
 - **Automatic [imputation](https://dictionary.apa.org/imputation)** of missing data: all sample data are used, even those that lacks some variate values. The imputation is done with a principled method (the marginalization rule of probability theory), rather than ad-hoc procedures.
 - Easy and straightforward **subgroup analyses** and **stratified analyses**, for any division of variates, with full statistical details.
