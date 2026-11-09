@@ -5,7 +5,6 @@ template:
   bslib:
     bootswatch: zephyr
     pkgdown-nav-height: 100px
-tdr: r-project
 reference:
 - title: "Learn from data"
   contents:
