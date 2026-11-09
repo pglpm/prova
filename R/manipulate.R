@@ -117,20 +117,19 @@ subset.prova_pr <- function(
 #'
 #' probs$value
 #'
-#' ## Subset by retaining the values 'Adelie' and 'Gentoo' for species,
-#' ## and 44 for bill length
-#' newprobs <- subset(
-#'   probs,
-#'   subsetY = species %in% c('Adelie', 'Gentoo'),
-#'   subsetX = bill_len == 43)
+#' ## Same, but given values 45 of variate 'bill_len';
+#' probs2 <- Pr(
+#'   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+#'   X = data.frame(bill_len = 45),
+#'   K = K
 #' )
 #'
+#' probs2$value
+#'
+#' ## Merge the two probability objects, combining their X values
+#' newprobs <- merge(probs, probs2)
+#'
 #' newprobs$value
-#'
-#' ## Plot these conditional probabilities and their revisabilities
-#' plot(newprobs)
-#'
-#' hist(newprobs)
 #'
 #' @concept manipulate
 #' @export
