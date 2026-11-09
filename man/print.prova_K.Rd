@@ -24,7 +24,7 @@ print(Kexample)
 
 }
 \seealso{
-\code{\link[=learn]{learn()}}, which generates a "prova_K" (knowledge) object.
+\code{\link[=learn]{learn()}}, to generate a "prova_K" (knowledge) object.
 
 \link{Kexample} an example "prova_K" (knowledge) object included with \strong{Prova}.
 }

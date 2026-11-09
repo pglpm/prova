@@ -68,7 +68,7 @@ print(valuesAll2)
 
 }
 \seealso{
-\code{\link[=learn]{learn()}}, which generates the "prova_K" (knowledge) objects required by \code{vrtgrid()}.
+\code{\link[=learn]{learn()}}, to generate the "prova_K" (knowledge) objects required by \code{vrtgrid()}.
 
 \code{\link[=Pr]{Pr()}} to calculate probabilities and their revisabilities.
 

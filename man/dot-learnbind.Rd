@@ -7,7 +7,7 @@
 .learnbind(x, y)
 }
 \description{
-Used in 'util_checkpoints()' within 'learn()', and in various functions in 'util_lprobs.R'.
+Used in 'util_checkpoints()' within 'learn()', and in various functions in 'util_lprobs.R' and 'merge.prova_pr'.
 }
 \details{
 NB: the following variant is slower:

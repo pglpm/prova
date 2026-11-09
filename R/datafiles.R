@@ -10,7 +10,7 @@
 #' @param file Either a character naming a file or a connection open for writing or reading. See [utils::write.csv()] and [utils::read.csv()].
 #' @param ... Other arguments to be passed to [utils::write.csv()] or [utils::read.csv()]. Arguments 'row.names', 'quote', 'na', 'na.strings', 'tryLogical', 'sep', 'dec' are not allowed.
 #'
-#' @return `pread.csv` returns a [data frame][base::data.frame()] containing a representation of the data in the file; see [utils::read.csv()]. `pwrite.csv' returns `NULL` [invisibly][base::invisible()].
+#' @return `pread.csv` returns a [data frame][base::data.frame()] containing a representation of the data from the input file; see [utils::read.csv()]. `pwrite.csv` returns `NULL` [invisibly][base::invisible()].
 #'
 #' @details
 #' The functions [learn()] and [metadatatemplate()] accept CSV files formatted as follows:

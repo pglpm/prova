@@ -91,7 +91,7 @@ This function also allows for base-rate or other prior-probability corrections: 
 \mathrm{Pr}(Y = y' \vert \text{prior})
 }
 \ .}
-\emph{Important}: any values \emph{not} present in the \code{Y} data frame are given \emph{zero} prior probability; in other words, the normalization \eqn{\sum_{y'}} only counts the $y$ values appearing in the data frame \code{Y}.
+\emph{Important}: any values \emph{not} present in the \code{Y} data frame are given \emph{zero} prior probability. In other words, the normalization \eqn{\sum_{y'}} only counts the \eqn{y'} values appearing in the data frame \code{Y}.
 
 Each variate in each argument \code{Y}, \code{X} can be specified either as a point-value \eqn{Y = y} or as a left-open interval \eqn{Y \le y} or as a right-open interval \eqn{Y \ge y}, through the argument \code{tails}.
 
@@ -228,7 +228,7 @@ probs$quantiles[, , c('5.5\%', '94.5\%')]
 }
 }
 \seealso{
-\code{\link[=learn]{learn()}}, which generates the \code{K}nowledge objects required by \code{Pr()}.
+\code{\link[=learn]{learn()}}, to generate the \code{K}nowledge objects required by \code{Pr()}.
 
 \code{\link[=plot.prova_pr]{plot.prova_pr()}} to plot probabilities and quantiles calculated by \code{Pr()}.
 

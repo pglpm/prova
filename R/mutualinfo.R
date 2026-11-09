@@ -64,7 +64,7 @@
 #'
 #' [Pr()] to calculate probabilities and their revisability.
 #'
-#' [learn()], which generates the "prova_K" (knowledge) objects required by `mutualinfo()`.
+#' [learn()], to generate the "prova_K" (knowledge) objects required by `mutualinfo()`.
 #'
 #' @examples
 #' ## Use the example "prova_K" (knowledge) object 'Kexample'
@@ -602,7 +602,7 @@ mutualinfo <- function(
             nm = paste0(solidus,
                 paste0(colnames(X), outtails[colnames(X)], collapse = sep)) )
     } else {
-        Xnames <- list(NULL)
+        Xnames <- list('')
     }
 
     dimnames(MI) <- dimnames(acc) <- Xnames
@@ -957,7 +957,7 @@ mutualinfoF <- function(
             nm = paste0(solidus,
                 paste0(colnames(X), outtails[colnames(X)], collapse = sep)) )
     } else {
-        Xnames <- list(NULL)
+        Xnames <- list('')
     }
 
     dimnames(MI) <- dimnames(acc) <- Xnames

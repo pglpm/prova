@@ -40,7 +40,7 @@
 
 #' Bind 3D arrays by first dimension
 #'
-#' Used in 'util_checkpoints()' within 'learn()', and in various functions in 'util_lprobs.R'.
+#' Used in 'util_checkpoints()' within 'learn()', and in various functions in 'util_lprobs.R' and 'merge.prova_pr'.
 #'
 #' NB: the following variant is slower:
 #'
@@ -63,6 +63,25 @@
             dimnames = NULL)
         out[seq_len(nrx), ,] <- x
         out[nrx + seq_len(nry), ,] <- y
+        out
+    }
+}
+
+#' Bind 3D arrays by second dimension
+#'
+#' Used in 'merge.prova_pr'.
+#'
+#' @keywords internal
+.learnbind2 <- function(x, y) {
+    if(is.null(x)) {
+        y
+    } else {
+        nrx <- dim(x)[2]
+        nry <- dim(y)[2]
+        out <- array(data = NA, dim = c(dim(x)[1], nrx + nry, dim(x)[3]),
+            dimnames = NULL)
+        out[, seq_len(nrx),] <- x
+        out[, nrx + seq_len(nry),] <- y
         out
     }
 }

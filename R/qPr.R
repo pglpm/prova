@@ -37,7 +37,7 @@
 #' - Porta Mana (2025): *What's special about 89% credibility intervals?* <doi:10.5281/zenodo.17072199>.
 #'
 #' @seealso
-#' [learn()], which generates the "prova_K" (knowledge) objects required by `qPr()`.
+#' [learn()], to generate the "prova_K" (knowledge) objects required by `qPr()`.
 #'
 #' [Pr()] to calculate joint and conditional probabilities.
 #'
@@ -461,7 +461,7 @@ qPr <- function(
             nm = paste0(solidus,
                 paste0(colnames(X), outtails[colnames(X)], collapse = sep)) )
     } else {
-        Xnames <- list(NULL)
+        Xnames <- list('')
     }
 
     dimnames(out$value) <- c(Ynames, Xnames)
@@ -480,11 +480,13 @@ qPr <- function(
     if(isTRUE(keepYX)){
         ## save Y and X values in the output; useful for plotting methods
         if(is.null(priorY)){
-            out$pY <- Ynames
-            out$X <- X
+            out <- c(out, list(pY = Ynames, X = X))
+            ## out$pY <- Ynames
+            ## out$X <- X
         } else {
-            out$Y <- X
-            out$X <- Y
+            out <- c(out, list(Y = X, X = Y))
+            ## out$Y <- X
+            ## out$X <- Y
             }
     }
     if(!is.null(outtails)){

@@ -24,6 +24,9 @@ reference:
 - title: "Plot & print"
   contents:
   - has_concept("display")
+- title: "Subset & merge probability objects"
+  contents:
+  - has_concept("manipulate")
 - title: "Handle metadata and data files"
   contents:
   - has_concept("data")

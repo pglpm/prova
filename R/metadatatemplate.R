@@ -57,7 +57,7 @@
 ## #' To be written.
 #'
 #' @seealso
-#' [learn()], which generates the information necessary to calculate posterior probabilities, based on data and metadata.
+#' [learn()], to generate the information necessary to calculate posterior probabilities, based on data and metadata.
 #'
 #' @examples
 #' ## Create a preliminary data frame of metadata for the `penguins` dataset

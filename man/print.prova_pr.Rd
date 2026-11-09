@@ -4,14 +4,22 @@
 \alias{print.prova_pr}
 \title{Print an object of class "prova_pr" (probability)}
 \usage{
-\method{print}{prova_pr}(x, elements = NULL, subset = NULL, digits = TRUE, edigits = 2, ...)
+\method{print}{prova_pr}(
+  x,
+  elements = NULL,
+  subsetY = TRUE,
+  subsetX = TRUE,
+  digits = TRUE,
+  edigits = 2,
+  ...
+)
 }
 \arguments{
 \item{x}{Object of class "prova_pr" (probability), obtained with \code{\link[=Pr]{Pr()}}.}
 
 \item{elements}{character or integer vector, or \code{NULL} (default): elements of the "prova_pr" (probability) object to display. The syntax is the same as with \code{\link[base:Extract]{[}}. If \code{NULL}, the elements \code{'value'} and \code{'quantiles'} are displayed together in a special way.}
 
-\item{subset}{Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.}
+\item{subsetY, subsetX}{Expressions, indicating which \code{Y} and \code{X} values to display from the probability-class object \code{x}. Note that these arguments will be evaluated in the probability-class object, so variates can be referred to (by name) as variables in the expression. See analogous arguments in \code{subset.prova_pr()}.}
 
 \item{digits}{positive integer or \code{NULL} or \code{TRUE} (default): minimal number of significant digits, see \code{\link[base:print.default]{base::print.default()}}. If value is \code{TRUE}, then the significant digits for elements \code{'value'} and \code{'quantiles'} are determined from their respective \code{'value.acc'} and \code{'quantiles.acc'} elements of the "prova_pr" (probability) object (see \code{\link[=Pr]{Pr()}}), according to the rules of the \emph{Guide to the expression of Uncertainty in Measurement}, keeping as many digits as given in parameter \code{edigits}; whereas \code{'samples'} elements uses \code{edigits} significant digits.}
 

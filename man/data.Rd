@@ -18,7 +18,7 @@ pread.csv(file, ...)
 \item{...}{Other arguments to be passed to \code{\link[utils:write.csv]{utils::write.csv()}} or \code{\link[utils:read.csv]{utils::read.csv()}}. Arguments 'row.names', 'quote', 'na', 'na.strings', 'tryLogical', 'sep', 'dec' are not allowed.}
 }
 \value{
-\code{pread.csv} returns a \link[base:data.frame]{data frame} containing a representation of the data in the file; see \code{\link[utils:read.csv]{utils::read.csv()}}. \verb{pwrite.csv' returns }NULL` \link[base:invisible]{invisibly}.
+\code{pread.csv} returns a \link[base:data.frame]{data frame} containing a representation of the data from the input file; see \code{\link[utils:read.csv]{utils::read.csv()}}. \code{pwrite.csv} returns \code{NULL} \link[base:invisible]{invisibly}.
 }
 \description{
 Utility functions to read and write CSV files in the format required by \strong{Prova}

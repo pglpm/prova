@@ -26,7 +26,7 @@
 #' \mathrm{Pr}(Y = y' \vert \text{prior})
 #' }
 #' \ .}
-#' *Important*: any values *not* present in the `Y` data frame are given *zero* prior probability; in other words, the normalization \eqn{\sum_{y'}} only counts the $y$ values appearing in the data frame `Y`.
+#' *Important*: any values *not* present in the `Y` data frame are given *zero* prior probability. In other words, the normalization \eqn{\sum_{y'}} only counts the \eqn{y'} values appearing in the data frame `Y`.
 #'
 #' Each variate in each argument `Y`, `X` can be specified either as a point-value \eqn{Y = y} or as a left-open interval \eqn{Y \le y} or as a right-open interval \eqn{Y \ge y}, through the argument `tails`.
 #'
@@ -69,7 +69,7 @@
 #' - Porta Mana (2025): *What's special about 89% credibility intervals?*, <doi:10.5281/zenodo.17072199>.
 #'
 #' @seealso
-#' [learn()], which generates the `K`nowledge objects required by `Pr()`.
+#' [learn()], to generate the `K`nowledge objects required by `Pr()`.
 #'
 #' [plot.prova_pr()] to plot probabilities and quantiles calculated by `Pr()`.
 #'
@@ -691,7 +691,7 @@ Pr <- function(
             nm = paste0(solidus,
                 paste0(colnames(X), outtails[colnames(X)], collapse = sep)) )
     } else {
-        Xnames <- list(NULL)
+        Xnames <- list('')
     }
 
 
@@ -719,8 +719,9 @@ Pr <- function(
 
     if(isTRUE(keepYX)){
         ## save Y and X values in the output; useful for plotting methods
-        out$Y <- Y
-        out$X <- X
+        out <- c(out, list(Y = Y, X = X))
+        ## out$Y <- Y
+        ## out$X <- X
     }
     if(!is.null(outtails)){
         out$tails <- outtails[!(outtails == '')]
