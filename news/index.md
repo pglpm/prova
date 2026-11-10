@@ -12,6 +12,7 @@
 - Removed the `subset =` argument in the plot and print functions, as
   this functionality is now provided by the
   [`subset()`](https://rdrr.io/r/base/subset.html) method.
+- Corrected and improved documentation.
 
 ## Prova v2.3.6
 
