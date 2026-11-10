@@ -559,8 +559,8 @@ mutualinfo <- function(
     if(!is.null(tails)){
         outtails <- list()
         outtails[colnames(X)] <- ''
-        outtails[names(tails)[tails == -1]] <- '>'
-        outtails[names(tails)[tails == 1]] <- '<'
+        outtails[names(tails)[tails == -1]] <- '>='
+        outtails[names(tails)[tails == 1]] <- '<='
     } else {
         outtails <- NULL
     }
@@ -589,18 +589,19 @@ mutualinfo <- function(
     if(!is.null(tails)){
         outtails <- list()
         outtails[colnames(X)] <- ''
-        outtails[names(tails)[tails == -1]] <- '>'
-        outtails[names(tails)[tails == 1]] <- '<'
+        outtails[names(tails)[tails == -1]] <- '>='
+        outtails[names(tails)[tails == 1]] <- '<='
     } else {
         outtails <- NULL
     }
 
     if(!is.null(X)){
         Xnames <- setNames(object = list(
-            apply(X = X, MARGIN = 1, FUN = paste0, collapse = sep,
-                simplify = TRUE)),
-            nm = paste0(solidus,
-                paste0(colnames(X), outtails[colnames(X)], collapse = sep)) )
+            apply(X = X, MARGIN = 1, FUN = function(xx){
+                paste0(outtails[colnames(X)], xx, collapse = sep)
+            }, simplify = TRUE)
+        ),
+        nm = paste0(solidus, paste0(colnames(X), collapse = sep)))
     } else {
         Xnames <- list('')
     }
@@ -944,18 +945,19 @@ mutualinfoF <- function(
     if(!is.null(tails)){
         outtails <- list()
         outtails[colnames(X)] <- ''
-        outtails[names(tails)[tails == -1]] <- '>'
-        outtails[names(tails)[tails == 1]] <- '<'
+        outtails[names(tails)[tails == -1]] <- '>='
+        outtails[names(tails)[tails == 1]] <- '<='
     } else {
         outtails <- NULL
     }
 
     if(!is.null(X)){
         Xnames <- setNames(object = list(
-            apply(X = X, MARGIN = 1, FUN = paste0, collapse = sep,
-                simplify = TRUE)),
-            nm = paste0(solidus,
-                paste0(colnames(X), outtails[colnames(X)], collapse = sep)) )
+            apply(X = X, MARGIN = 1, FUN = function(xx){
+                paste0(outtails[colnames(X)], xx, collapse = sep)
+            }, simplify = TRUE)
+        ),
+        nm = paste0(solidus, paste0(colnames(X), collapse = sep)))
     } else {
         Xnames <- list('')
     }

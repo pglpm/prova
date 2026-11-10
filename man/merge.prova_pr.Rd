@@ -13,10 +13,12 @@
 An object of class "prova_pr" (probability), concatenating the \code{x} and \code{y} objects either along the \code{Y} values or along the \code{X} values.
 }
 \description{
-A utility function to merge two objects of class "prova_pr" (probability).
+Utility function to merge two objects of class "prova_pr" (probability), having same \code{Y} and \code{X} variates but different values.
 }
 \details{
-This function combines two objects of class "prova_pr" (probability) into one. The two objects must have exactly the same sets (and ordering) of \code{Y} variates. They must also have the same sets (and ordering) of \code{X} variates, unless one or both have \code{NULL} \code{X}.
+This function combines two probability objects of class "prova_pr" (probability) into one. The two objects must have exactly the same sets (and ordering) of \code{Y} variates. They must also have the same sets (and ordering) of \code{X} variates, unless one or both have \code{NULL} \code{X}.
+
+The \code{Pr()} function allows to calculate point and tail probabilities for any given variate, but not both kinds at the same time. For example, \code{Pr()} can calculate the probability that a variate "age" is equal to 30, storing the result in a "prova_pr" probability object; or that it is larger than 35, storing the result in another probability object. But these two calculations cannot be done within one call to \code{Pr()}, storing both results at once in one probability object. With the \code{merge} function such an object can nevertheless be created from the previous two.
 
 If the values of the \code{X} variates are the same, then the probabilities corresponding to different \code{Y} values are concatenated. If the values of the \code{Y} variates are the same, then the probabilities corresponding to different \code{X} values are concatenated. If neither values are in common, the function throws an error.
 }
@@ -25,30 +27,32 @@ If the values of the \code{X} variates are the same, then the probabilities corr
 ## variates: 'species' and 'bill_len'
 K <- Kexample
 
-## Calculate the probability object for the three values of variate 'species',
-## given values 43 and 44 of variate 'bill_len';
-## this object contains probabilities, quantiles, and other information
-probs <- Pr(
-  Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-  X = data.frame(bill_len = c(43, 44)),
-  K = K
+## Calculate the probability that bill_len <= 43
+## given that the species is 'Adelie':
+probs1 <- Pr(
+  Y = data.frame(bill_len = 43),
+  X = data.frame(species = 'Adelie'),
+  K = K,
+  tails = list(bill_len = '<=')
 )
 
-probs$value
+probs1
 
-## Same, but given values 45 of variate 'bill_len';
+## Calculate the probability that bill_len >= 43.1
+## given that the species is 'Adelie':
 probs2 <- Pr(
-  Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-  X = data.frame(bill_len = 45),
-  K = K
+  Y = data.frame(bill_len = 43.1),
+  X = data.frame(species = 'Adelie'),
+  K = K,
+  tails = list(bill_len = '>=')
 )
 
-probs2$value
+probs2
 
-## Merge the two probability objects, combining their X values
-newprobs <- merge(probs, probs2)
+## Combine the two tail probabilities for bill_len in one object
+probs <- merge(probs1, probs2)
 
-newprobs$value
+probs
 
 }
 \seealso{

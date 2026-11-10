@@ -1,8 +1,12 @@
+# Prova v2.3.7
+
+* Added functions `subset()` and `merge()` to subset or merge probability objects.
+
 # Prova v2.3.6
 
 * Corrected behaviour of argument `cex = ` in plot functions, and a bug introduced by the correction.
 * New possible value for `quantiles.spread` and corrected behaviour of this argument.
-* New available values `FALSE` and `NA` for plot() `legend =` argument.
+* New available values `FALSE` and `NA` for `plot()`'s `legend =` argument.
 * Modified progress output of `learn()`.
 * Slightly modified convergence criterion in `learn()`, now more robust to numerical singularities.
 * Improved documentation.

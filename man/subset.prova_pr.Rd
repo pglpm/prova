@@ -17,7 +17,7 @@
 An object of class "prova_pr" (probability), identical to the original object \code{x} except for a reduced range of values in some if its \code{Y} or \code{X} variates
 }
 \description{
-A utility function to exclude some \code{Y} or \code{X} values from an object of class "prova_pr".
+Utility function to exclude some \code{Y} or \code{X} values from an object of class "prova_pr".
 }
 \details{
 An object of class "prova_pr" (probability), obtained with the \code{\link[=Pr]{Pr()}} function, holds the probabilities for all possible combinations of values of a set of joint variates \code{Y} conditional on a set of joint variates \code{X}, together with the revisabilities of these probabilities and some other information. In some cases one may want to exclude some of the values of the \code{Y} or \code{X} variates. For instance, \code{Y} in the probability-class object could include the variate "age" with values from 18 to 100, and one may want to retain only the values from 60 to 80.
