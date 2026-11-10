@@ -510,7 +510,6 @@ pplot <- function(
 #'
 #' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
 #' @param spread One of the values `'quantiles'`, `'samples'`, `'none'` (equivalent to `NA` or `FALSE`), or `NULL` (default), in which case the revisability available in `p` is used. This argument chooses how to represent the revisability of the probability; see [Pr()]. If the requested representation is not available in the object `x`, then a warning is issued and no revisability is plotted.
-#' @param subsetY,subsetX Expressions, indicating which `Y` and `X` values to display from the probability-class object `x`. Note that these arguments will be evaluated in the probability-class object, so variates can be referred to (by name) as variables in the expression. See analogous arguments in `subset.prova_pr()`.
 #'
 #' @param PvsY Logical or `NULL`: should probabilities be plotted against their `Y` argument? If `NULL`, the argument between `Y` and `X` having larger number of values is chosen. As many probability curves will be plotted as the number of values of the other argument.
 #' @param ylab2 A title for the y-axis on the right side of the plot, if displayed.
@@ -559,8 +558,6 @@ pplot <- function(
 plot.prova_pr <- function(
     x,
     spread = NULL,
-    subsetY = TRUE,
-    subsetX = TRUE,
     PvsY = NULL,
     type = NULL,
     lty = c(1, 2, 4, 3, 6, 5),
@@ -587,11 +584,6 @@ plot.prova_pr <- function(
     nsamples.spread = 360,
     ...
 ){
-    ## Replace object x keeping only values given in 'subset'
-    if(!isTRUE(subsetY) || !isTRUE(subsetX)){
-        x <- subset(x, subsetY = subsetY, subsetX = subsetX)
-    }
-
     ## If there's only one probability it doesn't make sense to plot anything:
     ## print() the result instead
     if(length(x[['value']]) == 1){
@@ -972,7 +964,6 @@ plot.prova_pr <- function(
 #' The `hist()` method for a "prova_pr" (probability) object is a utility to visualize this kind of revisability, in the form of a distribution. This distribution is represented by a histogram formed from samples of revised proobabilities (or long-run frequencies). The bin size is chosen according to the Monte Carlo accuracy.
 #'
 #' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
-#' @param subsetY,subsetX Expressions, indicating which `Y` and `X` values to display from the probability-class object `x`. Note that these arguments will be evaluated in the probability-class object, so variates can be referred to (by name) as variables in the expression. See analogous arguments in `subset.prova_pr()`.
 #' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` determines bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).
 #' @param alpha.f.fill Numeric, default `0.125`: opacity of the histogram filling, `0` being completely invisible and `1` completely opaque.
 #' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. Value `FALSE` or `NA` does not plot any legend. Default `'topright'`.
@@ -1010,8 +1001,6 @@ plot.prova_pr <- function(
 #' @export
 hist.prova_pr <- function(
     x,
-    subsetY = TRUE,
-    subsetX = TRUE,
     breaks = NULL,
     legend = 'topright',
     lty = c(1, 2, 4, 3, 6, 5),
@@ -1030,11 +1019,6 @@ hist.prova_pr <- function(
     add = FALSE,
     ...
 ){
-    ## Replace object x keeping only values given in 'subset'
-    if(!isTRUE(subsetY) || !isTRUE(subsetX)){
-        x <- subset(x, subsetY = subsetY, subsetX = subsetX)
-    }
-
     ## Check that samples are available in the probability object
     if(is.null(x[['samples']])) {
         stop('The "prova_pr" object does not contain any revisability samples')
@@ -1184,7 +1168,6 @@ hist.prova_pr <- function(
 #'
 #' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
 #' @param elements character or integer vector, or `NULL` (default): elements of the "prova_pr" (probability) object to display. The syntax is the same as with [` [ `][base::Extract]. If `NULL`, the elements `'value'` and `'quantiles'` are displayed together in a special way.
-#' @param subsetY,subsetX Expressions, indicating which `Y` and `X` values to display from the probability-class object `x`. Note that these arguments will be evaluated in the probability-class object, so variates can be referred to (by name) as variables in the expression. See analogous arguments in `subset.prova_pr()`.
 #' @param digits positive integer or `NULL` or `TRUE` (default): minimal number of significant digits, see [base::print.default()]. If value is `TRUE`, then the significant digits for elements `'value'` and `'quantiles'` are determined from their respective `'value.acc'` and `'quantiles.acc'` elements of the "prova_pr" (probability) object (see [Pr()]), according to the rules of the *Guide to the expression of Uncertainty in Measurement*, keeping as many digits as given in parameter `edigits`; whereas `'samples'` elements uses `edigits` significant digits.
 #' @param edigits positive integer, default 2: number of significant digits for elements `'value.acc'` and `'quantiles.acc'`, if `digits = TRUE`.
 #' @param ... Other parameters to be passed to [base::print()].
@@ -1216,25 +1199,19 @@ hist.prova_pr <- function(
 #' ## display the values and revisabilities of these probabilities
 #' print(probs)
 #'
-#' ## diplay 'value' only, and only for the species value 'Gentoo'
-#' print(probs, elements = 'value', subsetY = (species == 'Gentoo'))
+#' ## display 'value' only,
+#' ## use subset() to select only the value 'Gentoo' for species
+#' print(subset(probs, species == 'Gentoo'), elements = 'value')
 #'
 #' @concept display
 #' @export
 print.prova_pr <- function(
     x,
     elements = NULL,
-    subsetY = TRUE,
-    subsetX = TRUE,
     digits = TRUE,
     edigits = 2,
     ...
 ){
-    ## Replace object x keeping only values given in 'subset'
-    if(!isTRUE(subsetY) || !isTRUE(subsetX)){
-        x <- subset(x, subsetY = subsetY, subsetX = subsetX)
-    }
-
     vmca <- x[['value.acc']]
     if(is.null(vmca)){# output is from qPr()
         hasvmca <- FALSE

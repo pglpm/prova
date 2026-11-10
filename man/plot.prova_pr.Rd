@@ -7,8 +7,6 @@
 \method{plot}{prova_pr}(
   x,
   spread = NULL,
-  subsetY = TRUE,
-  subsetX = TRUE,
   PvsY = NULL,
   type = NULL,
   lty = c(1, 2, 4, 3, 6, 5),
@@ -42,8 +40,6 @@
 \item{x}{Object of class "prova_pr" (probability), obtained with \code{\link[=Pr]{Pr()}}.}
 
 \item{spread}{One of the values \code{'quantiles'}, \code{'samples'}, \code{'none'} (equivalent to \code{NA} or \code{FALSE}), or \code{NULL} (default), in which case the revisability available in \code{p} is used. This argument chooses how to represent the revisability of the probability; see \code{\link[=Pr]{Pr()}}. If the requested representation is not available in the object \code{x}, then a warning is issued and no revisability is plotted.}
-
-\item{subsetY, subsetX}{Expressions, indicating which \code{Y} and \code{X} values to display from the probability-class object \code{x}. Note that these arguments will be evaluated in the probability-class object, so variates can be referred to (by name) as variables in the expression. See analogous arguments in \code{subset.prova_pr()}.}
 
 \item{PvsY}{Logical or \code{NULL}: should probabilities be plotted against their \code{Y} argument? If \code{NULL}, the argument between \code{Y} and \code{X} having larger number of values is chosen. As many probability curves will be plotted as the number of values of the other argument.}
 

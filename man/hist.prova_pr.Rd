@@ -6,8 +6,6 @@
 \usage{
 \method{hist}{prova_pr}(
   x,
-  subsetY = TRUE,
-  subsetX = TRUE,
   breaks = NULL,
   legend = "topright",
   lty = c(1, 2, 4, 3, 6, 5),
@@ -29,8 +27,6 @@
 }
 \arguments{
 \item{x}{Object of class "prova_pr" (probability), obtained with \code{\link[=Pr]{Pr()}}.}
-
-\item{subsetY, subsetX}{Expressions, indicating which \code{Y} and \code{X} values to display from the probability-class object \code{x}. Note that these arguments will be evaluated in the probability-class object, so variates can be referred to (by name) as variables in the expression. See analogous arguments in \code{subset.prova_pr()}.}
 
 \item{breaks}{as in function \code{\link[graphics:hist]{graphics::hist()}}, or \code{NULL} (default). Value \code{NULL} determines bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).}
 

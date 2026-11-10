@@ -6,6 +6,9 @@
 #' @details
 #' An object of class "prova_pr" (probability), obtained with the [Pr()] function, holds the probabilities for all possible combinations of values of a set of joint variates `Y` conditional on a set of joint variates `X`, together with the revisabilities of these probabilities and some other information. In some cases one may want to exclude some of the values of the `Y` or `X` variates. For instance, `Y` in the probability-class object could include the variate "age" with values from 18 to 100, and one may want to retain only the values from 60 to 80.
 #'
+#' **Warning**    
+#' This is a convenience function mostly intended for interactive use, because the non-standard evaluation of arguments `subsetY` and `subsetX` can have unanticipated consequences.
+#'
 #' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
 #' @param subsetY Expression, indicating `Y` values to select from the probability-class object. Note that `subset` will be evaluated in the probability-class object, so `Y` variates can be referred to (by name) as variables in the expression (see the examples).
 #' @param subsetX Expression, indicating `X` values to select from the probability-class object. Note that `select` will be evaluated in the probability-class object, so `X` variates can be referred to (by name) as variables in the expression (see the examples).
@@ -28,22 +31,22 @@
 #' K <- Kexample
 #'
 #' ## Calculate the probability object for the three values of variate 'species',
-#' ## given values 43 and 44 of variate 'bill_len';
+#' ## given values 43 to 45 of variate 'bill_len';
 #' ## this object contains probabilities, quantiles, and other information
 #' probs <- Pr(
 #'   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-#'   X = data.frame(bill_len = c(43, 44)),
+#'   X = data.frame(bill_len = c(43, 45)),
 #'   K = K
 #' )
 #'
 #' probs$value
 #'
 #' ## Subset by retaining the values 'Adelie' and 'Gentoo' for species,
-#' ## and 44 for bill length
+#' ## and 44 or less for bill length
 #' newprobs <- subset(
 #'   probs,
-#'   subsetY = species %in% c('Adelie', 'Gentoo'),
-#'   subsetX = bill_len == 43
+#'   subsetY = (species %in% c('Adelie', 'Gentoo')),
+#'   subsetX = (bill_len <= 44)
 #' )
 #'
 #' newprobs$value

@@ -23,6 +23,9 @@ Utility function to exclude some \code{Y} or \code{X} values from an object of c
 }
 \details{
 An object of class "prova_pr" (probability), obtained with the \code{\link[=Pr]{Pr()}} function, holds the probabilities for all possible combinations of values of a set of joint variates \code{Y} conditional on a set of joint variates \code{X}, together with the revisabilities of these probabilities and some other information. In some cases one may want to exclude some of the values of the \code{Y} or \code{X} variates. For instance, \code{Y} in the probability-class object could include the variate "age" with values from 18 to 100, and one may want to retain only the values from 60 to 80.
+
+\strong{Warning}
+This is a convenience function mostly intended for interactive use, because the non-standard evaluation of arguments \code{subsetY} and \code{subsetX} can have unanticipated consequences.
 }
 \examples{
 ## Load the example `K`nowledge object calculated from the "penguins" dataset;
@@ -30,22 +33,22 @@ An object of class "prova_pr" (probability), obtained with the \code{\link[=Pr]{
 K <- Kexample
 
 ## Calculate the probability object for the three values of variate 'species',
-## given values 43 and 44 of variate 'bill_len';
+## given values 43 to 45 of variate 'bill_len';
 ## this object contains probabilities, quantiles, and other information
 probs <- Pr(
   Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-  X = data.frame(bill_len = c(43, 44)),
+  X = data.frame(bill_len = c(43, 45)),
   K = K
 )
 
 probs$value
 
 ## Subset by retaining the values 'Adelie' and 'Gentoo' for species,
-## and 44 for bill length
+## and 44 or less for bill length
 newprobs <- subset(
   probs,
-  subsetY = species \%in\% c('Adelie', 'Gentoo'),
-  subsetX = bill_len == 43
+  subsetY = (species \%in\% c('Adelie', 'Gentoo')),
+  subsetX = (bill_len <= 44)
 )
 
 newprobs$value
