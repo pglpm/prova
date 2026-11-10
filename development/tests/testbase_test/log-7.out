@@ -1,4 +1,4 @@
-Log node 7 - Current time: 2026-10-18 18:27:41 
+Log node 7 - Current time: 2026-11-10 14:39:48 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -101,7 +101,7 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 52 secs 
+Setup time 42 secs 
 
 ###########################################################
 Chain # 7 (chain 1 of 1 for this node)
@@ -113,8 +113,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:41
-MCMC time 6.9 secs 
+Current time: 2026-11-10 14:40:37
+MCMC time 5.7 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -125,7 +125,7 @@ ESS from rel. qt. error: 325
 ESS: 510
 needed thinning: 11.1
 log-average: -7.18
-Diagnostics time 0.89 secs 
+Diagnostics time 1.2 secs 
 
 Total iterations 3600 - require further 1468 - continue for 1468 
 
@@ -135,8 +135,8 @@ Iterations: 1469
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:47
-MCMC time 14 secs 
+Current time: 2026-11-10 14:40:44
+MCMC time 13 secs 
 
 USED COMPONENTS: 2 OF 64 
 
@@ -153,8 +153,8 @@ Total iterations 5069 - require further 0 - continue for 0
 
 Keeping  450 
 
-Current time: 2026-10-18 18:28:49
+Current time: 2026-11-10 14:40:46
 MCMC + diagnostics time 15 secs 
 
-Current time: 2026-10-18 18:28:49
-Total time 1.1 mins 
+Current time: 2026-11-10 14:40:46
+Total time 58 secs 

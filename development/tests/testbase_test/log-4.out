@@ -1,4 +1,4 @@
-Log node 4 - Current time: 2026-10-18 18:27:41 
+Log node 4 - Current time: 2026-11-10 14:39:48 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -101,7 +101,7 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 50 secs 
+Setup time 41 secs 
 
 ###########################################################
 Chain # 4 (chain 1 of 1 for this node)
@@ -113,8 +113,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:37
-MCMC time 5.1 secs 
+Current time: 2026-11-10 14:40:37
+MCMC time 6.1 secs 
 
 USED COMPONENTS: 2 OF 64 
 
@@ -125,7 +125,7 @@ ESS from rel. qt. error: 213
 ESS: 260
 needed thinning: 16.9
 log-average: -6.93
-Diagnostics time 0.98 secs 
+Diagnostics time 1.1 secs 
 
 Total iterations 3600 - require further 4138 - continue for 4138 
 
@@ -135,8 +135,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:46
-MCMC time 14 secs 
+Current time: 2026-11-10 14:40:47
+MCMC time 16 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -147,7 +147,7 @@ ESS from rel. qt. error: 449
 ESS: 550
 needed thinning: 16
 log-average: -7.05
-Diagnostics time 0.64 secs 
+Diagnostics time 0.63 secs 
 
 Total iterations 7200 - require further 138 - continue for 138 
 
@@ -157,8 +157,8 @@ Iterations: 139
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:49
-MCMC time 17 secs 
+Current time: 2026-11-10 14:40:50
+MCMC time 19 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -169,14 +169,14 @@ ESS from rel. qt. error: 475
 ESS: 566
 needed thinning: 15.4
 log-average: -7.06
-Diagnostics time 0.011 secs 
+Diagnostics time 0.01 secs 
 
 Total iterations 7339 - require further 0 - continue for 0 
 
 Keeping  450 
 
-Current time: 2026-10-18 18:28:50
-MCMC + diagnostics time 18 secs 
+Current time: 2026-11-10 14:40:50
+MCMC + diagnostics time 20 secs 
 
-Current time: 2026-10-18 18:28:50
-Total time 1.2 mins 
+Current time: 2026-11-10 14:40:50
+Total time 1 mins 

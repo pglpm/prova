@@ -1,4 +1,4 @@
-Log node 6 - Current time: 2026-10-18 18:27:41 
+Log node 6 - Current time: 2026-11-10 14:39:48 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -101,7 +101,7 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 48 secs 
+Setup time 42 secs 
 
 ###########################################################
 Chain # 6 (chain 1 of 1 for this node)
@@ -113,8 +113,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:39
-MCMC time 8.7 secs 
+Current time: 2026-11-10 14:40:37
+MCMC time 6.3 secs 
 
 USED COMPONENTS: 2 OF 64 
 
@@ -125,7 +125,7 @@ ESS from rel. qt. error: 488
 ESS: 325
 needed thinning: 11.1
 log-average: -7.07
-Diagnostics time 1 secs 
+Diagnostics time 0.97 secs 
 
 Total iterations 3600 - require further 1477 - continue for 1477 
 
@@ -135,8 +135,8 @@ Iterations: 1478
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:46
-MCMC time 16 secs 
+Current time: 2026-11-10 14:40:45
+MCMC time 14 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -147,7 +147,7 @@ ESS from rel. qt. error: 524
 ESS: 458
 needed thinning: 11.1
 log-average: -7.13
-Diagnostics time 0.081 secs 
+Diagnostics time 0.078 secs 
 
 Total iterations 5078 - require further 6 - continue for 6 
 
@@ -155,8 +155,8 @@ Chain # 6 - chunk 3 (chain 1 of 1 for this node): increasing by 7
 
 Iterations: 7 
 
-Current time: 2026-10-18 18:28:47
-MCMC time 17 secs 
+Current time: 2026-11-10 14:40:46
+MCMC time 15 secs 
 
 USED COMPONENTS: 2 OF 64 
 
@@ -167,14 +167,14 @@ ESS from rel. qt. error: 523
 ESS: 459
 needed thinning: 11.1
 log-average: -7.13
-Diagnostics time 0.0031 secs 
+Diagnostics time 0.0032 secs 
 
 Total iterations 5085 - require further 0 - continue for 0 
 
 Keeping  450 
 
-Current time: 2026-10-18 18:28:48
-MCMC + diagnostics time 18 secs 
+Current time: 2026-11-10 14:40:47
+MCMC + diagnostics time 16 secs 
 
-Current time: 2026-10-18 18:28:48
-Total time 1.1 mins 
+Current time: 2026-11-10 14:40:47
+Total time 59 secs 
