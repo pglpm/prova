@@ -476,12 +476,12 @@ The `Pr()` function has actually calculated the probabilities for all possible f
 
 ```{r hist10adelie, eval = TRUE, fig.cap='**Probability distribution for the frequency of Adelie penguins**'}
 ## select only Adelie by means of subset()
-hist(subset(Fspecies10, species == 'Adelie'),
+hist(subset(Fspecies10, subsetX = (species == 'Adelie')),
     xlim = c(0, 1), legend = 'topright', col = 1)
 ```
 \
 
-The `subset()` function selects the probabilities pertaining only to the `Adelie` species. The `hist()` function plots the probability distribution for all the frequency values. We see that frequencies between around `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.25),1)` and `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.75),1)` have highest probability. But the probability distribution is quite wide; even a frequency of `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.99),1)` has some probability. The vertical line indicates the mean of this probability distribution, which we take as our frequency estimate and as the probability that the next penguin we observe is of the Adélie species.
+The `subset()` function selects the probabilities conditional only to the `Adelie` species. The `hist()` function plots the probability distribution for all the frequency values. We see that frequencies between around `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.25),1)` and `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.75),1)` have highest probability. But the probability distribution is quite wide; even a frequency of `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.99),1)` has some probability. The vertical line indicates the mean of this probability distribution, which we take as our frequency estimate and as the probability that the next penguin we observe is of the Adélie species.
 
 The width of this probability distribution reflects our large uncertainty, which in turn comes from the fact that we have only seen a small sample of penguins. We shall see that this uncertainty decreases and we gather more samples.
 
@@ -594,7 +594,7 @@ For Biscoe island we find
 
 ```{r hist10biscoe, eval = TRUE, fig.cap='**Probability distribution for species frequencies on Biscoe**'}
 ## select only Biscoe
-hist(subset(Fspecies10I, island == 'Biscoe'),
+hist(subset(Fspecies10I, subsetX = (island == 'Biscoe')),
     xlim = c(0, 1), legend = 'topright', col = 1:3)
 ```
 
@@ -607,7 +607,7 @@ For Dream island we find
 
 ```{r hist10dream, eval = TRUE, fig.cap='**Probability distribution for species frequencies on Biscoe**'}
 ## select only Dream
-hist(subset(Fspecies10I, island == 'Dream'),
+hist(subset(Fspecies10I, subsetX = (island == 'Dream')),
     xlim = c(0, 1), legend = 'topright', col = 1:3)
 ```
 \
@@ -854,12 +854,12 @@ We can quickly repeat the analysis above for the *conditional* frequencies on th
 ### For `Dream` island
 
 ```{r hist60Dream, eval = TRUE, fig.cap=''}
-hist(subset(Fspecies10I, island == 'Dream'),
+hist(subset(Fspecies10I, subsetX = (island == 'Dream')),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 13), ## same y-range
     col = 1:3, main = '10 samples, Dream island')
 
-hist(subset(Fspecies60I, island == 'Dream'),
+hist(subset(Fspecies60I, subsetX = (island == 'Dream')),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 13), ## same y-range
     col = 1:3, main = '60 samples, Dream island')
@@ -871,12 +871,12 @@ The new frequency estimates for `Adelie` (solid blue line) and `Chinstrap` (dash
 ### For `Biscoe` island: a surprising result {#surprise}
 
 ```{r hist60Biscoe, eval = TRUE, fig.cap=''}
-hist(subset(Fspecies10I, island == 'Biscoe'),
+hist(subset(Fspecies10I, subsetX = (island == 'Biscoe')),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 17), ## same y-range from previous plot
     col = 1:3, main = '10 samples, Biscoe island')
 
-hist(subset(Fspecies60I, island == 'Biscoe'),
+hist(subset(Fspecies60I, subsetX = (island == 'Biscoe')),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 17), ## same y-range from previous plot
     col = 1:3, main = '60 samples, Biscoe island')
