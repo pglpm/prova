@@ -508,14 +508,17 @@ The `Pr()` function has actually calculated the probabilities for all possible f
 
 ``` r
 ## select only Adelie by means of subset()
-hist(subset(Fspecies10, subsetX = (species == 'Adelie')),
+hist(subset(Fspecies10, subsetY = (species == 'Adelie')),
     xlim = c(0, 1), legend = 'topright', col = 1)
-# Error:
-# ! object 'species' not found
 ```
+
+<div class="figure">
+<img src="figure/hist10adelie-1.svg" alt="**Probability distribution for the frequency of Adelie penguins**" width="100%" />
+<p class="caption">**Probability distribution for the frequency of Adelie penguins**</p>
+</div>
 \
 
-The `subset()` function selects the probabilities conditional only to the `Adelie` species. The `hist()` function plots the probability distribution for all the frequency values. We see that frequencies between around 0.2 and 0.4 have highest probability. But the probability distribution is quite wide; even a frequency of 0.6 has some probability. The vertical line indicates the mean of this probability distribution, which we take as our frequency estimate and as the probability that the next penguin we observe is of the Adélie species.
+The `subset()` function selects only the probabilities for the `Adelie` species. The `hist()` function plots the probability distribution for all the frequency values. We see that frequencies between around 0.2 and 0.4 have highest probability. But the probability distribution is quite wide; even a frequency of 0.6 has some probability. The vertical line indicates the mean of this probability distribution, which we take as our frequency estimate and as the probability that the next penguin we observe is of the Adélie species.
 
 The width of this probability distribution reflects our large uncertainty, which in turn comes from the fact that we have only seen a small sample of penguins. We shall see that this uncertainty decreases and we gather more samples.
 
