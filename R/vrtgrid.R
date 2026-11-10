@@ -2,6 +2,10 @@
 #'
 #' @description Create a data frame of values for one variate, or a combination of values for several variates.
 #'
+#' @param vrt Character vector: names of the variates; they must match variate names in the `metadata` file provided to the [learn()] function.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
+#' @param length.out Vector or list of positive integers or `NA` values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in `vrt`. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of `NA` values. Default `NA`.
+#'
 #' @details The value ranges are based on the information from data and metadata stored in the `K`nowledge object (see [learn()]) provided in the `K =` argument; they include, and extend slightly beyond, the ranges observed in the data used in the [learn()] function. Variate domains are always respected.
 #'
 #' The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see [metadata]):
@@ -11,10 +15,6 @@
 #' - For a continuous, *rounded* variate, a number of values as specified in the `length.out` argument; or, if `length.out` is missing or `NA`, the output values are separated by the variates's rounding interval (field `datastep` in the [`metadata`]).
 #'
 #' The output is a [data frame][base::data.frame()] that can be used directly in functions like [Pr()].
-#'
-#' @param vrt Character vector: names of the variates; they must match variate names in the `metadata` file provided to the [learn()] function.
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
-#' @param length.out Vector or list of positive integers or `NA` values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in `vrt`. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of `NA` values. Default `NA`.
 #'
 #' @return A [data frame][base::data.frame()] with columns corresponding to the `vrt` argument, and one row for each combination of the variate values.
 #'

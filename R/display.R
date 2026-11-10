@@ -3,6 +3,21 @@
 #' @description
 #' Plot function that modifies and expands the **graphics** package's [graphics::matplot()] function in several ways.
 #'
+#' @param x Numeric or character or list: vectors of x-coordinates. If an element of `x` is missing, a numeric vector `1:...` is created having as many values as the rows of the corresponding element in `y`.
+#' @param y Numeric or character or list: vectors of y-coordinates. If an element of `y` is missing, a numeric vector `1:...` is created having as many values as the rows of the corresponding element in `x`.
+#' @param type Character vector or list indicating the type of plot for each element of `x` and `y`. The types of plot are the same as in [base::plot()], in particular `'p'` for points, `'l'` for lines, `'b'` for both points and lines, `'c'` for empty points joined by lines, `'o'` for overplotted points and lines, ``n'` for empty plot. Additional special types `'hx'`, `'qx'`, `'hy'`, `'qy'` are available for plotting histograms and quantile bands; see "Details".
+#' @param xdomain,ydomain Character or numeric or `NULL` (default): vector of possible values of the variates represented in the `x`- and `y`-axes, in case the `x` or `y` argument is a character vector. Note that the domains apply to all elements in `x` and `y`. The ordering of the values is respected. If `NULL`, then `unique(x)` or `unique(y)` is used.
+#' @param xlim,ylim `NULL` (default) or a vector of two values. If non-`NULL` and any of the two values is not finite (including `NA` or `NULL`), then the `min` or `max` `x`- or `y`-coordinates of the plotted points are used.
+#' @param alpha.f Numeric vector or list, default `1`: opacity of the line or contour colours, `0` being completely invisible and `1` completely opaque.
+#' @param xjitter,yjitter Vector or list of logicals or `NA` (default): add [base::jitter()] to `x`- or `y`-values? Useful when plotting discrete variates. If `NA`, jitter is added if both `x` and `y` are of character (or factor) class.
+#' @param fill Logical or `NA` (default). For histogram plots (`type = 'hx'` or `'hy'`), value `TRUE` means fill the histogram, and do not plot its contour; `FAlSE` means plot only its contour without filling; `NA` means plot contour and fill. For quantile plots (`type = 'qx'` or `'qy'`), value `TRUE` do not plot the bands' contours; `FAlSE` means plot only the contours without filling; `NA` plots a contour only when the quantile band has zero area (and would be invisible otherwise).
+#' @param alpha.f.fill Numeric vector or list, default `0.25`: opacity of the filling colours, `0` being completely invisible and `1` completely opaque.
+#' @param grid Logical, default `TRUE`: plot a light grid?
+#' @param lwd.grid Numeric, default 1: width of grid lines.
+#' @param col.grid Color of grid lines, default `'#00000022'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()].
+#' @param lty,lwd,pch,lend,col,cex,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()]; defaults are different (see "Usage").
+#' @param ... Other parameters to be passed to [graphics::matplot()].
+#'
 #' @details
 #' This function is essentially a wrapper around [graphics::matplot()], augmenting the latter with some features useful for plotting data and probabilities handled by **Prova**. Some of the additional features provided by `pplot` are the following:
 #'
@@ -18,21 +33,6 @@
 #' - Some defaults are different from [base::plot()] and [graphics::matplot()].
 #'
 #' See the package's vignettes for more examples.
-#'
-#' @param x Numeric or character or list: vectors of x-coordinates. If an element of `x` is missing, a numeric vector `1:...` is created having as many values as the rows of the corresponding element in `y`.
-#' @param y Numeric or character or list: vectors of y-coordinates. If an element of `y` is missing, a numeric vector `1:...` is created having as many values as the rows of the corresponding element in `x`.
-#' @param type Character vector or list indicating the type of plot for each element of `x` and `y`. The types of plot are the same as in [base::plot()], in particular `'p'` for points, `'l'` for lines, `'b'` for both points and lines, `'c'` for empty points joined by lines, `'o'` for overplotted points and lines, ``n'` for empty plot. Additional special types `'hx'`, `'qx'`, `'hy'`, `'qy'` are available for plotting histograms and quantile bands; see "Details".
-#' @param xdomain,ydomain Character or numeric or `NULL` (default): vector of possible values of the variates represented in the `x`- and `y`-axes, in case the `x` or `y` argument is a character vector. Note that the domains apply to all elements in `x` and `y`. The ordering of the values is respected. If `NULL`, then `unique(x)` or `unique(y)` is used.
-#' @param xlim,ylim `NULL` (default) or a vector of two values. If non-`NULL` and any of the two values is not finite (including `NA` or `NULL`), then the `min` or `max` `x`- or `y`-coordinates of the plotted points are used.
-#' @param alpha.f Numeric vector or list, default `1`: opacity of the line or contour colours, `0` being completely invisible and `1` completely opaque.
-#' @param xjitter,yjitter Vector or list of logicals or `NA` (default): add [base::jitter()] to `x`- or `y`-values? Useful when plotting discrete variates. If `NA`, jitter is added if both `x` and `y` are of character (or factor) class.
-#' @param fill Logical or `NA` (default). For histogram plots (`type = 'hx'` or `'hy'`), value `TRUE` means fill the histogram, and do not plot its contour; `FAlSE` means plot only its contour without filling; `NA` means plot contour and fill. For quantile plots (`type = 'qx'` or `'qy'`), value `TRUE` do not plot the bands' contours; `FAlSE` means plot only the contours without filling; `NA` plots a contour only when the quantile band has zero area (and would be invisible otherwise).
-#' @param alpha.f.fill Numeric vector or list, default `0.25`: opacity of the filling colours, `0` being completely invisible and `1` completely opaque.
-#' @param grid Logical, default `TRUE`: plot a light grid?
-#' @param lwd.grid Numeric, default 1: width of grid lines.
-#' @param col.grid Color of grid lines, default `'#00000022'`. Can be specified in any of the usual ways, see for instance [grDevices::col2rgb()].
-#' @param lty,lwd,pch,lend,col,cex,xlab,ylab,add,axes,cex.main see analogous arguments in [graphics::matplot()] and [graphics::plot.default()]; defaults are different (see "Usage").
-#' @param ... Other parameters to be passed to [graphics::matplot()].
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
 #'
@@ -493,21 +493,6 @@ pplot <- function(
 #' @description
 #' This [base::plot()] method is a utility to plot probabilities obtained with [Pr()], as well as their revisabilities. The probabilities are plotted either against `Y`, with one curve for each value of `X`, or vice versa.
 #'
-#' @details For a collection of probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} with several values \eqn{y} and \eqn{x}, this plot method with argument `PvsY` set to `TRUE` shows the probabilities on the y-axis, while the x-axis spans the \eqn{y} values, the curve thus showing the probability distribution (the area underneath is 1, except for possibly omitted tails). One such curve is displayed for each \eqn{x} value. If the argument `PvsY` is `FALSE`, then the x-axis spans the \eqn{x} values instead -- thus the displayed curve is *not* a probability distribution (area underneath is not 1). One such curve is displayed for each \eqn{y} value. Which kind of plot is best depends on whether one needs to visualize how the probabilities depend on variate \eqn{Y} or on the conditioning variate \eqn{X}. The default `PvsY` value `NULL` tries to guess the desider behaviour depending on how many different values \eqn{y} and \eqn{x} are contained in the probability object `x`; the variate with the largest number of values is displayed on the x-axis, so as to clutter as little as possible the plot window with multiple curves.
-#'
-#' The revisabilities of the probabilities can be visualized in two different ways, determined by the argument `spread`:
-#'
-#' - `spread = 'quantiles'`: shows the revisabilities as quantile bands around the probability curves. Which quantiles are shown depends on the `quantiles.spread` argument.
-#' - `spread = 'samples'`: shows the revisabilities as an ensemble of alternative probability curves, which can also be interpreted as possible "long-run frequencies". The number of samples in the ensemble is determined by the argument `nsamples.spread`.
-#' - `spread = 'none'` or `NA` or `FALSE`: does not show any revisability.
-#' - `spread = NULL` (default): use the quantile plot, if quantiles are available; otherwise the ensemble plot, if samples are available; otherwise nothing.
-#'
-#' Information about the revisability, such as quantiles or number of samples displayed, is shown beside the left y-axis. While quantile bands look neat, they do not show important details about revised probabilities (long-run frequencies), such as persistent modes. Such details are better displayed in the ensemble plot. It is recommended to always take a look at both visualizations of revisability.
-#'
-#' The label on the left y-axis is by default the text `Pr(`\eqn{Y}` | `\eqn{X}`, `\eqn{K}`)`, displaying the actual \eqn{Y} and \eqn{X} variates present in the probability object `x`. If the displayed probabilities are densities (this means that some \eqn{Y} variates are continuous and not rounded), then lowercase `p` is used istead of `Pr`.
-#'
-#' Continuous variates with bounded domains, such as censored variates, may have singular probability values -- concentrated probability mass -- at the boundary points. When such singular points are present, their probability scale is shown in the *right* y-axis.
-#'
 #' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
 #' @param spread One of the values `'quantiles'`, `'samples'`, `'none'` (equivalent to `NA` or `FALSE`), or `NULL` (default), in which case the revisability available in `p` is used. This argument chooses how to represent the revisability of the probability; see [Pr()]. If the requested representation is not available in the object `x`, then a warning is issued and no revisability is plotted.
 #'
@@ -526,6 +511,22 @@ pplot <- function(
 #' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` means `0.25` if `spread = 'quantiles'`; and an appropriate value if `spread = 'samples'`,dependent on the number of samples (more samples, less opacity).
 #' @param pch,col,cex,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
 #' @param ... Other parameters to be passed to [pplot()].
+#'
+#' @details
+#' For a collection of probabilities \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} with several values \eqn{y} and \eqn{x}, this plot method with argument `PvsY` set to `TRUE` shows the probabilities on the y-axis, while the x-axis spans the \eqn{y} values, the curve thus showing the probability distribution (the area underneath is 1, except for possibly omitted tails). One such curve is displayed for each \eqn{x} value. If the argument `PvsY` is `FALSE`, then the x-axis spans the \eqn{x} values instead -- thus the displayed curve is *not* a probability distribution (area underneath is not 1). One such curve is displayed for each \eqn{y} value. Which kind of plot is best depends on whether one needs to visualize how the probabilities depend on variate \eqn{Y} or on the conditioning variate \eqn{X}. The default `PvsY` value `NULL` tries to guess the desider behaviour depending on how many different values \eqn{y} and \eqn{x} are contained in the probability object `x`; the variate with the largest number of values is displayed on the x-axis, so as to clutter as little as possible the plot window with multiple curves.
+#'
+#' The revisabilities of the probabilities can be visualized in two different ways, determined by the argument `spread`:
+#'
+#' - `spread = 'quantiles'`: shows the revisabilities as quantile bands around the probability curves. Which quantiles are shown depends on the `quantiles.spread` argument.
+#' - `spread = 'samples'`: shows the revisabilities as an ensemble of alternative probability curves, which can also be interpreted as possible "long-run frequencies". The number of samples in the ensemble is determined by the argument `nsamples.spread`.
+#' - `spread = 'none'` or `NA` or `FALSE`: does not show any revisability.
+#' - `spread = NULL` (default): use the quantile plot, if quantiles are available; otherwise the ensemble plot, if samples are available; otherwise nothing.
+#'
+#' Information about the revisability, such as quantiles or number of samples displayed, is shown beside the left y-axis. While quantile bands look neat, they do not show important details about revised probabilities (long-run frequencies), such as persistent modes. Such details are better displayed in the ensemble plot. It is recommended to always take a look at both visualizations of revisability.
+#'
+#' The label on the left y-axis is by default the text `Pr(`\eqn{Y}` | `\eqn{X}`, `\eqn{K}`)`, displaying the actual \eqn{Y} and \eqn{X} variates present in the probability object `x`. If the displayed probabilities are densities (this means that some \eqn{Y} variates are continuous and not rounded), then lowercase `p` is used istead of `Pr`.
+#'
+#' Continuous variates with bounded domains, such as censored variates, may have singular probability values -- concentrated probability mass -- at the boundary points. When such singular points are present, their probability scale is shown in the *right* y-axis.
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
 #'
@@ -1578,10 +1579,6 @@ print.prova_mi <- function(
 #' @description
 #' This [base::plot()] method is a utility to plot the expected utilities obtained with [exputility()], as well as their revisabilities.
 #'
-#' @details The x-axis spans the possible actions, and the y-axis their expected utilities. Their revisabilities are shown as an ensemble of 360 (default number) expected-utility curves; the number of samples in the ensemble is indicated beside the left y-axis. If any conditioning variate \eqn{X} was used for the probabilities, \eqn{\mathrm{Pr}(\dotso \vert X = x, \dotso)}, then one such plot is displayed for each conditioning value \eqn{x}.
-#'
-#' The probability that an action would still be considered optimal, if many moro learning data were collected, is indicated above the x-axis label corresponding to that action. An asterisk `*` marks the optimal actions. If any conditioning variate \eqn{X} was used, then one such probability is shown for each conditioning value.
-#'
 #' @param x Object of class "prova_eu" (expected utility), obtained with [exputility()].
 #' @param type Character vector (default `'b'`) or list indicating the type of plot for the main probability distribution; see [base::plot()].
 #' @param lty Analogous to argument `lty` (line style) in [graphics::matplot()], used for the main probability distributions.
@@ -1595,6 +1592,11 @@ print.prova_mi <- function(
 #' @param alpha.f.spread Numeric or `NULL` (default): opacity of the quantile bands or of the long-run-frequency samples, similar to `alpha.f`. `NULL` determines a value dependent on the number of samples (more samples, less opacity).
 #' @param pch,col,cex,xlab,ylab,main,xlim,ylim,grid,axes,add,lwd.grid,col.grid see analogous arguments in [graphics::plot.default()] and [graphics::matplot()].
 #' @param ... Other parameters to be passed to [pplot()].
+#'
+#' @details
+#' The x-axis spans the possible actions, and the y-axis their expected utilities. Their revisabilities are shown as an ensemble of 360 (default number) expected-utility curves; the number of samples in the ensemble is indicated beside the left y-axis. If any conditioning variate \eqn{X} was used for the probabilities, \eqn{\mathrm{Pr}(\dotso \vert X = x, \dotso)}, then one such plot is displayed for each conditioning value \eqn{x}.
+#'
+#' The probability that an action would still be considered optimal, if many moro learning data were collected, is indicated above the x-axis label corresponding to that action. An asterisk `*` marks the optimal actions. If any conditioning variate \eqn{X} was used, then one such probability is shown for each conditioning value.
 #'
 #' @return `NULL`, [invisibly][base::invisible()]; produces a plot, see [graphics::matplot()].
 #'

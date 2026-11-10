@@ -13,9 +13,6 @@
 The actual "prova_K" (knowledge) object or \code{NULL} if none was found.
 }
 \description{
-Retrieve a "prova_K" (knowledge) object
-}
-\details{
 Retrieves a "prova_K" (knowledge) object if given as a path to directory or file.
 }
 \keyword{internal}

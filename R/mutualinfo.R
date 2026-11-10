@@ -5,6 +5,25 @@
 #'
 #' @description Functions for calculating the mutual information between two grops of joint variates, as well as its revisability. Function [mutualinfo()] can be used for any variates, but is slower and potentially less accurate. Function [mutualinfoF()] is meant to be used with variates having a finite domain, but is extremely faster and more accurate. See "Details"
 #'
+#' @param Y1names Character vector: first group of joint variates
+#' @param Y2names Character vector or `NULL`: second group of joint variates
+#' @param X Matrix or data.frame or `NULL`: values of some variates conditional on which we want the probabilities.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
+#' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
+#' @param quantiles Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in [Pr()].
+#' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "prova_K" (knowledge) object.
+#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the revisability of the mutual information.
+#' @param unit Either one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used.
+#' @param parallel One of the following values:
+#' - A "cluster" object previously created with [parallel::makeCluster()].
+#' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
+#' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
+#' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "cl.cores"; if this option is unset, then use 2 nodes.
+#' @param sep character, default `','`: character to separate the output's variate names and values.
+#' @param solidus character, default `'|'`: character prepended to the output's names of the variates in the conditional (typically the `X` variates).
+#' @param verbose Logical, default `FALSE`: give messages about parallel processing?
+#' @param keepX Logical, default `TRUE`: keep a copy of the `X` argument in the output? This is used for [hist.prova_mi()].
+#'
 #' @details If \eqn{Y_1} and \eqn{Y_2} are two variates, each of which can be a joint variate such as \eqn{Y_1 = (Y_{1,1}, Y_{1,2}, \dotsc)}, and \eqn{X} a third, also possibly join, variate, then the mutual information \eqn{\mathit{MI}} between \eqn{Y_1} and \eqn{Y_2}, conditional on \eqn{X = x} and the knowledge \eqn{K} about data and metadata, is given by
 #' \deqn{\mathit{MI}(Y_1, Y_2 \vert X = x) \mathrel{:=}
 #' \sum_{y_1, y_2}
@@ -27,25 +46,6 @@
 #'
 # If either function is called with three unnamed arguments, e.g. `mutualinfo(..., ..., ...)`, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ..., K = ...)`.
 
-#'
-#' @param Y1names Character vector: first group of joint variates
-#' @param Y2names Character vector or `NULL`: second group of joint variates
-#' @param X Matrix or data.frame or `NULL`: values of some variates conditional on which we want the probabilities.
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
-#' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
-#' @param quantiles Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in [Pr()].
-#' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "prova_K" (knowledge) object.
-#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the revisability of the mutual information.
-#' @param unit Either one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used.
-#' @param parallel One of the following values:
-#' - A "cluster" object previously created with [parallel::makeCluster()].
-#' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
-#' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
-#' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "cl.cores"; if this option is unset, then use 2 nodes.
-#' @param sep character, default `','`: character to separate the output's variate names and values.
-#' @param solidus character, default `'|'`: character prepended to the output's names of the variates in the conditional (typically the `X` variates).
-#' @param verbose Logical, default `FALSE`: give messages about parallel processing?
-#' @param keepX Logical, default `TRUE`: keep a copy of the `X` argument in the output? This is used for [hist.prova_mi()].
 #'
 #' @return An object of class "prova_mi" (mutual information), which is a list consisting of the following elements:
 #'

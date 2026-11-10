@@ -1,6 +1,6 @@
 #' Retrieve a "prova_K" (knowledge) object
 #'
-#' @details
+#' @description
 #' Retrieves a "prova_K" (knowledge) object if given as a path to directory or file.
 #'
 #' @param K either a "prova_K" (knowledge) object, or a character string with the path to an rds file with such an object or a directory containing one.

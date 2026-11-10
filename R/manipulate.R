@@ -3,16 +3,16 @@
 #' @description
 #' Utility function to exclude some `Y` or `X` values from an object of class "prova_pr".
 #'
+#' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
+#' @param subsetY Expression, indicating `Y` values to select from the probability-class object. Note that `subset` will be evaluated in the probability-class object, so `Y` variates can be referred to (by name) as variables in the expression (see the examples).
+#' @param subsetX Expression, indicating `X` values to select from the probability-class object. Note that `select` will be evaluated in the probability-class object, so `X` variates can be referred to (by name) as variables in the expression (see the examples).
+#' @param ... Not used at present, left for method compatibility with `base::subset()`.
+#'
 #' @details
 #' An object of class "prova_pr" (probability), obtained with the [Pr()] function, holds the probabilities for all possible combinations of values of a set of joint variates `Y` conditional on a set of joint variates `X`, together with the revisabilities of these probabilities and some other information. In some cases one may want to exclude some of the values of the `Y` or `X` variates. For instance, `Y` in the probability-class object could include the variate "age" with values from 18 to 100, and one may want to retain only the values from 60 to 80.
 #'
 #' **Warning**    
 #' This is a convenience function mostly intended for interactive use, because the non-standard evaluation of arguments `subsetY` and `subsetX` can have unanticipated consequences.
-#'
-#' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
-#' @param subsetY Expression, indicating `Y` values to select from the probability-class object. Note that `subset` will be evaluated in the probability-class object, so `Y` variates can be referred to (by name) as variables in the expression (see the examples).
-#' @param subsetX Expression, indicating `X` values to select from the probability-class object. Note that `select` will be evaluated in the probability-class object, so `X` variates can be referred to (by name) as variables in the expression (see the examples).
-#' @param ... Not used at present, left for method compatibility with `base::subset()`.
 #'
 #' @return An object of class "prova_pr" (probability), identical to the original object `x` except for a reduced range of values in some if its `Y` or `X` variates
 #'
@@ -88,15 +88,15 @@ subset.prova_pr <- function(
 #' @description
 #' Utility function to merge two objects of class "prova_pr" (probability), having same `Y` and `X` variates but different values.
 #'
+#' @param x,y Objects of class "prova_pr" (probability), obtained with [Pr()].
+#' @param ... Not used, left for consistency with generic `base::merge()`.
+#'
 #' @details
 #' This function combines two probability objects of class "prova_pr" (probability) into one. The two objects must have exactly the same sets (and ordering) of `Y` variates. They must also have the same sets (and ordering) of `X` variates, unless one or both have `NULL` `X`.
 #'
 #' The `Pr()` function allows to calculate point and tail probabilities for any given variate, but not both kinds at the same time. For example, `Pr()` can calculate the probability that a variate "age" is equal to 30, storing the result in a "prova_pr" probability object; or that it is larger than 35, storing the result in another probability object. But these two calculations cannot be done within one call to `Pr()`, storing both results at once in one probability object. With the `merge` function such an object can nevertheless be created from the previous two.
 #'
 #' If the values of the `X` variates are the same, then the probabilities corresponding to different `Y` values are concatenated. If the values of the `Y` variates are the same, then the probabilities corresponding to different `X` values are concatenated. If neither values are in common, the function throws an error.
-#'
-#' @param x,y Objects of class "prova_pr" (probability), obtained with [Pr()].
-#' @param ... Not used, left for consistency with generic `base::merge()`.
 #'
 #' @return An object of class "prova_pr" (probability), concatenating the `x` and `y` objects either along the `Y` values or along the `X` values.
 #'

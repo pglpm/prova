@@ -2,10 +2,6 @@
 #'
 #' @description Calculate the quantiles of posterior probabilities and posterior conditional probabilities. Output the revisability of such quantiles if more training data were available.
 #'
-#' @details This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the `qxxx`-variants of [R distribution functions][stats::Distributions]. The revisability can be expressed in the form of quantiles, samples, or both, as in the [Pr()] function. If several joint values are given for the probability levels and for `X`, the function creates a 2D grid of results for all possible combinations of the given probability levels and `X` values. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails`.
-#'
-#' If `qPr()` is called with three unnamed arguments, `qPr(..., ..., ...)`, then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.
-#'
 #' @param p Numeric vector of probability levels.
 #' @param Yname Character vector: name of variate whose quantiles will be computed.
 #' @param X Matrix or data.table or `NULL` (default): set of values of variates on which we want to condition. If `NULL`, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
@@ -25,6 +21,10 @@
 #' @param keepYX Logical, default `TRUE`: keep a copy of the `Yname` and `X` arguments in the output? This is used for [plot.prova_pr()].
 #' @param tol numeric positive: tolerance in the calculation of quantiles. Default: `.Machine$double.eps * 10` (typically `2.22045e-15`).
 
+#'
+#' @details This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the `qxxx`-variants of [R distribution functions][stats::Distributions]. The revisability can be expressed in the form of quantiles, samples, or both, as in the [Pr()] function. If several joint values are given for the probability levels and for `X`, the function creates a 2D grid of results for all possible combinations of the given probability levels and `X` values. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails`.
+#'
+#' If `qPr()` is called with three unnamed arguments, `qPr(..., ..., ...)`, then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.
 #'
 #' @return A list of the following elements:
 #' - `'value'`: a matrix with the requested \eqn{Y}-quantiles `p` conditional on the requested \eqn{X}-values in `X`, for all combinations of `p` (rows) and `X` (columns).

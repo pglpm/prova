@@ -15,8 +15,6 @@
 #' Default `TRUE`.
 #' @param verbose Logical: output heuristics for each variate? Default `TRUE`.
 #'
-#' @return A preliminary [data frame][base::data.frame()] containing the metadata, [invisibly][base::invisible()] if `file = NULL`. If argument `file` is a character, a preliminary metadata file is also created with that name or path.
-#'
 #' @section Metadata information and format:
 #'
 #' In order to correctly learn from a dataset, the [learn()] function needs information that is not contained in the data themeselves; that is, it needs *meta*data. Metadata are provided either as a `csv` file or as a [base::data.frame()].
@@ -52,9 +50,7 @@
 #' **`minincluded`**, **`maxincluded`**: Whether the minimum (`domainmin`) and maximum(`domainmax`) values of a *continuous* variate can really appear in the data or not. Possible values are `true` (or `t` or `yes`) or `false` (or `f`, `no`, or an empty field); upper- or lower-case is irrelevant. Here are some examples about the meaning of these fields. (a) A *censored* variate has values larger than a given amount all grouped together, and similarly for values smaller than a given amount; for example, the "age" variate in a dataset might group all ages under 18 into a value "18 or less", and all those above 67 into "67 or more". In this case, "18" will go into the `domainmin` field, and `minincluded` must be set to `true`; likewise "67" will go into the `domainmax` field, and `maxincluded` must be set to `true`. (b) A continuous *unrounded* variate such as temperature has 0 as a minimum possible value `domainmin`, but this value itself is physically impossible and can never appear in data; in this case `minincluded` is empty (or set to `false` or `no`). Note that if `domainmin` is minus-infinity (empty value in the metadata file), then `minincluded` is automatically empty (that is, `false`), and similarly for `maxincluded` if `domainmax` is infinity.
 #'
 #'
-## #' @section Necessity of metadata:
-## #'
-## #' To be written.
+#' @return A preliminary [data frame][base::data.frame()] containing the metadata, [invisibly][base::invisible()] if `file = NULL`. If argument `file` is a character, a preliminary metadata file is also created with that name or path.
 #'
 #' @seealso
 #' [learn()], to generate the information necessary to calculate posterior probabilities, based on data and metadata.

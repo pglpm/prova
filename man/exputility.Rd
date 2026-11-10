@@ -12,7 +12,7 @@ exputility(u, p)
 \item{p}{A "prova_pr" (probability) object, obtained from \code{\link[=Pr]{Pr()}}. The number of \eqn{Y}-values of this object must be equal to the number of columens of the utility matrix of argument \code{um}.}
 }
 \value{
-A \link[base:list]{list}  of the following elements:
+A \link[base:list]{list} of the following elements:
 \itemize{
 \item \code{'value'}: a \link[base:matrix]{matrix} of the expected utilities of the actions. One row for each action, one column for each value of the conditional \eqn{X} in the probability \code{p}.
 \item \code{'samples'}: an \link[base:array]{array} of samples of the expeceted utilities that the actions would have, if many more sample data were available. The first dimension corresponds to the actions, the second to the values of the conditional \eqn{X}, and the third the sample index.
@@ -27,7 +27,11 @@ A \link[base:list]{list}  of the following elements:
 This functions calculates the expected utilities of each action or decision corresponding to a given utility matrix. The long-run probable utilities are also calculated.
 }
 \details{
-This function calculates...
+In Decision Theory (see References), a decision or action has a utility that may depend on the values of unknown quantities (as well as on previous decisions). Among a set of possible decisions, the optimal one is determined by the principle of \emph{maximal expected utility}: it is the one with the largest expected utility, where the expected utilities are calculated by combining utilities and probabilities. In simple cases this calculation amounts to multipling a matrix of expected utilities, having one row for each possible decision and one column for each possible value, by a column vector of probabilities.
+
+This function performs such calculation.
+
+Since the probabilities may be subject to revision if more learning data become available, the expected utilities themselves are subject to revision. The present function also calculates this revisability, expressing it as samples and as quantiles, similarly to what is done by the function \code{Pr()}.
 }
 \examples{
 ## Use the example "prova_K" (knowledge) object 'Kexample'

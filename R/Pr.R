@@ -2,6 +2,23 @@
 #'
 #' @description Calculate posterior probabilities and probability densities, cumulative posterior probabilities, and mixtures thereof. Output the "revisability" of such probabilities if more training data were available, and the Monte Carlo Standard Error for the calculated posterior probabilities.
 #'
+#' @param Y Matrix or data.table: set of values of variates whose probabilities are sought. One variate per column, one set of values per row.
+#' @param X Matrix or data.table or `NULL` (default): set of values of variates in the conditional of the probability of `Y`. If `NULL`, no conditioning is made (besides the conditioning on knowledge `K`). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.
+#' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **NB**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
+#' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
+#' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the probability for `Y`. If `NULL` or 0, no samples are reported. If `'all'` or `Inf`, all samples obtained by the [learn()] function are used.
+#' @param quantiles Numeric vector, between 0 and 1, or `NULL`: desired quantiles of the revisability of the probability for `Y`. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. These are typical quantile values in the Bayesian literature: they give 50% and 89% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty (see <doi:10.5281/zenodo.17072199>). If `NULL`, no quantiles are calculated.
+#' @param parallel One of the following values:
+#' - A "cluster" object previously created with [parallel::makeCluster()].
+#' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
+#' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
+#' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "cl.cores"; if this option is unset, then use 2 nodes.
+#' @param sep character, default `','`: character to separate the output's variate names and values.
+#' @param solidus character, default `'|'`: character prepended to the output's names of the variates in the conditional (typically the `X` variates).
+#' @param verbose Logical, default `FALSE`: give messages about parallel processing?
+#' @param keepYX Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in the output? This is used for [plot.prova_pr()].
+#'
 #' @details This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as [data frame][base::data.frame()] arguments `Y` and `X`, and \eqn{K} is the information in the data and metadata. It is somewhat analogous to the `dxxx`-variants and `pxxx`-variants of [R distribution functions][stats::Distributions]. If `X` is omitted or `NULL`, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert K)} is calculated.
 #'
 #' For some variates in `Y` or `X`, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .} Tail values are inputted via the `'tails'` argument; see "Usage".
@@ -31,23 +48,6 @@
 #' Each variate in each argument `Y`, `X` can be specified either as a point-value \eqn{Y = y} or as a left-open interval \eqn{Y \le y} or as a right-open interval \eqn{Y \ge y}, through the argument `tails`.
 #'
 #' See `vignette('intro')` for example uses.
-#'
-#' @param Y Matrix or data.table: set of values of variates whose probabilities are sought. One variate per column, one set of values per row.
-#' @param X Matrix or data.table or `NULL` (default): set of values of variates in the conditional of the probability of `Y`. If `NULL`, no conditioning is made (besides the conditioning on knowledge `K`). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.
-#' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **NB**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} you should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
-#' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
-#' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the probability for `Y`. If `NULL` or 0, no samples are reported. If `'all'` or `Inf`, all samples obtained by the [learn()] function are used.
-#' @param quantiles Numeric vector, between 0 and 1, or `NULL`: desired quantiles of the revisability of the probability for `Y`. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. These are typical quantile values in the Bayesian literature: they give 50% and 89% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty (see <doi:10.5281/zenodo.17072199>). If `NULL`, no quantiles are calculated.
-#' @param parallel One of the following values:
-#' - A "cluster" object previously created with [parallel::makeCluster()].
-#' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
-#' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
-#' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "cl.cores"; if this option is unset, then use 2 nodes.
-#' @param sep character, default `','`: character to separate the output's variate names and values.
-#' @param solidus character, default `'|'`: character prepended to the output's names of the variates in the conditional (typically the `X` variates).
-#' @param verbose Logical, default `FALSE`: give messages about parallel processing?
-#' @param keepYX Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in the output? This is used for [plot.prova_pr()].
 #'
 #' @return An object of class "prova_pr" (probability), which is a list consisting of the following elements:
 #'
