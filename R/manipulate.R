@@ -42,7 +42,7 @@
 #' newprobs <- subset(
 #'   probs,
 #'   subsetY = species %in% c('Adelie', 'Gentoo'),
-#'   subsetX = bill_len == 43)
+#'   subsetX = bill_len == 43
 #' )
 #'
 #' newprobs$value
@@ -91,6 +91,7 @@ subset.prova_pr <- function(
 #' If the values of the `X` variates are the same, then the probabilities corresponding to different `Y` values are concatenated. If the values of the `Y` variates are the same, then the probabilities corresponding to different `X` values are concatenated. If neither values are in common, the function throws an error.
 #'
 #' @param x,y Objects of class "prova_pr" (probability), obtained with [Pr()].
+#' @param ... Not used, left for consistency with generic `base::merge()`.
 #'
 #' @return An object of class "prova_pr" (probability), concatenating the `x` and `y` objects either along the `Y` values or along the `X` values.
 #'
@@ -137,7 +138,7 @@ subset.prova_pr <- function(
 #'
 #' @concept manipulate
 #' @export
-merge.prova_pr <- function(x, y){
+merge.prova_pr <- function(x, y, ...){
     ## Check if Y and X variates are the same
     xnames <- names(dimnames(x$value))
     ynames <- names(dimnames(y$value))

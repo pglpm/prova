@@ -4,10 +4,12 @@
 \alias{merge.prova_pr}
 \title{Merge two objects of class "prova_pr" (probability)}
 \usage{
-\method{merge}{prova_pr}(x, y)
+\method{merge}{prova_pr}(x, y, ...)
 }
 \arguments{
 \item{x, y}{Objects of class "prova_pr" (probability), obtained with \code{\link[=Pr]{Pr()}}.}
+
+\item{...}{Not used, left for consistency with generic \code{base::merge()}.}
 }
 \value{
 An object of class "prova_pr" (probability), concatenating the \code{x} and \code{y} objects either along the \code{Y} values or along the \code{X} values.

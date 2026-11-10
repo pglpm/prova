@@ -43,7 +43,7 @@ probs$value
 newprobs <- subset(
   probs,
   subsetY = species \%in\% c('Adelie', 'Gentoo'),
-  subsetX = bill_len == 43)
+  subsetX = bill_len == 43
 )
 
 newprobs$value
