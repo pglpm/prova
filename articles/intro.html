@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1235,7 +1235,7 @@ digits corresponding to the Monte Carlo numerical accuracy:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Fspecies10</span><span class="op">$</span><span class="va">value</span></span>
 <span><span class="co">#            </span></span>
-<span><span class="co"># species         [,1]</span></span>
+<span><span class="co"># species             </span></span>
 <span><span class="co">#   Adelie    0.296733</span></span>
 <span><span class="co">#   Chinstrap 0.303881</span></span>
 <span><span class="co">#   Gentoo    0.399386</span></span>
@@ -1244,10 +1244,10 @@ digits corresponding to the Monte Carlo numerical accuracy:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Fspecies10</span>, <span class="st">'value'</span><span class="op">)</span></span>
 <span><span class="co"># $value</span></span>
 <span><span class="co">#            </span></span>
-<span><span class="co"># species     [,1]</span></span>
-<span><span class="co">#   Adelie     0.3</span></span>
-<span><span class="co">#   Chinstrap  0.3</span></span>
-<span><span class="co">#   Gentoo     0.4</span></span></code></pre></div>
+<span><span class="co"># species        </span></span>
+<span><span class="co">#   Adelie    0.3</span></span>
+<span><span class="co">#   Chinstrap 0.3</span></span>
+<span><span class="co">#   Gentoo    0.4</span></span></code></pre></div>
 <p>These frequency estimates have also another important meaning: they
 are the <em>probabilities for the species of the <strong>next</strong>
 penguin we’ll observe</em>. More generally, they are the probabilities
@@ -1330,11 +1330,10 @@ sample.</p>
 <p>The <code><a href="../reference/Pr.html">Pr()</a></code> function has actually calculated the
 probabilities for all possible frequencies of each species. We can plot
 the probabilities of the frequencies of the <code>Adelie</code> species
-only, as follows:</p>
+only by using the <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> function, as follows:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## select only Adelie by means of argument 'subset ='</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10</span>,</span>
-<span>    subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="co">## select only Adelie by means of subset()</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Fspecies10</span>, subsetY <span class="op">=</span> <span class="op">(</span><span class="va">species</span> <span class="op">==</span> <span class="st">'Adelie'</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, legend <span class="op">=</span> <span class="st">'topright'</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/hist10adelie-1.svg" alt="**Probability distribution for the frequency of Adelie penguins**" width="100%"><p class="caption">
@@ -1343,15 +1342,15 @@ penguins</strong>
 </p>
 </div>
 <p><br></p>
-<p>The <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code> function plots the probability distribution
-for all the frequency values; its <code>subset =</code> argument selects
-the information pertaining only to the <code>Adelie</code> species. We
-see that frequencies between around 0.2 and 0.4 have highest
-probability. But the probability distribution is quite wide; even a
-frequency of 0.6 has some probability. The vertical line indicates the
-mean of this probability distribution, which we take as our frequency
-estimate and as the probability that the next penguin we observe is of
-the Adélie species.</p>
+<p>The <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> function selects only the probabilities for
+the <code>Adelie</code> species. The <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code> function plots
+the probability distribution for all the frequency values. We see that
+frequencies between around 0.2 and 0.4 have highest probability. But the
+probability distribution is quite wide; even a frequency of 0.6 has some
+probability. The vertical line indicates the mean of this probability
+distribution, which we take as our frequency estimate and as the
+probability that the next penguin we observe is of the Adélie
+species.</p>
 <p>The width of this probability distribution reflects our large
 uncertainty, which in turn comes from the fact that we have only seen a
 small sample of penguins. We shall see that this uncertainty decreases
@@ -1550,7 +1549,7 @@ of the <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link
 <p>For Biscoe island we find</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## select only Biscoe</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Biscoe'</span><span class="op">)</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subsetX <span class="op">=</span> <span class="op">(</span><span class="va">island</span> <span class="op">==</span> <span class="st">'Biscoe'</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, legend <span class="op">=</span> <span class="st">'topright'</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/hist10biscoe-1.svg" alt="**Probability distribution for species frequencies on Biscoe**" width="100%"><p class="caption">
@@ -1572,7 +1571,7 @@ sampling data confirm “no difference”?</p>
 For Dream island we find</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## select only Dream</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Dream'</span><span class="op">)</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subsetX <span class="op">=</span> <span class="op">(</span><span class="va">island</span> <span class="op">==</span> <span class="st">'Dream'</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, legend <span class="op">=</span> <span class="st">'topright'</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="figure/hist10dream-1.svg" alt="**Probability distribution for species frequencies on Biscoe**" width="100%"><p class="caption">
@@ -1952,14 +1951,14 @@ previous inference.</p>
 <h4 id="for-dream-island">For <code>Dream</code> island<a class="anchor" aria-label="anchor" href="#for-dream-island"></a>
 </h4>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Dream'</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subsetX <span class="op">=</span> <span class="op">(</span><span class="va">island</span> <span class="op">==</span> <span class="st">'Dream'</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    legend <span class="op">=</span> <span class="st">'topright'</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">13</span><span class="op">)</span>, <span class="co">## same y-range</span></span>
 <span>    col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, main <span class="op">=</span> <span class="st">'10 samples, Dream island'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/hist60Dream-1.svg" alt="" width="100%"></p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies60I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Dream'</span><span class="op">)</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Fspecies60I</span>, subsetX <span class="op">=</span> <span class="op">(</span><span class="va">island</span> <span class="op">==</span> <span class="st">'Dream'</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    legend <span class="op">=</span> <span class="st">'topright'</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">13</span><span class="op">)</span>, <span class="co">## same y-range</span></span>
 <span>    col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, main <span class="op">=</span> <span class="st">'60 samples, Dream island'</span><span class="op">)</span></span></code></pre></div>
@@ -1974,14 +1973,14 @@ intervals; we were correctly warned about their possible change.</p>
 <h4 id="surprise">For <code>Biscoe</code> island: a surprising result<a class="anchor" aria-label="anchor" href="#surprise"></a>
 </h4>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Biscoe'</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Fspecies10I</span>, subsetX <span class="op">=</span> <span class="op">(</span><span class="va">island</span> <span class="op">==</span> <span class="st">'Biscoe'</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    legend <span class="op">=</span> <span class="st">'topright'</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">17</span><span class="op">)</span>, <span class="co">## same y-range from previous plot</span></span>
 <span>    col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, main <span class="op">=</span> <span class="st">'10 samples, Biscoe island'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="figure/hist60Biscoe-1.svg" alt="" width="100%"></p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">Fspecies60I</span>, subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>island <span class="op">=</span> <span class="st">'Biscoe'</span><span class="op">)</span>,</span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Fspecies60I</span>, subsetX <span class="op">=</span> <span class="op">(</span><span class="va">island</span> <span class="op">==</span> <span class="st">'Biscoe'</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>    legend <span class="op">=</span> <span class="st">'topright'</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>    ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">17</span><span class="op">)</span>, <span class="co">## same y-range from previous plot</span></span>
 <span>    col <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, main <span class="op">=</span> <span class="st">'60 samples, Biscoe island'</span><span class="op">)</span></span></code></pre></div>

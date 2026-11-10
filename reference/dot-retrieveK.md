@@ -1,6 +1,7 @@
 # Retrieve a "prova_K" (knowledge) object
 
-Retrieve a "prova_K" (knowledge) object
+Retrieves a "prova_K" (knowledge) object if given as a path to directory
+or file.
 
 ## Usage
 
@@ -18,8 +19,3 @@ Retrieve a "prova_K" (knowledge) object
 ## Value
 
 The actual "prova_K" (knowledge) object or `NULL` if none was found.
-
-## Details
-
-Retrieves a "prova_K" (knowledge) object if given as a path to directory
-or file.

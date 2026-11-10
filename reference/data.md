@@ -39,9 +39,9 @@ pread.csv(file, ...)
 
 `pread.csv` returns a [data
 frame](https://rdrr.io/r/base/data.frame.html) containing a
-representation of the data in the file; see
+representation of the data from the input file; see
 [`utils::read.csv()`](https://rdrr.io/r/utils/read.table.html).
-`pwrite.csv' returns `NULL\`
+`pwrite.csv` returns `NULL`
 [invisibly](https://rdrr.io/r/base/invisible.html).
 
 ## Details

@@ -763,7 +763,7 @@ numerical accuracy:
 
 Fspecies10$value
 #            
-# species         [,1]
+# species             
 #   Adelie    0.296733
 #   Chinstrap 0.303881
 #   Gentoo    0.399386
@@ -772,10 +772,10 @@ Fspecies10$value
 print(Fspecies10, 'value')
 # $value
 #            
-# species     [,1]
-#   Adelie     0.3
-#   Chinstrap  0.3
-#   Gentoo     0.4
+# species        
+#   Adelie    0.3
+#   Chinstrap 0.3
+#   Gentoo    0.4
 ```
 
 These frequency estimates have also another important meaning: they are
@@ -872,13 +872,13 @@ because this is just a small sample.
 The [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function has
 actually calculated the probabilities for all possible frequencies of
 each species. We can plot the probabilities of the frequencies of the
-`Adelie` species only, as follows:
+`Adelie` species only by using the
+[`subset()`](https://rdrr.io/r/base/subset.html) function, as follows:
 
 ``` r
 
-## select only Adelie by means of argument 'subset ='
-hist(Fspecies10,
-    subset = list(species = 'Adelie'),
+## select only Adelie by means of subset()
+hist(subset(Fspecies10, subsetY = (species == 'Adelie')),
     xlim = c(0, 1), legend = 'topright', col = 1)
 ```
 
@@ -889,15 +889,15 @@ penguins\*\*](figure/hist10adelie-1.svg)
 
   
 
-The [`hist()`](https://rdrr.io/r/graphics/hist.html) function plots the
-probability distribution for all the frequency values; its `subset =`
-argument selects the information pertaining only to the `Adelie`
-species. We see that frequencies between around 0.2 and 0.4 have highest
-probability. But the probability distribution is quite wide; even a
-frequency of 0.6 has some probability. The vertical line indicates the
-mean of this probability distribution, which we take as our frequency
-estimate and as the probability that the next penguin we observe is of
-the Adélie species.
+The [`subset()`](https://rdrr.io/r/base/subset.html) function selects
+only the probabilities for the `Adelie` species. The
+[`hist()`](https://rdrr.io/r/graphics/hist.html) function plots the
+probability distribution for all the frequency values. We see that
+frequencies between around 0.2 and 0.4 have highest probability. But the
+probability distribution is quite wide; even a frequency of 0.6 has some
+probability. The vertical line indicates the mean of this probability
+distribution, which we take as our frequency estimate and as the
+probability that the next penguin we observe is of the Adélie species.
 
 The width of this probability distribution reflects our large
 uncertainty, which in turn comes from the fact that we have only seen a
@@ -1116,7 +1116,7 @@ For Biscoe island we find
 ``` r
 
 ## select only Biscoe
-hist(Fspecies10I, subset = list(island = 'Biscoe'),
+hist(subset(Fspecies10I, subsetX = (island == 'Biscoe')),
     xlim = c(0, 1), legend = 'topright', col = 1:3)
 ```
 
@@ -1142,7 +1142,7 @@ For Dream island we find
 ``` r
 
 ## select only Dream
-hist(Fspecies10I, subset = list(island = 'Dream'),
+hist(subset(Fspecies10I, subsetX = (island == 'Dream')),
     xlim = c(0, 1), legend = 'topright', col = 1:3)
 ```
 
@@ -1573,7 +1573,7 @@ inference.
 
 ``` r
 
-hist(Fspecies10I, subset = list(island = 'Dream'),
+hist(subset(Fspecies10I, subsetX = (island == 'Dream')),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 13), ## same y-range
     col = 1:3, main = '10 samples, Dream island')
@@ -1584,7 +1584,7 @@ hist(Fspecies10I, subset = list(island = 'Dream'),
 ``` r
 
 
-hist(Fspecies60I, subset = list(island = 'Dream'),
+hist(subset(Fspecies60I, subsetX = (island == 'Dream')),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 13), ## same y-range
     col = 1:3, main = '60 samples, Dream island')
@@ -1602,7 +1602,7 @@ were correctly warned about their possible change.
 
 ``` r
 
-hist(Fspecies10I, subset = list(island = 'Biscoe'),
+hist(subset(Fspecies10I, subsetX = (island == 'Biscoe')),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 17), ## same y-range from previous plot
     col = 1:3, main = '10 samples, Biscoe island')
@@ -1613,7 +1613,7 @@ hist(Fspecies10I, subset = list(island = 'Biscoe'),
 ``` r
 
 
-hist(Fspecies60I, subset = list(island = 'Biscoe'),
+hist(subset(Fspecies60I, subsetX = (island == 'Biscoe')),
     legend = 'topright', xlim = c(0, 1),
     ylim = c(0, 17), ## same y-range from previous plot
     col = 1:3, main = '60 samples, Biscoe island')

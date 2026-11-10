@@ -13,7 +13,6 @@ with one curve for each value of `X`, or vice versa.
 plot(
   x,
   spread = NULL,
-  subset = NULL,
   PvsY = NULL,
   type = NULL,
   lty = c(1, 2, 4, 3, 6, 5),
@@ -60,12 +59,6 @@ plot(
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md). If the
   requested representation is not available in the object `x`, then a
   warning is issued and no revisability is plotted.
-
-- subset:
-
-  Named list or named vector: which variate values to display. For the
-  variates corresponding to the names in this list, only the vector of
-  values corresponding to that variate is displayed.
 
 - PvsY:
 

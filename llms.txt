@@ -386,6 +386,13 @@ and of its documents.
 - [`print(`*`<prova_pr>`*`)`](https://pglpm.github.io/prova/reference/print.prova_pr.md)
   : Print an object of class "prova_pr" (probability)
 
+## Subset & merge probability objects
+
+- [`merge(`*`<prova_pr>`*`)`](https://pglpm.github.io/prova/reference/merge.prova_pr.md)
+  : Merge two objects of class "prova_pr" (probability)
+- [`subset(`*`<prova_pr>`*`)`](https://pglpm.github.io/prova/reference/subset.prova_pr.md)
+  : Subset variates of an object of class "prova_pr" (probability)
+
 ## Handle metadata and data files
 
 - [`pwrite.csv()`](https://pglpm.github.io/prova/reference/data.md)
@@ -434,6 +441,8 @@ For developers (beware!)
   : Join '\_\_\_\_tempPtraces-' files
 - [`.learnbind()`](https://pglpm.github.io/prova/reference/dot-learnbind.md)
   : Bind 3D arrays by first dimension
+- [`.learnbind2()`](https://pglpm.github.io/prova/reference/dot-learnbind2.md)
+  : Bind 3D arrays by second dimension
 - [`.lprobsargsyx()`](https://pglpm.github.io/prova/reference/dot-lprobsargsyx.md)
   : Prepare arguments for util_lprobsyx from data
 - [`.lprobsbase()`](https://pglpm.github.io/prova/reference/dot-lprobsbase.md)
@@ -449,8 +458,6 @@ For developers (beware!)
   : Plot one-dimensional posterior probabilities
 - [`.prepPcheckpoints()`](https://pglpm.github.io/prova/reference/dot-prepPcheckpoints.md)
   : Format datapoints used for MCMC monitoring
-- [`.prsubset()`](https://pglpm.github.io/prova/reference/dot-prsubset.md)
-  : Subset variates of an object of class "prova_pr" (probability)
 - [`.qYXcont()`](https://pglpm.github.io/prova/reference/dot-qYXcont.md)
   : Calculate quantiles for continuous Y by bisection
 - [`.qYXdiscr()`](https://pglpm.github.io/prova/reference/dot-qYXdiscr.md)

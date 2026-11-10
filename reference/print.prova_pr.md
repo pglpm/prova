@@ -14,7 +14,7 @@ continuous variate, are indicated with an asterisk `*`.
 
 ``` r
 # S3 method for class 'prova_pr'
-print(x, elements = NULL, subset = NULL, digits = TRUE, edigits = 2, ...)
+print(x, elements = NULL, digits = TRUE, edigits = 2, ...)
 ```
 
 ## Arguments
@@ -31,12 +31,6 @@ print(x, elements = NULL, subset = NULL, digits = TRUE, edigits = 2, ...)
   with [`[`](https://rdrr.io/r/base/Extract.html). If `NULL`, the
   elements `'value'` and `'quantiles'` are displayed together in a
   special way.
-
-- subset:
-
-  Named list or named vector: which variate values to display. For the
-  variates corresponding to the names in this list, only the vector of
-  values corresponding to that variate is displayed.
 
 - digits:
 
@@ -118,8 +112,9 @@ print(probs)
 #>   Gentoo    0.5722 0.0031 0.4671 0.5270 0.6204 0.6718
 #> 
 
-## diplay 'value' only, and only for the species value 'Gentoo'
-print(probs, elements = 'value', subset = list(species = 'Gentoo'))
+## display 'value' only,
+## use subset() to select only the value 'Gentoo' for species
+print(subset(probs, subsetY = (species == 'Gentoo')), elements = 'value')
 #> $value
 #>         |bill_len
 #> species    43   44

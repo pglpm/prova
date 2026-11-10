@@ -40,8 +40,8 @@ the [str](https://rdrr.io/r/utils/str.html)ucture of the corresponding
 
 ## See also
 
-[`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates a "prova_K" (knowledge) object.
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
+generate a "prova_K" (knowledge) object.
 
 [Kexample](https://pglpm.github.io/prova/reference/Kexample.md) an
 example "prova_K" (knowledge) object included with **Prova**.

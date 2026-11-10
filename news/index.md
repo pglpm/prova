@@ -1,12 +1,27 @@
 # Changelog
 
+## Prova v2.3.7
+
+- Added methods for functions
+  [`subset()`](https://rdrr.io/r/base/subset.html) and
+  [`merge()`](https://rdrr.io/r/base/merge.html), to subset or merge
+  probability objects. The
+  [`subset()`](https://rdrr.io/r/base/subset.html) function has
+  arguments that evaluate in a nonstandard way, making it easier to
+  subset variate ranges.
+- Removed the `subset =` argument in the plot and print functions, as
+  this functionality is now provided by the
+  [`subset()`](https://rdrr.io/r/base/subset.html) method.
+
 ## Prova v2.3.6
 
 - Corrected behaviour of argument `cex =` in plot functions, and a bug
   introduced by the correction.
 - New possible value for `quantiles.spread` and corrected behaviour of
   this argument.
-- New available values `FALSE` and `NA` for plot() `legend =` argument.
+- New available values `FALSE` and `NA` for
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html)’s `legend =`
+  argument.
 - Modified progress output of
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md).
 - Slightly modified convergence criterion in

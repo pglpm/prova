@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <a href="https://rdrr.io/r/base/list.html" class="external-link">list</a>  of the following elements:</p><ul><li><p><code>'value'</code>: a <a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a> of the expected utilities of the actions. One row for each action, one column for each value of the conditional \(X\) in the probability <code>p</code>.</p></li>
+    <p>A <a href="https://rdrr.io/r/base/list.html" class="external-link">list</a> of the following elements:</p><ul><li><p><code>'value'</code>: a <a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a> of the expected utilities of the actions. One row for each action, one column for each value of the conditional \(X\) in the probability <code>p</code>.</p></li>
 <li><p><code>'samples'</code>: an <a href="https://rdrr.io/r/base/array.html" class="external-link">array</a> of samples of the expeceted utilities that the actions would have, if many more sample data were available. The first dimension corresponds to the actions, the second to the values of the conditional \(X\), and the third the sample index.</p></li>
 <li><p><code>'value.acc'</code>: numerical accuracies of <code>'value'</code> elements.</p></li>
 <li><p><code>'optimal</code>': <a href="https://rdrr.io/r/base/list.html" class="external-link">list</a> of actions having maximal expected utility, one list element per column of <code>p</code> (that is, its conditional values <code>X</code>). If there are ties, all actions in the tie are reported.</p></li>
@@ -77,7 +77,9 @@
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function calculates...</p>
+    <p>In Decision Theory (see References), a decision or action has a utility that may depend on the values of unknown quantities (as well as on previous decisions). Among a set of possible decisions, the optimal one is determined by the principle of <em>maximal expected utility</em>: it is the one with the largest expected utility, where the expected utilities are calculated by combining utilities and probabilities. In simple cases this calculation amounts to multipling a matrix of expected utilities, having one row for each possible decision and one column for each possible value, by a column vector of probabilities.</p>
+<p>This function performs such calculation.</p>
+<p>Since the probabilities may be subject to revision if more learning data become available, the expected utilities themselves are subject to revision. The present function also calculates this revisability, expressing it as samples and as quantiles, similarly to what is done by the function <code><a href="Pr.html">Pr()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -123,7 +125,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">eu</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> actions      [,1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> actions          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      A1 0.3981347</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      A2 0.3510855</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      A3 0.4306723</span>
@@ -139,7 +141,7 @@
 <span class="r-in"><span><span class="co">## if many more sample data were available</span></span></span>
 <span class="r-in"><span><span class="va">eu</span><span class="op">$</span><span class="va">optimal.probs</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> actions       [,1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> actions           </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      A1 0.01333333</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      A2 0.05777778</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      A3 0.92888889</span>

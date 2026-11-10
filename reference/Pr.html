@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -151,7 +151,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 \mathrm{Pr}(Y = y' \vert \text{prior})
 }
 \ .$$
-<em>Important</em>: any values <em>not</em> present in the <code>Y</code> data frame are given <em>zero</em> prior probability; in other words, the normalization \(\sum_{y'}\) only counts the $y$ values appearing in the data frame <code>Y</code>.</p>
+<em>Important</em>: any values <em>not</em> present in the <code>Y</code> data frame are given <em>zero</em> prior probability. In other words, the normalization \(\sum_{y'}\) only counts the \(y'\) values appearing in the data frame <code>Y</code>.</p>
 <p>Each variate in each argument <code>Y</code>, <code>X</code> can be specified either as a point-value \(Y = y\) or as a left-open interval \(Y \le y\) or as a right-open interval \(Y \ge y\), through the argument <code>tails</code>.</p>
 <p>See <code><a href="../articles/intro.html">vignette('intro')</a></code> for example uses.</p>
     </div>
@@ -167,7 +167,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, which generates the <code>K</code>nowledge objects required by <code>Pr()</code>.</p>
+    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, to generate the <code>K</code>nowledge objects required by <code>Pr()</code>.</p>
 <p><code><a href="plot.prova_pr.html">plot.prova_pr()</a></code> to plot probabilities and quantiles calculated by <code>Pr()</code>.</p>
 <p><code><a href="hist.prova_pr.html">hist.prova_pr()</a></code> to plot histograms of the probability distributions calculated by <code>Pr()</code>.</p>
 <p><code><a href="print.prova_pr.html">print.prova_pr()</a></code> to print the main elements of the probabilities calculated by <code>Pr()</code>.</p>
@@ -191,7 +191,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> species      [,1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> species          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.440685</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## the full-population frequency of 'Adelie' penguins is unknown;</span></span></span>
@@ -217,7 +217,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="co">## display the 3 probability values</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> species          [,1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> species              </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4406850</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1984161</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3608989</span>
@@ -273,7 +273,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len        [,1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Adelie,43 0.001819114</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
@@ -340,7 +340,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="co">## display the 6 joint-probability values</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len         [,1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0018191137</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0005712174</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0015231253</span>

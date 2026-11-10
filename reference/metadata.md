@@ -202,9 +202,9 @@ infinity.
 
 ## See also
 
-[`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the information necessary to calculate posterior
-probabilities, based on data and metadata.
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
+generate the information necessary to calculate posterior probabilities,
+based on data and metadata.
 
 ## Examples
 

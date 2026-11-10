@@ -219,8 +219,8 @@ theorem \$\$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior}) = \frac{
 \text{prior}) }{ \sum\_{y'} \mathrm{Pr}(X = x \vert Y = y', K) \cdot
 \mathrm{Pr}(Y = y' \vert \text{prior}) } \\ .\$\$ *Important*: any
 values *not* present in the `Y` data frame are given *zero* prior
-probability; in other words, the normalization \\\sum\_{y'}\\ only
-counts the \$y\$ values appearing in the data frame `Y`.
+probability. In other words, the normalization \\\sum\_{y'}\\ only
+counts the \\y'\\ values appearing in the data frame `Y`.
 
 Each variate in each argument `Y`, `X` can be specified either as a
 point-value \\Y = y\\ or as a left-open interval \\Y \le y\\ or as a
@@ -253,8 +253,8 @@ for example uses.
 
 ## See also
 
-[`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the `K`nowledge objects required by `Pr()`.
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
+generate the `K`nowledge objects required by `Pr()`.
 
 [`plot.prova_pr()`](https://pglpm.github.io/prova/reference/plot.prova_pr.md)
 to plot probabilities and quantiles calculated by `Pr()`.
@@ -290,7 +290,7 @@ probs <- Pr(data.frame(species = 'Adelie'), Kexample)
 ## display the probability value
 probs$value
 #>         
-#> species      [,1]
+#> species          
 #>   Adelie 0.440685
 
 ## the full-population frequency of 'Adelie' penguins is unknown;
@@ -316,7 +316,7 @@ probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
 ## display the 3 probability values
 probs$value
 #>            
-#> species          [,1]
+#> species              
 #>   Adelie    0.4406850
 #>   Chinstrap 0.1984161
 #>   Gentoo    0.3608989
@@ -372,7 +372,7 @@ probs <- Pr(data.frame(species = 'Adelie', bill_len = 43), Kexample)
 ## display the probability value
 probs$value
 #>                 
-#> species,bill_len        [,1]
+#> species,bill_len            
 #>        Adelie,43 0.001819114
 
 ## display the 5.5%- and 94.5%-probability values
@@ -439,7 +439,7 @@ probs <- Pr(Y, Kexample)
 ## display the 6 joint-probability values
 probs$value
 #>                 
-#> species,bill_len         [,1]
+#> species,bill_len             
 #>     Adelie,43    0.0018191137
 #>     Chinstrap,43 0.0005712174
 #>     Gentoo,43    0.0015231253

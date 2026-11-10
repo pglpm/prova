@@ -231,8 +231,8 @@ to plot the revisability of the mutual information.
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 probabilities and their revisability.
 
-[`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the "prova_K" (knowledge) objects required by `mutualinfo()`.
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
+generate the "prova_K" (knowledge) objects required by `mutualinfo()`.
 
 ## Examples
 

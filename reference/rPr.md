@@ -87,8 +87,8 @@ then it is interpreted as `rPr(n = ..., Ynames = ..., K = ...)`.
 
 ## See also
 
-[`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the "prova_K" (knowledge) objects required by
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
+generate the "prova_K" (knowledge) objects required by
 [`qPr()`](https://pglpm.github.io/prova/reference/qPr.md).
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate

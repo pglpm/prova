@@ -169,8 +169,8 @@ then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.
 
 ## See also
 
-[`learn()`](https://pglpm.github.io/prova/reference/learn.md), which
-generates the "prova_K" (knowledge) objects required by `qPr()`.
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
+generate the "prova_K" (knowledge) objects required by `qPr()`.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 joint and conditional probabilities.
@@ -197,7 +197,7 @@ quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', Kexample)
 ## display the quantile values
 quants$value
 #>         
-#> bill_len [,1]
+#> bill_len     
 #>     0.25 39.2
 #>     0.5  44.3
 #>     0.75 48.3
@@ -206,18 +206,18 @@ quants$value
 probs <- Pr(data.frame(bill_len = c(quants$value)), Kexample,
   tails = list(bill_len = -1))
 probs$value
-#>          
-#> bill_len<      [,1]
-#>      39.2 0.2528194
-#>      44.3 0.5026998
-#>      48.3 0.7501943
+#>         
+#> bill_len          
+#>   <=39.2 0.2528194
+#>   <=44.3 0.5026998
+#>   <=48.3 0.7501943
 
 ## display the revisability about the quantiles
 quants$quantiles
 #> , , Q = 5.5%
 #> 
 #>         
-#> bill_len [,1]
+#> bill_len     
 #>     0.25 38.7
 #>     0.5  43.3
 #>     0.75 47.8
@@ -225,7 +225,7 @@ quants$quantiles
 #> , , Q = 50%
 #> 
 #>         
-#> bill_len [,1]
+#> bill_len     
 #>     0.25 39.2
 #>     0.5  44.3
 #>     0.75 48.3
@@ -233,7 +233,7 @@ quants$quantiles
 #> , , Q = 94.5%
 #> 
 #>         
-#> bill_len [,1]
+#> bill_len     
 #>     0.25 39.7
 #>     0.5  45.1
 #>     0.75 48.9
@@ -258,10 +258,10 @@ quants$value
 probs <- Pr(data.frame(bill_len = c(quants$value)),
   data.frame(species = 'Adelie'), Kexample, tails = list(bill_len = -1))
 probs$value
-#>          |species
-#> bill_len<    Adelie
-#>      37   0.2530943
-#>      38.8 0.5050883
-#>      40.6 0.7515390
+#>         |species
+#> bill_len    Adelie
+#>   <=37   0.2530943
+#>   <=38.8 0.5050883
+#>   <=40.6 0.7515390
 # }
 ```

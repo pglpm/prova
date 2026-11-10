@@ -1,7 +1,7 @@
 # Bind 3D arrays by first dimension
 
 Used in 'util_checkpoints()' within 'learn()', and in various functions
-in 'util_lprobs.R'.
+in 'util_lprobs.R' and 'merge.prova_pr'.
 
 ## Usage
 

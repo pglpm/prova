@@ -67,7 +67,23 @@ A [list](https://rdrr.io/r/base/list.html) of the following elements:
 
 ## Details
 
-This function calculates...
+In Decision Theory (see References), a decision or action has a utility
+that may depend on the values of unknown quantities (as well as on
+previous decisions). Among a set of possible decisions, the optimal one
+is determined by the principle of *maximal expected utility*: it is the
+one with the largest expected utility, where the expected utilities are
+calculated by combining utilities and probabilities. In simple cases
+this calculation amounts to multipling a matrix of expected utilities,
+having one row for each possible decision and one column for each
+possible value, by a column vector of probabilities.
+
+This function performs such calculation.
+
+Since the probabilities may be subject to revision if more learning data
+become available, the expected utilities themselves are subject to
+revision. The present function also calculates this revisability,
+expressing it as samples and as quantiles, similarly to what is done by
+the function [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 
 ## References
 
@@ -125,7 +141,7 @@ eu <- exputility(umatrix, probs)
 
 eu$value
 #>        
-#> actions      [,1]
+#> actions          
 #>      A1 0.3981347
 #>      A2 0.3510855
 #>      A3 0.4306723
@@ -141,7 +157,7 @@ eu$optimal
 ## if many more sample data were available
 eu$optimal.probs
 #>        
-#> actions       [,1]
+#> actions           
 #>      A1 0.01333333
 #>      A2 0.05777778
 #>      A3 0.92888889
