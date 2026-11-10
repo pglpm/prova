@@ -476,12 +476,12 @@ The `Pr()` function has actually calculated the probabilities for all possible f
 
 ```{r hist10adelie, eval = TRUE, fig.cap='**Probability distribution for the frequency of Adelie penguins**'}
 ## select only Adelie by means of subset()
-hist(subset(Fspecies10, subsetX = (species == 'Adelie')),
+hist(subset(Fspecies10, subsetY = (species == 'Adelie')),
     xlim = c(0, 1), legend = 'topright', col = 1)
 ```
 \
 
-The `subset()` function selects the probabilities conditional only to the `Adelie` species. The `hist()` function plots the probability distribution for all the frequency values. We see that frequencies between around `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.25),1)` and `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.75),1)` have highest probability. But the probability distribution is quite wide; even a frequency of `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.99),1)` has some probability. The vertical line indicates the mean of this probability distribution, which we take as our frequency estimate and as the probability that the next penguin we observe is of the Adélie species.
+The `subset()` function selects only the probabilities for the `Adelie` species. The `hist()` function plots the probability distribution for all the frequency values. We see that frequencies between around `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.25),1)` and `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.75),1)` have highest probability. But the probability distribution is quite wide; even a frequency of `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.99),1)` has some probability. The vertical line indicates the mean of this probability distribution, which we take as our frequency estimate and as the probability that the next penguin we observe is of the Adélie species.
 
 The width of this probability distribution reflects our large uncertainty, which in turn comes from the fact that we have only seen a small sample of penguins. We shall see that this uncertainty decreases and we gather more samples.
 

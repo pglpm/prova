@@ -1202,7 +1202,7 @@ hist.prova_pr <- function(
 #'
 #' ## display 'value' only,
 #' ## use subset() to select only the value 'Gentoo' for species
-#' print(subset(probs, species == 'Gentoo'), elements = 'value')
+#' print(subset(probs, subsetY = (species == 'Gentoo')), elements = 'value')
 #'
 #' @concept display
 #' @export
