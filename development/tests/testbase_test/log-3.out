@@ -1,4 +1,4 @@
-Log node 3 - Current time: 2026-10-18 18:27:41 
+Log node 3 - Current time: 2026-11-10 14:39:48 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -101,7 +101,7 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 46 secs 
+Setup time 42 secs 
 
 ###########################################################
 Chain # 3 (chain 1 of 1 for this node)
@@ -113,8 +113,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:33
-MCMC time 5.3 secs 
+Current time: 2026-11-10 14:40:36
+MCMC time 4.9 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -125,7 +125,7 @@ ESS from rel. qt. error: 518
 ESS: 314
 needed thinning: 11.5
 log-average: -7.33
-Diagnostics time 1 secs 
+Diagnostics time 1.2 secs 
 
 Total iterations 3600 - require further 1647 - continue for 1647 
 
@@ -135,7 +135,7 @@ Iterations: 1648
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:41
+Current time: 2026-11-10 14:40:43
 MCMC time 12 secs 
 
 USED COMPONENTS: 2 OF 64 
@@ -147,7 +147,7 @@ ESS from rel. qt. error: 490
 ESS: 344
 needed thinning: 15.3
 log-average: -7.12
-Diagnostics time 0.15 secs 
+Diagnostics time 0.14 secs 
 
 Total iterations 5248 - require further 1745 - continue for 1745 
 
@@ -157,7 +157,7 @@ Iterations: 1746
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:43
+Current time: 2026-11-10 14:40:46
 MCMC time 15 secs 
 
 USED COMPONENTS: 2 OF 64 
@@ -169,7 +169,7 @@ ESS from rel. qt. error: 708
 ESS: 431
 needed thinning: 16.2
 log-average: -7.08
-Diagnostics time 0.17 secs 
+Diagnostics time 0.15 secs 
 
 Total iterations 6994 - require further 437 - continue for 437 
 
@@ -179,7 +179,7 @@ Iterations: 438
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:45
+Current time: 2026-11-10 14:40:48
 MCMC time 17 secs 
 
 USED COMPONENTS: 2 OF 64 
@@ -191,14 +191,14 @@ ESS from rel. qt. error: 761
 ESS: 472
 needed thinning: 15.7
 log-average: -7.1
-Diagnostics time 0.029 secs 
+Diagnostics time 0.025 secs 
 
 Total iterations 7432 - require further 0 - continue for 0 
 
 Keeping  450 
 
-Current time: 2026-10-18 18:28:46
+Current time: 2026-11-10 14:40:49
 MCMC + diagnostics time 18 secs 
 
-Current time: 2026-10-18 18:28:46
-Total time 1.1 mins 
+Current time: 2026-11-10 14:40:49
+Total time 1 mins 

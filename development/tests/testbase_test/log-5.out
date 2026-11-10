@@ -1,4 +1,4 @@
-Log node 5 - Current time: 2026-10-18 18:27:41 
+Log node 5 - Current time: 2026-11-10 14:39:48 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -101,7 +101,7 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 47 secs 
+Setup time 42 secs 
 
 ###########################################################
 Chain # 5 (chain 1 of 1 for this node)
@@ -113,8 +113,8 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:36
-MCMC time 6.4 secs 
+Current time: 2026-11-10 14:40:37
+MCMC time 6.2 secs 
 
 USED COMPONENTS: 3 OF 64 
 
@@ -125,7 +125,7 @@ ESS from rel. qt. error: 378
 ESS: 379
 needed thinning: 9.53
 log-average: -7.19
-Diagnostics time 1.1 secs 
+Diagnostics time 1 secs 
 
 Total iterations 3600 - require further 767 - continue for 767 
 
@@ -135,8 +135,8 @@ Iterations: 768
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:43
-MCMC time 14 secs 
+Current time: 2026-11-10 14:40:44
+MCMC time 13 secs 
 
 USED COMPONENTS: 2 OF 64 
 
@@ -147,7 +147,7 @@ ESS from rel. qt. error: 364
 ESS: 431
 needed thinning: 12
 log-average: -7.14
-Diagnostics time 0.071 secs 
+Diagnostics time 0.042 secs 
 
 Total iterations 4368 - require further 1134 - continue for 1134 
 
@@ -157,8 +157,8 @@ Iterations: 1135
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-10-18 18:28:46
-MCMC time 16 secs 
+Current time: 2026-11-10 14:40:46
+MCMC time 15 secs 
 
 USED COMPONENTS: 2 OF 64 
 
@@ -169,14 +169,14 @@ ESS from rel. qt. error: 572
 ESS: 528
 needed thinning: 10.4
 log-average: -7.16
-Diagnostics time 0.062 secs 
+Diagnostics time 0.06 secs 
 
 Total iterations 5503 - require further 0 - continue for 0 
 
 Keeping  450 
 
-Current time: 2026-10-18 18:28:47
-MCMC + diagnostics time 18 secs 
+Current time: 2026-11-10 14:40:47
+MCMC + diagnostics time 16 secs 
 
-Current time: 2026-10-18 18:28:47
-Total time 1.1 mins 
+Current time: 2026-11-10 14:40:47
+Total time 59 secs 
