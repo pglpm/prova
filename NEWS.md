@@ -2,6 +2,8 @@
 
 * Added methods for functions `subset()` and `merge()`, to subset or merge probability objects. The `subset()` function has arguments that evaluate in a nonstandard way, making it easier to subset variate ranges.
 * Removed the `subset = ` argument in the plot and print functions, as this functionality is now provided by the `subset()` method.
+* Corrected and improved documentation.
+
 
 # Prova v2.3.6
 
