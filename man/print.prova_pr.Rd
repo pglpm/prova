@@ -50,7 +50,7 @@ probs <- Pr(Y, X, Kexample)
 print(probs)
 
 ## diplay 'value' only, and only for the species value 'Gentoo'
-print(probs, elements = 'value', subset = list(species = 'Gentoo'))
+print(probs, elements = 'value', subsetY = list(species = 'Gentoo'))
 
 }
 \references{

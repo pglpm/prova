@@ -4,7 +4,7 @@
 \alias{subset.prova_pr}
 \title{Subset variates of an object of class "prova_pr" (probability)}
 \usage{
-\method{subset}{prova_pr}(x, subsetY = TRUE, subsetX = TRUE)
+\method{subset}{prova_pr}(x, subsetY = TRUE, subsetX = TRUE, ...)
 }
 \arguments{
 \item{x}{Object of class "prova_pr" (probability), obtained with \code{\link[=Pr]{Pr()}}.}
@@ -12,6 +12,8 @@
 \item{subsetY}{Expression, indicating \code{Y} values to select from the probability-class object. Note that \code{subset} will be evaluated in the probability-class object, so \code{Y} variates can be referred to (by name) as variables in the expression (see the examples).}
 
 \item{subsetX}{Expression, indicating \code{X} values to select from the probability-class object. Note that \code{select} will be evaluated in the probability-class object, so \code{X} variates can be referred to (by name) as variables in the expression (see the examples).}
+
+\item{...}{Not used at present, left for method compatibility with \code{base::subset()}.}
 }
 \value{
 An object of class "prova_pr" (probability), identical to the original object \code{x} except for a reduced range of values in some if its \code{Y} or \code{X} variates

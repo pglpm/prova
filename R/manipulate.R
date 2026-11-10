@@ -9,6 +9,7 @@
 #' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
 #' @param subsetY Expression, indicating `Y` values to select from the probability-class object. Note that `subset` will be evaluated in the probability-class object, so `Y` variates can be referred to (by name) as variables in the expression (see the examples).
 #' @param subsetX Expression, indicating `X` values to select from the probability-class object. Note that `select` will be evaluated in the probability-class object, so `X` variates can be referred to (by name) as variables in the expression (see the examples).
+#' @param ... Not used at present, left for method compatibility with `base::subset()`.
 #'
 #' @return An object of class "prova_pr" (probability), identical to the original object `x` except for a reduced range of values in some if its `Y` or `X` variates
 #'
@@ -57,7 +58,8 @@
 subset.prova_pr <- function(
     x,
     subsetY = TRUE,
-    subsetX = TRUE
+    subsetX = TRUE,
+    ...
 ){
     totakeY <- eval(substitute(subsetY), x$Y, parent.frame())
     totakeX <- eval(substitute(subsetX), x$X, parent.frame())
