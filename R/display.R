@@ -588,8 +588,8 @@ plot.prova_pr <- function(
     ...
 ){
     ## Replace object x keeping only values given in 'subset'
-    if(!is.null(subset) || !is.null(select)){
-        x <- subset(x, subset = subset, select = select)
+    if(!isTRUE(subsetY) || !isTRUE(subsetX)){
+        x <- subset(x, subsetY = subsetY, subsetX = subsetX)
     }
 
     ## If there's only one probability it doesn't make sense to plot anything:
@@ -972,7 +972,7 @@ plot.prova_pr <- function(
 #' The `hist()` method for a "prova_pr" (probability) object is a utility to visualize this kind of revisability, in the form of a distribution. This distribution is represented by a histogram formed from samples of revised proobabilities (or long-run frequencies). The bin size is chosen according to the Monte Carlo accuracy.
 #'
 #' @param x Object of class "prova_pr" (probability), obtained with [Pr()].
-#' @param subset Named list or named vector: which variate values to display. For the variates corresponding to the names in this list, only the vector of values corresponding to that variate is displayed.
+#' @param subsetY,subsetX Expressions, indicating which `Y` and `X` values to display from the probability-class object `x`. Note that these arguments will be evaluated in the probability-class object, so variates can be referred to (by name) as variables in the expression. See analogous arguments in `subset.prova_pr()`.
 #' @param breaks as in function [graphics::hist()], or `NULL` (default). Value `NULL` determines bin width from the Monte Carlo accuracy (roughly speaking, each bin spans two standard deviations).
 #' @param alpha.f.fill Numeric, default `0.125`: opacity of the histogram filling, `0` being completely invisible and `1` completely opaque.
 #' @param legend One of the values `'bottomright'`, `'bottom'`, `'bottomleft'`, `'left'`, `'topleft'`, `'top'`, `'topright'`, `'right'`, `'center'` (see [graphics::legend()]): plot a legend at that position. Value `FALSE` or `NA` does not plot any legend. Default `'topright'`.
@@ -1010,7 +1010,8 @@ plot.prova_pr <- function(
 #' @export
 hist.prova_pr <- function(
     x,
-    subset = NULL,
+    subsetY = TRUE,
+    subsetX = TRUE,
     breaks = NULL,
     legend = 'topright',
     lty = c(1, 2, 4, 3, 6, 5),
