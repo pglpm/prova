@@ -33,8 +33,8 @@
 #' @param Bout Character, output of B-type variate, with possible values:
 #'  'numeric': for internal MCMC use, values 0,1
 #'  'original': original representation
-#' @param variates Character vector, names of variates
-#'   corresponding to columns of x (in case x misses column names)
+## #' @param variates Character vector, names of variates
+## #'   corresponding to columns of x (in case x misses column names)
 #' @param logjacobianOr Logical or `NULL`: output is the log-Jacobian in orginal or transformed domain? `NULL` (default) means do not calculate the log-Jacobians
 #'
 #' @return A [data frame][base::data.frame()] of transformed variates, or their log-Jacobians.
