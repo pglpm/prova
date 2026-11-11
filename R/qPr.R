@@ -549,7 +549,8 @@ qPr <- function(
         ), na.rm = TRUE) / sumlpX) - pY
     }
 
-    value <- unname(unlist(.vtransform(value,
+    value <- unname(unlist(.vtransform(
+        as.data.frame(value, nm = auxmetadata$name),
         auxmetadata = auxmetadata,
         Rout = 'original',
         Cout = 'original',
@@ -557,7 +558,6 @@ qPr <- function(
         Oout = 'original',
         Nout = 'original',
         Bout = 'original',
-        variates <- auxmetadata$name,
         logjacobianOr = NULL)))
 
 #### Calculate quantile for the frequency samples
@@ -598,7 +598,8 @@ qPr <- function(
             ), na.rm = TRUE) / sumlpX - pY
         tocheck <- abs(FF) > tol & Yvals[, 2] - Yvals[, 1] > tol
         }
-        samples <- unname(unlist(.vtransform(samples,
+        samples <- unname(unlist(.vtransform(
+            as.data.frame(samples, nm = auxmetadata$name),
             auxmetadata = auxmetadata,
             Rout = 'original',
             Cout = 'original',
@@ -606,7 +607,6 @@ qPr <- function(
             Oout = 'original',
             Nout = 'original',
             Bout = 'original',
-            variates <- auxmetadata$name,
             logjacobianOr = NULL)))
     }
 
@@ -670,7 +670,10 @@ qPr <- function(
             lprobX + params1[value, ,]
         ), na.rm = TRUE) / sumlpX)
     }
-    value <- unname(unlist(.vtransform(value,
+    print('hey')
+    str(value)
+    value <- unname(unlist(.vtransform(
+        as.data.frame(value, nm = auxmetadata$name),
         auxmetadata = auxmetadata,
         Rout = 'original',
         Cout = 'original',
@@ -678,7 +681,6 @@ qPr <- function(
         Oout = 'original',
         Nout = 'original',
         Bout = 'original',
-        variates <- auxmetadata$name,
         logjacobianOr = NULL)))
 
 #### Calculate quantile for the frequency samples
@@ -711,7 +713,8 @@ qPr <- function(
             ), na.rm = TRUE) / sumlpX
             tocheck <- FF < pY
         }
-        samples <- unname(unlist(.vtransform(samples,
+        samples <- unname(unlist(.vtransform(
+            as.data.frame(samples, nm = auxmetadata$name),
             auxmetadata = auxmetadata,
             Rout = 'original',
             Cout = 'original',
@@ -719,7 +722,6 @@ qPr <- function(
             Oout = 'original',
             Nout = 'original',
             Bout = 'original',
-            variates <- auxmetadata$name,
             logjacobianOr = NULL)))
     }
 
