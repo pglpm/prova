@@ -495,7 +495,7 @@ qPr <- function(
     }
     out$K <- Kname
 
-    class(out) <- 'prova_pr'
+    class(out) <- 'prova_qpr'
     out
 }
 
@@ -670,8 +670,7 @@ qPr <- function(
             lprobX + params1[value, ,]
         ), na.rm = TRUE) / sumlpX)
     }
-    print('hey')
-    str(value)
+
     value <- unname(unlist(.vtransform(
         as.data.frame(value, nm = auxmetadata$name),
         auxmetadata = auxmetadata,
