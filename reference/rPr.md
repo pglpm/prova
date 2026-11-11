@@ -80,7 +80,9 @@ distribution functions](https://rdrr.io/r/stats/Distributions.html). If
 `X` is omitted or `NULL`, then the posterior probability \\\mathrm{Pr}(Y
 \| K)\\ is used. Each variate in the argument `X` can be specified
 either as a point-value \\X = x\\ or as a left-open interval \\X \le x\\
-or as a right-open interval \\X \ge x\\, through the argument `tails`.
+or as a right-open interval \\X \ge x\\, through the argument `tails`
+(see *Tail probabilities* in the
+[`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) documentation).
 
 If `rPr()` is called with three unnamed arguments, `rPr(..., ..., ...)`,
 then it is interpreted as `rPr(n = ..., Ynames = ..., K = ...)`.

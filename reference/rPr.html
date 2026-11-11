@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,7 +99,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function generates datapoints according to the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, K)\) or \(\mathrm{Pr}(Y = y \vert X \le x, K)\) or combinations thereof, for the variates specified in the argument <code>Y</code>, and conditional on the variate values specified in the argument <code>X</code>. It is somewhat analogous to the <code>rxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probability \(\mathrm{Pr}(Y | K)\) is used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code>.</p>
+    <p>This function generates datapoints according to the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, K)\) or \(\mathrm{Pr}(Y = y \vert X \le x, K)\) or combinations thereof, for the variates specified in the argument <code>Y</code>, and conditional on the variate values specified in the argument <code>X</code>. It is somewhat analogous to the <code>rxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probability \(\mathrm{Pr}(Y | K)\) is used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code> (see <em>Tail probabilities</em> in the <code><a href="Pr.html">Pr()</a></code> documentation).</p>
 <p>If <code>rPr()</code> is called with three unnamed arguments, <code>rPr(..., ..., ...)</code>, then it is interpreted as <code>rPr(n = ..., Ynames = ..., K = ...)</code>.</p>
     </div>
     <div class="section level2">

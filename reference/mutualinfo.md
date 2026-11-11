@@ -199,7 +199,8 @@ specified in the [data frame](https://rdrr.io/r/base/data.frame.html)
 \\\mathrm{Pr}(Y_1 \| K)\\ etc. are used. Each variate in the argument
 `X` can be specified either as a point-value \\X = x\\ or as a left-open
 interval \\X \le x\\ or as a right-open interval \\X \ge x\\, through
-the argument `tails`.
+the argument `tails` (see *Tail probabilities* in the
+[`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) documentation).
 
 Function `mutualinfo()` computes the quantities above via Monte Carlo
 integration; that is, the sums or integrals are approximated by averages

@@ -1,6 +1,6 @@
 # Changelog
 
-## Prova v2.3.7
+## Prova v2.3.8
 
 - Added methods for functions
   [`subset()`](https://rdrr.io/r/base/subset.html) and
@@ -12,6 +12,10 @@
 - Removed the `subset =` argument in the plot and print functions, as
   this functionality is now provided by the
   [`subset()`](https://rdrr.io/r/base/subset.html) method.
+- Now the `tails=` argument in several functions also works for nominal
+  variates. For this kind of variates it must be understood in a special
+  sense; see documentation in
+  [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 - Corrected and improved documentation.
 
 ## Prova v2.3.6

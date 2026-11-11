@@ -157,7 +157,8 @@ the function creates a 2D grid of results for all possible combinations
 of the given probability levels and `X` values. Each variate in the
 argument `X` can be specified either as a point-value \\X = x\\ or as a
 left-open interval \\X \le x\\ or as a right-open interval \\X \ge x\\,
-through the argument `tails`.
+through the argument `tails` (see *Tail probabilities* in the
+[`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) documentation).
 
 If `qPr()` is called with three unnamed arguments, `qPr(..., ..., ...)`,
 then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.

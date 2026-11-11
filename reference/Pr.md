@@ -58,7 +58,7 @@ Pr(
   `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \\Y \ge
   y\\ is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values
   `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an
-  interval) should be calculated. **NB**: the semi-open intervals
+  interval) should be calculated. **Warning**: the semi-open intervals
   *always* include the given value; this is important for ordinal or
   rounded variates. For instance, if \\Y\\ is an integer variate, then
   to calculate \\\mathrm{Pr}(Y \< 3)\\ you should require
@@ -176,11 +176,16 @@ functions](https://rdrr.io/r/stats/Distributions.html). If `X` is
 omitted or `NULL`, then the posterior probability \\\mathrm{Pr}(Y = y
 \vert K)\\ is calculated.
 
-For some variates in `Y` or `X`, tail values can also be prescribed, so
-that this function calculates mixed probabilities such as
-\$\$\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge
-x_2, \dotsc, K)\\ .\$\$ Tail values are inputted via the `'tails'`
-argument; see "Usage".
+*Tail probabilities.* For some variates in `Y` or `X`, tail values can
+also be prescribed, so that this function calculates mixed probabilities
+such as \$\$\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1,
+X_2 \ge x_2, \dotsc, K)\\ .\$\$ Tail values are inputted via the
+`'tails'` argument; see "Usage". Note that nominal variates, strictly
+speaking, have no meaningful ordering, so the "\\\ge\\" and "\\\le\\"
+relations are not meaningful for them. For this kind of variates the
+"\\\ge\\" relation is understood in the sense of the value order
+appearing in the
+[metadata](https://pglpm.github.io/prova/reference/metadata.md) file.
 
 If `Pr()` is called with two unnamed arguments, `Pr(..., ...)`, then it
 is interpreted as `Pr(Y = ..., K = ...)`. If it is called with three
