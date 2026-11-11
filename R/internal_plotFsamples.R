@@ -607,8 +607,7 @@
                 datum <- datum[!is.na(datum)]
                 if (mcmctype %in% c('O', 'N', 'B')) {
                     datum <- as.matrix(
-                        .vtransform(x = datum,
-                            variates = name,
+                        .vtransform(x = as.data.frame(datum, nm = name),
                             auxmetadata = auxmetadata,
                             Oout = 'numeric',
                             Nout = 'numeric',

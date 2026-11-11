@@ -347,8 +347,7 @@
         ##     aux$indexpos[i] + seq_len(aux$Nvalues[i])
         ## }))
         Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
-            aux$indexpos, aux$Nvalues,
-            SIMPLIFY = FALSE))
+            aux$indexpos, aux$Nvalues, SIMPLIFY = FALSE))
         VNprobs <- .learnbind(VNprobs,
             K$Oprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
@@ -358,7 +357,7 @@
                     Oout = 'numeric',
                     logjacobianOr = NULL
                 ))) +
-                    Nshift + c(0, cumsum(aux$Nvalues[-1]))
+                    Nshift + c(0, cumsum(aux$Nvalues[-length(aux$Nvalues)]))
         )
         Nshift <- Nshift + length(Nindices)
     }
@@ -374,8 +373,7 @@
         ##     aux$indexpos[i] + seq_len(aux$Nvalues[i])
         ## }))
         Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
-            aux$indexpos, aux$Nvalues,
-            SIMPLIFY = FALSE))
+            aux$indexpos, aux$Nvalues, SIMPLIFY = FALSE))
         VNprobs <- .learnbind(VNprobs,
             K$Nprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
@@ -385,7 +383,7 @@
                     Nout = 'numeric',
                     logjacobianOr = NULL
                 ))) +
-                    Nshift + c(0, cumsum(aux$Nvalues[-1]))
+                    Nshift + c(0, cumsum(aux$Nvalues[-length(aux$Nvalues)]))
         )
         Nshift <- Nshift + length(Nindices)
     }
@@ -417,7 +415,7 @@
                 Oout = 'numeric',
                 logjacobianOr = NULL
             ))) +
-                Nshift + c(0, cumsum(aux$Nvalues[-1]))
+                Nshift + c(0, cumsum(aux$Nvalues[-length(aux$Nvalues)]))
         )
     }
 
@@ -448,7 +446,7 @@
                 Nout = 'numeric',
                 logjacobianOr = NULL
             ))) +
-                Nshift + c(0, cumsum(aux$Nvalues[-1]))
+                Nshift + c(0, cumsum(aux$Nvalues[-length(aux$Nvalues)]))
         )
     }
 
