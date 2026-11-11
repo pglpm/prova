@@ -362,9 +362,11 @@
         )
         Nshift <- Nshift + length(Nindices)
     }
-### N-variates
+
+### N-variates not in 'tails'
     toselect <- which((auxmetadata$name %in% Xv) &
-                          (auxmetadata$mcmctype == 'N'))
+                          (auxmetadata$mcmctype == 'N') &
+                          !(auxmetadata$name %in% tailsv))
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nVN <- TRUE
@@ -418,6 +420,38 @@
                 Nshift + c(0, cumsum(aux$Nvalues[-1]))
         )
     }
+
+### N-variates in 'tails'
+    toselect <- which((auxmetadata$name %in% Xv) &
+                          (auxmetadata$mcmctype == 'N') &
+                          (auxmetadata$name %in% tailsv))
+    if(length(toselect) > 0){
+        aux <- auxmetadata[toselect, ]
+        nVN <- TRUE
+        for(i in seq_len(nrow(aux))) {
+            VNprobs <- .learnbind(VNprobs,
+                if(tails[aux$name[i]] > 0) {
+                    .rowcumsum(K$Nprob[
+                        aux$indexpos[i] + seq_len(aux$Nvalues[i]), , , drop = FALSE
+                    ])
+                } else {
+                    .rowinvcumsum(K$Nprob[
+                        aux$indexpos[i] + seq_len(aux$Nvalues[i]), , , drop = FALSE
+                    ])
+                }
+            )
+        }
+        xVN <- rbind(xVN,
+            t(as.matrix(.vtransform(
+                x[, aux$name, drop = FALSE],
+                auxmetadata = auxmetadata,
+                Nout = 'numeric',
+                logjacobianOr = NULL
+            ))) +
+                Nshift + c(0, cumsum(aux$Nvalues[-1]))
+        )
+    }
+
     xVN <- unname(xVN)
 
 ###
