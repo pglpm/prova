@@ -1298,7 +1298,7 @@ learn <- function(
     print2user('\nChecking test data\n(',
         paste0('#', testdata$pointsid, collapse = ' '), '):')
 
-    ## .Pcheckpoints() outputs log-probabilities
+    ## .Pcheckpoints() outputs probabilities
     oktraces <- log(.Pcheckpoints(
         testdata = testdata,
         K = K
@@ -3116,7 +3116,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             diagntime <- Sys.time()
             ##
 
-            ## .Pcheckpoints() outputs log-probabilities
+            ## .Pcheckpoints() outputs probabilities
             ll <- log(.Pcheckpoints(
                 testdata = testdata,
                 K = mcsamples

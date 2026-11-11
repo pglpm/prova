@@ -1,8 +1,9 @@
-# Prova v2.3.8
+# Prova v2.4.0
 
 * Added methods for functions `subset()` and `merge()`, to subset or merge probability objects. The `subset()` function has arguments that evaluate in a nonstandard way, making it easier to subset variate ranges.
 * Removed the `subset = ` argument in the plot and print functions, as this functionality is now provided by the `subset()` method.
 * Now the `tails=` argument in several functions also works for nominal variates. For this kind of variates it must be understood in a special sense; see documentation in `Pr()`.
+* Fixed a bug that shuffled probability values in calculations involving several ordinal or nominal variates at once.
 * Corrected and improved documentation.
 
 

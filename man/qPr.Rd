@@ -54,7 +54,7 @@ qPr(
 \item{tol}{numeric positive: tolerance in the calculation of quantiles. Default: \code{.Machine$double.eps * 10} (typically \code{2.22045e-15}).}
 }
 \value{
-A list of the following elements:
+A list with the following elements:
 \itemize{
 \item \code{'value'}: a matrix with the requested \eqn{Y}-quantiles \code{p} conditional on the requested \eqn{X}-values in \code{X}, for all combinations of \code{p} (rows) and \code{X} (columns).
 \item \code{'quantiles'} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the \code{'value'} element.
