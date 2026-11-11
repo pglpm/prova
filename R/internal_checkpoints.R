@@ -266,13 +266,11 @@
 
 ### O-variates not in 'cumul'
         if(length(auxVNO) > 0){
-            VNprobs <- .learnbind(VNprobs,
-                Oprob)
+            VNprobs <- .learnbind(VNprobs, Oprob)
         }
 ### N-variates
         if(length(auxVNN) > 0){
-            VNprobs <- .learnbind(VNprobs,
-                Nprob)
+            VNprobs <- .learnbind(VNprobs, Nprob)
         }
 
 ###
