@@ -1,6 +1,6 @@
 library('prova')
 
-message(packageVersion('prova'))
+message('Testing version ', packageVersion('prova'))
 
 parallel <- 8
 
@@ -106,7 +106,7 @@ for(iv in seq_along(suite)){
                 prova:::.testPr(Y = setNames(list(x), vrt), X = NULL,
                     tails = tail, K = K)
         })
-        targetprob = list(value = cbind(sapply(targetprob, `[[`, 1)),
+        targetprob <- list(value = cbind(sapply(targetprob, `[[`, 1)),
             samples = t(sapply(targetprob, `[[`, 2)))
         tc(paste0(nm, '-', iv, '-', atail, '-values'),
             test_equivalent(prob$value, targetprob$value,

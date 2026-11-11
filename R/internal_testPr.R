@@ -230,10 +230,26 @@
 
 
             } else if(mctype == 'N'){
-                val <- unlist(.vtransform(Z[vrt], Nout = 'index',
+                ## ## Old version that didn't calculate tails
+                ##     val <- unlist(.vtransform(Z[vrt], Nout = 'index',
+                ##         auxmetadata = auxmetadata, logjacobianOr = NULL))
+                ##     logP <- log(K$Nprob[val, , ])
+                Nvals <- auxmetadata[auxmetadata$name == vrt, 'Nvalues']
+                seqN <- auxmetadata[auxmetadata$name == vrt, 'indexpos'] +
+                    seq_len(Nvals)
+                allP <- K$Nprob[seqN, , , drop = FALSE]
+                val <- unlist(.vtransform(Z[vrt], Nout = 'numeric',
                     auxmetadata = auxmetadata, logjacobianOr = NULL))
-                logP <- log(K$Nprob[val, , ])
 
+                if(!(vrt %in% names(tails))){
+                    logP <- log(allP[val, , ])
+                } else if(tails[vrt] %in% tailsleft){
+                    logP <- log(apply(allP[1:val, , , drop = FALSE],
+                        c(2,3), sum))
+                } else if(tails[vrt] %in% tailsright){
+                    logP <- log(apply(allP[val:Nvals, , , drop = FALSE],
+                        c(2,3), sum))
+                }
 
             } else if(mctype == 'O'){
                 Nvals <- auxmetadata[auxmetadata$name == vrt, 'Nvalues']

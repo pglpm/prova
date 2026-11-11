@@ -26,7 +26,7 @@
 #'
 #' If `qPr()` is called with three unnamed arguments, `qPr(..., ..., ...)`, then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.
 #'
-#' @return A list of the following elements:
+#' @return A list with the following elements:
 #' - `'value'`: a matrix with the requested \eqn{Y}-quantiles `p` conditional on the requested \eqn{X}-values in `X`, for all combinations of `p` (rows) and `X` (columns).
 #' - `'quantiles'` (possibly `NULL`): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the `'value'` element.
 #' - `'samples'` (possibly `NULL`): an array with the revisability samples (3rd dimension of the array) for such quantiles.
