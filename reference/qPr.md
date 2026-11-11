@@ -122,7 +122,7 @@ qPr(
 
 ## Value
 
-A list of the following elements:
+A list with the following elements:
 
 - `'value'`: a matrix with the requested \\Y\\-quantiles `p` conditional
   on the requested \\X\\-values in `X`, for all combinations of `p`

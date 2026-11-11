@@ -1,6 +1,6 @@
 # Changelog
 
-## Prova v2.3.8
+## Prova v2.4.0
 
 - Added methods for functions
   [`subset()`](https://rdrr.io/r/base/subset.html) and
@@ -16,6 +16,8 @@
   variates. For this kind of variates it must be understood in a special
   sense; see documentation in
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
+- Fixed a bug that shuffled probability values in calculations involving
+  several ordinal or nominal variates at once.
 - Corrected and improved documentation.
 
 ## Prova v2.3.6

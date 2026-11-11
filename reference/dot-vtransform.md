@@ -15,7 +15,6 @@ See
   Bout = NULL,
   Oout = NULL,
   Nout = NULL,
-  variates = NULL,
   logjacobianOr = NULL
 )
 ```
@@ -68,11 +67,6 @@ See
   Character, output of N-type variate, with possible values: 'numeric':
   for internal MCMC use, values 1,2,... 'original': original
   representation
-
-- variates:
-
-  Character vector, names of variates corresponding to columns of x (in
-  case x misses column names)
 
 - logjacobianOr:
 

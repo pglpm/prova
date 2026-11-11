@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,10 +44,11 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.3.8" id="prova-v238">Prova v2.3.8<a class="anchor" aria-label="anchor" href="#prova-v238"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.4.0" id="prova-v240">Prova v2.4.0<a class="anchor" aria-label="anchor" href="#prova-v240"></a></h2>
 <ul><li>Added methods for functions <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> and <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge()</a></code>, to subset or merge probability objects. The <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> function has arguments that evaluate in a nonstandard way, making it easier to subset variate ranges.</li>
 <li>Removed the <code>subset =</code> argument in the plot and print functions, as this functionality is now provided by the <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> method.</li>
 <li>Now the <code>tails=</code> argument in several functions also works for nominal variates. For this kind of variates it must be understood in a special sense; see documentation in <code><a href="../reference/Pr.html">Pr()</a></code>.</li>
+<li>Fixed a bug that shuffled probability values in calculations involving several ordinal or nominal variates at once.</li>
 <li>Corrected and improved documentation.</li>
 </ul></div>
     <div class="section level2">
