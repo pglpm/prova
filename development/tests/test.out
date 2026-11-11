@@ -1,30 +1,18 @@
-2.3.8
-Starting tests 261111T211918
-Quick learn 261111T211918
+Testing version 2.3.8
+Starting tests 261111T214154
+Quick learn 261111T214154
 [1] TRUE
-Full base learn 261111T211935
+Full base learn 261111T214212
 [1] TRUE
-Simple Pr 261111T212054
-[1] FALSE
-Various Pr 261111T212152
-[1] FALSE
-Simple MIs 261111T212240
-[1] FALSE
-$`Simple Pr-8-left-values`
-[1] "Mean absolute difference: 0.4599295"
-
-$`Simple Pr-8-left-samples`
-[1] "Mean absolute difference: 0.3870676"
-
-$`Simple Pr-8-right-values`
-[1] "Mean absolute difference: 0.5400705"
-
-$`Simple Pr-8-right-samples`
-[1] "Mean absolute difference: 0.4545127"
-
-Quick learn autocluster 261111T212524
-[1] FALSE
-Quick learn existing cluster 261111T212544
-[1] FALSE
-All test passed: FALSE
-Done 261111T212605
+Simple Pr 261111T214330
+[1] TRUE
+Various Pr 261111T214430
+[1] TRUE
+Simple MIs 261111T214518
+[1] TRUE
+Quick learn autocluster 261111T214803
+[1] TRUE
+Quick learn existing cluster 261111T214823
+[1] TRUE
+All test passed: TRUE
+Done 261111T214843
