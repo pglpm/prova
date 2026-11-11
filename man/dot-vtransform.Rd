@@ -13,7 +13,6 @@
   Bout = NULL,
   Oout = NULL,
   Nout = NULL,
-  variates = NULL,
   logjacobianOr = NULL
 )
 }
@@ -56,9 +55,6 @@
 \item{Nout}{Character, output of N-type variate, with possible values:
 'numeric': for internal MCMC use, values 1,2,...
 'original': original representation}
-
-\item{variates}{Character vector, names of variates
-corresponding to columns of x (in case x misses column names)}
 
 \item{logjacobianOr}{Logical or \code{NULL}: output is the log-Jacobian in orginal or transformed domain? \code{NULL} (default) means do not calculate the log-Jacobians}
 }
