@@ -9,7 +9,7 @@ test_equivalent <- function(x, y, tolerance = sqrt(.Machine$double.eps)){
 }
 
 
-tc <- function(nm = '', x){results <<- c(results, setNames(list(tryCatch(x, error = identity)), nm))}
+tc <- function(nm = '', x){c(setNames(list(tryCatch(x, error = identity)), nm))}
 
 
 results <- list()
@@ -22,7 +22,7 @@ nm <- 'Quick learn'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
-tc(nm, {
+thisresult <- tc(nm, {
     K <- learn(
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
@@ -34,8 +34,9 @@ tc(nm, {
     is.list(K)
     }
 )
+results <- c(results, thisresult)
+print(thisresult)
 saveRDS(results, savefile)
-all(sapply(results, isTRUE))
 rm(K)
 
 
@@ -43,7 +44,7 @@ rm(K)
 nm <- 'Full base learn'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 outputdir <- 'testbase_test'
-tc(nm, {
+thisresult <- tc(nm, {
     Kdir <- learn(
     data = 'data_basetest.csv',
     metadata = 'metadata_basetest.csv',
@@ -71,8 +72,9 @@ tc(nm, {
     is.character(Kdir)
     }
 )
+results <- c(results, thisresult)
+print(thisresult)
 saveRDS(results, savefile)
-all(sapply(results, isTRUE))
 
 
 
@@ -90,8 +92,9 @@ suite <- list(
     O1vrt = paste0(LETTERS[1:5], '1'),
     Bvrt = c('no', 'yes'),
     N2vrt = paste0(letters[1:4], '2'),
-    O2vrt = paste0(LETTERS[1:4], '2')
+    O2vrt = paste0(LETTERS[1:3], '2')
 )
+allOK <- TRUE
 for(iv in seq_along(suite)){
     for(atail in c(0, 'left', 'right')){
         atest <- suite[iv]
@@ -110,19 +113,24 @@ for(iv in seq_along(suite)){
         })
         targetprob <- list(value = cbind(sapply(targetprob, `[[`, 1)),
             samples = t(sapply(targetprob, `[[`, 2)))
-        tc(paste0(nm, '-', iv, '-', atail, '-values'),
+        thisresult1 <- tc(paste0(nm, '-', iv, '-', atail, '-values'),
             test_equivalent(prob$value, targetprob$value,
-                tolerance = 10 * .Machine$double.eps
-            ))
-        tc(paste0(nm, '-', iv, '-', atail, '-samples'),
+                tolerance = 10 * .Machine$double.eps)
+        )
+        results <- c(results, thisresult1)
+        thisresult2 <-tc(paste0(nm, '-', iv, '-', atail, '-samples'),
             test_equivalent(c(prob$samples), c(targetprob$samples),
-                tolerance = 10 * .Machine$double.eps
-            ))
-saveRDS(results, savefile)
+                tolerance = 10 * .Machine$double.eps)
+        )
+        results <- c(results, thisresult2)
+    }
+    saveRDS(results, savefile)
+    if(!isTRUE(thisresult1) || !isTRUE(thisresult2)){
+        allOK <- FALSE
+        break
     }
 }
-all(sapply(results, isTRUE))
-
+print(allOK)
 
 
 
@@ -131,6 +139,7 @@ message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 K <- Kdir
 atest <- 0L
 set.seed(16)
+allOK <- TRUE
 while(atest < 50){
     atest <- atest + 1L
     prob <- targetprob <- NULL
@@ -166,18 +175,23 @@ while(atest < 50){
     targetprob <- prova:::.testPr(Y = inY, X = inX, tails = intails,
         K = K)
     ##
-    tc(paste0(nm, '-', atest, '-values'),
+    thisresult1 <- tc(paste0(nm, '-', atest, '-values'),
         test_equivalent(c(prob$value), c(targetprob$value),
-            tolerance = 10 * .Machine$double.eps
-        ))
-    tc(paste0(nm, '-', atest, '-samples'),
+            tolerance = 10 * .Machine$double.eps)
+    )
+    results <- c(results, thisresult1)
+    thisresult2 <- tc(paste0(nm, '-', atest, '-samples'),
         test_equivalent(c(prob$samples), c(targetprob$samples),
-            tolerance = 10 * .Machine$double.eps
-        ))
-saveRDS(results, savefile)
+            tolerance = 10 * .Machine$double.eps)
+    )
+    results <- c(results, thisresult2)
+    saveRDS(results, savefile)
+    if(!isTRUE(thisresult1) || !isTRUE(thisresult2)){
+        allOK <- FALSE
+        break
+    }
 }
-all(sapply(results, isTRUE))
-
+print(allOK)
 
 
 nm <- 'Simple MIs'
@@ -210,6 +224,7 @@ suite <- list(
     list('N', 'R', list(B = 'y')),
     list('N', 'R', list(B = 'n'))
 )
+allOK <- TRUE
 for(atest in suite){
     testand <- target <- NULL
     testand <- mutualinfo(
@@ -220,25 +235,34 @@ for(atest in suite){
         Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
         nn = nn, K = K
     )
-    tc(paste0(nm, '-', paste0(atest, collapse = '-')), test_equivalent(
+    thisresult <- tc(paste0(nm, '-', paste0(atest, collapse = '-')),
+        test_equivalent(
         testand$value, target$value,
         tolerance = max((testand$value.acc + target$value.acc) * 2,
             10 * .Machine$double.eps)
-    ))
+        ))
+    results <- c(results, thisresult)
+    saveRDS(results, savefile)
+    if(!isTRUE(thisresult)){
+        allOK <- FALSE
+        print(FALSE)
+        break
+    }
 }
-saveRDS(results, savefile)
-final <- all(sapply(results, isTRUE))
-final
-if(!final){
-    results[!sapply(results, isTRUE)]
-}
+print(allOK)
+
+## final <- all(sapply(results, isTRUE))
+## final
+## if(!final){
+##     results[!sapply(results, isTRUE)]
+## }
 
 
 nm <- 'Quick learn autocluster'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
-tc(nm, {
+thisresult <- tc(nm, {
     K <- learn(
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
@@ -250,8 +274,9 @@ tc(nm, {
     is.list(K)
     }
 )
+results <- c(results, thisresult)
 saveRDS(results, savefile)
-all(sapply(results, isTRUE))
+print(thisresult)
 rm(K)
 
 
@@ -261,7 +286,7 @@ message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 cl <- parallel::makeCluster(6)
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
-tc(nm, {
+thisresult <- tc(nm, {
     K <- learn(
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
@@ -273,8 +298,9 @@ tc(nm, {
     is.list(K)
     }
 )
+results <- c(results, thisresult)
 saveRDS(results, savefile)
-all(sapply(results, isTRUE))
+print(thisresult)
 parallel::stopCluster(cl)
 rm(K)
 
