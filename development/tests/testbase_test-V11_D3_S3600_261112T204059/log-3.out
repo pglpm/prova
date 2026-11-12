@@ -1,4 +1,4 @@
-Log node 1 - Current time: 2026-11-10 14:39:48 
+Log node 3 - Current time: 2026-11-12 20:40:59 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -34,14 +34,14 @@ Compiling
 thin = 1: Bprob, Cmean, Cvar, Dmean, Dvar, Nprob, Oprob, Rmean, Rvar, W
 thin2 = 1: K
 ===== Samplers =====
-posterior_predictive sampler (9)
-  - Ndata[]  (1 element)
+posterior_predictive sampler (11)
+  - Ndata[]  (2 elements)
   - Bdata[]  (1 element)
-  - Odata[]  (1 element)
+  - Odata[]  (2 elements)
   - Rdata[]  (3 elements)
   - Clat[]  (1 element)
   - Dlat[]  (2 elements)
-conjugate sampler (1345)
+conjugate sampler (1473)
   - Rmean[]  (192 elements)
   - Rrate[]  (192 elements)
   - Cmean[]  (64 elements)
@@ -52,8 +52,8 @@ conjugate sampler (1345)
   - Rvar[]  (192 elements)
   - Cvar[]  (64 elements)
   - Dvar[]  (128 elements)
-  - Oprob[]  (64 multivariate elements)
-  - Nprob[]  (64 multivariate elements)
+  - Oprob[]  (128 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
   - W[1:64] 
 categorical sampler (4)
   - Alpha
@@ -68,14 +68,14 @@ RW sampler (5)
 thin = 1: Bprob, Cmean, Cvar, Dmean, Dvar, Nprob, Oprob, Rmean, Rvar, W
 thin2 = 1: K
 ===== Samplers =====
-posterior_predictive sampler (9)
-  - Ndata[]  (1 element)
+posterior_predictive sampler (11)
+  - Ndata[]  (2 elements)
   - Bdata[]  (1 element)
-  - Odata[]  (1 element)
+  - Odata[]  (2 elements)
   - Rdata[]  (3 elements)
   - Clat[]  (1 element)
   - Dlat[]  (2 elements)
-conjugate sampler (1345)
+conjugate sampler (1473)
   - Rmean[]  (192 elements)
   - Rrate[]  (192 elements)
   - Cmean[]  (64 elements)
@@ -87,8 +87,8 @@ conjugate sampler (1345)
   - Cvar[]  (64 elements)
   - Dvar[]  (128 elements)
   - W
-  - Oprob[]  (64 multivariate elements)
-  - Nprob[]  (64 multivariate elements)
+  - Oprob[]  (128 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
 categorical sampler (4)
   - Alpha
   - K[]  (3 elements)
@@ -101,10 +101,10 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 41 secs 
+Setup time 51 secs 
 
 ###########################################################
-Chain # 1 (chain 1 of 1 for this node)
+Chain # 5 (chain 1 of 2 for this node)
 
 Datapoints for testing chain behaviour:
  #1 #2 #3 
@@ -113,26 +113,101 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-10 14:40:35
-MCMC time 5.3 secs 
+Current time: 2026-11-12 20:42:00
+MCMC time 8.5 secs 
 
 USED COMPONENTS: 2 OF 64 
 
-abs. quantile error: 0.217
-quantile width: 5.22
-rel. quantile error: 0.0415
-ESS from rel. qt. error: 579
-ESS: 470
-needed thinning: 7.66
-log-average: -7.19
+abs. quantile error: 0.41
+quantile width: 5.52
+rel. quantile error: 0.0743
+ESS from rel. qt. error: 181
+ESS: 214
+needed thinning: 19.9
+log-average: -7.77
 Diagnostics time 1.2 secs 
 
-Total iterations 3600 - require further 0 - continue for 0 
+Total iterations 3600 - require further 5513 - continue for 5513 
+
+Chain # 5 - chunk 2 (chain 1 of 2 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-12 20:42:14
+MCMC time 22 secs 
+
+USED COMPONENTS: 3 OF 64 
+
+abs. quantile error: 0.233
+quantile width: 5.42
+rel. quantile error: 0.043
+ESS from rel. qt. error: 541
+ESS: 494
+needed thinning: 14.6
+log-average: -7.86
+Diagnostics time 0.32 secs 
+
+Total iterations 7200 - require further 0 - continue for 0 
 
 Keeping  450 
 
-Current time: 2026-11-10 14:40:41
-MCMC + diagnostics time 12 secs 
+Current time: 2026-11-12 20:42:19
+MCMC + diagnostics time 28 secs 
 
-Current time: 2026-11-10 14:40:41
-Total time 53 secs 
+###########################################################
+Chain # 6 (chain 2 of 2 for this node)
+
+Datapoints for testing chain behaviour:
+ #1 #2 #3 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-12 20:42:25
+MCMC time 33 secs 
+
+USED COMPONENTS: 3 OF 64 
+
+abs. quantile error: 0.208
+quantile width: 5.21
+rel. quantile error: 0.04
+ESS from rel. qt. error: 625
+ESS: 272
+needed thinning: 13.2
+log-average: -7.93
+Diagnostics time 0.34 secs 
+
+Total iterations 3600 - require further 2457 - continue for 2457 
+
+Chain # 6 - chunk 2 (chain 2 of 2 for this node): increasing by 2458 
+
+Iterations: 2458 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-12 20:42:33
+MCMC time 41 secs 
+
+USED COMPONENTS: 2 OF 64 
+
+abs. quantile error: 0.185
+quantile width: 5.31
+rel. quantile error: 0.0348
+ESS from rel. qt. error: 827
+ESS: 470
+needed thinning: 12.9
+log-average: -7.89
+Diagnostics time 0.85 secs 
+
+Total iterations 6058 - require further 0 - continue for 0 
+
+Keeping  450 
+
+Current time: 2026-11-12 20:42:36
+MCMC + diagnostics time 44 secs 
+
+Current time: 2026-11-12 20:42:36
+Total time 1.6 mins 

@@ -1,4 +1,4 @@
-Log node 7 - Current time: 2026-11-11 21:42:12 
+Log node 2 - Current time: 2026-11-12 20:49:26 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -34,14 +34,14 @@ Compiling
 thin = 1: Bprob, Cmean, Cvar, Dmean, Dvar, Nprob, Oprob, Rmean, Rvar, W
 thin2 = 1: K
 ===== Samplers =====
-posterior_predictive sampler (9)
-  - Ndata[]  (1 element)
+posterior_predictive sampler (11)
+  - Ndata[]  (2 elements)
   - Bdata[]  (1 element)
-  - Odata[]  (1 element)
+  - Odata[]  (2 elements)
   - Rdata[]  (3 elements)
   - Clat[]  (1 element)
   - Dlat[]  (2 elements)
-conjugate sampler (1345)
+conjugate sampler (1473)
   - Rmean[]  (192 elements)
   - Rrate[]  (192 elements)
   - Cmean[]  (64 elements)
@@ -52,8 +52,8 @@ conjugate sampler (1345)
   - Rvar[]  (192 elements)
   - Cvar[]  (64 elements)
   - Dvar[]  (128 elements)
-  - Oprob[]  (64 multivariate elements)
-  - Nprob[]  (64 multivariate elements)
+  - Oprob[]  (128 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
   - W[1:64] 
 categorical sampler (4)
   - Alpha
@@ -68,14 +68,14 @@ RW sampler (5)
 thin = 1: Bprob, Cmean, Cvar, Dmean, Dvar, Nprob, Oprob, Rmean, Rvar, W
 thin2 = 1: K
 ===== Samplers =====
-posterior_predictive sampler (9)
-  - Ndata[]  (1 element)
+posterior_predictive sampler (11)
+  - Ndata[]  (2 elements)
   - Bdata[]  (1 element)
-  - Odata[]  (1 element)
+  - Odata[]  (2 elements)
   - Rdata[]  (3 elements)
   - Clat[]  (1 element)
   - Dlat[]  (2 elements)
-conjugate sampler (1345)
+conjugate sampler (1473)
   - Rmean[]  (192 elements)
   - Rrate[]  (192 elements)
   - Cmean[]  (64 elements)
@@ -87,8 +87,8 @@ conjugate sampler (1345)
   - Cvar[]  (64 elements)
   - Dvar[]  (128 elements)
   - W
-  - Oprob[]  (64 multivariate elements)
-  - Nprob[]  (64 multivariate elements)
+  - Oprob[]  (128 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
 categorical sampler (4)
   - Alpha
   - K[]  (3 elements)
@@ -101,10 +101,10 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 42 secs 
+Setup time 51 secs 
 
 ###########################################################
-Chain # 7 (chain 1 of 1 for this node)
+Chain # 3 (chain 1 of 2 for this node)
 
 Datapoints for testing chain behaviour:
  #1 #2 #3 
@@ -113,48 +113,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-11 21:43:01
-MCMC time 6.1 secs 
-
-USED COMPONENTS: 3 OF 64 
-
-abs. quantile error: 0.269
-quantile width: 4.85
-rel. quantile error: 0.0554
-ESS from rel. qt. error: 325
-ESS: 510
-needed thinning: 11.1
-log-average: -7.18
-Diagnostics time 1 secs 
-
-Total iterations 3600 - require further 1468 - continue for 1468 
-
-Chain # 7 - chunk 2 (chain 1 of 1 for this node): increasing by 1469 
-
-Iterations: 1469 
-|-------------|-------------|-------------|-------------|
-|-------------------------------------------------------|
-
-Current time: 2026-11-11 21:43:09
-MCMC time 14 secs 
+Current time: 2026-11-12 20:50:27
+MCMC time 8.3 secs 
 
 USED COMPONENTS: 2 OF 64 
-
-abs. quantile error: 0.194
-quantile width: 5.03
-rel. quantile error: 0.0387
-ESS from rel. qt. error: 669
-ESS: 544
-needed thinning: 9.32
-log-average: -7.17
-Diagnostics time 0.077 secs 
-
-Total iterations 5069 - require further 0 - continue for 0 
-
-Keeping  450 
-
-Current time: 2026-11-11 21:43:10
-MCMC + diagnostics time 15 secs 
-
-Current time: 2026-11-11 21:43:10
-Total time 58 secs 

@@ -1,4 +1,4 @@
-Log node 8 - Current time: 2026-11-11 21:42:12 
+Log node 1 - Current time: 2026-11-12 20:49:26 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -34,14 +34,14 @@ Compiling
 thin = 1: Bprob, Cmean, Cvar, Dmean, Dvar, Nprob, Oprob, Rmean, Rvar, W
 thin2 = 1: K
 ===== Samplers =====
-posterior_predictive sampler (9)
-  - Ndata[]  (1 element)
+posterior_predictive sampler (11)
+  - Ndata[]  (2 elements)
   - Bdata[]  (1 element)
-  - Odata[]  (1 element)
+  - Odata[]  (2 elements)
   - Rdata[]  (3 elements)
   - Clat[]  (1 element)
   - Dlat[]  (2 elements)
-conjugate sampler (1345)
+conjugate sampler (1473)
   - Rmean[]  (192 elements)
   - Rrate[]  (192 elements)
   - Cmean[]  (64 elements)
@@ -52,8 +52,8 @@ conjugate sampler (1345)
   - Rvar[]  (192 elements)
   - Cvar[]  (64 elements)
   - Dvar[]  (128 elements)
-  - Oprob[]  (64 multivariate elements)
-  - Nprob[]  (64 multivariate elements)
+  - Oprob[]  (128 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
   - W[1:64] 
 categorical sampler (4)
   - Alpha
@@ -68,14 +68,14 @@ RW sampler (5)
 thin = 1: Bprob, Cmean, Cvar, Dmean, Dvar, Nprob, Oprob, Rmean, Rvar, W
 thin2 = 1: K
 ===== Samplers =====
-posterior_predictive sampler (9)
-  - Ndata[]  (1 element)
+posterior_predictive sampler (11)
+  - Ndata[]  (2 elements)
   - Bdata[]  (1 element)
-  - Odata[]  (1 element)
+  - Odata[]  (2 elements)
   - Rdata[]  (3 elements)
   - Clat[]  (1 element)
   - Dlat[]  (2 elements)
-conjugate sampler (1345)
+conjugate sampler (1473)
   - Rmean[]  (192 elements)
   - Rrate[]  (192 elements)
   - Cmean[]  (64 elements)
@@ -87,8 +87,8 @@ conjugate sampler (1345)
   - Cvar[]  (64 elements)
   - Dvar[]  (128 elements)
   - W
-  - Oprob[]  (64 multivariate elements)
-  - Nprob[]  (64 multivariate elements)
+  - Oprob[]  (128 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
 categorical sampler (4)
   - Alpha
   - K[]  (3 elements)
@@ -101,10 +101,10 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 42 secs 
+Setup time 51 secs 
 
 ###########################################################
-Chain # 8 (chain 1 of 1 for this node)
+Chain # 1 (chain 1 of 2 for this node)
 
 Datapoints for testing chain behaviour:
  #1 #2 #3 
@@ -113,70 +113,7 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-11 21:43:01
-MCMC time 6.2 secs 
-
-USED COMPONENTS: 3 OF 64 
-
-abs. quantile error: 0.378
-quantile width: 5.19
-rel. quantile error: 0.0729
-ESS from rel. qt. error: 188
-ESS: 306
-needed thinning: 19.1
-log-average: -7.16
-Diagnostics time 1 secs 
-
-Total iterations 3600 - require further 5155 - continue for 5155 
-
-Chain # 8 - chunk 2 (chain 1 of 1 for this node): increasing by 3600 
-
-Iterations: 3600 
-|-------------|-------------|-------------|-------------|
-|-------------------------------------------------------|
-
-Current time: 2026-11-11 21:43:11
-MCMC time 16 secs 
+Current time: 2026-11-12 20:50:25
+MCMC time 8 secs 
 
 USED COMPONENTS: 2 OF 64 
-
-abs. quantile error: 0.255
-quantile width: 5.2
-rel. quantile error: 0.049
-ESS from rel. qt. error: 417
-ESS: 478
-needed thinning: 17.3
-log-average: -7.12
-Diagnostics time 0.62 secs 
-
-Total iterations 7200 - require further 717 - continue for 717 
-
-Chain # 8 - chunk 3 (chain 1 of 1 for this node): increasing by 718 
-
-Iterations: 718 
-|-------------|-------------|-------------|-------------|
-|-------------------------------------------------------|
-
-Current time: 2026-11-11 21:43:14
-MCMC time 19 secs 
-
-USED COMPONENTS: 2 OF 64 
-
-abs. quantile error: 0.237
-quantile width: 5.17
-rel. quantile error: 0.0458
-ESS from rel. qt. error: 476
-ESS: 553
-needed thinning: 16.6
-log-average: -7.11
-Diagnostics time 0.038 secs 
-
-Total iterations 7918 - require further 0 - continue for 0 
-
-Keeping  450 
-
-Current time: 2026-11-11 21:43:15
-MCMC + diagnostics time 20 secs 
-
-Current time: 2026-11-11 21:43:15
-Total time 1 mins 
