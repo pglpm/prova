@@ -146,7 +146,7 @@ while(atest < 50){
     } else {
         inX <- NULL
     }
-    intails <- setNames(sample(c(-1, 0, 1), nsuite, replace = TRUE),
+    intails <- setNames(sample(c(-1, 0, 1), nsuite - 1, replace = TRUE),
         c('Rvrt', 'RPvrt', 'RFvrt', 'Cvrt', 'Dvrt', 'DPvrt',
             'O1vrt', 'O2vrt', 'N1vrt', 'N2vrt'))
     intails <- as.list(intails)
