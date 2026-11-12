@@ -1302,10 +1302,10 @@
         paste0('#', testdata$pointsid, collapse = ' '), '):')
 
     ## .Pcheckpoints() outputs probabilities
-    oktraces <- .Pcheckpoints(
+    oktraces <- log(.Pcheckpoints(
         testdata = testdata,
         K = K
-    )
+    ))
 
     ## Substitute variances for standard deviations
     if(!is.null(K$Rvar)){
@@ -1328,7 +1328,7 @@
 
 
     oktraces <- cbind(
-        rowMeans(oktraces, na.rm = TRUE), # mean
+        rowMeans(oktraces, na.rm = TRUE), # geometric mean
         oktraces
     )
 
@@ -1429,7 +1429,7 @@
         ## Do not join separate chains in the plot
         division <- (if(N > nchains) nchains else 1)
         pplot(
-            y = 4.343 * log(oktraces[is.finite(oktraces[, avar]), avar]),
+            y = 4.343 * (oktraces[is.finite(oktraces[, avar]), avar]),
             ## 4.343 is 10/log(10)
             ## x = matrix(seq_len(nsamples), ncol = division),
             ## y = matrix(10*log10(oktraces[, avar]), ncol = division),
@@ -3114,10 +3114,10 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             ##
 
             ## .Pcheckpoints() outputs probabilities
-            ll <- .Pcheckpoints(
+            ll <- log(.Pcheckpoints(
                 testdata = testdata,
                 K = mcsamples
-            )
+            ))
 
             ll <- cbind(
                 rowMeans(ll, na.rm = TRUE), # geometric mean
@@ -3192,12 +3192,8 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             wXhi <- temp[2, 2] - temp[1, 2]
 
             ## For each monitored point,
-            ## transform its posterior samples to normalized ranks,
-            ## then calculate the ESSs of their means,
-            ## as in Vehtari & al. 2021
-            ## and Blom 1958 sect.6.10 eqn (6.10.5)
-            ## (alternative eqn (6.10.3) gives roughly same results
-            ## but is computationally slightly more expensive)
+            ## calculate the ESSs of their means,
+            ## as in Vehtari & al. 2021 and Geyer 1992
             essnrmean <- .funESS3(oktraces)
 
             ## We check the relative MCSE of the following quantities:
@@ -3394,7 +3390,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 for (avar in 1:ncol(traces)) {
                     ## 4.343 is 10/log(10)
                     pplot(
-                        y = 4.343 * log(traces[is.finite(traces[, avar]), avar]),
+                        y = 4.343 * (traces[is.finite(traces[, avar]), avar]),
                         type = 'l', lty = 1, col = 1,
                         main = paste0('#', colnames(traces)[avar]),
                         cex.main = 1.25,
