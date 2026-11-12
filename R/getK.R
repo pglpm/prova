@@ -1,7 +1,7 @@
 #' Retrieve a "prova_K" (knowledge) object
 #'
 #' @description
-#' The `K =` argument in most functions of the **Prova** package accepts either a "prova_K" (knowledge) object, or a path to a directory containing a 'K.rds' file with such object, or a path to such a file itself.
+#' The `K = ` argument in most functions of the **Prova** package accepts either a "prova_K" (knowledge) object, or a path to a directory containing a 'K.rds' file with such object, or a path to such a file itself.
 #'
 #' The function `getK()` retrieves the actual "prova_K" object if given a path as in the latter two cases, and simply returns its argument if this is an actual "prova_K" object. In any case it also checks for the validity of the object, returning `NULL` if the object or path are not valid.
 #'

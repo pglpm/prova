@@ -73,7 +73,7 @@ The revisability can be expressed in the form of quantiles, samples, or both, as
 
 Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails} (see \emph{Tail probabilities} in the \code{\link[=Pr]{Pr()}} documentation).
 
-The default value of the \verb{K =} argument is the knowledge object stored in the option \code{'prova.K'} in \link[base:getOption]{options()}, which you may have previously set with \code{options(prova.K = ...)}. This way you can save a lot of \code{K = ...}-typing in this and other functions.
+The default value of the \verb{K = } argument is the knowledge object stored in the option \code{'prova.K'} in \link[base:getOption]{options()}, which you may have previously set with \code{options(prova.K = ...)}. This way you can save a lot of \code{K = ...}-typing in this and other functions.
 
 Therefore if \code{qPr()} is called with two unnamed arguments, \code{qPr(..., ...)}, then it is interpreted as \code{qPr(p = ..., Yname = ...)}, with \code{X = NA} and the \code{K} object retrieved from \link[base:getOption]{options()}. If it is called with three unnamed arguments, then it is interpreted as \code{qPr(p = ..., Yname = ..., X = ...)}, with \code{K} retrieved from \link[base:getOption]{options()}. If you want to specify \code{p}, \code{Yname}, and \code{K} without naming the arguments, then you must use \code{qPr(..., ..., NA, ...)}, explicitly giving \code{X} as third argument.
 }

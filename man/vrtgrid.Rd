@@ -20,7 +20,7 @@ A \link[base:data.frame]{data frame} with columns corresponding to the \code{vrt
 Create a data frame of values for one variate, or a combination of values for several variates.
 }
 \details{
-The value ranges are based on the information from data and metadata stored in the \code{K}nowledge object (see \code{\link[=learn]{learn()}}) provided in the \verb{K =} argument; they include, and extend slightly beyond, the ranges observed in the data used in the \code{\link[=learn]{learn()}} function. Variate domains are always respected.
+The value ranges are based on the information from data and metadata stored in the \code{K}nowledge object (see \code{\link[=learn]{learn()}}) provided in the \verb{K = } argument; they include, and extend slightly beyond, the ranges observed in the data used in the \code{\link[=learn]{learn()}} function. Variate domains are always respected.
 
 The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see \link{metadata}):
 \itemize{

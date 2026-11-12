@@ -95,6 +95,9 @@
 #'
 #' Tested also on t-distributions with df=1.1 and Pareto with a=1.5 (mean exists, variance infinite).
 #'
+#' Uses beta approximation
+#' from Vehtari & al. 2021 <https://doi.org/10.1214/20-BA1221> sect.4.4
+#'
 #' Used in '.workerfun()' in 'learn()'
 #'
 #' @param x A vector of MC samples
@@ -122,7 +125,10 @@
 
 #' Compute ESS
 #'
-#' Modified from 'rstan' <https://github.com/stan-dev/rstan/blob/develop/rstan/rstan/R/monitor.R>
+#' See:
+#' Geyer 1992, <https://doi.org/10.1214/ss/1177011137>,
+#' Vehtari & al. 2021 <https://doi.org/10.1214/20-BA1221>,
+#' RStan <https://github.com/stan-dev/rstan/blob/develop/rstan/rstan/R/monitor.R>
 #'
 #' Used in '.workerfun()' in 'learn()', and in '.funMCEQ()'.
 #'
@@ -141,7 +147,7 @@
   var_plus <- acov[1]
   mean_var <- var_plus * N / (N - 1)
   ##
-  ## Geyer's initial positive sequence
+  ## From Geyer 1992, initial positive sequence estimator, p.477
   rho_hat_t <- rep.int(x = 0, times = N)
   t <- 0
   rho_hat_even <- 1
@@ -163,7 +169,7 @@
   ## this is used in the improved estimate
   if (rho_hat_even>0){rho_hat_t[max_t + 1] <- rho_hat_even}
   ##
-  ## Geyer's initial monotone sequence
+  ## From Geyer 1992, initial monotone sequence estimator, p.477
   t <- 0
   while (t <= max_t - 4) {
     t <- t + 2
@@ -173,9 +179,9 @@
     }
   }
   ess <- N
-  # Geyer's truncated estimate
-  # tau_hat <- -1 + 2 * sum(rho_hat_t[1:max_t])
-  # Improved estimate reduces variance in antithetic case
+  ## From Geyer 1992, initial convex sequence estimator, p.477
+  ## tau_hat <- -1 + 2 * sum(rho_hat_t[1:max_t])
+  ## Improved estimate reduces variance in antithetic case as in RStan
   tau_hat <- -1 + 2 * sum(rho_hat_t[1:max_t]) + rho_hat_t[max_t+1]
   # Safety check for negative values and with max ess equal to ess*log10(ess)
   tau_hat <- max(tau_hat, 1/log10(ess))

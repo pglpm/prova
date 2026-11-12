@@ -1908,7 +1908,7 @@ print.prova_eu <- function(
 #' Print summary of a "prova_K" (knowledge) object
 #'
 #' @description
-#' This [base::print()] method is a utility to display a summary of a "prova_K" (knowledge) object outputted by [learn()], internally using [utils::str()]. It also display a summary if [learn()]'s value is only the path to the directory of the rds file containing the "prova_K" (knowledge) object itself (see argument `valueisK =` in [learn()]), by internally retrieving the object. If you want to have a summary of a "prova_K" (knowledge) object in a given directory or rds file, you can explicitly call `print.prova_K(<file path>)`.
+#' This [base::print()] method is a utility to display a summary of a "prova_K" (knowledge) object outputted by [learn()], internally using [utils::str()]. It also display a summary if [learn()]'s value is only the path to the directory of the rds file containing the "prova_K" (knowledge) object itself (see argument `valueisK = ` in [learn()]), by internally retrieving the object. If you want to have a summary of a "prova_K" (knowledge) object in a given directory or rds file, you can explicitly call `print.prova_K(<file path>)`.
 #'
 #' @param x Object of class "prova_K" (knowledge), output of [learn()].
 #' @param ... Other parameters to be passed to [utils::str()].

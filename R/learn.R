@@ -78,7 +78,7 @@
 #'
 #' @returns A "prova_K" (knowledge) object, or name of directory containing such an object and other output files, or `NULL`, depending on argument `valueisK`.
 #'
-#' `learn()` saves several files in a directory. By default this output directory is a temporary directory within the one used by [base::tempdir()], but an alternative one can be chosen with the argument `outputdir =`. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
+#' `learn()` saves several files in a directory. By default this output directory is a temporary directory within the one used by [base::tempdir()], but an alternative one can be chosen with the argument `outputdir = `. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
 #'
 #' - `MCtraces.pdf`: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file `MCtraces.rds`.
 #' - `plotsamples_learn.pdf`, `plotquantiles_learn.pdf`: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
@@ -86,7 +86,7 @@
 #' - `rng_seed.rds`: the state of the pseudorandom seed (see [base::Random]) when `learn()` was called.
 #' - `metadata.csv`: a copy of the metadata.
 #'
-#' It is recommended that you give an explicit argument `outputdir =` and save the directory with the files above for future reference. In particular, the `MCtraces.pdf` plot and `MCtraces.rds` data can be useful to report Monte Carlo convergence in any work of yours that used **Prova**.
+#' It is recommended that you give an explicit argument `outputdir = ` and save the directory with the files above for future reference. In particular, the `MCtraces.pdf` plot and `MCtraces.rds` data can be useful to report Monte Carlo convergence in any work of yours that used **Prova**.
 #'
 #' During operation, computation progress and estimated end times for each node's computation are outputted to the file `'main.out'` in the output directory, and also to the console if argument `verbose` is `TRUE`. Note that the estimated end times are very approximate and often quite conservative.
 #'

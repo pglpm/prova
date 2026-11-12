@@ -473,15 +473,15 @@ The subpopulation is chosen with the argument `X`, as in the `Pr()` and `rPr()` 
 
 ```{r misubpop, eval = FALSE}
 MIadelie <- mutualinfo('body_mass', 'bill_len',
-    data.frame(species = 'Adelie'), ## choose subpopulation
+    data.frame(species = 'Adelie'), # choose subpopulation
     K)
 
 MIchinstrap <- mutualinfo('body_mass', 'bill_len',
-    data.frame(species = 'Chinstrap'), ## choose subpopulation
+    data.frame(species = 'Chinstrap'), # choose subpopulation
     K)
 
 MIgentoo <- mutualinfo('body_mass', 'bill_len',
-    data.frame(species = 'Gentoo'), ## choose subpopulation
+    data.frame(species = 'Gentoo'), # choose subpopulation
     K)
 ```
 

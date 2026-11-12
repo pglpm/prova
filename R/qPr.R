@@ -29,7 +29,7 @@
 #'
 #' Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails` (see *Tail probabilities* in the [Pr()] documentation).
 #'
-#' The default value of the `K =` argument is the knowledge object stored in the option `'prova.K'` in [options()][base::getOption()], which you may have previously set with `options(prova.K = ...)`. This way you can save a lot of `K = ...`-typing in this and other functions.
+#' The default value of the `K = ` argument is the knowledge object stored in the option `'prova.K'` in [options()][base::getOption()], which you may have previously set with `options(prova.K = ...)`. This way you can save a lot of `K = ...`-typing in this and other functions.
 #'
 #' Therefore if `qPr()` is called with two unnamed arguments, `qPr(..., ...)`, then it is interpreted as `qPr(p = ..., Yname = ...)`, with `X = NA` and the `K` object retrieved from [options()][base::getOption()]. If it is called with three unnamed arguments, then it is interpreted as `qPr(p = ..., Yname = ..., X = ...)`, with `K` retrieved from [options()][base::getOption()]. If you want to specify `p`, `Yname`, and `K` without naming the arguments, then you must use `qPr(..., ..., NA, ...)`, explicitly giving `X` as third argument.
 #'

@@ -105,7 +105,7 @@ learn(
 \value{
 A "prova_K" (knowledge) object, or name of directory containing such an object and other output files, or \code{NULL}, depending on argument \code{valueisK}.
 
-\code{learn()} saves several files in a directory. By default this output directory is a temporary directory within the one used by \code{\link[base:tempdir]{base::tempdir()}}, but an alternative one can be chosen with the argument \verb{outputdir =}. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
+\code{learn()} saves several files in a directory. By default this output directory is a temporary directory within the one used by \code{\link[base:tempdir]{base::tempdir()}}, but an alternative one can be chosen with the argument \verb{outputdir = }. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
 \itemize{
 \item \code{MCtraces.pdf}: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file \code{MCtraces.rds}.
 \item \code{plotsamples_learn.pdf}, \code{plotquantiles_learn.pdf}: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
@@ -114,7 +114,7 @@ A "prova_K" (knowledge) object, or name of directory containing such an object a
 \item \code{metadata.csv}: a copy of the metadata.
 }
 
-It is recommended that you give an explicit argument \verb{outputdir =} and save the directory with the files above for future reference. In particular, the \code{MCtraces.pdf} plot and \code{MCtraces.rds} data can be useful to report Monte Carlo convergence in any work of yours that used \strong{Prova}.
+It is recommended that you give an explicit argument \verb{outputdir = } and save the directory with the files above for future reference. In particular, the \code{MCtraces.pdf} plot and \code{MCtraces.rds} data can be useful to report Monte Carlo convergence in any work of yours that used \strong{Prova}.
 
 During operation, computation progress and estimated end times for each node's computation are outputted to the file \code{'main.out'} in the output directory, and also to the console if argument \code{verbose} is \code{TRUE}. Note that the estimated end times are very approximate and often quite conservative.
 }

@@ -13,7 +13,7 @@ getK(K = getOption("prova.K"))
 The actual "prova_K" (knowledge) object or \code{NULL} if none was found.
 }
 \description{
-The \verb{K =} argument in most functions of the \strong{Prova} package accepts either a "prova_K" (knowledge) object, or a path to a directory containing a 'K.rds' file with such object, or a path to such a file itself.
+The \verb{K = } argument in most functions of the \strong{Prova} package accepts either a "prova_K" (knowledge) object, or a path to a directory containing a 'K.rds' file with such object, or a path to such a file itself.
 
 The function \code{getK()} retrieves the actual "prova_K" object if given a path as in the latter two cases, and simply returns its argument if this is an actual "prova_K" object. In any case it also checks for the validity of the object, returning \code{NULL} if the object or path are not valid.
 

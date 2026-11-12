@@ -573,7 +573,7 @@ X <- data.frame(island = c('Biscoe', 'Dream'))
 ## The second argument now denote the conditional
 Fspecies10I <- Pr(Y, X, K10)
 ```
-This could also be entered more explicitly as `Fspecies10I <- Pr(Y = Y, X = X, K = K10)`. An argument `X = NA` (or `X = NULL`) means that we are not conditioning on any variates.
+This could also be entered more explicitly as `Fspecies10I <- Pr(Y = Y, X = X, K = K10)`. An argument `X = NA` or `X = NULL` means that we are not conditioning on any variates.
 
 The answer to our question is now contained in the `Fspecies10I` object (we add `I` for "island" to the previous name). The estimates of the frequencies and their uncertainties can again be visualized by calling `plot()`:
 
@@ -707,7 +707,7 @@ plot(imputeddata, col = 8, legend = 'topleft')
 ```
 
 <!-- commented
-The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(Yname = 'bill_len', p = 0.5, X = X, K = K10)$value[1,1])`.
+The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(p = 0.5, Yname = 'bill_len', X = X, K = K10)$value[1,1])`.
 commented -->
 
 
