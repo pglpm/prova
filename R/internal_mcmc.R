@@ -96,7 +96,7 @@
 #' Tested also on t-distributions with df=1.1 and Pareto with a=1.5 (mean exists, variance infinite).
 #'
 #' Uses beta approximation
-#' from Vehtari & al. 2021 <https://doi.org/10.1214/20-BA1221> sect.4.4
+#' from Vehtari & al. 2021 <doi:10.1214/20-BA1221> sect.4.4
 #'
 #' Used in '.workerfun()' in 'learn()'
 #'
@@ -126,8 +126,8 @@
 #' Compute ESS
 #'
 #' See:
-#' Geyer 1992, <https://doi.org/10.1214/ss/1177011137>,
-#' Vehtari & al. 2021 <https://doi.org/10.1214/20-BA1221>,
+#' Geyer 1992, <doi:10.1214/ss/1177011137>,
+#' Vehtari & al. 2021 <doi:10.1214/20-BA1221>,
 #' RStan <https://github.com/stan-dev/rstan/blob/develop/rstan/rstan/R/monitor.R>
 #'
 #' Used in '.workerfun()' in 'learn()', and in '.funMCEQ()'.
