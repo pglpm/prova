@@ -8,8 +8,8 @@
 mutualinfo(
   Y1names,
   Y2names,
-  X = NULL,
-  K = NULL,
+  X = NA,
+  K = getOption("prova.K"),
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   ns = NULL,
@@ -25,8 +25,8 @@ mutualinfo(
 mutualinfoF(
   Y1names,
   Y2names,
-  X = NULL,
-  K = NULL,
+  X = NA,
+  K = getOption("prova.K"),
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   unit = "Sh",
@@ -42,9 +42,9 @@ mutualinfoF(
 
 \item{Y2names}{Character vector or \code{NULL}: second group of joint variates}
 
-\item{X}{Matrix or data.frame or \code{NULL}: values of some variates conditional on which we want the probabilities.}
+\item{X}{Matrix or data.table, or \code{NULL} or \code{NA} (default): set of values of variates in the conditional of the probability of \code{Y}. If \code{NA} or \code{NULL}, no conditioning is made (besides the conditioning on knowledge \code{K}). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.}
 
-\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
+\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option \code{'prova.K'} in \link[base:options]{options()}, in case the user has stored a "prova_K" object or its path in this option.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
@@ -102,11 +102,15 @@ If \eqn{Y_1} and \eqn{Y_2} are two variates, each of which can be a joint variat
 }
 an expression which can also be written in several other equivalent ways. If the variates involved are continuous, the sums are replaced by integrals. Mutual information is a model-free information-theoretic measure of association, that is, it does not depend on assumptions such as linearity, gaussianity, and similar. See \code{vignette('mutualinfo')} for discussion and example uses, and also the "References" section.  If \eqn{Y_1, Y_2} are \emph{jointly gaussian variates}, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output \code{rGauss} in the "Value" section.
 
-The functions \code{mutualinfo()} and \code{mutualinfoF()} calculate the mutual information above for the joint variates specified in the arguments \code{Y1names} and \code{Y2names}, conditional on the values of the variates specified in the \link[base:data.frame]{data frame} \code{X}. If \code{X} is omitted or \code{NULL}, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | K)} etc. are used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails} (see \emph{Tail probabilities} in the \code{\link[=Pr]{Pr()}} documentation).
+The functions \code{mutualinfo()} and \code{mutualinfoF()} calculate the mutual information above for the joint variates specified in the arguments \code{Y1names} and \code{Y2names}, conditional on the values of the variates specified in the \link[base:data.frame]{data frame} \code{X}. If \code{X} is \code{NA}, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | K)} etc. are used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails} (see \emph{Tail probabilities} in the \code{\link[=Pr]{Pr()}} documentation).
 
 Function \code{\link[=mutualinfo]{mutualinfo()}} computes the quantities above via Monte Carlo integration; that is, the sums or integrals are approximated by averages over samples drawn with appropriate probabilities. The computation can take tens of minutes if not hours; it can be sped up by using more nodes (if available) in parallel, through the argument \verb{parallel =}. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments \code{Y1names} and \code{Y2names}) include \emph{continous} variates (see \link{metadata}).
 
 Function \code{\link[=mutualinfoF]{mutualinfoF()}} computes the quantities above by calculating all required probabilities (a finite number) and performing the exact sums. This can only be done for variates with finite domains. If continuous variates are involved, a set of probabilities is calculated on a finite grid of their domain; for this reason the results may be grossly in error. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments \code{Y1names} and \code{Y2names}) include \emph{only} variates with finite domains, typically nominal or ordinal variates (see \link{metadata}).
+
+The default value of the \verb{K =} argument is the knowledge object stored in the option \code{'prova.K'} in \link[base:getOption]{options()}, which you may have previously set with \code{options(prova.K = ...)}. This way you can save a lot of \code{K = ...}-typing in this and other functions.
+
+Therefore if \code{mutualinfo()} or \code{mutualinfoF()} is called with two unnamed arguments, \code{mutualinfo(..., ...)}, then it is interpreted as \code{mutualinfo(Y1names = ..., Y2names = ...)}, with \code{X = NA} and the \code{K} object retrieved from \link[base:getOption]{options()}. If it is called with three unnamed arguments, then it is interpreted as \code{mutualinfo(Y1names = ..., Y2names = ..., X = ...)}, with \code{K} retrieved from \link[base:getOption]{options()}. If you want to specify \code{Y1names}, \code{Y2names}, and \code{K} without naming the arguments, then you must use \code{mutualinfo(..., ..., NA, ...)}, explicitly giving \code{X} as third argument.
 }
 \examples{
 ## Use the example "prova_K" (knowledge) object 'Kexample'
@@ -117,7 +121,12 @@ Function \code{\link[=mutualinfoF]{mutualinfoF()}} computes the quantities above
 ## Mutual information between the two variates;
 ## use mutualinfo() because 'bill_len' has infinite domain;
 ## set nv = 2 to reduce accuracy but also computation time
-MI <- mutualinfo('species', 'bill_len',  Kexample, nv = 2)
+MI <- mutualinfo(
+  Y1names = 'species',
+  Y2names = 'bill_len',
+  K = Kexample,
+  nv = 2
+)
 
 ## Print mutual information, its accuracy, and its revisability
 print(MI)

@@ -131,7 +131,7 @@ We immediately see some basic features of these variates in this sample. For exa
 These are only features of this specific data sample, however. Can we generalize them to the *whole* population? Intuitively it seems probable that the `'Biscoe'`-`'Gentoo'` pair can indeed be the commonest occurrence in the whole population as well. But we can't say for sure that the `'Torgersen'`-`'Chinstrap'` pair never occurs in the whole population: our sample included only 344 penguins, so what we can say is that this pair roughly occurs less frequently than once every 344 penguins. In fact, a calculation with the `Pr()` function shows that its probability is around 0.3%:
 
 ```{r probTorgersenChinstrap, eval = TRUE}
-prob <- Pr(data.frame(island = 'Torgersen', species = 'Chinstrap'), K)
+prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'), K = K)
 
 print(prob)
 ```
@@ -143,23 +143,23 @@ The **Prova** package offers the function `rPr()` to generate a data.frame of fi
 
 - `n`: a positive integer, the number of samples to generate.
 - `Ynames`: vector of variate names; samples are generates for these variates jointly.
-- `X`: data frame of variate values to restrict the sampling to specific subpopulations.
+- `X`: data frame of variate values to restrict the sampling to specific subpopulations; `NA` or `NULL` means no restriction.
 - `K`: the object that encodes the `K`nowledge from the computation made with the `learn()` function.
 
 Let's first generate 5 samples from the estimated whole population of penguins, as an example:
 
 ```{r gensamples5, eval = TRUE}
-rPr(5, c('island', 'species'), K)
+rPr(n = 5, Ynames = c('island', 'species'), K = K)
 ```
 
-This could have also be entered more explicitly as `rPr(n = 5, Ynames = c('island', 'species'), K = K)`.
+This could have also be entered as `rPr(5, c('island', 'species'), NA, K)`, where `NA` stands for the `X = ` argument.
 
 The rows of the resulting data frame are named according to the Monte Carlo samples used from the `K` object; they can be useful for peculiar studies but we can completely ignore them in the present case.
 
 Now let's generate 2000 samples, and then plot them in a scatter plot:
 
 ```{r gensamplesplot, eval = TRUE, fig.cap='**Scatter plot for *whole* population**'}
-samples <- rPr(2000, c('island', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
 
 pplot(x = samples$island, y = samples$species,
     type = 'p', col = 4, alpha.f = 0.5,
@@ -178,7 +178,7 @@ We generate 2000 whole-population samples of the two variates with `rPr()`, and 
 ```{r gensamplesplotbodymassspecies, eval = TRUE, fig.cap='**Scatter plot for body mass and species**'}
 body_massrange <- range(vrtgrid('body_mass', K))
 
-samples <- rPr(2000, c('body_mass', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
 
 pplot(x = samples$body_mass, y = samples$species,
     type = 'p', col = 5, alpha.f = 0.5,
@@ -197,7 +197,7 @@ In a completely analogous way we can visually assess the association of two cont
 ```{r gensamplesplotbodybilllen, eval = TRUE, fig.cap='**Scatter plot of body mass and bill length**'}
 bill_lenrange <- range(vrtgrid('bill_len', K))
 
-samples <- rPr(2000, c('body_mass', 'bill_len'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', col = 6, alpha.f = 0.5,
@@ -320,7 +320,7 @@ Mutual information is in fact a core quantity of communication theory and inform
 \ The **Prova** package provides the functions `mutualinfoF()` and `mutualinfo()` to calculate the mutual information between two variates or two sets of joint variates. Function `mutualinfoF()` can be used only to calculate the mutual information between groups of variates that have a *finite number of possible values* (finite domain), like the `species` or `island` variates, but it is extremely fast (seconds). Function `mutualinfo()` can be used with any kinds of variates, but it is much slower (tens of minutes). The main arguments of these functions are the following:
 
 - `Y1names`, `Y2names`: two vectors of variate names; the mutual information is calculated between these two sets.
-- *optionally* `X`: data frame of variate values to restrict the calculation to specific subpopulations.
+- `X`: data frame of variate values to restrict the calculation to specific subpopulations; `NA` or `NULL` means no restriction.
 - `K`: the object that encodes the `K`nowledge from the computation made with the `learn()` function.
 - *Optionally*, `unit`: the mutual information unit; default "shannons" (Sh).
 - *Optionally*, `parallel`  This argument specifies how many nodes we should use for the computation, or a cluster previously generated with `parallel::makeCluster()`. If this argument is missing, then the function checks whether a default cluster (set with `parallel::setDefaultCluster()`) exists, and if it doesn't then it creates a number of nodes equal to the R option "cl.cores" (see `getOption()`), or equal to 2, if that option is unset. In the present example we tell **Prova** that it can use up to 4 nodes; change this value to one that works for your system -- or just skip this step if you don't want to bother with parallel computation for the moment:
@@ -332,7 +332,7 @@ options(cl.cores = 4) # use up to 4 nodes
 Let's calculate the mutual information between the variates `island` and `species`, [previously discussed and visualized](#newsamples). These are nominal variates with a finite number of possible values, so we can use `mutualinfoF()`:
 
 ```{r miislandspecies, eval = FALSE}
-MIislandspecies <- mutualinfoF('island', 'species', K)
+MIislandspecies <- mutualinfoF(Y1names = 'island', Y2names = 'species', K = K)
 ```
 
 The resulting object `MIislandspecies` is a list of several quantities; the mutual information is given in the `$value` element, and its unit in the `$unit` element:
@@ -391,7 +391,7 @@ mi <- signif(MIislandspecies$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIislandspecies$rGauss, digits = 2)
 
-samples <- rPr(2000, c('island', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
 
 pplot(x = samples$island, y = samples$species,
     type = 'p', col = 4, alpha.f = 0.5,
@@ -406,7 +406,7 @@ pplot(x = samples$island, y = samples$species,
 Calculation of mutual info: "body mass" is a variate with an infinite number of possible values, so we use the function `mutualinfo()`:
 
 ```{r mibodymassspecies, eval = FALSE}
-MIbodymassspecies <- mutualinfo('body_mass', 'species', K)
+MIbodymassspecies <- mutualinfo(Y1names = 'body_mass', Y2names = 'species', K = K)
 ```
 
 Scatter plot:
@@ -418,7 +418,7 @@ mi <- signif(MIbodymassspecies$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
-samples <- rPr(2000, c('body_mass', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
 
 pplot(x = samples$body_mass, y = samples$species,
     type = 'p', col = 5, alpha.f = 0.5,
@@ -433,7 +433,7 @@ pplot(x = samples$body_mass, y = samples$species,
 Calculation of mutual information:
 
 ```{r mibodymassbilllen, eval = FALSE}
-MIbodymassbilllen <- mutualinfo('body_mass', 'bill_len', K)
+MIbodymassbilllen <- mutualinfo(Y1names = 'body_mass', Y2ames = 'bill_len', K = K)
 ```
 
 Scatter plot:
@@ -445,7 +445,7 @@ mi <- signif(MIbodymassbilllen$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 
-samples <- rPr(2000, c('body_mass', 'bill_len'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', col = 6, alpha.f = 0.5,

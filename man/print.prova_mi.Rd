@@ -34,7 +34,7 @@ This \code{\link[base:print]{base::print()}} method is a utility to display valu
 ## variates: 'species' and 'bill_len'
 
 ## Calculate the mutual information between variates 'species' and 'bill_len'
-MI <- mutualinfo('species', 'bill_len', Kexample)
+MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = Kexample)
 
 ## display the value and revisability of the mutual information
 print(MI)

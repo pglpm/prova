@@ -117,9 +117,9 @@ subset.prova_pr <- function(
 #' ## Calculate the probability that bill_len <= 43
 #' ## given that the species is 'Adelie':
 #' probs1 <- Pr(
-#'   Y = data.frame(bill_len = 43),
-#'   X = data.frame(species = 'Adelie'),
-#'   K = K,
+#'   data.frame(bill_len = 43),
+#'   data.frame(species = 'Adelie'),
+#'   K,
 #'   tails = list(bill_len = '<=')
 #' )
 #'
@@ -128,9 +128,9 @@ subset.prova_pr <- function(
 #' ## Calculate the probability that bill_len >= 43.1
 #' ## given that the species is 'Adelie':
 #' probs2 <- Pr(
-#'   Y = data.frame(bill_len = 43.1),
-#'   X = data.frame(species = 'Adelie'),
-#'   K = K,
+#'   data.frame(bill_len = 43.1),
+#'   data.frame(species = 'Adelie'),
+#'   K,
 #'   tails = list(bill_len = '>=')
 #' )
 #'

@@ -394,7 +394,7 @@ Bayesian nonparametrics and **Prova** give a first answer to this question in th
 - an *estimate* of the whole-population frequency distribution,
 - the *uncertainty* of this estimate.
 
-We discuss both in a moment. First let's compute them using the `Pr()` function. For the present question, this function requires two arguments:
+We discuss both in a moment. First let's compute them using the `Pr()` function. For the present question, this function requires two named arguments:
 
 - `Y`: a `data.frame` listing the values of the variate we are interested in. In the present case the variate is `species` and the values are 'Adelie', 'Chinstrap', 'Gentoo'.
 - `K`: the object that encodes the `K`nowledge from the computation made with the `learn()` function, discussed in the previous section. In the present case it's `K10`.
@@ -411,10 +411,10 @@ Back to our function `Pr()`: here is a way to call the function; the computation
 ## data frame with the variate and values we want to know the frequencies of
 Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
-Fspecies10 <- Pr(Y, K10)
+Fspecies10 <- Pr(Y = Y, K = K10)
 ```
 
-This could also be entered more explicitly as `Fspecies10 <- Pr(Y = Y, K = K10)`.
+This could also be entered, without naming the arguments, as `Fspecies10 <- Pr(Y, NA, K10)`. We'll explain the role of that `NA` shortly.
 
 
 The answer to our question is now contained in the `Fspecies10` object (we chose this name for "`F`requency distribution of `species`, estimated from `10` samples"). The estimate and its uncertainty can be immediately visualized by calling `plot()` with this object:
@@ -543,7 +543,7 @@ Y2 <- expand.grid(
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspeciessex10 <- Pr(Y2, K10)
+Fspeciessex10 <- Pr(Y = Y2, K = K10)
 
 ## Display the estimated frequencies of all six combinations,
 ## as well as their credibility intervals
@@ -573,7 +573,7 @@ X <- data.frame(island = c('Biscoe', 'Dream'))
 ## The second argument now denote the conditional
 Fspecies10I <- Pr(Y, X, K10)
 ```
-This could also be entered more explicitly as `Fspecies10I <- Pr(Y = Y, X = X, K = K10)`.
+This could also be entered more explicitly as `Fspecies10I <- Pr(Y = Y, X = X, K = K10)`. An argument `X = NA` (or `X = NULL`) means that we are not conditioning on any variates.
 
 The answer to our question is now contained in the `Fspecies10I` object (we add `I` for "island" to the previous name). The estimates of the frequencies and their uncertainties can again be visualized by calling `plot()`:
 
@@ -767,7 +767,7 @@ We can update our answers -- frequency estimates, their credible intervals, and 
 ## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 ## X <- data.frame(island = c('Biscoe', 'Dream'))
 
-Fspecies60 <- Pr(Y, K60) # updated inference using K60
+Fspecies60 <- Pr(Y = Y, K = K60) # updated inference using K60
 
 ## with three arguments, the second stands for the conditional
 Fspecies60I <- Pr(Y, X, K60) # updated inference using K60
@@ -967,7 +967,7 @@ Our final results about the overall relative frequencies of the three species ar
 ## 'Y' was previously defined with:
 ## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
-Fspeciesall <- Pr(Y, Kall) # updated inference using Kall
+Fspeciesall <- Pr(Y = Y, K = Kall) # updated inference using Kall
 ```
 
 Let's plot the estimated frequencies with their credibility intervals, and also their probability distributions:

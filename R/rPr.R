@@ -4,15 +4,19 @@
 #'
 #' @param n Positive integer: number of samples to draw.
 #' @param Ynames Character vector: names of variates to draw jointly
-#' @param X List or data.table or `NULL`: set of values of variates on which we want to condition the joint probability for `Y`. If `NULL` (default), no conditioning is made. Any rows beyond the first are discarded
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
+#' @param X Matrix or data.table, or `NULL` or `NA` (default): set of values of variates in the conditional of the probability of `Y`. If `NA` or `NULL`, no conditioning is made (besides the conditioning on knowledge `K`). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option `'prova.K'` in [options()][base::options()], in case the user has stored a "prova_K" object or its path in this option.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param mcsamples Vector of integers, or `'all'`, or `NULL` (default): which Monte Carlo samples calculated by the [learn()] function should be used to draw the variate values. The default is to choose a random subset if `n` is smaller than their number, otherwise to recycle them as necessary.
 #' @param parallel Not used: this function does not use parallelization.
 #'
-#' @details This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument `Y`, and conditional on the variate values specified in the argument `X`. It is somewhat analogous to the `rxxx`-variants of [R distribution functions][stats::Distributions]. If `X` is omitted or `NULL`, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails` (see *Tail probabilities* in the [Pr()] documentation).
+#' @details This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument `Y`, and conditional on the variate values specified in the argument `X`. It is somewhat analogous to the `rxxx`-variants of [R distribution functions][stats::Distributions]. If `X` is `NA`, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used.
 #'
-#' If `rPr()` is called with three unnamed arguments, `rPr(..., ..., ...)`, then it is interpreted as `rPr(n = ..., Ynames = ..., K = ...)`.
+#' Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails` (see *Tail probabilities* in the [Pr()] documentation).
+#'
+#' The default value of the `K =` argument is the knowledge object stored in the option `'prova.K'` in [options()][base::getOption()], which you may have previously set with `options(prova.K = ...)`. This way you can save a lot of `K = ...`-typing in this and other functions.
+#'
+#' Therefore if `rPr()` is called with two unnamed arguments, `rPr(..., ...)`, then it is interpreted as `rPr(n = ..., Ynames = ...)`, with `X = NA` and the `K` object retrieved from [options()][base::getOption()]. If it is called with three unnamed arguments, then it is interpreted as `rPr(n = ..., Ynames = ..., X = ...)`, with `K` retrieved from [options()][base::getOption()]. If you want to specify `n`, `Ynames`, and `K` without naming the arguments, then you must use `rPr(..., ..., NA, ...)`, explicitly giving `X` as third argument.
 #'
 #' @return A [data frame][base::data.frame()] of joint draws of the variates `Ynames` from the posterior distribution, conditional on `X`. The row names of the data frame report the Monte Carlo sample (from [learn()]) used for that draw, and the total number of draws from that sample so far.
 #'
@@ -32,7 +36,8 @@
 #' ## Generate 10 values of the 'species' variate,
 #' ## according to the frequency distribution estimated from the data
 #'
-#' datapoints <- rPr(10, 'species', Kexample)
+#' ## alternatively: rPr(10, 'species', NA, Kexample)
+#' datapoints <- rPr(n = 10, Ynames = 'species', K = Kexample)
 #'
 #' c(datapoints)
 #'
@@ -40,7 +45,7 @@
 #' ## ## Example 2:
 #' ## Generate 5 joint values of the 'species' and 'bill_len' variates.
 #'
-#' datapoints <- rPr(5, c('species', 'bill_len'), Kexample)
+#' datapoints <- rPr(5, c('species', 'bill_len'), NA, Kexample)
 #'
 #' print(datapoints, row.names = FALSE) ## row names give MCMC information
 #'
@@ -49,10 +54,34 @@
 #' ## Generate 5 values of the 'species' variate,
 #' ## for the subpopulation of penguins having bill length shorter than 40 mm
 #'
-#' datapoints <- rPr(5, 'species', data.frame(bill_len = 40), Kexample,
-#'   tails = list(bill_len = 'lower'))
+#' datapoints <- rPr(
+#'   5,
+#'   'species',
+#'   data.frame(bill_len = 40),
+#'   Kexample,
+#'   tails = list(bill_len = '<='))
 #'
 #' c(datapoints)
+#'
+#'
+#' ## Before the next example, save the current options() state
+#' oldopt <- getOption('prova.K')
+#'
+#' ## ## Example 4:
+#' ## We save the 'Kexample' object in options(prova.K = ...),
+#' ## so we don't need to give the 'K' argument
+#'
+#' options(prova.K = Kexample)
+#'
+#' ## Generate 10 values of the 'species' variate,
+#' ## according to the frequency distribution estimated from the data
+#'
+#' datapoints <- rPr(10, 'species')
+#'
+#' c(datapoints)
+#'
+#' ## Restore original options() state
+#' options(prova.K = oldopt)
 #'
 #' @import utils
 #' @import stats
@@ -62,28 +91,28 @@
 rPr <- function(
     n,
     Ynames,
-    X = NULL,
-    K = NULL,
+    X = NA,
+    K = getOption('prova.K'),
     tails = NULL,
     mcsamples = NULL,
     parallel = NULL # unused
 ) {
 
-    ## Figure out unnamed arguments
-    if(!is.null(X) && is.null(K)){
-        K <- X
-        X <- NULL
-    }
+    ## ## Figure out unnamed arguments
+    ## if(!is.null(X) && is.null(K)){
+    ##     K <- X
+    ##     X <- NULL
+    ## }
 
     ## Check 'K' argument
-    K <- .retrieveK(K)
+    K <- getK(K)
     if(is.null(K)){
         stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
     auxmetadata <- K$auxmetadata
     K$auxmetadata <- NULL
-    K$auxinfo <- NULL
+    K$info <- NULL
     ncomponents <- nrow(K$W)
     nmcsamples <- ncol(K$W)
 

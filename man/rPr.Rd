@@ -7,8 +7,8 @@
 rPr(
   n,
   Ynames,
-  X = NULL,
-  K = NULL,
+  X = NA,
+  K = getOption("prova.K"),
   tails = NULL,
   mcsamples = NULL,
   parallel = NULL
@@ -19,9 +19,9 @@ rPr(
 
 \item{Ynames}{Character vector: names of variates to draw jointly}
 
-\item{X}{List or data.table or \code{NULL}: set of values of variates on which we want to condition the joint probability for \code{Y}. If \code{NULL} (default), no conditioning is made. Any rows beyond the first are discarded}
+\item{X}{Matrix or data.table, or \code{NULL} or \code{NA} (default): set of values of variates in the conditional of the probability of \code{Y}. If \code{NA} or \code{NULL}, no conditioning is made (besides the conditioning on knowledge \code{K}). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.}
 
-\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
+\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option \code{'prova.K'} in \link[base:options]{options()}, in case the user has stored a "prova_K" object or its path in this option.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
@@ -36,9 +36,13 @@ A \link[base:data.frame]{data frame} of joint draws of the variates \code{Ynames
 Generates datapoints of chosen joint variates, according to posterior probabilities and posterior conditional probabilities.
 }
 \details{
-This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument \code{Y}, and conditional on the variate values specified in the argument \code{X}. It is somewhat analogous to the \code{rxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is omitted or \code{NULL}, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used. Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails} (see \emph{Tail probabilities} in the \code{\link[=Pr]{Pr()}} documentation).
+This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument \code{Y}, and conditional on the variate values specified in the argument \code{X}. It is somewhat analogous to the \code{rxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is \code{NA}, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used.
 
-If \code{rPr()} is called with three unnamed arguments, \code{rPr(..., ..., ...)}, then it is interpreted as \code{rPr(n = ..., Ynames = ..., K = ...)}.
+Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails} (see \emph{Tail probabilities} in the \code{\link[=Pr]{Pr()}} documentation).
+
+The default value of the \verb{K =} argument is the knowledge object stored in the option \code{'prova.K'} in \link[base:getOption]{options()}, which you may have previously set with \code{options(prova.K = ...)}. This way you can save a lot of \code{K = ...}-typing in this and other functions.
+
+Therefore if \code{rPr()} is called with two unnamed arguments, \code{rPr(..., ...)}, then it is interpreted as \code{rPr(n = ..., Ynames = ...)}, with \code{X = NA} and the \code{K} object retrieved from \link[base:getOption]{options()}. If it is called with three unnamed arguments, then it is interpreted as \code{rPr(n = ..., Ynames = ..., X = ...)}, with \code{K} retrieved from \link[base:getOption]{options()}. If you want to specify \code{n}, \code{Ynames}, and \code{K} without naming the arguments, then you must use \code{rPr(..., ..., NA, ...)}, explicitly giving \code{X} as third argument.
 }
 \examples{
 ## Use the example "prova_K" (knowledge) object 'Kexample'
@@ -49,7 +53,8 @@ If \code{rPr()} is called with three unnamed arguments, \code{rPr(..., ..., ...)
 ## Generate 10 values of the 'species' variate,
 ## according to the frequency distribution estimated from the data
 
-datapoints <- rPr(10, 'species', Kexample)
+## alternatively: rPr(10, 'species', NA, Kexample)
+datapoints <- rPr(n = 10, Ynames = 'species', K = Kexample)
 
 c(datapoints)
 
@@ -57,7 +62,7 @@ c(datapoints)
 ## ## Example 2:
 ## Generate 5 joint values of the 'species' and 'bill_len' variates.
 
-datapoints <- rPr(5, c('species', 'bill_len'), Kexample)
+datapoints <- rPr(5, c('species', 'bill_len'), NA, Kexample)
 
 print(datapoints, row.names = FALSE) ## row names give MCMC information
 
@@ -66,10 +71,34 @@ print(datapoints, row.names = FALSE) ## row names give MCMC information
 ## Generate 5 values of the 'species' variate,
 ## for the subpopulation of penguins having bill length shorter than 40 mm
 
-datapoints <- rPr(5, 'species', data.frame(bill_len = 40), Kexample,
-  tails = list(bill_len = 'lower'))
+datapoints <- rPr(
+  5,
+  'species',
+  data.frame(bill_len = 40),
+  Kexample,
+  tails = list(bill_len = '<='))
 
 c(datapoints)
+
+
+## Before the next example, save the current options() state
+oldopt <- getOption('prova.K')
+
+## ## Example 4:
+## We save the 'Kexample' object in options(prova.K = ...),
+## so we don't need to give the 'K' argument
+
+options(prova.K = Kexample)
+
+## Generate 10 values of the 'species' variate,
+## according to the frequency distribution estimated from the data
+
+datapoints <- rPr(10, 'species')
+
+c(datapoints)
+
+## Restore original options() state
+options(prova.K = oldopt)
 
 }
 \seealso{

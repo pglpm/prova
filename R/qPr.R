@@ -4,8 +4,8 @@
 #'
 #' @param p Numeric vector of probability levels.
 #' @param Yname Character vector: name of variate whose quantiles will be computed.
-#' @param X Matrix or data.table or `NULL` (default): set of values of variates on which we want to condition. If `NULL`, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.
+#' @param X Matrix or data.table, or `NULL` or `NA` (default): set of values of variates in the conditional of the probability of `Y`. If `NA` or `NULL`, no conditioning is made (besides the conditioning on knowledge `K`). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments. The default is the value of the option `'prova.K'` in [options()][base::options()], in case the user has stored a "prova_K" object or its path in this option.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 ## #' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal. For the moment only the value `NULL` is accepted.
 #' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the quantile for `Y`. If `NULL`, no samples are reported. If `'all'` (or `Inf`), all samples obtained by the [learn()] function are used.
@@ -22,9 +22,16 @@
 #' @param tol numeric positive: tolerance in the calculation of quantiles. Default: `.Machine$double.eps * 10` (typically `2.22045e-15`).
 
 #'
-#' @details This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the `qxxx`-variants of [R distribution functions][stats::Distributions]. The revisability can be expressed in the form of quantiles, samples, or both, as in the [Pr()] function. If several joint values are given for the probability levels and for `X`, the function creates a 2D grid of results for all possible combinations of the given probability levels and `X` values. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails` (see *Tail probabilities* in the [Pr()] documentation).
+#' @details
+#' This function calculates the quantiles of \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or of \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \eqn{Y} having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the `qxxx`-variants of [R distribution functions][stats::Distributions].
 #'
-#' If `qPr()` is called with three unnamed arguments, `qPr(..., ..., ...)`, then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.
+#' The revisability can be expressed in the form of quantiles, samples, or both, as in the [Pr()] function. If several joint values are given for the probability levels and for `X`, the function creates a 2D grid of results for all possible combinations of the given probability levels and `X` values.
+#'
+#' Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails` (see *Tail probabilities* in the [Pr()] documentation).
+#'
+#' The default value of the `K =` argument is the knowledge object stored in the option `'prova.K'` in [options()][base::getOption()], which you may have previously set with `options(prova.K = ...)`. This way you can save a lot of `K = ...`-typing in this and other functions.
+#'
+#' Therefore if `qPr()` is called with two unnamed arguments, `qPr(..., ...)`, then it is interpreted as `qPr(p = ..., Yname = ...)`, with `X = NA` and the `K` object retrieved from [options()][base::getOption()]. If it is called with three unnamed arguments, then it is interpreted as `qPr(p = ..., Yname = ..., X = ...)`, with `K` retrieved from [options()][base::getOption()]. If you want to specify `p`, `Yname`, and `K` without naming the arguments, then you must use `qPr(..., ..., NA, ...)`, explicitly giving `X` as third argument.
 #'
 #' @return A list with the following elements:
 #' - `'value'`: a matrix with the requested \eqn{Y}-quantiles `p` conditional on the requested \eqn{X}-values in `X`, for all combinations of `p` (rows) and `X` (columns).
@@ -55,14 +62,14 @@
 #' ## Calculate the 25%-, 50%-, and 75%-quantiles for the variate "bill length",
 #' ## that is, the values of "bill length" having such cumulative probabilities:
 #'
-#' quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', Kexample)
+#' quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', NA, Kexample)
 #'
 #' ## display the quantile values
 #' quants$value
 #'
 #' ## verify these values, within numerical error, using Pr():
-#' probs <- Pr(data.frame(bill_len = c(quants$value)), Kexample,
-#'   tails = list(bill_len = -1))
+#' probs <- Pr(data.frame(bill_len = c(quants$value)), NA, Kexample,
+#'   tails = list(bill_len = '<='))
 #' probs$value
 #'
 #' ## display the revisability about the quantiles
@@ -72,15 +79,21 @@
 #' ## ## Example 2:
 #' ## Calculate the 25%-, 50%-, and 75%-quantiles for the variate "bill length",
 #' ## for the subpopulation of species 'Adelie':
-#' quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', data.frame(species = 'Adelie'),
+#' quants <- qPr(
+#'   c(0.25, 0.5, 0.75),
+#'   'bill_len',
+#'   data.frame(species = 'Adelie'),
 #'   Kexample)
 #'
 #' ## display the quantile values
 #' quants$value
 #'
 #' ## verify these values, within numerical error, using Pr():
-#' probs <- Pr(data.frame(bill_len = c(quants$value)),
-#'   data.frame(species = 'Adelie'), Kexample, tails = list(bill_len = -1))
+#' probs <- Pr(
+#'   data.frame(bill_len = c(quants$value)),
+#'   data.frame(species = 'Adelie'),
+#'   Kexample,
+#'   tails = list(bill_len = '<='))
 #' probs$value
 #' }
 #'
@@ -93,8 +106,8 @@
 qPr <- function(
     p,
     Yname,
-    X = NULL,
-    K = NULL,
+    X = NA,
+    K = getOption('prova.K'),
     tails = NULL,
     ## priorY = NULL,
     nsamples = 'all',
@@ -156,25 +169,26 @@ qPr <- function(
         on.exit(closecoresonexit())
     }
 
-    ## Figure out unnamed arguments
-    Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
-    if(!is.null(X) && is.null(K)){
-        K <- X
-        X <- NULL
-        Kname <- Kname[2]
-    } else {
-        Kname <- Kname[1]
-    }
+    ## ## Figure out unnamed arguments
+    ## Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
+    ## if(!is.null(X) && is.null(K)){
+    ##     K <- X
+    ##     X <- NULL
+    ##     Kname <- Kname[2]
+    ## } else {
+    ##     Kname <- Kname[1]
+    ## }
+    Kname <- deparse(substitute(K))
 
     ## Check 'K' argument
-    K <- .retrieveK(K)
+    K <- getK(K)
     if(is.null(K)){
         stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
     auxmetadata <- K$auxmetadata
     K$auxmetadata <- NULL
-    K$auxinfo <- NULL
+    K$info <- NULL
     ncomponents <- nrow(K$W)
     nmcsamples <- ncol(K$W)
 

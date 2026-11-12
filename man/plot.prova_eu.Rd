@@ -84,7 +84,9 @@ umatrix <- matrix(c(
 print(umatrix)
 
 ## Calculate the probability of the 'species outcomes
-probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+probs <- Pr(
+  data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+  NULL,
   Kexample)
 
 ## Calculate the expected utilities of the actions

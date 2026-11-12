@@ -1240,7 +1240,9 @@ learn <- function(
 #### Save all final parameters together with some aux metadata in one file
     K <- c(mcsamples, list(
         auxmetadata = auxmetadata,
-        auxinfo = list(
+        info = list(
+            metadata = metadata,
+            nMCsamples = ncol(mcsamples$W),
             nchains = nchains,
             npoints = npoints,
             hyperparams = hyperparams,
@@ -1401,7 +1403,7 @@ learn <- function(
         'needed thinning' = jointdiagn[3, ],
         'log-average' = colMeans(oktraces)
     )
-    K$auxinfo <- c(K$auxinfo, toprint)
+    K$info <- c(K$info, toprint)
     class(K) <- 'prova_K'
     saveRDS(K,
         file = file.path(dirname, paste0('K', dashnameroot, '.rds'))

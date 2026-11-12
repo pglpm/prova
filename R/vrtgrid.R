@@ -3,7 +3,7 @@
 #' @description Create a data frame of values for one variate, or a combination of values for several variates.
 #'
 #' @param vrt Character vector: names of the variates; they must match variate names in the `metadata` file provided to the [learn()] function.
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option `'prova.K'` in [options()][base::options()], in case the user has stored a "prova_K" object or its path in this option.
 #' @param length.out Vector or list of positive integers or `NA` values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in `vrt`. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of `NA` values. Default `NA`.
 #'
 #' @details The value ranges are based on the information from data and metadata stored in the `K`nowledge object (see [learn()]) provided in the `K =` argument; they include, and extend slightly beyond, the ranges observed in the data used in the [learn()] function. Variate domains are always respected.
@@ -62,21 +62,38 @@
 #'
 #' print(valuesAll2)
 #'
+#'
+#' ## Before the next example, save the current options() state
+#' oldopt <- getOption('prova.K')
+#'
+#' ## We save the 'Kexample' object in options(prova.K = ...),
+#' ## so we don't need to give the 'K' argument
+#'
+#' options(prova.K = Kexample)
+#'
+#' ## set of values for the variate "species";
+#' ## since this variate is of a nominal kind, all values are included
+#' valuesSpecies <- vrtgrid('species')
+#'
+#' print(valuesSpecies)
+#'
+#' ## Restore original options() state
+#' options(prova.K = oldopt)
+#'
 #' @import utils
 #'
 #' @concept probability
 #' @export
 vrtgrid <- function(
     vrt,
-    K,
+    K = getOption('prova.K'),
     length.out = NA
 ){
     ## default number of points for continuous non-rounded variates
     lodefault <- 129
 
     ## Check 'K' argument
-    Kname <- deparse(substitute(K))
-    K <- .retrieveK(K)
+    K <- getK(K)
     if(is.null(K)){
         stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }

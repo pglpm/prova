@@ -59,7 +59,7 @@ The \code{hist()} method for a "prova_pr" (probability) object is a utility to v
 
 ## calculate the probability, and its revisability,
 ## for the value 'Adelie' of the "species" variate
-probs <- Pr(data.frame(species = 'Adelie'), Kexample)
+probs <- Pr(data.frame(species = 'Adelie'), NULL, Kexample)
 probs$value
 
 ## show the revisability of this probability; equivalently show

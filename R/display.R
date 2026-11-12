@@ -547,7 +547,7 @@ pplot <- function(
 #' valuesBill <- vrtgrid('bill_len', Kexample)
 #'
 #' ## calculate the probabilities and quantiles
-#' probs <- Pr(valuesBill, Kexample)
+#' probs <- Pr(Y = valuesBill, K = Kexample)
 #'
 #' ## plot the probabilities and quantiles
 #' plot(probs)
@@ -988,7 +988,7 @@ plot.prova_pr <- function(
 #'
 #' ## calculate the probability, and its revisability,
 #' ## for the value 'Adelie' of the "species" variate
-#' probs <- Pr(data.frame(species = 'Adelie'), Kexample)
+#' probs <- Pr(data.frame(species = 'Adelie'), NULL, Kexample)
 #' probs$value
 #'
 #' ## show the revisability of this probability; equivalently show
@@ -1310,7 +1310,12 @@ print.prova_pr <- function(
 #' ## variates: 'species' and 'bill_len'
 #'
 #' ## calculate the mutual information and its revisability
-#' MI <- mutualinfo('species', 'bill_len', Kexample, nv = 2)
+#' MI <- mutualinfo(
+#'   Y1names = 'species',
+#'   Y2names = 'bill_len',
+#'   K = Kexample,
+#'   nv = 2
+#' )
 #'
 #' ## show the possible revisability of the mutual information,
 #' ## if a much larger data sample were collected
@@ -1462,7 +1467,7 @@ hist.prova_mi <- function(
 #' ## variates: 'species' and 'bill_len'
 #'
 #' ## Calculate the mutual information between variates 'species' and 'bill_len'
-#' MI <- mutualinfo('species', 'bill_len', Kexample)
+#' MI <- mutualinfo(Y1names = 'species', Y2names = 'bill_len', K = Kexample)
 #'
 #' ## display the value and revisability of the mutual information
 #' print(MI)
@@ -1621,7 +1626,9 @@ print.prova_mi <- function(
 #' print(umatrix)
 #'
 #' ## Calculate the probability of the 'species outcomes
-#' probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+#' probs <- Pr(
+#'   data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+#'   NULL,
 #'   Kexample)
 #'
 #' ## Calculate the expected utilities of the actions
@@ -1820,7 +1827,9 @@ plot.prova_eu <- function(
 #' print(umatrix)
 #'
 #' ## Calculate the probability of the 'species outcomes
-#' probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+#' probs <- Pr(
+#'   data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+#'   NULL,
 #'   Kexample)
 #'
 #' ## Calculate the expected utilities of the actions
@@ -1921,7 +1930,7 @@ print.prova_eu <- function(
 #' @concept display
 #' @export
 print.prova_K <- function(x, ...){
-    K <- .retrieveK(x)
+    K <- getK(x)
     if(is.null(K)){
         message('Not a "prova_K" object')
     } else {

@@ -7,8 +7,8 @@
 #'
 #' @param Y1names Character vector: first group of joint variates
 #' @param Y2names Character vector or `NULL`: second group of joint variates
-#' @param X Matrix or data.frame or `NULL`: values of some variates conditional on which we want the probabilities.
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.
+#' @param X Matrix or data.table, or `NULL` or `NA` (default): set of values of variates in the conditional of the probability of `Y`. If `NA` or `NULL`, no conditioning is made (besides the conditioning on knowledge `K`). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
+#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option `'prova.K'` in [options()][base::options()], in case the user has stored a "prova_K" object or its path in this option.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param quantiles Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in [Pr()].
 #' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "prova_K" (knowledge) object.
@@ -38,14 +38,15 @@
 #' }
 #' an expression which can also be written in several other equivalent ways. If the variates involved are continuous, the sums are replaced by integrals. Mutual information is a model-free information-theoretic measure of association, that is, it does not depend on assumptions such as linearity, gaussianity, and similar. See `vignette('mutualinfo')` for discussion and example uses, and also the "References" section.  If \eqn{Y_1, Y_2} are *jointly gaussian variates*, then there is a mathematical correspondence between their mutual information and their Pearson correlation coefficient; see output `rGauss` in the "Value" section.
 #'
-#' The functions `mutualinfo()` and `mutualinfoF()` calculate the mutual information above for the joint variates specified in the arguments `Y1names` and `Y2names`, conditional on the values of the variates specified in the [data frame][base::data.frame()] `X`. If `X` is omitted or `NULL`, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | K)} etc. are used. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails` (see *Tail probabilities* in the [Pr()] documentation).
+#' The functions `mutualinfo()` and `mutualinfoF()` calculate the mutual information above for the joint variates specified in the arguments `Y1names` and `Y2names`, conditional on the values of the variates specified in the [data frame][base::data.frame()] `X`. If `X` is `NA`, then the posterior probabilities \eqn{\mathrm{Pr}(Y_1 | K)} etc. are used. Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails` (see *Tail probabilities* in the [Pr()] documentation).
 #'
 #' Function [mutualinfo()] computes the quantities above via Monte Carlo integration; that is, the sums or integrals are approximated by averages over samples drawn with appropriate probabilities. The computation can take tens of minutes if not hours; it can be sped up by using more nodes (if available) in parallel, through the argument `parallel =`. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments `Y1names` and `Y2names`) include *continous* variates (see [metadata]).
 #'
 #' Function [mutualinfoF()] computes the quantities above by calculating all required probabilities (a finite number) and performing the exact sums. This can only be done for variates with finite domains. If continuous variates are involved, a set of probabilities is calculated on a finite grid of their domain; for this reason the results may be grossly in error. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments `Y1names` and `Y2names`) include *only* variates with finite domains, typically nominal or ordinal variates (see [metadata]).
 #'
-# If either function is called with three unnamed arguments, e.g. `mutualinfo(..., ..., ...)`, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ..., K = ...)`.
-
+#' The default value of the `K =` argument is the knowledge object stored in the option `'prova.K'` in [options()][base::getOption()], which you may have previously set with `options(prova.K = ...)`. This way you can save a lot of `K = ...`-typing in this and other functions.
+#'
+#' Therefore if `mutualinfo()` or `mutualinfoF()` is called with two unnamed arguments, `mutualinfo(..., ...)`, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ...)`, with `X = NA` and the `K` object retrieved from [options()][base::getOption()]. If it is called with three unnamed arguments, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ..., X = ...)`, with `K` retrieved from [options()][base::getOption()]. If you want to specify `Y1names`, `Y2names`, and `K` without naming the arguments, then you must use `mutualinfo(..., ..., NA, ...)`, explicitly giving `X` as third argument.
 #'
 #' @return An object of class "prova_mi" (mutual information), which is a list consisting of the following elements:
 #'
@@ -75,7 +76,12 @@
 #' ## Mutual information between the two variates;
 #' ## use mutualinfo() because 'bill_len' has infinite domain;
 #' ## set nv = 2 to reduce accuracy but also computation time
-#' MI <- mutualinfo('species', 'bill_len',  Kexample, nv = 2)
+#' MI <- mutualinfo(
+#'   Y1names = 'species',
+#'   Y2names = 'bill_len',
+#'   K = Kexample,
+#'   nv = 2
+#' )
 #'
 #' ## Print mutual information, its accuracy, and its revisability
 #' print(MI)
@@ -94,8 +100,8 @@ NULL
 mutualinfo <- function(
     Y1names,
     Y2names,
-    X = NULL,
-    K = NULL,
+    X = NA,
+    K = getOption('prova.K'),
     tails = NULL,
     quantiles =  c(0.055, 0.25, 0.75, 0.945),
     ns = NULL,
@@ -170,25 +176,26 @@ mutualinfo <- function(
         on.exit(closecoresonexit())
     }
 
-    ## Figure out unnamed arguments
-    Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
-    if(!is.null(X) && is.null(K)){
-        K <- X
-        X <- NULL
-        Kname <- Kname[2]
-    } else {
-        Kname <- Kname[1]
-    }
+    ## ## Figure out unnamed arguments
+    ## Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
+    ## if(!is.null(X) && is.null(K)){
+    ##     K <- X
+    ##     X <- NULL
+    ##     Kname <- Kname[2]
+    ## } else {
+    ##     Kname <- Kname[1]
+    ## }
+    Kname <- deparse(substitute(K))
 
     ## Check 'K' argument
-    K <- .retrieveK(K)
+    K <- getK(K)
     if(is.null(K)){
         stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
     auxmetadata <- K$auxmetadata
     K$auxmetadata <- NULL
-    K$auxinfo <- NULL
+    K$info <- NULL
     ncomponents <- nrow(K$W)
     nmcs <- ncol(K$W)
 
@@ -648,8 +655,8 @@ mutualinfo <- function(
 mutualinfoF <- function(
     Y1names,
     Y2names,
-    X = NULL,
-    K = NULL,
+    X = NA,
+    K = getOption('prova.K'),
     tails = NULL,
     quantiles =  c(0.055, 0.25, 0.75, 0.945),
     unit = 'Sh',
@@ -703,18 +710,19 @@ mutualinfoF <- function(
         on.exit(closecoresonexit())
     }
 
-    ## Figure out unnamed arguments
-    Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
-    if(!is.null(X) && is.null(K)){
-        K <- X
-        X <- NULL
-        Kname <- Kname[2]
-    } else {
-        Kname <- Kname[1]
-    }
+    ## ## Figure out unnamed arguments
+    ## Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
+    ## if(!is.null(X) && is.null(K)){
+    ##     K <- X
+    ##     X <- NULL
+    ##     Kname <- Kname[2]
+    ## } else {
+    ##     Kname <- Kname[1]
+    ## }
+    Kname <- deparse(substitute(K))
 
     ## Check 'K' argument
-    K <- .retrieveK(K)
+    K <- getK(K)
     if(is.null(K)){
         stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }

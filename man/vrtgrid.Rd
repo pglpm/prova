@@ -4,12 +4,12 @@
 \alias{vrtgrid}
 \title{Create a grid of values for a variate}
 \usage{
-vrtgrid(vrt, K, length.out = NA)
+vrtgrid(vrt, K = getOption("prova.K"), length.out = NA)
 }
 \arguments{
 \item{vrt}{Character vector: names of the variates; they must match variate names in the \code{metadata} file provided to the \code{\link[=learn]{learn()}} function.}
 
-\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.}
+\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option \code{'prova.K'} in \link[base:options]{options()}, in case the user has stored a "prova_K" object or its path in this option.}
 
 \item{length.out}{Vector or list of positive integers or \code{NA} values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in \code{vrt}. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of \code{NA} values. Default \code{NA}.}
 }
@@ -65,6 +65,24 @@ valuesAll2 <- expand.grid(
 )
 
 print(valuesAll2)
+
+
+## Before the next example, save the current options() state
+oldopt <- getOption('prova.K')
+
+## We save the 'Kexample' object in options(prova.K = ...),
+## so we don't need to give the 'K' argument
+
+options(prova.K = Kexample)
+
+## set of values for the variate "species";
+## since this variate is of a nominal kind, all values are included
+valuesSpecies <- vrtgrid('species')
+
+print(valuesSpecies)
+
+## Restore original options() state
+options(prova.K = oldopt)
 
 }
 \seealso{

@@ -104,7 +104,7 @@ Continuous variates with bounded domains, such as censored variates, may have si
 valuesBill <- vrtgrid('bill_len', Kexample)
 
 ## calculate the probabilities and quantiles
-probs <- Pr(valuesBill, Kexample)
+probs <- Pr(Y = valuesBill, K = Kexample)
 
 ## plot the probabilities and quantiles
 plot(probs)
