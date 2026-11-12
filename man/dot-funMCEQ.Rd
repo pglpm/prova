@@ -27,6 +27,6 @@ Tested also on t-distributions with df=1.1 and Pareto with a=1.5 (mean exists, v
 Uses beta approximation
 from Vehtari & al. 2021 \url{doi:10.1214/20-BA1221} sect.4.4
 
-Used in '.workerfun()' in 'learn()'
+Used in '.workerfun()', 'learn()', 'Pr()', 'mutualinfo()'
 }
 \keyword{internal}

@@ -98,7 +98,7 @@
 #' Uses beta approximation
 #' from Vehtari & al. 2021 <doi:10.1214/20-BA1221> sect.4.4
 #'
-#' Used in '.workerfun()' in 'learn()'
+#' Used in '.workerfun()', 'learn()', 'Pr()', 'mutualinfo()'
 #'
 #' @param x A vector of MC samples
 #' @param prob numeric vector of probabilities: quantiles whose error interval is being estimated.
@@ -117,6 +117,44 @@
             na.rm = TRUE, names = FALSE, type = 6)
         ##
         essXlo <- .funESS3(x <= Xlo)
+        ##
+        a <- qbeta(Qpair, essXlo * aprob + 1, essXlo * (1 - aprob) + 1)
+        c(straces[max(round(a[1] * N), 1)], straces[min(round(a[2] * N), N)])
+    })
+}
+
+#' Calculate credibility quantiles on estimated quantile, batch-means version
+#'
+#' Calculates the lower and upper bound of a credibility interval, for various quantiles of the empirical distribution of a vector of MC samples.
+#'
+#' Tests show that it gives a very good approximation of the "true" credibility quantiles in the case of independent samples.
+#'
+#' Tested also on t-distributions with df=1.1 and Pareto with a=1.5 (mean exists, variance infinite).
+#'
+#' Uses beta approximation
+#' from Vehtari & al. 2021 <doi:10.1214/20-BA1221> sect.4.4
+#' but this version is based on batch-means rather than Geyer's method.
+#'
+#' Used in '.workerfun()' in 'learn()'
+#'
+#'
+#' @param x A vector of MC samples
+#' @param prob numeric vector of probabilities: quantiles whose error interval is being estimated.
+#' @param Qpair vector of length two (further elements are ignored): lower and higher credibility-quantiles requested. Default yields a credibility interval of 68%, or one nominal normal standard deviation.
+#'
+#' @return A matrix with two rows and as many columns as elements in 'prob'. Forr each column, the first and second row determine the lower and upper bound of the credibility interval of width `Qpair[2] - Qpair[2]`.
+#'
+#' @import stats
+#'
+#' @keywords internal
+.funMCEQB <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
+    N <- length(x)
+    straces <- sort(x)
+    sapply(prob, function(aprob) {
+        Xlo <- quantile(x = x, probs = aprob,
+            na.rm = TRUE, names = FALSE, type = 6)
+        ##
+        essXlo <- (sd(x <= Xlo) / .funMCSELD(x <= Xlo))^2
         ##
         a <- qbeta(Qpair, essXlo * aprob + 1, essXlo * (1 - aprob) + 1)
         c(straces[max(round(a[1] * N), 1)], straces[min(round(a[2] * N), N)])

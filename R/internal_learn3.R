@@ -1396,7 +1396,7 @@
         'ESS from rel. qt. error' = (1/jointdiagn[1, ])^2,
         'ESS' = jointdiagn[2, ],
         'needed thinning' = jointdiagn[3, ],
-        'log of average' = log(colMeans(oktraces))
+        'log of average' = colMeans(oktraces)
     )
     K$info <- c(K$info, toprint)
     class(K) <- 'prova_K'
@@ -3216,7 +3216,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
                 'ESS from rel. qt. error' = (1/max(relmcse[-1]))^2,
                 'ESS' = essnrmean,
                 'needed thinning' = autothinning,
-                'log of average' = log(mean(oktraces))
+                'log of average' = mean(oktraces)
             )
 
 ####
