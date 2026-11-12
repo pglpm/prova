@@ -1105,7 +1105,7 @@
     chaininfo <- parallel::parLapply(
         cl = cl,
         X = 1:ncores,
-        fun = .workerfun,
+        fun = .workerfun2,
         ## arguments to .workerfun
         dirname = dirname,
         dashnameroot = dashnameroot,
@@ -1527,7 +1527,7 @@
 
 
 
-#' Worker function called by learn()
+#' Worker function called by .learn2()
 #'
 #' @description
 #' This worker function is defined outside of learn() in order to avoid import of spurious objects into the parallel workers, and from the parallel workes into the main R session, with waste of memory.
@@ -1538,7 +1538,7 @@
 #' @import utils
 #'
 #' @keywords internal
-.workerfun <- function(
+.workerfun2 <- function(
     acore,
     dirname,
     dashnameroot,
