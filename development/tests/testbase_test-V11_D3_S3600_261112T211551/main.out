@@ -1,0 +1,54 @@
+
+Saving output in directory
+testbase_test-V11_D3_S3600_261112T211551
+
+Prova v2.4.0.
+Registered socket cluster with 8 nodes on host ‘localhost’.
+Learning from 3 datapoints, 11 variates.
+Starting Monte Carlo sampling of 3600 samples by 8 chains
+in a space of 1663 (effectively 2638) dimensions.
+Using 8 nodes: 450 samples per chain, max 1 chains per node.
+Requested:   ESS 450   rel.MCSE 0.0467.
+Node logs are being saved in individual files.
+C-compiling samplers appropriate to the variates (Nimble v1.4.3)
+this can take tens of minutes. Please wait...
+Compiled node 1. Number of samplers: 1493.             
+Estimated end times, updated 2026-11-12 21:16:
+Node 1: estimating...
+Node 2: estimating...
+Node 3: estimating...
+Node 4: estimating...
+Node 5: estimating...
+Node 6: estimating...
+Node 7: estimating...
+Node 8: estimating...
+[9AEstimated end times, updated 2026-11-12 21:16:[6BNode 6: 2026-11-12 21:20[3B[9AEstimated end times, updated 2026-11-12 21:16:[7BNode 7: 2026-11-12 21:20[2B[9AEstimated end times, updated 2026-11-12 21:16:[7BNode 7: 2026-11-12 21:20[2B[9AEstimated end times, updated 2026-11-12 21:16:[7BNode 7: finished.        [2B[9AEstimated end times, updated 2026-11-12 21:17:[2BNode 2: 2026-11-12 21:20[7B[9AEstimated end times, updated 2026-11-12 21:17:[4BNode 4: 2026-11-12 21:20[5B[9AEstimated end times, updated 2026-11-12 21:17:[3BNode 3: 2026-11-12 21:21[6B[9AEstimated end times, updated 2026-11-12 21:17:[6BNode 6: 2026-11-12 21:20[3B[9AEstimated end times, updated 2026-11-12 21:17:[6BNode 6: finished.        [3B[9AEstimated end times, updated 2026-11-12 21:17:[1BNode 1: 2026-11-12 21:20[8B[9AEstimated end times, updated 2026-11-12 21:17:[2BNode 2: 2026-11-12 21:20[7B[9AEstimated end times, updated 2026-11-12 21:17:[2BNode 2: finished.        [7B[9AEstimated end times, updated 2026-11-12 21:17:[4BNode 4: 2026-11-12 21:20[5B[9AEstimated end times, updated 2026-11-12 21:17:[4BNode 4: 2026-11-12 21:20[5B[9AEstimated end times, updated 2026-11-12 21:17:[4BNode 4: finished.        [5B[9AEstimated end times, updated 2026-11-12 21:17:[1BNode 1: 2026-11-12 21:20[8B[9AEstimated end times, updated 2026-11-12 21:17:[1BNode 1: 2026-11-12 21:20[8B[9AEstimated end times, updated 2026-11-12 21:17:[1BNode 1: 2026-11-12 21:20[8B[9AEstimated end times, updated 2026-11-12 21:17:[1BNode 1: finished.        [8B[9AEstimated end times, updated 2026-11-12 21:17:[3BNode 3: 2026-11-12 21:20[6B[9AEstimated end times, updated 2026-11-12 21:17:[3BNode 3: finished.        [6B[9AEstimated end times, updated 2026-11-12 21:17:[8BNode 8: 2026-11-12 21:20[1B[9AEstimated end times, updated 2026-11-12 21:17:[5BNode 5: 2026-11-12 21:20[4B[9AEstimated end times, updated 2026-11-12 21:17:[8BNode 8: 2026-11-12 21:20[1B[9AEstimated end times, updated 2026-11-12 21:17:[8BNode 8: 2026-11-12 21:20[1B[9AEstimated end times, updated 2026-11-12 21:17:[8BNode 8: finished.        [1B[9AEstimated end times, updated 2026-11-12 21:17:[5BNode 5: 2026-11-12 21:20[4B[9AEstimated end times, updated 2026-11-12 21:17:[5BNode 5: finished.        [4B
+Finished Monte Carlo sampling.
+Highest number of Monte Carlo iterations across chains: 7200.
+Highest number of used mixture components: 3.
+
+Checking test data
+(#1 #2 #3):
+abs. quantile error: 0.132 to 0.342
+quantile width: 5.33 to 12
+rel. quantile error: 0.0247 to 0.0334
+ESS from rel. qt. error: 897 to 1640
+ESS: 1740 to 3190
+needed thinning: 2.2 to 4.01
+log-average: -11.8 to -5.73
+
+Plotting final Monte Carlo traces and marginal samples...
+
+Total computation time: 1.8 mins
+Average preparation & finalization time: 1.2 mins.
+Average Monte Carlo time per chain: 22 secs.
+Max total memory used: approx 8400MB.
+Max memory used per node: approx 1100MB.
+Removing temporary output files.
+Finished.
+
+****************************************
+Output saved in directory
+testbase_test-V11_D3_S3600_261112T211551
+****************************************
+
