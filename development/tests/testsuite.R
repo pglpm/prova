@@ -86,9 +86,11 @@ suite <- list(
     Cvrt = seq(0, 1, length.out = 9),
     Dvrt = seq(-3, 3, length.out = 9),
     DPvrt = seq(0, 3, length.out = 9),
+    N1vrt = paste0(letters[1:3], '1'),
+    O1vrt = paste0(LETTERS[1:5], '1'),
     Bvrt = c('no', 'yes'),
-    Nvrt = paste0('N', letters[1:4]),
-    Ovrt = paste0('', LETTERS[1:5])
+    N2vrt = paste0(letters[1:4], '2'),
+    O2vrt = paste0(LETTERS[1:4], '2')
 )
 for(iv in seq_along(suite)){
     for(atail in c(0, 'left', 'right')){
@@ -145,7 +147,8 @@ while(atest < 50){
         inX <- NULL
     }
     intails <- setNames(sample(c(-1, 0, 1), nsuite - 2, replace = TRUE),
-        c('Rvrt', 'RPvrt', 'RFvrt', 'Cvrt', 'Dvrt', 'DPvrt', 'Ovrt'))
+        c('Rvrt', 'RPvrt', 'RFvrt', 'Cvrt', 'Dvrt', 'DPvrt',
+            'O1vrt', 'O2vrt', 'N1vrt', 'N2vrt'))
     intails <- as.list(intails)
     if(c(inY, inX)[['RPvrt']] == 0 && intails[['RPvrt']] != 1){
         intails[['RPvrt']] <- 1
