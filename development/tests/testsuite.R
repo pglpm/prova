@@ -125,7 +125,9 @@ for(iv in seq_along(suite)){
         results <- c(results, thisresult2)
     }
     saveRDS(results, savefile)
-    if(!isTRUE(thisresult1) || !isTRUE(thisresult2)){
+    if(!isTRUE(thisresult1[[1]]) || !isTRUE(thisresult2[[1]])){
+        print(thisresult1)
+        print(thisresult2)
         allOK <- FALSE
         break
     }
@@ -186,7 +188,9 @@ while(atest < 50){
     )
     results <- c(results, thisresult2)
     saveRDS(results, savefile)
-    if(!isTRUE(thisresult1) || !isTRUE(thisresult2)){
+    if(!isTRUE(thisresult1[[1]]) || !isTRUE(thisresult2[[1]])){
+        print(thisresult1)
+        print(thisresult2)
         allOK <- FALSE
         break
     }
@@ -243,7 +247,8 @@ for(atest in suite){
         ))
     results <- c(results, thisresult)
     saveRDS(results, savefile)
-    if(!isTRUE(thisresult)){
+    if(!isTRUE(thisresult[[1]])){
+        print(thisresult)
         allOK <- FALSE
         print(FALSE)
         break
