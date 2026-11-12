@@ -1,228 +1,32 @@
 Testing version 2.4.0
-Starting tests 261112T213830
-Quick learn 261112T213830
+Starting tests 261112T223851
+Quick learn 261112T223851
+$`Quick learn`
 [1] TRUE
-Full base learn 261112T213850
+
+Full base learn 261112T223910
+$`Full base learn`
 [1] TRUE
-Simple Pr 261112T214026
+
+Simple Pr 261112T224038
 [1] TRUE
-Various Pr 261112T214150
-[1] FALSE
-Simple MIs 261112T214308
-[1] FALSE
+Various Pr 261112T224158
 $`Various Pr-2-values`
-[1] "Mean absolute difference: 0.0005050631"
+[1] "Mean absolute difference: 0.000495708"
 
 $`Various Pr-2-samples`
-[1] "Mean absolute difference: 0.002413623"
+[1] "Mean absolute difference: 0.002588295"
 
-$`Various Pr-3-values`
-[1] "Mean absolute difference: 0.02312797"
-
-$`Various Pr-3-samples`
-[1] "Mean absolute difference: 0.06218617"
-
-$`Various Pr-4-values`
-[1] "Mean absolute difference: 5.144725e-05"
-
-$`Various Pr-4-samples`
-[1] "Mean absolute difference: 0.0002971184"
-
-$`Various Pr-6-values`
-[1] "Mean absolute difference: 2.194035e-05"
-
-$`Various Pr-6-samples`
-[1] "Mean absolute difference: 3.721013e-05"
-
-$`Various Pr-7-values`
-[1] "Mean absolute difference: 0.04758963"
-
-$`Various Pr-7-samples`
-[1] "Mean absolute difference: 0.05295737"
-
-$`Various Pr-8-values`
-[1] "Mean absolute difference: 0.002107551"
-
-$`Various Pr-8-samples`
-[1] "Mean absolute difference: 0.003100762"
-
-$`Various Pr-10-values`
-[1] "Mean absolute difference: 0.0015515"
-
-$`Various Pr-10-samples`
-[1] "Mean absolute difference: 0.0015515"
-
-$`Various Pr-11-values`
-[1] "Mean absolute difference: 0.01511413"
-
-$`Various Pr-11-samples`
-[1] "Mean absolute difference: 0.01760494"
-
-$`Various Pr-12-values`
-[1] "Mean absolute difference: 4.7943e-08"
-
-$`Various Pr-12-samples`
-[1] "Mean absolute difference: 4.7943e-08"
-
-$`Various Pr-13-values`
-[1] "Mean absolute difference: 0.0003006887"
-
-$`Various Pr-13-samples`
-[1] "Mean absolute difference: 0.000546227"
-
-$`Various Pr-14-values`
-[1] "Mean absolute difference: 0.0006092632"
-
-$`Various Pr-14-samples`
-[1] "Mean absolute difference: 0.001713295"
-
-$`Various Pr-15-values`
-[1] "Mean absolute difference: 0.0004661534"
-
-$`Various Pr-15-samples`
-[1] "Mean absolute difference: 0.005621619"
-
-$`Various Pr-17-values`
-[1] "Mean absolute difference: 0.001249269"
-
-$`Various Pr-17-samples`
-[1] "Mean absolute difference: 0.01442815"
-
-$`Various Pr-19-values`
-[1] "Mean absolute difference: 1.88388e-08"
-
-$`Various Pr-19-samples`
-[1] "Mean absolute difference: 4.23627e-07"
-
-$`Various Pr-20-values`
-[1] "Mean absolute difference: 0.08636951"
-
-$`Various Pr-20-samples`
-[1] "Mean absolute difference: 0.1134154"
-
-$`Various Pr-22-values`
-[1] "Mean absolute difference: 6.422153e-10"
-
-$`Various Pr-22-samples`
-[1] "Mean absolute difference: 6.425723e-10"
-
-$`Various Pr-23-values`
-[1] "Mean absolute difference: 3.30627e-05"
-
-$`Various Pr-23-samples`
-[1] "Mean absolute difference: 0.0005529482"
-
-$`Various Pr-24-values`
-[1] "Mean absolute difference: 0.01245944"
-
-$`Various Pr-24-samples`
-[1] "Mean absolute difference: 0.03615993"
-
-$`Various Pr-25-values`
-[1] "Mean absolute difference: 2.343947e-05"
-
-$`Various Pr-25-samples`
-[1] "Mean absolute difference: 3.977731e-05"
-
-$`Various Pr-26-values`
-[1] "Mean absolute difference: 2.682697e-07"
-
-$`Various Pr-26-samples`
-[1] "Mean absolute difference: 2.682697e-07"
-
-$`Various Pr-28-values`
-[1] "Mean absolute difference: 0.0007222223"
-
-$`Various Pr-28-samples`
-[1] "Mean absolute difference: 0.003781734"
-
-$`Various Pr-29-values`
-[1] "Mean absolute difference: 0.04108636"
-
-$`Various Pr-29-samples`
-[1] "Mean absolute difference: 0.04108636"
-
-$`Various Pr-30-values`
-[1] "Mean absolute difference: 6.875446e-05"
-
-$`Various Pr-30-samples`
-[1] "Mean absolute difference: 0.0001734746"
-
-$`Various Pr-32-values`
-[1] "Mean absolute difference: 0.2289327"
-
-$`Various Pr-32-samples`
-[1] "Mean absolute difference: 0.2289327"
-
-$`Various Pr-33-values`
-[1] "Mean absolute difference: 0.002549443"
-
-$`Various Pr-33-samples`
-[1] "Mean absolute difference: 0.008577338"
-
-$`Various Pr-34-values`
-[1] "Mean absolute difference: 0.0001994796"
-
-$`Various Pr-34-samples`
-[1] "Mean absolute difference: 0.005598713"
-
-$`Various Pr-36-values`
-[1] "Mean absolute difference: 0.0003122812"
-
-$`Various Pr-36-samples`
-[1] "Mean absolute difference: 0.0004418067"
-
-$`Various Pr-37-values`
-[1] "Mean absolute difference: 0.0005151309"
-
-$`Various Pr-37-samples`
-[1] "Mean absolute difference: 0.009956216"
-
-$`Various Pr-40-values`
-[1] "Mean absolute difference: 1.639952e-06"
-
-$`Various Pr-40-samples`
-[1] "Mean absolute difference: 2.348533e-06"
-
-$`Various Pr-42-values`
-[1] "Mean absolute difference: 0.001461058"
-
-$`Various Pr-42-samples`
-[1] "Mean absolute difference: 0.01845757"
-
-$`Various Pr-43-values`
-[1] "Mean absolute difference: 0.0001036414"
-
-$`Various Pr-43-samples`
-[1] "Mean absolute difference: 0.0006308625"
-
-$`Various Pr-44-values`
-[1] "Mean absolute difference: 2.032719e-07"
-
-$`Various Pr-44-samples`
-[1] "Mean absolute difference: 1.400412e-06"
-
-$`Various Pr-45-values`
-[1] "Mean absolute difference: 0.0003687462"
-
-$`Various Pr-45-samples`
-[1] "Mean absolute difference: 0.002754128"
-
-$`Various Pr-46-values`
-[1] "Mean absolute difference: 6.155598e-06"
-
-$`Various Pr-46-samples`
-[1] "Mean absolute difference: 1.342729e-05"
-
-$`Various Pr-49-values`
-[1] "Mean absolute difference: 0.01236277"
-
-$`Various Pr-49-samples`
-[1] "Mean absolute difference: 0.01377679"
-
-Quick learn autocluster 261112T214613
 [1] FALSE
-Quick learn existing cluster 261112T214633
-[1] FALSE
+Simple MIs 261112T224201
+[1] TRUE
+Quick learn autocluster 261112T224504
+$`Quick learn autocluster`
+[1] TRUE
+
+Quick learn existing cluster 261112T224525
+$`Quick learn existing cluster`
+[1] TRUE
+
 All test passed: FALSE
-Done 261112T214655
+Done 261112T224546
