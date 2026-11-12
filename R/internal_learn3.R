@@ -1,0 +1,3565 @@
+#' Monte Carlo computation of posterior probability distribution, alternative 3
+#'
+#' @description
+#' Compute the posterior joint probability distribution of the variates conditional on the given data, by means of Markov-chain Monte Carlo, using the package **Nimble**.
+#'
+#' This internal version does not use log-probabilities
+#'
+#' @param data A dataset, given as a [base::data.frame()] or as a file path to a CSV file. If missing or `NULL`, then the prior probability distribution is calculated.
+#' @param metadata [metadata] about the dataset's variates, given either as a [data frame][base::data.frame()] or as a file path to a CSV file.
+#' @param auxdata An *additional*, larger dataset, given as a data frame or as a file path to a CSV file. Such a dataset would be too large to use in the Monte Carlo sampling, but is used to help estimate some hyperparameters. Note that the `auxdata` and `data` datasets should *not* have datapoints in common.
+#' @param outputdir `NULL` (default) or `NA` or character: path to folder where output information and diagnostics should be saved. If `NULL`, a directory is created in the temporary-directory space given by [base::tempdir()]. If `NA`, a directory is created in the current working directory given by [base::getwd()]. If character, this is taken to be the output directory; it should of course be writable by the user.
+#' @param valueisK Logical or `NULL`: should the `VALUE` returned be the `K`nowledge object containing the results from the Monte Carlo computation? Default `TRUE`. If `FALSE`, then `VALUE` is the output directory name. If `NULL`, then `VALUE` is `NULL`.
+#' @param nsamples Integer, default 3600: number of desired, *approximately independent* Monte Carlo samples. If this argument is changed, the user is also required to explicitly give either `nchains` or `nsamplesperchain`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
+#' @param nchains Integer, default 8: number of Monte Carlo chains. If this argument is changed, the user is also required to explicitly give either `nsamples` or `nsamplesperchain`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
+#' @param nsamplesperchain Integer, default 450: number of *approximately independent* Monte Carlo samples per chain. If this argument is changed, the user is also required to explicitly give either `nsamples` or `nchains`, but not both; the remaining third argument is determined from \eqn{\mathrm{nsamples} = \mathrm{nchains} \times \mathrm{nsamplesperchain}}.
+#' @param parallel One of the following values:
+#' - A "cluster" object previously created with [parallel::makeCluster()].
+#' - Positive integer: create a parallel cluster with this number of nodes (it will be stopped at the end).
+#' - `FALSE`: do not use clusters (one node is still generated, in order to eliminate temporary objects from the computation).
+#' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "cl.cores"; if this option is unset, then use 2 nodes.
+#' @param seed Integer or `NULL` (default): use this seed for the random number generator. If `NULL`, do not set the seed.
+#' @param cleanup Logical, default `TRUE`: remove diagnostic files at the end of the computation?
+#' @param appendinfo Logical, default `TRUE`: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory `outputdir`? The appended string has the format 'Vn_Dn_Sn_YYMMDDTHHMMSS'.
+#' @param subsampledata Integer or `NULL` (default): if integer, use only that many datapoints from the original dataset in the `data` argument.
+#' @param prior Logical: Calculate the prior distribution? Default is `FALSE` unless `data` argument is missing or `NULL`.
+#' @param startupMCiterations Integer, default 3600: number of initial Monte Carlo iterations.
+#' @param minMCiterations Integer, default 0: minimum number of Monte Carlo iterations to be doneby a chain.
+#' @param maxMCiterations Integer, default `Inf`: Do at most this many Monte Carlo iterations per chain.
+#' @param maxhours Numeric, default `Inf`: approximate time limit, in hours, for the Monte Carlo computation to last.
+#' @param ncheckpoints Integer or `NULL`, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If `NULL`, this is equal to number of variates + 2. If Inf, use all datapoints.
+#' @param maxrelMCSE Numeric positive, default `+Inf`: desired maximal *relative Monte Carlo Standard Error* of calculated probabilities. The default `+Inf` means that `minESS` is used instead. `maxrelMCSE` is related to `minESS` by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}}.
+#' @param minESS Numeric positive or `NULL`, default 450: desired minimal Monte Carlo *Expected Sample Size*. If `NULL`, it is equal to the final `nsamplesperchain`. `minESS` is related to `maxrelMCSE` by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}}.
+#' @param initES Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.
+#' @param thinning Integer or `NULL` (default): thin out the Monte Carlo samples by this value. If `NULL`: let the diagnostics decide the thinning value.
+#' @param verbose Logical, default `TRUE`: output the progress also to terminal? If `FALSE`, the progress is outputted only to the file `'main.out'` in the `outputdir` directory.
+#' @param plottraces Logical, default `TRUE`: save plots of the Monte Carlo traces of diagnostic values?
+#' @param showKtraces Logical, default `FALSE`: save plots of the Monte Carlo traces of the K parameter?
+#' @param showAlphatraces Logical, default `FALSE`: save plots of the Monte Carlo traces of the Alpha parameter?
+#' @param hyperparams List: hyperparameters of the hyperprior; see values in "Usage".
+#'
+#' @details
+#' To use this function, the package [**Nimble**](https://cran.r-project.org/package=nimble) needs to be installed.
+#'
+#' This function takes as main inputs a set of data and metadata, and computes the full joint probability distribution for new data, including its "revisability". From this full joint distribution any other distributions of interest can subsequently be computed; see [Pr()] and related functions. This computation can also be interpreted as an estimation of the full joint frequency distribution of the variates in the *whole population*, beyond the sample data, together with its uncertainty. The computation allows for the use of datapoints with partially missing variables: imputation is automatically made. This imputation is *principled*, made according to the rules of probability theory.
+#'
+#' The output is a "prova_K" (knowledge) object, typically saved in a `K.rds` file, which is used in all subsequent probabilistic computations. Other information about the computation is provided in logs and plots, saved in a directory specified by the user.
+#'
+#' See `vignette('intro')` for introductory examples.
+#'
+#' The computation is "non-parametric": probability or frequency distributions are not assumed to be Gaussian or of any other specific shape; no "model" is assumed. The mathematical representation of the space of joint frequency distributions follows ideas of Dunson & Bhattacharya (2011); see [technical manual](https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf) for details.
+#'
+#' The computation is done via Markov-chain Monte Carlo, using the package **Nimble**. "Convergence" of the Monte Carlo computation is automatically assessed with methods described in Vehtari & al. (2021) and Kwon & al. (2025); see [technical manual](https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf) for details. The default values for convergence require that all of the following three conditions be fulilled:
+#'
+#' - The computation's numerical error (Monte-Carlo Standard Error) for the posterior probability must be smaller than 4.7% of the standard deviation of the posterior's variability.
+#'  - The computation's numerical error for the 0.055- and 0.945-percentiles of the posterior's variability should be smaller than 4.7% of the distance between them.
+#'
+#' Typically this requirement leads to final results obtained with the [Pr()] function having at least two significant digits.
+#'
+#' The `learn()` function can take hours or even days to perform its computations, depending on the size of the dataset, number of variates, and the (initially unknown) "shape" of the underlying probability distribution. For this reason it is typically called within an R script, executed via [utils::Rscript]. For example, a script 'myscript.R' could have the following structure:
+#'
+#' ```
+#' library('prova')
+#'
+#' learn(
+#'   data = 'filename_with_data.csv', # CSV file containing the dataset
+#'   metadata = 'filename_with_metadata.csv', # CSV file containing the metadata
+#'   outputdir = 'some_directory', # path to output directory
+#'   parallel = 8 # let's say machine has more than 8 cores, so we use 8
+#'   ## possibly other arguments to learn()
+#' )
+#' ```
+#'
+#' and then be called on a bash terminal with
+#'
+#' ```
+#' $ Rscript myscript.R > learnoutput.out 2>&1 &
+#' ```
+#'
+#' with such a call, the file 'learnoutput.out' will contain information about how the computation is proceeding and the estimated end time.
+#'
+#' @returns A "prova_K" (knowledge) object, or name of directory containing such an object and other output files, or `NULL`, depending on argument `valueisK`.
+#'
+#' `learn()` saves several files in a directory. By default this output directory is a temporary directory within the one used by [base::tempdir()], but an alternative one can be chosen with the argument `outputdir = `. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
+#'
+#' - `MCtraces.pdf`: shows several trace plots of the Monte Carlo sampling; the corresponding data are in the file `MCtraces.rds`.
+#' - `plotsamples_learn.pdf`, `plotquantiles_learn.pdf`: show the marginal posterior distributions of each individual variate, together with their "revisability" (as samples or quantiles).
+#' - `log-1.out`, `log-2.out`, ... one for each parallel node; report the progress of each parallel Monte Carlo computation and notes about it.
+#' - `rng_seed.rds`: the state of the pseudorandom seed (see [base::Random]) when `learn()` was called.
+#' - `metadata.csv`: a copy of the metadata.
+#'
+#' It is recommended that you give an explicit argument `outputdir = ` and save the directory with the files above for future reference. In particular, the `MCtraces.pdf` plot and `MCtraces.rds` data can be useful to report Monte Carlo convergence in any work of yours that used **Prova**.
+#'
+#' During operation, computation progress and estimated end times for each node's computation are outputted to the file `'main.out'` in the output directory, and also to the console if argument `verbose` is `TRUE`. Note that the estimated end times are very approximate and often quite conservative.
+#'
+#' @references
+#'
+#' For the mathematical representation of the frequency space:
+#'
+#' - Dunson, Bhattacharya (2011): *Nonparametric Bayes regression and classification through mixtures of product kernels* <doi:10.1093/acprof:oso/9780199694587.003.0005>.
+#' - Ishwaran, Zarepour (2002): *Exact and approximate sum representations for the Dirichlet process* <doi:10.2307/3315951>.
+#' - Porta Mana <https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf>.
+#'
+#' About Bayesian inference under exchangeability ("population inference"):
+#'
+#' - Lindley, Novick (1981): *The role of exchangeability in inference*, <doi:10.1214/aos/1176345331>.
+#' - Bernardo, Smith (2000): *Bayesian Theory*, Wiley <doi:10.1002/9780470316870>.
+#' - Fortini, Petrone (2024): *Prediction-based uncertainty quantification for exchangeable sequences*, <doi:10.1098/rsta.2022.0142>.
+#' - Porta Mana <https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf>.
+#'
+#' About nonparametrics:
+#'
+#' - Müller et al. (2015): *Nonparametric Bayesian inference*, IMS <doi:10.1007/978-3-319-18968-0>.
+#' - Hjort et al. (2010): *Bayesian Nonparametrics*, Cambridge University Press <doi:10.1017/CBO9780511802478>.
+#'
+#' About Markov-chain Monte Carlo and "convergence":
+#'
+#' - de Valpine, Paciorek, Turek, & al. (2026): *NIMBLE: MCMC, Particle Filtering, and Programmable Hierarchical Modeling*, <doi:10.5281/zenodo.1211190>, <https://cran.r-project.org/package=nimble>.
+#' - Kwon & al. (2025): *MCMC stopping rules in latent variable modelling*, <doi:10.1111/bmsp.12357>.
+#' - Vehtari & al. (2021): *Rank-normalization, folding, and localization: an improved R-hat for assessing convergence of MCMC*, <doi:10.1214/20-BA1221>.
+#' - Roy (2020): *Convergence diagnostics for Markov chain Monte Carlo*, <doi:10.1146/annurev-statistics-031219-041300>.
+#' - Gilks & al. (1998): *Markov Chain Monte Carlo in Practice*, Chapman & Hall/CRC <doi:10.1201/b14835>.
+#' - D. J. C. MacKay (2005): *Information Theory, Inference, and Learning Algorithms*, Cambridge University Press <https://www.inference.org.uk/itila/book.html>.
+#' - Porta Mana <https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf>.
+#'
+#'
+#' @seealso
+#' [metadatatemplate()] to help writing metadata files.
+#'
+#' [Pr()] to calculate probabilities, and [qPr()] to calculate quantiles, given the data processed by `learn()`.
+#'
+#' [rPr()] to generate datapoints similar to the data processed by `learn()`.
+#'
+#' [mutualinfo()] to calculate mutual information given the data processed by `learn()`.
+#'
+#' [pread.csv()] and [pwrite.csv()] to read and write CSV files in the format used by `learn()`.
+#'
+#' @examples
+#' \donttest{
+#' ### WARNING: the following example, if run, might even take a minute or more.
+#'
+#' ## Create dataset with 3 points of variate 'V' for demonstration:
+#' dataset <- data.frame(V = rnorm(n = 3))
+#'
+#' ## Create metadata file:
+#' metadata <- data.frame(name = 'V', type = 'continuous')
+#'
+#' ## Learn from the data:
+#' K <- learn(
+#'   data = dataset, metadata = metadata,
+#'       ## the following parameters are unrealistic
+#'       ## only used to reduce computation time for this example
+#'   nsamples = 10, nchains = 1,
+#'   startupMCiterations = 10, maxMCiterations = 10,
+#'   minESS = 0, initES = 0
+#' )
+#'
+#' ## Check structure of `K` object:
+#' str(K)
+#' }
+#'
+#' @import grDevices
+#' @import graphics
+#' @import parallel
+#' @import stats
+#' @import utils
+#'
+#' @keywords internal
+.learn3 <- function(
+    data,
+    metadata,
+    auxdata = NULL,
+    outputdir = NULL,
+    nsamples = 3600,
+    nchains = 8,
+    nsamplesperchain = 450,
+    parallel = TRUE,
+    seed = NULL,
+    cleanup = TRUE,
+    appendinfo = TRUE,
+    valueisK = TRUE,
+    subsampledata = NULL,
+    prior = missing(data) || is.null(data),
+    startupMCiterations = 3600,
+    minMCiterations = 0,
+    maxMCiterations = +Inf,
+    maxhours = +Inf,
+    ncheckpoints = 12,
+    maxrelMCSE = +Inf,
+    minESS = 450,
+    initES = 8,
+    thinning = NULL,
+    verbose = TRUE,
+    plottraces = !cleanup,
+    showKtraces = FALSE,
+    showAlphatraces = FALSE,
+    hyperparams = list(
+        ncomponents = 64,
+        minalpha = -4,
+        maxalpha = 4,
+        byalpha = 1,
+        Rshapelo = 0.5,
+        Rshapehi = 0.5,
+        Rvarm1 = 3^2,
+        Cshapelo = 0.5,
+        Cshapehi = 0.5,
+        Cvarm1 = 3^2,
+        Dshapelo = 0.5,
+        Dshapehi = 0.5,
+        Dvarm1 = 3^2,
+        Bshapelo = 1,
+        Bshapehi = 1,
+        Dthreshold = 1,
+        tscalefactor = 4.266,
+        Oprior = 'Hadamard',
+        Nprior = 'Hadamard',
+        avoidzeroW = NULL, # NULL: Turek's, TRUE: eps non-conj., FALSE: conj.
+        initmethod = 'datacentre',
+        Qerror = pnorm(c(-1, 1))
+        ## Qerror = c(0.055, 0.945) # pnorm(c(-1, 1))
+    )
+) {
+    ## Collect preliminary messages that will be printed to
+    ## the main log file in 'outputdir' (and to terminal if verbose = TRUE)
+    ## They cannot yet be printed because the 'outputdir' name
+    ## may depend on the output of the messages themselves
+    predirmsgs <- list(paste0('Prova v', packageVersion('prova'), '.'))
+
+
+    ## Handles R CMD check:
+    ## these are variables or functions handled in a special way by Nimble
+    ## but R CMD check erroneously sees them as "rogue"
+    if(FALSE){
+        Dthreshold <- tscalefactor <- minalpha <- maxalpha <- byalpha <- ncomponents <- Rvarm1 <- Rshapelo <- Rshapehi <- Cvarm1 <- Cshapelo <- Cshapehi <- Dvarm1 <- Dshapelo <- Dshapehi <- Oprior <- Nprior <- Bshapelo <- Bshapehi <- avoidzeroW <- initmethod <- Qerror <- NULL
+    }
+
+##################################################
+#### Various internal parameters
+##################################################
+
+#### Hyperparameters and other internal parameters
+    hyperparamsDefaults <- list(
+        ncomponents = 64,
+        minalpha = -4,
+        maxalpha = 4,
+        byalpha = 1,
+        Rshapelo = 0.5,
+        Rshapehi = 0.5,
+        Rvarm1 = 3^2,
+        Cshapelo = 0.5,
+        Cshapehi = 0.5,
+        Cvarm1 = 3^2,
+        Dshapelo = 0.5,
+        Dshapehi = 0.5,
+        Dvarm1 = 3^2,
+        Bshapelo = 1,
+        Bshapehi = 1,
+        Dthreshold = 1,
+        tscalefactor = 4.266,
+        Oprior = 'Hadamard',
+        Nprior = 'Hadamard',
+        avoidzeroW = NULL,
+        initmethod = 'datacentre',
+        Qerror = pnorm(c(-1, 1))
+        ## Qerror = c(0.055, 0.945) # pnorm(c(-1, 1))
+    )
+
+    ## Reference credibility-interval width
+    ## maybe in future versions there will be arguments
+    ## for these parameters
+    Qlo <- 0.055 # (100 - 89) / 200 # 0.055
+    Qhi <- 0.945 # (100 + 89) / 200 # 0.945
+
+    ## Allow user to specify hyperparameters only partially:
+    ## missing ones are given default values above
+    ## Check for unknown names first
+    if(length(
+        setdiff(names(hyperparams), names(hyperparamsDefaults))
+    ) > 0){
+        stop('Unknown hyperparameters:',
+            setdiff(names(hyperparams), names(hyperparamsDefaults))
+        )
+    }
+
+    for(aname in names(hyperparamsDefaults)){
+        if(is.null(hyperparams[[aname]])){
+            hyperparams[[aname]] <- hyperparamsDefaults[[aname]]
+        }
+        assign(aname, hyperparams[[aname]])
+    }
+
+#### Other options
+    Alphatoslice <- FALSE # FALSE typically leads to underflow
+    Ktoslice <- FALSE # FALSE typically leads to underflow
+    RWtoslice <- FALSE
+    changeSamplerOrder <- TRUE
+    ##
+    showsamples <- 100 # number of samples to show.
+    plotDisplayedQuantiles <- c(5.5, 94.5)/100 # c(1, 31) / 32 # quantiles to show
+    ncomponentsamples <- 128 # number of samples of Alpha and K
+    showsamplertimes <- FALSE ##
+    family <- 'Palatino' # font family in plots
+
+
+#### Start timer
+    timestart0 <- Sys.time()
+
+    ## Set the RNG seed if given by user, or if no seed already exists
+    if (!is.null(seed) || !exists('.Random.seed')) {
+        set.seed(seed)
+    }
+    currentseed <- .Random.seed
+
+##################################################
+#### Argument-consistency checks
+##################################################
+
+#### Consistency checks for numbers of samples, chains, nodes
+    ## The defaults are 3600 samples from 8 chains, 450 samples per chain
+    ## The user can choose any two
+    ## nsamples = nchains * nsamplesperchain
+
+    if(!missing(nchains) && !missing(nsamplesperchain) &&
+           missing(nsamples)){
+        ## given: nchains, nsamplesperchain
+        nsamples <- nchains * nsamplesperchain
+    } else if (missing(nchains) && !missing(nsamplesperchain) &&
+                   !missing(nsamples)){
+        ## given: nsamples, nsamplesperchain
+        nchains <- ceiling(nsamples / nsamplesperchain)
+        if(nsamples != nchains * nsamplesperchain){
+            nsamples <- nchains * nsamplesperchain
+            predirmsgs <- c(predirmsgs, list(
+                paste0('Increasing number of samples to ', nsamples,
+                    ' to comply with given "nsamplesperchain".')
+            ))
+        }
+    } else if (!missing(nchains) && missing(nsamplesperchain) &&
+                   !missing(nsamples)){
+        ## given: nsamples, nchains
+        nsamplesperchain <- ceiling(nsamples / nchains)
+        if(nsamples != nchains * nsamplesperchain){
+            nsamples <- nchains * nsamplesperchain
+            predirmsgs <- c(predirmsgs, list(
+                paste0('Increasing number of samples to ', nsamples,
+                    ' to comply with given "nchains".')
+            ))
+        }
+    } else if (!(missing(nchains) && missing(nsamplesperchain) &&
+                     missing(nsamples))){
+        stop('Please specify exactly two among "nsamples", "nchains", "nsamplesperchain"')
+    }
+
+
+#### Requested parallel processing
+
+    ## Parallellisation is done in any case,
+    ## so that objects from the Monte Carlo simulation are not left in memory.
+
+    ## Number of nodes is reduced if larger than 'nchains':
+    ## doesn't make sense to have more nodes than chains
+    closeexit <- FALSE
+    if (inherits(parallel, "cluster")){
+        ## user provides a cluster object
+        ## use only as many nodes as necessary
+        cl0 <- parallel # this will be used in plotFsamples
+        ncores <- min(nchains, length(cl0))
+        cl <- cl0[seq_len(ncores)]
+    } else if (isTRUE(parallel)) {
+        ## user wants us to check for or register a parallel backend
+        ## and to choose number of nodes
+        cl0 <- parallel::getDefaultCluster()
+        if(is.null(cl0)){
+            ncores <- min(nchains, getOption('cl.cores', 2))
+            cl0 <- cl <- parallel::makeCluster(ncores)
+            closeexit <- TRUE
+            predirmsgs <- c(predirmsgs, list(
+                paste0('Registered ', capture.output(print(cl)), '.')
+            ))
+        } else {
+            ncores <- min(nchains, length(cl0))
+            cl <- cl0[seq_len(ncores)]
+        }
+    } else if (isFALSE(parallel)) {
+        ## user wants us not to use parallel cores
+        ncores <- 1
+        cl0 <- cl <- parallel::makeCluster(ncores)
+        closeexit <- TRUE
+    } else if (is.numeric(parallel) &&
+                   is.finite(parallel) && parallel >= 1) {
+        ## user wants us to register 'parallel' number of nodes
+        ncores <- min(nchains, parallel)
+        cl0 <- cl <- parallel::makeCluster(ncores)
+        closeexit <- TRUE
+        predirmsgs <- c(predirmsgs, list(
+            paste0('Registered ', capture.output(print(cl)), '.')
+        ))
+    } else {
+        stop("Unknown value of argument 'parallel'.")
+    }
+
+    ## Close parallel connections if any were opened
+    if(closeexit) {
+        closecoresonexit <- function(){
+            parallel::stopCluster(cl)
+            gc(full = TRUE)
+            ## parallel::setDefaultCluster(NULL)
+        }
+        on.exit(closecoresonexit())
+    }
+
+    minchainspercore <- nchains %/% ncores
+    coreswithextrachain <- nchains %% ncores
+
+    if (is.numeric(thinning) && thinning > 0) {
+        thinning <- ceiling(thinning)
+    } else if (!is.null(thinning)) {
+        stop('Invalid "thinning" argument.')
+    }
+
+    ## Make sure 'startupMCiterations' is at least equal to 2
+    startupMCiterations <- max(2, startupMCiterations)
+
+    ## maxrelMCSE and minESS
+    maxrelMCSE <- min(maxrelMCSE, 1 / sqrt(minESS + initES))
+    minESS <- (1 / maxrelMCSE)^2 - initES
+
+    if(all(!is.finite(c(maxrelMCSE, maxMCiterations)))) {
+        stop('Impossible stopping rule')
+    }
+
+##################################################
+#### Read and process data and metadata
+##################################################
+
+
+#### Read metadata
+    ## Check whether argument 'metadata' is a string for a file name
+    ## otherwise we assume it's a data.frame or similar object
+    if (is.character(metadata) && file.exists(metadata)) {
+        metadata <- read.csv(metadata,
+            na.strings = '', stringsAsFactors = FALSE,
+            colClasses=c(
+                name = 'character',
+                type = 'character',
+                domainmin = 'numeric',
+                domainmax = 'numeric',
+                datastep = 'numeric',
+                minincluded = 'character',
+                maxincluded = 'character'
+            ))
+    }
+
+    if(!is.data.frame(metadata)){ metadata <- as.data.frame(metadata) }
+
+    ## eliminate possible empty V-columns
+    for(i in intersect(paste0('V', 11:3), colnames(metadata))){
+        if(all(is.na(metadata[, i]))){
+            metadata <- metadata[, -which(colnames(metadata) == i), drop=FALSE]
+        }
+    }
+
+#### Dataset
+    ## Check if 'data' is given
+    if(!(missing(data) || is.null(data))) {
+        ## Check if 'data' argument is an existing file
+        ## otherwise we assume it is an object
+        datafile <- NULL
+        if (is.character(data)) {
+            ## add '.csv' if missing
+            datafile <- paste0(sub('.csv$', '', data), '.csv')
+            if (file.exists(datafile)) {
+                data <- read.csv(datafile,
+                    na.strings = '', stringsAsFactors = FALSE, tryLogical = FALSE)
+            } else {
+                stop('Cannot find data file')
+            }
+        }
+
+        if(!is.data.frame(data)){ data <- as.data.frame(data) }
+        rownames(data) <- NULL
+
+        ## convert factors to strings if necessary
+        if(any(sapply(data, is.factor))){
+            ## message('Converting factors to characters.')
+            . <- sapply(data, is.factor)
+            data[, .] <- lapply(data[, ., drop = FALSE], as.character)
+        }
+
+        ## Consistency checks for data
+        ## They should be moved to an external function
+
+        ## Are data missing variates?
+        if (!all(metadata[['name']] %in% colnames(data))) {
+            stop('Missing variates in data. Check data- and metadata-files.')
+        }
+
+        ## Drop variates in data that are not in the metadata file
+        if (!all(colnames(data) %in% metadata[['name']])) {
+            predirmsgs <- c(predirmsgs, list(
+                'Data have additional variates. Dropping them.'
+            ))
+            subvar <- intersect(colnames(data), metadata[['name']])
+            data <- data[, subvar, drop = FALSE]
+            rm(subvar)
+        }
+
+        ## Remove empty datapoints
+        tokeep <- which(apply(data, 1, function(xx) { !all(is.na(xx)) }))
+        if(length(tokeep) == 0 && !prior) {
+            stop('Data are given but empty')
+        } else if(length(tokeep) < nrow(data)) {
+            message('Warning: data contain empty datapoints. Dropping them.')
+            data <- data[tokeep, , drop = FALSE]
+        }
+        rm(tokeep)
+
+        ## Check if the user wants to use a subset of the dataset
+        if (is.numeric(subsampledata)) {
+            ## @@TODO: find faster and memory-saving subsetting
+            predirmsgs <- c(predirmsgs, list(
+                'Subsampling data, as requested.'
+            ))
+            data <- data[sample.int(n = nrow(data),
+                size = min(subsampledata, nrow(data)),
+                replace = FALSE), ]
+        }
+
+        npoints <- nrow(data)
+
+    } else {
+        ## data not given: we assume user wants prior calculation
+        predirmsgs <- c(predirmsgs, list('Missing data'))
+        prior <- TRUE
+        npoints <- 0
+    }
+
+#### Auxiliary dataset
+    ## used to extract information about hyperparameters
+    ## Check if 'auxdata' is given
+    if(!(missing(auxdata) || is.null(auxdata))) {
+        ## Check if 'auxdata' argument is an existing file
+        ## otherwise we assume it is an object
+        auxdatafile <- NULL
+        if (is.character(auxdata)) {
+            ## add '.csv' if missing
+            auxdatafile <- paste0(sub('.csv$', '', auxdata), '.csv')
+            if (file.exists(auxdata)) {
+                auxdata <- read.csv(auxdatafile,
+                    na.strings = '', stringsAsFactors = FALSE, tryLogical = FALSE)
+            } else {
+                stop('Cannot find auxdata file')
+            }
+        }
+
+        if(!is.data.frame(auxdata)){auxdata <- as.data.frame(auxdata)}
+
+        ## Consistency checks for auxdata
+        ## They should be moved to an external function
+
+        ## Are auxdata missing variates?
+        if (!all(metadata[['name']] %in% colnames(auxdata))) {
+            stop('Missing variates in auxdata. Check auxdata- and metadata-files.')
+        }
+
+        ## Drop variates in auxdata that are not in the metadata file
+        if (!all(colnames(auxdata) %in% metadata[['name']])) {
+            predirmsgs <- c(predirmsgs, list(
+                '"auxdata" have additional variates. Dropping them.'
+            ))
+            subvar <- intersect(colnames(auxdata), metadata[['name']])
+            auxdata <- auxdata[, subvar, drop = FALSE]
+            rm(subvar)
+        }
+
+        ## Remove empty datapoints
+        tokeep <- which(apply(auxdata, 1, function(xx) { !all(is.na(xx)) }))
+        if(length(tokeep) == 0 && !prior) {
+            stop("'auxdata' is given but empty")
+        } else if(length(tokeep) < nrow(auxdata)) {
+            predirmsgs <- c(predirmsgs, list(
+                "'auxdata' contain empty datapoints. Dropping them."
+            ))
+            auxdata <- auxdata[tokeep, , drop = FALSE]
+        }
+        rm(tokeep)
+
+    } else {
+        ## auxdata not given
+        auxdata <- NULL
+    }
+
+    ## Build auxiliary metadata object; we'll save it later
+    ## message('Calculating auxiliary metadata.')
+    auxmetadata <- .buildauxmetadata(
+        data = if(is.null(auxdata)){data}else{rbind(data, auxdata)},
+        metadata = metadata,
+        Dthreshold = Dthreshold,
+        tscalefactor = tscalefactor
+    )
+    ## print(auxmetadata) # for debugging
+
+    predirmsgs <- c(predirmsgs, list(
+        paste0('Learning from ', npoints, ' datapoints, ',
+            nrow(auxmetadata), ' variates.')
+    ))
+
+#### Output-folder setup
+    suffix <- paste0(
+        'V', nrow(auxmetadata),
+        '_D',
+        (if (npoints == 1 && all(is.na(data))) {
+            0
+        } else {
+            npoints
+        }),
+        ## '-K', ncomponents, # unimportant for user
+        '_S', nsamples,
+        '_', format(Sys.time(), '%y%m%dT%H%M%S')
+    )
+    if(is.null(outputdir)){
+        if(!isTRUE(valueisK)) {
+            warning('With the chosen "outputdir" and "valueisK" arguments, results are not saved to a persistent directory and not outputted; they will likely be lost.')
+        }
+        ## Use a temporary output directory
+        dirname <- tempfile(pattern = paste0('prova-', suffix, '_'))
+    } else if (is.na(outputdir)) {
+        ## Create unique output directory within current directory
+        dirname <- tempfile(pattern = paste0('prova-', suffix, '_'),
+            tmpdir = getwd())
+    } else if (is.character(outputdir)) {
+        ## Create directory specified by user
+        dirname <- outputdir
+        if (appendinfo){ dirname <- paste0(dirname, '-', suffix) }
+    } else {
+        stop('Invalid "outputdir" argument')
+    }
+    dir.create(dirname)
+
+    ## This is in case we need to add some extra specifier to the  files
+    ## all 'dashnameroot' can be deleted in a final version
+    dashnameroot <- NULL
+
+    ## Create main log file in output directory
+    ## also keep printing to terminal if verbose = TRUE
+    mainlog <- file.path(dirname, 'main.out')
+    maincon0 <- file(mainlog, open = 'w')
+    closecons0 <- function(){
+        ## Close output to main log file
+        ## wrap in try() in case errors happen during parallel processing,
+        ## during which the connection is closed
+        try(flush(maincon0), silent = TRUE)
+        try(close(maincon0), silent = TRUE)
+    }
+    on.exit(closecons0(), add = TRUE)
+
+    if(verbose){
+        print2user <- function(...){
+            ## print to console
+            message(...)
+            ## print to main log file
+            writeLines(text = paste0(...), con = maincon0, sep = '\n')
+            flush(maincon0)
+        }
+    }else{
+        print2user <- function(...){
+            ## print only to main log file
+            writeLines(text = paste0(...), con = maincon0, sep = '\n')
+            flush(maincon0)
+        }
+    }
+
+    ## Print information about output directory
+    print2user('\nSaving output in directory\n', dirname, '\n')
+
+    ## Print accumulated messages
+    for(msg in predirmsgs){print2user(msg)}
+
+    ## Save copy of metadata and auxmetadata in directory
+    write.csv(metadata, file = file.path(dirname, 'metadata.csv'),
+        row.names = FALSE, quote = FALSE, na = '')
+    saveRDS(auxmetadata,
+        file = file.path(dirname, paste0('___auxmetadata', dashnameroot, '.rds')))
+
+    ## Save initial RNG seed in case needed by user
+    saveRDS(currentseed,
+        file = file.path(dirname, paste0('rng_seed', dashnameroot, '.rds')))
+    parallel::clusterSetRNGStream(cl = cl, currentseed)
+#### number of checkpoints for Monte Carlo stopping rule
+    if(is.null(ncheckpoints)) {
+        ncheckpoints <- nrow(auxmetadata) + 1
+    }
+    ncheckpoints <- round(ncheckpoints)
+    if (ncheckpoints < 1) {
+        stop('"ncheckpoints" must be > 0')
+    }
+
+    ## if data is not empty, we use it to create data for likelihood
+    if(!is.null(data)) {
+        ## testdata is created and saved outside of the parallel processes
+        ## so that the dataset does not need to be exported to them
+        ## (using extra memory)
+        ## Each chain uses a different set of testdata
+        for(achain in 0:nchains) {
+            pointsid <- sort(sample.int(n = npoints,
+                size = min(ncheckpoints, npoints), replace = FALSE))
+            testdata <- .prepPcheckpoints(
+                x = data[pointsid, , drop = FALSE],
+                auxmetadata = auxmetadata,
+                pointsid = pointsid
+            )
+            saveRDS(testdata,
+                file = file.path(dirname, paste0('___testdata_', achain, '.rds')))
+        }
+        rm(testdata)
+        rm(pointsid)
+    }
+
+#### Check if user wants to calculate prior
+    if (prior) {
+        print2user('CALCULATING PRIOR DISTRIBUTION')
+        if(is.null(data)) {
+            ## no data available: construct one datapoint from the metadata info
+            testdata <- as.matrix(
+                as.data.frame(
+                    lapply(seq_len(nrow(auxmetadata)),
+                        function(ii){
+                            if(auxmetadata[ii, 'mcmctype'] %in%
+                                   c('R', 'C', 'D', 'L')) {
+                                rnorm(n = ncheckpoints, mean = 0, sd = 2)
+                            } else {
+                                sample.int(n = auxmetadata[ii, 'Nvalues'],
+                                    size = ncheckpoints,
+                                    replace = TRUE) +
+                                    auxmetadata[ii, 'indexpos']
+                            }
+                        }
+                    ),
+                    row.names = seq_len(ncheckpoints),
+                    col.names = auxmetadata$name)
+            )
+            ## ## original alternative way. Delete soon
+            ## testdata <- data.frame(1:3)[,-1]
+            ## for(xx in seq_len(nrow(auxmetadata))) {
+            ##   xx <- as.list(auxmetadata[xx, ])
+            ##   toadd <- unlist(xx[paste0('mctest', 1:3)])
+            ##   if (xx[['mcmctype']] %in% c('B', 'N', 'O')) {
+            ##     toadd <- unlist(xx[paste0('V', toadd)])
+            ##   }
+            ##   testdata <- cbind(testdata, toadd)
+            ## }
+            ## colnames(testdata) <- auxmetadata[['name']]
+            for(achain in 0:nchains) {
+                saveRDS(testdata,
+                    file = file.path(dirname, paste0('___testdata_', achain, '.rds')))
+            }
+            rm(testdata)
+        }
+        ## create empty dataset: Monte Carlo sampling is non-Markov
+        data <- as.data.frame(
+            matrix(NA, nrow = 1, ncol = nrow(metadata),
+                dimnames = list(NULL, metadata$name))
+        )
+    }
+
+    ## #### Select and save data for loglikelihood
+    ##   ## Find which datapoints have not all missing entries
+    ##   dataNoNa <- which(apply(data, 1, function(xx) { !all(is.na(xx)) }))
+    ##   ndataNoNa <- length(dataNoNa)
+    ##
+    ##   if (ndataNoNa > 0) {
+    ##     ## if "testdata" is moved into the for-loop,
+    ##     ## then each chain uses a different set of testdata
+    ##     for(achain in seq_len(nchains)) {
+    ##       testdata <- data[sort(sample(dataNoNa, min(ncheckpoints, ndataNoNa))),]
+    ##       saveRDS(testdata,
+    ##               file = file.path(dirname, paste0('___testdata_', achain, '.rds')))
+    ##     }
+    ##   } else {
+    ##       ## no data available: construct one datapoint from the metadata info
+    ##       testdata <- data.table(sapply(seq_len(nrow(auxmetadata)), function(xx) {
+    ##       # consider making this function separate
+    ##       xx <- auxmetadata[xx, ]
+    ##       toadd <- xx[, paste0('mctest', 1:3), with = FALSE]
+    ##       if (xx[['mcmctype']] %in% c('B', 'N', 'O)) {
+    ##         toadd <- xx[1, paste0('V', toadd), with = FALSE]
+    ##       }
+    ##       toadd
+    ##     }))
+    ##     colnames(testdata) <- auxmetadata[['name']]
+    ##     for(achain in seq_len(nchains)) {
+    ##       saveRDS(testdata,
+    ##           file = file.path(dirname, paste0('___testdata_', achain, '.rds')))
+    ##     }
+    ##     rm(testdata)
+    ##     }
+
+
+
+
+##################################################
+#### Define functions
+##################################################
+
+    ## Load auxiliary functions from external files
+    ## source('samplesFDistribution.R')
+    ## source('.plotFsamples.R')
+    ## source('tplotfunctions.R')
+    ## source('.vtransform.R')
+    ## ## These are used within the foreach core loop
+    ## source('proposeburnin.R')
+    ## source('proposethinning.R')
+    ## source('.mcsubset.R')
+
+
+
+#####################################################
+#### Prepare arguments for Nimble model
+#####################################################
+
+    ## R: continuous open domain
+    ## C: continuous closed domain (or censored)
+    ## D: continuous rounded
+    ## L: latent
+    ## O: ordinal
+    ## N: nominal
+    ## B: binary
+    ## number and names of variates of each type
+    vn <- vnames <- list(R=NULL, C=NULL, D=NULL, O=NULL, N=NULL, B=NULL)
+
+    for (atype in names(vn)) {
+        vnames[[atype]] <- auxmetadata[auxmetadata$mcmctype == atype, 'name']
+        vn[[atype]] <- length(vnames[[atype]])
+    }
+
+    ## ## REMOVE soon: previous version
+    ## vn <- list() # How many variates of each type
+    ## vnames <- list() # The names for variates of each type
+    ## for (atype in c('R', 'C', 'D', 'L', 'O', 'N', 'B')) {
+    ##   vnames[[atype]] <- auxmetadata[auxmetadata$mcmctype == atype, 'name']
+    ##   vn[[atype]] <- length(vnames[[atype]])
+    ## }
+
+#### CONSTANTS OF NIMBLE MODEL
+    ## These constants are available in the Nimble environment
+    ## They don't have to be accessed by constants$varname
+    ## vn$R + vn$C + vn$D + vn$L
+    nalpha <- length(seq(minalpha, maxalpha, by = byalpha))
+    probalpha0 <- (1:nalpha)^2.25
+    probalpha0 <- probalpha0/sum(probalpha0)
+    constants <- c(
+        list(
+            ncomponents = ncomponents,
+            npoints = npoints,
+            nalpha = nalpha,
+            alphabase = sqrt(2),
+            probalpha0 = probalpha0,
+            dirchalphas = rep((2^(minalpha - 0.5)) / ncomponents, ncomponents)
+        ),
+        if (vn$R > 0) { # continuous open domain
+            list(
+                Rn = vn$R,
+                Rmean1 = rep(0, 1),
+                Rvarm1 = rep(Rvarm1, 1),
+                Rvar1 = rep(1, 1),
+                Rshapelo = rep(Rshapelo, 1),
+                Rshapehi = rep(Rshapehi, 1)
+            )
+        },
+        if (vn$C > 0) { # continuous closed domain
+            list(
+                Cn = vn$C,
+                Cmean1 = rep(0, 1),
+                Cvarm1 = rep(Cvarm1, 1),
+                Cvar1 = rep(1, 1),
+                Cshapelo = rep(Cshapelo, 1),
+                Cshapehi = rep(Cshapehi, 1),
+                Cleft = as.matrix(.vtransform(data[, vnames$C, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Cout = 'left', logjacobianOr = NULL)),
+                Cright = as.matrix(.vtransform(data[, vnames$C, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Cout = 'right', logjacobianOr = NULL)),
+                Clatinit = as.matrix(.vtransform(data[, vnames$C, drop = FALSE],
+                    auxmetadata,
+                    Cout = 'init', logjacobianOr = NULL))
+            )
+            ## Cleft & Cright are as many as the datapoints
+            ## so we do not create copies outside of Nimble
+            ## to save RAM
+        },
+        if (vn$D > 0) { # continuous rounded
+            list(
+                Dn = vn$D,
+                Dmean1 = rep(0, 1),
+                Dvarm1 = rep(Dvarm1, 1),
+                Dvar1 = rep(1, 1),
+                Dshapelo = rep(Dshapelo, 1),
+                Dshapehi = rep(Dshapehi, 1),
+                Dleft = as.matrix(.vtransform(data[, vnames$D, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Dout = 'left', logjacobianOr = NULL)),
+                Dright = as.matrix(.vtransform(data[, vnames$D, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Dout = 'right', logjacobianOr = NULL)),
+                Dlatinit = as.matrix(.vtransform(data[, vnames$D, drop = FALSE],
+                    auxmetadata,
+                    Dout = 'init', logjacobianOr = NULL))
+            )
+        },
+        ## if (vn$L > 0) { # latent
+        ##     list(
+        ##         Ln = vn$L,
+        ##         Lmean1 = rep(0, 1),
+        ##         Lvarm1 = rep(Lvarm1, 1),
+        ##         Lvar1 = rep(1, 1),
+        ##         Lshapelo = rep(Lshapelo, 1),
+        ##         Lshapehi = rep(Lshapehi, 1),
+        ##         Lleft = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
+        ##             auxmetadata = auxmetadata,
+        ##             Lout = 'left')),
+        ##         Lright = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
+        ##             auxmetadata = auxmetadata,
+        ##             Lout = 'right')),
+        ##         Llatinit = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
+        ##             auxmetadata,
+        ##             Lout = 'init'))
+        ##     )
+        ## },
+        if (vn$O > 0) { # ordinal
+            Ocards <- auxmetadata[auxmetadata$name %in% vnames$O, 'Nvalues']
+            Omaxn <- sum(Ocards)
+            Oi <- auxmetadata[auxmetadata$name %in% vnames$O, 'indexpos'] + 1L
+            ## if(vn$O == 1){Oi <- c(Oi, NA_integer_)}
+            Of <- Oi + Ocards - 1L
+            ## ## we choose a flatter hyperprior for ordinal variates
+            ## we choose a Hadamard-like hyperprior for nominal variates
+            Oalpha0 <- if(Oprior == 'Hadamard') {
+                as.vector(unlist(sapply(Ocards, function(acard){
+                    rep(1 / acard, acard)
+                })))
+            } else {
+                as.vector(unlist(sapply(Ocards, function(acard){
+                    rep(1, acard)
+                })))
+            }
+            ##
+            list(
+                On = vn$O,
+                Ocards = Ocards,
+                Oi = Oi,
+                Of = Of,
+                Oalpha0 = Oalpha0
+            )
+        },
+        if (vn$N > 0) { # nominal
+            Ncards <- auxmetadata[auxmetadata$name %in% vnames$N, 'Nvalues']
+            Nmaxn <- sum(Ncards)
+            Ni <- auxmetadata[auxmetadata$name %in% vnames$N, 'indexpos'] + 1L
+            ## if(vn$N == 1){Ni <- c(Ni, NA_integer_)}
+            Nf <- Ni + Ncards - 1L
+            ## ## we choose a flatter hyperprior for ordinal variates
+            ## we choose a Hadamard-like hyperprior for nominal variates
+            Nalpha0 <- if(Nprior == 'Hadamard') {
+                as.vector(unlist(sapply(Ncards, function(acard){
+                    rep(1 / acard, acard)
+                })))
+            } else {
+                as.vector(unlist(sapply(Ncards, function(acard){
+                    rep(1, acard)
+                })))
+            }
+            ##
+            list(
+                Nn = vn$N,
+                Ncards = Ncards,
+                Ni = Ni,
+                Nf = Nf,
+                Nalpha0 = Nalpha0
+            )
+        },
+        if (vn$B > 0) { # binary
+            list(
+                Bn = vn$B,
+                Bshapelo = rep(Bshapelo, 1),
+                Bshapehi = rep(Bshapehi, 1)
+            )
+        },
+        if(isTRUE(avoidzeroW)){
+            list(epsd = .Machine$double.xmin)
+        }
+    ) # End constants
+
+    saveRDS(constants,
+        file = file.path(dirname, paste0('___constants', dashnameroot, '.rds')))
+
+#### DATAPOINTS
+    ## for each list element: rows: data; cols: variates of that element
+    datapoints <- c(
+        if (vn$R > 0) { # continuous open domain
+            list(
+                Rdata = as.matrix(.vtransform(data[, vnames$R, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Rout = 'normalized', logjacobianOr = NULL))
+            )
+        },
+        if (vn$C > 0) { # continuous closed domain
+            list(
+                Caux = as.matrix(.vtransform(data[, vnames$C, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Cout = 'aux', logjacobianOr = NULL)),
+                Clat = as.matrix(.vtransform(data[, vnames$C, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Cout = 'lat', logjacobianOr = NULL))
+            )
+        },
+        if (vn$D > 0) { # continuous rounded
+            list(
+                Daux = as.matrix(.vtransform(data[, vnames$D, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Dout = 'aux', logjacobianOr = NULL))
+            )
+        },
+        ## if (vn$L > 0) { # latent
+        ##     list(
+        ##         Laux = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
+        ##             auxmetadata = auxmetadata,
+        ##             Lout = 'aux'))
+        ##     )
+        ## },
+        if (vn$O > 0) { # nominal
+            list(
+                Odata = as.matrix(.vtransform(data[, vnames$O, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Oout = 'numeric', logjacobianOr = NULL))
+            )
+        },
+        if (vn$N > 0) { # nominal
+            list(
+                Ndata = as.matrix(.vtransform(data[, vnames$N, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Nout = 'numeric', logjacobianOr = NULL))
+            )
+        },
+        if (vn$B > 0) { # binary
+            list(
+                Bdata = as.matrix(.vtransform(data[, vnames$B, drop = FALSE],
+                    auxmetadata = auxmetadata,
+                    Bout = 'numeric', logjacobianOr = NULL))
+            )
+        }
+    ) # End datapoints
+
+    saveRDS(datapoints,
+        file = file.path(dirname, paste0('___datapoints', dashnameroot, '.rds')))
+
+#### Output information to user
+    print2user('Starting Monte Carlo sampling of ', nsamples, ' samples by ',
+        nchains, ' chains')
+
+    samplespacedims <- (vn$R * 2 + vn$C * 2 + vn$D * 2 + # means, vars
+                            (if(vn$O > 0){Omaxn - vn$O}else{0}) +
+                            (if(vn$N > 0){Nmaxn - vn$N}else{0}) +
+                            vn$B + # independent probs
+                            1) * ncomponents - 1 # component weights
+
+    samplespacexdims <- 1 + # Alpha
+        (vn$R + vn$C + vn$D) * ncomponents + # rates
+        npoints + # K
+        (vn$C + vn$D) * npoints * ncomponents + # latents
+        sum(is.na(data)) # missing data
+
+
+    print2user('in a space of ', samplespacedims, ' (effectively ',
+        samplespacedims + samplespacexdims, ') dimensions.')
+
+    print2user('Using ', ncores, ' nodes: ',
+        nsamplesperchain, ' samples per chain, max ',
+        minchainspercore + (coreswithextrachain > 0), ' chains per node.')
+    print2user('Requested:   ESS ', round(minESS),
+        '   rel.MCSE ', signif(maxrelMCSE, 3), '.')
+    print2user('Node logs are being saved in individual files.')
+
+    ## function  to format printing of time
+    printtimediff <- function(tim) {
+        paste0(signif(tim, 2), ' ', attr(tim, 'units'))
+    }
+
+    ## Close output to main log file
+    close(maincon0)
+
+#####################################################
+#### BEGINNING OF PARALLEL LOOP OVER CORES
+#####################################################
+    ## Parallel execution over cores
+    ## parallel:clusterExport(cl = cl,
+    ##     varlist = c(
+    ##         'dirname',
+    ##         'dashnameroot',
+    ##         'avoidzeroW',
+    ##         'constants',
+    ##         'initmethod'
+    ##     ),
+    ##     envir = .GlobalEnv)
+
+    chaininfo <- parallel::parLapply(
+        cl = cl,
+        X = 1:ncores,
+        fun = .workerfun,
+        ## arguments to .workerfun
+        dirname = dirname,
+        dashnameroot = dashnameroot,
+        avoidzeroW = avoidzeroW,
+        initmethod = initmethod,
+        constants = constants,
+        datapoints = datapoints,
+        vn = vn,
+        showAlphatraces = showAlphatraces,
+        Alphatoslice = Alphatoslice,
+        Ktoslice = Ktoslice,
+        RWtoslice = RWtoslice,
+        changeSamplerOrder = changeSamplerOrder,
+        minchainspercore = minchainspercore,
+        coreswithextrachain = coreswithextrachain,
+        nchains = nchains,
+        maxhours = maxhours,
+        timestart0 = timestart0,
+        showsamplertimes = showsamplertimes,
+        startupMCiterations = startupMCiterations,
+        maxMCiterations = maxMCiterations,
+        showKtraces = showKtraces,
+        ncomponents = ncomponents,
+        plottraces = plottraces,
+        Qlo = Qlo,
+        Qhi = Qhi,
+        Qerror = Qerror,
+        minESS = minESS,
+        initES = initES,
+        nsamplesperchain = nsamplesperchain,
+        minMCiterations = minMCiterations,
+        printtimediff = printtimediff,
+        family = family,
+        mainlog = mainlog,
+        verbose = verbose,
+        ncores = ncores,
+        ##
+        chunk.size = NULL
+    )
+    chaininfo <- do.call(what = rbind, args = chaininfo)
+
+    ## Resume output to main log file
+    maincon0 <- file(mainlog, open = 'a')
+
+############################################################
+#### END OF PARALLEL LOOP OVER CORES
+############################################################
+
+    maxusedcomponents <- max(chaininfo[, 'maxusedcomponents'])
+    maxiterations <- max(chaininfo[, 'maxiterations'])
+    nonfinitechains <- sum(chaininfo[, 'nonfinitechains'])
+    stoppedchains <- sum(chaininfo[, 'stoppedchains'])
+    headertime <- as.difftime(mean(chaininfo[, 'headertime']), units = 'secs')
+    MCtime <- as.difftime(sum(chaininfo[, 'MCtime'])/nchains, units = 'secs')
+    maxusedmem <- max(chaininfo[, 'usedmem'])
+    totusedmem <- sum(chaininfo[, 'usedmem'])
+############################################################
+#### End of all MCMC
+############################################################
+
+
+############################################################
+#### Join chains
+############################################################
+
+    headertimestart <- Sys.time()
+    ## Save random seeds used in the parallel processing
+    if (!is.null(attr(chaininfo, 'rng'))) { # parallel processing
+        saveRDS(attr(chaininfo, 'rng'),
+            file = file.path(dirname,
+                paste0('rng_parallelseeds', dashnameroot, '.rds')
+            ))
+    }
+
+    ## Function for reading & concatenating samples saved by each chain
+    joinmc <- function(mc1, mc2) {
+        if(is.null(mc1)){
+            mc2
+        }else{
+            mapply(
+                function(xx, yy) {
+                    temp <- c(xx, yy)
+                    dx <- dim(yy)[-length(dim(yy))]
+                    dim(temp) <- c(dx, length(temp) / prod(dx))
+                    temp
+                },
+                mc1, mc2,
+                SIMPLIFY = FALSE
+            )
+        }
+    }
+
+## mcsamples0 <- foreach(chainnumber = 1:nchains,
+##         .combine = joinmc, .multicombine = FALSE) %do% {
+##             padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'), chainnumber)
+##
+##             readRDS(file = file.path(dirname,
+##                 paste0('___mcsamples', dashnameroot, '--',
+##                     padchainnumber, '.rds')
+##             ))
+##         }
+
+    mcsamples <- NULL
+    for(chainnumber in seq_len(nchains)){
+        padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'),
+            chainnumber)
+        mcsamples <- joinmc(mcsamples,
+            readRDS(file = file.path(dirname,
+                paste0('___mcsamples', dashnameroot, '--',
+                    padchainnumber, '.rds')
+            ))
+        )
+    }
+
+    ## chainnumber <- 1
+    ## padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'), chainnumber)
+    ## mcsamples <- readRDS(file = file.path(dirname,
+    ##             paste0('___mcsamples', dashnameroot, '--',
+    ##                 padchainnumber, '.rds')
+    ## ))
+    ## if(nchains > 1){
+    ##     for(chainnumber in 2:nchains){
+    ##         padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'), chainnumber)
+    ##         mcsamples <- joinmc(mcsamples,
+    ##             readRDS(file = file.path(dirname,
+    ##             paste0('___mcsamples', dashnameroot, '--',
+    ##                 padchainnumber, '.rds')
+    ##             ))
+    ##         )
+    ##     }
+    ## }
+
+#### Save all final parameters together with some aux metadata in one file
+    K <- c(mcsamples, list(
+        auxmetadata = auxmetadata,
+        info = list(
+            metadata = metadata,
+            nMCsamples = ncol(mcsamples$W),
+            nchains = nchains,
+            npoints = npoints,
+            hyperparams = hyperparams,
+            maxiterations = maxiterations,
+            maxusedcomponents = maxusedcomponents,
+            nonfinitechains = nonfinitechains,
+            stoppedchains = stoppedchains
+        )
+    ))
+    rm(mcsamples)
+    ## The 'prova_K' (knowledge) object is preliminarily saved as soon as possible,
+    ## in case something crashes during subsequent diagnostics
+    saveRDS(K,
+        file = file.path(dirname, paste0('___K', dashnameroot, '.rds'))
+    )
+
+    ## This is to delete the last 'estimated end time'
+    print2user('\nFinished Monte Carlo sampling.')
+
+    print2user(
+        'Highest number of Monte Carlo iterations across chains: ',
+        maxiterations, '.',
+        '\nHighest number of used mixture components: ',
+        maxusedcomponents, '.'
+    )
+    if (maxusedcomponents > ncomponents - 5) {
+        print2user('\nTOO MANY MIXTURE COMPONENTS USED!\n',
+            'Consider re-running with increased "ncomponents" parameter.')
+        warning('\nTOO MANY MIXTURE COMPONENTS USED!\n',
+            'Consider re-running with increased "ncomponents" parameter.\n')
+    }
+
+    if (nonfinitechains > 0) {
+        print2user('\nNote: ', nonfinitechains, ' chains had some non-finite outputs.')
+    }
+
+    if (stoppedchains > 0) {
+        print2user('\nWarning: ', stoppedchains,
+            ' chains were stopped before reaching required precision\n',
+            'in order to meet the required time constraints.')
+        ## Important to warn the user about this
+            warning(stoppedchains,
+                ' chains were stopped before reaching required precision\n',
+                'in order to meet the required time constraints.')
+        }
+
+
+
+############################################################
+#### Final joint diagnostics
+############################################################
+
+    testdata <- readRDS(file = file.path(dirname,
+        paste0('___testdata_', 0, '.rds')))
+    print2user('\nChecking test data\n(',
+        paste0('#', testdata$pointsid, collapse = ' '), '):')
+
+    ## .Pcheckpoints() outputs probabilities
+    oktraces <- .Pcheckpoints(
+        testdata = testdata,
+        K = K
+    )
+
+    ## Substitute variances for standard deviations
+    if(!is.null(K$Rvar)){
+        K$Rvar <- sqrt(K$Rvar)
+        names(K)[which(names(K) == 'Rvar')] <- 'Rsd'
+    }
+    if(!is.null(K$Cvar)){
+        K$Cvar <- sqrt(K$Cvar)
+        names(K)[which(names(K) == 'Cvar')] <- 'Csd'
+    }
+    if(!is.null(K$Dvar)){
+        K$Dvar <- sqrt(K$Dvar)
+        names(K)[which(names(K) == 'Dvar')] <- 'Dsd'
+    }
+
+    ## Save 'prova_K' (knowledge) object
+    saveRDS(K,
+        file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
+    )
+
+
+    oktraces <- cbind(
+        rowMeans(oktraces, na.rm = TRUE), # mean
+        oktraces
+    )
+
+    oktraces <- oktraces[apply(oktraces, 1, function(x) { all(is.finite(x)) }), ,
+        drop = FALSE]
+
+    colnames(oktraces) <- c('gmean', testdata$pointsid)
+
+    saveRDS(oktraces, file = file.path(dirname,
+        paste0('MCtraces', dashnameroot, '.rds')
+    ))
+
+    ## ##############################
+    ## ## MCSE, ESS, THINNING, ETC ##
+    ## ##############################
+
+    N <- nrow(oktraces)
+
+    jointdiagn <- apply(oktraces, 2, function(atrace) {
+### same as within cores
+
+        ## Calculate empirical quantiles of the vector of MC samples,
+        ## having 'Qlo' and 'Qhi' probabilities
+        Xlo <- quantile(x = atrace, probs = Qlo,
+            na.rm = FALSE, names = FALSE, type = 6)
+        Xhi <- quantile(x = atrace, probs = Qhi,
+            na.rm = FALSE, names = FALSE, type = 6)
+        ## quantile width
+        qwidth <- Xhi - Xlo
+
+        ## Calculate credibility intervals (proxy for MCSE)
+        ## for the empirical quantiles above
+        ## as in Vehtari & al. 2021
+        temp <- .funMCEQ(x = atrace, prob = c(Qlo, Qhi), Qpair = Qerror)
+        wXlo <- temp[2, 1] - temp[1, 1]
+        wXhi <- temp[2, 2] - temp[1, 2]
+
+        ## For each monitored point,
+        ## calculate the ESSs of their means,
+        ## as in Vehtari et al. 2021 and Geyer 1992
+        essnrmean <- .funESS3(atrace)
+
+        ## We check the relative MCSE of the following quantities:
+        ## - the mean of the MC samples, transformed to normalized ranks
+        ## - the lower quantile 'Qlo'
+        ## - the upper quantile 'Qhi'
+        ## so as to ensure the stability of the mean value
+        ## (representing the "long-run frequency")
+        ## and of its 'Qlo'- and 'Qhi'-quantiles
+        ## (representing the uncertainty about the freq. estimate)
+        relmcse <- c(1 / sqrt(essnrmean), wXlo / qwidth, wXhi / qwidth)
+
+        autothinning <- N * max(relmcse)^2
+
+### same as within cores
+
+        c(max(relmcse[-1]), essnrmean, autothinning, qwidth, max(wXhi, wXlo))
+    })
+
+    ## Output available diagnostics
+    toprint <- list(
+        'abs. quantile error' = jointdiagn[5, ],
+        'quantile width' = jointdiagn[4, ],
+        'rel. quantile error' = jointdiagn[1, ],
+        'ESS from rel. qt. error' = (1/jointdiagn[1, ])^2,
+        'ESS' = jointdiagn[2, ],
+        'needed thinning' = jointdiagn[3, ],
+        'log of average' = log(colMeans(oktraces))
+    )
+    K$info <- c(K$info, toprint)
+    class(K) <- 'prova_K'
+    saveRDS(K,
+        file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
+    )
+
+####
+    for(i in names(toprint)) {
+        thisdiagn <- toprint[[i]]
+        print2user(i, ': ',
+            if(length(thisdiagn) > 1){
+                paste(signif(range(thisdiagn), 3), collapse = ' to ')
+            } else {
+                signif(thisdiagn, 3)
+            }
+        )
+    }
+
+
+    ## Plot various info and traces
+    print2user('\nPlotting final Monte Carlo traces and marginal samples...\n')
+
+    graphics.off()
+    pdf(file.path(dirname,
+        paste0('MCtraces', dashnameroot, '.pdf')
+    ), height = 8.27, width = 11.69)
+    ## Traces of likelihood and cond. probabilities
+    for (avar in 1:ncol(oktraces)) {
+        ## Do not join separate chains in the plot
+        division <- (if(N > nchains) nchains else 1)
+        pplot(
+            y = 4.343 * log(oktraces[is.finite(oktraces[, avar]), avar]),
+            ## 4.343 is 10/log(10)
+            ## x = matrix(seq_len(nsamples), ncol = division),
+            ## y = matrix(10*log10(oktraces[, avar]), ncol = division),
+            type = 'l', lty = 1, col = 1,
+            ## col = 1:6, # to evidence consecutive chains
+            main = paste0('#', colnames(oktraces)[avar], ': ',
+                paste(
+                    names(toprint[c('rel. quantile error', 'ESS')]),
+                    sapply(toprint[c('rel. quantile error', 'ESS')],
+                        function(xx){ signif(xx[avar], 3) }),
+                    collapse = ' | ', sep = ': '
+                )),
+            cex.main = 1.25,
+            ylab = paste0('log_F(testpoints)/dHart'),
+            xlab = 'sample', family = family
+            ## mar = c(NA, 6, NA, NA)
+        )
+        abline(v = seq(from = 1, to = nsamples, by = nsamplesperchain)[-1] - 0.5,
+            lty = 2, col = 2, lwd = 1)
+    }
+
+    .plotFsamples(
+        filename = file.path(dirname,
+            paste0('plotsamples_learn', dashnameroot)),
+        K = K,
+        data = data,
+        plotvariability = 'samples',
+        nFsamples = showsamples, plotprobability = TRUE,
+        datahistogram = TRUE, datascatter = TRUE,
+        parallel = cl0
+    )
+
+    .plotFsamples(
+        filename = file.path(dirname,
+            paste0('plotquantiles_learn', dashnameroot)),
+        K = K,
+        data = data,
+        plotvariability = 'quantiles',
+        nFsamples = plotDisplayedQuantiles, plotprobability = TRUE,
+        datahistogram = TRUE, datascatter = TRUE,
+        parallel = cl0
+    )
+
+    totalfinaltime <- difftime(Sys.time(), timestart0, units = 'auto')
+    print2user(
+        'Total computation time: ', printtimediff(totalfinaltime),
+        '\nAverage preparation & finalization time: ',
+        printtimediff(
+            difftime(Sys.time() + headertime, headertimestart, units = 'auto')
+        ), '.',
+        '\nAverage Monte Carlo time per chain: ',
+        printtimediff(
+            difftime(headertimestart + MCtime, headertimestart, units = 'auto')
+        ), '.',
+        '\nMax total memory used: approx ', signif(totusedmem, 2), 'MB.',
+        '\nMax memory used per node: approx ', signif(maxusedmem, 2), 'MB.'
+    )
+
+#### Remove partial files if required
+    ## Partial files are identified by at last three initial underscores "___"
+    ## Should we leave the plots of partial traces?
+    ## maybe create an additional argument to let the user decide?
+    if (cleanup) {
+        print2user('Removing temporary output files.')
+        file.remove(dir(dirname,
+            pattern = paste0('^___.*\\..*$'),
+            full.names = TRUE
+        ))
+    }
+
+#### WHAT MIGHT BE ADDED:
+    ## - when 'showKtraces' is true:
+    ## a histogram over number of components over all chains
+    ## (for the moment there's one plot per chain)
+
+    asterisks <- paste0(rep('*', max(nchar(dirname), 26)), collapse = '')
+    print2user('Finished.\n\n', asterisks,
+        '\nOutput saved in directory\n', dirname, '\n',
+        asterisks, '\n')
+
+
+    ## What should we output? how about the full name of the output dir?
+    if (isTRUE(valueisK)) {
+        K
+    } else if (isFALSE(valueisK)) {
+        dirname
+    }
+}
+
+
+
+#' Worker function called by learn()
+#'
+#' @description
+#' This worker function is defined outside of learn() in order to avoid import of spurious objects into the parallel workers, and from the parallel workes into the main R session, with waste of memory.
+#'
+#' @import grDevices
+#' @import graphics
+#' @import stats
+#' @import utils
+#'
+#' @keywords internal
+.workerfun <- function(
+    acore,
+    dirname,
+    dashnameroot,
+    avoidzeroW,
+    initmethod,
+    constants,
+    datapoints,
+    vn,
+    showAlphatraces,
+    Alphatoslice,
+    Ktoslice,
+    RWtoslice,
+    changeSamplerOrder,
+    minchainspercore,
+    coreswithextrachain,
+    nchains,
+    maxhours,
+    timestart0,
+    showsamplertimes,
+    startupMCiterations,
+    maxMCiterations,
+    showKtraces,
+    ncomponents,
+    plottraces,
+    Qlo,
+    Qhi,
+    Qerror,
+    minESS,
+    initES,
+    nsamplesperchain,
+    minMCiterations,
+    printtimediff,
+    family,
+    mainlog,
+    verbose,
+    ncores
+){
+    ## Handles R CMD check:
+    ## these are variables or functions handled in a special way by Nimble
+    ## but R CMD check erroneously sees them as "rogue"
+    if(FALSE){
+nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Ndeps <- depNodes <- rdirch <- eps <- model <- calcNodes <- nimCopy <- mvSaved <- nimbleCode <- dirchalphas <- alphabase <- Alpha <- W <- epsd <- Rn <- Cn <- Dn <- On <- Nn <- Bn <- npoints <- probalpha0 <- Nmaxn <- Bshapelo <- Bshapehi <- Oalpha0 <- Oi <- Of <- Nalpha0 <- Ni <- Nf <- nimbleModel <- compileNimble <- configureMCMC <- buildMCMC <- ncomponentsamples <- nalpha <- minalpha <- maxalpha <- byalpha <- NULL
+    }
+
+    ## functions to format printing of time
+    printtimeend <- function(tim) {
+        format(Sys.time() + tim, format='%Y-%m-%d %H:%M')
+    }
+
+#### NOTA BENE:
+#### All cat() and print() commands within this function print only to a file,
+#### in a directory selected by the user (or within tempdir()),
+#### and they do so only within a temporary, non-interactive R session
+#### spawned by parallel.
+#### The user therefore never sees them and has no need to suppress them.
+#### The information thus saved in the file can be important
+#### in the case of publications and similar.
+####
+#### Use of sink() together with cat() is forced by the fact that
+#### Nimble would otherwise send diagnostic messages to the main session/console
+#### as it uses cat() internally.
+
+    ## Create log file
+    ## Redirect diagnostics and service messages there
+    outcon <- file(file.path(dirname,
+        paste0('log', dashnameroot,
+            '-', acore, '.out')
+    ), open = 'w')
+    sink(file = outcon, type = 'output', split = FALSE)
+    sink(file = outcon, type = 'message', split = FALSE)
+    maincon <- file(mainlog, open = 'a')
+    ## Restore sink in case of exit or error
+    closecons <- function(){
+        ## Close output to node log files
+        flush(outcon)
+        sink(file = NULL, type = 'output')
+        sink(file = NULL, type = 'message')
+        close(outcon)
+        ## Close output to main log file & console
+        flush(maincon)
+        close(maincon)
+    }
+    on.exit(closecons())
+
+    ## We need to send some messages to individual node-log files,
+    ## others to the main log file (and to terminal if verbose = TRUE)
+    ## This is done by changing output sink:
+    if(verbose){
+        print2user <- function(...){
+            flush(outcon)
+            ## print to console
+            sink(file = NULL, type = 'message')
+            message(..., appendLF = FALSE)
+            ## print to main log file
+            sink(file = maincon, type = 'message')
+            message(..., appendLF = FALSE)
+            flush(maincon)
+            ## redirect to node log file
+            sink(file = outcon, type = 'message')
+        }
+    }else{
+        print2user <- function(...){
+            flush(outcon)
+            ## print only to main log file
+            sink(file = maincon, type = 'message')
+            message(..., appendLF = FALSE)
+            flush(maincon)
+            ## redirect to node log file
+            sink(file = outcon, type = 'message')
+        }
+    }
+
+    usedmem <- sum(gc(full = TRUE)[,6])
+
+    ## Timer
+    headertimestart <- Sys.time()
+    cat('Log node', acore)
+    cat(' - Current time:',
+        strftime(as.POSIXlt(headertimestart), '%Y-%m-%d %H:%M:%S'), '\n')
+
+    ## Check if Nimble package is installed and load it
+
+#### NB: Nimble *must* be attached (not just loaded)
+#### with 'require()' or 'library()', see
+#### <https://groups.google.com/g/nimble-users/c/dDNE3L_sPxI/m/IyRgmXOaBwAJ>.
+#### This situation was approved by CRAN reviewer at submission of prova v0.8.0
+    loadnimble <- require
+    if (!loadnimble('nimble', quietly = TRUE)) {
+        stop("Package 'nimble' must be installed.", call. = FALSE)
+    }
+
+    if (acore == 1) {
+        print2user(paste0(
+        'C-compiling samplers appropriate to the variates (Nimble v',
+        packageVersion('nimble'), ')\n',
+        'this can take tens of minutes. Please wait...\n'
+        ))
+    }
+
+    ## suppressPackageStartupMessages(library('nimble'))
+    cat('Loaded Nimble', paste0('v', packageVersion('nimble')), '\n')
+    ## requireNamespace("nimble", quietly = TRUE)
+    ##library('nimble')
+
+
+#### Alternative Dirichlet sampler, to deal with zero-W preserving conjugacy
+#### from Daniel Turek 2025-06-29, nimble-users group
+    if(is.null(avoidzeroW)) {
+        conjugate_dirch_plus_eps <- nimbleFunction(
+            contains = sampler_BASE,
+            setup = function(model, mvSaved, target, control) {
+                ## control list extraction
+                eps <- extractControlElement(control,
+                    'eps', .Machine$double.xmin)
+                ## node list generation
+                target <- model$expandNodeNames(target)
+                calcNodes <- model$getDependencies(target)
+                depNodes <- model$getDependencies(target, self = FALSE)
+                ## numeric value generation
+                d <- length(model[[target]])
+                Ndeps <- length(depNodes)
+                ## checks
+                if(length(target) > 1) stop('conjugate_dirch_plus_eps only operates on a single node')
+                if(model$getDistribution(target) != 'ddirch') stop('conjugate_dirch_plus_eps target node must have ddirch distribution')
+                depDists <- sapply(depNodes, function(x) model$getDistribution(x))
+                if(!all(depDists == 'dcat')) stop('conjugate_dirch_plus_eps all dependencies should have dcat distributions')
+            },
+            run = function() {
+                posterior_alpha <- model$getParam(target, 'alpha')
+                for(i in 1:Ndeps) {
+                    depValue <- model$getParam(depNodes[i], 'value')
+                    posterior_alpha[depValue] <- posterior_alpha[depValue] + 1
+                }
+                newTargetValue <- rdirch(1, posterior_alpha)
+                newTargetValue <- newTargetValue + eps
+                model[[target]] <<- newTargetValue
+                model$calculate(calcNodes)
+                nimCopy(from = model, to = mvSaved, row = 1, nodes = calcNodes, logProb = TRUE)
+            },
+            methods = list(
+                reset = function() {}
+            )
+        )
+    }
+
+#### COMPONENT REPRESENTATION OF FREQUENCY SPACE
+#### Dirichlet-process mixture of product-kernels
+
+    ## hierarchical probability structure
+    finitemix <- nimbleCode({
+        ## Component weights
+        Alpha ~ dcat(prob = probalpha0[1:nalpha])
+        alphas[1:ncomponents] <- dirchalphas[1:ncomponents] * alphabase^Alpha
+        W[1:ncomponents] ~ ddirch(alpha = alphas[1:ncomponents])
+        if(isTRUE(avoidzeroW)){
+            W0[1:ncomponents] <- W[1:ncomponents] + epsd
+        }
+        ## Probability density for the parameters of the components
+        for (k in 1:ncomponents) {
+            ## Probability distributions of parameters
+            ## of the different variate types
+            if (vn$R > 0) { # continuous open domain
+                for (v in 1:Rn) {
+                    Rmean[v, k] ~ dnorm(mean = Rmean1, var = Rvarm1)
+                    Rrate[v, k] ~ dinvgamma(shape = Rshapehi, rate = Rvar1)
+                    Rvar[v, k] ~ dinvgamma(shape = Rshapelo, rate = Rrate[v, k])
+                }
+            }
+            if (vn$C > 0) { # continuous closed domain
+                for (v in 1:Cn) {
+                    Cmean[v, k] ~ dnorm(mean = Cmean1, var = Cvarm1)
+                    Crate[v, k] ~ dinvgamma(shape = Cshapehi, rate = Cvar1)
+                    Cvar[v, k] ~ dinvgamma(shape = Cshapelo, rate = Crate[v, k])
+                }
+            }
+            if (vn$D > 0) { # continuous rounded
+                for (v in 1:Dn) {
+                    Dmean[v, k] ~ dnorm(mean = Dmean1, var = Dvarm1)
+                    Drate[v, k] ~ dinvgamma(shape = Dshapehi, rate = Dvar1)
+                    Dvar[v, k] ~ dinvgamma(shape = Dshapelo, rate = Drate[v, k])
+                }
+            }
+            ## if (vn$L > 0) { # latent
+            ##     for (v in 1:Ln) {
+            ##         Lmean[v, k] ~ dnorm(mean = Lmean1, var = Lvarm1)
+            ##         Lrate[v, k] ~ dinvgamma(shape = Lshapehi, rate = Lvar1)
+            ##         Lvar[v, k] ~ dinvgamma(shape = Lshapelo, rate = Lrate[v, k])
+            ##     }
+            ## }
+            if (vn$O == 1) { # ordinal, one only
+                Oprob[Oi:Of, k] ~ ddirch(alpha = Oalpha0[Oi:Of])
+            }
+            if (vn$O > 1) { # ordinal, many
+                for (v in 1:On) {
+                    Oprob[Oi[v]:Of[v], k] ~ ddirch(alpha = Oalpha0[Oi[v]:Of[v]])
+                }
+            }
+            if (vn$N == 1) { # nominal, one only
+                    Nprob[Ni:Nf, k] ~ ddirch(alpha = Nalpha0[Ni:Nf])
+            }
+            if (vn$N > 1) { # nominal, many
+                for (v in 1:Nn) {
+                    Nprob[Ni[v]:Nf[v], k] ~ ddirch(alpha = Nalpha0[Ni[v]:Nf[v]])
+                }
+            }
+            if (vn$B > 0) { # binary
+                for (v in 1:Bn) {
+                    Bprob[v, k] ~ dbeta(shape1 = Bshapelo, shape2 = Bshapehi)
+                }
+            }
+        }
+        ## Probability of data
+        for (d in 1:npoints) {
+            if(isTRUE(avoidzeroW)){
+                K[d] ~ dcat(prob = W0[1:ncomponents])
+            } else {
+                K[d] ~ dcat(prob = W[1:ncomponents])
+            }
+            ##
+            if (vn$R > 0) { # continuous open domain
+                for (v in 1:Rn) {
+                    Rdata[d, v] ~ dnorm(mean = Rmean[v, K[d]], var = Rvar[v, K[d]])
+                }
+            }
+            if (vn$C > 0) { # continuous closed domain
+                for (v in 1:Cn) {
+                    Caux[d, v] ~ dconstraint(Clat[d, v] >= Cleft[d, v] &
+                                                 Clat[d, v] <= Cright[d, v])
+                    Clat[d, v] ~ dnorm(mean = Cmean[v, K[d]], var = Cvar[v, K[d]])
+                }
+            }
+            if (vn$D > 0) { # continuous rounded
+                for (v in 1:Dn) {
+                    Daux[d, v] ~ dconstraint(Dlat[d, v] >= Dleft[d, v] &
+                                                 Dlat[d, v] < Dright[d, v])
+                    Dlat[d, v] ~ dnorm(mean = Dmean[v, K[d]], var = Dvar[v, K[d]])
+                }
+            }
+            ## if (vn$L > 0) { # latent
+            ##     for (v in 1:Ln) {
+            ##         Laux[d, v] ~ dconstraint(Llat[d, v] >= Lleft[d, v] &
+            ##                                  Llat[d, v] < Lright[d, v])
+            ##         Llat[d, v] ~ dnorm(mean = Lmean[v, K[d]], var = Lvar[v, K[d]])
+            ##     }
+            ## }
+            if (vn$O == 1) { # ordinal, one only
+                Odata[d, 1] ~ dcat(prob = Oprob[Oi:Of, K[d]])
+            }
+            if (vn$O > 1) { # ordinal, many
+                for (v in 1:On) {
+                    Odata[d, v] ~ dcat(prob = Oprob[Oi[v]:Of[v], K[d]])
+                }
+            }
+            if (vn$N == 1) { # nominal, one only
+                Ndata[d, 1] ~ dcat(prob = Nprob[Ni:Nf, K[d]])
+            }
+            if (vn$N > 1) { # nominal, many
+                for (v in 1:Nn) {
+                    Ndata[d, v] ~ dcat(prob = Nprob[Ni[v]:Nf[v], K[d]])
+                }
+            }
+            if (vn$B > 0) { # binary
+                for (v in 1:Bn) { # Bprob is the probability that Bdata=1
+                    Bdata[d, v] ~ dbern(prob = Bprob[v, K[d]])
+                }
+            }
+        }
+    }) # end finitemix NimbleCode
+
+
+#### INITIAL-VALUE FUNCTION
+    ## init functions defined in 'util_mcmcinit.R'
+    if(initmethod == 'precluster'){
+        ## pre-clustering, k-mean style
+        initsfn <- function() {
+            ## Create components centres
+            ## distance function
+            ## NB: all variances will be initialized to 1
+            lpnorm <- function(xx){abs(xx)}
+            distances <- matrix(0, nrow = constants$npoints,
+                ncol = constants$ncomponents)
+            if (vn$R > 0) { # continuous open domain
+                Rmeans <- matrix(rnorm(
+                    n = vn$R * constants$ncomponents,
+                    mean = constants$Rmean1,
+                    sd = sqrt(constants$Rvarm1)
+                ), nrow = vn$R, ncol = constants$ncomponents)
+                Rvars <- matrix(1, nrow = vn$R, ncol = constants$ncomponents)
+                ## distances from datapoints
+                distances <- distances + apply(Rmeans, 2, function(ameans){
+                    colSums(lpnorm(t(datapoints$Rdata) - ameans), na.rm = TRUE)
+                })
+            }
+            if (vn$C > 0) { # continuous closed domain
+                Cmeans <- matrix(rnorm(
+                    n = vn$C * constants$ncomponents,
+                    mean = constants$Cmean1,
+                    sd = sqrt(constants$Cvarm1)
+                ), nrow = vn$C, ncol = constants$ncomponents)
+                Cvars <- matrix(1, nrow = vn$C, ncol = constants$ncomponents)
+                ## distances from datapoints
+                distances <- distances + apply(Cmeans, 2, function(ameans){
+                    colSums(lpnorm(t(datapoints$Clat) - ameans), na.rm = TRUE)
+                })
+            }
+            if (vn$D > 0) { # discrete
+                Dmeans <- matrix(rnorm(
+                    n = vn$D * constants$ncomponents,
+                    mean = constants$Dmean1,
+                    sd = sqrt(constants$Dvarm1)
+                ), nrow = vn$D, ncol = constants$ncomponents)
+                Dvars <- matrix(1, nrow = vn$D, ncol = constants$ncomponents)
+                ## distances from datapoints
+                distances <- distances + apply(Dmeans, 2, function(ameans){
+                    colSums(lpnorm(t(constants$Dlatinit) - ameans), na.rm = TRUE)
+                })
+            }
+            ## if (vn$L > 0) { #
+            ##     Lmeans <- matrix(rnorm(
+            ##         n = vn$L * constants$ncomponents,
+            ##         mean = constants$Lmean1,
+            ##         sd = sqrt(constants$Lvarm1)
+            ##     ), nrow = vn$L, ncol = constants$ncomponents)
+            ##     ## distances from datapoints
+            ##     distances <- distances + apply(Lmeans, 2, function(ameans){
+            ##         colSums(lpnorm(t(constants$Llatinit) - ameans), na.rm = TRUE)
+            ##     })
+            ## }
+            ## if (vn$B > 0) {
+            ##     Bprobs <- matrix(rbeta(
+            ##         n = vn$B * constants$ncomponents,
+            ##         shape1 = Bshapelo,
+            ##         shape2 = Bshapehi,
+            ##         ), nrow = vn$B, ncol = constants$ncomponents)
+            ##     ## distances from datapoints
+            ##     distances <- distances + apply(Bprobs, 2, function(ameans){
+            ##         colSums(lpnorm(t(datapoints$Bdata) - ameans), na.rm = TRUE)
+            ##     })
+            ## }
+
+            ## assign datapoints to component with closest centre
+            K <- apply(distances, 1, which.min)
+            occupied <- unique(K)
+
+            ## recalculate components centres according to their points
+            if (vn$R > 0) {
+                Rmeans[, occupied] <- sapply(occupied, function(acomponent){
+                    colMeans(
+                        datapoints$Rdata[which(K == acomponent), , drop = FALSE],
+                        na.rm = TRUE)
+                })
+                Rmeans[, -occupied] <- 0
+                ## Rvars[, occupied] <- sapply(occupied, function(acomponent){
+                ##     apply(
+                ##         datapoints$Rdata[which(K == acomponent), , drop = FALSE],
+                ##         2, sd, na.rm = TRUE)
+                ## })^2
+                ## Rvars[is.na(Rvars)] <- 1
+            }
+            if (vn$C > 0) {
+                Cmeans[, occupied] <- sapply(occupied, function(acomponent){
+                    colMeans(
+                        datapoints$Clat[which(K == acomponent), , drop = FALSE],
+                        na.rm = TRUE)
+                })
+                Cmeans[, -occupied] <- 0
+                ## Cvars[, occupied] <- sapply(occupied, function(acomponent){
+                ##     apply(
+                ##         datapoints$Clat[which(K == acomponent), , drop = FALSE],
+                ##         2, sd, na.rm = TRUE)
+                ## })^2
+                ## Cvars[is.na(Cvars)] <- 1
+            }
+            if (vn$D > 0) {
+                Dmeans[, occupied] <- sapply(occupied, function(acomponent){
+                    colMeans(
+                        constants$Dlatinit[which(K == acomponent), , drop = FALSE],
+                        na.rm = TRUE)
+                })
+                Dmeans[, -occupied] <- 0
+                ## Dvars[, occupied] <- sapply(occupied, function(acomponent){
+                ##     apply(constants$Dlatinit[which(K == acomponent), , drop = FALSE],
+                ##         2, sd, na.rm = TRUE)
+                ## })^2
+                ## Dvars[is.na(Dvars)] <- 1
+            }
+            ## if (vn$L > 0) { # continuous open domain
+            ##     Lmeans[, occupied] <- sapply(occupied, function(acomponent){
+            ##         colMeans(constants$Llatinit[which(K == acomponent), , drop = FALSE],
+            ##             na.rm = TRUE)
+            ##     })
+            ##     Lmeans[, -occupied] <- 0
+            ## }
+            ## if (vn$B > 0) {
+            ##     Bprobs[, occupied] <- sapply(occupied, function(acomponent){
+            ##         colMeans(datapoints$Bdata[which(K == acomponent), , drop = FALSE],
+            ##             na.rm = TRUE)
+            ##     })
+            ##     Bprobs[, -occupied] <- 0.5
+            ## }
+            ## Alpha <- sample(1:constants$nalpha, 1, prob = constants$probalpha0, replace = TRUE)
+            ## W <- c(rep(rempoints, miconstants$npoints), rep(1, constants$ncomponents - miconstants$npoints))
+            ## W <- W/sum(W)
+
+            outlist <- list(
+                Alpha = round(constants$nalpha/2),
+                W = rep.int(x = 1/constants$ncomponents,
+                    times = constants$ncomponents),
+                ## ## Assign every point to the closest component centre
+                K = K
+                ## ## Other assignment methods:
+                ## ## A. assign all points to an unsystematically chosen component
+                ## K = rep(sample(rep(which(W > 0), 2), 1), nepoints)
+                ## ## B. distribute points unsystematically among components
+                ## K = sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
+                ## ## or:
+                ## ## C. assign all points to the most probable component
+                ## K = rep(which.max(W), constants$npoints)
+                ## ## or:
+                ## ## D. assign all points to the least probable component
+                ## K = rep(which(W == min(W[W > 0]))[1], constants$npoints)
+                ## ## or:
+                ## ## E. distribute points unsystematically among M=2 components
+                ## K = sample(sample(rep(which(W > 0), 2), 2, replace = TRUE),
+                ##           constants$npoints, replace = TRUE)
+                ## ## F. mix methods A. and B.
+                ## K = (if(achain %% 2 == Ksample) {
+                ##        ## ## assign all points to an unsystematically chosen component
+                ##        rep(sample(rep(which(W > 0), 2), 1), constants$npoints)
+                ##      } else {
+                ##        ## distribute points unsystematically among components
+                ##        sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
+                ##      })
+            )
+            ##
+            if (vn$R > 0) { # continuous open domain
+                outlist <- c(
+                    outlist,
+                    list(
+                        Rmean = Rmeans,
+                        Rrate = matrix(
+                            nimble::qinvgamma(p = 0.5,
+                                shape = constants$Rshapehi,
+                                rate = constants$Rvar1),
+                            nrow = vn$R, ncol = constants$ncomponents
+                        ),
+                        Rvar = Rvars
+                    )
+                )
+            }
+            if (vn$C > 0) { # continuous closed domain
+                outlist <- c(
+                    outlist,
+                    list(
+                        Cmean = Cmeans,
+                        Crate = matrix(
+                            nimble::qinvgamma(p = 0.5,
+                                shape = constants$Cshapehi,
+                                rate = constants$Cvar1),
+                            nrow = vn$C, ncol = constants$ncomponents
+                        ),
+                        Cvar = Cvars,
+                        ## for data with boundary values
+                        Clat = constants$Clatinit
+                        ## Clat = .vtransform(data[, vnames$C, with = FALSE],
+                        ##   auxmetadata, Cout = 'init')
+                    )
+                )
+            }
+            if (vn$D > 0) { # continuous rounded
+                outlist <- c(
+                    outlist,
+                    list(
+                        Dmean = Dmeans,
+                        Drate = matrix(
+                            nimble::qinvgamma(p = 0.5,
+                                shape = constants$Dshapehi,
+                                rate = constants$Dvar1),
+                            nrow = vn$D, ncol = constants$ncomponents
+                        ),
+                        Dvar = Dvars,
+                        ## for data with boundary values
+                        Dlat = constants$Dlatinit
+                        ## Dlat = .vtransform(data[, vnames$D, with = FALSE],
+                        ##   auxmetadata, Dout = 'init')
+                    )
+                )
+            }
+            ## if (vn$L > 0) { # latent
+            ##     outlist <- c(
+            ##         outlist,
+            ##         list(
+            ##             Lmean = Lmeans,
+            ##             Lrate = matrix(
+            ##                 nimble::qinvgamma(p = 0.5,
+            ##                     shape = constants$Lshapehi,
+            ##                     rate = constants$Lvar1),
+            ##                 nrow = vn$L, ncol = constants$ncomponents
+            ##             ),
+            ##             Lvar = matrix(1,
+            ##                 nrow = vn$L, ncol = constants$ncomponents),
+            ##             ## for data with boundary values
+            ##             Llat = constants$Llatinit
+            ##             ## Llat = .vtransform(data[, vnames$L, with = FALSE],
+            ##             ##   auxmetadata, Lout = 'init')
+            ##         )
+            ##     )
+            ## }
+            if (vn$O > 0) { # ordinal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Oprob = matrix(unlist(sapply(constants$Ocards,
+                            function(acard){
+                            rep.int(x = 1 / acard, times = acard)
+                        })), nrow = sum(constants$Ocards), ncol = ncomponents)
+                    )
+                )
+            }
+            if (vn$N > 0) { # nominal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Nprob = matrix(unlist(sapply(constants$Ncards, function(acard){
+                            rep.int(x = 1 / acard, times = acard)
+                        })), nrow = sum(constants$Ncards), ncol = ncomponents)
+                    )
+                )
+            }
+            if (vn$B > 0) { # binary
+                outlist <- c(
+                    outlist,
+                    list(
+                        ## Bprob = Bprobs
+                        Bprob = matrix(0.5, nrow = vn$B, ncol = constants$ncomponents)
+                    )
+                )
+            }
+            ##
+            outlist
+        } # end precluster
+
+    } else if(initmethod == 'datacentre'){
+        ## pre-clustering, centering on data
+        initsfn <- function() {
+            ## assign each cluster to a datapoint
+            iK <- sample.int(constants$npoints, size = constants$ncomponents,
+                replace = (constants$npoints < constants$ncomponents))
+
+            ## Create components centres
+            ## distance function
+            ## NB: all variances will be initialized to 1
+            lpnorm <- function(xx){abs(xx)}
+            distances <- matrix(0, nrow = constants$npoints,
+                ncol = constants$ncomponents)
+            if (vn$R > 0) { # continuous open domain
+                Rmeans <- t(datapoints$Rdata[iK, , drop = FALSE])
+                ## distances from datapoints
+                distances <- distances + apply(Rmeans, 2, function(ameans){
+                    colSums(lpnorm(t(datapoints$Rdata) - ameans), na.rm = TRUE)
+                })
+            }
+            if (vn$C > 0) { # continuous closed domain
+                Cmeans <- t(datapoints$Clat[iK, , drop = FALSE])
+                ## distances from datapoints
+                distances <- distances + apply(Cmeans, 2, function(ameans){
+                    colSums(lpnorm(t(datapoints$Clat) - ameans), na.rm = TRUE)
+                })
+            }
+            if (vn$D > 0) { # discrete
+                Dmeans <- t(constants$Dlatinit[iK, , drop = FALSE])
+                ## distances from datapoints
+                distances <- distances + apply(Dmeans, 2, function(ameans){
+                    colSums(lpnorm(t(constants$Dlatinit) - ameans), na.rm = TRUE)
+                })
+            }
+            ## if (vn$L > 0) { #
+            ##     Lmeans <- matrix(rnorm(
+            ##         n = vn$L * constants$ncomponents,
+            ##         mean = constants$Lmean1,
+            ##         sd = sqrt(constants$Lvarm1)
+            ##     ), nrow = vn$L, ncol = constants$ncomponents)
+            ##     ## distances from datapoints
+            ##     distances <- distances + apply(Lmeans, 2, function(ameans){
+            ##         colSums(lpnorm(t(constants$Llatinit) - ameans), na.rm = TRUE)
+            ##     })
+            ## }
+            ## if (vn$B > 0) {
+            ##     Bprobs <- matrix(rbeta(
+            ##         n = vn$B * constants$ncomponents,
+            ##         shape1 = Bshapelo,
+            ##         shape2 = Bshapehi,
+            ##         ), nrow = vn$B, ncol = constants$ncomponents)
+            ##     ## distances from datapoints
+            ##     distances <- distances + apply(Bprobs, 2, function(ameans){
+            ##         colSums(lpnorm(t(datapoints$Bdata) - ameans), na.rm = TRUE)
+            ##     })
+            ## }
+
+            ## assign datapoints to component with closest centre
+            K <- apply(distances, 1, which.min)
+            occupied <- unique(K)
+
+            ## recalculate components centres according to their points
+            if (vn$R > 0) {
+                Rmeans[, occupied] <- sapply(occupied, function(acomponent){
+                    colMeans(datapoints$Rdata[which(K == acomponent), , drop = FALSE],
+                        na.rm = TRUE)
+                })
+                Rmeans[, -occupied] <- 0
+            }
+            if (vn$C > 0) {
+                Cmeans[, occupied] <- sapply(occupied, function(acomponent){
+                    colMeans(datapoints$Clat[which(K == acomponent), , drop = FALSE],
+                        na.rm = TRUE)
+                })
+                Cmeans[, -occupied] <- 0
+            }
+            if (vn$D > 0) {
+                Dmeans[, occupied] <- sapply(occupied, function(acomponent){
+                    colMeans(constants$Dlatinit[which(K == acomponent), , drop = FALSE],
+                        na.rm = TRUE)
+                })
+                Dmeans[, -occupied] <- 0
+            }
+            ## if (vn$L > 0) { # continuous open domain
+            ##     Lmeans[, occupied] <- sapply(occupied, function(acomponent){
+            ##         colMeans(constants$Llatinit[which(K == acomponent), , drop = FALSE],
+            ##             na.rm = TRUE)
+            ##     })
+            ##     Lmeans[, -occupied] <- 0
+            ## }
+            ## if (vn$B > 0) {
+            ##     Bprobs[, occupied] <- sapply(occupied, function(acomponent){
+            ##         colMeans(datapoints$Bdata[which(K == acomponent), , drop = FALSE],
+            ##             na.rm = TRUE)
+            ##     })
+            ##     Bprobs[, -occupied] <- 0.5
+            ## }
+            ## Alpha <- sample(1:constants$nalpha, 1, prob = constants$probalpha0, replace = TRUE)
+            ## W <- c(rep(rempoints, miconstants$npoints), rep(1, constants$ncomponents - miconstants$npoints))
+            ## W <- W/sum(W)
+
+            outlist <- list(
+                Alpha = round(constants$nalpha/2),
+                W = rep.int(x = 1/constants$ncomponents,
+                    times = constants$ncomponents),
+                ## ## Assign every point to the closest component centre
+                K = K
+                ## ## Other assignment methods:
+                ## ## A. assign all points to an unsystematically chosen component
+                ## K = rep(sample(rep(which(W > 0), 2), 1), nepoints)
+                ## ## B. distribute points unsystematically among components
+                ## K = sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
+                ## ## or:
+                ## ## C. assign all points to the most probable component
+                ## K = rep(which.max(W), constants$npoints)
+                ## ## or:
+                ## ## D. assign all points to the least probable component
+                ## K = rep(which(W == min(W[W > 0]))[1], constants$npoints)
+                ## ## or:
+                ## ## E. distribute points unsystematically among M=2 components
+                ## K = sample(sample(rep(which(W > 0), 2), 2, replace = TRUE),
+                ##           constants$npoints, replace = TRUE)
+                ## ## F. mix methods A. and B.
+                ## K = (if(achain %% 2 == Ksample) {
+                ##        ## ## assign all points to an unsystematically chosen component
+                ##        rep(sample(rep(which(W > 0), 2), 1), constants$npoints)
+                ##      } else {
+                ##        ## distribute points unsystematically among components
+                ##        sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
+                ##      })
+            )
+            ##
+            if (vn$R > 0) { # continuous open domain
+                outlist <- c(
+                    outlist,
+                    list(
+                        Rmean = Rmeans,
+                        Rrate = matrix(
+                            nimble::qinvgamma(p = 0.5,
+                                shape = constants$Rshapehi,
+                                rate = constants$Rvar1),
+                            nrow = vn$R, ncol = constants$ncomponents
+                        ),
+                        Rvar = matrix(1,
+                            nrow = vn$R, ncol = constants$ncomponents)
+                    )
+                )
+            }
+            if (vn$C > 0) { # continuous closed domain
+                outlist <- c(
+                    outlist,
+                    list(
+                        Cmean = Cmeans,
+                        Crate = matrix(
+                            nimble::qinvgamma(p = 0.5,
+                                shape = constants$Cshapehi,
+                                rate = constants$Cvar1),
+                            nrow = vn$C, ncol = constants$ncomponents
+                        ),
+                        Cvar = matrix(1,
+                            nrow = vn$C, ncol = constants$ncomponents),
+                        ## for data with boundary values
+                        Clat = constants$Clatinit
+                    )
+                )
+            }
+            if (vn$D > 0) { # continuous rounded
+                outlist <- c(
+                    outlist,
+                    list(
+                        Dmean = Dmeans,
+                        Drate = matrix(
+                            nimble::qinvgamma(p = 0.5,
+                                shape = constants$Dshapehi,
+                                rate = constants$Dvar1),
+                            nrow = vn$D, ncol = constants$ncomponents
+                        ),
+                        Dvar = matrix(1,
+                            nrow = vn$D, ncol = constants$ncomponents),
+                        ## for data with boundary values
+                        Dlat = constants$Dlatinit
+                    )
+                )
+            }
+            ## if (vn$L > 0) { # latent
+            ##     outlist <- c(
+            ##         outlist,
+            ##         list(
+            ##             Lmean = Lmeans,
+            ##             Lrate = matrix(
+            ##                 nimble::qinvgamma(p = 0.5,
+            ##                     shape = constants$Lshapehi,
+            ##                     rate = constants$Lvar1),
+            ##                 nrow = vn$L, ncol = constants$ncomponents
+            ##             ),
+            ##             Lvar = matrix(1,
+            ##                 nrow = vn$L, ncol = constants$ncomponents),
+            ##             ## for data with boundary values
+            ##             Llat = constants$Llatinit
+            ##         )
+            ##     )
+            ## }
+            if (vn$O > 0) { # ordinal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
+                            rep.int(x = 1 / acard, times = acard)
+                        })), nrow = sum(constants$Ocards), ncol = ncomponents)
+                    )
+                )
+            }
+            if (vn$N > 0) { # nominal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Nprob = matrix(unlist(sapply(constants$Ncards, function(acard){
+                            rep.int(x = 1 / acard, times = acard)
+                        })), nrow = sum(constants$Ncards), ncol = ncomponents)
+                    )
+                )
+            }
+            if (vn$B > 0) { # binary
+                outlist <- c(
+                    outlist,
+                    list(
+                        ## Bprob = Bprobs
+                        Bprob = matrix(0.5,
+                            nrow = vn$B, ncol = constants$ncomponents)
+                    )
+                )
+            }
+            ##
+            outlist
+        } # end datacentre
+
+    } else if(initmethod == 'prior'){
+        ## values chosen from prior
+        initsfn <- function() {
+            Alpha <- sample.int(n = constants$nalpha, size = 1,
+                prob = probalpha0[1:constants$nalpha])
+            W <- nimble::rdirch(n = 1,
+                alpha = constants$dirchalphas[1:constants$ncomponents] *
+                    constants$alphabase^Alpha)
+            outlist <- list(
+                Alpha = Alpha,
+                W = W,
+                K = sample(x = rep.int(x = which(W > 0), times = 2),
+                    size = constants$npoints, replace = TRUE)
+            )
+            ##
+            if (vn$R > 0) { # continuous open domain
+                Rrate <- matrix(
+                    nimble::rinvgamma(
+                        n = vn$R * constants$ncomponents,
+                        shape = constants$Rshapehi,
+                        rate = constants$Rvar1),
+                    nrow = vn$R, ncol = constants$ncomponents
+                )
+                outlist <- c(
+                    outlist,
+                    list(
+                        Rmean = matrix(rnorm(
+                            n = vn$R * constants$ncomponents,
+                            mean = constants$Rmean1,
+                            sd = sqrt(constants$Rvarm1)
+                        ), nrow = vn$R, ncol = constants$ncomponents),
+                        Rrate = Rrate,
+                        Rvar = matrix(
+                            nimble::rinvgamma(
+                                n = vn$R * constants$ncomponents,
+                                shape = constants$Rshapelo,
+                                rate = Rrate),
+                            nrow = vn$R, ncol = constants$ncomponents
+                        )
+                    )
+                )
+            }
+            if (vn$C > 0) { # continuous closed domain
+                Crate <- matrix(
+                    nimble::rinvgamma(
+                        n = vn$C * constants$ncomponents,
+                        shape = constants$Cshapehi,
+                        rate = constants$Cvar1),
+                    nrow = vn$C, ncol = constants$ncomponents
+                )
+                outlist <- c(
+                    outlist,
+                    list(
+                        Cmean = matrix(rnorm(
+                            n = vn$C * constants$ncomponents,
+                            mean = constants$Cmean1,
+                            sd = sqrt(constants$Cvarm1)
+                        ), nrow = vn$C, ncol = constants$ncomponents),
+                        Crate = Crate,
+                        Cvar = matrix(
+                            nimble::rinvgamma(
+                                n = vn$C * constants$ncomponents,
+                                shape = constants$Cshapelo,
+                                rate = Crate),
+                            nrow = vn$C, ncol = constants$ncomponents
+                        ),
+                        Clat = constants$Clatinit
+                    )
+                )
+            }
+            if (vn$D > 0) { # continuous rounded
+                Drate <- matrix(
+                    nimble::rinvgamma(
+                        n = vn$D * constants$ncomponents,
+                        shape = constants$Dshapehi,
+                        rate = constants$Dvar1),
+                    nrow = vn$D, ncol = constants$ncomponents
+                )
+                outlist <- c(
+                    outlist,
+                    list(
+                        Dmean = matrix(rnorm(
+                            n = vn$D * constants$ncomponents,
+                            mean = constants$Dmean1,
+                            sd = sqrt(constants$Dvarm1)
+                        ), nrow = vn$D, ncol = constants$ncomponents),
+                        Drate = Drate,
+                        Dvar = matrix(
+                            nimble::rinvgamma(
+                                n = vn$D * constants$ncomponents,
+                                shape = constants$Dshapelo,
+                                rate = Drate),
+                            nrow = vn$D, ncol = constants$ncomponents
+                        ),
+                        Dlat = constants$Dlatinit
+                    )
+                )
+            }
+            if (vn$O > 0) { # ordinal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
+                            rep.int(x = 1 / acard, times = acard)
+                        })), nrow = sum(constants$Ocards), ncol = ncomponents)
+                    )
+                )
+            }
+            if (vn$N > 0) { # nominal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Nprob = aperm(array(sapply(1:vn$N, function(avar) {
+                            sapply(1:constants$ncomponents, function(aclus) {
+                                constants$Nalpha0[avar, ]/sum(constants$Nalpha0[avar, ])
+                                ## nimble::rdirch(n = 1, alpha = constants$Nalpha0[avar, ])
+                            })
+                        }), dim = c(Nmaxn, constants$ncomponents, vn$N)))
+                    )
+                )
+            }
+            if (vn$B > 0) { # nominal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Bprob = matrix(
+                            rbeta(n = vn$B * constants$ncomponents,
+                                shape1 = Bshapelo, shape2 = Bshapehi),
+                            nrow = vn$B, ncol = constants$ncomponents)
+                    )
+                )
+            }
+            ##
+            outlist
+        } # end prior
+
+
+    } else if(initmethod == 'allcentre'){
+        ## all components equal, all points to first component
+        initsfn <- function() {
+            initvar <- 6
+            outlist <- list(
+                Alpha = round(constants$nalpha/2),
+                W = rep.int(x = 1/constants$ncomponents,
+                    times = constants$ncomponents),
+                ## ## Assign every point to first component
+                K = rep.int(x = 1, times = constants$npoints)
+            )
+            ##
+            if (vn$R > 0) { # continuous open domain
+                outlist <- c(
+                    outlist,
+                    list(
+                        Rmean =  matrix(0, nrow = vn$R, ncol = constants$ncomponents),
+                        Rrate = matrix(
+                            nimble::qinvgamma(p = 0.5,
+                                shape = constants$Rshapehi,
+                                rate = constants$Rvar1),
+                            nrow = vn$R, ncol = constants$ncomponents
+                        ),
+                        Rvar = matrix(initvar, nrow = vn$R, ncol = constants$ncomponents)
+                    )
+                )
+            }
+            if (vn$C > 0) { # continuous closed domain
+                outlist <- c(
+                    outlist,
+                    list(
+                        Cmean = matrix(0, nrow = vn$C, ncol = constants$ncomponents),
+                        Crate = matrix(
+                            nimble::qinvgamma(p = 0.5,
+                                shape = constants$Cshapehi,
+                                rate = constants$Cvar1),
+                            nrow = vn$C, ncol = constants$ncomponents
+                        ),
+                        Cvar = matrix(initvar, nrow = vn$C, ncol = constants$ncomponents),
+                        ## for data with boundary values
+                        Clat = constants$Clatinit
+                    )
+                )
+            }
+            if (vn$D > 0) { # continuous rounded
+                outlist <- c(
+                    outlist,
+                    list(
+                        Dmean = matrix(0, nrow = vn$D, ncol = constants$ncomponents),
+                        Drate = matrix(
+                            nimble::qinvgamma(p = 0.5,
+                                shape = constants$Dshapehi,
+                                rate = constants$Dvar1),
+                            nrow = vn$D, ncol = constants$ncomponents
+                        ),
+                        Dvar = matrix(initvar, nrow = vn$D, ncol = constants$ncomponents),
+                        ## for data with boundary values
+                        Dlat = constants$Dlatinit
+                    )
+                )
+            }
+            if (vn$O > 0) { # ordinal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
+                            rep.int(x = 1 / acard, times = acard)
+                        })), nrow = sum(constants$Ocards), ncol = ncomponents)
+                    )
+                )
+            }
+            if (vn$N > 0) { # nominal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Nprob = matrix(unlist(sapply(constants$Ncards, function(acard){
+                            rep.int(x = 1 / acard, times = acard)
+                        })), nrow = sum(constants$Ncards), ncol = ncomponents)
+                    )
+                )
+            }
+            if (vn$B > 0) { # binary
+                outlist <- c(
+                    outlist,
+                    list(
+                        Bprob = matrix(0.5, nrow = vn$B, ncol = constants$ncomponents)
+                    )
+                )
+            }
+            ##
+            outlist
+        } # end allcentre
+
+    } else if(initmethod == 'allinone'){
+        ## Components from prior, data all in one
+        initsfn <- function() {
+            outlist <- list(
+                Alpha = round(constants$nalpha/2),
+                W = rep_len(x = 1/constants$ncomponents,
+                    length.out = constants$ncomponents),
+                ## ## Assign every point to first component
+                K = rep.int(x = 1, times = constants$npoints)
+            )
+            ##
+            if (vn$R > 0) { # continuous open domain
+                Rrate <- matrix(
+                    nimble::rinvgamma(
+                        n = vn$R,
+                        shape = constants$Rshapehi,
+                        rate = constants$Rvar1),
+                    nrow = vn$R, ncol = constants$ncomponents
+                )
+                outlist <- c(
+                    outlist,
+                    list(
+                        Rmean = matrix(rnorm(
+                            n = vn$R,
+                            mean = constants$Rmean1,
+                            sd = sqrt(constants$Rvarm1)
+                        ), nrow = vn$R, ncol = constants$ncomponents),
+                        Rrate = Rrate,
+                        Rvar = matrix(
+                            nimble::rinvgamma(
+                                n = vn$R,
+                                shape = constants$Rshapelo,
+                                rate = Rrate),
+                            nrow = vn$R, ncol = constants$ncomponents
+                        )
+                    )
+                )
+            }
+            if (vn$C > 0) { # continuous closed domain
+                Crate <- matrix(
+                    nimble::rinvgamma(
+                        n = vn$C,
+                        shape = constants$Cshapehi,
+                        rate = constants$Cvar1),
+                    nrow = vn$C, ncol = constants$ncomponents
+                )
+                outlist <- c(
+                    outlist,
+                    list(
+                        Cmean = matrix(rnorm(
+                            n = vn$C,
+                            mean = constants$Cmean1,
+                            sd = sqrt(constants$Cvarm1)
+                        ), nrow = vn$C, ncol = constants$ncomponents),
+                        Crate = Crate,
+                        Cvar = matrix(
+                            nimble::rinvgamma(
+                                n = vn$C,
+                                shape = constants$Cshapelo,
+                                rate = Crate),
+                            nrow = vn$C, ncol = constants$ncomponents
+                        ),
+                        Clat = constants$Clatinit
+                    )
+                )
+            }
+            if (vn$D > 0) { # continuous rounded
+                Drate <- matrix(
+                    nimble::rinvgamma(
+                        n = vn$D,
+                        shape = constants$Dshapehi,
+                        rate = constants$Dvar1),
+                    nrow = vn$D, ncol = constants$ncomponents
+                )
+                outlist <- c(
+                    outlist,
+                    list(
+                        Dmean = matrix(rnorm(
+                            n = vn$D,
+                            mean = constants$Dmean1,
+                            sd = sqrt(constants$Dvarm1)
+                        ), nrow = vn$D, ncol = constants$ncomponents),
+                        Drate = Drate,
+                        Dvar = matrix(
+                            nimble::rinvgamma(
+                                n = vn$D,
+                                shape = constants$Dshapelo,
+                                rate = Drate),
+                            nrow = vn$D, ncol = constants$ncomponents
+                        ),
+                        Dlat = constants$Dlatinit
+                    )
+                )
+            }
+            if (vn$O > 0) { # ordinal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Oprob = matrix(unlist(sapply(seq_along(constants$Ocards),
+                            function(v){nimble::rdirch(n = 1,
+                                alpha = Oalpha0[Oi[v]:Of[v]])
+                            })), nrow = sum(constants$Ocards), ncol = ncomponents)
+                    )
+                )
+            }
+            if (vn$N > 0) { # nominal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Nprob = matrix(unlist(sapply(seq_along(constants$Ncards),
+                            function(v){nimble::rdirch(n = 1,
+                                alpha = Nalpha0[Ni[v]:Nf[v]])
+                            })), nrow = sum(constants$Ncards), ncol = ncomponents)
+                    )
+                )
+            }
+            if (vn$B > 0) { # nominal
+                outlist <- c(
+                    outlist,
+                    list(
+                        Bprob = matrix(
+                            rbeta(n = vn$B,
+                                shape1 = Bshapelo, shape2 = Bshapehi),
+                            nrow = vn$B, ncol = constants$ncomponents)
+                    )
+                )
+            }
+            ##
+            outlist
+        } # end allinone
+
+    } else {stop('Unknown "initmethod"')}
+
+#################################################
+#### NIMBLE SETUP
+##################################################
+
+    finitemixnimble <- nimbleModel(
+        code = finitemix,
+        name = 'finitemixnimble1',
+        constants = constants,
+        data = datapoints,
+        ## dimensions = c(
+        ##     ##     if (vn$R > 0) {
+        ##     ##         list(
+        ##     ##             Rdata = c(npoints, vn$R)
+        ##     ##             )
+        ##     ##     },
+        ##     ##     if (vn$C > 0) {
+        ##     ##         list(
+        ##     ##             Caux = c(npoints, vn$C),
+        ##     ##             Clat = c(npoints, vn$C),
+        ##     ##             Cleft = c(npoints, vn$C),
+        ##     ##             Cright = c(npoints, vn$C),
+        ##     ##             Clatinit = c(npoints, vn$C)
+        ##     ##             )
+        ##     ##     },
+        ##     ##     if (vn$D > 0) {
+        ##     ##         list(
+        ##     ##             Daux = c(npoints, vn$D),
+        ##     ##             Dleft = c(npoints, vn$D),
+        ##     ##             Dright = c(npoints, vn$D),
+        ##     ##             Dlatinit = c(npoints, vn$D)
+        ##     ##             )
+        ##     ##     },
+        ##     ## if (vn$O > 0) {
+        ##     ##     list(
+        ##     ##         Oi = length(Oi),
+        ##     ##         Of = length(Of)
+        ##     ##         ##             Odata = c(npoints, vn$O)
+        ##     ##     )
+        ##     ## },
+        ##     ## if (vn$N > 0) {
+        ##     ##     list(
+        ##     ##         Ni = length(Ni),
+        ##     ##         Nf = length(Nf)
+        ##     ##         ##             Ndata = c(npoints, vn$N)
+        ##     ##     )
+        ##     ## }
+        ##     ##     if (vn$B > 0) {
+        ##     ##         list(
+        ##     ##             Bdata = c(npoints, vn$B)
+        ##     ##             )
+        ##     ##     }
+        ## ),
+        inits = initsfn()
+    )
+
+    Cfinitemixnimble <- compileNimble(finitemixnimble,
+        showCompilerOutput = FALSE)
+    usedmem <- max(usedmem, sum(gc(full = TRUE)[,6])) #garbage collection
+
+    confnimble <- configureMCMC(
+        Cfinitemixnimble, # nodes = NULL
+        monitors = c(
+            'W',
+            if (vn$R > 0) {
+                c('Rmean', 'Rvar')
+            },
+            if (vn$C > 0) {
+                c('Cmean', 'Cvar')
+            },
+            if (vn$D > 0) {
+                c('Dmean', 'Dvar')
+            },
+            ## if (vn$L > 0) {
+            ##     c('Lmean', 'Lvar')
+            ## },
+            if (vn$O > 0) {
+                c('Oprob')
+            },
+            if (vn$N > 0) {
+                c('Nprob')
+            },
+            if (vn$B > 0) {
+                c('Bprob')
+            }
+        ),
+        ## It is necessary to monitor K to see if all components were used
+        ## if 'showAlphatraces' is true,
+        ## then the Alpha-parameter trace is also recorded and shown
+        monitors2 = c(if (showAlphatraces) { 'Alpha' },
+            'K')
+    )
+
+    ## ## Uncomment to debug Nimble (in case of Nimble updates)
+    ## print(confnimble$getUnsampledNodes())
+    ## cat('\nEX1\n')
+    ## confnimble$printSamplers(executionOrder=TRUE)
+
+    targetslist <- sapply(confnimble$getSamplers(), function(xx) xx$target)
+    nameslist <- sapply(confnimble$getSamplers(), function(xx) xx$name)
+    ## cat('\nNAMESLIST', nameslist, '\n')
+
+    ## replace W's sampler with the one from Daniel Turek
+    if(is.null(avoidzeroW)) {
+        confnimble$replaceSampler('W', conjugate_dirch_plus_eps)
+    }
+
+    ## replace Alpha's cat-sampler with slice
+    if (Alphatoslice &&
+            !('Alpha' %in% targetslist[nameslist == 'posterior_predictive'])) {
+        confnimble$replaceSampler(target='Alpha', type='slice')
+        ## ## Old replacement method, didn't work in previous Nimble
+        ## confnimble$removeSamplers('Alpha')
+        ## confnimble$addSampler(target = 'Alpha', type = 'slice')
+    }
+
+    ## replace K's cat-sampler with slice
+    if (Ktoslice) {
+        for (asampler in grep('^K\\[', targetslist, value = TRUE)) {
+            if (!(asampler %in% targetslist[nameslist == 'posterior_predictive'])) {
+                confnimble$replaceSampler(target=asampler, type='slice')
+                ## ## Old replacement method, didn't work in previous Nimble
+                ## confnimble$removeSamplers(asampler)
+                ## confnimble$addSampler(target = asampler, type = 'slice')
+            }
+        }
+    }
+
+    ## replace all RW samplers with slice
+    ## Should find a way to do this faster
+    ## testreptime <- Sys.time()
+    if (RWtoslice) {
+        for (asampler in targetslist[nameslist == 'RW']) {
+            ## ## New replacement method, didn't work in previous Nimble
+            confnimble$replaceSampler(target=asampler, type='slice')
+            ## ## Old replacement method:
+            ## confnimble$removeSamplers(asampler)
+            ## confnimble$addSampler(target = asampler, type = 'slice')
+        }
+    }
+
+    ## ## Uncomment when debugging Nimble
+    ## print(confnimble$getUnsampledNodes())
+    ## cat('\nEX2\n')
+    ## confnimble$printSamplers(executionOrder=TRUE)
+
+#### change execution order for some variates
+    if (changeSamplerOrder) {
+        ## call this to do a first reordering of the samplers
+        ## it places posterior-predictive nodes last
+        mcsampler <- buildMCMC(confnimble)
+
+        samplerorder <- c(
+            'K',
+            'W',
+            'Alpha',
+            if (vn$R > 0) {
+                c('Rmean', 'Rrate', 'Rvar')
+            },
+            if (vn$C > 0) {
+                c('Cmean', 'Crate', 'Cvar')
+            },
+            if (vn$D > 0) {
+                c('Dmean', 'Drate', 'Dvar')
+            },
+            ## if (vn$L > 0) {
+            ##     c('Lmean', 'Lrate', 'Lvar')
+            ## },
+            if (vn$O > 0) {
+                c('Oprob')
+            },
+            if (vn$N > 0) {
+                c('Nprob')
+            },
+            if (vn$B > 0) {
+                c('Bprob')
+            }
+        )
+        ##
+        neworder <- unlist(lapply(samplerorder, function(var){
+            grep(
+                paste0('^', var, '(\\[.+\\])*$'),
+                sapply(confnimble$getSamplers(), function(x) {
+                    if (!(x$name == 'posterior_predictive')) {
+                        x$target
+                    } else {
+                        NULL
+                    }
+                })
+            )
+        }))
+        ## ## Uncomment for debugging
+        ## cat('\nNEW ORDER',neworder,'\n')
+        confnimble$setSamplerExecutionOrder(c(setdiff(
+            confnimble$getSamplerExecutionOrder(),
+            neworder
+        ), neworder))
+        ## cat('\nEX3\n')
+        ## confnimble$printSamplers(executionOrder=TRUE)
+
+    }
+
+#### Compile Monte Carlo sampler
+    print(confnimble)
+    mcsampler <- buildMCMC(confnimble)
+    ## print(confnimble$getUnsampledNodes())
+    Cmcsampler <- compileNimble(mcsampler, resetFunctions = TRUE)
+
+    cat('\nSetup time',
+        printtimediff(difftime(Sys.time(), headertimestart, units = 'auto')),
+        '\n')
+    headertime <- difftime(Sys.time(), headertimestart, units = 'secs')
+
+
+    ## Inform user that compilation is done, if node 1:
+    if (acore == 1) {
+        print2user(paste0(
+            '\rCompiled node ', acore, '. ',
+            'Number of samplers: ',
+            length(confnimble$samplerExecutionOrder), '.             \n',
+            'Estimated end times, updated ',
+            format(Sys.time(), format='%Y-%m-%d %H:%M'), ':\n',
+            paste0('Node ', 1:ncores, ': estimating...\n', collapse = '')
+           ## , '\r\033[', ncores + 1, 'A\r'
+            ))
+    } else {Sys.sleep(1)}
+
+    ## cat('Loop over chains')
+##################################################
+#### LOOP OVER CHAINS (WITHIN ONE NODE)
+##################################################
+    ## Start timer
+    MCtimestart <- Sys.time()
+
+    maxusedcomponents <- 0
+    maxiterations <- 0
+    ## keep count of chains having non-finite outputs
+    nonfinitechains <- 0L
+    ## keep count of chains stopped prematurely
+    stoppedchains <- 0L
+    usedmem <- max(usedmem, sum(gc(full = TRUE)[,6])) #garbage collection
+
+#### LOOP OVER CHAINS IN NODE
+    nchainsperthiscore <- minchainspercore + (acore <= coreswithextrachain)
+
+    for (achain in 1:nchainsperthiscore) {
+
+        chainnumber <- achain + minchainspercore * (acore - 1) +
+            min(coreswithextrachain, acore - 1)
+        padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'), chainnumber)
+
+        ## calculate how the remaining time is allotted to remaining chains
+        timeleft <- (maxhours -
+                         as.double(Sys.time() - timestart0, units = 'hours')) /
+            (nchainsperthiscore - achain + 1)
+
+        showsamplertimes0 <- showsamplertimes && (achain == 1)
+        ## showAlphatraces0 <- showAlphatraces && (achain==1)
+        niter <- min(startupMCiterations, maxMCiterations)
+        ## ## Experimental: decrease number of iterations based on previous chain
+        ## if(achain == 1){
+        ##   niter <- startupMCiterations
+        ## }else{
+        ##  niter <- max(min(startupMCiterations,remainiter*2), 128)
+        ##  }
+
+        ## ## nitertot: total number of MC samples from chain start
+        nitertot <- 0L
+        remainiter <- +Inf
+        reset <- TRUE
+        allmcsamples <- NULL
+        ## allmcsamplesKA <- list(Alpha = NULL, K = NULL)
+        allmcsamplesKA <- NULL
+        flagll <- FALSE
+        flagnonfinite <- FALSE
+        cat('\n###########################################################\nChain #',
+            chainnumber,
+            '(chain', achain, 'of', nchainsperthiscore, 'for this node)\n'
+        )
+        ## Read data to be used in log-likelihood
+        testdata <- readRDS(file = file.path(dirname,
+            paste0('___testdata_', chainnumber, '.rds')))
+        cat('\nDatapoints for testing chain behaviour:\n',
+            paste0('#', testdata$pointsid), '\n')
+
+        ## will contain the MC traces of the test points
+        traces <- matrix(NA_real_, nrow = 0, ncol = 1,
+            dimnames = list(NULL, 'gmean'))
+
+
+        ## Initial values for this chain
+        ## random seed is taken care of by %doRNG%
+        Cfinitemixnimble$setInits(initsfn())
+
+        subiter <- 1L
+        savedchunks <- 0L
+#### WHILE-LOOP CONTINUING UNTIL STOP CRITERION MET
+        while (remainiter > 0) {
+            cat('\nIterations:', niter, '\n')
+
+            ## MONTE-CARLO CALL
+            ## If reporting Alpha or K traces,
+            ## then save them more frequently
+            ## Otherwise just save the last value
+            Cmcsampler$run(
+                niter = niter,
+                thin = 1,
+                thin2 = (if (showAlphatraces || showKtraces) {
+                    max(1, round(niter / ncomponentsamples))
+                } else {
+                    max(2, floor(niter / 2))
+                }),
+                nburnin = 0,
+                time = showsamplertimes0,
+                reset = reset,
+                resetMV = TRUE
+            )
+
+            ## iterationAsLastIndex: See sect 7.7 of Nimble manual
+            mcsamples <- as.list(Cmcsampler$mvSamples,
+                iterationAsLastIndex = TRUE)
+            mcsamplesKA <- as.list(Cmcsampler$mvSamples2,
+                iterationAsLastIndex = FALSE)
+
+            ## 'mcsamplesKA$K' contains the component identity
+            ## of each training datapoint, but we only want
+            ## the number of distinct components used:
+            mcsamplesKA$K <- apply(mcsamplesKA$K, 1,
+                function(xx){length(unique(xx))})
+
+            if (showAlphatraces) {
+                dim(mcsamplesKA$Alpha) <- NULL # from matrix to vector
+            }
+
+            cat('\nCurrent time:',
+                format(Sys.time(), '%Y-%m-%d %H:%M:%S'))
+            cat('\nMCMC time',
+                printtimediff(difftime(Sys.time(), MCtimestart, units = 'auto')),
+                '\n')
+
+#### Remove iterations with non-finite values
+            if(any(!is.finite(unlist(mcsamples)))) {
+                toRemove <- sort(unique(unlist(lapply(mcsamples, function(xx) {
+                    temp <- which(!is.finite(xx), arr.ind = TRUE)
+                    temp[, ncol(temp)]
+                }))))
+
+                cat('\nWARNING:', length(toRemove), 'NON-FINITE SAMPLES\n')
+                ##
+                flagnonfinite <- TRUE
+                nonfinitechains <- TRUE
+                saveRDS(mcsamples, file = file.path(dirname,
+                    paste0('NONFINITEmcsamples',
+                        dashnameroot, '--', padchainnumber,
+                        '_', achain, '-',
+                        acore, '-i', nitertot, '.rds')
+                ))
+                if (length(toRemove) == ncol(mcsamples$W)) {
+                    cat('\n...TOO MANY NON-FINITE OUTPUTS!\n')
+                    ## ## registerDoSEQ()
+                    ## if(exists('cl')){ parallel::stopCluster(cl) }
+                    ## stop('...TOO MANY NON-FINITE OUTPUTS. ABORTING')
+                    mcsamples <- NULL
+                    niter <- 0
+                } else {
+                    mcsamples <- .mcsubset(mcsamples, -toRemove)
+                    niter <- niter - length(toRemove)
+                }
+            }
+
+            nitertot <- nitertot + niter
+
+            ##
+            if (showsamplertimes0) {
+                samplertimes <- Cmcsampler$getTimes()
+                names(samplertimes) <- sapply(
+                    confnimble$getSamplers(),
+                    function(x) x$target
+                )
+                sprefixes <- unique(sub(
+                    '^([^[]+)(\\[.*\\])', '\\1',
+                    names(samplertimes)
+                ))
+                cat('\nSampler times:\n')
+                print(sort(sapply(sprefixes,
+                    function(x) sum(samplertimes[grepl(x, names(samplertimes))])),
+                    decreasing = TRUE
+                ))
+            }
+
+            ## Check how many components were used at the last step
+            ## usedcomponents <- mcsamplesKA$K[length(mcsamplesKA$K)]
+            usedcomponents <- max(mcsamplesKA$K)
+            cat('\nUSED COMPONENTS:', usedcomponents, 'OF', ncomponents, '\n')
+
+#### Update traces
+            ## Log-likelihood
+            diagntime <- Sys.time()
+            ##
+
+            ## .Pcheckpoints() outputs probabilities
+            ll <- .Pcheckpoints(
+                testdata = testdata,
+                K = mcsamples
+            )
+
+            ll <- cbind(
+                rowMeans(ll, na.rm = TRUE), # geometric mean
+                ll
+            )
+
+            colnames(ll) <- c('gmean', testdata$pointsid)
+
+            if(plottraces){
+                saveRDS(ll,
+                    file = file.path(dirname,
+                        paste0('____tempPtraces-',
+                            padchainnumber, '-',
+                            subiter, '.rds'))
+                )
+            }
+
+            traces <- rbind(traces, ll[, 1, drop = FALSE])
+
+            toRemove <- which(!is.finite(traces))
+            if (length(toRemove) > 0) {
+                flagll <- TRUE
+                oktraces <- traces[-unique(toRemove), , drop = FALSE]
+            } else {
+                oktraces <- traces
+            }
+
+            ## ## version before geom.mean
+            ## toRemove <- which(!is.finite(traces), arr.ind = TRUE)
+            ## if (length(toRemove) > 0) {
+            ##     flagll <- TRUE
+            ##     oktraces <- traces[-unique(toRemove[, 1]), , drop = FALSE]
+            ## } else {
+            ##     oktraces <- traces
+            ## }
+
+            ## ## for debugging
+            ## saveRDS(traces,
+            ##     file = file.path(dirname,
+            ##         paste0('___traces',
+            ##             dashnameroot, '--',
+            ##             padchainnumber,'-',subiter, '.rds')
+            ##     ))
+            ## saveRDS(oktraces,
+            ##     file = file.path(dirname,
+            ##         paste0('___oktraces',
+            ##             dashnameroot, '--',
+            ##             padchainnumber,'-',subiter, '.rds')
+            ##     ))
+
+
+            ## ##############################
+            ## ## MCSE, ESS, THINNING, ETC ##
+            ## ##############################
+
+            N <- nrow(oktraces)
+
+            ## Calculate empirical quantiles of the vector of MC samples,
+            ## having 'Qlo' and 'Qhi' probabilities
+            Xlo <- quantile(x = oktraces, probs = Qlo,
+                na.rm = FALSE, names = FALSE, type = 6)
+            Xhi <- quantile(x = oktraces, probs = Qhi,
+                na.rm = FALSE, names = FALSE, type = 6)
+            ## quantile width between empirical quantiles
+            qwidth <- Xhi - Xlo
+
+            ## Calculate credibility intervals (proxy for MCSE)
+            ## for the empirical quantiles above
+            ## as in Vehtari et al. 2021
+            temp <- .funMCEQ(x = oktraces, prob = c(Qlo, Qhi), Qpair = Qerror)
+            wXlo <- temp[2, 1] - temp[1, 1]
+            wXhi <- temp[2, 2] - temp[1, 2]
+
+            ## For each monitored point,
+            ## transform its posterior samples to normalized ranks,
+            ## then calculate the ESSs of their means,
+            ## as in Vehtari & al. 2021
+            ## and Blom 1958 sect.6.10 eqn (6.10.5)
+            ## (alternative eqn (6.10.3) gives roughly same results
+            ## but is computationally slightly more expensive)
+            essnrmean <- .funESS3(oktraces)
+
+            ## We check the relative MCSE of the following quantities:
+            ## - the mean of the MC samples, transformed to normalized ranks
+            ## - the lower quantile 'Qlo'
+            ## - the upper quantile 'Qhi'
+            ## so as to ensure the stability of the mean value
+            ## (representing the "long-run frequency")
+            ## and of its 'Qlo'- and 'Qhi'-quantiles
+            ## (representing the uncertainty about the freq. estimate)
+            relmcse <- c(1 / sqrt(essnrmean), wXlo / qwidth, wXhi / qwidth)
+
+            autothinning <- N * max(relmcse)^2
+
+            ## Output available diagnostics
+            toprint <- list(
+                'abs. quantile error' = max(wXlo, wXhi),
+                'quantile width' = qwidth,
+                'rel. quantile error' = max(relmcse[-1]),
+                'ESS from rel. qt. error' = (1/max(relmcse[-1]))^2,
+                'ESS' = essnrmean,
+                'needed thinning' = autothinning,
+                'log of average' = log(mean(oktraces))
+            )
+
+####
+            for(i in names(toprint)) {
+                thisdiagn <- toprint[[i]]
+                cat(paste0('\n', i, ':'),
+                    if(length(thisdiagn) > 1){
+                        paste(signif(range(thisdiagn), 3), collapse = ' to ')
+                    } else {
+                        signif(thisdiagn, 3)
+                    }
+                )
+            }
+
+            rm(oktraces)
+
+            cat('\nDiagnostics time',
+                printtimediff(difftime(Sys.time(), diagntime, units = 'auto')),
+                '\n')
+
+#### concatenate samples with those of previous chunk, if existing
+            ## add overall iteration index `MCindex` to mcsamples
+            mcsamples$MCindex <- seq(to = nitertot,
+                length.out = ncol(mcsamples$W))
+            ## need to add 1D to behave well with .mcsubset()
+            dim(mcsamples$MCindex) <- ncol(mcsamples$W)
+
+            ## concatenate samples
+                allmcsamples <- .mcjoin(allmcsamples, mcsamples)
+
+            if (is.null(allmcsamplesKA)) {
+                allmcsamplesKA <- mcsamplesKA
+            } else {
+                ## Concatenate samples of K and Alpha
+                ## if (showAlphatraces || showKtraces) {
+                allmcsamplesKA <- mapply(
+                    function(xx, yy) {
+                        c(xx, yy)
+                    },
+                    allmcsamplesKA, mcsamplesKA,
+                    SIMPLIFY = FALSE
+                )
+                ## }
+            }
+
+            ## ######################################
+            ## ## CHECK IF CHAIN MUST BE CONTINUED ##
+            ## ######################################
+
+            lowess <- (1 / max(relmcse))^2
+
+            neededsamples <- max(ceiling(autothinning * (minESS + initES)),
+                nsamplesperchain)
+
+            ## if(relmcse > minrelMCSE)
+            if(lowess < minESS + initES) {
+                ## too small ESS
+                reqiter <- neededsamples - nitertot
+            } else {
+                reqiter <- 0
+            }
+
+            ## respect min and max iterations chosen by user
+            remainiter <- max(minMCiterations - nitertot, reqiter)
+            remainiter <- min(maxMCiterations - nitertot, remainiter)
+
+            cat('\nTotal iterations', nitertot,
+                '- require further', reqiter,
+                '- continue for', remainiter, '\n')
+
+            if(as.double(Sys.time() - timestart0, units = 'hours') >= timeleft &&
+                   remainiter > 0 && nitertot >= nsamplesperchain
+            ) {
+                cat('but stopping chain because of lack of time\n')
+                stoppedchains <- stoppedchains + 1L
+                remainiter <- 0
+            }
+
+            ## Save cumulated mcsamples to save memory
+            ## Only saved when we have at least
+            ## 'startupMCiterations' samples
+            if(ncol(allmcsamples$W) > startupMCiterations/2 ||
+                   remainiter <= 0){
+                savedchunks <- savedchunks + 1L
+                saveRDS(
+                    allmcsamples,
+                    file = file.path(dirname,
+                        paste0('____tempmcsamples-',
+                            padchainnumber, '-',
+                            savedchunks, '.rds'))
+                )
+                allmcsamples <- NULL
+            }
+            gc(full = TRUE)
+
+            if (remainiter > 0) { # This chain is going to continue
+
+                ## limit number of iterations per loop, to save memory
+                niter <- min(remainiter + 1L, startupMCiterations)
+                subiter <- subiter + 1L
+                cat('\nChain #', chainnumber, '- chunk', subiter,
+                    '(chain', achain, 'of', nchainsperthiscore,
+                    'for this node): increasing by', niter, '\n'
+                )
+            }
+
+            ## ###########
+            ## ## PLOTS ##
+            ## ###########
+
+#### Plot diagnostic traces of current chain
+            if (plottraces) {
+                cat('\nPlotting traces and samples.\n')
+
+                ## Plot various info and traces
+                ## colpalette <- 1:6 #seq_len(ncol(traces))
+                ## names(colpalette) <- colnames(traces)[1:min(6, ncol(traces))]
+                graphics.off()
+                pdf(file.path(dirname,
+                    paste0('___mcpartialtraces', dashnameroot, '--',
+                        padchainnumber, '_', achain, '-', acore, '.pdf')
+                ), height = 8.27, width = 11.69)
+
+                ## Summary stats
+                matplot(1:2, type = 'l', col = 'white',
+                    main = paste0('Stats chain ', achain),
+                    axes = FALSE, ann = FALSE)
+                ## Legends
+                ## legendpositions <- c('topleft', 'topright', 'bottomleft', 'bottomright')
+                ## for (alegend in seq_along(grouplegends)) {
+                ##     legend(x = legendpositions[alegend], bty = 'n', cex = 1.5,
+                ##         legend = grouplegends[[alegend]]
+                ##     )
+                ## }
+                legend(x = 'left', bty = 'n', cex = 0.75,
+                    legend = c(
+                        paste0('Chain ', chainnumber, ' - ',
+                            achain, ' of node ', acore),
+                        ##
+                        paste0('Test points ',
+                            paste0('#', testdata$pointsid, collapse=' ')
+                        ),
+                        ##
+                        paste0('Iterations: ', nitertot),
+                        ##
+                        paste0('Used components: ', usedcomponents,
+                            ' of ', ncomponents),
+                        ##
+                        'NOTES:',
+                        if (flagnonfinite) {
+                            'some non-finite MC outputs'
+                        },
+                        if (usedcomponents > ncomponents - 5) {
+                            'too many components used'
+                        },
+                        if (flagll) {
+                            'non-finite values in diagnostics'
+                        },
+                        paste0(names(toprint), ': ',
+                            sapply(toprint, function(xx){ signif(xx, 3) })
+                        )
+                    )
+                )
+
+                ## Traces of likelihood and cond. probabilities
+                ## Save user's par()
+                ## oldpar <- par(mfrow = c(1, 1))
+                ## oldpar$new <- NULL
+                ## on.exit(par(oldpar), add = TRUE)
+
+                for (avar in 1:ncol(traces)) {
+                    ## 4.343 is 10/log(10)
+                    pplot(
+                        y = 4.343 * log(traces[is.finite(traces[, avar]), avar]),
+                        type = 'l', lty = 1, col = 1,
+                        main = paste0('#', colnames(traces)[avar]),
+                        cex.main = 1.25,
+                        ylab = paste0('log_F(testpoints)/dHart'),
+                        xlab = 'Monte Carlo sample',
+                        family = family
+                        ## mar = c(NA, 6, NA, NA)
+                    )
+                }
+                dev.off()
+            }
+
+#### Plot Alpha and component occupation, if required
+            if (showAlphatraces || showKtraces) {
+                cat('Plotting component and Alpha information.\n')
+                pdf(file = file.path(dirname,
+                    paste0('hyperparams_traces', dashnameroot, '--',
+                        padchainnumber, '_', achain, '-', acore, '.pdf')),
+                    height = 8.27, width = 11.69)
+
+                if (showKtraces) {
+                    cat('\nSTATS USED COMPONENTS:\n')
+                    print(summary(allmcsamplesKA$K))
+                    ##
+                    pplot(y = allmcsamplesKA$K, ylab = 'used components',
+                        xlab = 'iteration', ylim = c(0, ncomponents))
+                    pplot(x = 0:ncomponents,
+                        y = tabulate(allmcsamplesKA$K + 1, nbins = ncomponents + 1),
+                        type = 'l', xlab = 'used components', ylab = NA,
+                        ylim = c(0, NA))
+                }
+                if (showAlphatraces) {
+                    cat('\nSTATS alpha:\n')
+                    print(summary(allmcsamplesKA$Alpha, na.rm = TRUE))
+                    pplot(y = allmcsamplesKA$Alpha,
+                        ylab = bquote(alpha), xlab = 'iteration',
+                        ylim = c(1, nalpha))
+                    pplot(x = seq(minalpha, maxalpha, by = byalpha),
+                        y = tabulate(allmcsamplesKA$Alpha, nbins = nalpha),
+                        type = 'l', xlab = bquote(alpha), ylab = '',
+                        ylim = c(0, NA))
+                }
+                dev.off()
+            }
+
+            ## ###############
+            ## ## END PLOTS ##
+            ## ###############
+
+#### Print estimated end time
+            fracchain <- achain - remainiter / (remainiter + nitertot)
+            endTime <- Sys.time() + 180 +
+                ( (nchainsperthiscore + (acore > coreswithextrachain) - fracchain) *
+                      difftime(Sys.time(), MCtimestart) / fracchain )
+            print2user(paste0(
+                '\r\033[', ncores + 1, 'A',
+                '\rEstimated end times, updated ',
+                format(Sys.time(), format='%Y-%m-%d %H:%M'), ':\r',
+                '\033[', acore, 'B',
+                'Node ', acore, ': ',
+                format(endTime, format='%Y-%m-%d %H:%M'),
+                '\r\033[', ncores - acore + 1, 'B\r'
+                ))
+
+            reset <- FALSE
+        }
+#### END WHILE-LOOP OVER CHUNKS OF ONE CHAIN
+
+
+        ## #####################################
+        ## ## BUILD AND SAVE CHAIN QUANTITIES ##
+        ## #####################################
+
+#### Determine which MC samples should be saved
+        cat('\nKeeping ', nsamplesperchain, '\n')
+
+        tokeep <- round(seq(from = autothinning * initES,
+            to = nitertot,
+            length.out = nsamplesperchain
+        ))
+        if(length(tokeep) > length(unique(tokeep))){
+            cat('\nWARNING: reduced thinning owing to time constraints\n')
+            tokeep <- round(seq(from = max(1, nitertot - nsamplesperchain + 1L),
+                to = nitertot,
+                length.out = nsamplesperchain))
+        }
+
+        ## Read, subset, combine saved samples
+        for(chunk in seq_len(savedchunks)){
+            tempmcsamples <- readRDS(file = file.path(
+                dirname,
+                paste0('____tempmcsamples-',
+                    padchainnumber, '-',
+                    chunk, '.rds')
+            ))
+            tempmcsamples <- .mcsubset(tempmcsamples,
+                which(tempmcsamples$MCindex %in% tokeep)
+            )
+
+                allmcsamples <- .mcjoin(allmcsamples, tempmcsamples)
+        }
+
+        ## Save thinned total chain
+        saveRDS(allmcsamples,
+            file = file.path(dirname,
+                paste0('___mcsamples',
+                    dashnameroot, '--',
+                    padchainnumber, '.rds'))
+        )
+
+        saveRDS(allmcsamplesKA,
+            file = file.path(dirname,
+                paste0('___hyperparams_traces',
+                    dashnameroot, '--',
+                    padchainnumber, '.rds'))
+        )
+
+        ## put 'tokeep' in first slot if saving only nsamplesperchain
+        saveRDS(traces[ , , drop = FALSE],
+            file = file.path(dirname,
+                paste0('___mcpartialtraces',
+                    dashnameroot, '--',
+                    padchainnumber, '.rds')
+            ))
+
+        ## possibly increase the count of chains with non-finite outputs
+        nonfinitechains <- nonfinitechains + flagnonfinite
+
+        cat('\nCurrent time:', format(Sys.time(), '%Y-%m-%d %H:%M:%S'))
+        cat('\nMCMC + diagnostics time',
+            printtimediff(difftime(Sys.time(), MCtimestart, units = 'auto')),
+            '\n')
+
+        maxusedcomponents <- max(maxusedcomponents, usedcomponents)
+        maxiterations <- max(maxiterations, nitertot)
+    }
+#### END LOOP OVER CHAINS (WITHIN ONE NODE)
+
+    ##
+    cat('\nCurrent time:', format(Sys.time(), '%Y-%m-%d %H:%M:%S'))
+
+    cat('\nTotal time',
+        printtimediff(difftime(Sys.time(), headertimestart, units = 'auto')),
+        '\n')
+
+#### Inform user that this node has finished
+    print2user(paste0(
+        '\r\033[', ncores + 1, 'A',
+        '\rEstimated end times, updated ',
+        format(Sys.time(), format='%Y-%m-%d %H:%M'), ':\r',
+        '\033[', acore, 'B',
+        'Node ', acore, ': ',
+        'finished.        ',
+        '\r\033[', ncores - acore + 1, 'B\r'
+    ))
+
+    ## output information from a node,
+    ## passed to the originally calling process
+    cbind(
+        maxusedcomponents = maxusedcomponents,
+        maxiterations = maxiterations,
+        nonfinitechains = nonfinitechains,
+        stoppedchains = stoppedchains,
+        headertime = headertime,
+        MCtime = difftime(Sys.time(), MCtimestart, units = 'secs'),
+        usedmem = max(usedmem, sum(gc()[,6]))
+    )
+}
