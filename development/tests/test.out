@@ -1,32 +1,26 @@
 Testing version 2.4.0
-Starting tests 261112T223851
-Quick learn 261112T223851
+Starting tests 261113T092505
+Quick learn 261113T092505
 $`Quick learn`
 [1] TRUE
 
-Full base learn 261112T223910
+Full base learn 261113T092523
 $`Full base learn`
 [1] TRUE
 
-Simple Pr 261112T224038
+Simple Pr 261113T092648
 [1] TRUE
-Various Pr 261112T224158
-$`Various Pr-2-values`
-[1] "Mean absolute difference: 0.000495708"
-
-$`Various Pr-2-samples`
-[1] "Mean absolute difference: 0.002588295"
-
-[1] FALSE
-Simple MIs 261112T224201
+Various Pr 261113T092806
 [1] TRUE
-Quick learn autocluster 261112T224504
+Simple MIs 261113T092920
+[1] TRUE
+Quick learn autocluster 261113T093204
 $`Quick learn autocluster`
 [1] TRUE
 
-Quick learn existing cluster 261112T224525
+Quick learn existing cluster 261113T093224
 $`Quick learn existing cluster`
 [1] TRUE
 
-All test passed: FALSE
-Done 261112T224546
+All test passed: TRUE
+Done 261113T093244
