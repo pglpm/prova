@@ -23,13 +23,13 @@ message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
 thisresult <- tc(nm, {
-    K <- learn( # outputdir='deletethisdir',
+    K <- learn( outputdir='____deletethisdir',
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
     ## only used to reduce computation time for this example
-    nsamples = 10, nchains = 1,
-    startupMCiterations = 10, maxMCiterations = 10,
-    minESS = 0, initES = 0, verbose = FALSE
+    nsamples = 36, nchains = 1,
+    startupMCiterations = 36, maxMCiterations = 36,
+    minESS = 0, initES = 0, verbose = TRUE
     )
     is.list(K)
     }

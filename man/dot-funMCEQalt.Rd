@@ -2,7 +2,7 @@
 % Please edit documentation in R/internal_mcmc.R
 \name{.funMCEQalt}
 \alias{.funMCEQalt}
-\title{Calculate credibility quantiles on estimated quantile using batch-means}
+\title{Calculate credibility quantiles on estimated quantile using spectral method}
 \usage{
 .funMCEQalt(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1)))
 }
@@ -26,8 +26,7 @@ Tested also on t-distributions with df=1.1 and Pareto with a=1.5 (mean exists, v
 
 Uses beta approximation
 from Vehtari & al. 2021 \url{doi:10.1214/20-BA1221} sect.4.4
-but this version is based on batch-means rather than Geyer's method.
 
-Used in '.workerfun()' in 'learn()'
+Used in '.workerfun()', 'learn()', 'Pr()', 'mutualinfo()'
 }
 \keyword{internal}
