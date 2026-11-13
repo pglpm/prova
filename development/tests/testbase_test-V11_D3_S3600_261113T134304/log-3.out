@@ -1,4 +1,4 @@
-Log node 3 - Current time: 2026-11-13 09:25:23 
+Log node 3 - Current time: 2026-11-13 13:43:04 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -101,7 +101,7 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 43 secs 
+Setup time 44 secs 
 
 ###########################################################
 Chain # 3 (chain 1 of 1 for this node)
@@ -113,19 +113,22 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-13 09:26:15
-MCMC time 7.7 secs 
+Current time: 2026-11-13 13:43:57
+MCMC time 8.2 secs 
 
 USED COMPONENTS: 3 OF 64 
 
-abs. quantile error: 0.234
+max abs. quantile error: 0.234
 quantile width: 5.1
-rel. quantile error: 0.0458
-ESS from rel. qt. error: 476
+max rel. quantile error: 0.0458
+min ESS from rel. qt. error: 476
+MCSE: 0.0935
+rel. MCSE: 0.0586
+quantl-rel. MCSE: 0.0183
 ESS: 291
 needed thinning: 12.4
 log-average: -7.08
-Diagnostics time 0.32 secs 
+Diagnostics time 0.28 secs 
 
 Total iterations 3600 - require further 2063 - continue for 2063 
 
@@ -135,15 +138,18 @@ Iterations: 2064
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-13 09:26:25
-MCMC time 17 secs 
+Current time: 2026-11-13 13:44:07
+MCMC time 18 secs 
 
 USED COMPONENTS: 2 OF 64 
 
-abs. quantile error: 0.212
+max abs. quantile error: 0.212
 quantile width: 5.13
-rel. quantile error: 0.0414
-ESS from rel. qt. error: 584
+max rel. quantile error: 0.0414
+min ESS from rel. qt. error: 584
+MCSE: 0.0732
+rel. MCSE: 0.0455
+quantl-rel. MCSE: 0.0143
 ESS: 483
 needed thinning: 11.7
 log-average: -7.05
@@ -153,8 +159,8 @@ Total iterations 5664 - require further 0 - continue for 0
 
 Keeping  450 
 
-Current time: 2026-11-13 09:26:27
-MCMC + diagnostics time 19 secs 
+Current time: 2026-11-13 13:44:09
+MCMC + diagnostics time 20 secs 
 
-Current time: 2026-11-13 09:26:27
+Current time: 2026-11-13 13:44:09
 Total time 1.1 mins 
