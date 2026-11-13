@@ -1,26 +1,19 @@
-Testing version 2.4.0
-Starting tests 261113T134246
-Quick learn 261113T134246
+Testing version 2.5.0
+Starting tests 261113T232630
+Quick learn 261113T232630
 $`Quick learn`
 [1] TRUE
 
-Full base learn 261113T134304
+Full base learn 261113T232648
 $`Full base learn`
 [1] TRUE
 
-Simple Pr 261113T134430
+Simple Pr 261113T232814
 [1] TRUE
-Various Pr 261113T134548
+Various Pr 261113T232935
 [1] TRUE
-Simple MIs 261113T134703
-[1] TRUE
-Quick learn autocluster 261113T134947
-$`Quick learn autocluster`
-[1] TRUE
-
-Quick learn existing cluster 261113T135007
-$`Quick learn existing cluster`
-[1] TRUE
-
-All test passed: TRUE
-Done 261113T135028
+Simple MIs 261113T233048
+Error in getK(K, deparse(substitute(K))) : 
+  Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.
+Calls: mutualinfo -> getK
+Execution halted
