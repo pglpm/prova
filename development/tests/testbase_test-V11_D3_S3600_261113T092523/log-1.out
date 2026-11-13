@@ -1,4 +1,4 @@
-Log node 4 - Current time: 2026-11-12 22:39:10 
+Log node 1 - Current time: 2026-11-13 09:25:23 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -101,10 +101,10 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 45 secs 
+Setup time 43 secs 
 
 ###########################################################
-Chain # 4 (chain 1 of 1 for this node)
+Chain # 1 (chain 1 of 1 for this node)
 
 Datapoints for testing chain behaviour:
  #1 #2 #3 
@@ -113,93 +113,70 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-12 22:40:04
-MCMC time 8 secs 
+Current time: 2026-11-13 09:26:13
+MCMC time 6.8 secs 
 
 USED COMPONENTS: 3 OF 64 
 
-abs. quantile error: 0.303
-quantile width: 5.42
-rel. quantile error: 0.056
-ESS from rel. qt. error: 319
-ESS: 316
-needed thinning: 11.4
-log-average: -7.69
-Diagnostics time 0.32 secs 
+abs. quantile error: 0.228
+quantile width: 4.94
+rel. quantile error: 0.0461
+ESS from rel. qt. error: 471
+ESS: 393
+needed thinning: 9.15
+log-average: -6.99
+Diagnostics time 0.33 secs 
 
-Total iterations 3600 - require further 1621 - continue for 1621 
+Total iterations 3600 - require further 593 - continue for 593 
 
-Chain # 4 - chunk 2 (chain 1 of 1 for this node): increasing by 1622 
+Chain # 1 - chunk 2 (chain 1 of 1 for this node): increasing by 594 
 
-Iterations: 1622 
+Iterations: 594 
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-12 22:40:13
-MCMC time 17 secs 
+Current time: 2026-11-13 09:26:20
+MCMC time 14 secs 
 
 USED COMPONENTS: 3 OF 64 
 
-abs. quantile error: 0.263
-quantile width: 5.51
-rel. quantile error: 0.0477
-ESS from rel. qt. error: 440
-ESS: 425
-needed thinning: 12.3
-log-average: -7.72
-Diagnostics time 0.17 secs 
+abs. quantile error: 0.241
+quantile width: 4.98
+rel. quantile error: 0.0484
+ESS from rel. qt. error: 426
+ESS: 492
+needed thinning: 9.84
+log-average: -7
+Diagnostics time 0.036 secs 
 
-Total iterations 5222 - require further 412 - continue for 412 
+Total iterations 4194 - require further 313 - continue for 313 
 
-Chain # 4 - chunk 3 (chain 1 of 1 for this node): increasing by 413 
+Chain # 1 - chunk 3 (chain 1 of 1 for this node): increasing by 314 
 
-Iterations: 413 
+Iterations: 314 
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-12 22:40:15
-MCMC time 19 secs 
+Current time: 2026-11-13 09:26:21
+MCMC time 15 secs 
 
 USED COMPONENTS: 3 OF 64 
 
-abs. quantile error: 0.226
-quantile width: 5.44
-rel. quantile error: 0.0414
-ESS from rel. qt. error: 582
-ESS: 452
-needed thinning: 12.5
-log-average: -7.72
-Diagnostics time 0.027 secs 
+abs. quantile error: 0.222
+quantile width: 5.04
+rel. quantile error: 0.044
+ESS from rel. qt. error: 516
+ESS: 518
+needed thinning: 8.73
+log-average: -7.01
+Diagnostics time 0.019 secs 
 
-Total iterations 5635 - require further 81 - continue for 81 
-
-Chain # 4 - chunk 4 (chain 1 of 1 for this node): increasing by 82 
-
-Iterations: 82 
-Warning: value of thin2 is being changed, in the midst of a thinning interval.
-|-------------|-------------|-------------|-------------|
-|-------------------------------------------------------|
-
-Current time: 2026-11-12 22:40:16
-MCMC time 20 secs 
-
-USED COMPONENTS: 3 OF 64 
-
-abs. quantile error: 0.229
-quantile width: 5.48
-rel. quantile error: 0.0418
-ESS from rel. qt. error: 572
-ESS: 461
-needed thinning: 12.4
-log-average: -7.73
-Diagnostics time 0.0077 secs 
-
-Total iterations 5717 - require further 0 - continue for 0 
+Total iterations 4508 - require further 0 - continue for 0 
 
 Keeping  450 
 
-Current time: 2026-11-12 22:40:17
-MCMC + diagnostics time 21 secs 
+Current time: 2026-11-13 09:26:22
+MCMC + diagnostics time 16 secs 
 
-Current time: 2026-11-12 22:40:17
-Total time 1.1 mins 
+Current time: 2026-11-13 09:26:22
+Total time 59 secs 

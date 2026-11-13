@@ -1,4 +1,4 @@
-Log node 5 - Current time: 2026-11-12 22:39:10 
+Log node 4 - Current time: 2026-11-13 09:25:23 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -101,10 +101,10 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 47 secs 
+Setup time 43 secs 
 
 ###########################################################
-Chain # 5 (chain 1 of 1 for this node)
+Chain # 4 (chain 1 of 1 for this node)
 
 Datapoints for testing chain behaviour:
  #1 #2 #3 
@@ -113,93 +113,93 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-12 22:40:05
-MCMC time 7.6 secs 
-
-USED COMPONENTS: 2 OF 64 
-
-abs. quantile error: 0.271
-quantile width: 5.6
-rel. quantile error: 0.0484
-ESS from rel. qt. error: 426
-ESS: 355
-needed thinning: 10.1
-log-average: -7.72
-Diagnostics time 0.3 secs 
-
-Total iterations 3600 - require further 1045 - continue for 1045 
-
-Chain # 5 - chunk 2 (chain 1 of 1 for this node): increasing by 1046 
-
-Iterations: 1046 
-|-------------|-------------|-------------|-------------|
-|-------------------------------------------------------|
-
-Current time: 2026-11-12 22:40:13
-MCMC time 15 secs 
+Current time: 2026-11-13 09:26:16
+MCMC time 8.1 secs 
 
 USED COMPONENTS: 3 OF 64 
 
-abs. quantile error: 0.238
-quantile width: 5.59
-rel. quantile error: 0.0425
-ESS from rel. qt. error: 553
-ESS: 441
-needed thinning: 10.5
-log-average: -7.73
-Diagnostics time 0.067 secs 
+abs. quantile error: 0.328
+quantile width: 5.14
+rel. quantile error: 0.0639
+ESS from rel. qt. error: 245
+ESS: 291
+needed thinning: 14.7
+log-average: -6.86
+Diagnostics time 0.28 secs 
 
-Total iterations 4646 - require further 182 - continue for 182 
+Total iterations 3600 - require further 3139 - continue for 3139 
 
-Chain # 5 - chunk 3 (chain 1 of 1 for this node): increasing by 183 
+Chain # 4 - chunk 2 (chain 1 of 1 for this node): increasing by 3140 
 
-Iterations: 183 
+Iterations: 3140 
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-12 22:40:14
-MCMC time 16 secs 
+Current time: 2026-11-13 09:26:26
+MCMC time 19 secs 
 
 USED COMPONENTS: 3 OF 64 
 
-abs. quantile error: 0.241
-quantile width: 5.58
-rel. quantile error: 0.0433
-ESS from rel. qt. error: 534
-ESS: 432
-needed thinning: 11.2
-log-average: -7.75
-Diagnostics time 0.013 secs 
+abs. quantile error: 0.242
+quantile width: 5.15
+rel. quantile error: 0.0471
+ESS from rel. qt. error: 452
+ESS: 512
+needed thinning: 14.9
+log-average: -6.94
+Diagnostics time 0.66 secs 
 
-Total iterations 4829 - require further 294 - continue for 294 
+Total iterations 6740 - require further 96 - continue for 96 
 
-Chain # 5 - chunk 4 (chain 1 of 1 for this node): increasing by 295 
+Chain # 4 - chunk 3 (chain 1 of 1 for this node): increasing by 97 
 
-Iterations: 295 
+Iterations: 97 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 09:26:29
+MCMC time 22 secs 
+
+USED COMPONENTS: 3 OF 64 
+
+abs. quantile error: 0.247
+quantile width: 5.16
+rel. quantile error: 0.0479
+ESS from rel. qt. error: 435
+ESS: 516
+needed thinning: 15.7
+log-average: -6.95
+Diagnostics time 0.008 secs 
+
+Total iterations 6837 - require further 360 - continue for 360 
+
+Chain # 4 - chunk 4 (chain 1 of 1 for this node): increasing by 361 
+
+Iterations: 361 
 Warning: value of thin2 is being changed, in the midst of a thinning interval.
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-12 22:40:15
-MCMC time 17 secs 
+Current time: 2026-11-13 09:26:30
+MCMC time 23 secs 
 
 USED COMPONENTS: 3 OF 64 
 
-abs. quantile error: 0.229
-quantile width: 5.57
-rel. quantile error: 0.041
-ESS from rel. qt. error: 594
-ESS: 459
-needed thinning: 11.2
-log-average: -7.75
-Diagnostics time 0.019 secs 
+abs. quantile error: 0.237
+quantile width: 5.15
+rel. quantile error: 0.046
+ESS from rel. qt. error: 473
+ESS: 537
+needed thinning: 15.2
+log-average: -6.95
+Diagnostics time 0.02 secs 
 
-Total iterations 5124 - require further 0 - continue for 0 
+Total iterations 7198 - require further 0 - continue for 0 
 
 Keeping  450 
 
-Current time: 2026-11-12 22:40:16
-MCMC + diagnostics time 18 secs 
+Current time: 2026-11-13 09:26:31
+MCMC + diagnostics time 24 secs 
 
-Current time: 2026-11-12 22:40:16
+Current time: 2026-11-13 09:26:31
 Total time 1.1 mins 

@@ -1,4 +1,4 @@
-Log node 6 - Current time: 2026-11-12 22:39:10 
+Log node 3 - Current time: 2026-11-13 09:25:23 
 nimble version 1.4.3 is loaded.
 For more information on NIMBLE and a User Manual,
 please visit https://R-nimble.org.
@@ -101,10 +101,10 @@ Compiling
   [Note] This may take a minute.
   [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
 
-Setup time 45 secs 
+Setup time 43 secs 
 
 ###########################################################
-Chain # 6 (chain 1 of 1 for this node)
+Chain # 3 (chain 1 of 1 for this node)
 
 Datapoints for testing chain behaviour:
  #1 #2 #3 
@@ -113,71 +113,48 @@ Iterations: 3600
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-12 22:40:04
+Current time: 2026-11-13 09:26:15
 MCMC time 7.7 secs 
 
 USED COMPONENTS: 3 OF 64 
 
-abs. quantile error: 0.245
-quantile width: 5.16
-rel. quantile error: 0.0475
-ESS from rel. qt. error: 443
-ESS: 357
-needed thinning: 10.1
-log-average: -7.82
-Diagnostics time 0.33 secs 
+abs. quantile error: 0.234
+quantile width: 5.1
+rel. quantile error: 0.0458
+ESS from rel. qt. error: 476
+ESS: 291
+needed thinning: 12.4
+log-average: -7.08
+Diagnostics time 0.32 secs 
 
-Total iterations 3600 - require further 1024 - continue for 1024 
+Total iterations 3600 - require further 2063 - continue for 2063 
 
-Chain # 6 - chunk 2 (chain 1 of 1 for this node): increasing by 1025 
+Chain # 3 - chunk 2 (chain 1 of 1 for this node): increasing by 2064 
 
-Iterations: 1025 
+Iterations: 2064 
 |-------------|-------------|-------------|-------------|
 |-------------------------------------------------------|
 
-Current time: 2026-11-12 22:40:12
-MCMC time 16 secs 
-
-USED COMPONENTS: 3 OF 64 
-
-abs. quantile error: 0.218
-quantile width: 5.23
-rel. quantile error: 0.0416
-ESS from rel. qt. error: 577
-ESS: 409
-needed thinning: 11.3
-log-average: -7.78
-Diagnostics time 0.066 secs 
-
-Total iterations 4625 - require further 561 - continue for 561 
-
-Chain # 6 - chunk 3 (chain 1 of 1 for this node): increasing by 562 
-
-Iterations: 562 
-Warning: value of thin2 is being changed, in the midst of a thinning interval.
-|-------------|-------------|-------------|-------------|
-|-------------------------------------------------------|
-
-Current time: 2026-11-12 22:40:13
+Current time: 2026-11-13 09:26:25
 MCMC time 17 secs 
 
 USED COMPONENTS: 2 OF 64 
 
-abs. quantile error: 0.196
-quantile width: 5.27
-rel. quantile error: 0.0372
-ESS from rel. qt. error: 724
-ESS: 497
-needed thinning: 10.4
-log-average: -7.76
-Diagnostics time 0.035 secs 
+abs. quantile error: 0.212
+quantile width: 5.13
+rel. quantile error: 0.0414
+ESS from rel. qt. error: 584
+ESS: 483
+needed thinning: 11.7
+log-average: -7.05
+Diagnostics time 0.16 secs 
 
-Total iterations 5187 - require further 0 - continue for 0 
+Total iterations 5664 - require further 0 - continue for 0 
 
 Keeping  450 
 
-Current time: 2026-11-12 22:40:15
+Current time: 2026-11-13 09:26:27
 MCMC + diagnostics time 19 secs 
 
-Current time: 2026-11-12 22:40:15
+Current time: 2026-11-13 09:26:27
 Total time 1.1 mins 
