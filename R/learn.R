@@ -1459,8 +1459,8 @@ learn <- function(
             ## col = 1:6, # to evidence consecutive chains
             main = paste0('#', colnames(oktraces)[avar], ': ',
                 paste(
-                    names(toprint[c('rel. quantile error', 'ESS')]),
-                    sapply(toprint[c('rel. quantile error', 'ESS')],
+                    names(toprint[c('max rel. quantile error', 'ESS')]),
+                    sapply(toprint[c('max rel. quantile error', 'ESS')],
                         function(xx){ signif(xx[avar], 3) }),
                     collapse = ' | ', sep = ': '
                 )),
