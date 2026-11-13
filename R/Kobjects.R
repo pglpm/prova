@@ -2,7 +2,7 @@
 .prova_envK <- new.env(parent = emptyenv())
 
 
-#' @name Kobjects
+#' @name "K" objects and arguments
 #' @rdname Kobjects
 #'
 #' @title Set or unset default values for 'K =' arguments, and retrieve "prova_K" (knowledge) objects.
