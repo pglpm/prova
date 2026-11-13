@@ -334,8 +334,8 @@
 ### discrete case
 ###
     nVN <- FALSE
-    VNprobs <- numeric(0)
-    dim(VNprobs) <- c(0, dim(K$W))
+    VNprobs <- NULL
+    Nshift <- 0
 
 ### O-variates not in 'tails'
     toselect <- which((auxmetadata$name %in% Xv) &
@@ -349,7 +349,6 @@
         ## }))
         Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
             aux$indexpos, aux$Nvalues, SIMPLIFY = FALSE))
-        Nshift <- nrow(VNprobs)
         VNprobs <- .learnbind(VNprobs,
             K$Oprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
@@ -361,6 +360,7 @@
                 ))) +
                     Nshift + c(0, cumsum(aux$Nvalues[-length(aux$Nvalues)]))
         )
+        Nshift <- nrow(VNprobs)
     }
 
 ### N-variates not in 'tails'
@@ -375,7 +375,6 @@
         ## }))
         Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
             aux$indexpos, aux$Nvalues, SIMPLIFY = FALSE))
-        Nshift <- nrow(VNprobs)
         VNprobs <- .learnbind(VNprobs, K$Nprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
                 t(as.matrix(.vtransform(
@@ -386,6 +385,7 @@
                 ))) +
                     Nshift + c(0, cumsum(aux$Nvalues[-length(aux$Nvalues)]))
         )
+        Nshift <- nrow(VNprobs)
     }
 
 ### O-variates in 'tails'
@@ -395,7 +395,6 @@
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nVN <- TRUE
-        Nshift <- nrow(VNprobs)
         for(i in seq_len(nrow(aux))) {
             Nindices <- aux$indexpos[i] + seq_len(aux$Nvalues[i])
             VNprobs <- .learnbind(VNprobs,
@@ -415,6 +414,7 @@
             ))) +
                 Nshift + c(0, cumsum(aux$Nvalues[-length(aux$Nvalues)]))
         )
+        Nshift <- nrow(VNprobs)
     }
 
 ### N-variates in 'tails'
@@ -424,7 +424,6 @@
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nVN <- TRUE
-        Nshift <- nrow(VNprobs)
         for(i in seq_len(nrow(aux))) {
             VNprobs <- .learnbind(VNprobs,
                 if(tails[aux$name[i]] > 0) {
@@ -447,10 +446,10 @@
             ))) +
                 Nshift + c(0, cumsum(aux$Nvalues[-length(aux$Nvalues)]))
         )
+        Nshift <- nrow(VNprobs)
     }
 
     xVN <- unname(xVN)
-    if(nrow(VNprobs) == 0){VNprobs <- NULL}
 
 ###
 ### binary case

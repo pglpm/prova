@@ -187,7 +187,7 @@ while(atest < 50){
             tolerance = 10 * .Machine$double.eps)
     )
     results <- c(results, thisresult2)
-    saveRDS(results, savefile)
+    #saveRDS(results, savefile)
     if(!isTRUE(thisresult1[[1]]) || !isTRUE(thisresult2[[1]])){
         print(thisresult1)
         print(thisresult2)

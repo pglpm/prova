@@ -16,6 +16,7 @@
     temp <- .lprobsargsyx(
         x = x, auxmetadata = auxmetadata,
         K = list(
+            W = matrix(NA, nrow = 1, ncol = 1),
             Cmean = array(NA, dim = c(max(auxmetadata$id), 1, 1)),
             Dmean = array(NA, dim = c(max(auxmetadata$id), 1, 1))
         ), tails = NULL
