@@ -1346,7 +1346,7 @@ learn <- function(
 
     N <- nrow(oktraces)
 
-    jointdiagn <- apply(oktraces, 2, function(atrace) {
+    JD <- apply(oktraces, 2, function(atrace) {
 ### same as within cores
 
         ## Calculate empirical quantiles of the vector of MC samples,
@@ -1360,28 +1360,27 @@ learn <- function(
 
         ## Calculate credibility intervals (proxy for MCSE)
         ## for the empirical quantiles above
-        ## as in Vehtari et al. 2021
         temp <- .funMCEQ(x = atrace, prob = c(Qlo, Qhi), Qpair = Qerror)
         wXlo <- temp[2, 1] - temp[1, 1]
         wXhi <- temp[2, 2] - temp[1, 2]
 
-        ## ## For each monitored point,
-        ## ## transform its posterior samples to normalized ranks,
-        ## ## then calculate the ESSs of their means,
-        ## ## as in Vehtari et al. 2021
-        ## ## and Blom 1958 sect 6.10 eqn (6.10.5)
-        ## ## (alternative (6.10.3) gives roughly same results
-        ## ## but is computationally slightly more expensive)
-        ## essnrmean <- .funESS3(qnorm(
-        ## (rank(atrace, na.last = NA, ties.method = 'average') - 0.5) / N
-        ## ))
-        ## mcsemean <- 1 / sqrt(essnrmean)
+        ## For each monitored point,
+        ## transform its posterior samples to normalized ranks,
+        ## then calculate the ESSs of their means,
+        ## as in Vehtari et al. 2021
+        ## and Blom 1958 sect 6.10 eqn (6.10.5)
+        ## (alternative (6.10.3) gives roughly same results
+        ## but is computationally slightly more expensive)
+        essnrmean <- .funESS3(qnorm(
+        (rank(atrace, na.last = NA, ties.method = 'average') - 0.5) / N
+        ))
+        mcsemean <- 1 / sqrt(essnrmean)
 
         ## For each monitored point,
         ## calculate the ESSs of their means,
         ## using batch-means method
-        mcsemean <- .funMCSEBM(atrace) / sd(atrace)
-        essnrmean <- 1 / (mcsemean^2)
+        ## mcsemean <- .funMCSEBM(atrace) / sd(atrace)
+        ## essnrmean <- 1 / (mcsemean^2)
 
         ## We check the relative MCSE of the following quantities:
         ## - the mean of the MC samples, transformed to normalized ranks
@@ -1397,17 +1396,28 @@ learn <- function(
 
 ### same as within cores
 
-        c(max(relmcse[-1]), essnrmean, autothinning, qwidth, max(wXhi, wXlo))
+        c(
+            maxrelmcse = max(relmcse[-1]),
+            essnrmean = essnrmean,
+            autothinning = autothinning,
+            qwidth = qwidth,
+            maxwX = max(wXhi, wXlo),
+            mcsemean = mcsemean,
+            MCSE = mcsemean * sd(atrace)
+        )
     })
 
     ## Output available diagnostics
     toprint <- list(
-        'abs. quantile error' = jointdiagn[5, ],
-        'quantile width' = jointdiagn[4, ],
-        'rel. quantile error' = jointdiagn[1, ],
-        'ESS from rel. qt. error' = (1/jointdiagn[1, ])^2,
-        'ESS' = jointdiagn[2, ],
-        'needed thinning' = jointdiagn[3, ],
+        'max abs. quantile error' = JD['maxwX', ],
+        'quantile width' = JD['qwidth', ],
+        'max rel. quantile error' = JD['maxrelmcse', ],
+        'min ESS from rel. qt. error' = 1/(JD['maxrelmcse', ]^2),
+        'MCSE' = JD['MCSE', ],
+        'rel. MCSE' = JD['mcsemean', ],
+        'quantl-rel. MCSE' = JD['MCSE', ] / JD['qwidth', ],
+        'ESS' = JD['essnrmean', ],
+        'needed thinning' = JD['autothinning', ],
         'log-average' = colMeans(oktraces)
     )
     K$info <- c(K$info, toprint)
@@ -3198,28 +3208,27 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
             ## Calculate credibility intervals (proxy for MCSE)
             ## for the empirical quantiles above
-            ## as in Vehtari et al. 2021
             temp <- .funMCEQ(x = oktraces, prob = c(Qlo, Qhi), Qpair = Qerror)
             wXlo <- temp[2, 1] - temp[1, 1]
             wXhi <- temp[2, 2] - temp[1, 2]
 
-            ## ## For each monitored point,
-            ## ## transform its posterior samples to normalized ranks,
-            ## ## then calculate the ESSs of their means,
-            ## ## as in Vehtari et al. 2021
-            ## ## and Blom 1958 sect 6.10 eqn (6.10.5)
-            ## ## (alternative (6.10.3) gives roughly same results
-            ## ## but is computationally slightly more expensive)
-            ## essnrmean <- .funESS3(qnorm(
-            ## (rank(oktraces, na.last = NA, ties.method = 'average') - 0.5) / N
-            ## ))
-            ## mcsemean <- 1 / sqrt(essnrmean)
+            ## For each monitored point,
+            ## transform its posterior samples to normalized ranks,
+            ## then calculate the ESSs of their means,
+            ## as in Vehtari et al. 2021
+            ## and Blom 1958 sect 6.10 eqn (6.10.5)
+            ## (alternative (6.10.3) gives roughly same results
+            ## but is computationally slightly more expensive)
+            essnrmean <- .funESS3(qnorm(
+            (rank(oktraces, na.last = NA, ties.method = 'average') - 0.5) / N
+            ))
+            mcsemean <- 1 / sqrt(essnrmean)
 
             ## For each monitored point,
             ## calculate the ESSs of their means,
             ## using batch-means method
-            mcsemean <- .funMCSEBM(oktraces) / sd(oktraces)
-            essnrmean <- 1 / (mcsemean^2)
+            ## mcsemean <- .funMCSEBM(oktraces) / sd(oktraces)
+            ## essnrmean <- 1 / (mcsemean^2)
 
             ## We check the relative MCSE of the following quantities:
             ## - the mean of the MC samples, transformed to normalized ranks
@@ -3235,10 +3244,13 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
 
             ## Output available diagnostics
             toprint <- list(
-                'abs. quantile error' = max(wXlo, wXhi),
+                'max abs. quantile error' = max(wXlo, wXhi),
                 'quantile width' = qwidth,
-                'rel. quantile error' = max(relmcse[-1]),
-                'ESS from rel. qt. error' = (1/max(relmcse[-1]))^2,
+                'max rel. quantile error' = max(relmcse[-1]),
+                'min ESS from rel. qt. error' = 1/(max(relmcse[-1])^2),
+                'MCSE' = mcsemean * sd(oktraces),
+                'rel. MCSE' = mcsemean,
+                'quantl-rel. MCSE' = mcsemean * sd(oktraces) / qwidth,
                 'ESS' = essnrmean,
                 'needed thinning' = autothinning,
                 'log-average' = mean(oktraces)

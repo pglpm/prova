@@ -23,7 +23,7 @@ message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
 thisresult <- tc(nm, {
-    K <- learn(
+    K <- learn( # outputdir='deletethisdir',
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
     ## only used to reduce computation time for this example

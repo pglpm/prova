@@ -20,7 +20,7 @@
 #' @import stats
 #'
 #' @keywords internal
-.funMCEQalt <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
+.funMCEQ <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
     N <- length(x)
     straces <- sort(x)
     sapply(prob, function(aprob) {
@@ -58,14 +58,15 @@
 #' @import stats
 #'
 #' @keywords internal
-.funMCEQ <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
+.funMCEQalt <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
     N <- length(x)
     straces <- sort(x)
     sapply(prob, function(aprob) {
         Xlo <- quantile(x = x, probs = aprob,
             na.rm = TRUE, names = FALSE, type = 6)
         ##
-        essXlo <- (sd(x <= Xlo) / .funMCSEBM(x <= Xlo))^2
+        temp <- sd(x <= Xlo)
+        essXlo <- (if(temp > 0){(temp / .funMCSEBM(x <= Xlo))^2}else{N/2})
         ##
         a <- qbeta(Qpair, essXlo * aprob + 1, essXlo * (1 - aprob) + 1)
         c(straces[max(round(a[1] * N), 1)], straces[min(round(a[2] * N), N)])
