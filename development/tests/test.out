@@ -1,26 +1,26 @@
 Testing version 2.4.0
-Starting tests 261113T092505
-Quick learn 261113T092505
+Starting tests 261113T134246
+Quick learn 261113T134246
 $`Quick learn`
 [1] TRUE
 
-Full base learn 261113T092523
+Full base learn 261113T134304
 $`Full base learn`
 [1] TRUE
 
-Simple Pr 261113T092648
+Simple Pr 261113T134430
 [1] TRUE
-Various Pr 261113T092806
+Various Pr 261113T134548
 [1] TRUE
-Simple MIs 261113T092920
+Simple MIs 261113T134703
 [1] TRUE
-Quick learn autocluster 261113T093204
+Quick learn autocluster 261113T134947
 $`Quick learn autocluster`
 [1] TRUE
 
-Quick learn existing cluster 261113T093224
+Quick learn existing cluster 261113T135007
 $`Quick learn existing cluster`
 [1] TRUE
 
 All test passed: TRUE
-Done 261113T093244
+Done 261113T135028
