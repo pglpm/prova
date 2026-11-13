@@ -42,7 +42,7 @@ Each variate in the argument \code{X} can be specified either as a point-value \
 
 The default value of the \verb{K = } argument is the knowledge object stored in the option \code{'prova.K'} in \link[base:getOption]{options()}, which you may have previously set with \code{options(prova.K = ...)}. This way you can save a lot of \code{K = ...}-typing in this and other functions.
 
-Therefore if \code{rPr()} is called with two unnamed arguments, \code{rPr(..., ...)}, then it is interpreted as \code{rPr(n = ..., Ynames = ...)}, with \code{X = NA} and the \code{K} object retrieved from \link[base:getOption]{options()}. If it is called with three unnamed arguments, then it is interpreted as \code{rPr(n = ..., Ynames = ..., X = ...)}, with \code{K} retrieved from \link[base:getOption]{options()}. If you want to specify \code{n}, \code{Ynames}, and \code{K} without naming the arguments, then you must use \code{rPr(..., ..., NA, ...)}, explicitly giving \code{X} as third argument.
+Therefore if \code{rPr()} is called with two unnamed arguments, \code{rPr(..., ...)}, then it is interpreted as \code{rPr(n = ..., Ynames = ...)}, with \code{X = NA} and the \code{K} object retrieved from \link[base:getOption]{options()}. If it is called with three unnamed arguments, then it is interpreted as \code{rPr(n = ..., Ynames = ..., X = ...)}, with \code{K} retrieved from \link[base:getOption]{options()}. In order to specify \code{n}, \code{Ynames}, and \code{K} without naming the arguments, the form \code{rPr(..., ..., NA, ...)} must be used, explicitly giving \code{X} as third argument.
 }
 \examples{
 ## Use the example "prova_K" (knowledge) object 'Kexample'

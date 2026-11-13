@@ -1,34 +1,139 @@
-#' Retrieve a "prova_K" (knowledge) object
+# Internal environment to hold a K-object, for user convenience
+.prova_envK <- new.env(parent = emptyenv())
+
+
+#' @name Kobjects
+#' @rdname Kobjects
+#'
+#' @title Set or unset default values for 'K =' arguments, and retrieve "prova_K" (knowledge) objects.
 #'
 #' @description
-#' The `K = ` argument in most functions of the **Prova** package accepts either a "prova_K" (knowledge) object, or a path to a directory containing a 'K.rds' file with such object, or a path to such a file itself.
+#' Functions for declaring or undeclaring a "prova_K" (knowledge) object to be used implicitly in any subsequent `K = ` arguments, and for showing its contents.
 #'
-#' The function `getK()` retrieves the actual "prova_K" object if given a path as in the latter two cases, and simply returns its argument if this is an actual "prova_K" object. In any case it also checks for the validity of the object, returning `NULL` if the object or path are not valid.
+#' @param K One of these alternatives:
+#' - A "prova_K" (knowledge) object.
+#' - A character string of the path to an [RDS][base::readRDS] file (typically created by `learn()`) with such an object.
+#' - A character string of the path to a directory (typically created by `learn()`) containing such an [RDS][base::readRDS] file with such an object.
+#' - For function `getK()` it can also be `NULL` or omitted, if a default `K = ` argument has been defined with `useK()`.
 #'
-#' This function can be useful if you want to quickly check some information stored in the "prova_K" object, such as the metadata or the number of Monte Carlo samples (see examples).
+#' @param .name Either `NULL` (default) or a character. Used for internal purposes.
 #'
-#' @param K either a "prova_K" (knowledge) object, or a character string with the path to an RDS file with such an object or a directory containing one. The default is the value of the option `'prova.K'` in [options()][base::options()], in case the user has stored a "prova_K" object or its path in this option.
+#' @details
+#' The `K = ` argument in most functions of the **Prova** package, such as `Pr()`, accepts either a "prova_K" (knowledge) object, or a path to a directory containing a 'K.rds' file with such object, or a path to such a file itself. In a typical session or script, the "K" object was calculated beforehand, and is the same in all functions, unless the user is comparing probabilities calculated from different sampling data or different amounts of sampling data.
 #'
-#' @return The actual "prova_K" (knowledge) object or `NULL` if none was found.
+#' The function `useK()` allows the user to specify a "K" object to be implictily used in all `K = ` arguments of subsequent function calls. Then such arguments can simply be omitted, saving a lot of `K = ...`-typing (attention must still be paid to argument order; see details of individual functions).
+#'
+#' This function also checks if the given `K` is a valid "prova_K" object, or path to one, and throws an error otherwise. Note that any previously declared object is replaced.
+#'
+#' (This function also saves, mostly for internal purpose in plotting functions, the name of the variable that pointed to the "K" object.)
+#'
+#' If called with argument `NULL` or `NA`, `useK(NULL)`, then it declares that no default "K" objects should be used in `K = ` arguments any longer. Note that any subsequent calls to functions that omit `K = ` arguments will obviously throw an error.
+#'
+#' The function `getK()` returns the actual "prova_K" object, if its argument is a path to such an object. If the argument is the object itself it just returns it. With an empty argument, it returns the "K" object declared by `useK()`, throwing an error if no such object was declared. This function can be useful if you want to quickly check some information stored in the "prova_K" object, such as the metadata or the number of Monte Carlo samples (see examples).
+#'
+#' (This function can also return, via the `name` argument, the original name of the variable that pointed to the "K" object. This is mostly used for internal use of plotting functions.)
+#'
+#' @return
+#'
+#' Function `useK()` invisibly returns the name of the variable that points to the "K" object, or `NULL` if called with no arguments.
+#'
+#' Function `getK()` returns the actual "K" object corresponding to its input. If called with a non-`NULL` `name` argument, it returns a list of a "K" object and its name.
+#'
+#' @seealso
+#'
+#' [learn()], which creates and stores "K" objects.
+#'
+#' [Pr()], [vrtgrid()], and similar functions which use "K" objects.
 #'
 #' @examples
-#' ## Here w set 'K' to be the object 'Kexample',
-#' ## but it could be just the path (character string) to such an object
-#' K <- Kexample
+#' ## 'Prova' includes the example object 'Kexample'
+#' ## related to a dataset with variates 'species' and 'bill_len'.
 #'
-#' ## Retrieve the metadata that were used in 'K'
-#' getK(K)$info$metadata
+#' ## Set the object 'Kexample' to be used as default 'K=' argument;
+#' ## it could be just the path (character string) to such an object
+#' useK(Kexample)
 #'
-#' ## Retrieve the number of Monte Carlo samples in 'K'
-#' getK(K)$info$nMCsamples
+#' ## Show the metadata included in this default knowledge object
+#' getK()$info$metadata
+#'
+#' ## Create a data frame with all possible values of 'species';
+#' ## then calculate the probabilities of the different species
+#' ## full calls would be   vrtgrid(vrt = 'species', K = Kexample)
+#' ## and   Pr(Y = Y, X = NA, K = Kexample)
+#'
+#' Y <- vrtgrid('species')
+#'
+#' probs <- Pr(Y)
+#'
+#' ## Stop 'Kexample' to be used as default;
+#' ## note that calling "Pr(Y)" would now give an error thereafter.
+#' forgetK()
+#'
+#' ## Show how many Monte Carlo samples 'Kexample' contains;
+#' ## note we must pass it explicitly as argument now
+#' getK(Kexample)$info$nMCsamples
+#'
+#' @concept K
+NULL
+
+
+#' @rdname Kobjects
+#' @export
+useK <- function(K = NULL){
+    if(is.null(K) || (is.logical(K) && is.na(K))){
+        ## user wants to remove K object
+        if(exists('.K', envir = .prova_envK, inherits = FALSE)){
+            Kname <- get('.Kname', envir = .prova_envK, inherits = FALSE)
+            rm('.K', envir = .prova_envK)
+            rm('.Kname', envir = .prova_envK)
+        } else {
+            Kname <- NULL
+        }
+    } else if(!inherits(try(getK(K), silent = TRUE), "try-error")){
+        ## user wants to set K object as default
+        Kname <- deparse(substitute(K))
+        assign('.K', K, envir = .prova_envK)
+        assign('.Kname', Kname, envir = .prova_envK)
+    } else {
+        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
+    }
+    invisible(Kname)
+}
+
+
+
+#' @rdname Kobjects
 #'
 #' @import utils
 #'
 #' @concept learn
 #' @export
 getK <- function(
-    K = getOption('prova.K')
+    K = NULL,
+    .name = NULL
 ){
+    ## Save name of argument
+    if(is.character(.name)){
+        ## called from within a function
+        Kname <- .name
+    } else {
+        Kname <- deparse(substitute(K))
+    }
+    ## Check if a default K object and load if true
+    if(is.null(K)){
+        if(!exists('.K', envir = .prova_envK, inherits = FALSE)){
+            stop('No "K" object is set as default.\nIf you want to omit "K =" arguments,\nplease set the "K" object that should be used for the session\nby means of the function "useK()".', call. = FALSE)
+        } else {
+            K <- get('.K', envir = .prova_envK, inherits = FALSE)
+            Kname <- get('.Kname', envir = .prova_envK, inherits = FALSE)
+        }
+    }
+
+    ## Test validity of K reference
+    ## We do this even if the K object was previously checked by useK(),
+    ## in case directories or files have been deleted in the meantime
+
+    ## Is K a reference?
     if(is.character(K)){
         if(file.exists(paste0(sub('.rds$', '', K), '.rds'))){
             ## K is path to K-file
@@ -38,18 +143,26 @@ getK <- function(
             K <- readRDS(file.path(K, 'K.rds'))
         } else {
             K <- NULL
+            stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
         }
-        ## test if K has class 'prova_K' (knowledge)
+
+        ## test if retrieved K has class 'prova_K', and output
         if(inherits(K, 'prova_K')){
-            K
+            if(is.null(.name)){ K } else { list(K, Kname) }
         } else {
             NULL
+            stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
         }
-    } else if(inherits(K, 'prova_K') ||
-           (is.list(K) && !is.null(K[['W']]) && !is.null(K[['auxmetadata']]))){
-        ## K is K-object
-        K
+
+    ## Is K the object itself? Test class, and output
+    } else if(inherits(K, 'prova_K')){
+        # # alternative below was for backward compatibility
+        # || (is.list(K) && !is.null(K[['W']]) && !is.null(K[['auxmetadata']]))
+        if(is.null(.name)){ K } else { list(K, Kname) }
     } else {
         NULL
+        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 }
+
+

@@ -3,7 +3,8 @@
 #'
 #' @title Calculate mutual information between groups of joint variates
 #'
-#' @description Functions for calculating the mutual information between two grops of joint variates, as well as its revisability. Function [mutualinfo()] can be used for any variates, but is slower and potentially less accurate. Function [mutualinfoF()] is meant to be used with variates having a finite domain, but is extremely faster and more accurate. See "Details"
+#' @description
+#' Functions for calculating the mutual information between two grops of joint variates, as well as its revisability. Function [mutualinfo()] can be used for any variates, but is slower and potentially less accurate. Function [mutualinfoF()] is meant to be used with variates having a finite domain, but is extremely faster and more accurate. See "Details"
 #'
 #' @param Y1names Character vector: first group of joint variates
 #' @param Y2names Character vector or `NULL`: second group of joint variates
@@ -46,7 +47,7 @@
 #'
 #' The default value of the `K = ` argument is the knowledge object stored in the option `'prova.K'` in [options()][base::getOption()], which you may have previously set with `options(prova.K = ...)`. This way you can save a lot of `K = ...`-typing in this and other functions.
 #'
-#' Therefore if `mutualinfo()` or `mutualinfoF()` is called with two unnamed arguments, `mutualinfo(..., ...)`, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ...)`, with `X = NA` and the `K` object retrieved from [options()][base::getOption()]. If it is called with three unnamed arguments, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ..., X = ...)`, with `K` retrieved from [options()][base::getOption()]. If you want to specify `Y1names`, `Y2names`, and `K` without naming the arguments, then you must use `mutualinfo(..., ..., NA, ...)`, explicitly giving `X` as third argument.
+#' Therefore if `mutualinfo()` or `mutualinfoF()` is called with two unnamed arguments, `mutualinfo(..., ...)`, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ...)`, with `X = NA` and the `K` object retrieved from [options()][base::getOption()]. If it is called with three unnamed arguments, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ..., X = ...)`, with `K` retrieved from [options()][base::getOption()]. In order to specify `Y1names`, `Y2names`, and `K` without naming the arguments, the form `mutualinfo(..., ..., NA, ...)` must be used, explicitly giving `X` as third argument.
 #'
 #' @return An object of class "prova_mi" (mutual information), which is a list consisting of the following elements:
 #'
@@ -185,13 +186,12 @@ mutualinfo <- function(
     ## } else {
     ##     Kname <- Kname[1]
     ## }
-    Kname <- deparse(substitute(K))
 
-    ## Check 'K' argument
-    K <- getK(K)
-    if(is.null(K)){
-        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
-    }
+    ## Check 'K' argument and name
+    K <- getK(K, deparse(substitute(K)))
+    Kname <- K[[2]]
+    K <- K[[1]]
+    gc(full = TRUE)
 
     auxmetadata <- K$auxmetadata
     K$auxmetadata <- NULL
@@ -719,13 +719,12 @@ mutualinfoF <- function(
     ## } else {
     ##     Kname <- Kname[1]
     ## }
-    Kname <- deparse(substitute(K))
 
-    ## Check 'K' argument
-    K <- getK(K)
-    if(is.null(K)){
-        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
-    }
+    ## Check 'K' argument and name
+    K <- getK(K, deparse(substitute(K)))
+    Kname <- K[[2]]
+    K <- K[[1]]
+    gc(full = TRUE)
 
     auxmetadata <- K$auxmetadata
 

@@ -15,7 +15,7 @@
 Its \code{x} argument, \link[base:invisible]{invisibly}; the \link[utils:str]{str}ucture of the corresponding "prova_K" (knowledge) object, if it exists, is also displayed.
 }
 \description{
-This \code{\link[base:print]{base::print()}} method is a utility to display a summary of a "prova_K" (knowledge) object outputted by \code{\link[=learn]{learn()}}, internally using \code{\link[utils:str]{utils::str()}}. It also display a summary if \code{\link[=learn]{learn()}}'s value is only the path to the directory of the rds file containing the "prova_K" (knowledge) object itself (see argument \verb{valueisK = } in \code{\link[=learn]{learn()}}), by internally retrieving the object. If you want to have a summary of a "prova_K" (knowledge) object in a given directory or rds file, you can explicitly call \verb{print.prova_K(<file path>)}.
+This \code{\link[base:print]{base::print()}} method is a utility to display a summary of a "prova_K" (knowledge) object outputted by \code{\link[=learn]{learn()}}, internally using \code{\link[utils:str]{utils::str()}}. It also display a summary if \code{\link[=learn]{learn()}}'s value is only the path to the directory of the rds file containing the "prova_K" (knowledge) object itself (see argument \verb{valueisK = } in \code{\link[=learn]{learn()}}), by internally retrieving the object. To get a summary of a "prova_K" (knowledge) object in a given directory or rds file, the user can explicitly call \verb{print.prova_K(<file path>)}.
 }
 \examples{
 ## Display a summary of the example "prova_K" (knowledge) object

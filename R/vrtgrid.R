@@ -94,9 +94,6 @@ vrtgrid <- function(
 
     ## Check 'K' argument
     K <- getK(K)
-    if(is.null(K)){
-        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
-    }
 
     ## Consistency checks
     if(!all(vrt %in% K$auxmetadata$name)){

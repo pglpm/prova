@@ -114,7 +114,7 @@ A "prova_K" (knowledge) object, or name of directory containing such an object a
 \item \code{metadata.csv}: a copy of the metadata.
 }
 
-It is recommended that you give an explicit argument \verb{outputdir = } and save the directory with the files above for future reference. In particular, the \code{MCtraces.pdf} plot and \code{MCtraces.rds} data can be useful to report Monte Carlo convergence in any work of yours that used \strong{Prova}.
+It is recommended that an explicit argument \verb{outputdir = } be given, so as to save the directory with the files above for future reference. In particular, the \code{MCtraces.pdf} plot and \code{MCtraces.rds} data can be useful to report Monte Carlo convergence in any work that used \strong{Prova}.
 
 During operation, computation progress and estimated end times for each node's computation are outputted to the file \code{'main.out'} in the output directory, and also to the console if argument \code{verbose} is \code{TRUE}. Note that the estimated end times are very approximate and often quite conservative.
 }

@@ -86,7 +86,7 @@
 #' - `rng_seed.rds`: the state of the pseudorandom seed (see [base::Random]) when `learn()` was called.
 #' - `metadata.csv`: a copy of the metadata.
 #'
-#' It is recommended that you give an explicit argument `outputdir = ` and save the directory with the files above for future reference. In particular, the `MCtraces.pdf` plot and `MCtraces.rds` data can be useful to report Monte Carlo convergence in any work of yours that used **Prova**.
+#' It is recommended that an explicit argument `outputdir = ` be given, so as to save the directory with the files above for future reference. In particular, the `MCtraces.pdf` plot and `MCtraces.rds` data can be useful to report Monte Carlo convergence in any work that used **Prova**.
 #'
 #' During operation, computation progress and estimated end times for each node's computation are outputted to the file `'main.out'` in the output directory, and also to the console if argument `verbose` is `TRUE`. Note that the estimated end times are very approximate and often quite conservative.
 #'
