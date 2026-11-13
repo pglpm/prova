@@ -1,0 +1,378 @@
+Log node 3 - Current time: 2026-11-13 23:37:32 
+nimble version 1.4.3 is loaded.
+For more information on NIMBLE and a User Manual,
+please visit https://R-nimble.org.
+
+Attaching package: ‘nimble’
+
+The following object is masked from ‘package:stats’:
+
+    simulate
+
+The following object is masked from ‘package:base’:
+
+    declare
+
+Loaded Nimble v1.4.3 
+Defining model
+  [Note] 'Dlatinit' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Ncards' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Ocards' is provided in 'constants' but not used in the model code and is being ignored.
+Building model
+Setting data and initial values
+Running calculate on model
+  [Note] Any error reports that follow may simply reflect missing values in model variables.
+Checking model sizes and dimensions
+  [Note] This model is not fully initialized. This is not an error.
+         To see which variables are not initialized, use model$initializeInfo().
+         For more information on model initialization, see help(modelInitialization).
+Compiling
+  [Note] This may take a minute.
+  [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+===== Monitors =====
+thin = 1: Bprob, Dmean, Dvar, Nprob, Oprob, W
+thin2 = 1: K
+===== Samplers =====
+posterior_predictive sampler (6)
+  - Bdata[]  (2 elements)
+  - Dlat[]  (4 elements)
+conjugate sampler (1025)
+  - Dmean[]  (256 elements)
+  - Drate[]  (256 elements)
+  - Bprob[]  (64 elements)
+  - Dvar[]  (256 elements)
+  - Oprob[]  (64 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
+  - W[1:64] 
+categorical sampler (11)
+  - Alpha
+  - K[]  (10 elements)
+RW sampler (36)
+  - Dlat[]  (36 elements)
+===== Comments =====
+  [Note] Additional downstream predictive nodes are also being sampled by posterior_predictive sampler.
+  [Note] Reordering posterior_predictive samplers to execute last
+===== Monitors =====
+thin = 1: Bprob, Dmean, Dvar, Nprob, Oprob, W
+thin2 = 1: K
+===== Samplers =====
+posterior_predictive sampler (6)
+  - Bdata[]  (2 elements)
+  - Dlat[]  (4 elements)
+conjugate sampler (1025)
+  - Dmean[]  (256 elements)
+  - Drate[]  (256 elements)
+  - Bprob[]  (64 elements)
+  - Dvar[]  (256 elements)
+  - W
+  - Oprob[]  (64 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
+categorical sampler (11)
+  - Alpha
+  - K[]  (10 elements)
+RW sampler (36)
+  - Dlat[]  (36 elements)
+===== Comments =====
+  [Note] Additional downstream predictive nodes are also being sampled by posterior_predictive sampler.
+Compiling
+  [Note] This may take a minute.
+  [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+
+Setup time 1.1 mins 
+
+###########################################################
+Chain # 5 (chain 1 of 2 for this node)
+
+Datapoints for testing chain behaviour:
+ #1 #2 #3 #4 #5 #6 #7 #8 #9 #10 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:38:53
+MCMC time 11 secs 
+
+USED COMPONENTS: 4 OF 64 
+
+max abs. quantile error: 0.164
+quantile width: 2.44
+max rel. quantile error: 0.0673
+min ESS from rel. qt. error: 221
+MCSE: 0.0531
+rel. MCSE: 0.0701
+quantl-rel. MCSE: 0.0218
+ESS: 203
+needed thinning: 17.7
+log-average: -15.8
+Diagnostics time 1.3 secs 
+
+Total iterations 3600 - require further 4504 - continue for 4504 
+
+Chain # 5 - chunk 2 (chain 1 of 2 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:39:09
+MCMC time 27 secs 
+
+USED COMPONENTS: 4 OF 64 
+
+max abs. quantile error: 0.186
+quantile width: 2.38
+max rel. quantile error: 0.0781
+min ESS from rel. qt. error: 164
+MCSE: 0.0432
+rel. MCSE: 0.0583
+quantl-rel. MCSE: 0.0181
+ESS: 294
+needed thinning: 43.9
+log-average: -15.9
+Diagnostics time 1.4 secs 
+
+Total iterations 7200 - require further 12922 - continue for 12922 
+
+Chain # 5 - chunk 3 (chain 1 of 2 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:39:29
+MCMC time 47 secs 
+
+USED COMPONENTS: 4 OF 64 
+
+max abs. quantile error: 0.145
+quantile width: 2.29
+max rel. quantile error: 0.0632
+min ESS from rel. qt. error: 250
+MCSE: 0.0338
+rel. MCSE: 0.0475
+quantl-rel. MCSE: 0.0148
+ESS: 444
+needed thinning: 43.2
+log-average: -15.9
+Diagnostics time 2.3 secs 
+
+Total iterations 10800 - require further 8980 - continue for 8980 
+
+Chain # 5 - chunk 4 (chain 1 of 2 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:39:47
+MCMC time 1.1 mins 
+
+USED COMPONENTS: 4 OF 64 
+
+max abs. quantile error: 0.117
+quantile width: 2.23
+max rel. quantile error: 0.0526
+min ESS from rel. qt. error: 361
+MCSE: 0.0278
+rel. MCSE: 0.0397
+quantl-rel. MCSE: 0.0124
+ESS: 634
+needed thinning: 39.9
+log-average: -15.9
+Diagnostics time 1.8 secs 
+
+Total iterations 14400 - require further 3870 - continue for 3870 
+
+Chain # 5 - chunk 5 (chain 1 of 2 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:40:01
+MCMC time 1.3 mins 
+
+USED COMPONENTS: 5 OF 64 
+
+max abs. quantile error: 0.108
+quantile width: 2.23
+max rel. quantile error: 0.0482
+min ESS from rel. qt. error: 430
+MCSE: 0.0264
+rel. MCSE: 0.0379
+quantl-rel. MCSE: 0.0118
+ESS: 696
+needed thinning: 41.9
+log-average: -15.9
+Diagnostics time 1.4 secs 
+
+Total iterations 18000 - require further 1179 - continue for 1179 
+
+Chain # 5 - chunk 6 (chain 1 of 2 for this node): increasing by 1180 
+
+Iterations: 1180 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:40:07
+MCMC time 1.4 mins 
+
+USED COMPONENTS: 4 OF 64 
+
+max abs. quantile error: 0.1
+quantile width: 2.23
+max rel. quantile error: 0.0449
+min ESS from rel. qt. error: 497
+MCSE: 0.0245
+rel. MCSE: 0.0352
+quantl-rel. MCSE: 0.011
+ESS: 805
+needed thinning: 38.6
+log-average: -15.9
+Diagnostics time 0.38 secs 
+
+Total iterations 19180 - require further 0 - continue for 0 
+
+Keeping  450 
+
+Current time: 2026-11-13 23:40:10
+MCMC + diagnostics time 1.5 mins 
+
+###########################################################
+Chain # 6 (chain 2 of 2 for this node)
+
+Datapoints for testing chain behaviour:
+ #1 #2 #3 #4 #5 #6 #7 #8 #9 #10 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:40:19
+MCMC time 1.6 mins 
+
+USED COMPONENTS: 4 OF 64 
+
+max abs. quantile error: 0.129
+quantile width: 2.04
+max rel. quantile error: 0.0632
+min ESS from rel. qt. error: 250
+MCSE: 0.0394
+rel. MCSE: 0.0613
+quantl-rel. MCSE: 0.0193
+ESS: 266
+needed thinning: 14.4
+log-average: -15.9
+Diagnostics time 1.6 secs 
+
+Total iterations 3600 - require further 2993 - continue for 2993 
+
+Chain # 6 - chunk 2 (chain 2 of 2 for this node): increasing by 2994 
+
+Iterations: 2994 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:40:32
+MCMC time 1.8 mins 
+
+USED COMPONENTS: 5 OF 64 
+
+max abs. quantile error: 0.0932
+quantile width: 2.08
+max rel. quantile error: 0.0448
+min ESS from rel. qt. error: 499
+MCSE: 0.0312
+rel. MCSE: 0.0478
+quantl-rel. MCSE: 0.015
+ESS: 437
+needed thinning: 15.1
+log-average: -15.8
+Diagnostics time 1.1 secs 
+
+Total iterations 6594 - require further 320 - continue for 320 
+
+Chain # 6 - chunk 3 (chain 2 of 2 for this node): increasing by 321 
+
+Iterations: 321 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:40:35
+MCMC time 1.9 mins 
+
+USED COMPONENTS: 3 OF 64 
+
+max abs. quantile error: 0.0855
+quantile width: 2.07
+max rel. quantile error: 0.0412
+min ESS from rel. qt. error: 589
+MCSE: 0.0312
+rel. MCSE: 0.0479
+quantl-rel. MCSE: 0.015
+ESS: 436
+needed thinning: 15.9
+log-average: -15.8
+Diagnostics time 0.09 secs 
+
+Total iterations 6915 - require further 349 - continue for 349 
+
+Chain # 6 - chunk 4 (chain 2 of 2 for this node): increasing by 350 
+
+Iterations: 350 
+Warning: value of thin2 is being changed, in the midst of a thinning interval.
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:40:37
+MCMC time 1.9 mins 
+
+USED COMPONENTS: 4 OF 64 
+
+max abs. quantile error: 0.094
+quantile width: 2.08
+max rel. quantile error: 0.0452
+min ESS from rel. qt. error: 489
+MCSE: 0.0307
+rel. MCSE: 0.0471
+quantl-rel. MCSE: 0.0148
+ESS: 451
+needed thinning: 16.1
+log-average: -15.8
+Diagnostics time 0.099 secs 
+
+Total iterations 7265 - require further 109 - continue for 109 
+
+Chain # 6 - chunk 5 (chain 2 of 2 for this node): increasing by 110 
+
+Iterations: 110 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-13 23:40:37
+MCMC time 1.9 mins 
+
+USED COMPONENTS: 4 OF 64 
+
+max abs. quantile error: 0.0891
+quantile width: 2.08
+max rel. quantile error: 0.0429
+min ESS from rel. qt. error: 542
+MCSE: 0.0292
+rel. MCSE: 0.0448
+quantl-rel. MCSE: 0.0141
+ESS: 497
+needed thinning: 14.8
+log-average: -15.8
+Diagnostics time 0.032 secs 
+
+Total iterations 7375 - require further 0 - continue for 0 
+
+Keeping  450 
+
+Current time: 2026-11-13 23:40:38
+MCMC + diagnostics time 1.9 mins 
+
+Current time: 2026-11-13 23:40:38
+Total time 3.1 mins 
