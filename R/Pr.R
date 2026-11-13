@@ -522,6 +522,7 @@ Pr <- function(
         K = K,
         tails = tails
     )
+
     ## each instance of .lprobsbase() takes one datapoint
     invisible(parallel::parLapply(cl = cl,
         X = lpargs$xVs,

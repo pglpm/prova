@@ -78,9 +78,9 @@ saveRDS(results, savefile)
 
 
 
+K <- Kdir
 nm <- 'Simple Pr'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-K <- Kdir
 suite <- list(
     Rvrt = seq(-3, 3, length.out = 9),
     RPvrt = seq(0, 3, length.out = 9),
@@ -136,9 +136,9 @@ print(allOK)
 
 
 
+K <- Kdir
 nm <- 'Various Pr'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-K <- Kdir
 atest <- 0L
 set.seed(16)
 allOK <- TRUE

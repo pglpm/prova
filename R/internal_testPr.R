@@ -74,7 +74,7 @@
     ## tails[cright] <- -1
     tails <- unlist(tails)
 
-    ## Function to calculate and lum log-kernels log(K)
+    ## Function to calculate and sum log-kernels log(K)
     logK <- function(Z){
         logprob <- 0
 

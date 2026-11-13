@@ -334,8 +334,9 @@
 ### discrete case
 ###
     nVN <- FALSE
-    VNprobs <- NULL
-    Nshift <- 0L
+    VNprobs <- numeric(0)
+    dim(VNprobs) <- c(0, dim(K$W))
+
 ### O-variates not in 'tails'
     toselect <- which((auxmetadata$name %in% Xv) &
                           (auxmetadata$mcmctype == 'O') &
@@ -348,6 +349,7 @@
         ## }))
         Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
             aux$indexpos, aux$Nvalues, SIMPLIFY = FALSE))
+        Nshift <- nrow(VNprobs)
         VNprobs <- .learnbind(VNprobs,
             K$Oprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
@@ -359,7 +361,6 @@
                 ))) +
                     Nshift + c(0, cumsum(aux$Nvalues[-length(aux$Nvalues)]))
         )
-        Nshift <- Nshift + length(Nindices)
     }
 
 ### N-variates not in 'tails'
@@ -374,8 +375,8 @@
         ## }))
         Nindices <- unlist(mapply(FUN = function(i, n) {i + seq_len(n)},
             aux$indexpos, aux$Nvalues, SIMPLIFY = FALSE))
-        VNprobs <- .learnbind(VNprobs,
-            K$Nprob[Nindices, , , drop = FALSE])
+        Nshift <- nrow(VNprobs)
+        VNprobs <- .learnbind(VNprobs, K$Nprob[Nindices, , , drop = FALSE])
         xVN <- rbind(xVN,
                 t(as.matrix(.vtransform(
                     x[, aux$name, drop = FALSE],
@@ -385,7 +386,6 @@
                 ))) +
                     Nshift + c(0, cumsum(aux$Nvalues[-length(aux$Nvalues)]))
         )
-        Nshift <- Nshift + length(Nindices)
     }
 
 ### O-variates in 'tails'
@@ -395,16 +395,14 @@
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nVN <- TRUE
+        Nshift <- nrow(VNprobs)
         for(i in seq_len(nrow(aux))) {
+            Nindices <- aux$indexpos[i] + seq_len(aux$Nvalues[i])
             VNprobs <- .learnbind(VNprobs,
                 if(tails[aux$name[i]] > 0) {
-                    .rowcumsum(K$Oprob[
-                        aux$indexpos[i] + seq_len(aux$Nvalues[i]), , , drop = FALSE
-                    ])
+                    .rowcumsum(K$Oprob[Nindices, , , drop = FALSE])
                 } else {
-                    .rowinvcumsum(K$Oprob[
-                        aux$indexpos[i] + seq_len(aux$Nvalues[i]), , , drop = FALSE
-                    ])
+                    .rowinvcumsum(K$Oprob[Nindices, , , drop = FALSE])
                 }
             )
         }
@@ -426,6 +424,7 @@
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nVN <- TRUE
+        Nshift <- nrow(VNprobs)
         for(i in seq_len(nrow(aux))) {
             VNprobs <- .learnbind(VNprobs,
                 if(tails[aux$name[i]] > 0) {
@@ -451,6 +450,7 @@
     }
 
     xVN <- unname(xVN)
+    if(nrow(VNprobs) == 0){VNprobs <- NULL}
 
 ###
 ### binary case
@@ -463,8 +463,7 @@
     if(length(toselect) > 0){
         aux <- auxmetadata[toselect, ]
         nVB <- TRUE
-        VBprobs <- .learnbind(VBprobs,
-            K$Bprob[aux$id, , , drop = FALSE])
+        VBprobs <- .learnbind(VBprobs, K$Bprob[aux$id, , , drop = FALSE])
         xVB <- rbind(xVB,
             t(as.matrix(.vtransform(
                 x[, aux$name, drop = FALSE],
