@@ -65,8 +65,8 @@ Y <- vrtgrid('species')
 probs <- Pr(Y)
 
 ## Stop 'Kexample' to be used as default;
-## note that calling "Pr(Y)" would now give an error thereafter.
-forgetK()
+## note that calling "Pr(Y)" would give an error thereafter.
+useK()
 
 ## Show how many Monte Carlo samples 'Kexample' contains;
 ## note we must pass it explicitly as argument now
