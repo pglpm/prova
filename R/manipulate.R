@@ -178,14 +178,14 @@ merge.prova_pr <- function(x, y, ...){
 
         ## quantiles; check if x and y have same
         if(identical(dimnames(x$quantiles)[3], dimnames(y$quantiles)[3])){
-            temp <- .learnbind(x$quantiles, y$quantiles)
+            temp <- .a3bind(x$quantiles, y$quantiles)
             dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles)[3])
             out$quantiles <- temp
         }
 
         ## samples; check if x and y have same
         if(identical(dimnames(x$samples)[3], dimnames(y$samples)[3])){
-            temp <- .learnbind(x$samples, y$samples)
+            temp <- .a3bind(x$samples, y$samples)
             dimnames(temp) <- c(yxdimnames, dimnames(x$samples)[3])
             out$samples <- temp
         }
@@ -197,7 +197,7 @@ merge.prova_pr <- function(x, y, ...){
 
         ## quantiles.acc; check if x and y have same
         if(identical(dimnames(x$quantiles.acc)[3], dimnames(y$quantiles.acc)[3])){
-            temp <- .learnbind(x$quantiles.acc, y$quantiles.acc)
+            temp <- .a3bind(x$quantiles.acc, y$quantiles.acc)
             dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles.acc)[3])
             out$quantiles.acc <- temp
         }
@@ -233,14 +233,14 @@ merge.prova_pr <- function(x, y, ...){
 
         ## quantiles; check if x and y have same
         if(identical(dimnames(x$quantiles)[3], dimnames(y$quantiles)[3])){
-            temp <- .learnbind2(x$quantiles, y$quantiles)
+            temp <- .a3bind2(x$quantiles, y$quantiles)
             dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles)[3])
             out$quantiles <- temp
         }
 
         ## samples; check if x and y have same
         if(identical(dimnames(x$samples)[3], dimnames(y$samples)[3])){
-            temp <- .learnbind2(x$samples, y$samples)
+            temp <- .a3bind2(x$samples, y$samples)
             dimnames(temp) <- c(yxdimnames, dimnames(x$samples)[3])
             out$samples <- temp
         }
@@ -252,7 +252,7 @@ merge.prova_pr <- function(x, y, ...){
 
         ## quantiles.acc; check if x and y have same
         if(identical(dimnames(x$quantiles.acc)[3], dimnames(y$quantiles.acc)[3])){
-            temp <- .learnbind2(x$quantiles.acc, y$quantiles.acc)
+            temp <- .a3bind2(x$quantiles.acc, y$quantiles.acc)
             dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles.acc)[3])
             out$quantiles.acc <- temp
         }

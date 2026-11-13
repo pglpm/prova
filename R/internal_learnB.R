@@ -1370,7 +1370,7 @@
         ## For each monitored point,
         ## calculate the ESSs of their means,
         ## using batch-means method
-        mcsemean <- .funMCSELD(atrace) / sd(atrace)
+        mcsemean <- .funMCSEBM(atrace) / sd(atrace)
         essnrmean <- 1 / (mcsemean^2)
 
         ## We check the relative MCSE of the following quantities:
@@ -3197,7 +3197,7 @@ nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Nd
             ## For each monitored point,
             ## calculate the ESSs of their means,
             ## using batch-means method
-            mcsemean <- .funMCSELD(oktraces) / sd(oktraces)
+            mcsemean <- .funMCSEBM(oktraces) / sd(oktraces)
             essnrmean <- 1 / (mcsemean^2)
 
             ## We check the relative MCSE of the following quantities:

@@ -200,15 +200,15 @@
 
 ### R-variates not in 'cumul'
         if(length(auxV0a) > 0){
-            V0mean <- .learnbind(V0mean, Rmean)
-            V0sd <- .learnbind(V0sd, sqrt(Rvar)) # still variance
+            V0mean <- .a3bind(V0mean, Rmean)
+            V0sd <- .a3bind(V0sd, sqrt(Rvar)) # still variance
         }
 
 ### C-variates not in 'cumul' and with some non-boundary value
         if(length(auxV0b) > 0) {
-            V0mean <- .learnbind(V0mean,
+            V0mean <- .a3bind(V0mean,
                 Cmean[auxV0b, , , drop = FALSE])
-            V0sd <- .learnbind(V0sd,
+            V0sd <- .a3bind(V0sd,
                 sqrt(Cvar[auxV0b, , , drop = FALSE])) # still variance
         }
 
@@ -219,33 +219,33 @@
 
 ### C-variates not in 'cumul' and with left boundary values
         if(length(auxV1a) > 0){
-            V1mean <- .learnbind(V1mean,
+            V1mean <- .a3bind(V1mean,
                 Cmean[auxV1a, , , drop = FALSE])
-            V1sd <- .learnbind(V1sd,
+            V1sd <- .a3bind(V1sd,
                 sqrt(Cvar[auxV1a, , , drop = FALSE])) # still variance
         }
 
 ### C-variates not in 'cumul' and with right boundary values
         if(length(auxV1b) > 0){
-            V1mean <- .learnbind(V1mean,
+            V1mean <- .a3bind(V1mean,
                 - Cmean[auxV1b, , , drop = FALSE]) # minus sign
-            V1sd <- .learnbind(V1sd,
+            V1sd <- .a3bind(V1sd,
                 sqrt(Cvar[auxV1b, , , drop = FALSE])) # still variance
         }
 
 ### D-variates not in 'cumul' and with left boundary values
         if(length(auxV1c) > 0){
-            V1mean <- .learnbind(V1mean,
+            V1mean <- .a3bind(V1mean,
                 Dmean[auxV1c, , , drop = FALSE])
-            V1sd <- .learnbind(V1sd,
+            V1sd <- .a3bind(V1sd,
                 sqrt(Dvar[auxV1c, , , drop = FALSE])) # still variance
         }
 
 ### D-variates not in 'cumul' and with right boundary values
         if(length(auxV1d) > 0){
-            V1mean <- .learnbind(V1mean,
+            V1mean <- .a3bind(V1mean,
                 - Dmean[auxV1d, , , drop = FALSE]) # minus sign
-            V1sd <- .learnbind(V1sd,
+            V1sd <- .a3bind(V1sd,
                 sqrt(Dvar[auxV1d, , , drop = FALSE])) # still variance
         }
 
@@ -267,11 +267,11 @@
 
 ### O-variates not in 'cumul'
         if(length(auxVNO) > 0){
-            VNprobs <- .learnbind(VNprobs, Oprob)
+            VNprobs <- .a3bind(VNprobs, Oprob)
         }
 ### N-variates
         if(length(auxVNN) > 0){
-            VNprobs <- .learnbind(VNprobs, Nprob)
+            VNprobs <- .a3bind(VNprobs, Nprob)
         }
 
 ###

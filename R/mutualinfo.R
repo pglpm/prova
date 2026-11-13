@@ -577,7 +577,7 @@ mutualinfo <- function(
     MI <- mean(out)
     if(MI < 0){ MI <- 0 }
 
-    acc <- .funMCSELD(x = out)
+    acc <- .funMCSEBM(x = out)
     ## acc <- sd(out, na.rm = TRUE) / sqrt(ntot)
     dim(MI) <- dim(acc) <- length(MI)
 

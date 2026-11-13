@@ -1,93 +1,4 @@
-#' Eliminate samples from mcsamples object
-#'
-#' Used in 'learn()'.
-#'
-#' @keywords internal
-.mcsubset <- function(K, subsamples) {
-    lapply(K, function(xx) {
-        do.call('[', c(
-            list(xx),
-            rep(x = TRUE, times = length(dim(xx)) - 1),
-            list(subsamples),
-            list(drop = FALSE))
-        )
-    })
-}
-
-
-#' Concatenate mcsample objects
-#'
-#' Used in 'learn()'.
-#'
-#' @keywords internal
-.mcjoin <- function(x, y){
-    if(is.null(x)){
-        y
-    } else {
-        mapply(
-            function(xx, yy) {
-                temp <- c(xx, yy)
-                dx <- dim(yy)[-length(dim(yy))]
-                dim(temp) <- c(dx, length(temp) / prod(dx))
-                temp
-            },
-            x, y,
-            SIMPLIFY = FALSE
-        )
-    }
-}
-
-
-#' Bind 3D arrays by first dimension
-#'
-#' Used in 'util_checkpoints()' within 'learn()', and in various functions in 'util_lprobs.R' and 'merge.prova_pr'.
-#'
-#' NB: the following variant is slower:
-#'
-#' ```
-#' function(x, y) {
-#'     out <- c(aperm(x), aperm(y))
-#'     dim(out) <- c(rev(dim(x)[-1]), dim(x)[1] + dim(y)[1])
-#'     aperm(out)
-#' }
-#' ```
-#'
-#' @keywords internal
-.learnbind <- function(x, y) {
-    if(is.null(x)) {
-        y
-    } else {
-        nrx <- dim(x)[1]
-        nry <- dim(y)[1]
-        out <- array(data = NA, dim = c(nrx + nry, dim(x)[-1]),
-            dimnames = NULL)
-        out[seq_len(nrx), ,] <- x
-        out[nrx + seq_len(nry), ,] <- y
-        out
-    }
-}
-
-#' Bind 3D arrays by second dimension
-#'
-#' Used in 'merge.prova_pr'.
-#'
-#' @keywords internal
-.learnbind2 <- function(x, y) {
-    if(is.null(x)) {
-        y
-    } else {
-        nrx <- dim(x)[2]
-        nry <- dim(y)[2]
-        out <- array(data = NA, dim = c(dim(x)[1], nrx + nry, dim(x)[3]),
-            dimnames = NULL)
-        out[, seq_len(nrx),] <- x
-        out[, nrx + seq_len(nry),] <- y
-        out
-    }
-}
-
-
-#' Calculate credibility quantiles on estimated quantile
+#' Calculate credibility quantiles on estimated quantile using spectral method
 #'
 #' Calculates the lower and upper bound of a credibility interval, for various quantiles of the empirical distribution of a vector of MC samples.
 #'
@@ -109,7 +20,7 @@
 #' @import stats
 #'
 #' @keywords internal
-.funMCEQ <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
+.funMCEQalt <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
     N <- length(x)
     straces <- sort(x)
     sapply(prob, function(aprob) {
@@ -123,7 +34,7 @@
     })
 }
 
-#' Calculate credibility quantiles on estimated quantile, batch-means version
+#' Calculate credibility quantiles on estimated quantile using batch-means
 #'
 #' Calculates the lower and upper bound of a credibility interval, for various quantiles of the empirical distribution of a vector of MC samples.
 #'
@@ -147,14 +58,14 @@
 #' @import stats
 #'
 #' @keywords internal
-.funMCEQB <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
+.funMCEQ <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
     N <- length(x)
     straces <- sort(x)
     sapply(prob, function(aprob) {
         Xlo <- quantile(x = x, probs = aprob,
             na.rm = TRUE, names = FALSE, type = 6)
         ##
-        essXlo <- (sd(x <= Xlo) / .funMCSELD(x <= Xlo))^2
+        essXlo <- (sd(x <= Xlo) / .funMCSEBM(x <= Xlo))^2
         ##
         a <- qbeta(Qpair, essXlo * aprob + 1, essXlo * (1 - aprob) + 1)
         c(straces[max(round(a[1] * N), 1)], straces[min(round(a[2] * N), N)])
@@ -236,7 +147,7 @@
 #'
 #' Tested also on t-distributions with df=1.1 and Pareto with a=1.5 (mean exists, variance infinite).
 #'
-#' `sd() / sqrt(.funESS3()` gives essentially identical results to `.funMCSELD()`, but it's 20 times slower.
+#' `sd() / sqrt(.funESS3()` gives essentially identical results to `.funMCSEBM()`, but it's 20 times slower.
 #'
 #' Used in '.combineYX()' in 'Pr()'.
 #'
@@ -245,7 +156,7 @@
 #' @return MCSE estimates, one for each trace. Division by sqrt(N) is already performed.
 #'
 #' @keywords internal
-.funMCSELD <- function(x) {
+.funMCSEBM <- function(x) {
     if(is.null(dim(x))){ dim(x) <- c(length(x), 1) }
     N <- nrow(x)
     b <- floor(sqrt(N))
