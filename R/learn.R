@@ -47,7 +47,7 @@
 #'
 #' The computation is "non-parametric": probability or frequency distributions are not assumed to be Gaussian or of any other specific shape; no "model" is assumed. The mathematical representation of the space of joint frequency distributions follows ideas of Dunson & Bhattacharya (2011); see [technical manual](https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf) for details.
 #'
-#' The computation is done via Markov-chain Monte Carlo, using the package **Nimble**. "Convergence" of the Monte Carlo computation is automatically assessed with methods described in Vehtari & al. (2021) and Kwon & al. (2025); see [technical manual](https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf) for details. The default values for convergence require that all of the following three conditions be fulilled:
+#' The computation is done via Markov-chain Monte Carlo, using the package **Nimble**. "Convergence" of the Monte Carlo computation is automatically assessed with methods similar to those described in Vehtari & al. (2021), Kwon & al. (2025), Flegal & al (2008) <doi:10.1214/08-STS257>, Jones & al. (2006): <doi:10.1198/016214506000000492>; see [technical manual](https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf) for details. The default values for convergence require that all of the following three conditions be fulilled:
 #'
 #' - The computation's numerical error (Monte-Carlo Standard Error) for the posterior probability must be smaller than 4.7% of the standard deviation of the posterior's variability.
 #'  - The computation's numerical error for the 0.055- and 0.945-percentiles of the posterior's variability should be smaller than 4.7% of the distance between them.
@@ -116,6 +116,8 @@
 #' - Kwon & al. (2025): *MCMC stopping rules in latent variable modelling*, <doi:10.1111/bmsp.12357>.
 #' - Vehtari & al. (2021): *Rank-normalization, folding, and localization: an improved R-hat for assessing convergence of MCMC*, <doi:10.1214/20-BA1221>.
 #' - Roy (2020): *Convergence diagnostics for Markov chain Monte Carlo*, <doi:10.1146/annurev-statistics-031219-041300>.
+#' - Flegal & al. (2008): *Markov chain Monte Carlo: can we trust the third significant figure?}*, <doi:10.1214/08-STS257>.
+#' - Jones & al. (2006): *Fixed-width output analysis for Markov chain Monte Carlo*, <doi:10.1198/016214506000000492>.
 #' - Gilks & al. (1998): *Markov Chain Monte Carlo in Practice*, Chapman & Hall/CRC <doi:10.1201/b14835>.
 #' - D. J. C. MacKay (2005): *Information Theory, Inference, and Learning Algorithms*, Cambridge University Press <https://www.inference.org.uk/itila/book.html>.
 #' - Porta Mana <https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf>.

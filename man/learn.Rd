@@ -132,7 +132,7 @@ See \code{vignette('intro')} for introductory examples.
 
 The computation is "non-parametric": probability or frequency distributions are not assumed to be Gaussian or of any other specific shape; no "model" is assumed. The mathematical representation of the space of joint frequency distributions follows ideas of Dunson & Bhattacharya (2011); see \href{https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf}{technical manual} for details.
 
-The computation is done via Markov-chain Monte Carlo, using the package \strong{Nimble}. "Convergence" of the Monte Carlo computation is automatically assessed with methods described in Vehtari & al. (2021) and Kwon & al. (2025); see \href{https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf}{technical manual} for details. The default values for convergence require that all of the following three conditions be fulilled:
+The computation is done via Markov-chain Monte Carlo, using the package \strong{Nimble}. "Convergence" of the Monte Carlo computation is automatically assessed with methods similar to those described in Vehtari & al. (2021), Kwon & al. (2025), Flegal & al (2008) \url{doi:10.1214/08-STS257}, Jones & al. (2006): \url{doi:10.1198/016214506000000492}; see \href{https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf}{technical manual} for details. The default values for convergence require that all of the following three conditions be fulilled:
 \itemize{
 \item The computation's numerical error (Monte-Carlo Standard Error) for the posterior probability must be smaller than 4.7\% of the standard deviation of the posterior's variability.
 \item The computation's numerical error for the 0.055- and 0.945-percentiles of the posterior's variability should be smaller than 4.7\% of the distance between them.
@@ -213,6 +213,8 @@ About Markov-chain Monte Carlo and "convergence":
 \item Kwon & al. (2025): \emph{MCMC stopping rules in latent variable modelling}, \url{doi:10.1111/bmsp.12357}.
 \item Vehtari & al. (2021): \emph{Rank-normalization, folding, and localization: an improved R-hat for assessing convergence of MCMC}, \url{doi:10.1214/20-BA1221}.
 \item Roy (2020): \emph{Convergence diagnostics for Markov chain Monte Carlo}, \url{doi:10.1146/annurev-statistics-031219-041300}.
+\item Flegal & al. (2008): \emph{Markov chain Monte Carlo: can we trust the third significant figure?}}, \url{doi:10.1214/08-STS257}.
+\item Jones & al. (2006): \emph{Fixed-width output analysis for Markov chain Monte Carlo}, \url{doi:10.1198/016214506000000492}.
 \item Gilks & al. (1998): \emph{Markov Chain Monte Carlo in Practice}, Chapman & Hall/CRC \url{doi:10.1201/b14835}.
 \item D. J. C. MacKay (2005): \emph{Information Theory, Inference, and Learning Algorithms}, Cambridge University Press \url{https://www.inference.org.uk/itila/book.html}.
 \item Porta Mana \url{https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf}.
