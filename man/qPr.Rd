@@ -146,5 +146,7 @@ probs$value
 \code{\link[=Pr]{Pr()}} to calculate joint and conditional probabilities.
 
 \code{\link[=rPr]{rPr()}} to generate datapoints.
+
+\link{Kexample} an example "K" object included with \strong{Prova}.
 }
 \concept{probability}

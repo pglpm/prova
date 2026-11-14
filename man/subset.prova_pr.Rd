@@ -67,5 +67,7 @@ hist(newprobs)
 \code{\link[=plot.prova_pr]{plot.prova_pr()}} to plot probabilities and quantiles calculated by `Pr()'.
 
 \code{\link[=hist.prova_pr]{hist.prova_pr()}} to plot histograms of the probability distributions calculated by \code{Pr()}.
+
+\link{Kexample} an example "K" object included with \strong{Prova}.
 }
 \concept{manipulate}

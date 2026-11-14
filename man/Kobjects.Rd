@@ -81,6 +81,8 @@ getK(Kexample)$info$nMCsamples
 \code{\link[=learn]{learn()}}, which creates and stores "K" objects.
 
 \code{\link[=Pr]{Pr()}}, \code{\link[=vrtgrid]{vrtgrid()}}, and similar functions which use "K" objects.
+
+\link{Kexample} an example "K" object included with \strong{Prova}.
 }
 \concept{K}
 \concept{learn}

@@ -58,6 +58,8 @@
 #'
 #' [rPr()] to generate datapoints.
 #'
+#' [Kexample] an example "K" object included with **Prova**.
+#'
 #' @examples
 #' ### WARNING: the following examples, if run, might even take a minute or more.
 #'

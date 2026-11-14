@@ -92,6 +92,8 @@
 #'
 #' [rPr()] to generate datapoints.
 #'
+#' [Kexample] an example "K" object included with **Prova**.
+#'
 #' @examples
 #' ## Use the "K" object 'Kexample',
 #' ## calculated from the "penguins" dataset;

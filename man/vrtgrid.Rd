@@ -98,5 +98,7 @@ useK()
 \code{\link[=plot.prova_pr]{plot.prova_pr()}} to plot probabilities and quantiles calculated by \code{Pr()}.
 
 \code{\link[base:expand.grid]{base::expand.grid()}}, used internally by \code{vrtgrid()}, for a more general way to create a data frame with combination of specified values of several variates.
+
+\link{Kexample} an example "K" object included with \strong{Prova}.
 }
 \concept{probability}

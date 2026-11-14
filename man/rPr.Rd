@@ -112,5 +112,7 @@ useK()
 \code{\link[=Pr]{Pr()}} to calculate joint and conditional probabilities.
 
 \code{\link[=qPr]{qPr()}} to calculate quantiles.
+
+\link{Kexample} an example "K" object included with \strong{Prova}.
 }
 \concept{generate}

@@ -272,5 +272,7 @@ useK()
 \code{\link[=qPr]{qPr()}} to calculate quantiles for a specific variate, that is, the variate values having given probabilities.
 
 \code{\link[=rPr]{rPr()}} to generate datapoints.
+
+\link{Kexample} an example "K" object included with \strong{Prova}.
 }
 \concept{probability}

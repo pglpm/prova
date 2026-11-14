@@ -35,6 +35,8 @@
 #'
 #' [base::expand.grid()], used internally by `vrtgrid()`, for a more general way to create a data frame with combination of specified values of several variates.
 #'
+#' [Kexample] an example "K" object included with **Prova**.
+#'
 #' @examples
 #' ## Use the "K" object 'Kexample',
 #' ## calculated from the "penguins" dataset;

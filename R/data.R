@@ -12,6 +12,7 @@
 #' [metadatatemplate()] which helps producing this kind of metadata files from a given dataset.
 #'
 #' [learn()] which needs this kind of metadata files to "learn" from data.
+#'
 #' @concept data
 "metadataExample"
 
@@ -38,6 +39,9 @@
 #' [learn()], which produces this kind of object.
 #'
 #' [Pr()], [qPr()], [rPr()], [mutualinfo()]: functions that require this kind of object in order to calculate probabilities and quantiles, generate data points, and calculate mutual information.
+#'
+#' [useK()] to set a "K" object as default in all `K = ` arguments.
+#'
 #' @concept learn
 "Kexample"
 

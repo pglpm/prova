@@ -25,6 +25,8 @@
 #'
 #' [hist.prova_pr()] to plot histograms of the probability distributions calculated by `Pr()`.
 #'
+#' [Kexample] an example "K" object included with **Prova**.
+#'
 #' @examples
 #' ## Load the example `K`nowledge object calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
@@ -108,6 +110,8 @@ subset.prova_pr <- function(
 #' [plot.prova_pr()] to plot probabilities and quantiles calculated by `Pr()'.
 #'
 #' [hist.prova_pr()] to plot histograms of the probability distributions calculated by `Pr()`.
+#'
+#' [Kexample] an example "K" object included with **Prova**.
 #'
 #' @examples
 #' ## Load the example `K`nowledge object calculated from the "penguins" dataset;

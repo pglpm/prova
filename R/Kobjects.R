@@ -49,6 +49,8 @@
 #'
 #' [Pr()], [vrtgrid()], and similar functions which use "K" objects.
 #'
+#' [Kexample] an example "K" object included with **Prova**.
+#'
 #' @examples
 #' ## 'Prova' includes the example object 'Kexample'
 #' ## related to a dataset with variates 'species' and 'bill_len'.

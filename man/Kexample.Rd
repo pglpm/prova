@@ -19,8 +19,7 @@ No return value.
 \description{
 An example "K" (more precisely "prova_K") object obtained by means of the \code{\link[=learn]{learn()}} function, using the \link[datasets:penguins]{datasets::penguins} dataset and the metadata in \link{metadataExample}, according to the call
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{learn(data = penguins, metadata = metadataExample,
-  nsamples = 225, nchains = 15)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
 }\if{html}{\out{</div>}}
 
 It is a list that essentially contains posterior hyperparameters for drawing statistical inferences about the variates \code{species} and \code{bill_len}.
@@ -31,6 +30,8 @@ It is a list that essentially contains posterior hyperparameters for drawing sta
 \code{\link[=learn]{learn()}}, which produces this kind of object.
 
 \code{\link[=Pr]{Pr()}}, \code{\link[=qPr]{qPr()}}, \code{\link[=rPr]{rPr()}}, \code{\link[=mutualinfo]{mutualinfo()}}: functions that require this kind of object in order to calculate probabilities and quantiles, generate data points, and calculate mutual information.
+
+\code{\link[=useK]{useK()}} to set a "K" object as default in all \verb{K = } arguments.
 }
 \concept{learn}
 \keyword{datasets}
