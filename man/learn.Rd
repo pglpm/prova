@@ -21,11 +21,11 @@ learn(
   prior = missing(data) || is.null(data),
   startupMCiterations = 3600,
   minMCiterations = 0,
-  maxMCiterations = +Inf,
+  maxMCiterations = 9e+05,
   maxhours = +Inf,
   ncheckpoints = 12,
   maxrelMCSE = +Inf,
-  minESS = 450,
+  minESS = 617,
   initES = 8,
   thinning = NULL,
   verbose = TRUE,
@@ -74,23 +74,23 @@ learn(
 
 \item{prior}{Logical: Calculate the prior distribution? Default is \code{FALSE} unless \code{data} argument is missing or \code{NULL}.}
 
-\item{startupMCiterations}{Integer, default 3600: number of initial Monte Carlo iterations.}
+\item{startupMCiterations}{Integer, default 3600: number of initial Monte Carlo iterations per chain.}
 
-\item{minMCiterations}{Integer, default 0: minimum number of Monte Carlo iterations to be doneby a chain.}
+\item{minMCiterations}{Integer, default 0: Do at least this many Monte Carlo iterations per chain.}
 
-\item{maxMCiterations}{Integer, default \code{Inf}: Do at most this many Monte Carlo iterations per chain.}
+\item{maxMCiterations}{Integer, default 900000: Do at most this many Monte Carlo iterations per chain. Data is saved to disk during computation, so the user should increase or decrease this number according to disk capacity and complexity of the data.}
 
-\item{maxhours}{Numeric, default \code{Inf}: approximate time limit, in hours, for the Monte Carlo computation to last.}
+\item{maxhours}{Numeric, default \code{Inf}: Stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments \code{startupMCiterations} and \code{minMCiterations}.}
 
-\item{ncheckpoints}{Integer or \code{NULL}, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If \code{NULL}, this is equal to number of variates + 2. If Inf, use all datapoints.}
+\item{ncheckpoints}{Integer or \code{NULL}, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If \code{NULL}, this is equal to number of variates + 2. If \code{Inf}, use all datapoints.}
 
-\item{maxrelMCSE}{Numeric positive, default \code{+Inf}: desired maximal \emph{relative Monte Carlo Standard Error} of calculated probabilities. The default \code{+Inf} means that \code{minESS} is used instead. \code{maxrelMCSE} is related to \code{minESS} by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}}.}
+\item{maxrelMCSE}{Numeric positive, default \code{+Inf}: desired maximal \emph{relative Monte Carlo Standard Error} of calculated probabilities per chain. The default \code{+Inf} means that \code{minESS} is used instead. \code{maxrelMCSE} is related to \code{minESS} by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}}.}
 
-\item{minESS}{Numeric positive or \code{NULL}, default 450: desired minimal Monte Carlo \emph{Expected Sample Size}. If \code{NULL}, it is equal to the final \code{nsamplesperchain}. \code{minESS} is related to \code{maxrelMCSE} by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}}.}
+\item{minESS}{Numeric positive or \code{NULL}, default 617: desired minimal Monte Carlo \emph{Expected Sample Size} per chain. If \code{NULL}, it is equal to the final \code{nsamplesperchain}. \code{minESS} is related to \code{maxrelMCSE} by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}}. The default value \eqn{\mathrm{minESS} = 617} corresponds to \eqn{\mathrm{maxrelMCSE} = 0.4}.}
 
-\item{initES}{Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.}
+\item{initES}{Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded per chain. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.}
 
-\item{thinning}{Integer or \code{NULL} (default): thin out the Monte Carlo samples by this value. If \code{NULL}: let the diagnostics decide the thinning value.}
+\item{thinning}{Integer or \code{NULL} (default): thin out the Monte Carlo samples by this value. If \code{NULL}: let diagnostics decide the thinning value.}
 
 \item{verbose}{Logical, default \code{TRUE}: output the progress also to terminal? If \code{FALSE}, the progress is outputted only to the file \code{'main.out'} in the \code{outputdir} directory.}
 

@@ -21,15 +21,15 @@
 #' @param appendinfo Logical, default `TRUE`: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory `outputdir`? The appended string has the format 'Vn_Dn_Sn_YYMMDDTHHMMSS'.
 #' @param subsampledata Integer or `NULL` (default): if integer, use only that many datapoints from the original dataset in the `data` argument.
 #' @param prior Logical: Calculate the prior distribution? Default is `FALSE` unless `data` argument is missing or `NULL`.
-#' @param startupMCiterations Integer, default 3600: number of initial Monte Carlo iterations.
-#' @param minMCiterations Integer, default 0: minimum number of Monte Carlo iterations to be doneby a chain.
-#' @param maxMCiterations Integer, default `Inf`: Do at most this many Monte Carlo iterations per chain.
-#' @param maxhours Numeric, default `Inf`: approximate time limit, in hours, for the Monte Carlo computation to last.
-#' @param ncheckpoints Integer or `NULL`, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If `NULL`, this is equal to number of variates + 2. If Inf, use all datapoints.
-#' @param maxrelMCSE Numeric positive, default `+Inf`: desired maximal *relative Monte Carlo Standard Error* of calculated probabilities. The default `+Inf` means that `minESS` is used instead. `maxrelMCSE` is related to `minESS` by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}}.
-#' @param minESS Numeric positive or `NULL`, default 450: desired minimal Monte Carlo *Expected Sample Size*. If `NULL`, it is equal to the final `nsamplesperchain`. `minESS` is related to `maxrelMCSE` by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}}.
-#' @param initES Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.
-#' @param thinning Integer or `NULL` (default): thin out the Monte Carlo samples by this value. If `NULL`: let the diagnostics decide the thinning value.
+#' @param startupMCiterations Integer, default 3600: number of initial Monte Carlo iterations per chain.
+#' @param minMCiterations Integer, default 0: Do at least this many Monte Carlo iterations per chain.
+#' @param maxMCiterations Integer, default 900000: Do at most this many Monte Carlo iterations per chain. Data is saved to disk during computation, so the user should increase or decrease this number according to disk capacity and complexity of the data.
+#' @param maxhours Numeric, default `Inf`: Stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments `startupMCiterations` and `minMCiterations`.
+#' @param ncheckpoints Integer or `NULL`, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If `NULL`, this is equal to number of variates + 2. If `Inf`, use all datapoints.
+#' @param maxrelMCSE Numeric positive, default `+Inf`: desired maximal *relative Monte Carlo Standard Error* of calculated probabilities per chain. The default `+Inf` means that `minESS` is used instead. `maxrelMCSE` is related to `minESS` by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}}.
+#' @param minESS Numeric positive or `NULL`, default 617: desired minimal Monte Carlo *Expected Sample Size* per chain. If `NULL`, it is equal to the final `nsamplesperchain`. `minESS` is related to `maxrelMCSE` by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}}. The default value \eqn{\mathrm{minESS} = 617} corresponds to \eqn{\mathrm{maxrelMCSE} = 0.4}.
+#' @param initES Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded per chain. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.
+#' @param thinning Integer or `NULL` (default): thin out the Monte Carlo samples by this value. If `NULL`: let diagnostics decide the thinning value.
 #' @param verbose Logical, default `TRUE`: output the progress also to terminal? If `FALSE`, the progress is outputted only to the file `'main.out'` in the `outputdir` directory.
 #' @param plottraces Logical, default `TRUE`: save plots of the Monte Carlo traces of diagnostic values?
 #' @param showKtraces Logical, default `FALSE`: save plots of the Monte Carlo traces of the K parameter?
@@ -185,11 +185,11 @@ learn <- function(
     prior = missing(data) || is.null(data),
     startupMCiterations = 3600,
     minMCiterations = 0,
-    maxMCiterations = +Inf,
+    maxMCiterations = 900000,
     maxhours = +Inf,
     ncheckpoints = 12,
     maxrelMCSE = +Inf,
-    minESS = 450,
+    minESS = 617,
     initES = 8,
     thinning = NULL,
     verbose = TRUE,
