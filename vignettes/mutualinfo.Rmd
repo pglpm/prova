@@ -14,13 +14,13 @@ vignette: >
 
 This vignette gives an introduction and guide to the visual and quantitative capabilities and functions of the **Prova** package, for the study of associations, correlations, and links.
 
-See the `vignette('start')` for an introduction to the package. The present vignette continues with the same example and dataset.
+See the `vignette('intro')` for an introduction to the package. The present vignette continues with the same example and dataset.
 
 \
 
 # Probabilities and associations
 
-The `vignette('start')` focuses on the dataset `datasets::penguins`, and shows how to calculate probabilities of single and joint variates from that dataset; also probabilities conditional on given variates. These probabilities refers to a *new unit*; for example:
+The `vignette('intro')` focuses on the dataset `datasets::penguins`, and shows how to calculate probabilities of single and joint variates from that dataset; also probabilities conditional on given variates. These probabilities refers to a *new unit*; for example:
 
 - If we find that $\mathrm{Pr}(\text{species}\mo \text{Adelie}) = 44\%$, then there's a 44% probability that the next penguin we sample (from the same population) is of the *Adélie* species.
 - If we find that $\mathrm{Pr}(\text{species}\mo \text{Gentoo} \,\vert\, \text{island} \mo \text{Biscoe}) = 1\%$, then if we have a new penguin, and we know it is from Biscoe island, there's a 1% probability that it is of the *Gentoo* species.
@@ -47,7 +47,7 @@ library('prova')
 set.seed(10)
 ```
 
-As in the `vignette('start')`, we work with a specific population of penguins, of which we have 344 sample data stored in the dataset `datasets::penguins`, included in R version 4.5.0 and above. For your convenience, for instance if you have an older R version, you can also download the shuffled dataset as the CSV file [`penguins_shuffled.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv), then load it with the `pread.csv()` function as follows:
+As in the `vignette('intro')`, we work with a specific population of penguins, of which we have 344 sample data stored in the dataset `datasets::penguins`, included in R version 4.5.0 and above. For your convenience, for instance if you have an older R version, you can also download the shuffled dataset as the CSV file [`penguins_shuffled.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv), then load it with the `pread.csv()` function as follows:
 
 
 ``` r
@@ -62,7 +62,9 @@ We assume that we have already learned all predictive information from this data
 ``` r
 K <- 'Kall.rds'
 ```
-in this case `K` is just a character string pointing to the file containing the actual "Knowledge" object.
+
+Note that we could set this "K" object as default for all `K = ` arguments in the following calculations, by calling the function `useK(K)`, as explained in the `vignette('intro')`. Feel free to do so!
+
 
 ## Generating new samples {#newsamples}
 
@@ -102,11 +104,11 @@ These are only features of this specific data sample, however. Can we generalize
 
 
 ``` r
-prob <- Pr(data.frame(island = 'Torgersen', species = 'Chinstrap'), K)
+prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'), K = K)
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-# 0.002930 0.000055 0.000375 0.001150 0.003893  0.00764
+# 0.003103 0.000056 0.000413 0.001247 0.004181  0.00824
 ```
 
 \
@@ -116,23 +118,23 @@ The **Prova** package offers the function `rPr()` to generate a data.frame of fi
 
 - `n`: a positive integer, the number of samples to generate.
 - `Ynames`: vector of variate names; samples are generates for these variates jointly.
-- `X`: data frame of variate values to restrict the sampling to specific subpopulations.
+- `X`: data frame of variate values to restrict the sampling to specific subpopulations; `NA` or `NULL` means no restriction.
 - `K`: the object that encodes the `K`nowledge from the computation made with the `learn()` function.
 
 Let's first generate 5 samples from the estimated whole population of penguins, as an example:
 
 
 ``` r
-rPr(5, c('island', 'species'), K)
-#           island   species
-# 644_1      Dream Chinstrap
-# 996_1      Dream Chinstrap
-# 1228_1     Dream Chinstrap
-# 2230_1     Dream Chinstrap
-# 3083_1 Torgersen    Adelie
+rPr(n = 5, Ynames = c('island', 'species'), K = K)
+#        island   species
+# 644_1  Biscoe    Gentoo
+# 996_1   Dream Chinstrap
+# 1228_1 Biscoe    Gentoo
+# 2230_1  Dream Chinstrap
+# 3083_1  Dream    Adelie
 ```
 
-This could have also be entered more explicitly as `rPr(n = 5, Ynames = c('island', 'species'), K = K)`.
+This could have also be entered as `rPr(5, c('island', 'species'), NA, K)`, where `NA` stands for the `X = ` argument.
 
 The rows of the resulting data frame are named according to the Monte Carlo samples used from the `K` object; they can be useful for peculiar studies but we can completely ignore them in the present case.
 
@@ -140,7 +142,7 @@ Now let's generate 2000 samples, and then plot them in a scatter plot:
 
 
 ``` r
-samples <- rPr(2000, c('island', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
 
 pplot(x = samples$island, y = samples$species,
     type = 'p', col = 4, alpha.f = 0.5,
@@ -165,7 +167,7 @@ We generate 2000 whole-population samples of the two variates with `rPr()`, and 
 ``` r
 body_massrange <- range(vrtgrid('body_mass', K))
 
-samples <- rPr(2000, c('body_mass', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
 
 pplot(x = samples$body_mass, y = samples$species,
     type = 'p', col = 5, alpha.f = 0.5,
@@ -180,7 +182,7 @@ pplot(x = samples$body_mass, y = samples$species,
 
 Note again how `pplot()` automatically add a jitter to the discrete variate `species`, but not to the continuous `body_mass`.
 
-From the plot we see that there is an association between the Adélie and Chinstrap species and lighter body mass, around 3500 g; and between the Gentoo species and heavier body mass, around 5000 g. Incidentally, this reflects the probability plot at the end of the `vignette('start')`.
+From the plot we see that there is an association between the Adélie and Chinstrap species and lighter body mass, around 3500 g; and between the Gentoo species and heavier body mass, around 5000 g. Incidentally, this reflects the probability plot at the end of the `vignette('intro')`.
 
 ## Samples and plots for different subpopulations {#subpopplots}
 
@@ -190,7 +192,7 @@ In a completely analogous way we can visually assess the association of two cont
 ``` r
 bill_lenrange <- range(vrtgrid('bill_len', K))
 
-samples <- rPr(2000, c('body_mass', 'bill_len'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', col = 6, alpha.f = 0.5,
@@ -332,7 +334,7 @@ Mutual information is in fact a core quantity of communication theory and inform
 \ The **Prova** package provides the functions `mutualinfoF()` and `mutualinfo()` to calculate the mutual information between two variates or two sets of joint variates. Function `mutualinfoF()` can be used only to calculate the mutual information between groups of variates that have a *finite number of possible values* (finite domain), like the `species` or `island` variates, but it is extremely fast (seconds). Function `mutualinfo()` can be used with any kinds of variates, but it is much slower (tens of minutes). The main arguments of these functions are the following:
 
 - `Y1names`, `Y2names`: two vectors of variate names; the mutual information is calculated between these two sets.
-- *optionally* `X`: data frame of variate values to restrict the calculation to specific subpopulations.
+- `X`: data frame of variate values to restrict the calculation to specific subpopulations; `NA` or `NULL` means no restriction.
 - `K`: the object that encodes the `K`nowledge from the computation made with the `learn()` function.
 - *Optionally*, `unit`: the mutual information unit; default "shannons" (Sh).
 - *Optionally*, `parallel`  This argument specifies how many nodes we should use for the computation, or a cluster previously generated with `parallel::makeCluster()`. If this argument is missing, then the function checks whether a default cluster (set with `parallel::setDefaultCluster()`) exists, and if it doesn't then it creates a number of nodes equal to the R option "cl.cores" (see `getOption()`), or equal to 2, if that option is unset. In the present example we tell **Prova** that it can use up to 4 nodes; change this value to one that works for your system -- or just skip this step if you don't want to bother with parallel computation for the moment:
@@ -346,7 +348,7 @@ Let's calculate the mutual information between the variates `island` and `specie
 
 
 ``` r
-MIislandspecies <- mutualinfoF('island', 'species', K)
+MIislandspecies <- mutualinfoF(Y1names = 'island', Y2names = 'species', K = K)
 ```
 
 The resulting object `MIislandspecies` is a list of several quantities; the mutual information is given in the `$value` element, and its unit in the `$unit` element:
@@ -412,7 +414,7 @@ mi <- signif(MIislandspecies$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIislandspecies$rGauss, digits = 2)
 
-samples <- rPr(2000, c('island', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
 
 pplot(x = samples$island, y = samples$species,
     type = 'p', col = 4, alpha.f = 0.5,
@@ -433,7 +435,7 @@ Calculation of mutual info: "body mass" is a variate with an infinite number of 
 
 
 ``` r
-MIbodymassspecies <- mutualinfo('body_mass', 'species', K)
+MIbodymassspecies <- mutualinfo(Y1names = 'body_mass', Y2names = 'species', K = K)
 ```
 
 Scatter plot:
@@ -446,7 +448,7 @@ mi <- signif(MIbodymassspecies$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
-samples <- rPr(2000, c('body_mass', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
 
 pplot(x = samples$body_mass, y = samples$species,
     type = 'p', col = 5, alpha.f = 0.5,
@@ -467,7 +469,7 @@ Calculation of mutual information:
 
 
 ``` r
-MIbodymassbilllen <- mutualinfo('body_mass', 'bill_len', K)
+MIbodymassbilllen <- mutualinfo(Y1names = 'body_mass', Y2ames = 'bill_len', K = K)
 ```
 
 Scatter plot:
@@ -480,7 +482,7 @@ mi <- signif(MIbodymassbilllen$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 
-samples <- rPr(2000, c('body_mass', 'bill_len'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', col = 6, alpha.f = 0.5,
@@ -500,7 +502,7 @@ Note that in this case the Pearson correlation between `body_mass` and `bill_len
 
 ``` r
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.559465
+# [1] 0.56415
 ```
 
 which is different from the rough $r$-equivalent 0.67.
@@ -516,15 +518,15 @@ The subpopulation is chosen with the argument `X`, as in the `Pr()` and `rPr()` 
 
 ``` r
 MIadelie <- mutualinfo('body_mass', 'bill_len',
-    data.frame(species = 'Adelie'), ## choose subpopulation
+    data.frame(species = 'Adelie'), # choose subpopulation
     K)
 
 MIchinstrap <- mutualinfo('body_mass', 'bill_len',
-    data.frame(species = 'Chinstrap'), ## choose subpopulation
+    data.frame(species = 'Chinstrap'), # choose subpopulation
     K)
 
 MIgentoo <- mutualinfo('body_mass', 'bill_len',
-    data.frame(species = 'Gentoo'), ## choose subpopulation
+    data.frame(species = 'Gentoo'), # choose subpopulation
     K)
 ```
 
@@ -571,15 +573,15 @@ It is interesting to contrast this result with values of the Pearson correlation
 ``` r
 ## Pearson r for Adelie subpopulation:
 cor(samplesAdelie$body_mass, samplesAdelie$bill_len, method = 'pearson')
-# [1] 0.433698
+# [1] 0.497042
 
 ## Pearson r for Chinstrap subpopulation:
 cor(samplesChinstrap$body_mass, samplesChinstrap$bill_len, method = 'pearson')
-# [1] 0.271457
+# [1] 0.337984
 
 ## Pearson r for Gentoo subpopulation:
 cor(samplesGentoo$body_mass, samplesGentoo$bill_len, method = 'pearson')
-# [1] 0.535847
+# [1] 0.504752
 ```
 
 The Pearson correlation yields the same the association *ranking* as the mutual information does (first Gentoo, then Adélie, then Chinstrap), but it yields the association for the Adélie subpopulation to be closer to the Gentoo one than to the Chinstrap one. The mutual information yields the opposite.
