@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,8 @@ This is a convenience function mostly intended for interactive use, because the 
     <div class="dont-index"><p><code><a href="Pr.html">Pr()</a></code>, to generate probability objects.</p>
 <p><code><a href="merge.prova_pr.html">merge.prova_pr()</a></code>, to merge two probability objects.</p>
 <p><code><a href="plot.prova_pr.html">plot.prova_pr()</a></code> to plot probabilities and quantiles calculated by `Pr()'.</p>
-<p><code><a href="hist.prova_pr.html">hist.prova_pr()</a></code> to plot histograms of the probability distributions calculated by <code><a href="Pr.html">Pr()</a></code>.</p></div>
+<p><code><a href="hist.prova_pr.html">hist.prova_pr()</a></code> to plot histograms of the probability distributions calculated by <code><a href="Pr.html">Pr()</a></code>.</p>
+<p><a href="Kexample.html">Kexample</a> an example "K" object included with <strong>Prova</strong>.</p></div>
     </div>
 
     <div class="section level2">
@@ -110,9 +111,9 @@ This is a convenience function mostly intended for interactive use, because the 
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species            43         45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4647433 0.08989502</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1458345 0.24641970</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3894222 0.66368528</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4635304 0.08986735</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1550337 0.26079332</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3814359 0.64933933</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Subset by retaining the values 'Adelie' and 'Gentoo' for species,</span></span></span>
 <span class="r-in"><span><span class="co">## and 44 or less for bill length</span></span></span>
@@ -125,8 +126,8 @@ This is a convenience function mostly intended for interactive use, because the 
 <span class="r-in"><span><span class="va">newprobs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species         43</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4647433</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo 0.3894222</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4635304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo 0.3814359</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Plot these conditional probabilities and their revisabilities</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">newprobs</span><span class="op">)</span></span></span>

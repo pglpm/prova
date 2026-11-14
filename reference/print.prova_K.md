@@ -1,17 +1,18 @@
-# Print summary of a "prova_K" (knowledge) object
+# Print summary of a "K" (more precisely "prova_K") object
 
 This [`base::print()`](https://rdrr.io/r/base/print.html) method is a
-utility to display a summary of a "prova_K" (knowledge) object outputted
-by [`learn()`](https://pglpm.github.io/prova/reference/learn.md),
+utility to display a summary of a "K" (more precisely "prova_K") object
+outputted by
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md),
 internally using [`utils::str()`](https://rdrr.io/r/utils/str.html). It
 also display a summary if
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md)'s value is
-only the path to the directory of the rds file containing the "prova_K"
-(knowledge) object itself (see argument `valueisK =` in
+only the path to the directory of the rds file containing the "K" object
+itself (see argument `valueisK = ` in
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md)), by
-internally retrieving the object. If you want to have a summary of a
-"prova_K" (knowledge) object in a given directory or rds file, you can
-explicitly call `print.prova_K(<file path>)`.
+internally retrieving the object. To get a summary of a "K" object in a
+given directory or RDS file, the user can explicitly call
+`print.prova_K(<file path>)`.
 
 ## Usage
 
@@ -24,7 +25,7 @@ print(x, ...)
 
 - x:
 
-  Object of class "prova_K" (knowledge), output of
+  Object of class "K" (more precisely "prova_K"), output of
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md).
 
 - ...:
@@ -36,28 +37,28 @@ print(x, ...)
 
 Its `x` argument, [invisibly](https://rdrr.io/r/base/invisible.html);
 the [str](https://rdrr.io/r/utils/str.html)ucture of the corresponding
-"prova_K" (knowledge) object, if it exists, is also displayed.
+"K" object, if it exists, is also displayed.
 
 ## See also
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
-generate a "prova_K" (knowledge) object.
+generate a "K" (more precisely "prova_K") object.
 
 [Kexample](https://pglpm.github.io/prova/reference/Kexample.md) an
-example "prova_K" (knowledge) object included with **Prova**.
+example "K" object included with **Prova**.
 
 ## Examples
 
 ``` r
-## Display a summary of the example "prova_K" (knowledge) object
+## Display a summary of the example "K" object
 ## calculated from the "penguins" dataset
 print(Kexample)
 #> List of 7
-#>  $ Dmean      : num [1, 1:64, 1:225] -0.665 3.942 -5.018 1.271 3.742 ...
-#>  $ Dsd        : num [1, 1:64, 1:225] 0.6413 0.0614 10.5637 0.9795 0.1708 ...
-#>  $ Nprob      : num [1:3, 1:64, 1:225] 0.1032 0.8193 0.0775 0.1119 0.8821 ...
-#>  $ W          : num [1:64, 1:225] 7.54e-168 1.10e-18 4.59e-43 1.59e-30 2.20e-48 ...
-#>  $ MCindex    : num [1:225(1d)] 219 3752 7285 10817 14350 ...
+#>  $ Dmean      : num [1, 1:64, 1:225] 0.68 -0.814 -1.057 -1.607 -2.867 ...
+#>  $ Dsd        : num [1, 1:64, 1:225] 1.08594 2.23184 1.60639 0.36502 0.00626 ...
+#>  $ Nprob      : num [1:3, 1:64, 1:225] 0.22369 0.622466 0.153844 0.000493 0.998166 ...
+#>  $ W          : num [1:64, 1:225] 8.01e-27 2.99e-44 4.67e-23 5.43e-10 1.36e-47 ...
+#>  $ MCindex    : num [1:225(1d)] 204 257 310 362 415 467 520 573 625 678 ...
 #>  $ auxmetadata:'data.frame': 2 obs. of  25 variables:
 #>   ..$ name             : chr [1:2] "species" "bill_len"
 #>   ..$ type             : chr [1:2] "nominal" "continuous"
@@ -84,10 +85,22 @@ print(Kexample)
 #>   ..$ V1               : chr [1:2] "Adelie" NA
 #>   ..$ V2               : chr [1:2] "Chinstrap" NA
 #>   ..$ V3               : chr [1:2] "Gentoo" NA
-#>  $ auxinfo    :List of 12
-#>   ..$ nchains          : num 15
-#>   ..$ npoints          : int 344
-#>   ..$ hyperparams      :List of 21
+#>  $ info       :List of 19
+#>   ..$ metadata                   :'data.frame':  2 obs. of  10 variables:
+#>   .. ..$ name       : chr [1:2] "species" "bill_len"
+#>   .. ..$ type       : chr [1:2] "nominal" "continuous"
+#>   .. ..$ domainmin  : int [1:2] NA 0
+#>   .. ..$ domainmax  : int [1:2] NA NA
+#>   .. ..$ datastep   : num [1:2] NA 0.1
+#>   .. ..$ minincluded: int [1:2] NA NA
+#>   .. ..$ maxincluded: int [1:2] NA NA
+#>   .. ..$ V1         : chr [1:2] "Adelie" NA
+#>   .. ..$ V2         : chr [1:2] "Chinstrap" NA
+#>   .. ..$ V3         : chr [1:2] "Gentoo" NA
+#>   ..$ nMCsamples                 : int 225
+#>   ..$ nchains                    : num 1
+#>   ..$ npoints                    : int 344
+#>   ..$ hyperparams                :List of 21
 #>   .. ..$ ncomponents : num 64
 #>   .. ..$ minalpha    : num -4
 #>   .. ..$ maxalpha    : num 4
@@ -109,19 +122,29 @@ print(Kexample)
 #>   .. ..$ Nprior      : chr "Hadamard"
 #>   .. ..$ initmethod  : chr "datacentre"
 #>   .. ..$ Qerror      : num [1:2] 0.159 0.841
-#>   ..$ maxiterations    : num 49676
-#>   ..$ maxusedcomponents: num 8
-#>   ..$ nonfinitechains  : num 0
-#>   ..$ stoppedchains    : num 0
-#>   ..$ rel. CI error    : Named num [1:13] 0.0754 0.0613 0.0763 0.1336 0.1411 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "62" "64" "67" ...
-#>   ..$ ESS              : Named num [1:13] 192 234 251 190 351 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "62" "64" "67" ...
-#>   ..$ needed thinning  : Named num [1:13] 1.28 0.96 1.31 4.02 4.48 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "62" "64" "67" ...
-#>   ..$ average          : Named num [1:13] 0.002442 0.000643 0.006379 0.002348 0.002848 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "62" "64" "67" ...
-#>   ..$ quantile width   : Named num [1:13] 0.000495 0.000589 0.001754 0.00243 0.001564 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "62" "64" "67" ...
+#>   ..$ maxiterations              : num 11983
+#>   ..$ maxusedcomponents          : num 5
+#>   ..$ nonfinitechains            : num 0
+#>   ..$ stoppedchains              : num 0
+#>   ..$ max abs. quantile error    : Named num [1:13] 0.0192 0.0227 0.0145 0.0347 0.025 ...
+#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "2" "51" "92" ...
+#>   ..$ quantile width             : Named num [1:13] 0.202 0.275 0.272 0.338 0.505 ...
+#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "2" "51" "92" ...
+#>   ..$ max rel. quantile error    : Named num [1:13] 0.0954 0.0824 0.0534 0.1027 0.0495 ...
+#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "2" "51" "92" ...
+#>   ..$ min ESS from rel. qt. error: Named num [1:13] 109.8 147.3 350.2 94.8 408.8 ...
+#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "2" "51" "92" ...
+#>   ..$ MCSE                       : Named num [1:13] 0.00333 0.003 0.00305 0.00617 0.01195 ...
+#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "2" "51" "92" ...
+#>   ..$ rel. MCSE                  : Named num [1:13] 0.0498 0.0342 0.0348 0.0611 0.0743 ...
+#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "2" "51" "92" ...
+#>   ..$ quantl-rel. MCSE           : Named num [1:13] 0.0165 0.0109 0.0112 0.0183 0.0236 ...
+#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "2" "51" "92" ...
+#>   ..$ ESS                        : Named num [1:13] 402 855 827 268 181 ...
+#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "2" "51" "92" ...
+#>   ..$ needed thinning            : Named num [1:13] 2.049 1.527 0.642 2.373 1.24 ...
+#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "2" "51" "92" ...
+#>   ..$ log-average                : Named num [1:13] -6.07 -5.07 -5.08 -5.42 -5.84 ...
+#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "2" "51" "92" ...
 #>  - attr(*, "class")= chr "prova_K"
 ```

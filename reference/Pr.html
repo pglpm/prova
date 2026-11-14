@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Pr</span><span class="op">(</span></span>
 <span>  <span class="va">Y</span>,</span>
-<span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  X <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  K <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  priorY <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -75,15 +75,19 @@
 
 
 <dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Matrix or data.table or <code>NULL</code> (default): set of values of variates in the conditional of the probability of <code>Y</code>. If <code>NULL</code>, no conditioning is made (besides the conditioning on knowledge <code>K</code>). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.</p></dd>
+<dd><p>Matrix or data.table, or <code>NULL</code> or <code>NA</code> (default): set of values of variates in the conditional of the probability of <code>Y</code>. If <code>NA</code> or <code>NULL</code>, no conditioning is made (besides the conditioning on knowledge <code>K</code>). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>A "prova_K" (knowledge) object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.</p></dd>
+<dd><p>One of these alternatives:</p><ul><li><p>A "K" (more precisely "prova_K") object.</p></li>
+<li><p>A character string of the path to an <a href="https://rdrr.io/r/base/readRDS.html" class="external-link">RDS</a> file (typically created by <code><a href="learn.html">learn()</a></code>) containing a valid "K" object.</p></li>
+<li><p>A character string of the path to a directory (also typically created by <code><a href="learn.html">learn()</a></code>) containing such an <a href="https://rdrr.io/r/base/readRDS.html" class="external-link">RDS</a> file of a "K" object.</p></li>
+<li><p>For function <code><a href="Kobjects.html">getK()</a></code> it can also be <code>NULL</code> or omitted, if a default <code>K = </code> argument has been defined with <code><a href="Kobjects.html">useK()</a></code>.</p></li>
+</ul><p>Alternatively, a default <code>K = </code> argument can be set with <code><a href="Kobjects.html">useK()</a></code>, in which case the <code>K = </code> argument may be omitted. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
-<dd><p>Named vector or list, or <code>NULL</code> (default). The names must match some or all of the variates in arguments <code>Y</code> and <code>X</code>. For variates in this list, the probability arguments are understood in a semi-open interval sense: \(Y \le y\) or \(Y \ge y\), an so on. This is true for <code>Y</code> and <code>X</code> variates (on the left and on the right of the conditional sign \(\,\vert\,\)). A left-open interval \(Y \le y\) is indicated by <code>'&lt;='</code> or <code>'lower'</code> or<code>'left'</code> or <code>-1</code>; a right-open interval \(Y \ge y\) is indicated by <code>'&gt;='</code> or <code>'upper'</code> or <code>'right'</code> or <code>+1</code>. Values <code>NULL</code>, <code>'=='</code>, <code>0</code> indicate that a point value <code>Y = y</code> (not an interval) should be calculated. <strong>Warning</strong>: the semi-open intervals <em>always</em> include the given value; this is important for ordinal or rounded variates. For instance, if \(Y\) is an integer variate, then to calculate  \(\mathrm{Pr}(Y &lt; 3)\) you should require \(\mathrm{Pr}(Y \le 2)\); for this reason we also have that \(\mathrm{Pr}(Y \le 2)\) and  \(\mathrm{Pr}(Y \ge 2)\) generally add up to <em>more</em> than 1.</p></dd>
+<dd><p>Named vector or list, or <code>NULL</code> (default). The names must match some or all of the variates in arguments <code>Y</code> and <code>X</code>. For variates in this list, the probability arguments are understood in a semi-open interval sense: \(Y \le y\) or \(Y \ge y\), an so on. This is true for <code>Y</code> and <code>X</code> variates (on the left and on the right of the conditional sign \(\,\vert\,\)). A left-open interval \(Y \le y\) is indicated by <code>'&lt;='</code> or <code>'lower'</code> or<code>'left'</code> or <code>-1</code>; a right-open interval \(Y \ge y\) is indicated by <code>'&gt;='</code> or <code>'upper'</code> or <code>'right'</code> or <code>+1</code>. Values <code>NULL</code>, <code>'=='</code>, <code>0</code> indicate that a point value <code>Y = y</code> (not an interval) should be calculated. <strong>Warning</strong>: the semi-open intervals <em>always</em> include the given value; this is important for ordinal or rounded variates. For instance, if \(Y\) is an integer variate, then to calculate  \(\mathrm{Pr}(Y &lt; 3)\) the user should require \(\mathrm{Pr}(Y \le 2)\); for this reason we also have that \(\mathrm{Pr}(Y \le 2)\) and  \(\mathrm{Pr}(Y \ge 2)\) generally add up to <em>more</em> than 1.</p></dd>
 
 
 <dt id="arg-priory">priorY<a class="anchor" aria-label="anchor" href="#arg-priory"></a></dt>
@@ -130,17 +134,18 @@
 <li><p><code>'value.acc'</code>, <code>quantiles.acc</code>: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the <code>'values'</code> and <code>'quantiles'</code> elements.</p></li>
 <li><p><code>'density'</code>: numerical vector as long as number of rows in <code>Y</code>, used mainly for <code><a href="plot.prova_pr.html">plot.prova_pr()</a></code>. It is the order of the probability density the <code>Y</code>-values: values with <code>0</code> are actual probabilities; values with <code>1</code> are one-dimensional probability densities \(\mathrm{p}(\dotso)\,\mathrm{d}y\); values with <code>2</code> are two-dimensional probability densities \(\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2\); and so on.</p></li>
 <li><p><code>'Y'</code>, <code>'X'</code>, <code>'tails'</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
-<li><p><code>'K'</code>: name of the "prova_K" (knowledge) object used in the calculation.</p></li>
+<li><p><code>'K'</code>: name of the "K" object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function calculates the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, K)\), where \(Y = y\) and \(X = x\) are two (non overlapping) sets of joint variate values, inputted as <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> arguments <code>Y</code> and <code>X</code>, and \(K\) is the information in the data and metadata. It is somewhat analogous to the <code>dxxx</code>-variants and <code>pxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probability \(\mathrm{Pr}(Y = y \vert K)\) is calculated.</p>
+    <p>This function calculates the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, K)\), where \(Y = y\) and \(X = x\) are two (non overlapping) sets of joint variate values, inputted as <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> arguments <code>Y</code> and <code>X</code>, and \(K\) is the information in the data and metadata. It is somewhat analogous to the <code>dxxx</code>-variants and <code>pxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. If <code>X</code> is <code>NA</code>, then the posterior probability \(\mathrm{Pr}(Y = y \vert K)\) is calculated.</p>
 <p><em>Tail probabilities.</em> For some variates in <code>Y</code> or <code>X</code>, tail values can also be prescribed, so that this function calculates mixed probabilities such as $$\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .$$ Tail values are inputted via the <code>'tails'</code> argument; see "Usage". Note that nominal variates, strictly speaking, have no meaningful ordering, so the "\(\ge\)" and "\(\le\)" relations are not meaningful for them. For this kind of variates the "\(\ge\)" relation is understood in the sense of the value order appearing in the <a href="metadata.html">metadata</a> file.</p>
-<p>If <code>Pr()</code> is called with two unnamed arguments, <code>Pr(..., ...)</code>, then it is interpreted as <code>Pr(Y = ..., K = ...)</code>. If it is called with three unnamed arguments, then it is interpreted as either <code>Pr(Y = ..., X = ..., K = ...)</code> or <code>Pr(Y = ..., K = ..., tails = ...)</code>, depending on whether the second argument appears to be a "prova_K" (knowledge) object or not.</p>
-<p>This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \(\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)\) that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:</p><ul><li><p>As samples (default 3600 samples, depending on the 'nsamples' argument given to the <code><a href="learn.html">learn()</a></code> function) of the alternative values that the posterior probability could have.</p></li>
+<p><em>Arguments.</em> A default value for the <code>K = </code> argument can be set (and unset) with <code><a href="Kobjects.html">useK()</a></code>. When this is done, the <code>K = </code> argument may be omitted, saving a lot of <code>K = ...</code>-typing in this and other functions.</p>
+<p>Therefore if <code>Pr()</code> is called with one unnamed argument, <code>Pr(...)</code>, then it is interpreted as <code>Pr(Y = ...)</code>, with <code>X = NA</code> and the default <code>K = </code> argument set by <code><a href="Kobjects.html">useK()</a></code>. If <code>Pr()</code> is called with two unnamed arguments, <code>Pr(..., ...)</code>, then it is interpreted as <code>Pr(Y = ..., X = ...)</code> and the default <code>K = </code> argument set by <code><a href="Kobjects.html">useK()</a></code>. If it is called with three unnamed arguments, then it is interpreted as <code>Pr(Y = ..., X = ..., K = ...)</code>, with <code>K</code> explicitly given, overriding any default set by <code><a href="Kobjects.html">useK()</a></code>. In order to specify <code>Y</code> and <code>K</code> without naming the arguments, the form <code>Pr(..., NA, ...)</code> must be used, explicitly giving <code>X</code> as second argument.</p>
+<p><em>Revisabilities.</em> This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \(\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)\) that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:</p><ul><li><p>As samples (default 3600 samples, depending on the 'nsamples' argument given to the <code><a href="learn.html">learn()</a></code> function) of the alternative values that the posterior probability could have.</p></li>
 <li><p>As quantiles (default 5.5%, 25%, 75%, 94.5%) of the possible revisability.</p></li>
 </ul><p>If several joint values are given for <code>Y</code> or <code>X</code>, the function will create a 2D grid of results for all possible combinations of the given <code>Y</code> and <code>X</code> values.</p>
-<p>This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for the data corresponding to rows <code>Y</code> is given, the function will calculate the probability \(\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})\) from \(\mathrm{Pr}(X = x \vert Y = y, K)\) and the prior, by means of Bayes's theorem
+<p><em>Prior specification.</em> This function also allows for base-rate or other prior-probability corrections: If a prior (for instance, a base rate) for the data corresponding to rows <code>Y</code> is given, the function will calculate the probability \(\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})\) from \(\mathrm{Pr}(X = x \vert Y = y, K)\) and the prior, by means of Bayes's theorem
 $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 =
 \frac{
@@ -168,16 +173,18 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, to generate the <code>K</code>nowledge objects required by <code>Pr()</code>.</p>
+<p><code><a href="Kobjects.html">useK()</a></code> to set a "K" object as default in all <code>K = </code> arguments.</p>
 <p><code><a href="plot.prova_pr.html">plot.prova_pr()</a></code> to plot probabilities and quantiles calculated by <code>Pr()</code>.</p>
 <p><code><a href="hist.prova_pr.html">hist.prova_pr()</a></code> to plot histograms of the probability distributions calculated by <code>Pr()</code>.</p>
 <p><code><a href="print.prova_pr.html">print.prova_pr()</a></code> to print the main elements of the probabilities calculated by <code>Pr()</code>.</p>
 <p><code><a href="qPr.html">qPr()</a></code> to calculate quantiles for a specific variate, that is, the variate values having given probabilities.</p>
-<p><code><a href="rPr.html">rPr()</a></code> to generate datapoints.</p></div>
+<p><code><a href="rPr.html">rPr()</a></code> to generate datapoints.</p>
+<p><a href="Kexample.html">Kexample</a> an example "K" object included with <strong>Prova</strong>.</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the "prova_K" (knowledge) object 'Kexample',</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the "K" object 'Kexample',</span></span></span>
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span></span></span>
@@ -185,21 +192,21 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="co">## Calculate the probability that an unknown penguin from this population</span></span></span>
 <span class="r-in"><span><span class="co">## is of species 'Adelie'</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## more explicitly: Pr(Y = data.frame(species = 'Adelie'), K = Kexample)</span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## alternatively: Pr(data.frame(species = 'Adelie'), NA, Kexample)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> species          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.440685</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> species           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4402128</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## the full-population frequency of 'Adelie' penguins is unknown;</span></span></span>
 <span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
 <span class="r-in"><span><span class="co">## for such frequency</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%     94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3988210 0.4829919 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3945673 0.4882089 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## we can also plot the probability distribution</span></span></span>
 <span class="r-in"><span><span class="co">## for this full-population frequency</span></span></span>
@@ -211,16 +218,18 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="co">## Calculate the 3 probabilities that an unknown penguin from this population</span></span></span>
 <span class="r-in"><span><span class="co">## is of species 'Adelie', 'Chinstrap', 'Gentoo'</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Adelie'</span>, <span class="st">'Chinstrap'</span>, <span class="st">'Gentoo'</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## alternatively:</span></span></span>
+<span class="r-in"><span><span class="co">## Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), NA, Kexample)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Adelie'</span>, <span class="st">'Chinstrap'</span>, <span class="st">'Gentoo'</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  K <span class="op">=</span> <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 3 probability values</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4406850</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1984161</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3608989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4402128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1990491</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3607380</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## the full-population frequencies of the three species are unknown;</span></span></span>
 <span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
@@ -228,9 +237,9 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Q</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species          5.5%     94.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.3988210 0.4829919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1623616 0.2357522</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3237028 0.4017671</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.3945673 0.4882089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1660700 0.2316169</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3196910 0.4032075</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## plot the probabilities and quantiles</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span></span></span>
@@ -245,15 +254,16 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="co">## Calculate the probability that an unknown penguin is of species 'Adelie'</span></span></span>
 <span class="r-in"><span><span class="co">## GIVEN that its bill length is 43 mm</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## more explicitly: Pr(Y = ..., X = ..., K = Kexample)</span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="co">## alternatively: Pr(Y = ..., X = ..., K = Kexample)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species         43</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4647433</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4635304</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## the full-subpopulation frequency of 'Adelie' penguins,</span></span></span>
 <span class="r-in"><span><span class="co">## among penguins having bill length of 43 mm, is unknown;</span></span></span>
@@ -261,26 +271,26 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="co">## for such conditional frequency</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%     94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3669249 0.5678666 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3612267 0.5654892 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 4:</span></span></span>
 <span class="r-in"><span><span class="co">## Calculate the probability that</span></span></span>
 <span class="r-in"><span><span class="co">## an unknown penguin is of species 'Adelie' AND its bill length is 43 mm</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span>, bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span>, bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Adelie,43 0.001819114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Adelie,43 0.001833167</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
 <span class="r-in"><span><span class="co">## for the full-population frequency of 'Adelie' penguins with 43 mm bills</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        5.5%       94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.001245039 0.002371801 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.001293080 0.002340539 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 5:</span></span></span>
@@ -297,9 +307,9 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species            43        44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4647433 0.2223224</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1458345 0.2054491</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3894222 0.5722285</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4635304 0.2220543</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1550337 0.2203152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3814359 0.5576305</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
 <span class="r-in"><span><span class="co">## for the full-population joint frequencies</span></span></span>
@@ -308,17 +318,17 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species             43        44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.36692485 0.1447719</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.08096214 0.1197566</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.29852092 0.4671262</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.36122673 0.1469467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.09270182 0.1421189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.29615404 0.4614142</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , Q = 94.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species            43        44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.5678666 0.3069388</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.2190872 0.2965559</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.4811995 0.6718201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.5654892 0.3040153</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.2194305 0.3050006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.4890394 0.6689622</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## plot the probabilities and quantiles</span></span></span>
@@ -335,31 +345,50 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span>  bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">43</span>, <span class="fl">44</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="va">Y</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## X is not given</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="va">Y</span>, <span class="cn">NA</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 6 joint-probability values</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0018191137</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0005712174</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0015231253</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0009554396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0008826070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0024593339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0018331674</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0006123980</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0015093929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0009604290</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0009505859</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0024192357</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
 <span class="r-in"><span><span class="co">## for the full-population joint frequencies</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Q</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len         5.5%       94.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0012450391 0.002371801</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0003027243 0.000897585</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0010682562 0.002025675</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0005600381 0.001361621</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0004820964 0.001288832</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0017899847 0.003151722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len         5.5%        94.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0012930803 0.0023405386</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0003504603 0.0009103917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0010585493 0.0020202051</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0005966045 0.0013332037</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0005961187 0.0013419007</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0018050459 0.0031778278</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ## Example 7:</span></span></span>
+<span class="r-in"><span><span class="co">## To omit 'K =' arguments, we can set a default one with useK()</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Kobjects.html">useK</a></span><span class="op">(</span><span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Calculate the probability that an unknown penguin from this population</span></span></span>
+<span class="r-in"><span><span class="co">## is of species 'Adelie'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span> <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Calculate the probability that an unknown penguin is of species 'Adelie'</span></span></span>
+<span class="r-in"><span><span class="co">## GIVEN that its bill length is 43 mm</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span> <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#' ## Remove any default 'K =' argument</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Kobjects.html">useK</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Kexample"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

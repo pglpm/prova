@@ -114,7 +114,7 @@ joint and conditional probabilities.
 ## Examples
 
 ``` r
-## Use the example "prova_K" (knowledge) object 'Kexample'
+## Use the example "K" object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -133,7 +133,9 @@ print(umatrix)
 #>      A4 -0.12  0.35  0.62
 
 ## Calculate the probability of the 'species outcomes
-probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+probs <- Pr(
+  data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+  NULL,
   Kexample)
 
 ## Calculate the expected utilities of the actions
@@ -142,10 +144,10 @@ eu <- exputility(umatrix, probs)
 eu$value
 #>        
 #> actions          
-#>      A1 0.3981347
-#>      A2 0.3510855
-#>      A3 0.4306723
-#>      A4 0.2403208
+#>      A1 0.3966675
+#>      A2 0.3509575
+#>      A3 0.4296713
+#>      A4 0.2404992
 
 ## optimal action:
 eu$optimal
@@ -158,8 +160,8 @@ eu$optimal
 eu$optimal.probs
 #>        
 #> actions           
-#>      A1 0.01333333
-#>      A2 0.05777778
-#>      A3 0.92888889
+#>      A1 0.01777778
+#>      A2 0.10222222
+#>      A3 0.88000000
 #>      A4 0.00000000
 ```

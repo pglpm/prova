@@ -150,7 +150,7 @@ to print a summary of expected utilities and their revisability.
 ## Examples
 
 ``` r
-## Use the example "prova_K" (knowledge) object 'Kexample'
+## Use the example "K" object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -169,7 +169,9 @@ print(umatrix)
 #>      A4 -0.12  0.35  0.62
 
 ## Calculate the probability of the 'species outcomes
-probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+probs <- Pr(
+  data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+  NULL,
   Kexample)
 
 ## Calculate the expected utilities of the actions

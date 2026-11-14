@@ -1,6 +1,7 @@
 # Compute ESS
 
-Modified from 'rstan'
+See: Geyer 1992, <doi:10.1214/ss/1177011137>, Vehtari & al. 2021
+<doi:10.1214/20-BA1221>, RStan
 <https://github.com/stan-dev/rstan/blob/develop/rstan/rstan/R/monitor.R>
 
 ## Usage

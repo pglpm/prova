@@ -10,7 +10,7 @@ more training data were available.
 qPr(
   p,
   Yname,
-  X = NULL,
+  X = NA,
   K = NULL,
   tails = NULL,
   nsamples = "all",
@@ -36,19 +36,39 @@ qPr(
 
 - X:
 
-  Matrix or data.table or `NULL` (default): set of values of variates on
-  which we want to condition. If `NULL`, no conditioning is made (except
-  for conditioning on the learning dataset and prior assumptions). One
-  variate per column, one set of values per row. See "Details" for the
-  interpretation of unnamed arguments.
+  Matrix or data.table, or `NULL` or `NA` (default): set of values of
+  variates in the conditional of the probability of `Y`. If `NA` or
+  `NULL`, no conditioning is made (besides the conditioning on knowledge
+  `K`). One variate per column, one set of values per row. See "Details"
+  for the interpretation of unnamed arguments.
 
 - K:
 
-  A "prova_K" (knowledge) object produced by
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
-  also be a path to a 'K.rds' file containing such object, or to a
-  directory containing one. See "Details" for the interpretation of
-  unnamed arguments.
+  One of these alternatives:
+
+  - A "K" (more precisely "prova_K") object.
+
+  - A character string of the path to an
+    [RDS](https://rdrr.io/r/base/readRDS.html) file (typically created
+    by [`learn()`](https://pglpm.github.io/prova/reference/learn.md))
+    containing a valid "K" object.
+
+  - A character string of the path to a directory (also typically
+    created by
+    [`learn()`](https://pglpm.github.io/prova/reference/learn.md))
+    containing such an [RDS](https://rdrr.io/r/base/readRDS.html) file
+    of a "K" object.
+
+  - For function
+    [`getK()`](https://pglpm.github.io/prova/reference/Kobjects.md) it
+    can also be `NULL` or omitted, if a default `K = ` argument has been
+    defined with
+    [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md).
+
+  Alternatively, a default `K = ` argument can be set with
+  [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md), in
+  which case the `K = ` argument may be omitted. See "Details" for the
+  interpretation of unnamed arguments.
 
 - tails:
 
@@ -137,8 +157,7 @@ A list with the following elements:
 
 - `'Y'`, `'X'` `'tails'`: copies of the `Y`, `X`, `tails` arguments.
 
-- `'K'`: name of the "prova_K" (knowledge) object used in the
-  calculation.
+- `'K'`: name of the "K" object used in the calculation.
 
 ## Details
 
@@ -149,19 +168,35 @@ calculates the values of \\Y\\ having specified cumulative probabilities
 or conditional probabilities. It also calculates the revisability of
 those quantiles if more learning data were provided. It is somewhat
 analogous to the `qxxx`-variants of [R distribution
-functions](https://rdrr.io/r/stats/Distributions.html). The revisability
-can be expressed in the form of quantiles, samples, or both, as in the
-[`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function. If
-several joint values are given for the probability levels and for `X`,
-the function creates a 2D grid of results for all possible combinations
-of the given probability levels and `X` values. Each variate in the
-argument `X` can be specified either as a point-value \\X = x\\ or as a
-left-open interval \\X \le x\\ or as a right-open interval \\X \ge x\\,
-through the argument `tails` (see *Tail probabilities* in the
+functions](https://rdrr.io/r/stats/Distributions.html).
+
+The revisability can be expressed in the form of quantiles, samples, or
+both, as in the [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md)
+function. If several joint values are given for the probability levels
+and for `X`, the function creates a 2D grid of results for all possible
+combinations of the given probability levels and `X` values.
+
+Each variate in the argument `X` can be specified either as a
+point-value \\X = x\\ or as a left-open interval \\X \le x\\ or as a
+right-open interval \\X \ge x\\, through the argument `tails` (see *Tail
+probabilities* in the
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) documentation).
 
-If `qPr()` is called with three unnamed arguments, `qPr(..., ..., ...)`,
-then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.
+A default value for the `K = ` argument can be set (and unset) with
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md). When
+this is done, the `K = ` argument may be omitted, saving a lot of
+`K = ...`-typing in this and other functions.
+
+Therefore if `qPr()` is called with two unnamed arguments,
+`qPr(..., ...)`, then it is interpreted as `qPr(p = ..., Yname = ...)`,
+with `X = NA` and the default `K = ` argument set by
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md). If it
+is called with three unnamed arguments, then it is interpreted as
+`qPr(p = ..., Yname = ..., X = ...)`, with the default `K = ` argument
+set by [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md).
+In order to specify `p`, `Yname`, and `K` without naming the arguments,
+the form `qPr(..., ..., NA, ...)` must be used, explicitly giving `X` as
+third argument.
 
 ## References
 
@@ -171,7 +206,10 @@ then it is interpreted as `qPr(p = ..., Yname = ..., K = ...)`.
 ## See also
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
-generate the "prova_K" (knowledge) objects required by `qPr()`.
+generate "K" objects required by `qPr()`.
+
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md) to set a
+"K" object as default in all `K = ` arguments.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 joint and conditional probabilities.
@@ -179,13 +217,16 @@ joint and conditional probabilities.
 [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md) to generate
 datapoints.
 
+[Kexample](https://pglpm.github.io/prova/reference/Kexample.md) an
+example "K" object included with **Prova**.
+
 ## Examples
 
 ``` r
 ### WARNING: the following examples, if run, might even take a minute or more.
 
 # \donttest{
-## Use the example "prova_K" (knowledge) object 'Kexample'
+## Use the example "K" object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -193,7 +234,7 @@ datapoints.
 ## Calculate the 25%-, 50%-, and 75%-quantiles for the variate "bill length",
 ## that is, the values of "bill length" having such cumulative probabilities:
 
-quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', Kexample)
+quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', NA, Kexample)
 
 ## display the quantile values
 quants$value
@@ -204,14 +245,14 @@ quants$value
 #>     0.75 48.3
 
 ## verify these values, within numerical error, using Pr():
-probs <- Pr(data.frame(bill_len = c(quants$value)), Kexample,
-  tails = list(bill_len = -1))
+probs <- Pr(data.frame(bill_len = c(quants$value)), NA, Kexample,
+  tails = list(bill_len = '<='))
 probs$value
 #>         
 #> bill_len          
-#>   <=39.2 0.2528194
-#>   <=44.3 0.5026998
-#>   <=48.3 0.7501943
+#>   <=39.2 0.2524340
+#>   <=44.3 0.5020812
+#>   <=48.3 0.7504611
 
 ## display the revisability about the quantiles
 quants$quantiles
@@ -220,7 +261,7 @@ quants$quantiles
 #>         
 #> bill_len     
 #>     0.25 38.7
-#>     0.5  43.3
+#>     0.5  43.2
 #>     0.75 47.8
 #> 
 #> , , Q = 50%
@@ -235,7 +276,7 @@ quants$quantiles
 #> 
 #>         
 #> bill_len     
-#>     0.25 39.7
+#>     0.25 39.8
 #>     0.5  45.1
 #>     0.75 48.9
 #> 
@@ -244,7 +285,10 @@ quants$quantiles
 ## ## Example 2:
 ## Calculate the 25%-, 50%-, and 75%-quantiles for the variate "bill length",
 ## for the subpopulation of species 'Adelie':
-quants <- qPr(c(0.25, 0.5, 0.75), 'bill_len', data.frame(species = 'Adelie'),
+quants <- qPr(
+  c(0.25, 0.5, 0.75),
+  'bill_len',
+  data.frame(species = 'Adelie'),
   Kexample)
 
 ## display the quantile values
@@ -256,13 +300,16 @@ quants$value
 #>     0.75   40.6
 
 ## verify these values, within numerical error, using Pr():
-probs <- Pr(data.frame(bill_len = c(quants$value)),
-  data.frame(species = 'Adelie'), Kexample, tails = list(bill_len = -1))
+probs <- Pr(
+  data.frame(bill_len = c(quants$value)),
+  data.frame(species = 'Adelie'),
+  Kexample,
+  tails = list(bill_len = '<='))
 probs$value
 #>         |species
 #> bill_len    Adelie
-#>   <=37   0.2530943
-#>   <=38.8 0.5050883
-#>   <=40.6 0.7515390
+#>   <=37   0.2545590
+#>   <=38.8 0.5060331
+#>   <=40.6 0.7519188
 # }
 ```

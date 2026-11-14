@@ -1,4 +1,4 @@
-# Calculate credibility quantiles on estimated quantile
+# Calculate credibility quantiles on estimated quantile using batch-means
 
 Calculates the lower and upper bound of a credibility interval, for
 various quantiles of the empirical distribution of a vector of MC
@@ -40,5 +40,9 @@ credibility quantiles in the case of independent samples.
 
 Tested also on t-distributions with df=1.1 and Pareto with a=1.5 (mean
 exists, variance infinite).
+
+Uses beta approximation from Vehtari & al. 2021 <doi:10.1214/20-BA1221>
+sect.4.4 but this version is based on batch-means rather than Geyer's
+method.
 
 Used in '.workerfun()' in 'learn()'

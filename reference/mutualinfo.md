@@ -12,7 +12,7 @@ finite domain, but is extremely faster and more accurate. See "Details"
 mutualinfo(
   Y1names,
   Y2names,
-  X = NULL,
+  X = NA,
   K = NULL,
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
@@ -29,7 +29,7 @@ mutualinfo(
 mutualinfoF(
   Y1names,
   Y2names,
-  X = NULL,
+  X = NA,
   K = NULL,
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
@@ -54,15 +54,39 @@ mutualinfoF(
 
 - X:
 
-  Matrix or data.frame or `NULL`: values of some variates conditional on
-  which we want the probabilities.
+  Matrix or data.table, or `NULL` or `NA` (default): set of values of
+  variates in the conditional of the probability of `Y`. If `NA` or
+  `NULL`, no conditioning is made (besides the conditioning on knowledge
+  `K`). One variate per column, one set of values per row. See "Details"
+  for the interpretation of unnamed arguments.
 
 - K:
 
-  A "prova_K" (knowledge) object produced by
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
-  also be a path to a 'K.rds' file containing such object, or to a
-  directory containing one.
+  One of these alternatives:
+
+  - A "K" (more precisely "prova_K") object.
+
+  - A character string of the path to an
+    [RDS](https://rdrr.io/r/base/readRDS.html) file (typically created
+    by [`learn()`](https://pglpm.github.io/prova/reference/learn.md))
+    containing a valid "K" object.
+
+  - A character string of the path to a directory (also typically
+    created by
+    [`learn()`](https://pglpm.github.io/prova/reference/learn.md))
+    containing such an [RDS](https://rdrr.io/r/base/readRDS.html) file
+    of a "K" object.
+
+  - For function
+    [`getK()`](https://pglpm.github.io/prova/reference/Kobjects.md) it
+    can also be `NULL` or omitted, if a default `K = ` argument has been
+    defined with
+    [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md).
+
+  Alternatively, a default `K = ` argument can be set with
+  [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md), in
+  which case the `K = ` argument may be omitted. See "Details" for the
+  interpretation of unnamed arguments.
 
 - tails:
 
@@ -82,15 +106,14 @@ mutualinfoF(
 - ns:
 
   Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in
-  the "prova_K" (knowledge) object to use for calculating the mutual
-  information. If `Inf` or `NULL`, use all Monte Carlo samples available
-  in the "prova_K" (knowledge) object.
+  the "K" object to use for calculating the mutual information. If `Inf`
+  or `NULL`, use all Monte Carlo samples available in the "K" object.
 
 - nv:
 
   Integer, default 12: number of *duplicates* of Monte Carlo samples in
-  the "prova_K" (knowledge) object to use for calculating the
-  revisability of the mutual information.
+  the "K" object to use for calculating the revisability of the mutual
+  information.
 
 - unit:
 
@@ -165,8 +188,7 @@ consisting of the following elements:
 - `'unit'`, `'Y1names'`, `'Y1names'` `'X'`, `'tails'`: copies of the
   homonymous input arguments.
 
-- `'K'`: name of the "prova_K" (knowledge) object used in the
-  calculation.
+- `'K'`: name of the "K" object used in the calculation.
 
 ## Details
 
@@ -195,18 +217,18 @@ The functions `mutualinfo()` and `mutualinfoF()` calculate the mutual
 information above for the joint variates specified in the arguments
 `Y1names` and `Y2names`, conditional on the values of the variates
 specified in the [data frame](https://rdrr.io/r/base/data.frame.html)
-`X`. If `X` is omitted or `NULL`, then the posterior probabilities
-\\\mathrm{Pr}(Y_1 \| K)\\ etc. are used. Each variate in the argument
-`X` can be specified either as a point-value \\X = x\\ or as a left-open
-interval \\X \le x\\ or as a right-open interval \\X \ge x\\, through
-the argument `tails` (see *Tail probabilities* in the
+`X`. If `X` is `NA`, then the posterior probabilities \\\mathrm{Pr}(Y_1
+\| K)\\ etc. are used. Each variate in the argument `X` can be specified
+either as a point-value \\X = x\\ or as a left-open interval \\X \le x\\
+or as a right-open interval \\X \ge x\\, through the argument `tails`
+(see *Tail probabilities* in the
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) documentation).
 
 Function `mutualinfo()` computes the quantities above via Monte Carlo
 integration; that is, the sums or integrals are approximated by averages
 over samples drawn with appropriate probabilities. The computation can
 take tens of minutes if not hours; it can be sped up by using more nodes
-(if available) in parallel, through the argument `parallel =`. This
+(if available) in parallel, through the argument `parallel = `. This
 function should be used if \\Y_1\\ or \\Y_2\\ (arguments `Y1names` and
 `Y2names`) include *continous* variates (see
 [metadata](https://pglpm.github.io/prova/reference/metadata.md)).
@@ -221,6 +243,24 @@ grossly in error. This function should be used if \\Y_1\\ or \\Y_2\\
 domains, typically nominal or ordinal variates (see
 [metadata](https://pglpm.github.io/prova/reference/metadata.md)).
 
+A default value for the `K = ` argument can be set (and unset) with
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md). When
+this is done, the `K = ` argument may be omitted, saving a lot of
+`K = ...`-typing in this and other functions.
+
+Therefore if `mutualinfo()` or `mutualinfoF()` is called with two
+unnamed arguments, `mutualinfo(..., ...)`, then it is interpreted as
+`mutualinfo(Y1names = ..., Y2names = ...)`, with `X = NA` and the
+default `K = ` argument set by
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md). If it
+is called with three unnamed arguments, then it is interpreted as
+`mutualinfo(Y1names = ..., Y2names = ..., X = ...)`, with the default
+`K = ` argument set by
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md). In
+order to specify `Y1names`, `Y2names`, and `K` without naming the
+arguments, the form `mutualinfo(..., ..., NA, ...)` must be used,
+explicitly giving `X` as third argument.
+
 ## See also
 
 [`print.prova_mi()`](https://pglpm.github.io/prova/reference/print.prova_mi.md)
@@ -229,16 +269,19 @@ domains, typically nominal or ordinal variates (see
 [`hist.prova_mi()`](https://pglpm.github.io/prova/reference/hist.prova_mi.md)
 to plot the revisability of the mutual information.
 
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md) to set a
+"K" object as default in all `K = ` arguments.
+
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 probabilities and their revisability.
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
-generate the "prova_K" (knowledge) objects required by `mutualinfo()`.
+generate "K" objects required by `mutualinfo()`.
 
 ## Examples
 
 ``` r
-## Use the example "prova_K" (knowledge) object 'Kexample'
+## Use the example "K" object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' (nominal, finite domain)
 ## and 'bill_len' (continuous rounded, infinite domain)
@@ -246,10 +289,15 @@ generate the "prova_K" (knowledge) objects required by `mutualinfo()`.
 ## Mutual information between the two variates;
 ## use mutualinfo() because 'bill_len' has infinite domain;
 ## set nv = 2 to reduce accuracy but also computation time
-MI <- mutualinfo('species', 'bill_len',  Kexample, nv = 2)
+MI <- mutualinfo(
+  Y1names = 'species',
+  Y2names = 'bill_len',
+  K = Kexample,
+  nv = 2
+)
 
 ## Print mutual information, its accuracy, and its revisability
 print(MI)
 #> value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-#>    0.694    0.048        0    0.632    1.047    1.247 
+#>    0.788    0.035        0    0.715    1.066    1.272 
 ```

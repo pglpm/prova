@@ -95,12 +95,17 @@ to calculate mutual information and its revisability.
 ## Examples
 
 ``` r
-## Use the "prova_K" (knowledge) object 'Kexample',
+## Use the "K" object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## calculate the mutual information and its revisability
-MI <- mutualinfo('species', 'bill_len', Kexample, nv = 2)
+MI <- mutualinfo(
+  Y1names = 'species',
+  Y2names = 'bill_len',
+  K = Kexample,
+  nv = 2
+)
 
 ## show the possible revisability of the mutual information,
 ## if a much larger data sample were collected

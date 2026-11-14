@@ -136,7 +136,7 @@ print(prob)
 # 
 #         probability
 # species  value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
-#   Adelie 0.94832 0.00035 0.91207 0.93725 0.96282 0.97525
+#   Adelie 0.94827 0.00049 0.91272 0.93652 0.96289 0.97634
 ```
 
 The answer is that there is roughly a 10% probability that a new

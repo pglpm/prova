@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,21 +44,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.4.0" id="prova-v240">Prova v2.4.0<a class="anchor" aria-label="anchor" href="#prova-v240"></a></h2>
-<ul><li>Added methods for functions <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> and <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge()</a></code>, to subset or merge probability objects. The <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> function has arguments that evaluate in a nonstandard way, making it easier to subset variate ranges.</li>
-<li>Removed the <code>subset =</code> argument in the plot and print functions, as this functionality is now provided by the <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> method.</li>
-<li>Now the <code>tails=</code> argument in several functions also works for nominal variates. For this kind of variates it must be understood in a special sense; see documentation in <code><a href="../reference/Pr.html">Pr()</a></code>.</li>
-<li>Fixed a bug that shuffled probability values in calculations involving several ordinal or nominal variates at once.</li>
-<li>Corrected and improved documentation.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.3.6" id="prova-v236">Prova v2.3.6<a class="anchor" aria-label="anchor" href="#prova-v236"></a></h2>
-<ul><li>Corrected behaviour of argument <code>cex =</code> in plot functions, and a bug introduced by the correction.</li>
-<li>New possible value for <code>quantiles.spread</code> and corrected behaviour of this argument.</li>
-<li>New available values <code>FALSE</code> and <code>NA</code> for <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>’s <code>legend =</code> argument.</li>
-<li>Modified progress output of <code><a href="../reference/learn.html">learn()</a></code>.</li>
-<li>Slightly modified convergence criterion in <code><a href="../reference/learn.html">learn()</a></code>, now more robust to numerical singularities.</li>
-<li>Improved documentation.</li>
+<h2 class="pkg-version" data-toc-text="3.0.0" id="prova-v300">Prova v3.0.0<a class="anchor" aria-label="anchor" href="#prova-v300"></a></h2>
+<p>Changes from v2.3.0 (previous CRAN version):</p>
+<ul><li><p>Fixed a bug that shuffled probability values in calculations involving several ordinal or nominal variates at once. It is recommended that you compare your previous results involving multiple join ordinal/nominal variates with results obtained with this new version of Prova.</p></li>
+<li><p>Added the convenience function <code><a href="../reference/Kobjects.html">useK()</a></code>, which allows the user to set (and unset) a default <code>K =</code> argument in all functions subsequently used, so that it can be omitted. This should save some <code>K = ...</code> typing. (This function works through a package-level environment, <code>.prova_envir</code>, which is invisible to the user.)</p></li>
+<li><p>Added methods for functions <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> and <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge()</a></code>, to subset or merge probability objects. The <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> function has arguments that evaluate in a nonstandard way, making it easier to subset variate ranges.</p></li>
+<li><p>Removed the <code>subset =</code> argument in the plot and print functions, as this functionality is now provided by the <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> method.</p></li>
+<li><p>Now the <code>tails=</code> argument in several functions also works for nominal variates. For this kind of variates it must be understood in a special sense; see documentation in <code><a href="../reference/Pr.html">Pr()</a></code>.</p></li>
+<li><p>Corrected behaviour of argument <code>cex =</code> in plot functions.</p></li>
+<li><p>New possible value for <code>quantiles.spread</code> and corrected behaviour of this argument.</p></li>
+<li><p>New available values <code>FALSE</code> and <code>NA</code> for <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>’s <code>legend =</code> argument.</p></li>
+<li><p>Modified progress output of <code><a href="../reference/learn.html">learn()</a></code>.</p></li>
+<li><p>The internal computations of Monte Carlo Standard Errors and Effective Sample Sizes now rely on batch-mean methods rather than Geyer’s methods (the validity of the latter was uncertain, because the chains are non-reversible in Prova). Slightly modified convergence criterion in <code><a href="../reference/learn.html">learn()</a></code>, now more robust to numerical singularities.</p></li>
+<li><p>Corrected and improved documentation.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.3.0" id="prova-v230">Prova v2.3.0<a class="anchor" aria-label="anchor" href="#prova-v230"></a></h2><p class="text-muted">CRAN release: 2026-08-20</p>

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,13 @@
 
         </dt>
         <dd>Example <code>K</code>nowledge object produced by learn()</dd>
+
+        <dt>
+
+          <code><a href="Kobjects.html">useK()</a></code> <code><a href="Kobjects.html">getK()</a></code>
+
+        </dt>
+        <dd>Set or unset default values for 'K =' arguments, and retrieve "prova_K" objects.</dd>
 
         <dt>
 
@@ -193,7 +200,7 @@
           <code><a href="print.prova_K.html">print(<i>&lt;prova_K&gt;</i>)</a></code>
 
         </dt>
-        <dd>Print summary of a "prova_K" (knowledge) object</dd>
+        <dd>Print summary of a "K" (more precisely "prova_K") object</dd>
 
         <dt>
 
@@ -294,6 +301,20 @@
 
         <dt>
 
+          <code><a href="dot-a3bind.html">.a3bind()</a></code>
+
+        </dt>
+        <dd>Bind 3D arrays by first dimension</dd>
+
+        <dt>
+
+          <code><a href="dot-a3bind2.html">.a3bind2()</a></code>
+
+        </dt>
+        <dd>Bind 3D arrays by second dimension</dd>
+
+        <dt>
+
           <code><a href="dot-buildauxmetadata.html">.buildauxmetadata()</a></code>
 
         </dt>
@@ -353,11 +374,18 @@
           <code><a href="dot-funMCEQ.html">.funMCEQ()</a></code>
 
         </dt>
-        <dd>Calculate credibility quantiles on estimated quantile</dd>
+        <dd>Calculate credibility quantiles on estimated quantile using batch-means</dd>
 
         <dt>
 
-          <code><a href="dot-funMCSELD.html">.funMCSELD()</a></code>
+          <code><a href="dot-funMCEQalt.html">.funMCEQalt()</a></code>
+
+        </dt>
+        <dd>Calculate credibility quantiles on estimated quantile using spectral method</dd>
+
+        <dt>
+
+          <code><a href="dot-funMCSEBM.html">.funMCSEBM()</a></code>
 
         </dt>
         <dd>Calculate MC standard error using LaplacesDemon's batch means</dd>
@@ -371,17 +399,10 @@
 
         <dt>
 
-          <code><a href="dot-learnbind.html">.learnbind()</a></code>
+          <code><a href="dot-learnalt.html">.learnalt()</a></code>
 
         </dt>
-        <dd>Bind 3D arrays by first dimension</dd>
-
-        <dt>
-
-          <code><a href="dot-learnbind2.html">.learnbind2()</a></code>
-
-        </dt>
-        <dd>Bind 3D arrays by second dimension</dd>
+        <dd>Monte Carlo computation of posterior probability distribution - alternative</dd>
 
         <dt>
 
@@ -448,13 +469,6 @@
 
         <dt>
 
-          <code><a href="dot-retrieveK.html">.retrieveK()</a></code>
-
-        </dt>
-        <dd>Retrieve a "prova_K" (knowledge) object</dd>
-
-        <dt>
-
           <code><a href="dot-rowcumsum.html">.rowcumsum()</a></code>
 
         </dt>
@@ -494,6 +508,13 @@
 
         </dt>
         <dd>Worker function called by learn()</dd>
+
+        <dt>
+
+          <code><a href="dot-workerfunalt.html">.workerfunalt()</a></code>
+
+        </dt>
+        <dd>Worker function called by .learnalt()</dd>
 
         <dt>
 

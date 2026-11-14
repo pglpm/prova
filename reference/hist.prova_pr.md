@@ -109,17 +109,17 @@ to plot the posterior probabilities.
 ## Examples
 
 ``` r
-## Use the "prova_K" (knowledge) object 'Kexample',
+## Use the "K" object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
 ## calculate the probability, and its revisability,
 ## for the value 'Adelie' of the "species" variate
-probs <- Pr(data.frame(species = 'Adelie'), Kexample)
+probs <- Pr(data.frame(species = 'Adelie'), NULL, Kexample)
 probs$value
 #>         
-#> species          
-#>   Adelie 0.440685
+#> species           
+#>   Adelie 0.4402128
 
 ## show the revisability of this probability; equivalently show
 ## the probability distribution for the relative frequency of

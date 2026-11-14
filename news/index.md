@@ -1,6 +1,22 @@
 # Changelog
 
-## Prova v2.4.0
+## Prova v3.0.0
+
+Changes from v2.3.0 (previous CRAN version):
+
+- Fixed a bug that shuffled probability values in calculations involving
+  several ordinal or nominal variates at once. It is recommended that
+  you compare your previous results involving multiple join
+  ordinal/nominal variates with results obtained with this new version
+  of Prova.
+
+- Added the convenience function
+  [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md), which
+  allows the user to set (and unset) a default `K =` argument in all
+  functions subsequently used, so that it can be omitted. This should
+  save some `K = ...` typing. (This function works through a
+  package-level environment, `.prova_envir`, which is invisible to the
+  user.)
 
 - Added methods for functions
   [`subset()`](https://rdrr.io/r/base/subset.html) and
@@ -9,32 +25,36 @@
   [`subset()`](https://rdrr.io/r/base/subset.html) function has
   arguments that evaluate in a nonstandard way, making it easier to
   subset variate ranges.
+
 - Removed the `subset =` argument in the plot and print functions, as
   this functionality is now provided by the
   [`subset()`](https://rdrr.io/r/base/subset.html) method.
+
 - Now the `tails=` argument in several functions also works for nominal
   variates. For this kind of variates it must be understood in a special
   sense; see documentation in
   [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
-- Fixed a bug that shuffled probability values in calculations involving
-  several ordinal or nominal variates at once.
-- Corrected and improved documentation.
 
-## Prova v2.3.6
+- Corrected behaviour of argument `cex =` in plot functions.
 
-- Corrected behaviour of argument `cex =` in plot functions, and a bug
-  introduced by the correction.
 - New possible value for `quantiles.spread` and corrected behaviour of
   this argument.
+
 - New available values `FALSE` and `NA` for
   [`plot()`](https://rdrr.io/r/graphics/plot.default.html)’s `legend =`
   argument.
+
 - Modified progress output of
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md).
-- Slightly modified convergence criterion in
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md), now
+
+- The internal computations of Monte Carlo Standard Errors and Effective
+  Sample Sizes now rely on batch-mean methods rather than Geyer’s
+  methods (the validity of the latter was uncertain, because the chains
+  are non-reversible in Prova). Slightly modified convergence criterion
+  in [`learn()`](https://pglpm.github.io/prova/reference/learn.md), now
   more robust to numerical singularities.
-- Improved documentation.
+
+- Corrected and improved documentation.
 
 ## Prova v2.3.0
 

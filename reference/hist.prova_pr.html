@@ -23,7 +23,7 @@ The hist() method for a &quot;prova_pr&quot; (probability) object is a utility t
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,17 +130,17 @@ The hist() method for a &quot;prova_pr&quot; (probability) object is a utility t
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the "prova_K" (knowledge) object 'Kexample',</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the "K" object 'Kexample',</span></span></span>
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## calculate the probability, and its revisability,</span></span></span>
 <span class="r-in"><span><span class="co">## for the value 'Adelie' of the "species" variate</span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="cn">NULL</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> species          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.440685</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> species           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4402128</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## show the revisability of this probability; equivalently show</span></span></span>
 <span class="r-in"><span><span class="co">## the probability distribution for the relative frequency of</span></span></span>

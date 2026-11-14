@@ -67,6 +67,9 @@ to plot probabilities and quantiles calculated by \`Pr()'.
 to plot histograms of the probability distributions calculated by
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 
+[Kexample](https://pglpm.github.io/prova/reference/Kexample.md) an
+example "K" object included with **Prova**.
+
 ## Examples
 
 ``` r
@@ -77,9 +80,9 @@ K <- Kexample
 ## Calculate the probability that bill_len <= 43
 ## given that the species is 'Adelie':
 probs1 <- Pr(
-  Y = data.frame(bill_len = 43),
-  X = data.frame(species = 'Adelie'),
-  K = K,
+  data.frame(bill_len = 43),
+  data.frame(species = 'Adelie'),
+  K,
   tails = list(bill_len = '<=')
 )
 
@@ -87,16 +90,16 @@ probs1
 #> , , |species = Adelie
 #> 
 #>         probability
-#> bill_len value   +/-     Q5.5%  Q25%   Q75%   Q94.5%
-#>     <=43 0.93524 0.00089 0.9078 0.9258 0.9456 0.9581
+#> bill_len value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
+#>     <=43 0.9349 0.0011 0.9067 0.9241 0.9460 0.9574
 #> 
 
 ## Calculate the probability that bill_len >= 43.1
 ## given that the species is 'Adelie':
 probs2 <- Pr(
-  Y = data.frame(bill_len = 43.1),
-  X = data.frame(species = 'Adelie'),
-  K = K,
+  data.frame(bill_len = 43.1),
+  data.frame(species = 'Adelie'),
+  K,
   tails = list(bill_len = '>=')
 )
 
@@ -104,8 +107,8 @@ probs2
 #> , , |species = Adelie
 #> 
 #>         probability
-#> bill_len value   +/-     Q5.5%  Q25%   Q75%   Q94.5%
-#>   >=43.1 0.06476 0.00089 0.0419 0.0544 0.0742 0.0922
+#> bill_len value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
+#>   >=43.1 0.0651 0.0011 0.0426 0.0540 0.0759 0.0933
 #> 
 
 ## Combine the two tail probabilities for bill_len in one object
@@ -115,8 +118,8 @@ probs
 #> , , |species = Adelie
 #> 
 #>         probability
-#> bill_len value   +/-     Q5.5%  Q25%   Q75%   Q94.5%
-#>   <=43   0.93524 0.00089 0.9078 0.9258 0.9456 0.9581
-#>   >=43.1 0.06476 0.00089 0.0419 0.0544 0.0742 0.0922
+#> bill_len value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
+#>   <=43   0.9349 0.0011 0.9067 0.9241 0.9460 0.9574
+#>   >=43.1 0.0651 0.0011 0.0426 0.0540 0.0759 0.0933
 #> 
 ```

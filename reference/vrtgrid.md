@@ -6,7 +6,7 @@ values for several variates.
 ## Usage
 
 ``` r
-vrtgrid(vrt, K, length.out = NA)
+vrtgrid(vrt, K = NULL, length.out = NA)
 ```
 
 ## Arguments
@@ -20,10 +20,31 @@ vrtgrid(vrt, K, length.out = NA)
 
 - K:
 
-  A "prova_K" (knowledge) object produced by
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
-  also be a path to a 'K.rds' file containing such object, or to a
-  directory containing one.
+  One of these alternatives:
+
+  - A "K" (more precisely "prova_K") object.
+
+  - A character string of the path to an
+    [RDS](https://rdrr.io/r/base/readRDS.html) file (typically created
+    by [`learn()`](https://pglpm.github.io/prova/reference/learn.md))
+    containing a valid "K" object.
+
+  - A character string of the path to a directory (also typically
+    created by
+    [`learn()`](https://pglpm.github.io/prova/reference/learn.md))
+    containing such an [RDS](https://rdrr.io/r/base/readRDS.html) file
+    of a "K" object.
+
+  - For function
+    [`getK()`](https://pglpm.github.io/prova/reference/Kobjects.md) it
+    can also be `NULL` or omitted, if a default `K = ` argument has been
+    defined with
+    [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md).
+
+  Alternatively, a default `K = ` argument can be set with
+  [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md), in
+  which case the `K = ` argument may be omitted. See "Details" for the
+  interpretation of unnamed arguments.
 
 - length.out:
 
@@ -44,7 +65,7 @@ the variate values.
 The value ranges are based on the information from data and metadata
 stored in the `K`nowledge object (see
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md)) provided
-in the `K =` argument; they include, and extend slightly beyond, the
+in the `K = ` argument; they include, and extend slightly beyond, the
 ranges observed in the data used in the
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function.
 Variate domains are always respected.
@@ -73,23 +94,29 @@ that can be used directly in functions like
 ## See also
 
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
-generate the "prova_K" (knowledge) objects required by `vrtgrid()`.
+generate "K" objects required by `vrtgrid()`.
 
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) to calculate
 probabilities and their revisabilities.
 
-[`base::expand.grid()`](https://rdrr.io/r/base/expand.grid.html) to
-create a data frame with combination of specified values of several
-variates.
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md) to set a
+"K" object as default in all `K = ` arguments.
 
 [`plot.prova_pr()`](https://pglpm.github.io/prova/reference/plot.prova_pr.md)
 to plot probabilities and quantiles calculated by
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 
+[`base::expand.grid()`](https://rdrr.io/r/base/expand.grid.html), used
+internally by `vrtgrid()`, for a more general way to create a data frame
+with combination of specified values of several variates.
+
+[Kexample](https://pglpm.github.io/prova/reference/Kexample.md) an
+example "K" object included with **Prova**.
+
 ## Examples
 
 ``` r
-## Use the "prova_K" (knowledge) object 'Kexample',
+## Use the "K" object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -157,4 +184,22 @@ print(valuesAll2)
 #> 10    Adelie 64.20000
 #> 11 Chinstrap 64.20000
 #> 12    Gentoo 64.20000
+
+
+## To omit 'K =' arguments, we can set a default one with useK()
+useK(Kexample)
+
+## set of values for the variate "species";
+## since this variate is of a nominal kind, all values are included
+valuesSpecies <- vrtgrid('species')
+
+print(valuesSpecies)
+#>     species
+#> 1    Adelie
+#> 2 Chinstrap
+#> 3    Gentoo
+
+## Remove any default 'K =' argument
+useK()
+#> [1] "Kexample"
 ```

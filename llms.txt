@@ -136,7 +136,7 @@ print(prob)
 # 
 #         probability
 # species  value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
-#   Adelie 0.94832 0.00035 0.91207 0.93725 0.96282 0.97525
+#   Adelie 0.94827 0.00049 0.91272 0.93652 0.96289 0.97634
 ```
 
 The answer is that there is roughly a 10% probability that a new
@@ -333,6 +333,11 @@ and of its documents.
 
   Example `K`nowledge object produced by learn()
 
+- [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md)
+  [`getK()`](https://pglpm.github.io/prova/reference/Kobjects.md) : Set
+  or unset default values for 'K =' arguments, and retrieve "prova_K"
+  objects.
+
 - [`learn()`](https://pglpm.github.io/prova/reference/learn.md) : Monte
   Carlo computation of posterior probability distribution
 
@@ -377,7 +382,7 @@ and of its documents.
 - [`pplot()`](https://pglpm.github.io/prova/reference/pplot.md) : Plot
   numeric or character values
 - [`print(`*`<prova_K>`*`)`](https://pglpm.github.io/prova/reference/print.prova_K.md)
-  : Print summary of a "prova_K" (knowledge) object
+  : Print summary of a "K" (more precisely "prova_K") object
 - [`print(`*`<prova_eu>`*`)`](https://pglpm.github.io/prova/reference/print.prova_eu.md)
   : Print an object of class "prova_eu" (expected utility)
 - [`print(`*`<prova_mi>`*`)`](https://pglpm.github.io/prova/reference/print.prova_mi.md)
@@ -416,6 +421,10 @@ For developers (beware!)
 
 - [`.Pcheckpoints()`](https://pglpm.github.io/prova/reference/dot-Pcheckpoints.md)
   : Calculate joint frequencies for MCMC-monitoring checkpoints
+- [`.a3bind()`](https://pglpm.github.io/prova/reference/dot-a3bind.md) :
+  Bind 3D arrays by first dimension
+- [`.a3bind2()`](https://pglpm.github.io/prova/reference/dot-a3bind2.md)
+  : Bind 3D arrays by second dimension
 - [`.buildauxmetadata()`](https://pglpm.github.io/prova/reference/dot-buildauxmetadata.md)
   : Build augmented metadata file
 - [`.cleanup()`](https://pglpm.github.io/prova/reference/dot-cleanup.md)
@@ -434,15 +443,18 @@ For developers (beware!)
 - [`.funESS3()`](https://pglpm.github.io/prova/reference/dot-funESS3.md)
   : Compute ESS
 - [`.funMCEQ()`](https://pglpm.github.io/prova/reference/dot-funMCEQ.md)
-  : Calculate credibility quantiles on estimated quantile
-- [`.funMCSELD()`](https://pglpm.github.io/prova/reference/dot-funMCSELD.md)
+  : Calculate credibility quantiles on estimated quantile using
+  batch-means
+- [`.funMCEQalt()`](https://pglpm.github.io/prova/reference/dot-funMCEQalt.md)
+  : Calculate credibility quantiles on estimated quantile using spectral
+  method
+- [`.funMCSEBM()`](https://pglpm.github.io/prova/reference/dot-funMCSEBM.md)
   : Calculate MC standard error using LaplacesDemon's batch means
 - [`.joinPtraces()`](https://pglpm.github.io/prova/reference/dot-joinPtraces.md)
   : Join '\_\_\_\_tempPtraces-' files
-- [`.learnbind()`](https://pglpm.github.io/prova/reference/dot-learnbind.md)
-  : Bind 3D arrays by first dimension
-- [`.learnbind2()`](https://pglpm.github.io/prova/reference/dot-learnbind2.md)
-  : Bind 3D arrays by second dimension
+- [`.learnalt()`](https://pglpm.github.io/prova/reference/dot-learnalt.md)
+  : Monte Carlo computation of posterior probability distribution -
+  alternative
 - [`.lprobsargsyx()`](https://pglpm.github.io/prova/reference/dot-lprobsargsyx.md)
   : Prepare arguments for util_lprobsyx from data
 - [`.lprobsbase()`](https://pglpm.github.io/prova/reference/dot-lprobsbase.md)
@@ -462,8 +474,6 @@ For developers (beware!)
   : Calculate quantiles for continuous Y by bisection
 - [`.qYXdiscr()`](https://pglpm.github.io/prova/reference/dot-qYXdiscr.md)
   : Calculate quantiles for discrete Y by bisection
-- [`.retrieveK()`](https://pglpm.github.io/prova/reference/dot-retrieveK.md)
-  : Retrieve a "prova_K" (knowledge) object
 - [`.rowcumsum()`](https://pglpm.github.io/prova/reference/dot-rowcumsum.md)
   : Cumulative sum along first dimension
 - [`.rowinvcumsum()`](https://pglpm.github.io/prova/reference/dot-rowinvcumsum.md)
@@ -476,6 +486,8 @@ For developers (beware!)
   : Transforms variates to different representations
 - [`.workerfun()`](https://pglpm.github.io/prova/reference/dot-workerfun.md)
   : Worker function called by learn()
+- [`.workerfunalt()`](https://pglpm.github.io/prova/reference/dot-workerfunalt.md)
+  : Worker function called by .learnalt()
 - [`prova`](https://pglpm.github.io/prova/reference/prova-package.md)
   [`prova-package`](https://pglpm.github.io/prova/reference/prova-package.md)
   : prova: Nonparametric Probabilistic-Statistical Variate Analysis

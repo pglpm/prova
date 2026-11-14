@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,8 @@
     <div class="dont-index"><p><code><a href="Pr.html">Pr()</a></code>, to generate probability objects.</p>
 <p><code><a href="subset.prova_pr.html">subset.prova_pr()</a></code>, to subset a probability object.</p>
 <p><code><a href="plot.prova_pr.html">plot.prova_pr()</a></code> to plot probabilities and quantiles calculated by `Pr()'.</p>
-<p><code><a href="hist.prova_pr.html">hist.prova_pr()</a></code> to plot histograms of the probability distributions calculated by <code><a href="Pr.html">Pr()</a></code>.</p></div>
+<p><code><a href="hist.prova_pr.html">hist.prova_pr()</a></code> to plot histograms of the probability distributions calculated by <code><a href="Pr.html">Pr()</a></code>.</p>
+<p><a href="Kexample.html">Kexample</a> an example "K" object included with <strong>Prova</strong>.</p></div>
     </div>
 
     <div class="section level2">
@@ -93,9 +94,9 @@
 <span class="r-in"><span><span class="co">## Calculate the probability that bill_len &lt;= 43</span></span></span>
 <span class="r-in"><span><span class="co">## given that the species is 'Adelie':</span></span></span>
 <span class="r-in"><span><span class="va">probs1</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  K <span class="op">=</span> <span class="va">K</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="va">K</span>,</span></span>
 <span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="st">'&lt;='</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -103,16 +104,16 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , |species = Adelie</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         probability</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len value   +/-     Q5.5%  Q25%   Q75%   Q94.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;=43 0.93524 0.00089 0.9078 0.9258 0.9456 0.9581</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len value  +/-    Q5.5%  Q25%   Q75%   Q94.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;=43 0.9349 0.0011 0.9067 0.9241 0.9460 0.9574</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Calculate the probability that bill_len &gt;= 43.1</span></span></span>
 <span class="r-in"><span><span class="co">## given that the species is 'Adelie':</span></span></span>
 <span class="r-in"><span><span class="va">probs2</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43.1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  K <span class="op">=</span> <span class="va">K</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43.1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="va">K</span>,</span></span>
 <span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="st">'&gt;='</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -120,8 +121,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , |species = Adelie</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         probability</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len value   +/-     Q5.5%  Q25%   Q75%   Q94.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &gt;=43.1 0.06476 0.00089 0.0419 0.0544 0.0742 0.0922</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len value  +/-    Q5.5%  Q25%   Q75%   Q94.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &gt;=43.1 0.0651 0.0011 0.0426 0.0540 0.0759 0.0933</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Combine the two tail probabilities for bill_len in one object</span></span></span>
@@ -131,9 +132,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , |species = Adelie</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         probability</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len value   +/-     Q5.5%  Q25%   Q75%   Q94.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=43   0.93524 0.00089 0.9078 0.9258 0.9456 0.9581</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &gt;=43.1 0.06476 0.00089 0.0419 0.0544 0.0742 0.0922</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len value  +/-    Q5.5%  Q25%   Q75%   Q94.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=43   0.9349 0.0011 0.9067 0.9241 0.9460 0.9574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &gt;=43.1 0.0651 0.0011 0.0426 0.0540 0.0759 0.0933</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -81,7 +81,7 @@ to plot the revisability of the probabilities as a distribution.
 ## Examples
 
 ``` r
-## Use the "prova_K" (knowledge) object 'Kexample',
+## Use the "K" object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -99,17 +99,17 @@ print(probs)
 #> 
 #>            probability
 #> species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#>   Adelie    0.4647 0.0049 0.3669 0.4212 0.5131 0.5679
-#>   Chinstrap 0.1458 0.0029 0.0810 0.1167 0.1723 0.2191
-#>   Gentoo    0.3894 0.0034 0.2985 0.3476 0.4302 0.4812
+#>   Adelie    0.4635 0.0026 0.3612 0.4199 0.5070 0.5655
+#>   Chinstrap 0.1550 0.0028 0.0927 0.1266 0.1845 0.2194
+#>   Gentoo    0.3814 0.0036 0.2962 0.3389 0.4214 0.489 
 #> 
 #> , , |bill_len = 44
 #> 
 #>            probability
 #> species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#>   Adelie    0.2223 0.0029 0.145  0.1866 0.2551 0.3069
-#>   Chinstrap 0.2054 0.0035 0.1198 0.1717 0.2429 0.2966
-#>   Gentoo    0.5722 0.0031 0.4671 0.5270 0.6204 0.6718
+#>   Adelie    0.2221 0.0031 0.1469 0.1814 0.2546 0.3040
+#>   Chinstrap 0.2203 0.0040 0.1421 0.1828 0.2558 0.305 
+#>   Gentoo    0.5576 0.0050 0.4614 0.5108 0.6008 0.6690
 #> 
 
 ## display 'value' only,
@@ -118,6 +118,6 @@ print(subset(probs, subsetY = (species == 'Gentoo')), elements = 'value')
 #> $value
 #>         |bill_len
 #> species    43   44
-#>   Gentoo 0.39 0.57
+#>   Gentoo 0.38 0.56
 #> 
 ```

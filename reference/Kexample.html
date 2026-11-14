@@ -5,14 +5,12 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Example Knowledge object produced by learn() — Kexample"><meta name="description" content="An example &quot;prova_K&quot; (knowledge) object obtained by means of the learn() function, using the datasets::penguins dataset and the metadata in metadataExample, according to the call
-learn(data = penguins, metadata = metadataExample,
-  nsamples = 225, nchains = 15)
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Example Knowledge object produced by learn() — Kexample"><meta name="description" content="An example &quot;K&quot; (more precisely &quot;prova_K&quot;) object obtained by means of the learn() function, using the datasets::penguins dataset and the metadata in metadataExample, according to the call
+learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
 
 It is a list that essentially contains posterior hyperparameters for drawing statistical inferences about the variates species and bill_len.
-Note that the learn() function that produced Kexample was called with the option to create only a limited number (225) of Monte Carlo samples, in order to reduce its memory size. Thus the numerical error associated with the Monte Carlo approximation is relatively in inferences drawn from the posterior hyperparameters saved in Kexample. It is only meant to be used for illustration purposes of the package's capabilities."><meta property="og:description" content="An example &quot;prova_K&quot; (knowledge) object obtained by means of the learn() function, using the datasets::penguins dataset and the metadata in metadataExample, according to the call
-learn(data = penguins, metadata = metadataExample,
-  nsamples = 225, nchains = 15)
+Note that the learn() function that produced Kexample was called with the option to create only a limited number (225) of Monte Carlo samples, in order to reduce its memory size. Thus the numerical error associated with the Monte Carlo approximation is relatively in inferences drawn from the posterior hyperparameters saved in Kexample. It is only meant to be used for illustration purposes of the package's capabilities."><meta property="og:description" content="An example &quot;K&quot; (more precisely &quot;prova_K&quot;) object obtained by means of the learn() function, using the datasets::penguins dataset and the metadata in metadataExample, according to the call
+learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
 
 It is a list that essentially contains posterior hyperparameters for drawing statistical inferences about the variates species and bill_len.
 Note that the learn() function that produced Kexample was called with the option to create only a limited number (225) of Monte Carlo samples, in order to reduce its memory size. Thus the numerical error associated with the Monte Carlo approximation is relatively in inferences drawn from the posterior hyperparameters saved in Kexample. It is only meant to be used for illustration purposes of the package's capabilities."></head><body>
@@ -23,7 +21,7 @@ Note that the learn() function that produced Kexample was called with the option
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,9 +53,8 @@ Note that the learn() function that produced Kexample was called with the option
     </div>
 
     <div class="ref-description section level2">
-    <p>An example "prova_K" (knowledge) object obtained by means of the <code><a href="learn.html">learn()</a></code> function, using the <a href="https://rdrr.io/r/datasets/penguins.html" class="external-link">datasets::penguins</a> dataset and the metadata in <a href="metadataExample.html">metadataExample</a>, according to the call</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">learn</span>(<span class="at">data =</span> penguins, <span class="at">metadata =</span> metadataExample,</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="at">nsamples =</span> <span class="dv">225</span>, <span class="at">nchains =</span> <span class="dv">15</span>)</span></code></pre><p></p></div>
+    <p>An example "K" (more precisely "prova_K") object obtained by means of the <code><a href="learn.html">learn()</a></code> function, using the <a href="https://rdrr.io/r/datasets/penguins.html" class="external-link">datasets::penguins</a> dataset and the metadata in <a href="metadataExample.html">metadataExample</a>, according to the call</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">learn</span>(<span class="at">data =</span> penguins, <span class="at">metadata =</span> metadataExample, <span class="at">nsamples =</span> <span class="dv">225</span>, <span class="at">nchains =</span> <span class="dv">1</span>)</span></code></pre><p></p></div>
 <p>It is a list that essentially contains posterior hyperparameters for drawing statistical inferences about the variates <code>species</code> and <code>bill_len</code>.</p>
 <p><strong>Note</strong> that the <code><a href="learn.html">learn()</a></code> function that produced <code>Kexample</code> was called with the option to create only a limited number (225) of Monte Carlo samples, in order to reduce its memory size. Thus the numerical error associated with the Monte Carlo approximation is relatively in inferences drawn from the posterior hyperparameters saved in <code>Kexample</code>. It is only meant to be used for illustration purposes of the package's capabilities.</p>
     </div>
@@ -85,7 +82,8 @@ Note that the learn() function that produced Kexample was called with the option
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, which produces this kind of object.</p>
-<p><code><a href="Pr.html">Pr()</a></code>, <code><a href="qPr.html">qPr()</a></code>, <code><a href="rPr.html">rPr()</a></code>, <code><a href="mutualinfo.html">mutualinfo()</a></code>: functions that require this kind of object in order to calculate probabilities and quantiles, generate data points, and calculate mutual information.</p></div>
+<p><code><a href="Pr.html">Pr()</a></code>, <code><a href="qPr.html">qPr()</a></code>, <code><a href="rPr.html">rPr()</a></code>, <code><a href="mutualinfo.html">mutualinfo()</a></code>: functions that require this kind of object in order to calculate probabilities and quantiles, generate data points, and calculate mutual information.</p>
+<p><code><a href="Kobjects.html">useK()</a></code> to set a "K" object as default in all <code>K = </code> arguments.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

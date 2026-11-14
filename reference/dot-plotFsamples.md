@@ -59,8 +59,8 @@ Used in 'learn()' to plot diagnostics.
 
 - parallel:
 
-  Logical or numeric: whether to use pre-existing parallel workers, or
-  how many to create and use
+  Logical or numeric: whether to use pre-existing parallel nodes, or how
+  many to create and use.
 
 ## Value
 

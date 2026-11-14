@@ -1,14 +1,14 @@
 # Example `K`nowledge object produced by learn()
 
-An example "prova_K" (knowledge) object obtained by means of the
-[`learn()`](https://pglpm.github.io/prova/reference/learn.md) function,
-using the [datasets::penguins](https://rdrr.io/r/datasets/penguins.html)
-dataset and the metadata in
+An example "K" (more precisely "prova_K") object obtained by means of
+the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
+function, using the
+[datasets::penguins](https://rdrr.io/r/datasets/penguins.html) dataset
+and the metadata in
 [metadataExample](https://pglpm.github.io/prova/reference/metadataExample.md),
 according to the call
 
-    learn(data = penguins, metadata = metadataExample,
-      nsamples = 225, nchains = 15)
+    learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
 
 It is a list that essentially contains posterior hyperparameters for
 drawing statistical inferences about the variates `species` and
@@ -52,3 +52,6 @@ produces this kind of object.
 functions that require this kind of object in order to calculate
 probabilities and quantiles, generate data points, and calculate mutual
 information.
+
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md) to set a
+"K" object as default in all `K = ` arguments.

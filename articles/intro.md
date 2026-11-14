@@ -630,9 +630,10 @@ Monte Carlo computation and time and memory use is provided.[^2] The
 inference above, with 10 datasamples and 8 variates, took around 3 GB
 and 10 minutes to complete on 4 cores.
 
-The results of this main inference are now stored in the compressed file
-`K.rds` (around 32 MB) within the specified output directory. The name
-of this directory is also saved as the final value of the
+The results of this main inference are what we call a “K” object (for
+‘Knowledge’ or ‘Known’). This object is now stored in the compressed
+file `K.rds` (around 32 MB) within the specified output directory. The
+name of this directory is also saved as the final value of the
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function.
 We saved this directory name in the `K10` variable in the code above, by
 invoking `K10 <- learn(...)`.
@@ -648,8 +649,7 @@ invoke
 K10 <- 'K10.rds'
 ```
 
-which produces an object `K10` (just a character string, in this case)
-which can be used in the following analysis.
+The variable `K10` can be used in the following analysis.
 
   
 
@@ -671,13 +671,14 @@ question in the form of:
 
 We discuss both in a moment. First let’s compute them using the
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function. For
-the present question, this function requires two arguments:
+the present question, this function requires two named arguments:
 
 - `Y`: a `data.frame` listing the values of the variate we are
   interested in. In the present case the variate is `species` and the
   values are ‘Adelie’, ‘Chinstrap’, ‘Gentoo’.
-- `K`: the object that encodes the `K`nowledge from the computation made
-  with the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
+- `K`: the “K” object that encodes the `K`nowledge from the computation
+  made with the
+  [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function, discussed in the previous section. In the present case it’s
   `K10`.
 
@@ -711,11 +712,12 @@ seconds:
 ## data frame with the variate and values we want to know the frequencies of
 Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
-Fspecies10 <- Pr(Y, K10)
+Fspecies10 <- Pr(Y = Y, K = K10)
 ```
 
-This could also be entered more explicitly as
-`Fspecies10 <- Pr(Y = Y, K = K10)`.
+This could also be entered, without naming the arguments, as
+`Fspecies10 <- Pr(Y, NA, K10)`. We’ll explain the role of that `NA`
+shortly.
 
 The answer to our question is now contained in the `Fspecies10` object
 (we chose this name for “`F`requency distribution of `species`,
@@ -749,8 +751,8 @@ to compare several frequency distributions, as we’ll do later.)
 
 The three estimated frequencies are:
 
-- Adélie: 0.30
-- Chinstrap: 0.30
+- Adélie: 0.29
+- Chinstrap: 0.31
 - Gentoo: 0.40
 
 and can be read from the `value` element of the `Fspecies10` object,
@@ -764,18 +766,18 @@ numerical accuracy:
 Fspecies10$value
 #            
 # species             
-#   Adelie    0.296733
-#   Chinstrap 0.303881
-#   Gentoo    0.399386
+#   Adelie    0.294738
+#   Chinstrap 0.307734
+#   Gentoo    0.397528
 
 ## or
 print(Fspecies10, 'value')
 # $value
 #            
-# species        
-#   Adelie    0.3
-#   Chinstrap 0.3
-#   Gentoo    0.4
+# species         
+#   Adelie    0.29
+#   Chinstrap 0.31
+#   Gentoo    0.40
 ```
 
 These frequency estimates have also another important meaning: they are
@@ -816,11 +818,11 @@ intervals contain the 50% ones.
 For instance, the plot indicates that there’s a 50% probability that the
 relative frequency of all `Adelie` penguins is roughly between 0.21 and
 0.37; and an 89% probability that their relative frequency is roughly
-between 0.12 and 0.51.
+between 0.11 and 0.51.
 
 For the `Gentoo` species, there’s a 50% probability that its relative
 frequency is roughly between 0.30 and 0.49; and an 89% probability that
-their relative frequency is roughly between 0.19 and 0.63.
+their relative frequency is roughly between 0.20 and 0.62.
 
 A different way of visualizing the uncertainty about the long-run
 frequency distribution is by displaying an ensemble of *probable
@@ -915,9 +917,9 @@ element of the `Fspecies10` object. For instance, we can read the
 Fspecies10$quantiles[, , c('5.5%', '94.5%')]
 #            Q
 # species         5.5%    94.5%
-#   Adelie    0.117030 0.510935
-#   Chinstrap 0.128830 0.516406
-#   Gentoo    0.190425 0.625712
+#   Adelie    0.113392 0.507788
+#   Chinstrap 0.125314 0.519937
+#   Gentoo    0.195601 0.624599
 ```
 
 or we can use the [`print()`](https://rdrr.io/r/base/print.html)
@@ -928,9 +930,9 @@ function to display values and quantiles together:
 print(Fspecies10)
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   Adelie    0.2967 0.0020 0.1170 0.2073 0.3736 0.5109
-#   Chinstrap 0.3039 0.0020 0.1288 0.2126 0.3817 0.5164
-#   Gentoo    0.3994 0.0021 0.1904 0.3005 0.4918 0.6257
+#   Adelie    0.2947 0.0020 0.1134 0.2055 0.3743 0.5078
+#   Chinstrap 0.3077 0.0020 0.1253 0.2154 0.3916 0.5199
+#   Gentoo    0.3975 0.0024 0.1956 0.2989 0.4879 0.6246
 ```
 
 ### A preliminary report on question Q1
@@ -944,10 +946,10 @@ A summary answer could be as follows:
 > From a sample of 10 penguins, the inference about the relative
 > frequencies of the three species in the full population is as follows:
 >
-> - Adélie: rel. frequency between 0.12 and 0.51, with 89% probability.
+> - Adélie: rel. frequency between 0.11 and 0.51, with 89% probability.
 > - Chinstrap: rel. frequency between 0.13 and 0.52, with 89%
 >   probability.
-> - Gentoo: rel. frequency between 0.19 and 0.63, with 89% probability.
+> - Gentoo: rel. frequency between 0.20 and 0.62, with 89% probability.
 
 But we can also give a fuller answer by displaying the probability
 distributions for all three frequencies:
@@ -992,24 +994,22 @@ Y2 <- expand.grid(
     stringsAsFactors = FALSE ## important! Prova doesn't use factors
 )
 
-Fspeciessex10 <- Pr(Y2, K10)
+Fspeciessex10 <- Pr(Y = Y2, K = K10)
 
 ## Display the estimated frequencies of all six combinations,
 ## as well as their credibility intervals
 print(Fspeciessex10)
 #                   probability
 # species,sex        value  +/-    Q5.5%   Q25%    Q75%   Q94.5%
-#   Adelie,female    0.1650 0.0013 0.0496  0.0978  0.2145 0.3327
-#   Chinstrap,female 0.1314 0.0012 0.03633 0.07526 0.1735 0.2702
-#   Gentoo,female    0.2919 0.0020 0.1184  0.2028  0.3691 0.5030
-#   Adelie,male      0.1318 0.0013 0.03630 0.0741  0.1755 0.2682
-#   Chinstrap,male   0.1725 0.0015 0.0548  0.1054  0.2251 0.3423
-#   Gentoo,male      0.1075 0.0011 0.02234 0.05377 0.1448 0.2440
+#   Adelie,female    0.1646 0.0014 0.0488  0.0996  0.2142 0.3303
+#   Chinstrap,female 0.1330 0.0014 0.03576 0.0758  0.1761 0.2755
+#   Gentoo,female    0.2913 0.0021 0.1210  0.2008  0.3670 0.5059
+#   Adelie,male      0.1301 0.0013 0.0328  0.07215 0.1758 0.2700
+#   Chinstrap,male   0.1748 0.0014 0.0561  0.1056  0.2270 0.3422
+#   Gentoo,male      0.1063 0.0012 0.02241 0.0538  0.1410 0.2398
 ```
 
 Now let’s continue with our simpler plan.
-
-  
 
 ## Analysis example: frequencies on different islands
 
@@ -1051,12 +1051,13 @@ is as follows:
 ## data frame with the variate and values of the subpopulations of interest
 X <- data.frame(island = c('Biscoe', 'Dream'))
 
-## The second argument now denote the conditional
+## The second argument now denotes the conditional
 Fspecies10I <- Pr(Y, X, K10)
 ```
 
 This could also be entered more explicitly as
-`Fspecies10I <- Pr(Y = Y, X = X, K = K10)`.
+`Fspecies10I <- Pr(Y = Y, X = X, K = K10)`. An argument `X = NA` or
+`X = NULL` means that we are not conditioning on any variates.
 
 The answer to our question is now contained in the `Fspecies10I` object
 (we add `I` for “island” to the previous name). The estimates of the
@@ -1088,17 +1089,17 @@ print(Fspecies10I)
 # 
 #            probability
 # species     value  +/-    Q5.5%   Q25%   Q75%   Q94.5%
-#   Adelie    0.1428 0.0019 0.01556 0.0555 0.1971 0.3620
-#   Chinstrap 0.1361 0.0020 0.0126  0.0503 0.1904 0.3566
-#   Gentoo    0.7211 0.0030 0.4186  0.6198 0.8463 0.9421
+#   Adelie    0.1442 0.0022 0.01409 0.0527 0.2016 0.3787
+#   Chinstrap 0.1388 0.0023 0.01329 0.0501 0.1968 0.3597
+#   Gentoo    0.7170 0.0035 0.4133  0.6068 0.8496 0.9435
 # 
 # , , |island = Dream
 # 
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   Adelie    0.3599 0.0032 0.1050 0.2264 0.4802 0.6554
-#   Chinstrap 0.4725 0.0033 0.1927 0.3423 0.6031 0.7766
-#   Gentoo    0.1675 0.0022 0.0200 0.0651 0.2385 0.4190
+#   Adelie    0.3555 0.0034 0.1015 0.2219 0.4783 0.6543
+#   Chinstrap 0.4753 0.0032 0.1914 0.3354 0.6100 0.7744
+#   Gentoo    0.1692 0.0025 0.0194 0.0665 0.2409 0.4290
 ```
 
 According to these estimates, on Biscoe there should be a predominance
@@ -1154,7 +1155,7 @@ Biscoe\*\*](figure/hist10dream-1.svg)
   
 
 Among other things we see here a larger difference in the estimated
-frequencies of Adélie, around 0.36, and Chinstrap, around 0.47. Still,
+frequencies of Adélie, around 0.36, and Chinstrap, around 0.48. Still,
 the probability distributions are wide.
 
 **For later, keep in mind the following question: *On Dream, are the
@@ -1181,17 +1182,17 @@ print(Fspecies10I)
 # 
 #            probability
 # species     value  +/-    Q5.5%   Q25%   Q75%   Q94.5%
-#   Adelie    0.1428 0.0019 0.01556 0.0555 0.1971 0.3620
-#   Chinstrap 0.1361 0.0020 0.0126  0.0503 0.1904 0.3566
-#   Gentoo    0.7211 0.0030 0.4186  0.6198 0.8463 0.9421
+#   Adelie    0.1442 0.0022 0.01409 0.0527 0.2016 0.3787
+#   Chinstrap 0.1388 0.0023 0.01329 0.0501 0.1968 0.3597
+#   Gentoo    0.7170 0.0035 0.4133  0.6068 0.8496 0.9435
 # 
 # , , |island = Dream
 # 
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   Adelie    0.3599 0.0032 0.1050 0.2264 0.4802 0.6554
-#   Chinstrap 0.4725 0.0033 0.1927 0.3423 0.6031 0.7766
-#   Gentoo    0.1675 0.0022 0.0200 0.0651 0.2385 0.4190
+#   Adelie    0.3555 0.0034 0.1015 0.2219 0.4783 0.6543
+#   Chinstrap 0.4753 0.0032 0.1914 0.3354 0.6100 0.7744
+#   Gentoo    0.1692 0.0025 0.0194 0.0665 0.2409 0.4290
 ```
 
 ### Differences from “null-hypothesis testing” and *p*-value methods
@@ -1248,17 +1249,16 @@ are also easily handled by **Prova**, for any combination of
 subpopulations. The procedure is analogous to the one we [previously
 discussed](#twovariates) very briefly.
 
-Also in this case we only show the example code for the moment:
+Also in this case we only show the example code for the moment. We can
+use the function
+[`vrtgrid()`](https://pglpm.github.io/prova/reference/vrtgrid.md) to
+generate a data frame with *all combinations* of values of the variates
+`island` and `sex`:
 
 ``` r
 
 ## data frame with all combination of values from 'island' and 'sex'
-## use base-R function 'expand.grid()'
-Xdouble <- expand.grid(
-    island = c('Biscoe', 'Dream', 'Torgersen'),
-    sex = c('female', 'male'),
-    stringsAsFactors = FALSE ## important! Prova doesn't use factors
-)
+Xdouble <- vrtgrid(c('island', 'sex'), K10)
 
 Fspecies10IS <- Pr(Y, Xdouble, K10)
 
@@ -1268,17 +1268,86 @@ print(Fspecies10IS, 'value')
 # $value
 #            |island,sex
 # species     Biscoe,female Dream,female Torgersen,female Biscoe,male
-#   Adelie             0.13         0.40             0.47        0.21
-#   Chinstrap          0.11         0.39             0.27        0.22
-#   Gentoo             0.76         0.21             0.25        0.58
+#   Adelie             0.13         0.40             0.48        0.20
+#   Chinstrap          0.11         0.40             0.27        0.22
+#   Gentoo             0.76         0.21             0.25        0.57
 #            |island,sex
 # species     Dream,male Torgersen,male
 #   Adelie          0.32           0.44
-#   Chinstrap       0.54           0.38
+#   Chinstrap       0.54           0.39
 #   Gentoo          0.14           0.18
 ```
 
-### Imputation of missing data
+  
+
+## Set a default “K” object to save typing
+
+Before continuing, let’s open a parenthesis to quickly see a command
+that can save us a lot of typing.
+
+You have noticed that most functions we have called so far use a `K =`
+argument, where we must specify what has been learnt from the data and
+metadata, the “K” (`K`nowledge or `K`nown) object. But in our analysis
+this `K`nowledge is always the same: the one learnt from the
+10_datasamples and represented by the R variable `K10`. Is there a way
+to make this knowledge as a sort of “default”, so that we can skip
+typing `K = ...` everywhere? Yes, there is!
+
+We can set a default “K” object, to be used implicitly in all `K =`
+arguments, by means of the function
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md):
+
+``` r
+
+useK(K10)
+```
+
+Done. Now, an argument `K = K10` will be used as default in every
+function that needs a `K =` argument but misses one. Let’s check that
+this default is true by redoing the calculation for `Fspecies10` and for
+`Fspecies10I`, and checking that we get the same results:
+
+``` r
+
+## 'Y' and 'X' were previously defined with:
+## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
+## X <- data.frame(island = c('Biscoe', 'Dream'))
+
+## Recalculate Fspecies10, no 'K =' argument:
+checkFspecies10 <- Pr(Y)
+
+## Results as before
+identical(checkFspecies10, Fspecies10)
+# [1] TRUE
+
+## Recalculate Fspecies10I, no 'K =' argument:
+checkFspecies10I <- Pr(Y, X)
+
+## Results as before
+identical(checkFspecies10I, Fspecies10I)
+# [1] TRUE
+```
+
+The name of the current default `K =` argument can be queried at any
+time by calling
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md) with
+empty argument. Let’s check if `K10` is being used as default:
+
+``` r
+
+useK()
+# [1] "K10"
+```
+
+The default `K =` argument can be changed at any time by calling
+`useK(...)` again. To *remove* any default, we can call `useK(NA)`, or
+`useK(NULL)`, or `useK(FALSE)`.
+
+Now back to our analysis.
+
+  
+
+## Imputation of missing data
 
 In our dataset, datapoint \#1 lacks the value of the `sex` variate, and
 datapoint \#6 lacks the values of variates `bill_len`, `bill_dep`,
@@ -1305,20 +1374,21 @@ print(X1)
 #   species    island bill_len bill_dep flipper_len body_mass year
 # 1  Adelie Torgersen     37.8     17.1         186      3300 2007
 
-imputeddata <- Pr(Y1imp, X1, K10)
+## Default argument is K = K10, omitted
+imputeddata <- Pr(Y1imp, X1)
 
 print(imputeddata)
 # , , |species,island,bill_len,bill_dep,flipper_len,body_mass,year = Adelie,Torgersen,37.8,17.1,186,3300,2007
 # 
 #         probability
 # sex      value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   female 0.6789 0.0039 0.2559 0.5210 0.8711 0.9706
-#   male   0.3211 0.0039 0.0294 0.1289 0.4790 0.7441
+#   female 0.6821 0.0045 0.254  0.5224 0.8767 0.9752
+#   male   0.3179 0.0045 0.0248 0.1233 0.4776 0.746
 ```
 
 We see that penguin \#1 might have been female with probability 0.68,
 although further data might shift that probability somewhere between
-0.26 and 0.97.
+0.25 and 0.98.
 
 Now let’s take datapoint \#6 and infer the value of `bill_len`. We can
 use the function
@@ -1340,14 +1410,12 @@ print(X6)
 #   species island year
 # 6  Gentoo Biscoe 2009
 
-imputeddata <- Pr(Y6imp, X6, K10)
+imputeddata <- Pr(Y6imp, X6)
 
 plot(imputeddata, col = 8, legend = 'topleft')
 ```
 
 ![](figure/imputation6-1.svg)
-
-  
 
 ## More samples
 
@@ -1394,9 +1462,10 @@ K60 <- learn(
 The calculation with 60 datasamples took around 3 GB and 10 minutes on
 4 cores.
 
-The results of this updated inference are now stored in the compressed
-file `K.rds` within the new output directory. For your convenience the
-object produced by the computation above can be downloaded as the file
+The results of this updated inference are now represented by the R
+variable `K60`. Its “K” object is stored in the compressed file `K.rds`
+within the new output directory. For your convenience the “K” object
+produced by the computation above can be downloaded as the file
 [`K60.rds`](https://github.com/pglpm/prova/raw/main/vignettes/K60.rds).
 Once you have downloaded it in your working directory, invoke
 
@@ -1405,7 +1474,17 @@ Once you have downloaded it in your working directory, invoke
 K60 <- 'K60.rds'
 ```
 
-which we now use to update our analysis.
+which we now use to update our analysis. Note that we have two
+`K`nowledge objects that we can compare: `K10`, which stores what we
+learnt from 10 datasamples, and `K60`, which stores what we learnt from
+60 datasamples. Let’s remove any default `K =` argument set with
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md), so as
+to avoid any confusion:
+
+``` r
+
+useK(NA)
+```
 
 ### Updates in analysis and hypotheses
 
@@ -1432,11 +1511,21 @@ calculation for all three questions:
 ## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 ## X <- data.frame(island = c('Biscoe', 'Dream'))
 
-Fspecies60 <- Pr(Y, K60) # updated inference using K60
+Fspecies60 <- Pr(Y = Y, K = K60) # updated inference using K60
 
 ## with three arguments, the second stands for the conditional
 Fspecies60I <- Pr(Y, X, K60) # updated inference using K60
 ```
+
+  
+
+We could avoid typing the `K` arguments by using `useK(K60)`. However,
+just to remind ourselves that we are now drawing inferences from
+60 datasamples, let’s keep the `K60` explicit. Feel free to issue
+`useK(K60)` and then omit the `K60` arguments and check that the results
+are the same.
+
+  
 
 Just like in the preliminary analysis we can use the
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) and
@@ -1546,19 +1635,19 @@ is as follows:
 
 print(Fspecies60)
 #            probability
-# species     value   +/-     Q5.5%  Q25%   Q75%   Q94.5%
-#   Adelie    0.3929  0.0010  0.2960 0.3515 0.4335 0.4956
-#   Chinstrap 0.21002 0.00094 0.1345 0.1745 0.2426 0.2939
-#   Gentoo    0.39711 0.00097 0.3005 0.3542 0.4384 0.5005
+# species     value   +/-     Q5.5%  Q25%    Q75%   Q94.5%
+#   Adelie    0.3938  0.0011  0.2980 0.3512  0.4344 0.4961
+#   Chinstrap 0.21163 0.00078 0.1351 0.17493 0.2449 0.2997
+#   Gentoo    0.39456 0.00094 0.2977 0.3511  0.4349 0.4942
 ```
 
 > From a sample of 10 penguins, the inference about the relative
 > frequencies of the three species in the full population is as follows:
 >
 > - Adélie: rel. frequency between 0.30 and 0.50, with 89% probability.
-> - Chinstrap: rel. frequency between 0.13 and 0.29, with 89%
+> - Chinstrap: rel. frequency between 0.14 and 0.30, with 89%
 >   probability.
-> - Gentoo: rel. frequency between 0.30 and 0.50, with 89% probability.
+> - Gentoo: rel. frequency between 0.30 and 0.49, with 89% probability.
 
 ### Updates in island-wise conditional frequencies
 
@@ -1657,16 +1746,16 @@ estimate (median) and an 89%-credibility interval about this difference:
 ``` r
 
 median(freqdiff)
-# [1] 0.703512
+# [1] 0.703207
 
 quantile(freqdiff, c(0.055, 0.945))
 #     5.5%    94.5% 
-# 0.539614 0.832564
+# 0.546721 0.831743
 ```
 
 > From a sample of 60 penguins, the difference between the frequencies
 > of `Gentoo` species and `Chinstrap` species, on `Biscoe` island, is
-> estimated with a median of 0.7, and it is between 0.54 and 0.83 with
+> estimated with a median of 0.7, and it is between 0.55 and 0.83 with
 > 89% probability.
 
 Maybe you prefer a ratio between the two frequencies:
@@ -1677,16 +1766,16 @@ freqratio <- Fspecies60I$samples['Gentoo', 'Biscoe',] /
     Fspecies60I$samples['Chinstrap', 'Biscoe',]
 
 median(freqratio)
-# [1] 20.6057
+# [1] 21.1094
 
 quantile(freqratio, c(0.055, 0.945))
 #     5.5%    94.5% 
-#  6.84432 97.31692
+#  6.74092 97.68391
 ```
 
 > From a sample of 60 penguins, the ratio between the frequencies of
 > `Gentoo` species on `Chinstrap` species, on `Biscoe` island, is
-> estimated with a median of 21, and it is between 6.84 and 97.32 with
+> estimated with a median of 21, and it is between 6.74 and 97.68 with
 > 89% probability.
 
 It is remarkable that with only 60 penguins – and not all of them from
@@ -1767,7 +1856,7 @@ species are computed in the usual way:
 ## 'Y' was previously defined with:
 ## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
 
-Fspeciesall <- Pr(Y, Kall) # updated inference using Kall
+Fspeciesall <- Pr(Y = Y, K = Kall) # updated inference using Kall
 ```
 
 Let’s plot the estimated frequencies with their credibility intervals,
@@ -1798,9 +1887,9 @@ be extracted from the `Fspeciesall` in the usual way:
 print(Fspeciesall)
 #            probability
 # species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
-#   Adelie    0.44181 0.00052 0.3994  0.42314 0.46030 0.4853 
-#   Chinstrap 0.19881 0.00043 0.16576 0.18407 0.21298 0.23395
-#   Gentoo    0.35939 0.00050 0.31751 0.34221 0.37643 0.40079
+#   Adelie    0.44308 0.00032 0.4014  0.42545 0.46085 0.48626
+#   Chinstrap 0.19933 0.00029 0.16638 0.18469 0.21347 0.23389
+#   Gentoo    0.35759 0.00036 0.31631 0.34008 0.37492 0.39872
 ```
 
 > From a sample of 344 penguins \[add a more thorough specification of
@@ -1893,9 +1982,9 @@ print(Fanalysis)
 # 
 #            probability
 # species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
-#   Adelie    0.26672 0.00062 0.2147  0.24288 0.28886 0.3223 
-#   Chinstrap 0.01173 0.00018 0.00262 0.00608 0.01567 0.02651
-#   Gentoo    0.72155 0.00068 0.6654  0.69910 0.74487 0.7753
+#   Adelie    0.26848 0.00048 0.21628 0.24506 0.29078 0.32412
+#   Chinstrap 0.01189 0.00016 0.00271 0.00622 0.01552 0.02612
+#   Gentoo    0.71963 0.00054 0.6632  0.69682 0.74309 0.77266
 ```
 
 Conclusion:
@@ -1906,7 +1995,7 @@ Conclusion:
 > - Adélie:
 >
 >   estimate 0.27  
->   true rel. frequency between 0.21 and 0.32 with 89% probability.
+>   true rel. frequency between 0.22 and 0.32 with 89% probability.
 >
 > - Chinstrap:
 >
@@ -1916,7 +2005,7 @@ Conclusion:
 > - Gentoo:
 >
 >   estimate 0.72  
->   true rel. frequency between 0.67 and 0.78 with 89% probability.
+>   true rel. frequency between 0.66 and 0.77 with 89% probability.
 
 Note how our [previous estimates from 60 samples](#surprise) were
 already quite on the spot.
@@ -1957,9 +2046,9 @@ print(Fanalysis)
 # 
 #            probability
 # island      value   +/-     Q5.5%   Q25%    Q75%    Q94.5%
-#   Biscoe    0.29279 0.00056 0.23734 0.26703 0.31707 0.3506
-#   Dream     0.36888 0.00058 0.3097  0.34280 0.3956  0.4291
-#   Torgersen 0.33833 0.00062 0.2796  0.31312 0.36311 0.3979
+#   Biscoe    0.29304 0.00061 0.2369  0.26853 0.31770 0.3525
+#   Dream     0.36861 0.00053 0.30848 0.34208 0.39469 0.4301
+#   Torgersen 0.33836 0.00064 0.2797  0.31324 0.36361 0.4011
 ```
 
 Conclusions:

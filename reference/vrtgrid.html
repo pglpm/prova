@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vrtgrid</span><span class="op">(</span><span class="va">vrt</span>, <span class="va">K</span>, length.out <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vrtgrid</span><span class="op">(</span><span class="va">vrt</span>, K <span class="op">=</span> <span class="cn">NULL</span>, length.out <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -62,7 +62,11 @@
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>A "prova_K" (knowledge) object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.</p></dd>
+<dd><p>One of these alternatives:</p><ul><li><p>A "K" (more precisely "prova_K") object.</p></li>
+<li><p>A character string of the path to an <a href="https://rdrr.io/r/base/readRDS.html" class="external-link">RDS</a> file (typically created by <code><a href="learn.html">learn()</a></code>) containing a valid "K" object.</p></li>
+<li><p>A character string of the path to a directory (also typically created by <code><a href="learn.html">learn()</a></code>) containing such an <a href="https://rdrr.io/r/base/readRDS.html" class="external-link">RDS</a> file of a "K" object.</p></li>
+<li><p>For function <code><a href="Kobjects.html">getK()</a></code> it can also be <code>NULL</code> or omitted, if a default <code>K = </code> argument has been defined with <code><a href="Kobjects.html">useK()</a></code>.</p></li>
+</ul><p>Alternatively, a default <code>K = </code> argument can be set with <code><a href="Kobjects.html">useK()</a></code>, in which case the <code>K = </code> argument may be omitted. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-length-out">length.out<a class="anchor" aria-label="anchor" href="#arg-length-out"></a></dt>
@@ -75,7 +79,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The value ranges are based on the information from data and metadata stored in the <code>K</code>nowledge object (see <code><a href="learn.html">learn()</a></code>) provided in the <code>K =</code> argument; they include, and extend slightly beyond, the ranges observed in the data used in the <code><a href="learn.html">learn()</a></code> function. Variate domains are always respected.</p>
+    <p>The value ranges are based on the information from data and metadata stored in the <code>K</code>nowledge object (see <code><a href="learn.html">learn()</a></code>) provided in the <code>K = </code> argument; they include, and extend slightly beyond, the ranges observed in the data used in the <code><a href="learn.html">learn()</a></code> function. Variate domains are always respected.</p>
 <p>The set of chosen values, for each variate, depends on the type of variate (nominal or continuous, rounded, and so on, see <a href="metadata.html">metadata</a>):</p><ul><li><p>For a discrete (nominal or ordinal) variate, all possible values are chosen.</p></li>
 <li><p>For a continuous, <em>non-rounded</em> variate, a number of values as specified in the <code>length.out</code> argument; or 257 values if <code>length.out</code> is missing or <code>NA</code>.</p></li>
 <li><p>For a continuous, <em>rounded</em> variate, a number of values as specified in the <code>length.out</code> argument; or, if <code>length.out</code> is missing or <code>NA</code>, the output values are separated by the variates's rounding interval (field <code>datastep</code> in the <code><a href="metadata.html">metadata</a></code>).</p></li>
@@ -83,15 +87,17 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, to generate the "prova_K" (knowledge) objects required by <code>vrtgrid()</code>.</p>
+    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, to generate "K" objects required by <code>vrtgrid()</code>.</p>
 <p><code><a href="Pr.html">Pr()</a></code> to calculate probabilities and their revisabilities.</p>
-<p><code><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">base::expand.grid()</a></code> to create a data frame with combination of specified values of several variates.</p>
-<p><code><a href="plot.prova_pr.html">plot.prova_pr()</a></code> to plot probabilities and quantiles calculated by <code><a href="Pr.html">Pr()</a></code>.</p></div>
+<p><code><a href="Kobjects.html">useK()</a></code> to set a "K" object as default in all <code>K = </code> arguments.</p>
+<p><code><a href="plot.prova_pr.html">plot.prova_pr()</a></code> to plot probabilities and quantiles calculated by <code><a href="Pr.html">Pr()</a></code>.</p>
+<p><code><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">base::expand.grid()</a></code>, used internally by <code>vrtgrid()</code>, for a more general way to create a data frame with combination of specified values of several variates.</p>
+<p><a href="Kexample.html">Kexample</a> an example "K" object included with <strong>Prova</strong>.</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the "prova_K" (knowledge) object 'Kexample',</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the "K" object 'Kexample',</span></span></span>
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span></span></span>
@@ -159,6 +165,24 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10    Adelie 64.20000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11 Chinstrap 64.20000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12    Gentoo 64.20000</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## To omit 'K =' arguments, we can set a default one with useK()</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Kobjects.html">useK</a></span><span class="op">(</span><span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## set of values for the variate "species";</span></span></span>
+<span class="r-in"><span><span class="co">## since this variate is of a nominal kind, all values are included</span></span></span>
+<span class="r-in"><span><span class="va">valuesSpecies</span> <span class="op">&lt;-</span> <span class="fu">vrtgrid</span><span class="op">(</span><span class="st">'species'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">valuesSpecies</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    Adelie</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Chinstrap</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    Gentoo</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Remove any default 'K =' argument</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Kobjects.html">useK</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Kexample"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

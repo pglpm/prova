@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">rPr</span><span class="op">(</span></span>
 <span>  <span class="va">n</span>,</span>
 <span>  <span class="va">Ynames</span>,</span>
-<span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  X <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  K <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  mcsamples <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -74,11 +74,15 @@
 
 
 <dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>List or data.table or <code>NULL</code>: set of values of variates on which we want to condition the joint probability for <code>Y</code>. If <code>NULL</code> (default), no conditioning is made. Any rows beyond the first are discarded</p></dd>
+<dd><p>Matrix or data.table, or <code>NULL</code> or <code>NA</code> (default): set of values of variates in the conditional of the probability of <code>Y</code>. If <code>NA</code> or <code>NULL</code>, no conditioning is made (besides the conditioning on knowledge <code>K</code>). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>A "prova_K" (knowledge) object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one.</p></dd>
+<dd><p>One of these alternatives:</p><ul><li><p>A "K" (more precisely "prova_K") object.</p></li>
+<li><p>A character string of the path to an <a href="https://rdrr.io/r/base/readRDS.html" class="external-link">RDS</a> file (typically created by <code><a href="learn.html">learn()</a></code>) containing a valid "K" object.</p></li>
+<li><p>A character string of the path to a directory (also typically created by <code><a href="learn.html">learn()</a></code>) containing such an <a href="https://rdrr.io/r/base/readRDS.html" class="external-link">RDS</a> file of a "K" object.</p></li>
+<li><p>For function <code><a href="Kobjects.html">getK()</a></code> it can also be <code>NULL</code> or omitted, if a default <code>K = </code> argument has been defined with <code><a href="Kobjects.html">useK()</a></code>.</p></li>
+</ul><p>Alternatively, a default <code>K = </code> argument can be set with <code><a href="Kobjects.html">useK()</a></code>, in which case the <code>K = </code> argument may be omitted. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
@@ -99,19 +103,23 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function generates datapoints according to the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, K)\) or \(\mathrm{Pr}(Y = y \vert X \le x, K)\) or combinations thereof, for the variates specified in the argument <code>Y</code>, and conditional on the variate values specified in the argument <code>X</code>. It is somewhat analogous to the <code>rxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. If <code>X</code> is omitted or <code>NULL</code>, then the posterior probability \(\mathrm{Pr}(Y | K)\) is used. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code> (see <em>Tail probabilities</em> in the <code><a href="Pr.html">Pr()</a></code> documentation).</p>
-<p>If <code>rPr()</code> is called with three unnamed arguments, <code>rPr(..., ..., ...)</code>, then it is interpreted as <code>rPr(n = ..., Ynames = ..., K = ...)</code>.</p>
+    <p>This function generates datapoints according to the posterior probability \(\mathrm{Pr}(Y = y \vert X = x, K)\) or \(\mathrm{Pr}(Y = y \vert X \le x, K)\) or combinations thereof, for the variates specified in the argument <code>Y</code>, and conditional on the variate values specified in the argument <code>X</code>. It is somewhat analogous to the <code>rxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. If <code>X</code> is <code>NA</code>, then the posterior probability \(\mathrm{Pr}(Y | K)\) is used.</p>
+<p>Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code> (see <em>Tail probabilities</em> in the <code><a href="Pr.html">Pr()</a></code> documentation).</p>
+<p>A default value for the <code>K = </code> argument can be set (and unset) with <code><a href="Kobjects.html">useK()</a></code>. When this is done, the <code>K = </code> argument may be omitted, saving a lot of <code>K = ...</code>-typing in this and other functions.</p>
+<p>Therefore if <code>rPr()</code> is called with two unnamed arguments, <code>rPr(..., ...)</code>, then it is interpreted as <code>rPr(n = ..., Ynames = ...)</code>, with <code>X = NA</code> and the default <code>K = </code> argument set by <code><a href="Kobjects.html">useK()</a></code>. If it is called with three unnamed arguments, then it is interpreted as <code>rPr(n = ..., Ynames = ..., X = ...)</code>, with the default <code>K = </code> argument set by <code><a href="Kobjects.html">useK()</a></code>. In order to specify <code>n</code>, <code>Ynames</code>, and <code>K</code> without naming the arguments, the form <code>rPr(..., ..., NA, ...)</code> must be used, explicitly giving <code>X</code> as third argument.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, to generate the "prova_K" (knowledge) objects required by <code><a href="qPr.html">qPr()</a></code>.</p>
+    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, to generate "K" objects required by <code><a href="qPr.html">qPr()</a></code>.</p>
+<p><code><a href="Kobjects.html">useK()</a></code> to set a "K" object as default in all <code>K = </code> arguments.</p>
 <p><code><a href="Pr.html">Pr()</a></code> to calculate joint and conditional probabilities.</p>
-<p><code><a href="qPr.html">qPr()</a></code> to calculate quantiles.</p></div>
+<p><code><a href="qPr.html">qPr()</a></code> to calculate quantiles.</p>
+<p><a href="Kexample.html">Kexample</a> an example "K" object included with <strong>Prova</strong>.</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the example "prova_K" (knowledge) object 'Kexample'</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the example "K" object 'Kexample'</span></span></span>
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span></span></span>
@@ -119,40 +127,65 @@
 <span class="r-in"><span><span class="co">## Generate 10 values of the 'species' variate,</span></span></span>
 <span class="r-in"><span><span class="co">## according to the frequency distribution estimated from the data</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">datapoints</span> <span class="op">&lt;-</span> <span class="fu">rPr</span><span class="op">(</span><span class="fl">10</span>, <span class="st">'species'</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## alternatively: rPr(10, 'species', NA, Kexample)</span></span></span>
+<span class="r-in"><span><span class="va">datapoints</span> <span class="op">&lt;-</span> <span class="fu">rPr</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, Ynames <span class="op">=</span> <span class="st">'species'</span>, K <span class="op">=</span> <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">datapoints</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Adelie" "Gentoo" "Adelie" "Adelie" "Adelie" "Adelie" "Gentoo" "Gentoo"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "Gentoo" "Gentoo"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Adelie"    "Adelie"    "Adelie"    "Chinstrap" "Chinstrap" "Chinstrap"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "Gentoo"    "Chinstrap" "Gentoo"    "Adelie"   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 2:</span></span></span>
 <span class="r-in"><span><span class="co">## Generate 5 joint values of the 'species' and 'bill_len' variates.</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">datapoints</span> <span class="op">&lt;-</span> <span class="fu">rPr</span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'species'</span>, <span class="st">'bill_len'</span><span class="op">)</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">datapoints</span> <span class="op">&lt;-</span> <span class="fu">rPr</span><span class="op">(</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'species'</span>, <span class="st">'bill_len'</span><span class="op">)</span>, <span class="cn">NA</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">datapoints</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">## row names give MCMC information</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    species bill_len</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     37.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     37.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     37.8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     42.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Chinstrap     50.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     44.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo     51.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Chinstrap     54.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie     41.7</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 3:</span></span></span>
 <span class="r-in"><span><span class="co">## Generate 5 values of the 'species' variate,</span></span></span>
 <span class="r-in"><span><span class="co">## for the subpopulation of penguins having bill length shorter than 40 mm</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">datapoints</span> <span class="op">&lt;-</span> <span class="fu">rPr</span><span class="op">(</span><span class="fl">5</span>, <span class="st">'species'</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">40</span><span class="op">)</span>, <span class="va">Kexample</span>,</span></span>
-<span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="st">'lower'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">datapoints</span> <span class="op">&lt;-</span> <span class="fu">rPr</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'species'</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">40</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="va">Kexample</span>,</span></span>
+<span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="st">'&lt;='</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">datapoints</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Adelie" "Adelie" "Adelie" "Adelie" "Adelie"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ## Example 4:</span></span></span>
+<span class="r-in"><span><span class="co">## To omit 'K =' arguments, we can set a default one with useK()</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Kobjects.html">useK</a></span><span class="op">(</span><span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Generate 10 values of the 'species' variate,</span></span></span>
+<span class="r-in"><span><span class="co">## according to the frequency distribution estimated from the data</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">datapoints</span> <span class="op">&lt;-</span> <span class="fu">rPr</span><span class="op">(</span><span class="fl">10</span>, <span class="st">'species'</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">datapoints</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Gentoo"    "Adelie"    "Chinstrap" "Adelie"    "Adelie"    "Adelie"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "Gentoo"    "Gentoo"    "Chinstrap" "Chinstrap"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Remove any default 'K =' argument</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="Kobjects.html">useK</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Kexample"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

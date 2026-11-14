@@ -73,6 +73,9 @@ to plot probabilities and quantiles calculated by \`Pr()'.
 to plot histograms of the probability distributions calculated by
 [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 
+[Kexample](https://pglpm.github.io/prova/reference/Kexample.md) an
+example "K" object included with **Prova**.
+
 ## Examples
 
 ``` r
@@ -92,9 +95,9 @@ probs <- Pr(
 probs$value
 #>            |bill_len
 #> species            43         45
-#>   Adelie    0.4647433 0.08989502
-#>   Chinstrap 0.1458345 0.24641970
-#>   Gentoo    0.3894222 0.66368528
+#>   Adelie    0.4635304 0.08986735
+#>   Chinstrap 0.1550337 0.26079332
+#>   Gentoo    0.3814359 0.64933933
 
 ## Subset by retaining the values 'Adelie' and 'Gentoo' for species,
 ## and 44 or less for bill length
@@ -107,8 +110,8 @@ newprobs <- subset(
 newprobs$value
 #>         |bill_len
 #> species         43
-#>   Adelie 0.4647433
-#>   Gentoo 0.3894222
+#>   Adelie 0.4635304
+#>   Gentoo 0.3814359
 
 ## Plot these conditional probabilities and their revisabilities
 plot(newprobs)

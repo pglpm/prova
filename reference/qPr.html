@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">qPr</span><span class="op">(</span></span>
 <span>  <span class="va">p</span>,</span>
 <span>  <span class="va">Yname</span>,</span>
-<span>  X <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  X <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  K <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tails <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nsamples <span class="op">=</span> <span class="st">"all"</span>,</span>
@@ -80,11 +80,15 @@
 
 
 <dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Matrix or data.table or <code>NULL</code> (default): set of values of variates on which we want to condition. If <code>NULL</code>, no conditioning is made (except for conditioning on the learning dataset and prior assumptions). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.</p></dd>
+<dd><p>Matrix or data.table, or <code>NULL</code> or <code>NA</code> (default): set of values of variates in the conditional of the probability of <code>Y</code>. If <code>NA</code> or <code>NULL</code>, no conditioning is made (besides the conditioning on knowledge <code>K</code>). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-k">K<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>A "prova_K" (knowledge) object produced by <code><a href="learn.html">learn()</a></code>. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments.</p></dd>
+<dd><p>One of these alternatives:</p><ul><li><p>A "K" (more precisely "prova_K") object.</p></li>
+<li><p>A character string of the path to an <a href="https://rdrr.io/r/base/readRDS.html" class="external-link">RDS</a> file (typically created by <code><a href="learn.html">learn()</a></code>) containing a valid "K" object.</p></li>
+<li><p>A character string of the path to a directory (also typically created by <code><a href="learn.html">learn()</a></code>) containing such an <a href="https://rdrr.io/r/base/readRDS.html" class="external-link">RDS</a> file of a "K" object.</p></li>
+<li><p>For function <code><a href="Kobjects.html">getK()</a></code> it can also be <code>NULL</code> or omitted, if a default <code>K = </code> argument has been defined with <code><a href="Kobjects.html">useK()</a></code>.</p></li>
+</ul><p>Alternatively, a default <code>K = </code> argument can be set with <code><a href="Kobjects.html">useK()</a></code>, in which case the <code>K = </code> argument may be omitted. See "Details" for the interpretation of unnamed arguments.</p></dd>
 
 
 <dt id="arg-tails">tails<a class="anchor" aria-label="anchor" href="#arg-tails"></a></dt>
@@ -133,12 +137,15 @@
 <li><p><code>'quantiles'</code> (possibly <code>NULL</code>): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the <code>'value'</code> element.</p></li>
 <li><p><code>'samples'</code> (possibly <code>NULL</code>): an array with the revisability samples (3rd dimension of the array) for such quantiles.</p></li>
 <li><p><code>'Y'</code>, <code>'X'</code> <code>'tails'</code>: copies of the <code>Y</code>, <code>X</code>, <code>tails</code> arguments.</p></li>
-<li><p><code>'K'</code>: name of the "prova_K" (knowledge) object used in the calculation.</p></li>
+<li><p><code>'K'</code>: name of the "K" object used in the calculation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function calculates the quantiles of \(\mathrm{Pr}(Y = y \vert X = x, K)\) or of \(\mathrm{Pr}(Y = y \vert X \le x, K)\) or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \(Y\) having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the <code>qxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>. The revisability can be expressed in the form of quantiles, samples, or both, as in the <code><a href="Pr.html">Pr()</a></code> function. If several joint values are given for the probability levels and for <code>X</code>, the function creates a 2D grid of results for all possible combinations of the given probability levels and <code>X</code> values. Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code> (see <em>Tail probabilities</em> in the <code><a href="Pr.html">Pr()</a></code> documentation).</p>
-<p>If <code>qPr()</code> is called with three unnamed arguments, <code>qPr(..., ..., ...)</code>, then it is interpreted as <code>qPr(p = ..., Yname = ..., K = ...)</code>.</p>
+    <p>This function calculates the quantiles of \(\mathrm{Pr}(Y = y \vert X = x, K)\) or of \(\mathrm{Pr}(Y = y \vert X \le x, K)\) or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \(Y\) having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the <code>qxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>.</p>
+<p>The revisability can be expressed in the form of quantiles, samples, or both, as in the <code><a href="Pr.html">Pr()</a></code> function. If several joint values are given for the probability levels and for <code>X</code>, the function creates a 2D grid of results for all possible combinations of the given probability levels and <code>X</code> values.</p>
+<p>Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code> (see <em>Tail probabilities</em> in the <code><a href="Pr.html">Pr()</a></code> documentation).</p>
+<p>A default value for the <code>K = </code> argument can be set (and unset) with <code><a href="Kobjects.html">useK()</a></code>. When this is done, the <code>K = </code> argument may be omitted, saving a lot of <code>K = ...</code>-typing in this and other functions.</p>
+<p>Therefore if <code>qPr()</code> is called with two unnamed arguments, <code>qPr(..., ...)</code>, then it is interpreted as <code>qPr(p = ..., Yname = ...)</code>, with <code>X = NA</code> and the default <code>K = </code> argument set by <code><a href="Kobjects.html">useK()</a></code>. If it is called with three unnamed arguments, then it is interpreted as <code>qPr(p = ..., Yname = ..., X = ...)</code>, with the default <code>K = </code> argument set by <code><a href="Kobjects.html">useK()</a></code>. In order to specify <code>p</code>, <code>Yname</code>, and <code>K</code> without naming the arguments, the form <code>qPr(..., ..., NA, ...)</code> must be used, explicitly giving <code>X</code> as third argument.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -147,9 +154,11 @@
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, to generate the "prova_K" (knowledge) objects required by <code>qPr()</code>.</p>
+    <div class="dont-index"><p><code><a href="learn.html">learn()</a></code>, to generate "K" objects required by <code>qPr()</code>.</p>
+<p><code><a href="Kobjects.html">useK()</a></code> to set a "K" object as default in all <code>K = </code> arguments.</p>
 <p><code><a href="Pr.html">Pr()</a></code> to calculate joint and conditional probabilities.</p>
-<p><code><a href="rPr.html">rPr()</a></code> to generate datapoints.</p></div>
+<p><code><a href="rPr.html">rPr()</a></code> to generate datapoints.</p>
+<p><a href="Kexample.html">Kexample</a> an example "K" object included with <strong>Prova</strong>.</p></div>
     </div>
 
     <div class="section level2">
@@ -157,7 +166,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">### WARNING: the following examples, if run, might even take a minute or more.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co">## Use the example "prova_K" (knowledge) object 'Kexample'</span></span></span>
+<span class="r-in"><span><span class="co">## Use the example "K" object 'Kexample'</span></span></span>
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
 <span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span></span></span>
@@ -165,7 +174,7 @@
 <span class="r-in"><span><span class="co">## Calculate the 25%-, 50%-, and 75%-quantiles for the variate "bill length",</span></span></span>
 <span class="r-in"><span><span class="co">## that is, the values of "bill length" having such cumulative probabilities:</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">quants</span> <span class="op">&lt;-</span> <span class="fu">qPr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>, <span class="st">'bill_len'</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">quants</span> <span class="op">&lt;-</span> <span class="fu">qPr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>, <span class="st">'bill_len'</span>, <span class="cn">NA</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the quantile values</span></span></span>
 <span class="r-in"><span><span class="va">quants</span><span class="op">$</span><span class="va">value</span></span></span>
@@ -176,14 +185,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## verify these values, within numerical error, using Pr():</span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, <span class="va">Kexample</span>,</span></span>
-<span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, <span class="cn">NA</span>, <span class="va">Kexample</span>,</span></span>
+<span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="st">'&lt;='</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=39.2 0.2528194</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=44.3 0.5026998</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=48.3 0.7501943</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=39.2 0.2524340</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=44.3 0.5020812</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=48.3 0.7504611</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the revisability about the quantiles</span></span></span>
 <span class="r-in"><span><span class="va">quants</span><span class="op">$</span><span class="va">quantiles</span></span></span>
@@ -192,7 +201,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 38.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  43.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  43.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 47.8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , Q = 50%</span>
@@ -207,7 +216,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 39.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 39.8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  45.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -216,7 +225,10 @@
 <span class="r-in"><span><span class="co">## ## Example 2:</span></span></span>
 <span class="r-in"><span><span class="co">## Calculate the 25%-, 50%-, and 75%-quantiles for the variate "bill length",</span></span></span>
 <span class="r-in"><span><span class="co">## for the subpopulation of species 'Adelie':</span></span></span>
-<span class="r-in"><span><span class="va">quants</span> <span class="op">&lt;-</span> <span class="fu">qPr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>, <span class="st">'bill_len'</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="va">quants</span> <span class="op">&lt;-</span> <span class="fu">qPr</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">'bill_len'</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the quantile values</span></span></span>
@@ -228,14 +240,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.75   40.6</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## verify these values, within numerical error, using Pr():</span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="va">Kexample</span>, tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="va">Kexample</span>,</span></span>
+<span class="r-in"><span>  tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="st">'&lt;='</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         |species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len    Adelie</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=37   0.2530943</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=38.8 0.5050883</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=40.6 0.7515390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=37   0.2545590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=38.8 0.5060331</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=40.6 0.7519188</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

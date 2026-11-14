@@ -4,14 +4,18 @@ This vignette gives an introduction and guide to the visual and
 quantitative capabilities and functions of the **Prova** package, for
 the study of associations, correlations, and links.
 
-See the `vignette('start')` for an introduction to the package. The
-present vignette continues with the same example and dataset.
+See the
+[`vignette('intro')`](https://pglpm.github.io/prova/articles/intro.md)
+for an introduction to the package. The present vignette continues with
+the same example and dataset.
 
   
 
 ## Probabilities and associations
 
-The `vignette('start')` focuses on the dataset
+The
+[`vignette('intro')`](https://pglpm.github.io/prova/articles/intro.md)
+focuses on the dataset
 [`datasets::penguins`](https://rdrr.io/r/datasets/penguins.html), and
 shows how to calculate probabilities of single and joint variates from
 that dataset; also probabilities conditional on given variates. These
@@ -64,8 +68,10 @@ library('prova')
 set.seed(10)
 ```
 
-As in the `vignette('start')`, we work with a specific population of
-penguins, of which we have 344 sample data stored in the dataset
+As in the
+[`vignette('intro')`](https://pglpm.github.io/prova/articles/intro.md),
+we work with a specific population of penguins, of which we have
+344 sample data stored in the dataset
 [`datasets::penguins`](https://rdrr.io/r/datasets/penguins.html),
 included in R version 4.5.0 and above. For your convenience, for
 instance if you have an older R version, you can also download the
@@ -99,8 +105,11 @@ Once you have downloaded it in your working directory you can just set
 K <- 'Kall.rds'
 ```
 
-in this case `K` is just a character string pointing to the file
-containing the actual “Knowledge” object.
+Note that we could set this “K” object as default for all `K =`
+arguments in the following calculations, by calling the function
+`useK(K)`, as explained in the
+[`vignette('intro')`](https://pglpm.github.io/prova/articles/intro.md).
+Feel free to do so!
 
 ### Generating new samples
 
@@ -162,11 +171,11 @@ that its probability is around 0.3%:
 
 ``` r
 
-prob <- Pr(data.frame(island = 'Torgersen', species = 'Chinstrap'), K)
+prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'), K = K)
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-# 0.002930 0.000055 0.000375 0.001150 0.003893  0.00764
+# 0.003103 0.000056 0.000413 0.001247 0.004181  0.00824
 ```
 
   
@@ -186,7 +195,7 @@ instance to produce a scatter plot. The main arguments of
 - `Ynames`: vector of variate names; samples are generates for these
   variates jointly.
 - `X`: data frame of variate values to restrict the sampling to specific
-  subpopulations.
+  subpopulations; `NA` or `NULL` means no restriction.
 - `K`: the object that encodes the `K`nowledge from the computation made
   with the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function.
@@ -196,17 +205,18 @@ penguins, as an example:
 
 ``` r
 
-rPr(5, c('island', 'species'), K)
-#           island   species
-# 644_1      Dream Chinstrap
-# 996_1      Dream Chinstrap
-# 1228_1     Dream Chinstrap
-# 2230_1     Dream Chinstrap
-# 3083_1 Torgersen    Adelie
+rPr(n = 5, Ynames = c('island', 'species'), K = K)
+#        island   species
+# 644_1  Biscoe    Gentoo
+# 996_1   Dream Chinstrap
+# 1228_1 Biscoe    Gentoo
+# 2230_1  Dream Chinstrap
+# 3083_1  Dream    Adelie
 ```
 
-This could have also be entered more explicitly as
-`rPr(n = 5, Ynames = c('island', 'species'), K = K)`.
+This could have also be entered as
+`rPr(5, c('island', 'species'), NA, K)`, where `NA` stands for the `X =`
+argument.
 
 The rows of the resulting data frame are named according to the Monte
 Carlo samples used from the `K` object; they can be useful for peculiar
@@ -216,7 +226,7 @@ Now let’s generate 2000 samples, and then plot them in a scatter plot:
 
 ``` r
 
-samples <- rPr(2000, c('island', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
 
 pplot(x = samples$island, y = samples$species,
     type = 'p', col = 4, alpha.f = 0.5,
@@ -253,7 +263,7 @@ data previously observed:
 
 body_massrange <- range(vrtgrid('body_mass', K))
 
-samples <- rPr(2000, c('body_mass', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
 
 pplot(x = samples$body_mass, y = samples$species,
     type = 'p', col = 5, alpha.f = 0.5,
@@ -274,7 +284,8 @@ the continuous `body_mass`.
 From the plot we see that there is an association between the Adélie and
 Chinstrap species and lighter body mass, around 3500 g; and between the
 Gentoo species and heavier body mass, around 5000 g. Incidentally, this
-reflects the probability plot at the end of the `vignette('start')`.
+reflects the probability plot at the end of the
+[`vignette('intro')`](https://pglpm.github.io/prova/articles/intro.md).
 
 ### Samples and plots for different subpopulations
 
@@ -285,7 +296,7 @@ two continuous variates, such as body mass and bill length (`bill_len`):
 
 bill_lenrange <- range(vrtgrid('bill_len', K))
 
-samples <- rPr(2000, c('body_mass', 'bill_len'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', col = 6, alpha.f = 0.5,
@@ -513,8 +524,8 @@ minutes). The main arguments of these functions are the following:
 
 - `Y1names`, `Y2names`: two vectors of variate names; the mutual
   information is calculated between these two sets.
-- *optionally* `X`: data frame of variate values to restrict the
-  calculation to specific subpopulations.
+- `X`: data frame of variate values to restrict the calculation to
+  specific subpopulations; `NA` or `NULL` means no restriction.
 - `K`: the object that encodes the `K`nowledge from the computation made
   with the [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
   function.
@@ -546,7 +557,7 @@ nominal variates with a finite number of possible values, so we can use
 
 ``` r
 
-MIislandspecies <- mutualinfoF('island', 'species', K)
+MIislandspecies <- mutualinfoF(Y1names = 'island', Y2names = 'species', K = K)
 ```
 
 The resulting object `MIislandspecies` is a list of several quantities;
@@ -647,7 +658,7 @@ mi <- signif(MIislandspecies$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIislandspecies$rGauss, digits = 2)
 
-samples <- rPr(2000, c('island', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
 
 pplot(x = samples$island, y = samples$species,
     type = 'p', col = 4, alpha.f = 0.5,
@@ -670,7 +681,7 @@ number of possible values, so we use the function
 
 ``` r
 
-MIbodymassspecies <- mutualinfo('body_mass', 'species', K)
+MIbodymassspecies <- mutualinfo(Y1names = 'body_mass', Y2names = 'species', K = K)
 ```
 
 Scatter plot:
@@ -683,7 +694,7 @@ mi <- signif(MIbodymassspecies$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
-samples <- rPr(2000, c('body_mass', 'species'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
 
 pplot(x = samples$body_mass, y = samples$species,
     type = 'p', col = 5, alpha.f = 0.5,
@@ -704,7 +715,7 @@ Calculation of mutual information:
 
 ``` r
 
-MIbodymassbilllen <- mutualinfo('body_mass', 'bill_len', K)
+MIbodymassbilllen <- mutualinfo(Y1names = 'body_mass', Y2ames = 'bill_len', K = K)
 ```
 
 Scatter plot:
@@ -717,7 +728,7 @@ mi <- signif(MIbodymassbilllen$value, digits = 2)
 ## approx r-equivalent
 r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 
-samples <- rPr(2000, c('body_mass', 'bill_len'), K)
+samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
 
 pplot(x = samples$body_mass, y = samples$bill_len,
     type = 'p', col = 6, alpha.f = 0.5,
@@ -738,7 +749,7 @@ Note that in this case the Pearson correlation between `body_mass` and
 ``` r
 
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.559465
+# [1] 0.56415
 ```
 
 which is different from the rough \\r\\-equivalent 0.67.
@@ -769,15 +780,15 @@ computation could take half an hour):
 ``` r
 
 MIadelie <- mutualinfo('body_mass', 'bill_len',
-    data.frame(species = 'Adelie'), ## choose subpopulation
+    data.frame(species = 'Adelie'), # choose subpopulation
     K)
 
 MIchinstrap <- mutualinfo('body_mass', 'bill_len',
-    data.frame(species = 'Chinstrap'), ## choose subpopulation
+    data.frame(species = 'Chinstrap'), # choose subpopulation
     K)
 
 MIgentoo <- mutualinfo('body_mass', 'bill_len',
-    data.frame(species = 'Gentoo'), ## choose subpopulation
+    data.frame(species = 'Gentoo'), # choose subpopulation
     K)
 ```
 

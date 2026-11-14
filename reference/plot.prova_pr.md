@@ -228,7 +228,7 @@ to plot the revisability of the probabilities as a distribution.
 ## Examples
 
 ``` r
-## Use the "prova_K" (knowledge) object 'Kexample',
+## Use the "K" object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -237,7 +237,7 @@ to plot the revisability of the probabilities as a distribution.
 valuesBill <- vrtgrid('bill_len', Kexample)
 
 ## calculate the probabilities and quantiles
-probs <- Pr(valuesBill, Kexample)
+probs <- Pr(Y = valuesBill, K = Kexample)
 
 ## plot the probabilities and quantiles
 plot(probs)

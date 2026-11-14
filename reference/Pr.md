@@ -10,7 +10,7 @@ Monte Carlo Standard Error for the calculated posterior probabilities.
 ``` r
 Pr(
   Y,
-  X = NULL,
+  X = NA,
   K = NULL,
   tails = NULL,
   priorY = NULL,
@@ -33,19 +33,39 @@ Pr(
 
 - X:
 
-  Matrix or data.table or `NULL` (default): set of values of variates in
-  the conditional of the probability of `Y`. If `NULL`, no conditioning
-  is made (besides the conditioning on knowledge `K`). One variate per
-  column, one set of values per row. See "Details" for the
-  interpretation of unnamed arguments.
+  Matrix or data.table, or `NULL` or `NA` (default): set of values of
+  variates in the conditional of the probability of `Y`. If `NA` or
+  `NULL`, no conditioning is made (besides the conditioning on knowledge
+  `K`). One variate per column, one set of values per row. See "Details"
+  for the interpretation of unnamed arguments.
 
 - K:
 
-  A "prova_K" (knowledge) object produced by
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md). It can
-  also be a path to a 'K.rds' file containing such object, or to a
-  directory containing one. See "Details" for the interpretation of
-  unnamed arguments.
+  One of these alternatives:
+
+  - A "K" (more precisely "prova_K") object.
+
+  - A character string of the path to an
+    [RDS](https://rdrr.io/r/base/readRDS.html) file (typically created
+    by [`learn()`](https://pglpm.github.io/prova/reference/learn.md))
+    containing a valid "K" object.
+
+  - A character string of the path to a directory (also typically
+    created by
+    [`learn()`](https://pglpm.github.io/prova/reference/learn.md))
+    containing such an [RDS](https://rdrr.io/r/base/readRDS.html) file
+    of a "K" object.
+
+  - For function
+    [`getK()`](https://pglpm.github.io/prova/reference/Kobjects.md) it
+    can also be `NULL` or omitted, if a default `K = ` argument has been
+    defined with
+    [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md).
+
+  Alternatively, a default `K = ` argument can be set with
+  [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md), in
+  which case the `K = ` argument may be omitted. See "Details" for the
+  interpretation of unnamed arguments.
 
 - tails:
 
@@ -61,7 +81,7 @@ Pr(
   interval) should be calculated. **Warning**: the semi-open intervals
   *always* include the given value; this is important for ordinal or
   rounded variates. For instance, if \\Y\\ is an integer variate, then
-  to calculate \\\mathrm{Pr}(Y \< 3)\\ you should require
+  to calculate \\\mathrm{Pr}(Y \< 3)\\ the user should require
   \\\mathrm{Pr}(Y \le 2)\\; for this reason we also have that
   \\\mathrm{Pr}(Y \le 2)\\ and \\\mathrm{Pr}(Y \ge 2)\\ generally add up
   to *more* than 1.
@@ -161,8 +181,7 @@ of the following elements:
 
 - `'Y'`, `'X'`, `'tails'`: copies of the `Y`, `X`, `tails` arguments.
 
-- `'K'`: name of the "prova_K" (knowledge) object used in the
-  calculation.
+- `'K'`: name of the "K" object used in the calculation.
 
 ## Details
 
@@ -172,9 +191,9 @@ overlapping) sets of joint variate values, inputted as [data
 frame](https://rdrr.io/r/base/data.frame.html) arguments `Y` and `X`,
 and \\K\\ is the information in the data and metadata. It is somewhat
 analogous to the `dxxx`-variants and `pxxx`-variants of [R distribution
-functions](https://rdrr.io/r/stats/Distributions.html). If `X` is
-omitted or `NULL`, then the posterior probability \\\mathrm{Pr}(Y = y
-\vert K)\\ is calculated.
+functions](https://rdrr.io/r/stats/Distributions.html). If `X` is `NA`,
+then the posterior probability \\\mathrm{Pr}(Y = y \vert K)\\ is
+calculated.
 
 *Tail probabilities.* For some variates in `Y` or `X`, tail values can
 also be prescribed, so that this function calculates mixed probabilities
@@ -187,19 +206,33 @@ relations are not meaningful for them. For this kind of variates the
 appearing in the
 [metadata](https://pglpm.github.io/prova/reference/metadata.md) file.
 
-If `Pr()` is called with two unnamed arguments, `Pr(..., ...)`, then it
-is interpreted as `Pr(Y = ..., K = ...)`. If it is called with three
-unnamed arguments, then it is interpreted as either
-`Pr(Y = ..., X = ..., K = ...)` or `Pr(Y = ..., K = ..., tails = ...)`,
-depending on whether the second argument appears to be a "prova_K"
-(knowledge) object or not.
+*Arguments.* A default value for the `K = ` argument can be set (and
+unset) with
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md). When
+this is done, the `K = ` argument may be omitted, saving a lot of
+`K = ...`-typing in this and other functions.
 
-This function also outputs the "revisability" of the posterior
-probabilities above, that is, probabilities such as \\\mathrm{Pr}(Y = y
-\vert X = x, \text{new data}, K)\\ that we could have if more learning
-data were provided, as well as a number of samples of the possible
-values of such probability. This revisability can be outputted in two
-ways; the user can choose either, or both, or none:
+Therefore if `Pr()` is called with one unnamed argument, `Pr(...)`, then
+it is interpreted as `Pr(Y = ...)`, with `X = NA` and the default `K = `
+argument set by
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md). If
+`Pr()` is called with two unnamed arguments, `Pr(..., ...)`, then it is
+interpreted as `Pr(Y = ..., X = ...)` and the default `K = ` argument
+set by [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md).
+If it is called with three unnamed arguments, then it is interpreted as
+`Pr(Y = ..., X = ..., K = ...)`, with `K` explicitly given, overriding
+any default set by
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md). In
+order to specify `Y` and `K` without naming the arguments, the form
+`Pr(..., NA, ...)` must be used, explicitly giving `X` as second
+argument.
+
+*Revisabilities.* This function also outputs the "revisability" of the
+posterior probabilities above, that is, probabilities such as
+\\\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)\\ that we could
+have if more learning data were provided, as well as a number of samples
+of the possible values of such probability. This revisability can be
+outputted in two ways; the user can choose either, or both, or none:
 
 - As samples (default 3600 samples, depending on the 'nsamples' argument
   given to the
@@ -214,18 +247,19 @@ If several joint values are given for `Y` or `X`, the function will
 create a 2D grid of results for all possible combinations of the given
 `Y` and `X` values.
 
-This function also allows for base-rate or other prior-probability
-corrections: If a prior (for instance, a base rate) for the data
-corresponding to rows `Y` is given, the function will calculate the
-probability \\\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})\\ from
-\\\mathrm{Pr}(X = x \vert Y = y, K)\\ and the prior, by means of Bayes's
-theorem \$\$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior}) = \frac{
-\mathrm{Pr}(X = x \vert Y = y, K) \cdot \mathrm{Pr}(Y = y \vert
-\text{prior}) }{ \sum\_{y'} \mathrm{Pr}(X = x \vert Y = y', K) \cdot
-\mathrm{Pr}(Y = y' \vert \text{prior}) } \\ .\$\$ *Important*: any
-values *not* present in the `Y` data frame are given *zero* prior
-probability. In other words, the normalization \\\sum\_{y'}\\ only
-counts the \\y'\\ values appearing in the data frame `Y`.
+*Prior specification.* This function also allows for base-rate or other
+prior-probability corrections: If a prior (for instance, a base rate)
+for the data corresponding to rows `Y` is given, the function will
+calculate the probability \\\mathrm{Pr}(Y = y \vert X = x, K,
+\text{prior})\\ from \\\mathrm{Pr}(X = x \vert Y = y, K)\\ and the
+prior, by means of Bayes's theorem \$\$\mathrm{Pr}(Y = y \vert X = x, K,
+\text{prior}) = \frac{ \mathrm{Pr}(X = x \vert Y = y, K) \cdot
+\mathrm{Pr}(Y = y \vert \text{prior}) }{ \sum\_{y'} \mathrm{Pr}(X = x
+\vert Y = y', K) \cdot \mathrm{Pr}(Y = y' \vert \text{prior}) } \\ .\$\$
+*Important*: any values *not* present in the `Y` data frame are given
+*zero* prior probability. In other words, the normalization
+\\\sum\_{y'}\\ only counts the \\y'\\ values appearing in the data frame
+`Y`.
 
 Each variate in each argument `Y`, `X` can be specified either as a
 point-value \\Y = y\\ or as a left-open interval \\Y \le y\\ or as a
@@ -261,6 +295,9 @@ for example uses.
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md), to
 generate the `K`nowledge objects required by `Pr()`.
 
+[`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md) to set a
+"K" object as default in all `K = ` arguments.
+
 [`plot.prova_pr()`](https://pglpm.github.io/prova/reference/plot.prova_pr.md)
 to plot probabilities and quantiles calculated by `Pr()`.
 
@@ -278,10 +315,13 @@ given probabilities.
 [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md) to generate
 datapoints.
 
+[Kexample](https://pglpm.github.io/prova/reference/Kexample.md) an
+example "K" object included with **Prova**.
+
 ## Examples
 
 ``` r
-## Use the "prova_K" (knowledge) object 'Kexample',
+## Use the "K" object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -289,21 +329,21 @@ datapoints.
 ## Calculate the probability that an unknown penguin from this population
 ## is of species 'Adelie'
 
-## more explicitly: Pr(Y = data.frame(species = 'Adelie'), K = Kexample)
-probs <- Pr(data.frame(species = 'Adelie'), Kexample)
+## alternatively: Pr(data.frame(species = 'Adelie'), NA, Kexample)
+probs <- Pr(Y = data.frame(species = 'Adelie'), K = Kexample)
 
 ## display the probability value
 probs$value
 #>         
-#> species          
-#>   Adelie 0.440685
+#> species           
+#>   Adelie 0.4402128
 
 ## the full-population frequency of 'Adelie' penguins is unknown;
 ## display the 5.5%- and 94.5%-probability values
 ## for such frequency
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>      5.5%     94.5% 
-#> 0.3988210 0.4829919 
+#> 0.3945673 0.4882089 
 
 ## we can also plot the probability distribution
 ## for this full-population frequency
@@ -315,16 +355,18 @@ hist(probs, legend = 'topright')
 ## Calculate the 3 probabilities that an unknown penguin from this population
 ## is of species 'Adelie', 'Chinstrap', 'Gentoo'
 
-probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-  Kexample)
+## alternatively:
+## Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), NA, Kexample)
+probs <- Pr(Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+  K = Kexample)
 
 ## display the 3 probability values
 probs$value
 #>            
 #> species              
-#>   Adelie    0.4406850
-#>   Chinstrap 0.1984161
-#>   Gentoo    0.3608989
+#>   Adelie    0.4402128
+#>   Chinstrap 0.1990491
+#>   Gentoo    0.3607380
 
 ## the full-population frequencies of the three species are unknown;
 ## display the 5.5%- and 94.5%-probability values
@@ -332,9 +374,9 @@ probs$value
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>            Q
 #> species          5.5%     94.5%
-#>   Adelie    0.3988210 0.4829919
-#>   Chinstrap 0.1623616 0.2357522
-#>   Gentoo    0.3237028 0.4017671
+#>   Adelie    0.3945673 0.4882089
+#>   Chinstrap 0.1660700 0.2316169
+#>   Gentoo    0.3196910 0.4032075
 
 ## plot the probabilities and quantiles
 plot(probs)
@@ -349,15 +391,16 @@ hist(probs)
 ## Calculate the probability that an unknown penguin is of species 'Adelie'
 ## GIVEN that its bill length is 43 mm
 
-## more explicitly: Pr(Y = ..., X = ..., K = Kexample)
-probs <- Pr(data.frame(species = 'Adelie'), data.frame(bill_len = 43),
+## alternatively: Pr(Y = ..., X = ..., K = Kexample)
+probs <- Pr(data.frame(species = 'Adelie'),
+  data.frame(bill_len = 43),
   Kexample)
 
 ## display the probability value
 probs$value
 #>         |bill_len
 #> species         43
-#>   Adelie 0.4647433
+#>   Adelie 0.4635304
 
 ## the full-subpopulation frequency of 'Adelie' penguins,
 ## among penguins having bill length of 43 mm, is unknown;
@@ -365,26 +408,26 @@ probs$value
 ## for such conditional frequency
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>      5.5%     94.5% 
-#> 0.3669249 0.5678666 
+#> 0.3612267 0.5654892 
 
 
 ## ## Example 4:
 ## Calculate the probability that
 ## an unknown penguin is of species 'Adelie' AND its bill length is 43 mm
 
-probs <- Pr(data.frame(species = 'Adelie', bill_len = 43), Kexample)
+probs <- Pr(Y = data.frame(species = 'Adelie', bill_len = 43), K = Kexample)
 
 ## display the probability value
 probs$value
 #>                 
 #> species,bill_len            
-#>        Adelie,43 0.001819114
+#>        Adelie,43 0.001833167
 
 ## display the 5.5%- and 94.5%-probability values
 ## for the full-population frequency of 'Adelie' penguins with 43 mm bills
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>        5.5%       94.5% 
-#> 0.001245039 0.002371801 
+#> 0.001293080 0.002340539 
 
 
 ## ## Example 5:
@@ -401,9 +444,9 @@ probs <- Pr(Y, X, Kexample)
 probs$value
 #>            |bill_len
 #> species            43        44
-#>   Adelie    0.4647433 0.2223224
-#>   Chinstrap 0.1458345 0.2054491
-#>   Gentoo    0.3894222 0.5722285
+#>   Adelie    0.4635304 0.2220543
+#>   Chinstrap 0.1550337 0.2203152
+#>   Gentoo    0.3814359 0.5576305
 
 ## display the 5.5%- and 94.5%-probability values
 ## for the full-population joint frequencies
@@ -412,17 +455,17 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 #> 
 #>            |bill_len
 #> species             43        44
-#>   Adelie    0.36692485 0.1447719
-#>   Chinstrap 0.08096214 0.1197566
-#>   Gentoo    0.29852092 0.4671262
+#>   Adelie    0.36122673 0.1469467
+#>   Chinstrap 0.09270182 0.1421189
+#>   Gentoo    0.29615404 0.4614142
 #> 
 #> , , Q = 94.5%
 #> 
 #>            |bill_len
 #> species            43        44
-#>   Adelie    0.5678666 0.3069388
-#>   Chinstrap 0.2190872 0.2965559
-#>   Gentoo    0.4811995 0.6718201
+#>   Adelie    0.5654892 0.3040153
+#>   Chinstrap 0.2194305 0.3050006
+#>   Gentoo    0.4890394 0.6689622
 #> 
 
 ## plot the probabilities and quantiles
@@ -439,29 +482,48 @@ Y <- expand.grid(
   bill_len = c(43, 44)
 )
 
-probs <- Pr(Y, Kexample)
+## X is not given
+probs <- Pr(Y, NA, Kexample)
 
 ## display the 6 joint-probability values
 probs$value
 #>                 
 #> species,bill_len             
-#>     Adelie,43    0.0018191137
-#>     Chinstrap,43 0.0005712174
-#>     Gentoo,43    0.0015231253
-#>     Adelie,44    0.0009554396
-#>     Chinstrap,44 0.0008826070
-#>     Gentoo,44    0.0024593339
+#>     Adelie,43    0.0018331674
+#>     Chinstrap,43 0.0006123980
+#>     Gentoo,43    0.0015093929
+#>     Adelie,44    0.0009604290
+#>     Chinstrap,44 0.0009505859
+#>     Gentoo,44    0.0024192357
 
 ## display the 5.5%- and 94.5%-probability values
 ## for the full-population joint frequencies
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>                 Q
-#> species,bill_len         5.5%       94.5%
-#>     Adelie,43    0.0012450391 0.002371801
-#>     Chinstrap,43 0.0003027243 0.000897585
-#>     Gentoo,43    0.0010682562 0.002025675
-#>     Adelie,44    0.0005600381 0.001361621
-#>     Chinstrap,44 0.0004820964 0.001288832
-#>     Gentoo,44    0.0017899847 0.003151722
+#> species,bill_len         5.5%        94.5%
+#>     Adelie,43    0.0012930803 0.0023405386
+#>     Chinstrap,43 0.0003504603 0.0009103917
+#>     Gentoo,43    0.0010585493 0.0020202051
+#>     Adelie,44    0.0005966045 0.0013332037
+#>     Chinstrap,44 0.0005961187 0.0013419007
+#>     Gentoo,44    0.0018050459 0.0031778278
 
+
+## ## Example 7:
+## To omit 'K =' arguments, we can set a default one with useK()
+useK(Kexample)
+
+## Calculate the probability that an unknown penguin from this population
+## is of species 'Adelie'
+
+probs <- Pr( data.frame(species = 'Adelie') )
+
+## Calculate the probability that an unknown penguin is of species 'Adelie'
+## GIVEN that its bill length is 43 mm
+
+probs <- Pr( data.frame(species = 'Adelie'), data.frame(bill_len = 43) )
+
+#' ## Remove any default 'K =' argument
+useK()
+#> [1] "Kexample"
 ```

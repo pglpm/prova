@@ -69,7 +69,7 @@ to calculate expected utilities and their revisability.
 ## Examples
 
 ``` r
-## Use the example "prova_K" (knowledge) object 'Kexample'
+## Use the example "K" object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -88,7 +88,9 @@ print(umatrix)
 #>      A4 -0.12  0.35  0.62
 
 ## Calculate the probability of the 'species outcomes
-probs <- Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+probs <- Pr(
+  data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
+  NULL,
   Kexample)
 
 ## Calculate the expected utilities of the actions
@@ -100,8 +102,8 @@ eu <- exputility(umatrix, probs)
 print(eu)
 #>        
 #> actions   EU     +/-    prob.
-#>      A1   0.3981 0.0048 0.013
-#>      A2   0.3511 0.0013 0.058
-#>      A3 * 0.4307 0.0036 0.93 
-#>      A4   0.2403 0.0015 0    
+#>      A1   0.3967 0.0034 0.018
+#>      A2   0.3510 0.0011 0.10 
+#>      A3 * 0.4297 0.0025 0.88 
+#>      A4   0.2405 0.0014 0    
 ```

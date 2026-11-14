@@ -26,10 +26,31 @@ function does not do consistency checks of its arguments.
 
 - K:
 
-  Either a character with the name of a directory or full path for a
-  'K.rds' object, produced by the
-  [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
-  function, or such an object itself.
+  One of these alternatives:
+
+  - A "K" (more precisely "prova_K") object.
+
+  - A character string of the path to an
+    [RDS](https://rdrr.io/r/base/readRDS.html) file (typically created
+    by [`learn()`](https://pglpm.github.io/prova/reference/learn.md))
+    containing a valid "K" object.
+
+  - A character string of the path to a directory (also typically
+    created by
+    [`learn()`](https://pglpm.github.io/prova/reference/learn.md))
+    containing such an [RDS](https://rdrr.io/r/base/readRDS.html) file
+    of a "K" object.
+
+  - For function
+    [`getK()`](https://pglpm.github.io/prova/reference/Kobjects.md) it
+    can also be `NULL` or omitted, if a default `K = ` argument has been
+    defined with
+    [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md).
+
+  Alternatively, a default `K = ` argument can be set with
+  [`useK()`](https://pglpm.github.io/prova/reference/Kobjects.md), in
+  which case the `K = ` argument may be omitted. See "Details" for the
+  interpretation of unnamed arguments.
 
 - tails:
 
@@ -45,7 +66,7 @@ function does not do consistency checks of its arguments.
   interval) should be calculated. **NB**: the semi-open intervals
   *always* include the given value; this is important for ordinal or
   rounded variates. For instance, if \\Y\\ is an integer variate, then
-  to calculate \\\mathrm{Pr}(Y \< 3)\\ you should require
+  to calculate \\\mathrm{Pr}(Y \< 3)\\ the user should require
   \\\mathrm{Pr}(Y \le 2)\\; for this reason we also have that
   \\\mathrm{Pr}(Y \le 2)\\ and \\\mathrm{Pr}(Y \ge 2)\\ generally add up
   to *more* than 1.
