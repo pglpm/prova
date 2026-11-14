@@ -9,11 +9,17 @@
 #' @param Y1names Character vector: first group of joint variates
 #' @param Y2names Character vector or `NULL`: second group of joint variates
 #' @param X Matrix or data.table, or `NULL` or `NA` (default): set of values of variates in the conditional of the probability of `Y`. If `NA` or `NULL`, no conditioning is made (besides the conditioning on knowledge `K`). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option `'prova.K'` in [options()][base::options()], in case the user has stored a "prova_K" object or its path in this option.
+#' @param K One of these alternatives:
+#' - A "K" (more precisely "prova_K") object.
+#' - A character string of the path to an [RDS][base::readRDS] file (typically created by `learn()`) containing a valid "K" object.
+#' - A character string of the path to a directory (also typically created by `learn()`) containing such an [RDS][base::readRDS] file of a "K" object.
+#' - For function `getK()` it can also be `NULL` or omitted, if a default `K = ` argument has been defined with `useK()`.
+#'
+#' Alternatively, a default `K = ` argument can be set with `useK()`, in which case the `K = ` argument may be omitted. See "Details" for the interpretation of unnamed arguments.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param quantiles Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. See similar argument in [Pr()].
-#' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "prova_K" (knowledge) object.
-#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the revisability of the mutual information.
+#' @param ns Integer or `Inf` or `NULL` (default): number of Monte Carlo samples in the "K" object to use for calculating the mutual information. If `Inf` or `NULL`, use all Monte Carlo samples available in the "K" object.
+#' @param nv Integer, default 12: number of *duplicates* of Monte Carlo samples in the "K" object to use for calculating the revisability of the mutual information.
 #' @param unit Either one of 'Sh' for *shannon* (default), 'Hart' for *hartley*, 'nat' for *natural unit*, or a positive real indicating the base of the logarithms to be used.
 #' @param parallel One of the following values:
 #' - A "cluster" object previously created with [parallel::makeCluster()].
@@ -45,9 +51,9 @@
 #'
 #' Function [mutualinfoF()] computes the quantities above by calculating all required probabilities (a finite number) and performing the exact sums. This can only be done for variates with finite domains. If continuous variates are involved, a set of probabilities is calculated on a finite grid of their domain; for this reason the results may be grossly in error. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments `Y1names` and `Y2names`) include *only* variates with finite domains, typically nominal or ordinal variates (see [metadata]).
 #'
-#' The default value of the `K = ` argument is the knowledge object stored in the option `'prova.K'` in [options()][base::getOption()], which you may have previously set with `options(prova.K = ...)`. This way you can save a lot of `K = ...`-typing in this and other functions.
+#' A default value for the `K = ` argument can be set (and unset) with `useK()`. When this is done, the `K = ` argument may be omitted, saving a lot of `K = ...`-typing in this and other functions.
 #'
-#' Therefore if `mutualinfo()` or `mutualinfoF()` is called with two unnamed arguments, `mutualinfo(..., ...)`, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ...)`, with `X = NA` and the `K` object retrieved from [options()][base::getOption()]. If it is called with three unnamed arguments, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ..., X = ...)`, with `K` retrieved from [options()][base::getOption()]. In order to specify `Y1names`, `Y2names`, and `K` without naming the arguments, the form `mutualinfo(..., ..., NA, ...)` must be used, explicitly giving `X` as third argument.
+#' Therefore if `mutualinfo()` or `mutualinfoF()` is called with two unnamed arguments, `mutualinfo(..., ...)`, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ...)`, with `X = NA` and the default `K = ` argument set by `useK()`. If it is called with three unnamed arguments, then it is interpreted as `mutualinfo(Y1names = ..., Y2names = ..., X = ...)`, with the default `K = ` argument set by `useK()`. In order to specify `Y1names`, `Y2names`, and `K` without naming the arguments, the form `mutualinfo(..., ..., NA, ...)` must be used, explicitly giving `X` as third argument.
 #'
 #' @return An object of class "prova_mi" (mutual information), which is a list consisting of the following elements:
 #'
@@ -57,19 +63,22 @@
 #' - `'samples'`, a vector with the revisability samples for the mutual information.
 #' - `'rGauss'`, a vector of `value` and `accuracy`: the absolute value of the Pearson correlation coefficient \eqn{r} of a *multivariate Gaussian distribution* having mutual information `MI`; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the `MI` value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
 #' - `'unit'`, `'Y1names'`, `'Y1names'` `'X'`, `'tails'`: copies of the homonymous input arguments.
-#' - `'K'`: name of the "prova_K" (knowledge) object used in the calculation.
+#' - `'K'`: name of the "K" object used in the calculation.
 #'
 #' @seealso
+#'
 #' [print.prova_mi()] ] to plot mutual information and quantiles calculated by `mutualinfo()`
 #'
 #' [hist.prova_mi()] to plot the revisability of the mutual information.
 #'
+#' [useK()] to set a "K" object as default in all `K = ` arguments.
+#'
 #' [Pr()] to calculate probabilities and their revisability.
 #'
-#' [learn()], to generate the "prova_K" (knowledge) objects required by `mutualinfo()`.
+#' [learn()], to generate "K" objects required by `mutualinfo()`.
 #'
 #' @examples
-#' ## Use the example "prova_K" (knowledge) object 'Kexample'
+#' ## Use the example "K" object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' (nominal, finite domain)
 #' ## and 'bill_len' (continuous rounded, infinite domain)
@@ -102,7 +111,7 @@ mutualinfo <- function(
     Y1names,
     Y2names,
     X = NA,
-    K = getOption('prova.K'),
+    K = NULL,
     tails = NULL,
     quantiles =  c(0.055, 0.25, 0.75, 0.945),
     ns = NULL,
@@ -656,7 +665,7 @@ mutualinfoF <- function(
     Y1names,
     Y2names,
     X = NA,
-    K = getOption('prova.K'),
+    K = NULL,
     tails = NULL,
     quantiles =  c(0.055, 0.25, 0.75, 0.945),
     unit = 'Sh',

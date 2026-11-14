@@ -4,7 +4,13 @@
 #'
 #' @param Y named list of values; list names must be valid variate names.
 #' @param X named list of values; list names must be valid variate names.
-#' @param K Either a character with the name of a directory or full path for a 'K.rds' object, produced by the [learn()] function, or such an object itself. The default is the value of the option `'prova.K'` in [options()][base::options()], in case the user has stored a "prova_K" object or its path in this option.
+#' @param K One of these alternatives:
+#' - A "K" (more precisely "prova_K") object.
+#' - A character string of the path to an [RDS][base::readRDS] file (typically created by `learn()`) containing a valid "K" object.
+#' - A character string of the path to a directory (also typically created by `learn()`) containing such an [RDS][base::readRDS] file of a "K" object.
+#' - For function `getK()` it can also be `NULL` or omitted, if a default `K = ` argument has been defined with `useK()`.
+#'
+#' Alternatively, a default `K = ` argument can be set with `useK()`, in which case the `K = ` argument may be omitted. See "Details" for the interpretation of unnamed arguments.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'`  or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **NB**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} the user should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
 #' @return A list consisting of the following elements:
 #'
@@ -19,7 +25,7 @@
 .testPr <- function(
     Y,
     X = NULL,
-    K = getOption('prova.K'),
+    K = NULL,
     tails = NULL
 ){
     Qerror <- pnorm(c(-1, 1))

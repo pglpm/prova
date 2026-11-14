@@ -71,7 +71,7 @@ The x-axis spans the possible actions, and the y-axis their expected utilities. 
 The probability that an action would still be considered optimal, if many moro learning data were collected, is indicated above the x-axis label corresponding to that action. An asterisk \code{*} marks the optimal actions. If any conditioning variate \eqn{X} was used, then one such probability is shown for each conditioning value.
 }
 \examples{
-## Use the example "prova_K" (knowledge) object 'Kexample'
+## Use the example "K" object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 

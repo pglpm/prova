@@ -3,7 +3,13 @@
 #' @description Create a data frame of values for one variate, or a combination of values for several variates.
 #'
 #' @param vrt Character vector: names of the variates; they must match variate names in the `metadata` file provided to the [learn()] function.
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option `'prova.K'` in [options()][base::options()], in case the user has stored a "prova_K" object or its path in this option.
+#' @param K One of these alternatives:
+#' - A "K" (more precisely "prova_K") object.
+#' - A character string of the path to an [RDS][base::readRDS] file (typically created by `learn()`) containing a valid "K" object.
+#' - A character string of the path to a directory (also typically created by `learn()`) containing such an [RDS][base::readRDS] file of a "K" object.
+#' - For function `getK()` it can also be `NULL` or omitted, if a default `K = ` argument has been defined with `useK()`.
+#'
+#' Alternatively, a default `K = ` argument can be set with `useK()`, in which case the `K = ` argument may be omitted. See "Details" for the interpretation of unnamed arguments.
 #' @param length.out Vector or list of positive integers or `NA` values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in `vrt`. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of `NA` values. Default `NA`.
 #'
 #' @details The value ranges are based on the information from data and metadata stored in the `K`nowledge object (see [learn()]) provided in the `K = ` argument; they include, and extend slightly beyond, the ranges observed in the data used in the [learn()] function. Variate domains are always respected.
@@ -19,16 +25,18 @@
 #' @return A [data frame][base::data.frame()] with columns corresponding to the `vrt` argument, and one row for each combination of the variate values.
 #'
 #' @seealso
-#' [learn()], to generate the "prova_K" (knowledge) objects required by `vrtgrid()`.
+#' [learn()], to generate "K" objects required by `vrtgrid()`.
 #'
 #' [Pr()] to calculate probabilities and their revisabilities.
 #'
-#' [base::expand.grid()] to create a data frame with combination of specified values of several variates.
+#' [useK()] to set a "K" object as default in all `K = ` arguments.
 #'
 #' [plot.prova_pr()] to plot probabilities and quantiles calculated by `Pr()`.
 #'
+#' [base::expand.grid()], used internally by `vrtgrid()`, for a more general way to create a data frame with combination of specified values of several variates.
+#'
 #' @examples
-#' ## Use the "prova_K" (knowledge) object 'Kexample',
+#' ## Use the "K" object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -63,13 +71,8 @@
 #' print(valuesAll2)
 #'
 #'
-#' ## Before the next example, save the current options() state
-#' oldopt <- getOption('prova.K')
-#'
-#' ## We save the 'Kexample' object in options(prova.K = ...),
-#' ## so we don't need to give the 'K' argument
-#'
-#' options(prova.K = Kexample)
+#' ## To omit 'K =' arguments, we can set a default one with useK()
+#' useK(Kexample)
 #'
 #' ## set of values for the variate "species";
 #' ## since this variate is of a nominal kind, all values are included
@@ -77,8 +80,8 @@
 #'
 #' print(valuesSpecies)
 #'
-#' ## Restore original options() state
-#' options(prova.K = oldopt)
+#' ## Remove any default 'K =' argument
+#' useK()
 #'
 #' @import utils
 #'
@@ -86,13 +89,13 @@
 #' @export
 vrtgrid <- function(
     vrt,
-    K = getOption('prova.K'),
+    K = NULL,
     length.out = NA
 ){
     ## default number of points for continuous non-rounded variates
     lodefault <- 129
 
-    ## Check 'K' argument
+    ## Check and get 'K' argument
     K <- getK(K)
 
     ## Consistency checks

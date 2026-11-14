@@ -4,14 +4,22 @@
 \alias{.testPr}
 \title{Test posterior probabilities}
 \usage{
-.testPr(Y, X = NULL, K = getOption("prova.K"), tails = NULL)
+.testPr(Y, X = NULL, K = NULL, tails = NULL)
 }
 \arguments{
 \item{Y}{named list of values; list names must be valid variate names.}
 
 \item{X}{named list of values; list names must be valid variate names.}
 
-\item{K}{Either a character with the name of a directory or full path for a 'K.rds' object, produced by the \code{\link[=learn]{learn()}} function, or such an object itself. The default is the value of the option \code{'prova.K'} in \link[base:options]{options()}, in case the user has stored a "prova_K" object or its path in this option.}
+\item{K}{One of these alternatives:
+\itemize{
+\item A "K" (more precisely "prova_K") object.
+\item A character string of the path to an \link[base:readRDS]{RDS} file (typically created by \code{learn()}) containing a valid "K" object.
+\item A character string of the path to a directory (also typically created by \code{learn()}) containing such an \link[base:readRDS]{RDS} file of a "K" object.
+\item For function \code{getK()} it can also be \code{NULL} or omitted, if a default \verb{K = } argument has been defined with \code{useK()}.
+}
+
+Alternatively, a default \verb{K = } argument can be set with \code{useK()}, in which case the \verb{K = } argument may be omitted. See "Details" for the interpretation of unnamed arguments.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{Y} and \code{X}. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for \code{Y} and \code{X} variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by \code{'<='} or \code{'lower'} or\code{'left'} or \code{-1}; a right-open interval \eqn{Y \ge y} is indicated by \code{'>='} or \code{'upper'}  or \code{'right'} or \code{+1}. Values \code{NULL}, \code{'=='}, \code{0} indicate that a point value \code{Y = y} (not an interval) should be calculated. \strong{NB}: the semi-open intervals \emph{always} include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} the user should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to \emph{more} than 1.}
 }

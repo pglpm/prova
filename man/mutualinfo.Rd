@@ -9,7 +9,7 @@ mutualinfo(
   Y1names,
   Y2names,
   X = NA,
-  K = getOption("prova.K"),
+  K = NULL,
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   ns = NULL,
@@ -26,7 +26,7 @@ mutualinfoF(
   Y1names,
   Y2names,
   X = NA,
-  K = getOption("prova.K"),
+  K = NULL,
   tails = NULL,
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   unit = "Sh",
@@ -44,15 +44,23 @@ mutualinfoF(
 
 \item{X}{Matrix or data.table, or \code{NULL} or \code{NA} (default): set of values of variates in the conditional of the probability of \code{Y}. If \code{NA} or \code{NULL}, no conditioning is made (besides the conditioning on knowledge \code{K}). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.}
 
-\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option \code{'prova.K'} in \link[base:options]{options()}, in case the user has stored a "prova_K" object or its path in this option.}
+\item{K}{One of these alternatives:
+\itemize{
+\item A "K" (more precisely "prova_K") object.
+\item A character string of the path to an \link[base:readRDS]{RDS} file (typically created by \code{learn()}) containing a valid "K" object.
+\item A character string of the path to a directory (also typically created by \code{learn()}) containing such an \link[base:readRDS]{RDS} file of a "K" object.
+\item For function \code{getK()} it can also be \code{NULL} or omitted, if a default \verb{K = } argument has been defined with \code{useK()}.
+}
+
+Alternatively, a default \verb{K = } argument can be set with \code{useK()}, in which case the \verb{K = } argument may be omitted. See "Details" for the interpretation of unnamed arguments.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
 \item{quantiles}{Numeric vector, between 0 and 1: desired quantiles of the revisability of the mutual information. Default \code{c(0.055, 0.25, 0.75, 0.945)}, that is, the 5.5\%, 25\%, 75\%, 94.5\% quantiles. See similar argument in \code{\link[=Pr]{Pr()}}.}
 
-\item{ns}{Integer or \code{Inf} or \code{NULL} (default): number of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the mutual information. If \code{Inf} or \code{NULL}, use all Monte Carlo samples available in the "prova_K" (knowledge) object.}
+\item{ns}{Integer or \code{Inf} or \code{NULL} (default): number of Monte Carlo samples in the "K" object to use for calculating the mutual information. If \code{Inf} or \code{NULL}, use all Monte Carlo samples available in the "K" object.}
 
-\item{nv}{Integer, default 12: number of \emph{duplicates} of Monte Carlo samples in the "prova_K" (knowledge) object to use for calculating the revisability of the mutual information.}
+\item{nv}{Integer, default 12: number of \emph{duplicates} of Monte Carlo samples in the "K" object to use for calculating the revisability of the mutual information.}
 
 \item{unit}{Either one of 'Sh' for \emph{shannon} (default), 'Hart' for \emph{hartley}, 'nat' for \emph{natural unit}, or a positive real indicating the base of the logarithms to be used.}
 
@@ -81,7 +89,7 @@ An object of class "prova_mi" (mutual information), which is a list consisting o
 \item \code{'samples'}, a vector with the revisability samples for the mutual information.
 \item \code{'rGauss'}, a vector of \code{value} and \code{accuracy}: the absolute value of the Pearson correlation coefficient \eqn{r} of a \emph{multivariate Gaussian distribution} having mutual information \code{MI}; the two are related by \eqn{\mathrm{MI} = -\ln(1 - r^2)/2}. It may provide a vague intuition for the \code{MI} value for people more familiar with Pearson's correlation, but should be taken with a grain of salt.
 \item \code{'unit'}, \code{'Y1names'}, \code{'Y1names'} \code{'X'}, \code{'tails'}: copies of the homonymous input arguments.
-\item \code{'K'}: name of the "prova_K" (knowledge) object used in the calculation.
+\item \code{'K'}: name of the "K" object used in the calculation.
 }
 }
 \description{
@@ -108,12 +116,12 @@ Function \code{\link[=mutualinfo]{mutualinfo()}} computes the quantities above v
 
 Function \code{\link[=mutualinfoF]{mutualinfoF()}} computes the quantities above by calculating all required probabilities (a finite number) and performing the exact sums. This can only be done for variates with finite domains. If continuous variates are involved, a set of probabilities is calculated on a finite grid of their domain; for this reason the results may be grossly in error. This function should be used if \eqn{Y_1} or \eqn{Y_2} (arguments \code{Y1names} and \code{Y2names}) include \emph{only} variates with finite domains, typically nominal or ordinal variates (see \link{metadata}).
 
-The default value of the \verb{K = } argument is the knowledge object stored in the option \code{'prova.K'} in \link[base:getOption]{options()}, which you may have previously set with \code{options(prova.K = ...)}. This way you can save a lot of \code{K = ...}-typing in this and other functions.
+A default value for the \verb{K = } argument can be set (and unset) with \code{useK()}. When this is done, the \verb{K = } argument may be omitted, saving a lot of \code{K = ...}-typing in this and other functions.
 
-Therefore if \code{mutualinfo()} or \code{mutualinfoF()} is called with two unnamed arguments, \code{mutualinfo(..., ...)}, then it is interpreted as \code{mutualinfo(Y1names = ..., Y2names = ...)}, with \code{X = NA} and the \code{K} object retrieved from \link[base:getOption]{options()}. If it is called with three unnamed arguments, then it is interpreted as \code{mutualinfo(Y1names = ..., Y2names = ..., X = ...)}, with \code{K} retrieved from \link[base:getOption]{options()}. In order to specify \code{Y1names}, \code{Y2names}, and \code{K} without naming the arguments, the form \code{mutualinfo(..., ..., NA, ...)} must be used, explicitly giving \code{X} as third argument.
+Therefore if \code{mutualinfo()} or \code{mutualinfoF()} is called with two unnamed arguments, \code{mutualinfo(..., ...)}, then it is interpreted as \code{mutualinfo(Y1names = ..., Y2names = ...)}, with \code{X = NA} and the default \verb{K = } argument set by \code{useK()}. If it is called with three unnamed arguments, then it is interpreted as \code{mutualinfo(Y1names = ..., Y2names = ..., X = ...)}, with the default \verb{K = } argument set by \code{useK()}. In order to specify \code{Y1names}, \code{Y2names}, and \code{K} without naming the arguments, the form \code{mutualinfo(..., ..., NA, ...)} must be used, explicitly giving \code{X} as third argument.
 }
 \examples{
-## Use the example "prova_K" (knowledge) object 'Kexample'
+## Use the example "K" object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' (nominal, finite domain)
 ## and 'bill_len' (continuous rounded, infinite domain)
@@ -137,8 +145,10 @@ print(MI)
 
 \code{\link[=hist.prova_mi]{hist.prova_mi()}} to plot the revisability of the mutual information.
 
+\code{\link[=useK]{useK()}} to set a "K" object as default in all \verb{K = } arguments.
+
 \code{\link[=Pr]{Pr()}} to calculate probabilities and their revisability.
 
-\code{\link[=learn]{learn()}}, to generate the "prova_K" (knowledge) objects required by \code{mutualinfo()}.
+\code{\link[=learn]{learn()}}, to generate "K" objects required by \code{mutualinfo()}.
 }
 \concept{association}

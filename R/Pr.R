@@ -4,7 +4,13 @@
 #'
 #' @param Y Matrix or data.table: set of values of variates whose probabilities are sought. One variate per column, one set of values per row.
 #' @param X Matrix or data.table, or `NULL` or `NA` (default): set of values of variates in the conditional of the probability of `Y`. If `NA` or `NULL`, no conditioning is made (besides the conditioning on knowledge `K`). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option `'prova.K'` in [options()][base::options()], in case the user has stored a "prova_K" object or its path in this option. See "Details" for the interpretation of unnamed arguments.
+#' @param K One of these alternatives:
+#' - A "K" (more precisely "prova_K") object.
+#' - A character string of the path to an [RDS][base::readRDS] file (typically created by `learn()`) containing a valid "K" object.
+#' - A character string of the path to a directory (also typically created by `learn()`) containing such an [RDS][base::readRDS] file of a "K" object.
+#' - For function `getK()` it can also be `NULL` or omitted, if a default `K = ` argument has been defined with `useK()`.
+#'
+#' Alternatively, a default `K = ` argument can be set with `useK()`, in which case the `K = ` argument may be omitted. See "Details" for the interpretation of unnamed arguments.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **Warning**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} the user should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
 #' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
 #' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the probability for `Y`. If `NULL` or 0, no samples are reported. If `'all'` or `Inf`, all samples obtained by the [learn()] function are used.
@@ -24,9 +30,9 @@
 #'
 #' *Tail probabilities.* For some variates in `Y` or `X`, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .} Tail values are inputted via the `'tails'` argument; see "Usage". Note that nominal variates, strictly speaking, have no meaningful ordering, so the "\eqn{\ge}" and "\eqn{\le}" relations are not meaningful for them. For this kind of variates the "\eqn{\ge}" relation is understood in the sense of the value order appearing in the [metadata] file.
 #'
-#' *Arguments.* The default value of the `K = ` argument is the knowledge object stored in the option `'prova.K'` in [options()][base::getOption()], which the user may have previously declared with `useK()`. This way you can save a lot of `K = ...`-typing in this and other functions.
+#' *Arguments.* A default value for the `K = ` argument can be set (and unset) with `useK()`. When this is done, the `K = ` argument may be omitted, saving a lot of `K = ...`-typing in this and other functions.
 #'
-#' Therefore if `Pr()` is called with one unnamed argument, `Pr(...)`, then it is interpreted as `Pr(Y = ...)`, with `X = NA` and the `K` object retrieved from [options()][base::getOption()]. If `Pr()` is called with two unnamed arguments, `Pr(..., ...)`, then it is interpreted as `Pr(Y = ..., X = ...)` and the `K` object retrieved from [options()][base::getOption()]. If it is called with three unnamed arguments, then it is interpreted as `Pr(Y = ..., X = ..., K = ...)`, with `K` explicitly given. In order to specify `Y` and `K` without naming the arguments, the form `Pr(..., NA, ...)` must be used, explicitly giving `X` as second argument.
+#' Therefore if `Pr()` is called with one unnamed argument, `Pr(...)`, then it is interpreted as `Pr(Y = ...)`, with `X = NA` and the default `K = ` argument set by `useK()`. If `Pr()` is called with two unnamed arguments, `Pr(..., ...)`, then it is interpreted as `Pr(Y = ..., X = ...)` and the default `K = ` argument set by `useK()`. If it is called with three unnamed arguments, then it is interpreted as `Pr(Y = ..., X = ..., K = ...)`, with `K` explicitly given, overriding any default set by `useK()`. In order to specify `Y` and `K` without naming the arguments, the form `Pr(..., NA, ...)` must be used, explicitly giving `X` as second argument.
 #'
 #' *Revisabilities.* This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:
 #'
@@ -60,7 +66,7 @@
 #' - `'value.acc'`, `quantiles.acc`: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the `'values'` and `'quantiles'` elements.
 #' - `'density'`: numerical vector as long as number of rows in `Y`, used mainly for [plot.prova_pr()]. It is the order of the probability density the `Y`-values: values with `0` are actual probabilities; values with `1` are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with `2` are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
 #' - `'Y'`, `'X'`, `'tails'`: copies of the `Y`, `X`, `tails` arguments.
-#' - `'K'`: name of the "prova_K" (knowledge) object used in the calculation.
+#' - `'K'`: name of the "K" object used in the calculation.
 #'
 #' @references
 #'
@@ -74,6 +80,8 @@
 #' @seealso
 #' [learn()], to generate the `K`nowledge objects required by `Pr()`.
 #'
+#' [useK()] to set a "K" object as default in all `K = ` arguments.
+#'
 #' [plot.prova_pr()] to plot probabilities and quantiles calculated by `Pr()`.
 #'
 #' [hist.prova_pr()] to plot histograms of the probability distributions calculated by `Pr()`.
@@ -85,7 +93,7 @@
 #' [rPr()] to generate datapoints.
 #'
 #' @examples
-#' ## Use the "prova_K" (knowledge) object 'Kexample',
+#' ## Use the "K" object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -207,14 +215,9 @@
 #' probs$quantiles[, , c('5.5%', '94.5%')]
 #'
 #'
-#' ## Before the next example, save the current options() state
-#' oldopt <- getOption('prova.K')
-#'
 #' ## ## Example 7:
-#' ## We save the 'Kexample' object in options(prova.K = ...),
-#' ## so we don't need to give the 'K' argument
-#'
-#' options(prova.K = Kexample)
+#' ## To omit 'K =' arguments, we can set a default one with useK()
+#' useK(Kexample)
 #'
 #' ## Calculate the probability that an unknown penguin from this population
 #' ## is of species 'Adelie'
@@ -226,9 +229,8 @@
 #'
 #' probs <- Pr( data.frame(species = 'Adelie'), data.frame(bill_len = 43) )
 #'
-#'
-#' ## Restore original options() state
-#' options(prova.K = oldopt)
+#'#' ## Remove any default 'K =' argument
+#' useK()
 #'
 #' @import parallel
 #' @import stats

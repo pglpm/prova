@@ -538,7 +538,7 @@ pplot <- function(
 #' [pplot()] (on which `plot.prova_pr()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the "prova_K" (knowledge) object 'Kexample',
+#' ## Use the "K" object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -982,7 +982,7 @@ plot.prova_pr <- function(
 #' [pplot()] (on which `hist.prova_pr()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the "prova_K" (knowledge) object 'Kexample',
+#' ## Use the "K" object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -1185,7 +1185,7 @@ hist.prova_pr <- function(
 #' [hist.prova_pr()] to plot the revisability of the probabilities as a distribution.
 #'
 #' @examples
-#' ## Use the "prova_K" (knowledge) object 'Kexample',
+#' ## Use the "K" object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -1305,7 +1305,7 @@ print.prova_pr <- function(
 #' [pplot()] (on which `hist.prova_mi()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the "prova_K" (knowledge) object 'Kexample',
+#' ## Use the "K" object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -1462,7 +1462,7 @@ hist.prova_mi <- function(
 #' \donttest{
 #' ### WARNING: the following example, if run, might even take a minute or more.
 #'
-#' ## Use the "prova_K" (knowledge) object 'Kexample',
+#' ## Use the "K" object 'Kexample',
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -1613,7 +1613,7 @@ print.prova_mi <- function(
 #' [pplot()] (on which `plot.prova_eu()` is based) for more general plots.
 #'
 #' @examples
-#' ## Use the example "prova_K" (knowledge) object 'Kexample'
+#' ## Use the example "K" object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -1814,7 +1814,7 @@ plot.prova_eu <- function(
 #' [exputility()] to calculate expected utilities and their revisability.
 #'
 #' @examples
-#' ## Use the example "prova_K" (knowledge) object 'Kexample'
+#' ## Use the example "K" object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -1905,23 +1905,23 @@ print.prova_eu <- function(
 }
 
 
-#' Print summary of a "prova_K" (knowledge) object
+#' Print summary of a "K" (more precisely "prova_K") object
 #'
 #' @description
-#' This [base::print()] method is a utility to display a summary of a "prova_K" (knowledge) object outputted by [learn()], internally using [utils::str()]. It also display a summary if [learn()]'s value is only the path to the directory of the rds file containing the "prova_K" (knowledge) object itself (see argument `valueisK = ` in [learn()]), by internally retrieving the object. To get a summary of a "prova_K" (knowledge) object in a given directory or rds file, the user can explicitly call `print.prova_K(<file path>)`.
+#' This [base::print()] method is a utility to display a summary of a "K" (more precisely "prova_K") object outputted by [learn()], internally using [utils::str()]. It also display a summary if [learn()]'s value is only the path to the directory of the rds file containing the "K" object itself (see argument `valueisK = ` in [learn()]), by internally retrieving the object. To get a summary of a "K" object in a given directory or RDS file, the user can explicitly call `print.prova_K(<file path>)`.
 #'
-#' @param x Object of class "prova_K" (knowledge), output of [learn()].
+#' @param x Object of class "K" (more precisely "prova_K"), output of [learn()].
 #' @param ... Other parameters to be passed to [utils::str()].
 #'
-#' @return Its `x` argument, [invisibly][base::invisible()]; the [str][utils::str()]ucture of the corresponding "prova_K" (knowledge) object, if it exists, is also displayed.
+#' @return Its `x` argument, [invisibly][base::invisible()]; the [str][utils::str()]ucture of the corresponding "K" object, if it exists, is also displayed.
 #'
 #' @seealso
-#' [learn()], to generate a "prova_K" (knowledge) object.
+#' [learn()], to generate a "K" (more precisely "prova_K") object.
 #'
-#' [Kexample] an example "prova_K" (knowledge) object included with **Prova**.
+#' [Kexample] an example "K" object included with **Prova**.
 #'
 #' @examples
-#' ## Display a summary of the example "prova_K" (knowledge) object
+#' ## Display a summary of the example "K" object
 #' ## calculated from the "penguins" dataset
 #' print(Kexample)
 #'

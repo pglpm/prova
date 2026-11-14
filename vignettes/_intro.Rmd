@@ -372,20 +372,20 @@ K10 <- learn(
 
 The initial output gives a summary of the sample size, number of variates, saving directory, and other computational details. Estimated end times, one for each computation node, are periodically updated. Once the computation is finished, some final information about the underlying Monte Carlo computation and time and memory use is provided.^[The Monte Carlo expert will notice that the effective sample size is around 3000 or more. The Monte Carlo sampling is designed to stop when 3600 samples have been obtained from 8 chains, each with an effective sample size of at least 450, or equivalently a relative Monte Carlo standard error under 0.047. This is enough, considering that the statistical uncertainty in the results can be tens or hundreds of times larger than this. The desired number of samples and maximal Monte Carlo standard error can be specified with the `nsamples`, `minESS`, and `maxrelMCSE` arguments.] The inference above, with 10 datasamples and 8 variates, took around 3 GB and 10 minutes to complete on 4 cores.
 
-The results of this main inference are now stored in the compressed file `K.rds` (around 32 MB) within the specified output directory. The name of this directory is also saved as the final value of the `learn()` function. We saved this directory name in the `K10` variable in the code above, by invoking `K10 <- learn(...)`.
+The results of this main inference are what we call a "K" object (for 'Knowledge' or 'Known'). This object is now stored in the compressed file `K.rds` (around 32 MB) within the specified output directory. The name of this directory is also saved as the final value of the `learn()` function. We saved this directory name in the `K10` variable in the code above, by invoking `K10 <- learn(...)`.
 
 For your convenience the object produced by the computation above can be downloaded as the file [`K10.rds`](https://github.com/pglpm/prova/raw/main/vignettes/K10.rds). Once you have downloaded it in your working directory you can just invoke
 
 ```{r load10, eval = TRUE, echo = TRUE}
 K10 <- 'K10.rds'
 ```
-which produces an object `K10` (just a character string, in this case) which can be used in the following analysis.
+The variable `K10` can be used in the following analysis.
 
 \
 
 # Analysis example: frequencies of species {#prelimQ1}
 
-## Estimating relative frequencies
+## Estimating relative frequencies {#estimating10}
 
 Consider our first research question **Q1**: what's the overall statistical occurrence of the three species in the whole population? The relative frequencies of the three species in the whole population are unknown to us, so we cannot give a simple answer such as, hypothetically, "Adélie: 0.10, Chinstrap: 0.34, Gentoo: 0.56".
 
@@ -397,7 +397,7 @@ Bayesian nonparametrics and **Prova** give a first answer to this question in th
 We discuss both in a moment. First let's compute them using the `Pr()` function. For the present question, this function requires two named arguments:
 
 - `Y`: a `data.frame` listing the values of the variate we are interested in. In the present case the variate is `species` and the values are 'Adelie', 'Chinstrap', 'Gentoo'.
-- `K`: the object that encodes the `K`nowledge from the computation made with the `learn()` function, discussed in the previous section. In the present case it's `K10`.
+- `K`: the "K" object that encodes the `K`nowledge from the computation made with the `learn()` function, discussed in the previous section. In the present case it's `K10`.
 
 *Optionally*, a `parallel =` argument can also be given. This argument specifies how many nodes we should use for the computation, or a cluster previously generated with `parallel::makeCluster()`. If this argument is missing, then the function checks whether a default cluster (set with `parallel::setDefaultCluster()`) exists, and if it doesn't then it creates a number of nodes equal to the R option "cl.cores" (see `options()`), or equal to 2, if that option is unset. In the present example we tell **Prova** that it can use up to 4 nodes; change this value to one that works for your system -- or just skip this step if you don't want to bother with parallel computation for the moment:
 
@@ -552,11 +552,9 @@ print(Fspeciessex10)
 
 Now let's continue with our simpler plan.
 
-\
-
 # Analysis example: frequencies on different islands  {#prelimQ2}
 
-## Estimating frequencies of species, island-wise
+## Estimating frequencies of species, island-wise {#estimating10I}
 
 Let's now do a preliminary analysis related to research question **Q2**: do the three species differ, statistically, in some physical or geographical characteristic? This question is still somewhat vague, so let's make it more specific: *Is there any difference in species frequency on the different islands?*
 
@@ -570,7 +568,7 @@ Bayesian nonparametrics and **Prova** can also draw this kind of inferences. We 
 ## data frame with the variate and values of the subpopulations of interest
 X <- data.frame(island = c('Biscoe', 'Dream'))
 
-## The second argument now denote the conditional
+## The second argument now denotes the conditional
 Fspecies10I <- Pr(Y, X, K10)
 ```
 This could also be entered more explicitly as `Fspecies10I <- Pr(Y = Y, X = X, K = K10)`. An argument `X = NA` or `X = NULL` means that we are not conditioning on any variates.
@@ -646,16 +644,11 @@ Bayesian estimates don't suffer from this problem. You can update the estimates 
 
 We may be interested in the frequencies of the three species in more complex subpopulations, for example the subpopulation of female penguins living on Biscoe island; in other words, penguins with `island` variate equal to `'Biscoe'`, and `sex` variate equal to `'female'`. These cases are also easily handled by **Prova**, for any combination of subpopulations. The procedure is analogous to the one we [previously discussed](#twovariates) very briefly.
 
-Also in this case we only show the example code for the moment:
+Also in this case we only show the example code for the moment. We can use the function `vrtgrid()` to generate a data frame with *all combinations* of values of the variates `island` and `sex`:
 
 ```{r islandandsex, eval = TRUE}
 ## data frame with all combination of values from 'island' and 'sex'
-## use base-R function 'expand.grid()'
-Xdouble <- expand.grid(
-    island = c('Biscoe', 'Dream', 'Torgersen'),
-    sex = c('female', 'male'),
-    stringsAsFactors = FALSE ## important! Prova doesn't use factors
-)
+Xdouble <- vrtgrid(c('island', 'sex'), K10)
 
 Fspecies10IS <- Pr(Y, Xdouble, K10)
 
@@ -664,7 +657,53 @@ Fspecies10IS <- Pr(Y, Xdouble, K10)
 print(Fspecies10IS, 'value')
 ```
 
-## Imputation of missing data {#imputation}
+\
+
+# Set a default "K" object to save typing
+
+ Before continuing, let's open a parenthesis to quickly see a command that can save us a lot of typing.
+
+You have noticed that most functions we have called so far use a `K = ` argument, where we must specify what has been learnt from the data and metadata, the "K" (`K`nowledge or `K`nown) object. But in our analysis this `K`nowledge is always the same: the one learnt from the 10_datasamples and represented by the R variable `K10`. Is there a way to make this knowledge as a sort of "default", so that we can skip typing `K = ...` everywhere? Yes, there is!
+
+We can set a default "K" object, to be used implicitly in all `K = ` arguments, by means of the function `useK()`:
+
+```{r useK10, eval = TRUE}
+useK(K10)
+```
+
+Done. Now, an argument `K = K10` will be used as default in every function that needs a `K = ` argument but misses one. Let's check that this default is true by redoing the calculation for [`Fspecies10`]{#estimating10} and for [`Fspecies10I`]{#estimating10I},  and checking that we get the same results:
+
+```{r test_useK, eval = TRUE}
+## 'Y' and 'X' were previously defined with:
+## Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
+## X <- data.frame(island = c('Biscoe', 'Dream'))
+
+## Recalculate Fspecies10, no 'K =' argument:
+checkFspecies10 <- Pr(Y)
+
+## Results as before
+identical(checkFspecies10, Fspecies10)
+
+## Recalculate Fspecies10I, no 'K =' argument:
+checkFspecies10I <- Pr(Y, X)
+
+## Results as before
+identical(checkFspecies10I, Fspecies10I)
+```
+
+The name of the current default `K = ` argument can be queried at any time by calling `useK()` with empty argument. Let's check if `K10` is being used as default:
+
+```{r useK10check, eval = TRUE}
+useK()
+```
+
+The default `K = ` argument can be changed at any time by calling `useK(...)` again. To *remove* any default, we can call `useK(NA)`, or `useK(NULL)`, or `useK(FALSE)`.
+
+Now back to our analysis.
+
+\
+
+# Imputation of missing data {#imputation}
 
 In our dataset, datapoint #1 lacks the value of the `sex` variate, and datapoint #6 lacks the values of variates `bill_len`, `bill_dep`, `flipper_len`, `body_mass`. The partial information in these two datapoints was nevertheless still used by the function `learn()`: the datapoints were not discarded.
 
@@ -681,7 +720,8 @@ Y1imp <- data.frame(sex = c('female', 'male'))
 X1 <- penguins_shuffled[1, colnames(penguins_shuffled) != 'sex']
 print(X1)
 
-imputeddata <- Pr(Y1imp, X1, K10)
+## Default argument is K = K10, omitted
+imputeddata <- Pr(Y1imp, X1)
 
 print(imputeddata)
 ```
@@ -701,17 +741,16 @@ X6 <- penguins_shuffled[6, ]
 X6 <- X6[, !is.na(X6)]
 print(X6)
 
-imputeddata <- Pr(Y6imp, X6, K10)
+imputeddata <- Pr(Y6imp, X6)
 
 plot(imputeddata, col = 8, legend = 'topleft')
 ```
 
 <!-- commented
-The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(p = 0.5, Yname = 'bill_len', X = X, K = K10)$value[1,1])`.
+The bill length of penguin #6 can be estimated with a median of around `r printprob(qPr(p = 0.5, Yname = 'bill_len', X = X)$value[1,1])`.
 commented -->
 
 
-\
 
 # More samples
 
@@ -743,13 +782,17 @@ K60 <- learn(
 
 The calculation with 60 datasamples took around 3 GB and 10 minutes on 4 cores.
 
-The results of this updated inference are now stored in the compressed file `K.rds` within the new output directory. For your convenience the object produced by the computation above can be downloaded as the file [`K60.rds`](https://github.com/pglpm/prova/raw/main/vignettes/K60.rds). Once you have downloaded it in your working directory, invoke
+The results of this updated inference are now represented by the R variable `K60`. Its "K" object is stored in the compressed file `K.rds` within the new output directory. For your convenience the "K" object produced by the computation above can be downloaded as the file [`K60.rds`](https://github.com/pglpm/prova/raw/main/vignettes/K60.rds). Once you have downloaded it in your working directory, invoke
 
 ```{r load60, eval = TRUE, echo = TRUE}
 K60 <- 'K60.rds'
 ```
 
-which we now use to update our analysis.
+which we now use to update our analysis. Note that we have two `K`nowledge objects that we can compare: `K10`, which stores what we learnt from 10 datasamples, and `K60`, which stores what we learnt from 60 datasamples. Let's remove any default `K = ` argument set with `useK()`, so as to avoid any confusion:
+
+```{r removeK10, eval = TRUE, echo = TRUE}
+useK(NA)
+```
 
 
 ## Updates in analysis and hypotheses
@@ -772,6 +815,11 @@ Fspecies60 <- Pr(Y = Y, K = K60) # updated inference using K60
 ## with three arguments, the second stands for the conditional
 Fspecies60I <- Pr(Y, X, K60) # updated inference using K60
 ```
+\
+
+We could avoid typing the `K` arguments by using `useK(K60)`. However, just to remind ourselves that we are now drawing inferences from 60 datasamples, let's keep the `K60` explicit. Feel free to issue `useK(K60)` and then omit the `K60` arguments and check that the results are the same.
+
+\
 
 Just like in the preliminary analysis we can use the `plot()` and `hist()` functions to visualize estimates, credibility intervals, and probability distributions.
 

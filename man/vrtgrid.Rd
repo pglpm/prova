@@ -4,12 +4,20 @@
 \alias{vrtgrid}
 \title{Create a grid of values for a variate}
 \usage{
-vrtgrid(vrt, K = getOption("prova.K"), length.out = NA)
+vrtgrid(vrt, K = NULL, length.out = NA)
 }
 \arguments{
 \item{vrt}{Character vector: names of the variates; they must match variate names in the \code{metadata} file provided to the \code{\link[=learn]{learn()}} function.}
 
-\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option \code{'prova.K'} in \link[base:options]{options()}, in case the user has stored a "prova_K" object or its path in this option.}
+\item{K}{One of these alternatives:
+\itemize{
+\item A "K" (more precisely "prova_K") object.
+\item A character string of the path to an \link[base:readRDS]{RDS} file (typically created by \code{learn()}) containing a valid "K" object.
+\item A character string of the path to a directory (also typically created by \code{learn()}) containing such an \link[base:readRDS]{RDS} file of a "K" object.
+\item For function \code{getK()} it can also be \code{NULL} or omitted, if a default \verb{K = } argument has been defined with \code{useK()}.
+}
+
+Alternatively, a default \verb{K = } argument can be set with \code{useK()}, in which case the \verb{K = } argument may be omitted. See "Details" for the interpretation of unnamed arguments.}
 
 \item{length.out}{Vector or list of positive integers or \code{NA} values, possibly named: number of values to be created for each variate. Elements with names are used for the homonymous variates in \code{vrt}. Unnamed elements are used for the remaining variates, recycled as necessary. See "Details" for the meaning of \code{NA} values. Default \code{NA}.}
 }
@@ -32,7 +40,7 @@ The set of chosen values, for each variate, depends on the type of variate (nomi
 The output is a \link[base:data.frame]{data frame} that can be used directly in functions like \code{\link[=Pr]{Pr()}}.
 }
 \examples{
-## Use the "prova_K" (knowledge) object 'Kexample',
+## Use the "K" object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -67,13 +75,8 @@ valuesAll2 <- expand.grid(
 print(valuesAll2)
 
 
-## Before the next example, save the current options() state
-oldopt <- getOption('prova.K')
-
-## We save the 'Kexample' object in options(prova.K = ...),
-## so we don't need to give the 'K' argument
-
-options(prova.K = Kexample)
+## To omit 'K =' arguments, we can set a default one with useK()
+useK(Kexample)
 
 ## set of values for the variate "species";
 ## since this variate is of a nominal kind, all values are included
@@ -81,17 +84,19 @@ valuesSpecies <- vrtgrid('species')
 
 print(valuesSpecies)
 
-## Restore original options() state
-options(prova.K = oldopt)
+## Remove any default 'K =' argument
+useK()
 
 }
 \seealso{
-\code{\link[=learn]{learn()}}, to generate the "prova_K" (knowledge) objects required by \code{vrtgrid()}.
+\code{\link[=learn]{learn()}}, to generate "K" objects required by \code{vrtgrid()}.
 
 \code{\link[=Pr]{Pr()}} to calculate probabilities and their revisabilities.
 
-\code{\link[base:expand.grid]{base::expand.grid()}} to create a data frame with combination of specified values of several variates.
+\code{\link[=useK]{useK()}} to set a "K" object as default in all \verb{K = } arguments.
 
 \code{\link[=plot.prova_pr]{plot.prova_pr()}} to plot probabilities and quantiles calculated by \code{Pr()}.
+
+\code{\link[base:expand.grid]{base::expand.grid()}}, used internally by \code{vrtgrid()}, for a more general way to create a data frame with combination of specified values of several variates.
 }
 \concept{probability}

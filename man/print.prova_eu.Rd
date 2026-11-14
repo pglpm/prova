@@ -24,7 +24,7 @@ Its \code{x} argument, \link[base:invisible]{invisibly}; see \code{\link[base:pr
 This \code{\link[base:print]{base::print()}} method is a utility to display value and revisability of an "prova_mi" (mutual information) object obtained with \code{\link[=mutualinfo]{mutualinfo()}}.
 }
 \examples{
-## Use the example "prova_K" (knowledge) object 'Kexample'
+## Use the example "K" object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 

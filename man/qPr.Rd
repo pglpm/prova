@@ -8,7 +8,7 @@ qPr(
   p,
   Yname,
   X = NA,
-  K = getOption("prova.K"),
+  K = NULL,
   tails = NULL,
   nsamples = "all",
   quantiles = c(0.055, 0.5, 0.945),
@@ -27,7 +27,15 @@ qPr(
 
 \item{X}{Matrix or data.table, or \code{NULL} or \code{NA} (default): set of values of variates in the conditional of the probability of \code{Y}. If \code{NA} or \code{NULL}, no conditioning is made (besides the conditioning on knowledge \code{K}). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.}
 
-\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. See "Details" for the interpretation of unnamed arguments. The default is the value of the option \code{'prova.K'} in \link[base:options]{options()}, in case the user has stored a "prova_K" object or its path in this option.}
+\item{K}{One of these alternatives:
+\itemize{
+\item A "K" (more precisely "prova_K") object.
+\item A character string of the path to an \link[base:readRDS]{RDS} file (typically created by \code{learn()}) containing a valid "K" object.
+\item A character string of the path to a directory (also typically created by \code{learn()}) containing such an \link[base:readRDS]{RDS} file of a "K" object.
+\item For function \code{getK()} it can also be \code{NULL} or omitted, if a default \verb{K = } argument has been defined with \code{useK()}.
+}
+
+Alternatively, a default \verb{K = } argument can be set with \code{useK()}, in which case the \verb{K = } argument may be omitted. See "Details" for the interpretation of unnamed arguments.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
@@ -60,7 +68,7 @@ A list with the following elements:
 \item \code{'quantiles'} (possibly \code{NULL}): an array with the revisability quantiles (3rd dimension of the array) for the quantiles of the \code{'value'} element.
 \item \code{'samples'} (possibly \code{NULL}): an array with the revisability samples (3rd dimension of the array) for such quantiles.
 \item \code{'Y'}, \code{'X'} \code{'tails'}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
-\item \code{'K'}: name of the "prova_K" (knowledge) object used in the calculation.
+\item \code{'K'}: name of the "K" object used in the calculation.
 }
 }
 \description{
@@ -73,15 +81,15 @@ The revisability can be expressed in the form of quantiles, samples, or both, as
 
 Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails} (see \emph{Tail probabilities} in the \code{\link[=Pr]{Pr()}} documentation).
 
-The default value of the \verb{K = } argument is the knowledge object stored in the option \code{'prova.K'} in \link[base:getOption]{options()}, which you may have previously set with \code{options(prova.K = ...)}. This way you can save a lot of \code{K = ...}-typing in this and other functions.
+A default value for the \verb{K = } argument can be set (and unset) with \code{useK()}. When this is done, the \verb{K = } argument may be omitted, saving a lot of \code{K = ...}-typing in this and other functions.
 
-Therefore if \code{qPr()} is called with two unnamed arguments, \code{qPr(..., ...)}, then it is interpreted as \code{qPr(p = ..., Yname = ...)}, with \code{X = NA} and the \code{K} object retrieved from \link[base:getOption]{options()}. If it is called with three unnamed arguments, then it is interpreted as \code{qPr(p = ..., Yname = ..., X = ...)}, with \code{K} retrieved from \link[base:getOption]{options()}. In order to specify \code{p}, \code{Yname}, and \code{K} without naming the arguments, the form \code{qPr(..., ..., NA, ...)} must be used, explicitly giving \code{X} as third argument.
+Therefore if \code{qPr()} is called with two unnamed arguments, \code{qPr(..., ...)}, then it is interpreted as \code{qPr(p = ..., Yname = ...)}, with \code{X = NA} and the default \verb{K = } argument set by \code{useK()}. If it is called with three unnamed arguments, then it is interpreted as \code{qPr(p = ..., Yname = ..., X = ...)}, with the default \verb{K = } argument set by \code{useK()}. In order to specify \code{p}, \code{Yname}, and \code{K} without naming the arguments, the form \code{qPr(..., ..., NA, ...)} must be used, explicitly giving \code{X} as third argument.
 }
 \examples{
 ### WARNING: the following examples, if run, might even take a minute or more.
 
 \donttest{
-## Use the example "prova_K" (knowledge) object 'Kexample'
+## Use the example "K" object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -131,7 +139,9 @@ probs$value
 }
 }
 \seealso{
-\code{\link[=learn]{learn()}}, to generate the "prova_K" (knowledge) objects required by \code{qPr()}.
+\code{\link[=learn]{learn()}}, to generate "K" objects required by \code{qPr()}.
+
+\code{\link[=useK]{useK()}} to set a "K" object as default in all \verb{K = } arguments.
 
 \code{\link[=Pr]{Pr()}} to calculate joint and conditional probabilities.
 

@@ -2,30 +2,30 @@
 % Please edit documentation in R/display.R
 \name{print.prova_K}
 \alias{print.prova_K}
-\title{Print summary of a "prova_K" (knowledge) object}
+\title{Print summary of a "K" (more precisely "prova_K") object}
 \usage{
 \method{print}{prova_K}(x, ...)
 }
 \arguments{
-\item{x}{Object of class "prova_K" (knowledge), output of \code{\link[=learn]{learn()}}.}
+\item{x}{Object of class "K" (more precisely "prova_K"), output of \code{\link[=learn]{learn()}}.}
 
 \item{...}{Other parameters to be passed to \code{\link[utils:str]{utils::str()}}.}
 }
 \value{
-Its \code{x} argument, \link[base:invisible]{invisibly}; the \link[utils:str]{str}ucture of the corresponding "prova_K" (knowledge) object, if it exists, is also displayed.
+Its \code{x} argument, \link[base:invisible]{invisibly}; the \link[utils:str]{str}ucture of the corresponding "K" object, if it exists, is also displayed.
 }
 \description{
-This \code{\link[base:print]{base::print()}} method is a utility to display a summary of a "prova_K" (knowledge) object outputted by \code{\link[=learn]{learn()}}, internally using \code{\link[utils:str]{utils::str()}}. It also display a summary if \code{\link[=learn]{learn()}}'s value is only the path to the directory of the rds file containing the "prova_K" (knowledge) object itself (see argument \verb{valueisK = } in \code{\link[=learn]{learn()}}), by internally retrieving the object. To get a summary of a "prova_K" (knowledge) object in a given directory or rds file, the user can explicitly call \verb{print.prova_K(<file path>)}.
+This \code{\link[base:print]{base::print()}} method is a utility to display a summary of a "K" (more precisely "prova_K") object outputted by \code{\link[=learn]{learn()}}, internally using \code{\link[utils:str]{utils::str()}}. It also display a summary if \code{\link[=learn]{learn()}}'s value is only the path to the directory of the rds file containing the "K" object itself (see argument \verb{valueisK = } in \code{\link[=learn]{learn()}}), by internally retrieving the object. To get a summary of a "K" object in a given directory or RDS file, the user can explicitly call \verb{print.prova_K(<file path>)}.
 }
 \examples{
-## Display a summary of the example "prova_K" (knowledge) object
+## Display a summary of the example "K" object
 ## calculated from the "penguins" dataset
 print(Kexample)
 
 }
 \seealso{
-\code{\link[=learn]{learn()}}, to generate a "prova_K" (knowledge) object.
+\code{\link[=learn]{learn()}}, to generate a "K" (more precisely "prova_K") object.
 
-\link{Kexample} an example "prova_K" (knowledge) object included with \strong{Prova}.
+\link{Kexample} an example "K" object included with \strong{Prova}.
 }
 \concept{display}

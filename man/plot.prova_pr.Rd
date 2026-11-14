@@ -95,7 +95,7 @@ The label on the left y-axis is by default the text \verb{Pr(}\eqn{Y}\code{|}\eq
 Continuous variates with bounded domains, such as censored variates, may have singular probability values -- concentrated probability mass -- at the boundary points. When such singular points are present, their probability scale is shown in the \emph{right} y-axis.
 }
 \examples{
-## Use the "prova_K" (knowledge) object 'Kexample',
+## Use the "K" object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 

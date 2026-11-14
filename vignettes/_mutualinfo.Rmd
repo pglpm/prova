@@ -54,13 +54,13 @@ MIgentoo <- readRDS('MIgentoo.rds')
 
 This vignette gives an introduction and guide to the visual and quantitative capabilities and functions of the **Prova** package, for the study of associations, correlations, and links.
 
-See the `vignette('start')` for an introduction to the package. The present vignette continues with the same example and dataset.
+See the `vignette('intro')` for an introduction to the package. The present vignette continues with the same example and dataset.
 
 \
 
 # Probabilities and associations
 
-The `vignette('start')` focuses on the dataset `datasets::penguins`, and shows how to calculate probabilities of single and joint variates from that dataset; also probabilities conditional on given variates. These probabilities refers to a *new unit*; for example:
+The `vignette('intro')` focuses on the dataset `datasets::penguins`, and shows how to calculate probabilities of single and joint variates from that dataset; also probabilities conditional on given variates. These probabilities refers to a *new unit*; for example:
 
 - If we find that $\mathrm{Pr}(\text{species}\mo \text{Adelie}) = 44\%$, then there's a 44% probability that the next penguin we sample (from the same population) is of the *Adélie* species.
 - If we find that $\mathrm{Pr}(\text{species}\mo \text{Gentoo} \,\vert\, \text{island} \mo \text{Biscoe}) = 1\%$, then if we have a new penguin, and we know it is from Biscoe island, there's a 1% probability that it is of the *Gentoo* species.
@@ -86,7 +86,7 @@ library('prova')
 set.seed(10)
 ```
 
-As in the `vignette('start')`, we work with a specific population of penguins, of which we have 344 sample data stored in the dataset `datasets::penguins`, included in R version 4.5.0 and above. For your convenience, for instance if you have an older R version, you can also download the shuffled dataset as the CSV file [`penguins_shuffled.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv), then load it with the `pread.csv()` function as follows:
+As in the `vignette('intro')`, we work with a specific population of penguins, of which we have 344 sample data stored in the dataset `datasets::penguins`, included in R version 4.5.0 and above. For your convenience, for instance if you have an older R version, you can also download the shuffled dataset as the CSV file [`penguins_shuffled.csv`](https://github.com/pglpm/prova/raw/main/vignettes/penguins_shuffled.csv), then load it with the `pread.csv()` function as follows:
 
 ```{r loadpenguins, eval = TRUE, echo = TRUE}
 if(!exists('penguins')){
@@ -99,7 +99,9 @@ We assume that we have already learned all predictive information from this data
 ```{r loadK, eval = TRUE, echo = TRUE}
 K <- 'Kall.rds'
 ```
-in this case `K` is just a character string pointing to the file containing the actual "Knowledge" object.
+
+Note that we could set this "K" object as default for all `K = ` arguments in the following calculations, by calling the function `useK(K)`, as explained in the `vignette('intro')`. Feel free to do so!
+
 
 ## Generating new samples {#newsamples}
 
@@ -188,7 +190,7 @@ pplot(x = samples$body_mass, y = samples$species,
 
 Note again how `pplot()` automatically add a jitter to the discrete variate `species`, but not to the continuous `body_mass`.
 
-From the plot we see that there is an association between the Adélie and Chinstrap species and lighter body mass, around 3500 g; and between the Gentoo species and heavier body mass, around 5000 g. Incidentally, this reflects the probability plot at the end of the `vignette('start')`.
+From the plot we see that there is an association between the Adélie and Chinstrap species and lighter body mass, around 3500 g; and between the Gentoo species and heavier body mass, around 5000 g. Incidentally, this reflects the probability plot at the end of the `vignette('intro')`.
 
 ## Samples and plots for different subpopulations {#subpopplots}
 

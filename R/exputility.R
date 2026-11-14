@@ -37,7 +37,7 @@
 #' [Pr()] to calculate joint and conditional probabilities.
 #'
 #' @examples
-#' ## Use the example "prova_K" (knowledge) object 'Kexample'
+#' ## Use the example "K" object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'

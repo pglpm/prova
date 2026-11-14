@@ -24,7 +24,15 @@ Pr(
 
 \item{X}{Matrix or data.table, or \code{NULL} or \code{NA} (default): set of values of variates in the conditional of the probability of \code{Y}. If \code{NA} or \code{NULL}, no conditioning is made (besides the conditioning on knowledge \code{K}). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.}
 
-\item{K}{A "prova_K" (knowledge) object produced by \code{\link[=learn]{learn()}}. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option \code{'prova.K'} in \link[base:options]{options()}, in case the user has stored a "prova_K" object or its path in this option. See "Details" for the interpretation of unnamed arguments.}
+\item{K}{One of these alternatives:
+\itemize{
+\item A "K" (more precisely "prova_K") object.
+\item A character string of the path to an \link[base:readRDS]{RDS} file (typically created by \code{learn()}) containing a valid "K" object.
+\item A character string of the path to a directory (also typically created by \code{learn()}) containing such an \link[base:readRDS]{RDS} file of a "K" object.
+\item For function \code{getK()} it can also be \code{NULL} or omitted, if a default \verb{K = } argument has been defined with \code{useK()}.
+}
+
+Alternatively, a default \verb{K = } argument can be set with \code{useK()}, in which case the \verb{K = } argument may be omitted. See "Details" for the interpretation of unnamed arguments.}
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{Y} and \code{X}. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for \code{Y} and \code{X} variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by \code{'<='} or \code{'lower'} or\code{'left'} or \code{-1}; a right-open interval \eqn{Y \ge y} is indicated by \code{'>='} or \code{'upper'} or \code{'right'} or \code{+1}. Values \code{NULL}, \code{'=='}, \code{0} indicate that a point value \code{Y = y} (not an interval) should be calculated. \strong{Warning}: the semi-open intervals \emph{always} include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} the user should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to \emph{more} than 1.}
 
@@ -59,7 +67,7 @@ An object of class "prova_pr" (probability), which is a list consisting of the f
 \item \code{'value.acc'}, \code{quantiles.acc}: arrays with the numerical accuracies (roughly speaking a standard deviation) of the Monte Carlo calculations for the \code{'values'} and \code{'quantiles'} elements.
 \item \code{'density'}: numerical vector as long as number of rows in \code{Y}, used mainly for \code{\link[=plot.prova_pr]{plot.prova_pr()}}. It is the order of the probability density the \code{Y}-values: values with \code{0} are actual probabilities; values with \code{1} are one-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y}; values with \code{2} are two-dimensional probability densities \eqn{\mathrm{p}(\dotso)\,\mathrm{d}y_1\,\mathrm{d}y_2}; and so on.
 \item \code{'Y'}, \code{'X'}, \code{'tails'}: copies of the \code{Y}, \code{X}, \code{tails} arguments.
-\item \code{'K'}: name of the "prova_K" (knowledge) object used in the calculation.
+\item \code{'K'}: name of the "K" object used in the calculation.
 }
 }
 \description{
@@ -70,9 +78,9 @@ This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert 
 
 \emph{Tail probabilities.} For some variates in \code{Y} or \code{X}, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .} Tail values are inputted via the \code{'tails'} argument; see "Usage". Note that nominal variates, strictly speaking, have no meaningful ordering, so the "\eqn{\ge}" and "\eqn{\le}" relations are not meaningful for them. For this kind of variates the "\eqn{\ge}" relation is understood in the sense of the value order appearing in the \link{metadata} file.
 
-\emph{Arguments.} The default value of the \verb{K = } argument is the knowledge object stored in the option \code{'prova.K'} in \link[base:getOption]{options()}, which the user may have previously declared with \code{useK()}. This way you can save a lot of \code{K = ...}-typing in this and other functions.
+\emph{Arguments.} A default value for the \verb{K = } argument can be set (and unset) with \code{useK()}. When this is done, the \verb{K = } argument may be omitted, saving a lot of \code{K = ...}-typing in this and other functions.
 
-Therefore if \code{Pr()} is called with one unnamed argument, \code{Pr(...)}, then it is interpreted as \code{Pr(Y = ...)}, with \code{X = NA} and the \code{K} object retrieved from \link[base:getOption]{options()}. If \code{Pr()} is called with two unnamed arguments, \code{Pr(..., ...)}, then it is interpreted as \code{Pr(Y = ..., X = ...)} and the \code{K} object retrieved from \link[base:getOption]{options()}. If it is called with three unnamed arguments, then it is interpreted as \code{Pr(Y = ..., X = ..., K = ...)}, with \code{K} explicitly given. In order to specify \code{Y} and \code{K} without naming the arguments, the form \code{Pr(..., NA, ...)} must be used, explicitly giving \code{X} as second argument.
+Therefore if \code{Pr()} is called with one unnamed argument, \code{Pr(...)}, then it is interpreted as \code{Pr(Y = ...)}, with \code{X = NA} and the default \verb{K = } argument set by \code{useK()}. If \code{Pr()} is called with two unnamed arguments, \code{Pr(..., ...)}, then it is interpreted as \code{Pr(Y = ..., X = ...)} and the default \verb{K = } argument set by \code{useK()}. If it is called with three unnamed arguments, then it is interpreted as \code{Pr(Y = ..., X = ..., K = ...)}, with \code{K} explicitly given, overriding any default set by \code{useK()}. In order to specify \code{Y} and \code{K} without naming the arguments, the form \code{Pr(..., NA, ...)} must be used, explicitly giving \code{X} as second argument.
 
 \emph{Revisabilities.} This function also outputs the "revisability" of the posterior probabilities above, that is, probabilities such as \eqn{\mathrm{Pr}(Y = y \vert X = x, \text{new data}, K)} that we could have if more learning data were provided, as well as a number of samples of the possible values of such probability. This revisability can be outputted in two ways; the user can choose either, or both, or none:
 \itemize{
@@ -100,7 +108,7 @@ Each variate in each argument \code{Y}, \code{X} can be specified either as a po
 See \code{vignette('intro')} for example uses.
 }
 \examples{
-## Use the "prova_K" (knowledge) object 'Kexample',
+## Use the "K" object 'Kexample',
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 
@@ -222,14 +230,9 @@ probs$value
 probs$quantiles[, , c('5.5\%', '94.5\%')]
 
 
-## Before the next example, save the current options() state
-oldopt <- getOption('prova.K')
-
 ## ## Example 7:
-## We save the 'Kexample' object in options(prova.K = ...),
-## so we don't need to give the 'K' argument
-
-options(prova.K = Kexample)
+## To omit 'K =' arguments, we can set a default one with useK()
+useK(Kexample)
 
 ## Calculate the probability that an unknown penguin from this population
 ## is of species 'Adelie'
@@ -241,9 +244,8 @@ probs <- Pr( data.frame(species = 'Adelie') )
 
 probs <- Pr( data.frame(species = 'Adelie'), data.frame(bill_len = 43) )
 
-
-## Restore original options() state
-options(prova.K = oldopt)
+#' ## Remove any default 'K =' argument
+useK()
 
 }
 \references{
@@ -258,6 +260,8 @@ options(prova.K = oldopt)
 }
 \seealso{
 \code{\link[=learn]{learn()}}, to generate the \code{K}nowledge objects required by \code{Pr()}.
+
+\code{\link[=useK]{useK()}} to set a "K" object as default in all \verb{K = } arguments.
 
 \code{\link[=plot.prova_pr]{plot.prova_pr()}} to plot probabilities and quantiles calculated by \code{Pr()}.
 

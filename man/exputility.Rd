@@ -34,7 +34,7 @@ This function performs such calculation.
 Since the probabilities may be subject to revision if more learning data become available, the expected utilities themselves are subject to revision. The present function also calculates this revisability, expressing it as samples and as quantiles, similarly to what is done by the function \code{Pr()}.
 }
 \examples{
-## Use the example "prova_K" (knowledge) object 'Kexample'
+## Use the example "K" object 'Kexample'
 ## calculated from the "penguins" dataset;
 ## variates: 'species' and 'bill_len'
 

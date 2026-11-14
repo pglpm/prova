@@ -5,7 +5,13 @@
 #' @param n Positive integer: number of samples to draw.
 #' @param Ynames Character vector: names of variates to draw jointly
 #' @param X Matrix or data.table, or `NULL` or `NA` (default): set of values of variates in the conditional of the probability of `Y`. If `NA` or `NULL`, no conditioning is made (besides the conditioning on knowledge `K`). One variate per column, one set of values per row. See "Details" for the interpretation of unnamed arguments.
-#' @param K A "prova_K" (knowledge) object produced by [learn()]. It can also be a path to a 'K.rds' file containing such object, or to a directory containing one. The default is the value of the option `'prova.K'` in [options()][base::options()], in case the user has stored a "prova_K" object or its path in this option.
+#' @param K One of these alternatives:
+#' - A "K" (more precisely "prova_K") object.
+#' - A character string of the path to an [RDS][base::readRDS] file (typically created by `learn()`) containing a valid "K" object.
+#' - A character string of the path to a directory (also typically created by `learn()`) containing such an [RDS][base::readRDS] file of a "K" object.
+#' - For function `getK()` it can also be `NULL` or omitted, if a default `K = ` argument has been defined with `useK()`.
+#'
+#' Alternatively, a default `K = ` argument can be set with `useK()`, in which case the `K = ` argument may be omitted. See "Details" for the interpretation of unnamed arguments.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
 #' @param mcsamples Vector of integers, or `'all'`, or `NULL` (default): which Monte Carlo samples calculated by the [learn()] function should be used to draw the variate values. The default is to choose a random subset if `n` is smaller than their number, otherwise to recycle them as necessary.
 #' @param parallel Not used: this function does not use parallelization.
@@ -14,21 +20,23 @@
 #'
 #' Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails` (see *Tail probabilities* in the [Pr()] documentation).
 #'
-#' The default value of the `K = ` argument is the knowledge object stored in the option `'prova.K'` in [options()][base::getOption()], which you may have previously set with `options(prova.K = ...)`. This way you can save a lot of `K = ...`-typing in this and other functions.
+#' A default value for the `K = ` argument can be set (and unset) with `useK()`. When this is done, the `K = ` argument may be omitted, saving a lot of `K = ...`-typing in this and other functions.
 #'
-#' Therefore if `rPr()` is called with two unnamed arguments, `rPr(..., ...)`, then it is interpreted as `rPr(n = ..., Ynames = ...)`, with `X = NA` and the `K` object retrieved from [options()][base::getOption()]. If it is called with three unnamed arguments, then it is interpreted as `rPr(n = ..., Ynames = ..., X = ...)`, with `K` retrieved from [options()][base::getOption()]. In order to specify `n`, `Ynames`, and `K` without naming the arguments, the form `rPr(..., ..., NA, ...)` must be used, explicitly giving `X` as third argument.
+#' Therefore if `rPr()` is called with two unnamed arguments, `rPr(..., ...)`, then it is interpreted as `rPr(n = ..., Ynames = ...)`, with `X = NA` and the default `K = ` argument set by `useK()`. If it is called with three unnamed arguments, then it is interpreted as `rPr(n = ..., Ynames = ..., X = ...)`, with the default `K = ` argument set by `useK()`. In order to specify `n`, `Ynames`, and `K` without naming the arguments, the form `rPr(..., ..., NA, ...)` must be used, explicitly giving `X` as third argument.
 #'
 #' @return A [data frame][base::data.frame()] of joint draws of the variates `Ynames` from the posterior distribution, conditional on `X`. The row names of the data frame report the Monte Carlo sample (from [learn()]) used for that draw, and the total number of draws from that sample so far.
 #'
 #' @seealso
-#' [learn()], to generate the "prova_K" (knowledge) objects required by `qPr()`.
+#' [learn()], to generate "K" objects required by `qPr()`.
+#'
+#' [useK()] to set a "K" object as default in all `K = ` arguments.
 #'
 #' [Pr()] to calculate joint and conditional probabilities.
 #'
 #' [qPr()] to calculate quantiles.
 #'
 #' @examples
-#' ## Use the example "prova_K" (knowledge) object 'Kexample'
+#' ## Use the example "K" object 'Kexample'
 #' ## calculated from the "penguins" dataset;
 #' ## variates: 'species' and 'bill_len'
 #'
@@ -64,14 +72,9 @@
 #' c(datapoints)
 #'
 #'
-#' ## Before the next example, save the current options() state
-#' oldopt <- getOption('prova.K')
-#'
 #' ## ## Example 4:
-#' ## We save the 'Kexample' object in options(prova.K = ...),
-#' ## so we don't need to give the 'K' argument
-#'
-#' options(prova.K = Kexample)
+#' ## To omit 'K =' arguments, we can set a default one with useK()
+#' useK(Kexample)
 #'
 #' ## Generate 10 values of the 'species' variate,
 #' ## according to the frequency distribution estimated from the data
@@ -80,8 +83,8 @@
 #'
 #' c(datapoints)
 #'
-#' ## Restore original options() state
-#' options(prova.K = oldopt)
+#' ## Remove any default 'K =' argument
+#' useK()
 #'
 #' @import utils
 #' @import stats
@@ -92,7 +95,7 @@ rPr <- function(
     n,
     Ynames,
     X = NA,
-    K = getOption('prova.K'),
+    K = NULL,
     tails = NULL,
     mcsamples = NULL,
     parallel = NULL # unused
