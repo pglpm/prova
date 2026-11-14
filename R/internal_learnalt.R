@@ -1,7 +1,7 @@
-#' Monte Carlo computation of posterior probability distribution
+#' Monte Carlo computation of posterior probability distribution - alternative
 #'
 #' @description
-#' Compute the posterior joint probability distribution of the variates conditional on the given data, by means of Markov-chain Monte Carlo, using the package **Nimble**.
+#' Compute the posterior joint probability distribution of the variates conditional on the given data, by means of Markov-chain Monte Carlo, using the package **Nimble**. Alternative version that use Geyer's methods to compute ESS and MCSE, for development use.
 #'
 #' @param data A dataset, given as a [base::data.frame()] or as a file path to a CSV file. If missing or `NULL`, then the prior probability distribution is calculated.
 #' @param metadata [metadata] about the dataset's variates, given either as a [data frame][base::data.frame()] or as a file path to a CSV file.
@@ -1547,7 +1547,7 @@
 #' Worker function called by .learnalt()
 #'
 #' @description
-#' This worker function is defined outside of learn() in order to avoid import of spurious objects into the parallel workers, and from the parallel workes into the main R session, with waste of memory.
+#' This worker function is defined outside of learn() in order to avoid import of spurious objects into the parallel workers, and from the parallel workes into the main R session, with waste of memory. Alternative version that use Geyer's methods to compute ESS and MCSE, for development use.
 #'
 #' @import grDevices
 #' @import graphics

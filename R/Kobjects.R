@@ -1,5 +1,5 @@
 # Internal environment to hold a K-object, for user convenience
-.prova_envK <- new.env(parent = emptyenv())
+.prova_envir <- new.env(parent = emptyenv())
 
 
 #' @name "K" objects and arguments
@@ -88,17 +88,17 @@ NULL
 useK <- function(K = NULL){
     if(missing('K')){
         ## user wants to know the name of the K object last saved
-        if(exists('.Kname', envir = .prova_envK, inherits = FALSE)){
-            get('.Kname', envir = .prova_envK, inherits = FALSE)
+        if(exists('.Kname', envir = .prova_envir, inherits = FALSE)){
+            get('.Kname', envir = .prova_envir, inherits = FALSE)
         } else {
             NULL
         }
     } else if(is.null(K) || (is.logical(K) && !isTRUE(K))){
         ## user wants to remove K object
-        if(exists('.K', envir = .prova_envK, inherits = FALSE)){
-            Kname <- get('.Kname', envir = .prova_envK, inherits = FALSE)
-            rm('.K', envir = .prova_envK)
-            rm('.Kname', envir = .prova_envK)
+        if(exists('.K', envir = .prova_envir, inherits = FALSE)){
+            Kname <- get('.Kname', envir = .prova_envir, inherits = FALSE)
+            rm('.K', envir = .prova_envir)
+            rm('.Kname', envir = .prova_envir)
         } else {
             Kname <- NULL
         }
@@ -106,8 +106,8 @@ useK <- function(K = NULL){
     } else if(!inherits(try(getK(K), silent = TRUE), "try-error")){
         ## user wants to set K object as default
         Kname <- deparse(substitute(K))
-        assign('.K', K, envir = .prova_envK)
-        assign('.Kname', Kname, envir = .prova_envK)
+        assign('.K', K, envir = .prova_envir)
+        assign('.Kname', Kname, envir = .prova_envir)
         invisible(Kname)
     } else {
         stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file., or 'NULL'/'NA'/'FALSE', or empty.")
@@ -135,11 +135,11 @@ getK <- function(
     }
     ## Check if a default K object and load if true
     if(is.null(K)){
-        if(!exists('.K', envir = .prova_envK, inherits = FALSE)){
+        if(!exists('.K', envir = .prova_envir, inherits = FALSE)){
             stop('No "K" object is set as default.\nIf you want to omit "K =" arguments,\nplease set the "K" object that should be used for the session\nby means of the function "useK()".', call. = FALSE)
         } else {
-            K <- get('.K', envir = .prova_envK, inherits = FALSE)
-            Kname <- get('.Kname', envir = .prova_envK, inherits = FALSE)
+            K <- get('.K', envir = .prova_envir, inherits = FALSE)
+            Kname <- get('.Kname', envir = .prova_envir, inherits = FALSE)
         }
     }
 

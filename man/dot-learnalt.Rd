@@ -2,7 +2,7 @@
 % Please edit documentation in R/internal_learnalt.R
 \name{.learnalt}
 \alias{.learnalt}
-\title{Monte Carlo computation of posterior probability distribution}
+\title{Monte Carlo computation of posterior probability distribution - alternative}
 \usage{
 .learnalt(
   data,
@@ -119,7 +119,7 @@ It is recommended that an explicit argument \verb{outputdir = } be given, so as 
 During operation, computation progress and estimated end times for each node's computation are outputted to the file \code{'main.out'} in the output directory, and also to the console if argument \code{verbose} is \code{TRUE}. Note that the estimated end times are very approximate and often quite conservative.
 }
 \description{
-Compute the posterior joint probability distribution of the variates conditional on the given data, by means of Markov-chain Monte Carlo, using the package \strong{Nimble}.
+Compute the posterior joint probability distribution of the variates conditional on the given data, by means of Markov-chain Monte Carlo, using the package \strong{Nimble}. Alternative version that use Geyer's methods to compute ESS and MCSE, for development use.
 }
 \details{
 To use this function, the package \href{https://cran.r-project.org/package=nimble}{\strong{Nimble}} needs to be installed.

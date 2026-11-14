@@ -2,15 +2,26 @@
 
 Changes from v2.3.0 (previous CRAN version):
 
+* Fixed a bug that shuffled probability values in calculations involving several ordinal or nominal variates at once. It is recommended that you compare your previous results involving multiple join ordinal/nominal variates with results obtained with this new version of Prova.
+
+* Added the convenience function `useK()`, which allows the user to set (and unset) a default `K = ` argument in all functions subsequently used, so that it can be omitted. This should save some `K = ...` typing. (This function works through a package-level environment, `.prova_envir`, which is invisible to the user.)
+
 * Added methods for functions `subset()` and `merge()`, to subset or merge probability objects. The `subset()` function has arguments that evaluate in a nonstandard way, making it easier to subset variate ranges.
+
 * Removed the `subset = ` argument in the plot and print functions, as this functionality is now provided by the `subset()` method.
+
 * Now the `tails=` argument in several functions also works for nominal variates. For this kind of variates it must be understood in a special sense; see documentation in `Pr()`.
-* Fixed a bug that shuffled probability values in calculations involving several ordinal or nominal variates at once.
-* Corrected behaviour of argument `cex = ` in plot functions, and a bug introduced by the correction.
+
+* Corrected behaviour of argument `cex = ` in plot functions.
+
 * New possible value for `quantiles.spread` and corrected behaviour of this argument.
+
 * New available values `FALSE` and `NA` for `plot()`'s `legend =` argument.
+
 * Modified progress output of `learn()`.
-* Slightly modified convergence criterion in `learn()`, now more robust to numerical singularities.
+
+* The internal computations of Monte Carlo Standard Errors and Effective Sample Sizes now rely on batch-mean methods rather than Geyer's methods (the validity of the latter was uncertain, because the chains are non-reversible in Prova). Slightly modified convergence criterion in `learn()`, now more robust to numerical singularities.
+
 * Corrected and improved documentation.
 
 
