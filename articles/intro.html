@@ -1066,6 +1066,11 @@ longer time on your computer:</p>
 <span>    outputdir <span class="op">=</span> <span class="st">'penguin_inference'</span>,</span>
 <span>    parallel <span class="op">=</span> <span class="fl">4</span> <span class="co">## how many nodes to use for the computation</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">##</span></span>
+<span><span class="co">## Saving output in directory</span></span>
+<span><span class="co">## penguin_inference_10-V8_D10_S3600_yymmddTHHMMSS</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Prova v3.0.0.</span></span>
 <span><span class="co">## Registered socket cluster with 4 nodes on host ‘localhost’.</span></span>
 <span><span class="co">## Learning from 10 datapoints, 8 variates.</span></span>
 <span><span class="co">## Starting Monte Carlo sampling of 3600 samples by 8 chains</span></span>
@@ -1075,39 +1080,41 @@ longer time on your computer:</p>
 <span><span class="co">## Node logs are being saved in individual files.</span></span>
 <span><span class="co">## C-compiling samplers appropriate to the variates (Nimble v1.4.3)</span></span>
 <span><span class="co">## this can take tens of minutes. Please wait...</span></span>
-<span><span class="co">## Compiled node 1. Number of samplers: 1078.</span></span>
+<span><span class="co">## Compiled node 1. Number of samplers: 1078.             </span></span>
 <span><span class="co">## Estimated end times, updated yyyy-mm-dd HH:MM:</span></span>
-<span><span class="co">## Node 1 finished.</span></span>
-<span><span class="co">## Node 2 finished.</span></span>
-<span><span class="co">## Node 3 finished.</span></span>
-<span><span class="co">## Node 4 finished.</span></span>
-<span><span class="co">## </span></span>
+<span><span class="co">## Node 1: finished.</span></span>
+<span><span class="co">## Node 2: finished.</span></span>
+<span><span class="co">## Node 3: finished.</span></span>
+<span><span class="co">## Node 4: finished.</span></span>
 <span><span class="co">## Finished Monte Carlo sampling.</span></span>
-<span><span class="co">## Highest number of Monte Carlo iterations across chains: 96260.</span></span>
+<span><span class="co">## Highest number of Monte Carlo iterations across chains: 36000.</span></span>
 <span><span class="co">## Highest number of used mixture components: 5.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Checking test data</span></span>
 <span><span class="co">## (#1 #2 #3 #4 #5 #6 #7 #8 #9 #10):</span></span>
-<span><span class="co">## abs. quantile error: 0.0382 to 0.332</span></span>
-<span><span class="co">## quantile width: 1.9 to 9.22</span></span>
-<span><span class="co">## rel. quantile error: 0.0201 to 0.036</span></span>
-<span><span class="co">## ESS from rel. qt. error: 774 to 2480</span></span>
-<span><span class="co">## ESS: 2000 to 3970</span></span>
-<span><span class="co">## needed thinning: 1.45 to 4.65</span></span>
-<span><span class="co">## log-average: -20.7 to -1.83</span></span>
+<span><span class="co">## max abs. quantile error: 0.0412 to 0.353</span></span>
+<span><span class="co">## quantile width: 1.34 to 8.81</span></span>
+<span><span class="co">## max rel. quantile error: 0.0209 to 0.0401</span></span>
+<span><span class="co">## min ESS from rel. qt. error: 621 to 2280</span></span>
+<span><span class="co">## MCSE: 0.00606 to 0.065</span></span>
+<span><span class="co">## rel. MCSE: 0.0143 to 0.024</span></span>
+<span><span class="co">## quantl-rel. MCSE: 0.00452 to 0.00763</span></span>
+<span><span class="co">## ESS: 1740 to 4860</span></span>
+<span><span class="co">## needed thinning: 1.58 to 5.79</span></span>
+<span><span class="co">## log-average: -19.5 to -1.2</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Plotting final Monte Carlo traces and marginal samples...</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Total computation time: 12 mins</span></span>
-<span><span class="co">## Average preparation &amp; finalization time: 1.8 mins.</span></span>
-<span><span class="co">## Average Monte Carlo time per chain: 2.5 mins.</span></span>
+<span><span class="co">## Total computation time: 5.2 mins</span></span>
+<span><span class="co">## Average preparation &amp; finalization time: 1.9 mins.</span></span>
+<span><span class="co">## Average Monte Carlo time per chain: 1.2 mins.</span></span>
 <span><span class="co">## Max total memory used: approx 3100MB.</span></span>
 <span><span class="co">## Max memory used per node: approx 770MB.</span></span>
 <span><span class="co">## Removing temporary output files.</span></span>
 <span><span class="co">## Finished.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## ***********************************************</span></span>
-<span><span class="co">##  Output saved in directory</span></span>
+<span><span class="co">## Output saved in directory</span></span>
 <span><span class="co">## penguin_inference_10-V8_D10_S3600_yymmddTHHMMSS</span></span>
 <span><span class="co">## ***********************************************</span></span></code></pre></div>
 <p>The initial output gives a summary of the sample size, number of
@@ -1124,7 +1131,7 @@ larger than this. The desired number of samples and maximal Monte Carlo
 standard error can be specified with the &lt;code&gt;nsamples&lt;/code&gt;,
 &lt;code&gt;minESS&lt;/code&gt;, and &lt;code&gt;maxrelMCSE&lt;/code&gt; arguments.&lt;/p&gt;"><sup>2</sup></a> The
 inference above, with 10 datasamples and 8 variates, took around 3 GB
-and 10 minutes to complete on 4 cores.</p>
+and less than 10 minutes to complete on 4 cores.</p>
 <p>The results of this main inference are what we call a “K” object (for
 ‘Knowledge’ or ‘Known’). This object is now stored in the compressed
 file <code>K.rds</code> (around 32 MB) within the specified output
@@ -2166,7 +2173,7 @@ the code below); this time we use 8 parallel cores:</p>
 <span>    parallel <span class="op">=</span> <span class="fl">8</span> <span class="co">## how many nodes to use for the computation</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">## [Output omitted]</span></span></code></pre></div>
-<p>The calculation with 344 datasamples took around 7 GB and 50 min.</p>
+<p>The calculation with 344 datasamples took around 7 GB and 30 min.</p>
 <p>The results of this final inference are stored in the compressed file
 <code>K.rds</code> within the new output directory. The object produced
 by the computation above can be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds" class="external-link"><code>Kall.rds</code></a>.

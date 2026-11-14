@@ -576,6 +576,11 @@ K10 <- learn(
     outputdir = 'penguin_inference',
     parallel = 4 ## how many nodes to use for the computation
 )
+##
+## Saving output in directory
+## penguin_inference_10-V8_D10_S3600_yymmddTHHMMSS
+## 
+## Prova v3.0.0.
 ## Registered socket cluster with 4 nodes on host ‘localhost’.
 ## Learning from 10 datapoints, 8 variates.
 ## Starting Monte Carlo sampling of 3600 samples by 8 chains
@@ -585,39 +590,41 @@ K10 <- learn(
 ## Node logs are being saved in individual files.
 ## C-compiling samplers appropriate to the variates (Nimble v1.4.3)
 ## this can take tens of minutes. Please wait...
-## Compiled node 1. Number of samplers: 1078.
+## Compiled node 1. Number of samplers: 1078.             
 ## Estimated end times, updated yyyy-mm-dd HH:MM:
-## Node 1 finished.
-## Node 2 finished.
-## Node 3 finished.
-## Node 4 finished.
-## 
+## Node 1: finished.
+## Node 2: finished.
+## Node 3: finished.
+## Node 4: finished.
 ## Finished Monte Carlo sampling.
-## Highest number of Monte Carlo iterations across chains: 96260.
+## Highest number of Monte Carlo iterations across chains: 36000.
 ## Highest number of used mixture components: 5.
 ## 
 ## Checking test data
 ## (#1 #2 #3 #4 #5 #6 #7 #8 #9 #10):
-## abs. quantile error: 0.0382 to 0.332
-## quantile width: 1.9 to 9.22
-## rel. quantile error: 0.0201 to 0.036
-## ESS from rel. qt. error: 774 to 2480
-## ESS: 2000 to 3970
-## needed thinning: 1.45 to 4.65
-## log-average: -20.7 to -1.83
+## max abs. quantile error: 0.0412 to 0.353
+## quantile width: 1.34 to 8.81
+## max rel. quantile error: 0.0209 to 0.0401
+## min ESS from rel. qt. error: 621 to 2280
+## MCSE: 0.00606 to 0.065
+## rel. MCSE: 0.0143 to 0.024
+## quantl-rel. MCSE: 0.00452 to 0.00763
+## ESS: 1740 to 4860
+## needed thinning: 1.58 to 5.79
+## log-average: -19.5 to -1.2
 ## 
 ## Plotting final Monte Carlo traces and marginal samples...
 ## 
-## Total computation time: 12 mins
-## Average preparation & finalization time: 1.8 mins.
-## Average Monte Carlo time per chain: 2.5 mins.
+## Total computation time: 5.2 mins
+## Average preparation & finalization time: 1.9 mins.
+## Average Monte Carlo time per chain: 1.2 mins.
 ## Max total memory used: approx 3100MB.
 ## Max memory used per node: approx 770MB.
 ## Removing temporary output files.
 ## Finished.
 ## 
 ## ***********************************************
-##  Output saved in directory
+## Output saved in directory
 ## penguin_inference_10-V8_D10_S3600_yymmddTHHMMSS
 ## ***********************************************
 ```
@@ -628,7 +635,7 @@ end times, one for each computation node, are periodically updated. Once
 the computation is finished, some final information about the underlying
 Monte Carlo computation and time and memory use is provided.[^2] The
 inference above, with 10 datasamples and 8 variates, took around 3 GB
-and 10 minutes to complete on 4 cores.
+and less than 10 minutes to complete on 4 cores.
 
 The results of this main inference are what we call a “K” object (for
 ‘Knowledge’ or ‘Known’). This object is now stored in the compressed
@@ -1833,7 +1840,7 @@ Kall <- learn(
 ## [Output omitted]
 ```
 
-The calculation with 344 datasamples took around 7 GB and 50 min.
+The calculation with 344 datasamples took around 7 GB and 30 min.
 
 The results of this final inference are stored in the compressed file
 `K.rds` within the new output directory. The object produced by the
