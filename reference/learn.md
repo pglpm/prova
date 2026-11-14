@@ -410,16 +410,20 @@ About Markov-chain Monte Carlo and "convergence":
   <doi:10.1146/annurev-statistics-031219-041300>.
 
 - Flegal & al. (2008): *Markov chain Monte Carlo: can we trust the third
-  significant figure?*
+  significant figure?*, <doi:10.1214/08-STS257>.
 
-, <doi:10.1214/08-STS257>. Jones & al. (2006): *Fixed-width output
-analysis for Markov chain Monte Carlo*,
-<doi:10.1198/016214506000000492>. Gilks & al. (1998): *Markov Chain
-Monte Carlo in Practice*, Chapman & Hall/CRC <doi:10.1201/b14835>. D. J.
-C. MacKay (2005): *Information Theory, Inference, and Learning
-Algorithms*, Cambridge University Press
-<https://www.inference.org.uk/itila/book.html>. Porta Mana
-<https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf>.
+- Jones & al. (2006): *Fixed-width output analysis for Markov chain
+  Monte Carlo*, <doi:10.1198/016214506000000492>.
+
+- Gilks & al. (1998): *Markov Chain Monte Carlo in Practice*, Chapman &
+  Hall/CRC <doi:10.1201/b14835>.
+
+- D. J. C. MacKay (2005): *Information Theory, Inference, and Learning
+  Algorithms*, Cambridge University Press
+  <https://www.inference.org.uk/itila/book.html>.
+
+- Porta Mana
+  <https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf>.
 
 ## See also
 
@@ -468,7 +472,7 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/Rtmpu29GAl/prova-V1_D3_S10_261114T132356_18d133318151
+#> /tmp/RtmpwEVeZU/prova-V1_D3_S10_261114T133032_18cd4162643b
 #> Prova v3.0.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -496,9 +500,9 @@ K <- learn(
 #> log-average: -2.71 to -0.842
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 32 secs
-#> Average preparation & finalization time: 31 secs.
-#> Average Monte Carlo time per chain: 0.67 secs.
+#> Total computation time: 25 secs
+#> Average preparation & finalization time: 24 secs.
+#> Average Monte Carlo time per chain: 0.63 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per node: approx 340MB.
 #> Removing temporary output files.
@@ -506,7 +510,7 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/Rtmpu29GAl/prova-V1_D3_S10_261114T132356_18d133318151
+#> /tmp/RtmpwEVeZU/prova-V1_D3_S10_261114T133032_18cd4162643b
 #> **********************************************************
 
 ## Check structure of `K` object:
