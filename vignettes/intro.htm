@@ -48,8 +48,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -742,7 +743,7 @@ should obviously have different names.
 </dd>
 <dt>Variate type (<code>type</code>)</dt>
 <dd>
-<p><strong>Prova</strong> can handle three kinds of variates:</p>
+<strong>Prova</strong> can handle three kinds of variates:
 <ul>
 <li><code>nominal</code>: it can take on a finite number of discrete
 values, which do not have any natural ordering. Examples could be sex or
@@ -756,17 +757,17 @@ scale</a>.</li>
 number of continuous values, although they can be discretized or
 rounded. Examples could be age or weight.</li>
 </ul>
-<p>Many other types of variates exist. For example images and audio are
+Many other types of variates exist. For example images and audio are
 also types of variates; but <strong>Prova</strong> cannot handle these
 complex types. A simple type of variate that <strong>Prova</strong>
 cannot properly handle is the <em>cyclic</em> one, such as time of day.
 There are no clear-cut separations between different types of variates;
-thus it’s sometimes difficult to assess the type.</p>
+thus it’s sometimes difficult to assess the type.
 </dd>
 <dt>Domain minimum and maximum (<code>domainmin</code>,
 <code>domainmax</code>)</dt>
 <dd>
-<p>These are numbers, only defined for numeric-ordinal and continuous
+These are numbers, only defined for numeric-ordinal and continuous
 variates. These metadata are the minimum and maximum value a variate can
 take on in a given study. For example, in a study about health or
 employment of adults, a variate <em>age</em> might have a minimum of
@@ -774,11 +775,11 @@ employment of adults, a variate <em>age</em> might have a minimum of
 minimum would be 0. In a health study where people of 90 years or more
 are pooled together, the maximum would be 90 years. A minimum could also
 be minus-infinity, and a maximum plus-infinity. Obviously the minimum
-should be lower than the maximum.</p>
-<p>Sometimes the minimum or maximum is not clear-cut. For instance,
-there is no theoretical maximum on a person’s age, although we can
-consider an age of 300 impossible to reach today. In such cases the
-maximum or minimum can be taken to be plus or minus infinity.</p>
+should be lower than the maximum.
+Sometimes the minimum or maximum is not clear-cut. For instance, there
+is no theoretical maximum on a person’s age, although we can consider an
+age of 300 impossible to reach today. In such cases the maximum or
+minimum can be taken to be plus or minus infinity.
 </dd>
 <dt>Interval between values (<code>datastep</code>)</dt>
 <dd>
@@ -902,7 +903,7 @@ warnings of the helper function:</p>
 <span id="cb4-64"><a href="#cb4-64" tabindex="-1"></a><span class="co"># Saved proposal metadata file as &quot;meta_penguins_temp.csv&quot; </span></span></code></pre></div>
 <p>The preliminary metadata file created by
 <code>metadatatemplate()</code> looks like this:</p>
-<table style="width:100%;">
+<table style="width:99%;">
 <colgroup>
 <col width="9%" />
 <col width="8%" />
@@ -1149,7 +1150,7 @@ was correctly guessed).</p>
 <code>meta_penguins_temp.csv</code> with our favourite editor, and
 correct and complete the guesses of the helper function. In this case we
 end up with the following corrected metadata:</p>
-<table style="width:100%;">
+<table style="width:99%;">
 <colgroup>
 <col width="11%" />
 <col width="10%" />
@@ -1324,57 +1325,64 @@ longer time on your computer:</p>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="at">outputdir =</span> <span class="st">&#39;penguin_inference&#39;</span>,</span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">4</span> <span class="do">## how many nodes to use for the computation</span></span>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>)</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="do">## Registered socket cluster with 4 nodes on host ‘localhost’.</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="do">## Learning from 10 datapoints, 8 variates.</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="do">## Starting Monte Carlo sampling of 3600 samples by 8 chains</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="do">## in a space of 1023 (effectively 3856) dimensions.</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="do">## Using 4 nodes: 450 samples per chain, max 2 chains per node.</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="do">## Requested:   ESS 450   rel.MCSE 0.0467.</span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="do">## Node logs are being saved in individual files.</span></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="do">## C-compiling samplers appropriate to the variates (Nimble v1.4.3)</span></span>
-<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="do">## this can take tens of minutes. Please wait...</span></span>
-<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="do">## Compiled node 1. Number of samplers: 1078.</span></span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="do">## Estimated end times, updated yyyy-mm-dd HH:MM:</span></span>
-<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="do">## Node 1 finished.</span></span>
-<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="do">## Node 2 finished.</span></span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="do">## Node 3 finished.</span></span>
-<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="do">## Node 4 finished.</span></span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="do">## Finished Monte Carlo sampling.</span></span>
-<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="do">## Highest number of Monte Carlo iterations across chains: 96260.</span></span>
-<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="do">## Highest number of used mixture components: 5.</span></span>
-<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="do">## Checking test data</span></span>
-<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="do">## (#1 #2 #3 #4 #5 #6 #7 #8 #9 #10):</span></span>
-<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="do">## abs. quantile error: 0.0382 to 0.332</span></span>
-<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a><span class="do">## quantile width: 1.9 to 9.22</span></span>
-<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a><span class="do">## rel. quantile error: 0.0201 to 0.036</span></span>
-<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a><span class="do">## ESS from rel. qt. error: 774 to 2480</span></span>
-<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a><span class="do">## ESS: 2000 to 3970</span></span>
-<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a><span class="do">## needed thinning: 1.45 to 4.65</span></span>
-<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a><span class="do">## log-average: -20.7 to -1.83</span></span>
-<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a><span class="do">## Plotting final Monte Carlo traces and marginal samples...</span></span>
-<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a><span class="do">## Total computation time: 12 mins</span></span>
-<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a><span class="do">## Average preparation &amp; finalization time: 1.8 mins.</span></span>
-<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a><span class="do">## Average Monte Carlo time per chain: 2.5 mins.</span></span>
-<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a><span class="do">## Max total memory used: approx 3100MB.</span></span>
-<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a><span class="do">## Max memory used per node: approx 770MB.</span></span>
-<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a><span class="do">## Removing temporary output files.</span></span>
-<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a><span class="do">## Finished.</span></span>
-<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a><span class="do">## ***********************************************</span></span>
-<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a><span class="do">##  Output saved in directory</span></span>
-<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a><span class="do">## penguin_inference_10-V8_D10_S3600_yymmddTHHMMSS</span></span>
-<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a><span class="do">## ***********************************************</span></span></code></pre></div>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="do">## Saving output in directory</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="do">## penguin_inference_10-V8_D10_S3600_yymmddTHHMMSS</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="do">## Prova v3.0.0.</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="do">## Registered socket cluster with 4 nodes on host ‘localhost’.</span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="do">## Learning from 10 datapoints, 8 variates.</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="do">## Starting Monte Carlo sampling of 3600 samples by 8 chains</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="do">## in a space of 1023 (effectively 3856) dimensions.</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="do">## Using 4 nodes: 450 samples per chain, max 2 chains per node.</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="do">## Requested:   ESS 450   rel.MCSE 0.0467.</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="do">## Node logs are being saved in individual files.</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="do">## C-compiling samplers appropriate to the variates (Nimble v1.4.3)</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="do">## this can take tens of minutes. Please wait...</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="do">## Compiled node 1. Number of samplers: 1078.             </span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="do">## Estimated end times, updated yyyy-mm-dd HH:MM:</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="do">## Node 1: finished.</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="do">## Node 2: finished.</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="do">## Node 3: finished.</span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="do">## Node 4: finished.</span></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="do">## Finished Monte Carlo sampling.</span></span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="do">## Highest number of Monte Carlo iterations across chains: 36000.</span></span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="do">## Highest number of used mixture components: 5.</span></span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a><span class="do">## Checking test data</span></span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a><span class="do">## (#1 #2 #3 #4 #5 #6 #7 #8 #9 #10):</span></span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a><span class="do">## max abs. quantile error: 0.0412 to 0.353</span></span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a><span class="do">## quantile width: 1.34 to 8.81</span></span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a><span class="do">## max rel. quantile error: 0.0209 to 0.0401</span></span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a><span class="do">## min ESS from rel. qt. error: 621 to 2280</span></span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a><span class="do">## MCSE: 0.00606 to 0.065</span></span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a><span class="do">## rel. MCSE: 0.0143 to 0.024</span></span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a><span class="do">## quantl-rel. MCSE: 0.00452 to 0.00763</span></span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a><span class="do">## ESS: 1740 to 4860</span></span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a><span class="do">## needed thinning: 1.58 to 5.79</span></span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a><span class="do">## log-average: -19.5 to -1.2</span></span>
+<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a><span class="do">## Plotting final Monte Carlo traces and marginal samples...</span></span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a><span class="do">## Total computation time: 5.2 mins</span></span>
+<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a><span class="do">## Average preparation &amp; finalization time: 1.9 mins.</span></span>
+<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a><span class="do">## Average Monte Carlo time per chain: 1.2 mins.</span></span>
+<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a><span class="do">## Max total memory used: approx 3100MB.</span></span>
+<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a><span class="do">## Max memory used per node: approx 770MB.</span></span>
+<span id="cb5-53"><a href="#cb5-53" tabindex="-1"></a><span class="do">## Removing temporary output files.</span></span>
+<span id="cb5-54"><a href="#cb5-54" tabindex="-1"></a><span class="do">## Finished.</span></span>
+<span id="cb5-55"><a href="#cb5-55" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb5-56"><a href="#cb5-56" tabindex="-1"></a><span class="do">## ***********************************************</span></span>
+<span id="cb5-57"><a href="#cb5-57" tabindex="-1"></a><span class="do">## Output saved in directory</span></span>
+<span id="cb5-58"><a href="#cb5-58" tabindex="-1"></a><span class="do">## penguin_inference_10-V8_D10_S3600_yymmddTHHMMSS</span></span>
+<span id="cb5-59"><a href="#cb5-59" tabindex="-1"></a><span class="do">## ***********************************************</span></span></code></pre></div>
 <p>The initial output gives a summary of the sample size, number of
 variates, saving directory, and other computational details. Estimated
 end times, one for each computation node, are periodically updated. Once
 the computation is finished, some final information about the underlying
 Monte Carlo computation and time and memory use is provided.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> The
 inference above, with 10 datasamples and 8 variates, took around 3 GB
-and 10 minutes to complete on 4 cores.</p>
+and less than 10 minutes to complete on 4 cores.</p>
 <p>The results of this main inference are what we call a “K” object (for
 ‘Knowledge’ or ‘Known’). This object is now stored in the compressed
 file <code>K.rds</code> (around 32 MB) within the specified output
@@ -2394,7 +2402,7 @@ the code below); this time we use 8 parallel cores:</p>
 <span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a>    <span class="at">parallel =</span> <span class="dv">8</span> <span class="do">## how many nodes to use for the computation</span></span>
 <span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a>)</span>
 <span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a><span class="do">## [Output omitted]</span></span></code></pre></div>
-<p>The calculation with 344 datasamples took around 7 GB and 50 min.</p>
+<p>The calculation with 344 datasamples took around 7 GB and 30 min.</p>
 <p>The results of this final inference are stored in the compressed file
 <code>K.rds</code> within the new output directory. The object produced
 by the computation above can be downloaded as the file <a href="https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds"><code>Kall.rds</code></a>.
