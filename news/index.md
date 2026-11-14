@@ -2,6 +2,8 @@
 
 ## Prova v3.0.0
 
+CRAN release: 2026-11-14
+
 Changes from v2.3.0 (previous CRAN version):
 
 - Fixed a bug that shuffled probability values in calculations involving

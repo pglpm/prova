@@ -67,11 +67,11 @@
 <span>  prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/missing.html" class="external-link">missing</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">||</span> <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>,</span>
 <span>  startupMCiterations <span class="op">=</span> <span class="fl">3600</span>,</span>
 <span>  minMCiterations <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  maxMCiterations <span class="op">=</span> <span class="op">+</span><span class="cn">Inf</span>,</span>
+<span>  maxMCiterations <span class="op">=</span> <span class="fl">9e+05</span>,</span>
 <span>  maxhours <span class="op">=</span> <span class="op">+</span><span class="cn">Inf</span>,</span>
 <span>  ncheckpoints <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  maxrelMCSE <span class="op">=</span> <span class="op">+</span><span class="cn">Inf</span>,</span>
-<span>  minESS <span class="op">=</span> <span class="fl">450</span>,</span>
+<span>  minESS <span class="op">=</span> <span class="fl">617</span>,</span>
 <span>  initES <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  thinning <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -151,39 +151,39 @@
 
 
 <dt id="arg-startupmciterations">startupMCiterations<a class="anchor" aria-label="anchor" href="#arg-startupmciterations"></a></dt>
-<dd><p>Integer, default 3600: number of initial Monte Carlo iterations.</p></dd>
+<dd><p>Integer, default 3600: number of initial Monte Carlo iterations per chain.</p></dd>
 
 
 <dt id="arg-minmciterations">minMCiterations<a class="anchor" aria-label="anchor" href="#arg-minmciterations"></a></dt>
-<dd><p>Integer, default 0: minimum number of Monte Carlo iterations to be doneby a chain.</p></dd>
+<dd><p>Integer, default 0: Do at least this many Monte Carlo iterations per chain.</p></dd>
 
 
 <dt id="arg-maxmciterations">maxMCiterations<a class="anchor" aria-label="anchor" href="#arg-maxmciterations"></a></dt>
-<dd><p>Integer, default <code>Inf</code>: Do at most this many Monte Carlo iterations per chain.</p></dd>
+<dd><p>Integer, default 900000: Do at most this many Monte Carlo iterations per chain. Data is saved to disk during computation, so the user should increase or decrease this number according to disk capacity and complexity of the data.</p></dd>
 
 
 <dt id="arg-maxhours">maxhours<a class="anchor" aria-label="anchor" href="#arg-maxhours"></a></dt>
-<dd><p>Numeric, default <code>Inf</code>: approximate time limit, in hours, for the Monte Carlo computation to last.</p></dd>
+<dd><p>Numeric, default <code>Inf</code>: Stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments <code>startupMCiterations</code> and <code>minMCiterations</code>.</p></dd>
 
 
 <dt id="arg-ncheckpoints">ncheckpoints<a class="anchor" aria-label="anchor" href="#arg-ncheckpoints"></a></dt>
-<dd><p>Integer or <code>NULL</code>, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If <code>NULL</code>, this is equal to number of variates + 2. If Inf, use all datapoints.</p></dd>
+<dd><p>Integer or <code>NULL</code>, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If <code>NULL</code>, this is equal to number of variates + 2. If <code>Inf</code>, use all datapoints.</p></dd>
 
 
 <dt id="arg-maxrelmcse">maxrelMCSE<a class="anchor" aria-label="anchor" href="#arg-maxrelmcse"></a></dt>
-<dd><p>Numeric positive, default <code>+Inf</code>: desired maximal <em>relative Monte Carlo Standard Error</em> of calculated probabilities. The default <code>+Inf</code> means that <code>minESS</code> is used instead. <code>maxrelMCSE</code> is related to <code>minESS</code> by \(\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}\).</p></dd>
+<dd><p>Numeric positive, default <code>+Inf</code>: desired maximal <em>relative Monte Carlo Standard Error</em> of calculated probabilities per chain. The default <code>+Inf</code> means that <code>minESS</code> is used instead. <code>maxrelMCSE</code> is related to <code>minESS</code> by \(\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}\).</p></dd>
 
 
 <dt id="arg-miness">minESS<a class="anchor" aria-label="anchor" href="#arg-miness"></a></dt>
-<dd><p>Numeric positive or <code>NULL</code>, default 450: desired minimal Monte Carlo <em>Expected Sample Size</em>. If <code>NULL</code>, it is equal to the final <code>nsamplesperchain</code>. <code>minESS</code> is related to <code>maxrelMCSE</code> by \(\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}\).</p></dd>
+<dd><p>Numeric positive or <code>NULL</code>, default 617: desired minimal Monte Carlo <em>Expected Sample Size</em> per chain. If <code>NULL</code>, it is equal to the final <code>nsamplesperchain</code>. <code>minESS</code> is related to <code>maxrelMCSE</code> by \(\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}\). The default value \(\mathrm{minESS} = 617\) corresponds to \(\mathrm{maxrelMCSE} = 0.4\).</p></dd>
 
 
 <dt id="arg-inites">initES<a class="anchor" aria-label="anchor" href="#arg-inites"></a></dt>
-<dd><p>Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.</p></dd>
+<dd><p>Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded per chain. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.</p></dd>
 
 
 <dt id="arg-thinning">thinning<a class="anchor" aria-label="anchor" href="#arg-thinning"></a></dt>
-<dd><p>Integer or <code>NULL</code> (default): thin out the Monte Carlo samples by this value. If <code>NULL</code>: let the diagnostics decide the thinning value.</p></dd>
+<dd><p>Integer or <code>NULL</code> (default): thin out the Monte Carlo samples by this value. If <code>NULL</code>: let diagnostics decide the thinning value.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -294,7 +294,7 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmpdcf9ty/prova-V1_D3_S10_261114T164431_1c1cc92e4cd</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmprqVTr2/prova-V1_D3_S10_261114T211436_19865381dd1d</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Prova v3.0.0.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Registered socket cluster with 1 nodes on host ‘localhost’.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Learning from 3 datapoints, 1 variates.</span>
@@ -322,18 +322,18 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> log-average: -2.71 to -0.842</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Plotting final Monte Carlo traces and marginal samples...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 38 secs</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 37 secs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.59 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total computation time: 36 secs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average preparation &amp; finalization time: 35 secs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Average Monte Carlo time per chain: 0.69 secs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max total memory used: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Max memory used per node: approx 340MB.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Removing temporary output files.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finished.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> *********************************************************</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Output saved in directory</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/Rtmpdcf9ty/prova-V1_D3_S10_261114T164431_1c1cc92e4cd</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> *********************************************************</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> /tmp/RtmprqVTr2/prova-V1_D3_S10_261114T211436_19865381dd1d</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> **********************************************************</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Check structure of `K` object:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">K</span><span class="op">)</span></span></span>

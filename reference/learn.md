@@ -24,11 +24,11 @@ learn(
   prior = missing(data) || is.null(data),
   startupMCiterations = 3600,
   minMCiterations = 0,
-  maxMCiterations = +Inf,
+  maxMCiterations = 9e+05,
   maxhours = +Inf,
   ncheckpoints = 12,
   maxrelMCSE = +Inf,
-  minESS = 450,
+  minESS = 617,
   initES = 8,
   thinning = NULL,
   verbose = TRUE,
@@ -159,55 +159,62 @@ learn(
 
 - startupMCiterations:
 
-  Integer, default 3600: number of initial Monte Carlo iterations.
+  Integer, default 3600: number of initial Monte Carlo iterations per
+  chain.
 
 - minMCiterations:
 
-  Integer, default 0: minimum number of Monte Carlo iterations to be
-  doneby a chain.
+  Integer, default 0: Do at least this many Monte Carlo iterations per
+  chain.
 
 - maxMCiterations:
 
-  Integer, default `Inf`: Do at most this many Monte Carlo iterations
-  per chain.
+  Integer, default 900000: Do at most this many Monte Carlo iterations
+  per chain. Data is saved to disk during computation, so the user
+  should increase or decrease this number according to disk capacity and
+  complexity of the data.
 
 - maxhours:
 
-  Numeric, default `Inf`: approximate time limit, in hours, for the
-  Monte Carlo computation to last.
+  Numeric, default `Inf`: Stop the Monte Carlo computation after
+  approximately this many hours, if it has not finished yet. A value of
+  0 finishes the computation as soon as possible, compatibly with the
+  arguments `startupMCiterations` and `minMCiterations`.
 
 - ncheckpoints:
 
   Integer or `NULL`, default 12: number of datapoints (per chain) to use
   for checking when the Monte Carlo computation should end. If `NULL`,
-  this is equal to number of variates + 2. If Inf, use all datapoints.
+  this is equal to number of variates + 2. If `Inf`, use all datapoints.
 
 - maxrelMCSE:
 
   Numeric positive, default `+Inf`: desired maximal *relative Monte
-  Carlo Standard Error* of calculated probabilities. The default `+Inf`
-  means that `minESS` is used instead. `maxrelMCSE` is related to
-  `minESS` by \\\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} +
-  \mathrm{initES}}\\.
+  Carlo Standard Error* of calculated probabilities per chain. The
+  default `+Inf` means that `minESS` is used instead. `maxrelMCSE` is
+  related to `minESS` by \\\mathrm{maxrelMCSE} =
+  1/\sqrt{\mathrm{minESS} + \mathrm{initES}}\\.
 
 - minESS:
 
-  Numeric positive or `NULL`, default 450: desired minimal Monte Carlo
-  *Expected Sample Size*. If `NULL`, it is equal to the final
+  Numeric positive or `NULL`, default 617: desired minimal Monte Carlo
+  *Expected Sample Size* per chain. If `NULL`, it is equal to the final
   `nsamplesperchain`. `minESS` is related to `maxrelMCSE` by
-  \\\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}\\.
+  \\\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}\\. The
+  default value \\\mathrm{minESS} = 617\\ corresponds to
+  \\\mathrm{maxrelMCSE} = 0.4\\.
 
 - initES:
 
   Numeric positive, default 8: number of initial "burn-in" samples,
-  separated by the Expected Sample Size, to be discarded. Note that the
-  Monte Carlo chain typically starts in a high-probability region, so
-  there is no reason to discard many initial samples.
+  separated by the Expected Sample Size, to be discarded per chain. Note
+  that the Monte Carlo chain typically starts in a high-probability
+  region, so there is no reason to discard many initial samples.
 
 - thinning:
 
   Integer or `NULL` (default): thin out the Monte Carlo samples by this
-  value. If `NULL`: let the diagnostics decide the thinning value.
+  value. If `NULL`: let diagnostics decide the thinning value.
 
 - verbose:
 
@@ -472,7 +479,7 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/Rtmpdcf9ty/prova-V1_D3_S10_261114T164431_1c1cc92e4cd
+#> /tmp/RtmprqVTr2/prova-V1_D3_S10_261114T211436_19865381dd1d
 #> Prova v3.0.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -500,18 +507,18 @@ K <- learn(
 #> log-average: -2.71 to -0.842
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 38 secs
-#> Average preparation & finalization time: 37 secs.
-#> Average Monte Carlo time per chain: 0.59 secs.
+#> Total computation time: 36 secs
+#> Average preparation & finalization time: 35 secs.
+#> Average Monte Carlo time per chain: 0.69 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per node: approx 340MB.
 #> Removing temporary output files.
 #> Finished.
 #> 
-#> *********************************************************
+#> **********************************************************
 #> Output saved in directory
-#> /tmp/Rtmpdcf9ty/prova-V1_D3_S10_261114T164431_1c1cc92e4cd
-#> *********************************************************
+#> /tmp/RtmprqVTr2/prova-V1_D3_S10_261114T211436_19865381dd1d
+#> **********************************************************
 
 ## Check structure of `K` object:
 str(K)
