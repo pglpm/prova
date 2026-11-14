@@ -22,8 +22,7 @@
 #' An example "K" (more precisely "prova_K") object obtained by means of the [learn()] function, using the [datasets::penguins] dataset and the metadata in [metadataExample], according to the call
 #'
 #' ```
-#' learn(data = penguins, metadata = metadataExample,
-#'   nsamples = 225, nchains = 15)
+#' learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
 #' ```
 #'
 #' It is a list that essentially contains posterior hyperparameters for drawing statistical inferences about the variates `species` and `bill_len`.
