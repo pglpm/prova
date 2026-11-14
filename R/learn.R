@@ -116,7 +116,7 @@
 #' - Kwon & al. (2025): *MCMC stopping rules in latent variable modelling*, <doi:10.1111/bmsp.12357>.
 #' - Vehtari & al. (2021): *Rank-normalization, folding, and localization: an improved R-hat for assessing convergence of MCMC*, <doi:10.1214/20-BA1221>.
 #' - Roy (2020): *Convergence diagnostics for Markov chain Monte Carlo*, <doi:10.1146/annurev-statistics-031219-041300>.
-#' - Flegal & al. (2008): *Markov chain Monte Carlo: can we trust the third significant figure?}*, <doi:10.1214/08-STS257>.
+#' - Flegal & al. (2008): *Markov chain Monte Carlo: can we trust the third significant figure?*, <doi:10.1214/08-STS257>.
 #' - Jones & al. (2006): *Fixed-width output analysis for Markov chain Monte Carlo*, <doi:10.1198/016214506000000492>.
 #' - Gilks & al. (1998): *Markov Chain Monte Carlo in Practice*, Chapman & Hall/CRC <doi:10.1201/b14835>.
 #' - D. J. C. MacKay (2005): *Information Theory, Inference, and Learning Algorithms*, Cambridge University Press <https://www.inference.org.uk/itila/book.html>.
