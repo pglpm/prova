@@ -64,14 +64,14 @@ K <- learn(data = penguins, metadata = meta_penguins)
 
 The object `K` (for "Knowledge" or "Known") encodes what has been learnt from data and metadata.
 
-Ask a statistical question about the penguin population. For example: given the data we have collected, what is the probability that a *new* penguin from this population is of species *Adélie*, if its bill length is 40 mm? In symbols,
+Ask a statistical question about the penguin population. For example: given the data we have collected, what is the *probability* that a *new* penguin from this population is of species 'Adélie', if its bill length is 40 mm? In probability notation:
 
 $$
 \mathrm{Pr}(\text{species = Adelie} \thinspace\vert\thinspace\mathopen{}
 \text{bill len = 40 mm}, K)
 $$
 
-where $K$ stands for the knowledge acquired from data and metadata. To answer this question, use the function `Pr()`, and print a summary of the result:
+where $K$ stands for the knowledge acquired from data and metadata. To answer this question, use the function `Pr()`, which has arguments corresponding to the notation above, and print a summary of the result:
 ```r
 prob <- Pr(
     data.frame(species = 'Adelie'), # predictand
@@ -86,17 +86,17 @@ print(prob)
 # species  value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
 #   Adelie 0.94827 0.00049 0.91272 0.93652 0.96289 0.97634
 ```
-The answer is that there is roughly a 10% probability that a new penguin, among those with a 40 mm bill length, is of species *Adélie*.
+The answer is that there is roughly a 95% probability that a new penguin, among those with a 40 mm bill length, is of species 'Adélie'.
 
-Now ask: what is the relative frequency of *Adélie* species *in the whole subpopulation* (including unsampled penguins), of penguins having bill length of 40 mm? This cannot be answered with certainty, because we have only a sample of the full population. But **Prova** can calculate the *probability distribution* for this full-population frequency. In fact, it has already been calculated by the function `Pr()` above, and we can visualize it with a plot:
+Now ask: what is the relative *frequency* of the 'Adélie' species in the whole subpopulation of penguins (including *unsampled* penguins) having bill length of 40 mm? This question cannot be answered with certainty, because we have only a sample of the full population. But **Prova** can calculate the probability distribution for this full-population frequency. In fact, it has already been calculated by the function `Pr()` above, and we can visualize it with a plot:
 ```r
 hist(prob)
 ```
 <img src="man/figures/README-hist-1.svg" alt="probability of long-run frequency" width="100%"/>
 
-The plot shows that this full-population frequency is most likely (with roughly 90% probability) between 0.05 and 0.15. These are the values shown by `print(prob)` above.
+The plot shows that this full-population frequency is most likely (with roughly 90% probability) between 0.91 and 0.98. These are the "Q5.5%" and "Q94.5%" values shown by `print(prob)` above.
 
-The *inverse* question can also be asked: if we observe a new penguin of *Adélie* species, what could its bill length be? The answer is uncertain, and **Prova** can calculate the probability distribution of the penguin's bill length:
+The *inverse* question can also be asked: if we observe a new penguin of species 'Adélie', what could its bill length be? The answer is uncertain, and **Prova** can calculate the probability distribution of the penguin's bill length:
 ```r
 invprob <- Pr(
     data.frame(bill_len = seq(30, 60, by = 0.5)), # predictand
@@ -110,7 +110,7 @@ plot(invprob, col = 2)
 
 this probability distribution has a peak between 35 mm and 40 mm and it's slightly skewed.
 
-This distribution is not the *frequency* distribution of bill length in the whole subpopulation of *Adélie* penguins: such distribution is uncertain because we have only a sample. But the plot above shows that this frequency distribution is somewhere between the widest coloured bands with roughly a 90% probability. Alternatively we can display this uncertainty with an ensemble plot of probable frequency distributions:
+This distribution is not the *frequency* distribution of bill length in the whole subpopulation of *Adélie* penguins: such distribution is uncertain because we have only a sample. But the plot above shows that this frequency distribution is (with roughly 90% probability) somewhere between the widest coloured bands. Alternatively we can display this uncertainty with an ensemble plot of probable frequency distributions:
 ```r
 plot(invprob, col = 2, spread = 'samples')
 ```
