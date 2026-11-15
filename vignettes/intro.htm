@@ -48,9 +48,8 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
-html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -743,7 +742,7 @@ should obviously have different names.
 </dd>
 <dt>Variate type (<code>type</code>)</dt>
 <dd>
-<strong>Prova</strong> can handle three kinds of variates:
+<p><strong>Prova</strong> can handle three kinds of variates:</p>
 <ul>
 <li><code>nominal</code>: it can take on a finite number of discrete
 values, which do not have any natural ordering. Examples could be sex or
@@ -757,17 +756,17 @@ scale</a>.</li>
 number of continuous values, although they can be discretized or
 rounded. Examples could be age or weight.</li>
 </ul>
-Many other types of variates exist. For example images and audio are
+<p>Many other types of variates exist. For example images and audio are
 also types of variates; but <strong>Prova</strong> cannot handle these
 complex types. A simple type of variate that <strong>Prova</strong>
 cannot properly handle is the <em>cyclic</em> one, such as time of day.
 There are no clear-cut separations between different types of variates;
-thus it’s sometimes difficult to assess the type.
+thus it’s sometimes difficult to assess the type.</p>
 </dd>
 <dt>Domain minimum and maximum (<code>domainmin</code>,
 <code>domainmax</code>)</dt>
 <dd>
-These are numbers, only defined for numeric-ordinal and continuous
+<p>These are numbers, only defined for numeric-ordinal and continuous
 variates. These metadata are the minimum and maximum value a variate can
 take on in a given study. For example, in a study about health or
 employment of adults, a variate <em>age</em> might have a minimum of
@@ -775,11 +774,11 @@ employment of adults, a variate <em>age</em> might have a minimum of
 minimum would be 0. In a health study where people of 90 years or more
 are pooled together, the maximum would be 90 years. A minimum could also
 be minus-infinity, and a maximum plus-infinity. Obviously the minimum
-should be lower than the maximum.
-Sometimes the minimum or maximum is not clear-cut. For instance, there
-is no theoretical maximum on a person’s age, although we can consider an
-age of 300 impossible to reach today. In such cases the maximum or
-minimum can be taken to be plus or minus infinity.
+should be lower than the maximum.</p>
+<p>Sometimes the minimum or maximum is not clear-cut. For instance,
+there is no theoretical maximum on a person’s age, although we can
+consider an age of 300 impossible to reach today. In such cases the
+maximum or minimum can be taken to be plus or minus infinity.</p>
 </dd>
 <dt>Interval between values (<code>datastep</code>)</dt>
 <dd>
@@ -903,7 +902,7 @@ warnings of the helper function:</p>
 <span id="cb4-64"><a href="#cb4-64" tabindex="-1"></a><span class="co"># Saved proposal metadata file as &quot;meta_penguins_temp.csv&quot; </span></span></code></pre></div>
 <p>The preliminary metadata file created by
 <code>metadatatemplate()</code> looks like this:</p>
-<table style="width:99%;">
+<table style="width:100%;">
 <colgroup>
 <col width="9%" />
 <col width="8%" />
@@ -1150,7 +1149,7 @@ was correctly guessed).</p>
 <code>meta_penguins_temp.csv</code> with our favourite editor, and
 correct and complete the guesses of the helper function. In this case we
 end up with the following corrected metadata:</p>
-<table style="width:99%;">
+<table style="width:100%;">
 <colgroup>
 <col width="11%" />
 <col width="10%" />
@@ -1540,7 +1539,7 @@ the lighter grey band; these latter intervals contain the 50% ones.</p>
 the relative frequency of all <code>Adelie</code> penguins is roughly
 between 0.21 and 0.37; and an 89% probability that their relative
 frequency is roughly between 0.11 and 0.51.</p>
-<p>For the <code>Gentoo</code> species, there’s a 50% probability that
+<p>For the species <code>Gentoo</code> there’s a 50% probability that
 its relative frequency is roughly between 0.30 and 0.49; and an 89%
 probability that their relative frequency is roughly between 0.20 and
 0.62.</p>
@@ -1586,7 +1585,7 @@ there’s still a lot of uncertainty because this is just a small
 sample.</p>
 <p>The <code>Pr()</code> function has actually calculated the
 probabilities for all possible frequencies of each species. We can plot
-the probabilities of the frequencies of the <code>Adelie</code> species
+the probabilities of the frequencies of the species <code>Adelie</code>
 only by using the <code>subset()</code> function, as follows:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="do">## select only Adelie by means of subset()</span></span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">subset</span>(Fspecies10, <span class="at">subsetY =</span> (species <span class="sc">==</span> <span class="st">&#39;Adelie&#39;</span>)),</span>
@@ -1601,7 +1600,7 @@ penguins</strong>
 <p><br />
 </p>
 <p>The <code>subset()</code> function selects only the probabilities for
-the <code>Adelie</code> species. The <code>hist()</code> function plots
+the species <code>Adelie</code>. The <code>hist()</code> function plots
 the probability distribution for all the frequency values. We see that
 frequencies between around 0.2 and 0.4 have highest probability. But the
 probability distribution is quite wide; even a frequency of 0.6 has some
@@ -2333,7 +2332,7 @@ interval about this difference:</p>
 <span id="cb44-6"><a href="#cb44-6" tabindex="-1"></a><span class="co"># 0.546721 0.831743</span></span></code></pre></div>
 <blockquote>
 <p>From a sample of 60 penguins, the difference between the frequencies
-of <code>Gentoo</code> species and <code>Chinstrap</code> species, on
+of the species <code>Gentoo</code> and <code>Chinstrap</code>, on
 <code>Biscoe</code> island, is estimated with a median of 0.7, and it is
 between 0.55 and 0.83 with 89% probability.</p>
 </blockquote>
@@ -2349,7 +2348,7 @@ between 0.55 and 0.83 with 89% probability.</p>
 <span id="cb45-9"><a href="#cb45-9" tabindex="-1"></a><span class="co">#  6.74092 97.68391</span></span></code></pre></div>
 <blockquote>
 <p>From a sample of 60 penguins, the ratio between the frequencies of
-<code>Gentoo</code> species on <code>Chinstrap</code> species, on
+the species <code>Gentoo</code> and <code>Chinstrap</code>, on
 <code>Biscoe</code> island, is estimated with a median of 21, and it is
 between 6.74 and 97.68 with 89% probability.</p>
 </blockquote>

@@ -510,7 +510,7 @@ The visualization by quantile bands often looks neater; but keep in mind that it
 
 **Prova** makes also available a finer visualization of the uncertainty about the long-run frequencies. We can plot the probabilities of all possible such frequencies. To understand this idea, let's ask: what is the relative frequency of Adélie penguins in the whole population? Possible values could be anything between 0 and 1. But some of these values may be more probable than others. If we look at our 10 samples, we see that 3 out of 10 are `Adelie`. So a relative frequency around 0.3 is a little more probable, although there's still a lot of uncertainty because this is just a small sample.
 
-The `Pr()` function has actually calculated the probabilities for all possible frequencies of each species. We can plot the probabilities of the frequencies of the `Adelie` species only by using the `subset()` function, as follows:
+The `Pr()` function has actually calculated the probabilities for all possible frequencies of each species. We can plot the probabilities of the frequencies of the species `Adelie` only by using the `subset()` function, as follows:
 
 
 ``` r
@@ -525,7 +525,7 @@ hist(subset(Fspecies10, subsetY = (species == 'Adelie')),
 </div>
 \
 
-The `subset()` function selects only the probabilities for the `Adelie` species. The `hist()` function plots the probability distribution for all the frequency values. We see that frequencies between around 0.2 and 0.4 have highest probability. But the probability distribution is quite wide; even a frequency of 0.6 has some probability. The vertical line indicates the mean of this probability distribution, which we take as our frequency estimate and as the probability that the next penguin we observe is of the Adélie species.
+The `subset()` function selects only the probabilities for the species `Adelie`. The `hist()` function plots the probability distribution for all the frequency values. We see that frequencies between around 0.2 and 0.4 have highest probability. But the probability distribution is quite wide; even a frequency of 0.6 has some probability. The vertical line indicates the mean of this probability distribution, which we take as our frequency estimate and as the probability that the next penguin we observe is of the Adélie species.
 
 The width of this probability distribution reflects our large uncertainty, which in turn comes from the fact that we have only seen a small sample of penguins. We shall see that this uncertainty decreases and we gather more samples.
 
@@ -1161,7 +1161,7 @@ quantile(freqdiff, c(0.055, 0.945))
 # 0.546721 0.831743
 ```
 
-> From a sample of 60 penguins, the difference between the frequencies of `Gentoo` species and `Chinstrap` species, on `Biscoe` island, is estimated with a median of 0.7, and it is between 0.55 and 0.83 with 89% probability.
+> From a sample of 60 penguins, the difference between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of 0.7, and it is between 0.55 and 0.83 with 89% probability.
 
 
 Maybe you prefer a ratio between the two frequencies:
@@ -1179,7 +1179,7 @@ quantile(freqratio, c(0.055, 0.945))
 #  6.74092 97.68391
 ```
 
-> From a sample of 60 penguins, the ratio between the frequencies of `Gentoo` species on `Chinstrap` species, on `Biscoe` island, is estimated with a median of 21, and it is between 6.74 and 97.68 with 89% probability.
+> From a sample of 60 penguins, the ratio between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of 21, and it is between 6.74 and 97.68 with 89% probability.
 
 It is remarkable that with only 60 penguins -- and not all of them from Biscoe island -- we can conclude with a high probability (95%) that there are at least 7 times more Gentoo penguins than Chinstrap penguins on Biscoe island! Note an important consequence from the point of view of hypothesis testing:
 
