@@ -1,0 +1,10 @@
+Starting calcs 261115T072201
+done island_species_ 261115T072202
+done body_mass_species_ 261115T072548
+done body_mass_bill_len_ 261115T073124
+done body_mass_bill_len_Adelie 261115T073632
+done body_mass_bill_len_Chinstrap 261115T074210
+done body_mass_bill_len_Gentoo 261115T074805
+Error in checkCluster(cl) : not a valid cluster
+Calls: <Anonymous> -> defaultCluster -> checkCluster
+Execution halted
