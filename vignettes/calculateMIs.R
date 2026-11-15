@@ -2,7 +2,7 @@ library('prova')
 
 K <- 'Kall.rds'
 
-parallel <- parallel::makeCluster(18)
+parallel <- 12
 
 starttime <- format(Sys.time(), '%y%m%dT%H%M%S')
 message('Starting calcs ', starttime)
