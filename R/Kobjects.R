@@ -1,4 +1,4 @@
-# Internal environment to hold a K-object, for user convenience
+                                        # Internal environment to hold a K-object, for user convenience
 .prova_envir <- new.env(parent = emptyenv())
 
 
@@ -86,32 +86,32 @@ NULL
 #' @rdname Kobjects
 #' @export
 useK <- function(K = NULL){
-    if(missing('K')){
-        ## user wants to know the name of the K object last saved
-        if(exists('.Kname', envir = .prova_envir, inherits = FALSE)){
-            get('.Kname', envir = .prova_envir, inherits = FALSE)
-        } else {
-            NULL
-        }
-    } else if(is.null(K) || (is.logical(K) && !isTRUE(K))){
-        ## user wants to remove K object
-        if(exists('.K', envir = .prova_envir, inherits = FALSE)){
-            Kname <- get('.Kname', envir = .prova_envir, inherits = FALSE)
-            rm('.K', envir = .prova_envir)
-            rm('.Kname', envir = .prova_envir)
-        } else {
-            Kname <- NULL
-        }
-        invisible(Kname)
-    } else if(!inherits(try(getK(K), silent = TRUE), "try-error")){
-        ## user wants to set K object as default
-        Kname <- deparse(substitute(K))
-        assign('.K', K, envir = .prova_envir)
-        assign('.Kname', Kname, envir = .prova_envir)
-        invisible(Kname)
+  if(missing('K')){
+    ## user wants to know the name of the K object last saved
+    if(exists('.Kname', envir = .prova_envir, inherits = FALSE)){
+      get('.Kname', envir = .prova_envir, inherits = FALSE)
     } else {
-        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file., or 'NULL'/'NA'/'FALSE', or empty.")
+      NULL
     }
+  } else if(is.null(K) || (is.logical(K) && !isTRUE(K))){
+    ## user wants to remove K object
+    if(exists('.K', envir = .prova_envir, inherits = FALSE)){
+      Kname <- get('.Kname', envir = .prova_envir, inherits = FALSE)
+      rm('.K', envir = .prova_envir)
+      rm('.Kname', envir = .prova_envir)
+    } else {
+      Kname <- NULL
+    }
+    invisible(Kname)
+  } else if(!inherits(try(getK(K), silent = TRUE), "try-error")){
+    ## user wants to set K object as default
+    Kname <- deparse(substitute(K))
+    assign('.K', K, envir = .prova_envir)
+    assign('.Kname', Kname, envir = .prova_envir)
+    invisible(Kname)
+  } else {
+    stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file., or 'NULL'/'NA'/'FALSE', or empty.")
+  }
 }
 
 
@@ -123,60 +123,58 @@ useK <- function(K = NULL){
 #' @concept learn
 #' @export
 getK <- function(
-    K = NULL,
-    .name = NULL
+  K = NULL,
+  .name = NULL
 ){
-    ## Save name of argument
-    if(is.character(.name)){
-        ## called from within a function
-        Kname <- .name
+  ## Save name of argument
+  if(is.character(.name)){
+    ## called from within a function
+    Kname <- .name
+  } else {
+    Kname <- deparse(substitute(K))
+  }
+  ## Check if a default K object and load if true
+  if(is.null(K)){
+    if(!exists('.K', envir = .prova_envir, inherits = FALSE)){
+      stop('No "K" object is set as default.\nIf you want to omit "K =" arguments,\nplease set the "K" object that should be used for the session\nby means of the function "useK()".', call. = FALSE)
     } else {
-        Kname <- deparse(substitute(K))
+      K <- get('.K', envir = .prova_envir, inherits = FALSE)
+      Kname <- get('.Kname', envir = .prova_envir, inherits = FALSE)
     }
-    ## Check if a default K object and load if true
-    if(is.null(K)){
-        if(!exists('.K', envir = .prova_envir, inherits = FALSE)){
-            stop('No "K" object is set as default.\nIf you want to omit "K =" arguments,\nplease set the "K" object that should be used for the session\nby means of the function "useK()".', call. = FALSE)
-        } else {
-            K <- get('.K', envir = .prova_envir, inherits = FALSE)
-            Kname <- get('.Kname', envir = .prova_envir, inherits = FALSE)
-        }
+  }
+
+  ## Test validity of K reference
+  ## We do this even if the K object was previously checked by useK(),
+  ## in case directories or files have been deleted in the meantime
+
+  ## Is K a reference?
+  if(is.character(K)){
+    if(file.exists(paste0(sub('.rds$', '', K), '.rds'))){
+      ## K is path to K-file
+      K <- readRDS(paste0(sub('.rds$', '', K), '.rds'))
+    } else if(file_test('-d', K) && file.exists(file.path(K, 'K.rds'))) {
+      ## K is path do directory of K-file
+      K <- readRDS(file.path(K, 'K.rds'))
+    } else {
+      K <- NULL
+      stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
     }
 
-    ## Test validity of K reference
-    ## We do this even if the K object was previously checked by useK(),
-    ## in case directories or files have been deleted in the meantime
-
-    ## Is K a reference?
-    if(is.character(K)){
-        if(file.exists(paste0(sub('.rds$', '', K), '.rds'))){
-            ## K is path to K-file
-            K <- readRDS(paste0(sub('.rds$', '', K), '.rds'))
-        } else if(file_test('-d', K) && file.exists(file.path(K, 'K.rds'))) {
-            ## K is path do directory of K-file
-            K <- readRDS(file.path(K, 'K.rds'))
-        } else {
-            K <- NULL
-            stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
-        }
-
-        ## test if retrieved K has class 'prova_K', and output
-        if(inherits(K, 'prova_K')){
-            if(is.null(.name)){ K } else { list(K, Kname) }
-        } else {
-            NULL
-            stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
-        }
+    ## test if retrieved K has class 'prova_K', and output
+    if(inherits(K, 'prova_K')){
+      if(is.null(.name)){ K } else { list(K, Kname) }
+    } else {
+      NULL
+      stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
+    }
 
     ## Is K the object itself? Test class, and output
-    } else if(inherits(K, 'prova_K')){
-        # # alternative below was for backward compatibility
-        # || (is.list(K) && !is.null(K[['W']]) && !is.null(K[['auxmetadata']]))
-        if(is.null(.name)){ K } else { list(K, Kname) }
-    } else {
-        NULL
-        stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
-    }
+  } else if(inherits(K, 'prova_K')){
+                                        # # alternative below was for backward compatibility
+                                        # || (is.list(K) && !is.null(K[['W']]) && !is.null(K[['auxmetadata']]))
+    if(is.null(.name)){ K } else { list(K, Kname) }
+  } else {
+    NULL
+    stop("Argument 'K' must be a 'prova_K' object, or a path to an RDS file with such object, or a path to a directory to a 'K.rds' file.")
+  }
 }
-
-

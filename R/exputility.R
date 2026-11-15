@@ -16,7 +16,7 @@
 #' @return A [list][base::list()] of the following elements:
 #'
 #' - `'value'`: a [matrix][base::matrix()] of the expected utilities of the actions. One row for each action, one column for each value of the conditional \eqn{X} in the probability `p`.
-# #' - `'quantiles'`:...
+                                        # #' - `'quantiles'`:...
 #' - `'samples'`: an [array][base::array()] of samples of the expeceted utilities that the actions would have, if many more sample data were available. The first dimension corresponds to the actions, the second to the values of the conditional \eqn{X}, and the third the sample index.
 #' - `'value.acc'`: numerical accuracies of `'value'` elements.
 #' - `'optimal`': [list][base::list()] of actions having maximal expected utility, one list element per column of `p` (that is, its conditional values `X`). If there are ties, all actions in the tie are reported.
@@ -70,70 +70,70 @@
 #' @concept utility
 #' @export
 exputility <- function(
-    u,
-    p
+  u,
+  p
 ){
-    ## example reversal
-    ## 0.47 -0.15  2.0
-    ## 0.30  2.00 -0.7
-    if(!inherits(p, 'prova_pr')){
-        stop("Argument 'p' is not an object of class 'prova_pr'.")
-    }
-    if(length(dim(u)) != 2 || dim(u)[1] == 1){
-        stop("Argument 'u' must be a utility matrix with at least two actions (rows).")
-    }
-    if(ncol(u) != nrow(p[['value']])){
-        stop("Number of columns of 'u' and number of Y-values of 'p' must be the same.")
-    }
+  ## example reversal
+  ## 0.47 -0.15  2.0
+  ## 0.30  2.00 -0.7
+  if(!inherits(p, 'prova_pr')){
+    stop("Argument 'p' is not an object of class 'prova_pr'.")
+  }
+  if(length(dim(u)) != 2 || dim(u)[1] == 1){
+    stop("Argument 'u' must be a utility matrix with at least two actions (rows).")
+  }
+  if(ncol(u) != nrow(p[['value']])){
+    stop("Number of columns of 'u' and number of Y-values of 'p' must be the same.")
+  }
 
-    anames <- dimnames(u)[1]
-    if(is.null(anames)){
-        anames <- list(action = paste0('action', seq_len(nrow(u))))
-        dimnames(u) <- c(anames, dimnames(u)[-1])
-    }
-    nact <- nrow(u)
+  anames <- dimnames(u)[1]
+  if(is.null(anames)){
+    anames <- list(action = paste0('action', seq_len(nrow(u))))
+    dimnames(u) <- c(anames, dimnames(u)[-1])
+  }
+  nact <- nrow(u)
 
-    value <- u %*% p[['value']]
+  value <- u %*% p[['value']]
 
-    samples <- p[['samples']]
-    temp <- dim(samples)[-1]
-    temp2 <- dimnames(samples)[-1]
-    dim(samples) <- c(dim(samples)[1], prod(temp))
-    samples <- u %*% samples
-    dim(samples) <- c(nact, temp)
-    dimnames(samples) <- c(anames, temp2)
+  samples <- p[['samples']]
+  temp <- dim(samples)[-1]
+  temp2 <- dimnames(samples)[-1]
+  dim(samples) <- c(dim(samples)[1], prod(temp))
+  samples <- u %*% samples
+  dim(samples) <- c(nact, temp)
+  dimnames(samples) <- c(anames, temp2)
 
-    osamples <- apply(X = samples, MARGIN = c(2, 3),
-        FUN = function(xx){sample(
-            x = rep.int(x = which(xx == max(xx, na.rm = TRUE)),
-                times = 2),
-            size = 1, replace = FALSE, prob = NULL)}, simplify = TRUE)
+  osamples <- apply(X = samples, MARGIN = c(2, 3),
+    FUN = function(xx){sample(
+      x = rep.int(x = which(xx == max(xx, na.rm = TRUE)),
+        times = 2),
+      size = 1, replace = FALSE, prob = NULL)}, simplify = TRUE)
 
-    ## this is faster than apply(..., MARGIN = 1)
-    oprobs <- vapply(X = seq_len(nrow(osamples)),
-        FUN = function(i){tabulate(bin = osamples[i, ], nbins = nact)},
-        FUN.VALUE = numeric(nact)) / ncol(osamples)
-    dimnames(oprobs) <- dimnames(value)
-    osamples <- anames[[1]][c(osamples)]
-    dim(osamples) <- dim(samples)[-1]
-    dimnames(osamples) <- dimnames(samples)[-1]
+  ## this is faster than apply(..., MARGIN = 1)
+  oprobs <- vapply(X = seq_len(nrow(osamples)),
+    FUN = function(i){tabulate(bin = osamples[i, ], nbins = nact)},
+    FUN.VALUE = numeric(nact)) / ncol(osamples)
+  dimnames(oprobs) <- dimnames(value)
+  osamples <- anames[[1]][c(osamples)]
+  dim(osamples) <- dim(samples)[-1]
+  dimnames(osamples) <- dimnames(samples)[-1]
 
-    out <- c(
-        list(
-            value = value,
-            value.acc = abs(u) %*% p[['value.acc']],
-            samples = samples,
-            optimal = apply(X = value, MARGIN = 2,
-                FUN = function(xx){
-                    anames[[1]][which(xx == max(xx, na.rm = TRUE))]
-                }, simplify = FALSE),
-            optimal.probs = oprobs,
-            optimal.samples = osamples
-        ),
-        if(!is.null(p[['X']])){p['X']},
-        p[c('tails', 'K')]
-    )
+  out <- c(
+    list(
+      value = value,
+      value.acc = abs(u) %*% p[['value.acc']],
+      samples = samples,
+      optimal = apply(X = value, MARGIN = 2,
+        FUN = function(xx){
+          anames[[1]][which(xx == max(xx, na.rm = TRUE))]
+        }, simplify = FALSE),
+      optimal.probs = oprobs,
+      optimal.samples = osamples
+    ),
+    if(!is.null(p[['X']])){p['X']},
+    p[c('tails', 'K')]
+  )
 
-    class(out) <- 'prova_eu'
-    out
+  class(out) <- 'prova_eu'
+  out
 }

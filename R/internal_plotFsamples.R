@@ -20,617 +20,617 @@
 #'
 #' @keywords internal
 .plotFsamples <- function(
-    filename,
-    K,
-    data,
-    plotprobability = TRUE,
-    plotvariability = 'samples',
-    nFsamples = NULL,
-    datahistogram = !(missing(data) || is.null(data)),
-    datascatter = !(missing(data) || is.null(data)),
-    parallel = TRUE
+  filename,
+  K,
+  data,
+  plotprobability = TRUE,
+  plotvariability = 'samples',
+  nFsamples = NULL,
+  datahistogram = !(missing(data) || is.null(data)),
+  datascatter = !(missing(data) || is.null(data)),
+  parallel = TRUE
 ) {
-    fontfamily <- 'Palatino'
-    ## Tol colour-blind-friendly palette
-    black <- 'black'
-    red <- '#EE6677'
-    blue <- '#4477AA'
-    green <- '#228833'
-    yellow <- '#CCBB44'
-    purple <- '#AA3377'
-    cyan <- '#66CCEE'
-    grey <- '#BBBBBB'
-    midgrey <- '#888888'
+  fontfamily <- 'Palatino'
+  ## Tol colour-blind-friendly palette
+  black <- 'black'
+  red <- '#EE6677'
+  blue <- '#4477AA'
+  green <- '#228833'
+  yellow <- '#CCBB44'
+  purple <- '#AA3377'
+  cyan <- '#66CCEE'
+  grey <- '#BBBBBB'
+  midgrey <- '#888888'
 
-    ## ## Extract Monte Carlo output & auxmetadata
-    ## ## If 'K' is a string, check if it's a folder name or file name
-    ## if (is.character(K)) {
-    ##     ## Check if 'K' is a folder containing K.rds
-    ##     if (file_test('-d', K) &&
-    ##             file.exists(file.path(K, 'K.rds'))) {
-    ##         K <- readRDS(file.path(K, 'K.rds'))
-    ##     } else {
-    ##         ## Assume 'K' the full path of K.rds
-    ##         ## possibly without the file extension '.rds'
-    ##         K <- paste0(sub('.rds$', '', K), '.rds')
-    ##         if (file.exists(K)) {
-    ##             K <- readRDS(K)
-    ##         } else {
-    ##             stop('The argument "K" must be a folder containing K.rds, or the path to an rds-file containing the output from "learn".')
-    ##         }
-    ##     }
-    ## }
+  ## ## Extract Monte Carlo output & auxmetadata
+  ## ## If 'K' is a string, check if it's a folder name or file name
+  ## if (is.character(K)) {
+  ##     ## Check if 'K' is a folder containing K.rds
+  ##     if (file_test('-d', K) &&
+  ##             file.exists(file.path(K, 'K.rds'))) {
+  ##         K <- readRDS(file.path(K, 'K.rds'))
+  ##     } else {
+  ##         ## Assume 'K' the full path of K.rds
+  ##         ## possibly without the file extension '.rds'
+  ##         K <- paste0(sub('.rds$', '', K), '.rds')
+  ##         if (file.exists(K)) {
+  ##             K <- readRDS(K)
+  ##         } else {
+  ##             stop('The argument "K" must be a folder containing K.rds, or the path to an rds-file containing the output from "learn".')
+  ##         }
+  ##     }
+  ## }
 
-    auxmetadata <- K$auxmetadata
-    K$info <- NULL
-    nsamples <- ncol(K$W)
+  auxmetadata <- K$auxmetadata
+  K$info <- NULL
+  nsamples <- ncol(K$W)
 
-    nodata <- missing(data) || is.null(data) || isFALSE(data)
-    if (datahistogram && nodata) {
-        datahistogram <- FALSE
-        message('NOTE while plotting: "datahistogram" is TRUE but there is no data')
+  nodata <- missing(data) || is.null(data) || isFALSE(data)
+  if (datahistogram && nodata) {
+    datahistogram <- FALSE
+    message('NOTE while plotting: "datahistogram" is TRUE but there is no data')
+  }
+  if (datascatter && nodata) {
+    datascatter <- FALSE
+    message('NOTE while plotting: "datascatter" is TRUE but there is no data')
+  }
+
+  addylab <- ''
+  if (plotvariability == 'quantiles') {
+    if(is.null(nFsamples)) {nFsamples <- c(5.5, 94.5) / 100}
+    ## plotprobability <- TRUE
+    if (any(nFsamples <= 0 | nFsamples >= 1)) {
+      nFsamples <- c(5.5, 94.5) / 100
     }
-    if (datascatter && nodata) {
-        datascatter <- FALSE
-        message('NOTE while plotting: "datascatter" is TRUE but there is no data')
+    quants <- sort(unique(round(c(nFsamples, 1 - nFsamples), 6)))
+    nmcsamples <- NULL
+    addylab <- paste0(' & ', ceiling(diff(quants) * 100), '% variability')
+  } else {
+    if(is.null(nFsamples)) {nFsamples <- 100}
+    if (nFsamples == 'all') {
+      nFsamples <- nsamples
+    }
+    quants <- NULL
+    nmcsamples <- abs(nFsamples)
+  }
+
+  addplot <- FALSE
+
+  graphics.off()
+  ## make sure graphics device is closed also in case of error
+  on.exit(dev.off())
+
+  pdf(file = paste0(filename, '.pdf'), family = fontfamily,
+    height = 8.27, width = 11.69)
+  ## Save user's par()
+  ## oldpar <- par(mfrow = c(1, 1))
+  ## oldpar$new <- NULL
+  ## on.exit(par(oldpar))
+  ## on.exit(dev.off(), add = TRUE)
+
+  for (name in auxmetadata[['name']]) {
+    ## Check if we have proper data for this variate
+    if (datahistogram || datascatter) {
+      theresdata <- (sum(!is.na(data[[name]])) > 1)
     }
 
-    addylab <- ''
-    if (plotvariability == 'quantiles') {
-        if(is.null(nFsamples)) {nFsamples <- c(5.5, 94.5) / 100}
-        ## plotprobability <- TRUE
-        if (any(nFsamples <= 0 | nFsamples >= 1)) {
-            nFsamples <- c(5.5, 94.5) / 100
-        }
-        quants <- sort(unique(round(c(nFsamples, 1 - nFsamples), 6)))
-        nmcsamples <- NULL
-        addylab <- paste0(' & ', ceiling(diff(quants) * 100), '% variability')
-    } else {
-        if(is.null(nFsamples)) {nFsamples <- 100}
-        if (nFsamples == 'all') {
-            nFsamples <- nsamples
-        }
-        quants <- NULL
-        nmcsamples <- abs(nFsamples)
-    }
+    ## save the possibly existing V-values for this variate
+    datavalues <- as.list(auxmetadata[auxmetadata$name == name,
+      grep('^V[0-9]+$', names(auxmetadata))
+    ])
+    datavalues <- unlist(datavalues[!is.na(datavalues)])
+    nvaluelist <- length(datavalues)
 
-    addplot <- FALSE
+    with(as.list(auxmetadata[auxmetadata$name == name, ]),
+    {
 
-    graphics.off()
-    ## make sure graphics device is closed also in case of error
-    on.exit(dev.off())
+      if(mcmctype == 'R') {
+        Xgrid <- cbind(seq(plotmin, plotmax, length.out = 129))
+        colnames(Xgrid) <- name
+        probabilities <- Pr(Y = Xgrid, X = NULL,
+          K = K,
+          quantiles = quants,
+          nsamples = nmcsamples,
+          parallel = parallel,
+          verbose = FALSE,
+          keepYX = FALSE)
 
-    pdf(file = paste0(filename, '.pdf'), family = fontfamily,
-        height = 8.27, width = 11.69)
-    ## Save user's par()
-    ## oldpar <- par(mfrow = c(1, 1))
-    ## oldpar$new <- NULL
-    ## on.exit(par(oldpar))
-    ## on.exit(dev.off(), add = TRUE)
+        dim(probabilities$value) <- NULL
 
-    for (name in auxmetadata[['name']]) {
-        ## Check if we have proper data for this variate
-        if (datahistogram || datascatter) {
-            theresdata <- (sum(!is.na(data[[name]])) > 1)
-        }
-
-        ## save the possibly existing V-values for this variate
-        datavalues <- as.list(auxmetadata[auxmetadata$name == name,
-            grep('^V[0-9]+$', names(auxmetadata))
-        ])
-        datavalues <- unlist(datavalues[!is.na(datavalues)])
-        nvaluelist <- length(datavalues)
-
-        with(as.list(auxmetadata[auxmetadata$name == name, ]),
-        {
-
-            if(mcmctype == 'R') {
-                Xgrid <- cbind(seq(plotmin, plotmax, length.out = 129))
-                colnames(Xgrid) <- name
-                probabilities <- Pr(Y = Xgrid, X = NULL,
-                    K = K,
-                    quantiles = quants,
-                    nsamples = nmcsamples,
-                    parallel = parallel,
-                    verbose = FALSE,
-                    keepYX = FALSE)
-
-                dim(probabilities$value) <- NULL
-
-                ## Find appropriate plot height across plots
-                if (plotvariability == 'samples') {
-                    dim(probabilities$samples) <- dim(probabilities$samples)[-2]
-                    ymax <- quantile(x = apply(probabilities$samples, 2,
-                        function(x) {
-                            quantile(x = c(x), probs = 31 / 32, type = 6,
-                                na.rm = TRUE, names = FALSE)
-                        }
-                    ), probs = 31 / 32, type = 6, na.rm = TRUE, names = FALSE)
-                } else {
-                    dim(probabilities$quantiles) <- dim(probabilities$quantiles)[-2]
-                    ymax <- max(probabilities$quantiles[
-                        is.finite(probabilities$quantiles)])
-                    ##     apply(probabilities[, , drop = FALSE], 1,
-                    ##     function(x) {
-                    ##         quantile(x = x, max(quants), type = 6, na.rm = TRUE)
-                    ##     }
-                    ## )
-                    ## ymax <- max(ymax[is.finite(ymax)])
-                }
-
-                ## prepare info for histogram data plots if required
-                if (datahistogram && theresdata) {
-                    datum <- data[[name]]
-                    datum <- datum[!is.na(datum)]
-                    ## try to guess optimal bin size
-                    nh <- max(32, round(length(datum) / 64))
-
-                    ## histo <- thist(datum, n = nh, extendbreaks = FALSE)
-                    histo <- hist(datum, breaks = nh, plot = FALSE)
-                    hmax <- max(histo$density)
-
-                    if(ymax / hmax < 0.3 | ymax / hmax > 3) {
-                        histo$density <- histo$density / max(histo$density) * ymax
-                    } else {
-                        ymax <- max(ymax, histo$density)
-                    }
-                }
-
-                ## If required, plot frequency samples
-                if (plotvariability == 'samples') {
-                    pplot(
-                        x = Xgrid, y = probabilities$samples,
-                        xlim = range(Xgrid), ylim = c(0, ymax),
-                        type = 'l', lty = 1, lwd = 2,
-                        col = adjustcolor(cyan, 1 / 8),
-                        xlab = name,
-                        ylab = paste0('probability density', addylab),
-                        family = fontfamily
-                    )
-                    addplot <- TRUE # new plots must keep this one
-                } else if (plotvariability == 'quantiles') {
-                    ## marguncertainty <- t(apply(probabilities, 1, function(x) {
-                    ##     quantile(x = x, probs = quants, type = 6, na.rm = TRUE)
-                    ## }))
-
-                    pplot(
-                        x = Xgrid,
-                        y = probabilities$quantiles,
-                        ## y = marguncertainty[, , drop = FALSE],
-                        type = 'qx',
-                        col = cyan, alpha.f = 0.25,
-                        xlim = range(Xgrid), ylim = c(0, ymax),
-                        xlab = name,
-                        ylab = paste0('probability density', addylab),
-                        family = fontfamily,
-                        add = addplot
-                    )
-                    addplot <- TRUE # new plots must keep this one
-                }
-
-                ## If required, plot probability
-                if (plotprobability) {
-                    pplot(
-                        x = Xgrid,
-                        y = probabilities$value,
-                        ## y = rowMeans(probabilities[, , drop = FALSE], na.rm = TRUE),
-                        xlim = range(Xgrid), ylim = c(0, ymax),
-                        type = 'l', cex = 0.5, lty = 1, lwd = 4,
-                        col = adjustcolor(blue, 0.75),
-                        xlab = name,
-                        ylab = paste0('probability density', addylab),
-                        family = fontfamily,
-                        add = addplot
-                    )
-                }
-
-                ## If required and possible, plot data histogram
-                if (datahistogram && theresdata) {
-                    pplot(
-                        x = histo$mids, y = histo$density,
-                        xlim = range(Xgrid), ylim = c(0, ymax),
-                        type = 'l', cex = 0.5, lty = 1, lwd = 2,
-                        col = adjustcolor(yellow, 0.5),
-                        xlab = name,
-                        ylab = paste0('probability density', addylab),
-                        family = fontfamily,
-                        add = addplot
-                    )
-                }
-                ## End R case
-
-            } else if(mcmctype == 'C') {
-                ## C-type variates are peculiar because
-                ## their boundary values have a finite probability,
-                ## not a probability density.
-                ## These values need different handling and representation
-
-                Xgrid <- cbind(seq(plotmin, plotmax, length.out = 129))
-                colnames(Xgrid) <- name
-
-                xin <- Xgrid > domainminplushs & Xgrid < domainmaxminushs
-
-                probabilities <- Pr(Y = Xgrid, X = NULL,
-                    K = K,
-                    quantiles = quants,
-                    nsamples = nmcsamples,
-                    parallel = parallel,
-                    verbose = FALSE,
-                    keepYX = FALSE)
-
-                dim(probabilities$value) <- NULL
-
-                ## Find appropriate plot height across plots
-                if (plotvariability == 'samples') {
-                    dim(probabilities$samples) <- dim(probabilities$samples)[-2]
-                    ymax <- quantile(x = apply(
-                        probabilities$samples[xin, , drop = FALSE], 2,
-                        function(x) {
-                            quantile(x = c(x), probs = 31 / 32, type = 6,
-                                na.rm = TRUE, names = FALSE)
-                        }
-                    ), probs = 31 / 32, type = 6, na.rm = TRUE, names = FALSE)
-                    ## ymax <- quantile(x = apply(
-                    ##     probabilities[xin, subsamples, drop = FALSE],
-                    ##     2, function(x) {
-                    ##         quantile(x = x, probs = 31 / 32, type = 6, na.rm = TRUE)
-                    ##     }
-                    ## ), 31 / 32, type = 6, na.rm = TRUE)
-                } else {
-                    dim(probabilities$quantiles) <- dim(probabilities$quantiles)[-2]
-                    ymax <- probabilities$quantiles[xin, ]
-                    ymax <- max(ymax[is.finite(ymax)])
-                    ## ymax <- apply(probabilities[xin, , drop = FALSE], 1,
-                    ##     function(x) {
-                    ##         quantile(x, max(quants), type = 6, na.rm = TRUE)
-                    ##     }
-                    ## )
-                    ## ymax <- max(ymax[is.finite(ymax)])
-                }
-
-                ## prepare info for histogram data plots if required
-                if (datahistogram && theresdata) {
-                    datum <- data[[name]]
-                    datum <- datum[!is.na(datum)]
-
-                    din <- datum > domainminplushs & datum < domainmaxminushs
-                    ## try to guess optimal bin size
-                    nh <- max(32, round(length(datum[din]) / 64))
-
-                    ## histo <- thist(datum[din], n = nh, extendbreaks = FALSE)
-                    histo <- hist(datum, breaks = nh, plot = FALSE)
-                    hmax <- max(histo$density)
-
-                    hleft <- sum(datum <= domainminplushs) / length(datum)
-                    hright <- sum(datum >= domainmaxminushs) / length(datum)
-
-                    if(ymax / hmax < 0.3 | ymax / hmax > 3) {
-                        histo$density <- histo$density / max(histo$density) * ymax
-                    } else {
-                        ymax <- max(ymax, histo$density)
-                    }
-                }
-
-                ## If required, plot frequency samples
-                if (plotvariability == 'samples') {
-                    if (any(xin)) {
-                        pplot(
-                            x = Xgrid[xin],
-                            y = probabilities$samples[xin, , drop = FALSE],
-                            xlim = range(Xgrid), ylim = c(0, ymax),
-                            type = 'l', lty = 1, lwd = 2,
-                            col = adjustcolor(cyan, 1 / 8),
-                            xlab = name,
-                            ylab = paste0('probability density', addylab),
-                            family = fontfamily
-                        )
-                        addplot <- TRUE
-                    }
-
-                    ## Boundary points
-                    if (any(!xin)) {
-                        pplot(
-                            x = Xgrid[!xin],
-                            y = probabilities$value[!xin] * ymax,
-                            type = 'p', pch = 2, cex = 2,
-                            col = adjustcolor(cyan, 1 / 8),
-                            family = fontfamily,
-                            add = addplot
-                        )
-                        addplot <- TRUE
-                    }
-
-                } else if (plotvariability == 'quantiles') {
-                    if (any(xin)) {
-                        pplot(
-                            x = Xgrid[xin],
-                            y = probabilities$quantiles[xin, , drop = FALSE],
-                            type = 'qx',
-                            col = cyan, alpha.f = 0.25,
-                            xlim = range(Xgrid), ylim = c(0, ymax),
-                            xlab = name,
-                            ylab = paste0('probability density', addylab),
-                            family = fontfamily,
-                            add = addplot
-                        )
-                        addplot <- TRUE
-                    }
-
-                    ## Boundary points
-                    if (any(!xin)) {
-                        pplot(
-                            x = matrix(Xgrid[!xin],
-                                nrow = 2, ncol = sum(!xin), byrow = TRUE),
-                            y = t(probabilities$quantiles[!xin, , drop = FALSE]) *
-                                ymax,
-                            type = 'l', pch = 2, cex = 2,
-                            col = adjustcolor(cyan, 0.25),
-                            lty = 1, lwd = 16,
-                            add = addplot
-                        )
-                        addplot <- TRUE
-                    }
-                }
-
-                ## If required, plot probability
-                if (plotprobability) {
-                    if (any(xin)) {
-                        pplot(
-                            x = Xgrid[xin],
-                            y = probabilities$value[xin],
-                            xlim = range(Xgrid), ylim = c(0, ymax),
-                            type = 'l', cex = 0.5, lty = 1, lwd = 4,
-                            col = adjustcolor(blue, 0.75),
-                            xlab = name,
-                            ylab = paste0('probability density', addylab),
-                            family = fontfamily,
-                            add = addplot
-                        )
-                        addplot <- TRUE
-                    }
-
-                    ## Boundary points
-                    if (any(!xin)) {
-                        pplot(
-                            x = Xgrid[!xin],
-                            y = probabilities$value[!xin] * ymax,
-                            type = 'p', pch = 2, cex = 2,
-                            col = adjustcolor(blue, 0.75),
-                            lty = 1, lwd = 3,
-                            add = addplot
-                        )
-                        addplot <- TRUE
-                    }
-                }
-
-                ## If required and possible, plot data histogram
-                if (datahistogram && theresdata) {
-                    if(hleft + hright < 1) {
-                        pplot(
-                            x = histo$mids, y = histo$density,
-                            xlim = range(Xgrid), ylim = c(0, ymax),
-                            type = 'l', cex = 0.5, lty = 1, lwd = 2,
-                            col = adjustcolor(yellow, 0.5),
-                            ## border = '#555555', border.alpha = 1/4,
-                            xlab = name,
-                            ylab = paste0('probability density', addylab),
-                            family = fontfamily,
-                            add = addplot
-                        )
-                        addplot <- TRUE
-                    }
-
-                    ## Boundary points
-                    if (hleft + hright > 0) {
-                        pplot(
-                            x = c(if(hleft > 0){domainminplushs},
-                                if(hright > 0){domainmaxminushs}),
-                            y = c(if(hleft > 0){hleft},
-                                if(hright > 0){hright}) * ymax,
-                            type = 'p', pch = 0, cex = 2,
-                            col = adjustcolor(yellow, 0.5),
-                            lty = 1, lwd = 5,
-                            family = fontfamily,
-                            add = addplot
-                        )
-                        addplot <- TRUE
-                    }
-                }
-                ## End C case
-
-            } else if (mcmctype %in% c('D', 'O', 'N', 'B')) {
-                ## These variate types all have finite probabilities
-                if(nvaluelist > 0) {
-                    ## Xgrid <-  as.matrix(
-                    ##     .vtransform(x = datavalues,
-                    ##         variates = name,
-                    ##         auxmetadata = auxmetadata,
-                    ##         Oout = 'numeric',
-                    ##         Nout = 'numeric',
-                    ##         Bout = 'numeric',
-                    ##         logjacobianOr = NULL
-                    ##     ))
-                    Xgrid <- cbind(datavalues)
-                    colnames(Xgrid) <- name
-                    rownames(Xgrid) <- datavalues
-
-                } else {
-                    ## we must construct an X-grid
-                    Xgrid <- cbind(seq(plotmin, plotmax, by = halfstep * 2))
-                    colnames(Xgrid) <- name
-                    rownames(Xgrid) <- NULL
-                    Xticks <- NULL
-                }
-
-                probabilities <- Pr(Y = Xgrid, X = NULL,
-                    K = K,
-                    quantiles = quants,
-                    nsamples = nmcsamples,
-                    parallel = parallel,
-                    verbose = FALSE,
-                    keepYX = FALSE)
-
-                dim(probabilities$value) <- NULL
-
-
-                ## Find appropriate plot height across plots
-                if (plotvariability == 'samples') {
-                    dim(probabilities$samples) <- dim(probabilities$samples)[-2]
-                    ymax <- quantile(x = apply(probabilities$samples, 2,
-                        function(x) {
-                            quantile(x = x, probs = 31 / 32, type = 6,
-                                na.rm = TRUE, names = FALSE)
-                        }
-                    ), probs = 31 / 32, type = 6, na.rm = TRUE, names = FALSE)
-                    ## ymax <- quantile(apply(
-                    ##     probabilities[, subsamples, drop = FALSE],
-                    ##     2, function(x) {
-                    ##         quantile(x, 31 / 32, type = 6, na.rm = TRUE)
-                    ##     }
-                    ## ), 31 / 32, type = 6, na.rm = TRUE)
-                } else {
-                    dim(probabilities$quantiles) <- dim(probabilities$quantiles)[-2]
-                    ymax <- probabilities$quantiles
-                    ymax <- max(ymax[is.finite(ymax)])
-                    ## ymax <- apply(probabilities[, , drop = FALSE], 1,
-                    ##     function(x) {
-                    ##         quantile(x, max(quants), type = 6, na.rm = TRUE)
-                    ##     }
-                    ## )
-                    ## ymax <- max(ymax[is.finite(ymax)])
-                }
-
-                ## prepare info for histogram data plots if required
-                if (datahistogram && theresdata) {
-                    datum <- data[[name]]
-                    datum <- datum[!is.na(datum)]
-
-                    if(nvaluelist > 0) {
-                        histo <- as.vector(table(factor(datum,
-                            levels = rownames(Xgrid)))) / length(datum)
-                    } else {
-                        ## histo <- thist(datum,
-                        ##     n = c(Xgrid - halfstep, max(Xgrid) + halfstep),
-                        ##     extendbreaks = FALSE)$counts / length(datum)
-                        histo <- hist(datum,
-                            breaks = c(Xgrid - halfstep, max(Xgrid) + halfstep),
-                            plot = FALSE)$counts / length(datum)
-                    }
-
-                    ymax <- max(ymax, histo)
-                }
-
-                ## If required, plot frequency samples
-                if (plotvariability == 'samples') {
-                    pplot(
-                        x = Xgrid,
-                        y = probabilities$samples,
-                        ## xlim = range(Xgrid),
-                        ylim = c(0, ymax),
-                        ## xticks = Xticks, xlabels = rownames(Xgrid),
-                        type = 'o', lty = 1, lwd = 2,
-                        col = adjustcolor(cyan, 1 / 8),
-                        xlab = name,
-                        ylab = paste0('probability', addylab),
-                        family = fontfamily
-                    )
-                    addplot <- TRUE
-
-                } else if (plotvariability == 'quantiles') {
-                    ## marguncertainty <- t(apply(probabilities, 1, function(x) {
-                    ##     quantile(x, quants, type = 6, na.rm = TRUE)
-                    ## }))
-                    pplot(
-                        x = Xgrid,
-                        y = probabilities$quantiles,
-                        type = 'qx',
-                        col = cyan, alpha.f = 0.25,
-                        ## xlim = range(Xgrid),
-                        ylim = c(0, ymax),
-                        ## xticks = Xticks, xlabels = rownames(Xgrid),
-                        xlab = name,
-                        ylab = paste0('probability', addylab),
-                        family = fontfamily,
-                        add = addplot
-                    )
-                    addplot <- TRUE
-                }
-
-                ## If required, plot probability
-                if (plotprobability) {
-                    pplot(
-                        x = Xgrid,
-                        y = probabilities$value,
-                        xlim = range(Xgrid), ylim = c(0, ymax),
-                        ## xticks = Xticks, xlabels = rownames(Xgrid),
-                        type = 'o', pch = 16, cex = 0.5, lty = 1, lwd = 4,
-                        col = adjustcolor(blue, 0.75),
-                        xlab = name,
-                        ylab = paste0('probability', addylab),
-                        family = fontfamily,
-                        add = addplot
-                    )
-                    addplot <- TRUE
-                }
-
-                ## If required and possible, plot data histogram
-                if (datahistogram && theresdata) {
-                    pplot(
-                        x = Xgrid, y = histo,
-                        xlim = range(Xgrid), ylim = c(0, ymax),
-                        ## xticks = Xticks, xlabels = rownames(Xgrid),
-                        type = 'o', pch = 1, cex = 0.5, lty = 1, lwd = 2,
-                        col = adjustcolor(yellow, 0.5),
-                        ## border = '#555555', border.alpha = 1/4,
-                        xlab = name,
-                        ylab = paste0('probability', addylab),
-                        family = fontfamily,
-                        add = addplot
-                    )
-                    addplot <- TRUE
-                }
-                ## End D, O, N, B case
-            } else {
-                message('NOTE while plotting: unknown MC type for variate ', name)
+        ## Find appropriate plot height across plots
+        if (plotvariability == 'samples') {
+          dim(probabilities$samples) <- dim(probabilities$samples)[-2]
+          ymax <- quantile(x = apply(probabilities$samples, 2,
+            function(x) {
+              quantile(x = c(x), probs = 31 / 32, type = 6,
+                na.rm = TRUE, names = FALSE)
             }
+          ), probs = 31 / 32, type = 6, na.rm = TRUE, names = FALSE)
+        } else {
+          dim(probabilities$quantiles) <- dim(probabilities$quantiles)[-2]
+          ymax <- max(probabilities$quantiles[
+            is.finite(probabilities$quantiles)])
+          ##     apply(probabilities[, , drop = FALSE], 1,
+          ##     function(x) {
+          ##         quantile(x = x, max(quants), type = 6, na.rm = TRUE)
+          ##     }
+          ## )
+          ## ymax <- max(ymax[is.finite(ymax)])
+        }
 
-            ## Scatter plot of data if required
-            if (datascatter && theresdata) {
-                datum <- data[[name]]
-                datum <- datum[!is.na(datum)]
-                if (mcmctype %in% c('O', 'N', 'B')) {
-                    datum <- as.matrix(
-                        .vtransform(x = as.data.frame(datum, nm = name),
-                            auxmetadata = auxmetadata,
-                            Oout = 'numeric',
-                            Nout = 'numeric',
-                            Bout = 'numeric',
-                            logjacobianOr = NULL
-                        ))
-                }
-                if(mcmctype == 'B'){datum <- datum + 1}
-                rug(x = jitter(datum, amount = 0), side = 1,
-                    col = adjustcolor(yellow,
-                        alpha.f = exp((-length(datum) + 1) / 128)),
-                    quiet = TRUE)
-                ## scatteraxis(
-                ##     side = 1, n = NA, alpha = 0.75, ext = 5,
-                ##     x = datum + runif(length(datum),
-                ##         min = -min(diff(sort(c(par('usr')[1:2],
-                ##             unique(datum))))) / 1.5,
-                ##         max = min(diff(sort(c(par('usr')[1:2],
-                ##             unique(datum))))) / 1.5
-                ##     ),
-                ##     col = 4
-                ## )
-                ## ## These lines plot quartiles
-                ## if (vtype %in% c('R', 'D', 'C', 'L')) {
-                ## fiven <- fivenum(datum)
-                ## abline(v = fiven, col = paste0(palette()[c(2, 4, 5, 4, 2)], '44'),
-                ##     lwd = 5, lty = 2)
-                ## }
+        ## prepare info for histogram data plots if required
+        if (datahistogram && theresdata) {
+          datum <- data[[name]]
+          datum <- datum[!is.na(datum)]
+          ## try to guess optimal bin size
+          nh <- max(32, round(length(datum) / 64))
+
+          ## histo <- thist(datum, n = nh, extendbreaks = FALSE)
+          histo <- hist(datum, breaks = nh, plot = FALSE)
+          hmax <- max(histo$density)
+
+          if(ymax / hmax < 0.3 | ymax / hmax > 3) {
+            histo$density <- histo$density / max(histo$density) * ymax
+          } else {
+            ymax <- max(ymax, histo$density)
+          }
+        }
+
+        ## If required, plot frequency samples
+        if (plotvariability == 'samples') {
+          pplot(
+            x = Xgrid, y = probabilities$samples,
+            xlim = range(Xgrid), ylim = c(0, ymax),
+            type = 'l', lty = 1, lwd = 2,
+            col = adjustcolor(cyan, 1 / 8),
+            xlab = name,
+            ylab = paste0('probability density', addylab),
+            family = fontfamily
+          )
+          addplot <- TRUE # new plots must keep this one
+        } else if (plotvariability == 'quantiles') {
+          ## marguncertainty <- t(apply(probabilities, 1, function(x) {
+          ##     quantile(x = x, probs = quants, type = 6, na.rm = TRUE)
+          ## }))
+
+          pplot(
+            x = Xgrid,
+            y = probabilities$quantiles,
+            ## y = marguncertainty[, , drop = FALSE],
+            type = 'qx',
+            col = cyan, alpha.f = 0.25,
+            xlim = range(Xgrid), ylim = c(0, ymax),
+            xlab = name,
+            ylab = paste0('probability density', addylab),
+            family = fontfamily,
+            add = addplot
+          )
+          addplot <- TRUE # new plots must keep this one
+        }
+
+        ## If required, plot probability
+        if (plotprobability) {
+          pplot(
+            x = Xgrid,
+            y = probabilities$value,
+            ## y = rowMeans(probabilities[, , drop = FALSE], na.rm = TRUE),
+            xlim = range(Xgrid), ylim = c(0, ymax),
+            type = 'l', cex = 0.5, lty = 1, lwd = 4,
+            col = adjustcolor(blue, 0.75),
+            xlab = name,
+            ylab = paste0('probability density', addylab),
+            family = fontfamily,
+            add = addplot
+          )
+        }
+
+        ## If required and possible, plot data histogram
+        if (datahistogram && theresdata) {
+          pplot(
+            x = histo$mids, y = histo$density,
+            xlim = range(Xgrid), ylim = c(0, ymax),
+            type = 'l', cex = 0.5, lty = 1, lwd = 2,
+            col = adjustcolor(yellow, 0.5),
+            xlab = name,
+            ylab = paste0('probability density', addylab),
+            family = fontfamily,
+            add = addplot
+          )
+        }
+        ## End R case
+
+      } else if(mcmctype == 'C') {
+        ## C-type variates are peculiar because
+        ## their boundary values have a finite probability,
+        ## not a probability density.
+        ## These values need different handling and representation
+
+        Xgrid <- cbind(seq(plotmin, plotmax, length.out = 129))
+        colnames(Xgrid) <- name
+
+        xin <- Xgrid > domainminplushs & Xgrid < domainmaxminushs
+
+        probabilities <- Pr(Y = Xgrid, X = NULL,
+          K = K,
+          quantiles = quants,
+          nsamples = nmcsamples,
+          parallel = parallel,
+          verbose = FALSE,
+          keepYX = FALSE)
+
+        dim(probabilities$value) <- NULL
+
+        ## Find appropriate plot height across plots
+        if (plotvariability == 'samples') {
+          dim(probabilities$samples) <- dim(probabilities$samples)[-2]
+          ymax <- quantile(x = apply(
+            probabilities$samples[xin, , drop = FALSE], 2,
+            function(x) {
+              quantile(x = c(x), probs = 31 / 32, type = 6,
+                na.rm = TRUE, names = FALSE)
             }
-        }) # End with
-    }
-    invisible()
+          ), probs = 31 / 32, type = 6, na.rm = TRUE, names = FALSE)
+          ## ymax <- quantile(x = apply(
+          ##     probabilities[xin, subsamples, drop = FALSE],
+          ##     2, function(x) {
+          ##         quantile(x = x, probs = 31 / 32, type = 6, na.rm = TRUE)
+          ##     }
+          ## ), 31 / 32, type = 6, na.rm = TRUE)
+        } else {
+          dim(probabilities$quantiles) <- dim(probabilities$quantiles)[-2]
+          ymax <- probabilities$quantiles[xin, ]
+          ymax <- max(ymax[is.finite(ymax)])
+          ## ymax <- apply(probabilities[xin, , drop = FALSE], 1,
+          ##     function(x) {
+          ##         quantile(x, max(quants), type = 6, na.rm = TRUE)
+          ##     }
+          ## )
+          ## ymax <- max(ymax[is.finite(ymax)])
+        }
+
+        ## prepare info for histogram data plots if required
+        if (datahistogram && theresdata) {
+          datum <- data[[name]]
+          datum <- datum[!is.na(datum)]
+
+          din <- datum > domainminplushs & datum < domainmaxminushs
+          ## try to guess optimal bin size
+          nh <- max(32, round(length(datum[din]) / 64))
+
+          ## histo <- thist(datum[din], n = nh, extendbreaks = FALSE)
+          histo <- hist(datum, breaks = nh, plot = FALSE)
+          hmax <- max(histo$density)
+
+          hleft <- sum(datum <= domainminplushs) / length(datum)
+          hright <- sum(datum >= domainmaxminushs) / length(datum)
+
+          if(ymax / hmax < 0.3 | ymax / hmax > 3) {
+            histo$density <- histo$density / max(histo$density) * ymax
+          } else {
+            ymax <- max(ymax, histo$density)
+          }
+        }
+
+        ## If required, plot frequency samples
+        if (plotvariability == 'samples') {
+          if (any(xin)) {
+            pplot(
+              x = Xgrid[xin],
+              y = probabilities$samples[xin, , drop = FALSE],
+              xlim = range(Xgrid), ylim = c(0, ymax),
+              type = 'l', lty = 1, lwd = 2,
+              col = adjustcolor(cyan, 1 / 8),
+              xlab = name,
+              ylab = paste0('probability density', addylab),
+              family = fontfamily
+            )
+            addplot <- TRUE
+          }
+
+          ## Boundary points
+          if (any(!xin)) {
+            pplot(
+              x = Xgrid[!xin],
+              y = probabilities$value[!xin] * ymax,
+              type = 'p', pch = 2, cex = 2,
+              col = adjustcolor(cyan, 1 / 8),
+              family = fontfamily,
+              add = addplot
+            )
+            addplot <- TRUE
+          }
+
+        } else if (plotvariability == 'quantiles') {
+          if (any(xin)) {
+            pplot(
+              x = Xgrid[xin],
+              y = probabilities$quantiles[xin, , drop = FALSE],
+              type = 'qx',
+              col = cyan, alpha.f = 0.25,
+              xlim = range(Xgrid), ylim = c(0, ymax),
+              xlab = name,
+              ylab = paste0('probability density', addylab),
+              family = fontfamily,
+              add = addplot
+            )
+            addplot <- TRUE
+          }
+
+          ## Boundary points
+          if (any(!xin)) {
+            pplot(
+              x = matrix(Xgrid[!xin],
+                nrow = 2, ncol = sum(!xin), byrow = TRUE),
+              y = t(probabilities$quantiles[!xin, , drop = FALSE]) *
+                ymax,
+              type = 'l', pch = 2, cex = 2,
+              col = adjustcolor(cyan, 0.25),
+              lty = 1, lwd = 16,
+              add = addplot
+            )
+            addplot <- TRUE
+          }
+        }
+
+        ## If required, plot probability
+        if (plotprobability) {
+          if (any(xin)) {
+            pplot(
+              x = Xgrid[xin],
+              y = probabilities$value[xin],
+              xlim = range(Xgrid), ylim = c(0, ymax),
+              type = 'l', cex = 0.5, lty = 1, lwd = 4,
+              col = adjustcolor(blue, 0.75),
+              xlab = name,
+              ylab = paste0('probability density', addylab),
+              family = fontfamily,
+              add = addplot
+            )
+            addplot <- TRUE
+          }
+
+          ## Boundary points
+          if (any(!xin)) {
+            pplot(
+              x = Xgrid[!xin],
+              y = probabilities$value[!xin] * ymax,
+              type = 'p', pch = 2, cex = 2,
+              col = adjustcolor(blue, 0.75),
+              lty = 1, lwd = 3,
+              add = addplot
+            )
+            addplot <- TRUE
+          }
+        }
+
+        ## If required and possible, plot data histogram
+        if (datahistogram && theresdata) {
+          if(hleft + hright < 1) {
+            pplot(
+              x = histo$mids, y = histo$density,
+              xlim = range(Xgrid), ylim = c(0, ymax),
+              type = 'l', cex = 0.5, lty = 1, lwd = 2,
+              col = adjustcolor(yellow, 0.5),
+              ## border = '#555555', border.alpha = 1/4,
+              xlab = name,
+              ylab = paste0('probability density', addylab),
+              family = fontfamily,
+              add = addplot
+            )
+            addplot <- TRUE
+          }
+
+          ## Boundary points
+          if (hleft + hright > 0) {
+            pplot(
+              x = c(if(hleft > 0){domainminplushs},
+                if(hright > 0){domainmaxminushs}),
+              y = c(if(hleft > 0){hleft},
+                if(hright > 0){hright}) * ymax,
+              type = 'p', pch = 0, cex = 2,
+              col = adjustcolor(yellow, 0.5),
+              lty = 1, lwd = 5,
+              family = fontfamily,
+              add = addplot
+            )
+            addplot <- TRUE
+          }
+        }
+        ## End C case
+
+      } else if (mcmctype %in% c('D', 'O', 'N', 'B')) {
+        ## These variate types all have finite probabilities
+        if(nvaluelist > 0) {
+          ## Xgrid <-  as.matrix(
+          ##     .vtransform(x = datavalues,
+          ##         variates = name,
+          ##         auxmetadata = auxmetadata,
+          ##         Oout = 'numeric',
+          ##         Nout = 'numeric',
+          ##         Bout = 'numeric',
+          ##         logjacobianOr = NULL
+          ##     ))
+          Xgrid <- cbind(datavalues)
+          colnames(Xgrid) <- name
+          rownames(Xgrid) <- datavalues
+
+        } else {
+          ## we must construct an X-grid
+          Xgrid <- cbind(seq(plotmin, plotmax, by = halfstep * 2))
+          colnames(Xgrid) <- name
+          rownames(Xgrid) <- NULL
+          Xticks <- NULL
+        }
+
+        probabilities <- Pr(Y = Xgrid, X = NULL,
+          K = K,
+          quantiles = quants,
+          nsamples = nmcsamples,
+          parallel = parallel,
+          verbose = FALSE,
+          keepYX = FALSE)
+
+        dim(probabilities$value) <- NULL
+
+
+        ## Find appropriate plot height across plots
+        if (plotvariability == 'samples') {
+          dim(probabilities$samples) <- dim(probabilities$samples)[-2]
+          ymax <- quantile(x = apply(probabilities$samples, 2,
+            function(x) {
+              quantile(x = x, probs = 31 / 32, type = 6,
+                na.rm = TRUE, names = FALSE)
+            }
+          ), probs = 31 / 32, type = 6, na.rm = TRUE, names = FALSE)
+          ## ymax <- quantile(apply(
+          ##     probabilities[, subsamples, drop = FALSE],
+          ##     2, function(x) {
+          ##         quantile(x, 31 / 32, type = 6, na.rm = TRUE)
+          ##     }
+          ## ), 31 / 32, type = 6, na.rm = TRUE)
+        } else {
+          dim(probabilities$quantiles) <- dim(probabilities$quantiles)[-2]
+          ymax <- probabilities$quantiles
+          ymax <- max(ymax[is.finite(ymax)])
+          ## ymax <- apply(probabilities[, , drop = FALSE], 1,
+          ##     function(x) {
+          ##         quantile(x, max(quants), type = 6, na.rm = TRUE)
+          ##     }
+          ## )
+          ## ymax <- max(ymax[is.finite(ymax)])
+        }
+
+        ## prepare info for histogram data plots if required
+        if (datahistogram && theresdata) {
+          datum <- data[[name]]
+          datum <- datum[!is.na(datum)]
+
+          if(nvaluelist > 0) {
+            histo <- as.vector(table(factor(datum,
+              levels = rownames(Xgrid)))) / length(datum)
+          } else {
+            ## histo <- thist(datum,
+            ##     n = c(Xgrid - halfstep, max(Xgrid) + halfstep),
+            ##     extendbreaks = FALSE)$counts / length(datum)
+            histo <- hist(datum,
+              breaks = c(Xgrid - halfstep, max(Xgrid) + halfstep),
+              plot = FALSE)$counts / length(datum)
+          }
+
+          ymax <- max(ymax, histo)
+        }
+
+        ## If required, plot frequency samples
+        if (plotvariability == 'samples') {
+          pplot(
+            x = Xgrid,
+            y = probabilities$samples,
+            ## xlim = range(Xgrid),
+            ylim = c(0, ymax),
+            ## xticks = Xticks, xlabels = rownames(Xgrid),
+            type = 'o', lty = 1, lwd = 2,
+            col = adjustcolor(cyan, 1 / 8),
+            xlab = name,
+            ylab = paste0('probability', addylab),
+            family = fontfamily
+          )
+          addplot <- TRUE
+
+        } else if (plotvariability == 'quantiles') {
+          ## marguncertainty <- t(apply(probabilities, 1, function(x) {
+          ##     quantile(x, quants, type = 6, na.rm = TRUE)
+          ## }))
+          pplot(
+            x = Xgrid,
+            y = probabilities$quantiles,
+            type = 'qx',
+            col = cyan, alpha.f = 0.25,
+            ## xlim = range(Xgrid),
+            ylim = c(0, ymax),
+            ## xticks = Xticks, xlabels = rownames(Xgrid),
+            xlab = name,
+            ylab = paste0('probability', addylab),
+            family = fontfamily,
+            add = addplot
+          )
+          addplot <- TRUE
+        }
+
+        ## If required, plot probability
+        if (plotprobability) {
+          pplot(
+            x = Xgrid,
+            y = probabilities$value,
+            xlim = range(Xgrid), ylim = c(0, ymax),
+            ## xticks = Xticks, xlabels = rownames(Xgrid),
+            type = 'o', pch = 16, cex = 0.5, lty = 1, lwd = 4,
+            col = adjustcolor(blue, 0.75),
+            xlab = name,
+            ylab = paste0('probability', addylab),
+            family = fontfamily,
+            add = addplot
+          )
+          addplot <- TRUE
+        }
+
+        ## If required and possible, plot data histogram
+        if (datahistogram && theresdata) {
+          pplot(
+            x = Xgrid, y = histo,
+            xlim = range(Xgrid), ylim = c(0, ymax),
+            ## xticks = Xticks, xlabels = rownames(Xgrid),
+            type = 'o', pch = 1, cex = 0.5, lty = 1, lwd = 2,
+            col = adjustcolor(yellow, 0.5),
+            ## border = '#555555', border.alpha = 1/4,
+            xlab = name,
+            ylab = paste0('probability', addylab),
+            family = fontfamily,
+            add = addplot
+          )
+          addplot <- TRUE
+        }
+        ## End D, O, N, B case
+      } else {
+        message('NOTE while plotting: unknown MC type for variate ', name)
+      }
+
+      ## Scatter plot of data if required
+      if (datascatter && theresdata) {
+        datum <- data[[name]]
+        datum <- datum[!is.na(datum)]
+        if (mcmctype %in% c('O', 'N', 'B')) {
+          datum <- as.matrix(
+            .vtransform(x = as.data.frame(datum, nm = name),
+              auxmetadata = auxmetadata,
+              Oout = 'numeric',
+              Nout = 'numeric',
+              Bout = 'numeric',
+              logjacobianOr = NULL
+            ))
+        }
+        if(mcmctype == 'B'){datum <- datum + 1}
+        rug(x = jitter(datum, amount = 0), side = 1,
+          col = adjustcolor(yellow,
+            alpha.f = exp((-length(datum) + 1) / 128)),
+          quiet = TRUE)
+        ## scatteraxis(
+        ##     side = 1, n = NA, alpha = 0.75, ext = 5,
+        ##     x = datum + runif(length(datum),
+        ##         min = -min(diff(sort(c(par('usr')[1:2],
+        ##             unique(datum))))) / 1.5,
+        ##         max = min(diff(sort(c(par('usr')[1:2],
+        ##             unique(datum))))) / 1.5
+        ##     ),
+        ##     col = 4
+        ## )
+        ## ## These lines plot quartiles
+        ## if (vtype %in% c('R', 'D', 'C', 'L')) {
+        ## fiven <- fivenum(datum)
+        ## abline(v = fiven, col = paste0(palette()[c(2, 4, 5, 4, 2)], '44'),
+        ##     lwd = 5, lty = 2)
+        ## }
+      }
+    }) # End with
+  }
+  invisible()
 }

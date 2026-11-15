@@ -12,87 +12,86 @@
 #' @import stats
 #' @keywords internal
 .createQfunction <- function(
-    nint = 3600,
-    nsamples = 2^24L,
-    mean = 0,
-    sd = 3,
-    shapelo = 0.5,
-    shapehi = 0.5,
-    rate = 1,
-    file = paste0('__Qfunction', nint, '_', sd),
-#    save = TRUE, # save using usethis::use_data()
-    plot = FALSE
+  nint = 3600,
+  nsamples = 2^24L,
+  mean = 0,
+  sd = 3,
+  shapelo = 0.5,
+  shapehi = 0.5,
+  rate = 1,
+  file = paste0('__Qfunction', nint, '_', sd),
+  plot = FALSE
 ) {
-    ##
-    seqnint <- (1:(nint - 1)) / nint
-    means <- rnorm(nsamples, mean = mean, sd = sd)
-    sds <- sqrt(
-        nimble::rinvgamma(nsamples, shape = shapelo, rate = nimble::rinvgamma(nsamples, shape = shapehi, rate = rate))
-        ## extraDistr::rbetapr(nsamples, shape1=shapehi, shape2=shapelo, scale=scale)
-    )
-    xsamples <- rnorm(nsamples,
-        mean = means,
-        sd = sds
-    )
-    ##
-    thismad <- mad(xsamples, constant = 1)
-    oquants <- c(
-        NULL,
-        quantile(x = xsamples, probs = seqnint, na.rm = TRUE,
-            type = 6, names = FALSE),
-        NULL
-    )
-    rm(xsamples)
-    oquants <- (oquants - rev(oquants)) / 2
-    util_Q <- approxfun(x = seqnint, y = oquants, yleft = -Inf, yright = +Inf)
-    util_invQ <- approxfun(y = seqnint, x = oquants, yleft = 0, yright = 1)
+  ##
+  seqnint <- (1:(nint - 1)) / nint
+  means <- rnorm(nsamples, mean = mean, sd = sd)
+  sds <- sqrt(
+    nimble::rinvgamma(nsamples, shape = shapelo, rate = nimble::rinvgamma(nsamples, shape = shapehi, rate = rate))
+    ## extraDistr::rbetapr(nsamples, shape1=shapehi, shape2=shapelo, scale=scale)
+  )
+  xsamples <- rnorm(nsamples,
+    mean = means,
+    sd = sds
+  )
+  ##
+  thismad <- mad(xsamples, constant = 1)
+  oquants <- c(
+    NULL,
+    quantile(x = xsamples, probs = seqnint, na.rm = TRUE,
+      type = 6, names = FALSE),
+    NULL
+  )
+  rm(xsamples)
+  oquants <- (oquants - rev(oquants)) / 2
+  util_Q <- approxfun(x = seqnint, y = oquants, yleft = -Inf, yright = +Inf)
+  util_invQ <- approxfun(y = seqnint, x = oquants, yleft = 0, yright = 1)
 
-    if (is.character(file)) {
-        saveRDS(util_Q, paste0(file, '.rds'))
-        saveRDS(util_invQ, paste0(file,'_inv', '.rds'))
-    }
+  if (is.character(file)) {
+    saveRDS(util_Q, paste0(file, '.rds'))
+    saveRDS(util_invQ, paste0(file,'_inv', '.rds'))
+  }
+  ##
+  xsamples <- util_Q(seqnint)
+  cl <- parallel::makeCluster(8)
+  oquants <- parallel::parSapply(cl, xsamples,
+    function(x, mean, sd){ mean(dnorm(x, mean = mean, sd = sd)) },
+    mean = means, sd = sds
+  )
+  stopCluster(cl)
+  oquants <- (oquants + rev(oquants)) / 2
+  ##
+  ##
+  util_invDQ <- approxfun(x = xsamples, y = oquants, yleft = 0, yright = 0)
+  if (is.character(file)) {
+    saveRDS(util_invDQ, paste0('D', file, '.rds'))
+  }
+  if (is.character(plot)) {
     ##
-    xsamples <- util_Q(seqnint)
-    cl <- parallel::makeCluster(8)
-    oquants <- parallel::parSapply(cl, xsamples,
-        function(x, mean, sd){ mean(dnorm(x, mean = mean, sd = sd)) },
-        mean = means, sd = sds
-        )
-    stopCluster(cl)
-    oquants <- (oquants + rev(oquants)) / 2
-    ##
-    ##
-    util_invDQ <- approxfun(x = xsamples, y = oquants, yleft = 0, yright = 0)
-    if (is.character(file)) {
-        saveRDS(util_invDQ, paste0('D', file, '.rds'))
-    }
-    if (is.character(plot)) {
-        ##
-        nint <- 256
-        xgrid <- seq(1 / nint, (nint - 1) / nint, length.out = nint - 1)
-        pdf(file = paste0(sub('.pdf$', '', plot), '.pdf'),
-            paper = 'special',
-            height = floor(841 / sqrt(2)^(5)) / 25.4,
-            width = floor(841 / sqrt(2)^(5 - 1)) / 25.4)
-        pplot(
-            x = xgrid, y = list(
-                util_Q(xgrid), qnorm(xgrid, sd = thismad / qnorm(3 / 4)), qcauchy(xgrid, scale = thismad) # ,qlogis(xgrid,scale=1/qlogis(3/4))
-            ),
-            lwd = c(3, 2, 2, 5), lty = c(1, 2, 4, 3), alpha.f = c(1, rep(0.75, 3)),
-            ylim = range(util_Q(xgrid)),
-            ## xticks=c(0,0.25,0.5,0.75,1),xlabels=c(0,expression(italic(m)/4),expression(italic(m)/2),expression(3*italic(m)/4),expression(italic(m))),
-            xlab = expression(italic(x)), ylab = expression(italic(Q)(italic(x))),
-            mar = c(NA, 5, 1, 1)
-        )
-        legend('topleft', c(expression(italic(Q)), 'Gauss', 'Cauchy'), lwd = c(3, 2, 2, 5), lty = c(1, 2, 4, 3), col = c(1, 2, 3, 4), bty = 'n')
-        dev.off()
-    }
+    nint <- 256
+    xgrid <- seq(1 / nint, (nint - 1) / nint, length.out = nint - 1)
+    pdf(file = paste0(sub('.pdf$', '', plot), '.pdf'),
+      paper = 'special',
+      height = floor(841 / sqrt(2)^(5)) / 25.4,
+      width = floor(841 / sqrt(2)^(5 - 1)) / 25.4)
+    pplot(
+      x = xgrid, y = list(
+        util_Q(xgrid), qnorm(xgrid, sd = thismad / qnorm(3 / 4)), qcauchy(xgrid, scale = thismad) # ,qlogis(xgrid,scale=1/qlogis(3/4))
+      ),
+      lwd = c(3, 2, 2, 5), lty = c(1, 2, 4, 3), alpha.f = c(1, rep(0.75, 3)),
+      ylim = range(util_Q(xgrid)),
+      ## xticks=c(0,0.25,0.5,0.75,1),xlabels=c(0,expression(italic(m)/4),expression(italic(m)/2),expression(3*italic(m)/4),expression(italic(m))),
+      xlab = expression(italic(x)), ylab = expression(italic(Q)(italic(x))),
+      mar = c(NA, 5, 1, 1)
+    )
+    legend('topleft', c(expression(italic(Q)), 'Gauss', 'Cauchy'), lwd = c(3, 2, 2, 5), lty = c(1, 2, 4, 3), col = c(1, 2, 3, 4), bty = 'n')
+    dev.off()
+  }
 
-    ## ## This is only used during package development
-    ## if(save){
-    ##     usethis::use_data(util_Q, util_invQ, util_invDQ,
-    ##         internal = TRUE, overwrite = TRUE)
-    ## }
+  ## ## This is only used during package development
+  ## if(save){
+  ##     usethis::use_data(util_Q, util_invQ, util_invDQ,
+  ##         internal = TRUE, overwrite = TRUE)
+  ## }
 
-    list(util_Q = util_Q, util_invQ = util_invQ, util_invDQ = util_invDQ)
+  list(util_Q = util_Q, util_invQ = util_invQ, util_invDQ = util_invDQ)
 }

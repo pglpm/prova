@@ -4,14 +4,14 @@
 #'
 #' @keywords internal
 .mcsubset <- function(K, subsamples) {
-    lapply(K, function(xx) {
-        do.call('[', c(
-            list(xx),
-            rep(x = TRUE, times = length(dim(xx)) - 1),
-            list(subsamples),
-            list(drop = FALSE))
-        )
-    })
+  lapply(K, function(xx) {
+    do.call('[', c(
+      list(xx),
+      rep(x = TRUE, times = length(dim(xx)) - 1),
+      list(subsamples),
+      list(drop = FALSE))
+    )
+  })
 }
 
 
@@ -21,20 +21,20 @@
 #'
 #' @keywords internal
 .mcjoin <- function(x, y){
-    if(is.null(x)){
-        y
-    } else {
-        mapply(
-            function(xx, yy) {
-                temp <- c(xx, yy)
-                dx <- dim(yy)[-length(dim(yy))]
-                dim(temp) <- c(dx, length(temp) / prod(dx))
-                temp
-            },
-            x, y,
-            SIMPLIFY = FALSE
-        )
-    }
+  if(is.null(x)){
+    y
+  } else {
+    mapply(
+      function(xx, yy) {
+        temp <- c(xx, yy)
+        dx <- dim(yy)[-length(dim(yy))]
+        dim(temp) <- c(dx, length(temp) / prod(dx))
+        temp
+      },
+      x, y,
+      SIMPLIFY = FALSE
+    )
+  }
 }
 
 
@@ -54,17 +54,17 @@
 #'
 #' @keywords internal
 .a3bind <- function(x, y) {
-    if(is.null(x)) {
-        y
-    } else {
-        nrx <- dim(x)[1]
-        nry <- dim(y)[1]
-        out <- array(data = NA, dim = c(nrx + nry, dim(x)[-1]),
-            dimnames = NULL)
-        out[seq_len(nrx), ,] <- x
-        out[nrx + seq_len(nry), ,] <- y
-        out
-    }
+  if(is.null(x)) {
+    y
+  } else {
+    nrx <- dim(x)[1]
+    nry <- dim(y)[1]
+    out <- array(data = NA, dim = c(nrx + nry, dim(x)[-1]),
+      dimnames = NULL)
+    out[seq_len(nrx), ,] <- x
+    out[nrx + seq_len(nry), ,] <- y
+    out
+  }
 }
 
 #' Bind 3D arrays by second dimension
@@ -73,15 +73,15 @@
 #'
 #' @keywords internal
 .a3bind2 <- function(x, y) {
-    if(is.null(x)) {
-        y
-    } else {
-        nrx <- dim(x)[2]
-        nry <- dim(y)[2]
-        out <- array(data = NA, dim = c(dim(x)[1], nrx + nry, dim(x)[3]),
-            dimnames = NULL)
-        out[, seq_len(nrx),] <- x
-        out[, nrx + seq_len(nry),] <- y
-        out
-    }
+  if(is.null(x)) {
+    y
+  } else {
+    nrx <- dim(x)[2]
+    nry <- dim(y)[2]
+    out <- array(data = NA, dim = c(dim(x)[1], nrx + nry, dim(x)[3]),
+      dimnames = NULL)
+    out[, seq_len(nrx),] <- x
+    out[, nrx + seq_len(nry),] <- y
+    out
+  }
 }

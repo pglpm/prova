@@ -90,42 +90,42 @@
 #' @concept probability
 #' @export
 vrtgrid <- function(
-    vrt,
-    K = NULL,
-    length.out = NA
+  vrt,
+  K = NULL,
+  length.out = NA
 ){
-    ## default number of points for continuous non-rounded variates
-    lodefault <- 129
+  ## default number of points for continuous non-rounded variates
+  lodefault <- 129
 
-    ## Check and get 'K' argument
-    K <- getK(K)
+  ## Check and get 'K' argument
+  K <- getK(K)
 
-    ## Consistency checks
-    if(!all(vrt %in% K$auxmetadata$name)){
-        stop("'vrt' contains unknown variate names.")
-    }
+  ## Consistency checks
+  if(!all(vrt %in% K$auxmetadata$name)){
+    stop("'vrt' contains unknown variate names.")
+  }
 
-    if(is.null(names(length.out))){names(length.out) <- ''}
-    inlo <- names(length.out)[names(length.out) %in% vrt]
-    outlo <- vrt[!(vrt %in% inlo)]
-    lo <- length.out[names(length.out) == '']
-    length.out = c(length.out[inlo],
-        setNames(object = rep(x = lo, length.out = length(outlo)),
-            nm = outlo)
-    )
+  if(is.null(names(length.out))){names(length.out) <- ''}
+  inlo <- names(length.out)[names(length.out) %in% vrt]
+  outlo <- vrt[!(vrt %in% inlo)]
+  lo <- length.out[names(length.out) == '']
+  length.out = c(length.out[inlo],
+    setNames(object = rep(x = lo, length.out = length(outlo)),
+      nm = outlo)
+  )
 
-    expand.grid(setNames(
-        object = lapply(X = vrt, FUN = function(avrt){
-    adata <- as.list(K$auxmetadata[K$auxmetadata$name == avrt, ])
+  expand.grid(setNames(
+    object = lapply(X = vrt, FUN = function(avrt){
+      adata <- as.list(K$auxmetadata[K$auxmetadata$name == avrt, ])
 
-    if(adata$mcmctype %in% c('R', 'C')){
+      if(adata$mcmctype %in% c('R', 'C')){
         if(is.na(length.out[avrt])){length.out[avrt] <- lodefault}
         temp <- seq(adata$plotmin, adata$plotmax, length.out = length.out[avrt])
-    } else if(adata$mcmctype == 'D'){
+      } else if(adata$mcmctype == 'D'){
         if(is.na(length.out[avrt])){
-            seq(adata$plotmin, adata$plotmax, by = 2 * adata$halfstep)
+          seq(adata$plotmin, adata$plotmax, by = 2 * adata$halfstep)
         } else {
-            seq(adata$plotmin, adata$plotmax, length.out = length.out[avrt])
+          seq(adata$plotmin, adata$plotmax, length.out = length.out[avrt])
         }
         ## step <- as.integer(ceiling((adata$plotmax - adata$plotmin) /
         ##                                (2 * adata$halfstep)))
@@ -135,9 +135,9 @@ vrtgrid <- function(
         ##     2 * adata$halfstep
         ## temp <- seq(adata$plotmin, adata$plotmax,
         ##     length.out = 1 + round((adata$plotmax - adata$plotmin)/step))
-    } else if(adata$mcmctype %in% c('B', 'O', 'N')){
+      } else if(adata$mcmctype %in% c('B', 'O', 'N')){
         unname(unlist(adata[paste0('V', seq_len(adata$Nvalues))]))
-    }
-        }),
+      }
+    }),
     nm = vrt), KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
 }

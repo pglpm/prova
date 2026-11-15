@@ -241,530 +241,530 @@
 #' @concept probability
 #' @export
 Pr <- function(
-    Y,
-    X = NA,
-    K = NULL,
-    tails = NULL,
-    priorY = NULL,
-    nsamples = 'all',
-    quantiles = c(0.055, 0.25, 0.75, 0.945),
-    parallel = TRUE,
-    sep = ',',
-    solidus = '|',
-    verbose = FALSE,
-    keepYX = TRUE
+  Y,
+  X = NA,
+  K = NULL,
+  tails = NULL,
+  priorY = NULL,
+  nsamples = 'all',
+  quantiles = c(0.055, 0.25, 0.75, 0.945),
+  parallel = TRUE,
+  sep = ',',
+  solidus = '|',
+  verbose = FALSE,
+  keepYX = TRUE
 ){
-    ## #' @param usememory Logical, default `TRUE`: save partial results to disc, to avoid excessive RAM use. (For the moment only possible value is `TRUE`.)
-    usememory <- TRUE
+  ## #' @param usememory Logical, default `TRUE`: save partial results to disc, to avoid excessive RAM use. (For the moment only possible value is `TRUE`.)
+  usememory <- TRUE
 
-    Qerror <- pnorm(c(-1, 1))
+  Qerror <- pnorm(c(-1, 1))
 
 #### Requested parallel processing
-    ## NB: doesn't make sense to have more cores than chains
-    closeexit <- FALSE
-    if (inherits(parallel, "cluster")){
-        ## user provides a cluster object
-        ## use only as many nodes as necessary
-        ncores <- length(parallel)
-        cl <- parallel
-    } else if (isTRUE(parallel)) {
-        ## user wants us to check for or register a parallel backend
-        ## and to choose number of cores
-        cl <- parallel::getDefaultCluster()
-        if(is.null(cl)){
-            ncores <- getOption("cl.cores", 2)
-            cl <- parallel::makeCluster(ncores)
-            closeexit <- TRUE
-            if(verbose){message('Registered ', capture.output(print(cl)), '.')}
-        }
-    } else if (isFALSE(parallel)) {
-        ## user wants us not to use parallel cores
-        ncores <- 1
-        cl <- parallel::makeCluster(ncores)
-        closeexit <- TRUE
-    } else if (is.numeric(parallel) &&
-                   is.finite(parallel) && parallel >= 1) {
-        ## user wants us to register 'parallel' # of cores
-        ncores <- parallel
-        cl <- parallel::makeCluster(ncores)
-        closeexit <- TRUE
-        if(verbose){message('Registered ', capture.output(print(cl)), '.')}
-    } else {
-        stop("Unknown value of argument 'parallel'.")
+  ## NB: doesn't make sense to have more cores than chains
+  closeexit <- FALSE
+  if (inherits(parallel, "cluster")){
+    ## user provides a cluster object
+    ## use only as many nodes as necessary
+    ncores <- length(parallel)
+    cl <- parallel
+  } else if (isTRUE(parallel)) {
+    ## user wants us to check for or register a parallel backend
+    ## and to choose number of cores
+    cl <- parallel::getDefaultCluster()
+    if(is.null(cl)){
+      ncores <- getOption("cl.cores", 2)
+      cl <- parallel::makeCluster(ncores)
+      closeexit <- TRUE
+      if(verbose){message('Registered ', capture.output(print(cl)), '.')}
+    }
+  } else if (isFALSE(parallel)) {
+    ## user wants us not to use parallel cores
+    ncores <- 1
+    cl <- parallel::makeCluster(ncores)
+    closeexit <- TRUE
+  } else if (is.numeric(parallel) &&
+               is.finite(parallel) && parallel >= 1) {
+    ## user wants us to register 'parallel' # of cores
+    ncores <- parallel
+    cl <- parallel::makeCluster(ncores)
+    closeexit <- TRUE
+    if(verbose){message('Registered ', capture.output(print(cl)), '.')}
+  } else {
+    stop("Unknown value of argument 'parallel'.")
+  }
+
+  ## Close parallel connections if any were opened
+  if(closeexit) {
+    closecoresonexit <- function(){
+      if(verbose){message('Closing connections to cores.')}
+      parallel::stopCluster(cl)
+      ## parallel::setDefaultCluster(NULL)
+    }
+    on.exit(closecoresonexit())
+  }
+
+  ## ## Figure out unnamed arguments
+  ## Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
+  ## if(!is.null(X) && is.null(K)){
+  ##     K <- X
+  ##     X <- NULL
+  ##     Kname <- Kname[2]
+  ## } else if(!is.null(X) && !is.null(K) && is.null(tails) &&
+  ##               !is.null(getK(X))){
+  ##         tails <- K
+  ##         K <- X
+  ##         X <- NULL
+  ##         Kname <- Kname[2]
+  ## } else {
+  ##     Kname <- Kname[1]
+  ## }
+
+  ## Check 'K' argument and name
+  K <- getK(K, deparse(substitute(K)))
+  Kname <- K[[2]]
+  K <- K[[1]]
+  gc(full = TRUE)
+
+  auxmetadata <- K$auxmetadata
+  K$auxmetadata <- NULL
+  K$info <- NULL
+  ncomponents <- nrow(K$W)
+  nmcsamples <- ncol(K$W)
+
+  if(is.null(nsamples)){
+    nsamples <- 0
+  } else if(is.numeric(nsamples)){
+    if(is.na(nsamples) || nsamples < 1) {
+      nsamples <- 0
+    } else if(nsamples > nmcsamples){
+      nsamples <- nmcsamples
+    }
+  } else if (is.character(nsamples) && nsamples == 'all'){
+    nsamples <- nmcsamples
+  }
+
+  if(!is.data.frame(Y)){ Y <- as.data.frame(Y) }
+  Yv <- colnames(Y)
+
+  if(all(is.na(X))){X <- NULL}
+  if(!is.null(X) && !is.data.frame(X)){ X <- as.data.frame(X) }
+  Xv <- colnames(X)
+
+  if(!is.null(tails)){
+    tails <- as.list(tails)
+    if(is.null(names(tails))) {
+      stop('Missing variate names in "tails"')
+    }
+  }
+  tailscentre <- list('==', 0, '0', NULL)
+  tailsleft <- list('<=', -1, '-1', 'left', 'lower')
+  tailsright <- list('>=', 1, '+1', 'right', 'upper')
+  tailsvalues <- c(tailscentre, tailsleft, tailsright)
+
+
+  ## Consistency checks
+
+  if(!all(Yv %in% auxmetadata$name)) {
+    stop('unknown Y variate ',
+      paste0(Yv[!(Yv %in% auxmetadata$name)], collapse = ' '),
+      '\n')
+  }
+  if(anyDuplicated(Yv)){
+    stop('duplicate Y variates\n')
+  }
+
+  if (!all(Xv %in% auxmetadata$name)) {
+    stop('unknown X variate ',
+      paste0(Xv[!(Xv %in% auxmetadata$name)], collapse = ' '),
+      '\n')
+  }
+  if(anyDuplicated(Xv)){
+    stop('duplicate X variates\n')
+  }
+
+  if(anyDuplicated(c(Yv, Xv))){
+    stop('overlap in Y and X variates\n')
+  }
+
+  tailsv <- names(tails)
+  if(!all(tailsv %in% c(Yv, Xv))) {
+    warning('"tails" variate ',
+      paste0(tailsv[!(tailsv %in% c(Yv, Xv))], collapse = ' '),
+      ' not among Y and X; ignored\n')
+    tails <- tails[tailsv %in% c(Yv, Xv)]
+    tailsv <- names(tails)
+  }
+  if(anyDuplicated(tailsv)){
+    stop('duplicate "tails" variates\n')
+  }
+  if(!all(tails %in% tailsvalues)) {
+    stop('"tails" values must be ',
+      paste0(tailsvalues, collapse = ' '), '\n')
+  }
+
+  ## transform 'tails' to -1, +1
+  ## +1: '<=',    -1: '>='
+  ## this is opposite of the argument convention because
+  ## interval probabilities are calculated with `lower.tail = TRUE`
+  ## eg:
+  ## pnorm(x, mean, sd, lower.tail = FALSE) ==
+  ##     pnorm(-x, -mean, sd, lower.tail = TRUE)
+  tails[tails %in% tailscentre] <- NULL
+  cleft <- tails %in% tailsleft
+  cright <- tails %in% tailsright
+  tails[cleft] <- +1
+  tails[cright] <- -1
+  tails <- unlist(tails)
+  tailsv <- names(tails)
+
+  ## Check if a prior for Y is given, in that case Y and X will be swapped
+  if(!is.null(priorY) && (isFALSE(priorY) || any(is.na(priorY)))){
+    priorY <- NULL
+  }
+
+  if(!is.null(priorY)){
+    ## Conditions for using priorY
+    if(is.null(X)){ stop("'X' must be non-null if 'priorY' is given") }
+
+    if(anyDuplicated(Y)){
+      stop("All rows in 'Y' must be unique if 'priorY' is given")
     }
 
-    ## Close parallel connections if any were opened
-    if(closeexit) {
-        closecoresonexit <- function(){
-            if(verbose){message('Closing connections to cores.')}
-            parallel::stopCluster(cl)
-            ## parallel::setDefaultCluster(NULL)
-        }
-        on.exit(closecoresonexit())
+    ## if priorY is TRUE, the user wants a uniform prior distribution
+    if(isTRUE(priorY)){
+      priorY <- 1 + numeric(nrow(Y))
+    }
+    if(length(priorY) != nrow(Y)){
+      stop("'priorY' must have as many entries as rows of 'Y'")
+    }
+    if(!is.numeric(priorY) || any(priorY < 0)) {
+      stop("'priorY' contains invalid probabilities")
     }
 
-    ## ## Figure out unnamed arguments
-    ## Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
-    ## if(!is.null(X) && is.null(K)){
-    ##     K <- X
-    ##     X <- NULL
-    ##     Kname <- Kname[2]
-    ## } else if(!is.null(X) && !is.null(K) && is.null(tails) &&
-    ##               !is.null(getK(X))){
-    ##         tails <- K
-    ##         K <- X
-    ##         X <- NULL
-    ##         Kname <- Kname[2]
+    ## Swap X and Y, to use Bayes's theorem
+    ## And consider all values of Y, if it only has discrete variates
+    . <- Y
+    Y <- X
+    X <- .
+    ## ## ## Alternative version: calculate for all possible Y-values,
+    ## ## ## if Y has finite domain
+    ## ## 'X' used below will contain all values of the original Y-variates
+    ## if(all(auxmetadata[auxmetadata$name %in% Yv, 'mcmctype'] %in%
+    ##            c('B', 'O', 'N'))){
+    ##     X <- do.call(what = expand.grid,
+    ##         args = c(setNames(
+    ##             object = lapply(X = Yv, FUN = vrtgrid,
+    ##                 K = list(auxmetadata = auxmetadata)),
+    ##             nm = Yv),
+    ##             list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+    ##         ) )
+    ##
+    ##     Ytokeep <- match(do.call(paste0, Y0), do.call(paste0, X))
+    ##
     ## } else {
-    ##     Kname <- Kname[1]
+    ##     X <- Y0
+    ##     Ytokeep <- TRUE
     ## }
 
-    ## Check 'K' argument and name
-    K <- getK(K, deparse(substitute(K)))
-    Kname <- K[[2]]
-    K <- K[[1]]
+    . <- Yv
+    Yv <- Xv
+    Xv <- .
+    rm(.)
     gc(full = TRUE)
 
-    auxmetadata <- K$auxmetadata
-    K$auxmetadata <- NULL
-    K$info <- NULL
-    ncomponents <- nrow(K$W)
-    nmcsamples <- ncol(K$W)
+  }
 
-    if(is.null(nsamples)){
-        nsamples <- 0
-    } else if(is.numeric(nsamples)){
-        if(is.na(nsamples) || nsamples < 1) {
-            nsamples <- 0
-        } else if(nsamples > nmcsamples){
-            nsamples <- nmcsamples
-        }
-    } else if (is.character(nsamples) && nsamples == 'all'){
-        nsamples <- nmcsamples
-    }
-
-    if(!is.data.frame(Y)){ Y <- as.data.frame(Y) }
-    Yv <- colnames(Y)
-
-    if(all(is.na(X))){X <- NULL}
-    if(!is.null(X) && !is.data.frame(X)){ X <- as.data.frame(X) }
-    Xv <- colnames(X)
-
-    if(!is.null(tails)){
-        tails <- as.list(tails)
-        if(is.null(names(tails))) {
-            stop('Missing variate names in "tails"')
-        }
-    }
-    tailscentre <- list('==', 0, '0', NULL)
-    tailsleft <- list('<=', -1, '-1', 'left', 'lower')
-    tailsright <- list('>=', 1, '+1', 'right', 'upper')
-    tailsvalues <- c(tailscentre, tailsleft, tailsright)
-
-
-    ## Consistency checks
-
-    if(!all(Yv %in% auxmetadata$name)) {
-        stop('unknown Y variate ',
-            paste0(Yv[!(Yv %in% auxmetadata$name)], collapse = ' '),
-            '\n')
-    }
-    if(anyDuplicated(Yv)){
-        stop('duplicate Y variates\n')
-    }
-
-    if (!all(Xv %in% auxmetadata$name)) {
-        stop('unknown X variate ',
-            paste0(Xv[!(Xv %in% auxmetadata$name)], collapse = ' '),
-            '\n')
-    }
-    if(anyDuplicated(Xv)){
-        stop('duplicate X variates\n')
-    }
-
-    if(anyDuplicated(c(Yv, Xv))){
-        stop('overlap in Y and X variates\n')
-    }
-
-    tailsv <- names(tails)
-    if(!all(tailsv %in% c(Yv, Xv))) {
-        warning('"tails" variate ',
-            paste0(tailsv[!(tailsv %in% c(Yv, Xv))], collapse = ' '),
-            ' not among Y and X; ignored\n')
-        tails <- tails[tailsv %in% c(Yv, Xv)]
-        tailsv <- names(tails)
-    }
-    if(anyDuplicated(tailsv)){
-        stop('duplicate "tails" variates\n')
-    }
-    if(!all(tails %in% tailsvalues)) {
-        stop('"tails" values must be ',
-            paste0(tailsvalues, collapse = ' '), '\n')
-    }
-
-    ## transform 'tails' to -1, +1
-    ## +1: '<=',    -1: '>='
-    ## this is opposite of the argument convention because
-    ## interval probabilities are calculated with `lower.tail = TRUE`
-    ## eg:
-    ## pnorm(x, mean, sd, lower.tail = FALSE) ==
-    ##     pnorm(-x, -mean, sd, lower.tail = TRUE)
-    tails[tails %in% tailscentre] <- NULL
-    cleft <- tails %in% tailsleft
-    cright <- tails %in% tailsright
-    tails[cleft] <- +1
-    tails[cright] <- -1
-    tails <- unlist(tails)
-    tailsv <- names(tails)
-
-    ## Check if a prior for Y is given, in that case Y and X will be swapped
-    if(!is.null(priorY) && (isFALSE(priorY) || any(is.na(priorY)))){
-        priorY <- NULL
-    }
-
-    if(!is.null(priorY)){
-        ## Conditions for using priorY
-        if(is.null(X)){ stop("'X' must be non-null if 'priorY' is given") }
-
-        if(anyDuplicated(Y)){
-            stop("All rows in 'Y' must be unique if 'priorY' is given")
-        }
-
-        ## if priorY is TRUE, the user wants a uniform prior distribution
-        if(isTRUE(priorY)){
-            priorY <- 1 + numeric(nrow(Y))
-        }
-        if(length(priorY) != nrow(Y)){
-            stop("'priorY' must have as many entries as rows of 'Y'")
-        }
-        if(!is.numeric(priorY) || any(priorY < 0)) {
-            stop("'priorY' contains invalid probabilities")
-        }
-
-        ## Swap X and Y, to use Bayes's theorem
-        ## And consider all values of Y, if it only has discrete variates
-        . <- Y
-        Y <- X
-        X <- .
-        ## ## ## Alternative version: calculate for all possible Y-values,
-        ## ## ## if Y has finite domain
-        ## ## 'X' used below will contain all values of the original Y-variates
-        ## if(all(auxmetadata[auxmetadata$name %in% Yv, 'mcmctype'] %in%
-        ##            c('B', 'O', 'N'))){
-        ##     X <- do.call(what = expand.grid,
-        ##         args = c(setNames(
-        ##             object = lapply(X = Yv, FUN = vrtgrid,
-        ##                 K = list(auxmetadata = auxmetadata)),
-        ##             nm = Yv),
-        ##             list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-        ##         ) )
-        ##
-        ##     Ytokeep <- match(do.call(paste0, Y0), do.call(paste0, X))
-        ##
-        ## } else {
-        ##     X <- Y0
-        ##     Ytokeep <- TRUE
-        ## }
-
-        . <- Yv
-        Yv <- Xv
-        Xv <- .
-        rm(.)
-        gc(full = TRUE)
-
-    }
-
-    nY <- nrow(Y)
-    nX <- max(nrow(X), 1L)
+  nY <- nrow(Y)
+  nX <- max(nrow(X), 1L)
 
 #### tmp dir where to save X and Y objects
-    temporarydir <- tempdir()
+  temporarydir <- tempdir()
 
 
 #### Calculate and save arrays for X values:
-    if (is.null(X)) {
-        lprobX <- log(K$W)
-        saveRDS(lprobX,
-            file.path(temporarydir,
-                paste0('__X', 1, '__.rds'))
-        )
-    } else {
-        ## Construction of the arguments for util_lprobs, X argument
-        lpargs <- .lprobsargsyx(
-            x = X,
-            auxmetadata = auxmetadata,
-            K = K,
-            tails = tails
-        )
-
-        ## each instance of .lprobsbase() takes one datapoint
-        invisible(parallel::parLapply(cl = cl,
-            X = lpargs$xVs,
-            fun = .lprobsbase,
-            params = lpargs$params,
-            logW = c(log(K$W)),
-            temporarydir = temporarydir,
-            lab = '__X'
-        ))
-    }
-
-
-#### Calculate and save arrays for Y values:
-
-    ## Construction of the arguments for util_lprobs, Y argument
-    ## jacobians <- exp(-rowSums(
-    ##     log(.vtransform(Y,
-    ##         auxmetadata = auxmetadata,
-    ##         invjacobian = TRUE)),
-    ##     na.rm = TRUE
-    ## ))
-
+  if (is.null(X)) {
+    lprobX <- log(K$W)
+    saveRDS(lprobX,
+      file.path(temporarydir,
+        paste0('__X', 1, '__.rds'))
+    )
+  } else {
+    ## Construction of the arguments for util_lprobs, X argument
     lpargs <- .lprobsargsyx(
-        x = Y,
-        auxmetadata = auxmetadata,
-        K = K,
-        tails = tails
+      x = X,
+      auxmetadata = auxmetadata,
+      K = K,
+      tails = tails
     )
 
     ## each instance of .lprobsbase() takes one datapoint
     invisible(parallel::parLapply(cl = cl,
-        X = lpargs$xVs,
-        fun = .lprobsbase,
-        params = lpargs$params,
-        logW = 0,
-        temporarydir = temporarydir,
-        lab = '__Y'
+      X = lpargs$xVs,
+      fun = .lprobsbase,
+      params = lpargs$params,
+      logW = c(log(K$W)),
+      temporarydir = temporarydir,
+      lab = '__X'
     ))
+  }
 
-    ## Calculation with all Y and X combinations
-    keys <- c('value', 'quantiles', 'samples', 'value.acc', 'quantiles.acc')
-    ##
-    combfnr <- function(...){setNames(do.call(mapply,
-        c(FUN = `rbind`, lapply(X = ..., FUN = `[`, keys, drop = FALSE))),
-        keys)}
-    ## combfnc <- function(...){setNames(do.call(mapply, c(FUN=cbind, lapply(list(...), `[`, keys))), keys)}
 
-    doquantiles <- !is.null(quantiles)
-    dosamples <- (nsamples > 0)
+#### Calculate and save arrays for Y values:
 
-    if(is.null(priorY)){
-        out <- combfnr(parallel::parApply(cl = cl,
-            X = expand.grid(
-                jy = seq_len(nY), # these will be rows
-                jx = seq_len(nX), # these will be cols
-                KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
-            MARGIN = 1,
-            FUN = .combineYX,
-            temporarydir = temporarydir, usememory = usememory,
-            doquantiles = doquantiles, quantiles = quantiles,
-            dosamples = dosamples, nsamples = nsamples,
-            Qerror = Qerror
-        ))
-    } else {
-        out <- combfnr(parallel::parApply(cl = cl,
-            X = expand.grid(
-                jx = seq_len(nX), # these will be rows
-                jy = seq_len(nY), # these will be cols
-                KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
-            MARGIN = 1,
-            FUN = .combineYX,
-            temporarydir = temporarydir, usememory = usememory,
-            doquantiles = doquantiles, quantiles = quantiles,
-            dosamples = dosamples, nsamples = nsamples,
-            Qerror = Qerror
-        ))
+  ## Construction of the arguments for util_lprobs, Y argument
+  ## jacobians <- exp(-rowSums(
+  ##     log(.vtransform(Y,
+  ##         auxmetadata = auxmetadata,
+  ##         invjacobian = TRUE)),
+  ##     na.rm = TRUE
+  ## ))
+
+  lpargs <- .lprobsargsyx(
+    x = Y,
+    auxmetadata = auxmetadata,
+    K = K,
+    tails = tails
+  )
+
+  ## each instance of .lprobsbase() takes one datapoint
+  invisible(parallel::parLapply(cl = cl,
+    X = lpargs$xVs,
+    fun = .lprobsbase,
+    params = lpargs$params,
+    logW = 0,
+    temporarydir = temporarydir,
+    lab = '__Y'
+  ))
+
+  ## Calculation with all Y and X combinations
+  keys <- c('value', 'quantiles', 'samples', 'value.acc', 'quantiles.acc')
+  ##
+  combfnr <- function(...){setNames(do.call(mapply,
+    c(FUN = `rbind`, lapply(X = ..., FUN = `[`, keys, drop = FALSE))),
+    keys)}
+  ## combfnc <- function(...){setNames(do.call(mapply, c(FUN=cbind, lapply(list(...), `[`, keys))), keys)}
+
+  doquantiles <- !is.null(quantiles)
+  dosamples <- (nsamples > 0)
+
+  if(is.null(priorY)){
+    out <- combfnr(parallel::parApply(cl = cl,
+      X = expand.grid(
+        jy = seq_len(nY), # these will be rows
+        jx = seq_len(nX), # these will be cols
+        KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
+      MARGIN = 1,
+      FUN = .combineYX,
+      temporarydir = temporarydir, usememory = usememory,
+      doquantiles = doquantiles, quantiles = quantiles,
+      dosamples = dosamples, nsamples = nsamples,
+      Qerror = Qerror
+    ))
+  } else {
+    out <- combfnr(parallel::parApply(cl = cl,
+      X = expand.grid(
+        jx = seq_len(nX), # these will be rows
+        jy = seq_len(nY), # these will be cols
+        KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
+      MARGIN = 1,
+      FUN = .combineYX,
+      temporarydir = temporarydir, usememory = usememory,
+      doquantiles = doquantiles, quantiles = quantiles,
+      dosamples = dosamples, nsamples = nsamples,
+      Qerror = Qerror
+    ))
+  }
+
+  ## clean temp files
+  if(usememory) {
+    unlink(x = c(
+      sapply(seq_len(nX), function(jx){
+        file.path(temporarydir, paste0('__X', jx, '__.rds'))
+      }),
+      sapply(seq_len(nY), function(jy){
+        file.path(temporarydir, paste0('__Y', jy, '__.rds'))
+      })
+    ))
+  }
+
+  ## transform to grid
+  ## in the output-list elements the Y & X values are the rows
+  if(is.null(priorY)){
+    dim(out$value) <- dim(out$value.acc) <- c(nY, nX)
+
+    if(dosamples){
+      dim(out$samples) <- c(nY, nX, nsamples)
     }
 
-    ## clean temp files
-    if(usememory) {
-        unlink(x = c(
-            sapply(seq_len(nX), function(jx){
-                file.path(temporarydir, paste0('__X', jx, '__.rds'))
-            }),
-            sapply(seq_len(nY), function(jy){
-                file.path(temporarydir, paste0('__Y', jy, '__.rds'))
-            })
-        ))
+    if(doquantiles){
+      dim(out$quantiles) <- dim(out$quantiles.acc) <-
+        c(nY, nX, length(quantiles))
     }
 
-    ## transform to grid
-    ## in the output-list elements the Y & X values are the rows
-    if(is.null(priorY)){
-        dim(out$value) <- dim(out$value.acc) <- c(nY, nX)
+  } else {
+    dim(out$value) <- dim(out$value.acc) <- c(nX, nY)
+    ## now: *original Y* are rows, *original X* are cols
+    ## apply Bayes's theorem
+    out$value <- t(out$value * priorY)
+    out$value.acc <- t(out$value.acc * priorY)
+    ## now: *original X* are rows, *original Y* are cols
 
-        if(dosamples){
-            dim(out$samples) <- c(nY, nX, nsamples)
-        }
+    normf <- rowSums(x = out$value, na.rm = TRUE)
 
-        if(doquantiles){
-            dim(out$quantiles) <- dim(out$quantiles.acc) <-
-                c(nY, nX, length(quantiles))
-        }
+    ## error propagation:
+    out$value.acc <- t(
+      out$value.acc / normf +
+        out$value *
+        rowSums(x = out$value.acc, na.rm = TRUE) /
+        (normf^2)
+    )
+    out$value <- t(out$value / normf)
 
-    } else {
-        dim(out$value) <- dim(out$value.acc) <- c(nX, nY)
-        ## now: *original Y* are rows, *original X* are cols
-        ## apply Bayes's theorem
-        out$value <- t(out$value * priorY)
-        out$value.acc <- t(out$value.acc * priorY)
-        ## now: *original X* are rows, *original Y* are cols
+    ## now: *original Y* are rows, *original X* are cols
 
-        normf <- rowSums(x = out$value, na.rm = TRUE)
+    ## ## ## Alternative version, with all Y-values
+    ## ## subset to original Y-values
+    ## out$value <- out$value[Ytokeep, , drop = FALSE]
+    ## out$value.acc <- out$value.acc[Ytokeep, , drop = FALSE]
 
-        ## error propagation:
-        out$value.acc <- t(
-            out$value.acc / normf +
-                out$value *
-                rowSums(x = out$value.acc, na.rm = TRUE) /
-                (normf^2)
-        )
-        out$value <- t(out$value / normf)
+    if(dosamples){
+      dim(out$samples) <- c(nX, nY, nsamples)
+      out$samples <- out$samples * priorY
+      normf <- c(colSums(x = out$samples, dims = 1, na.rm = TRUE))
+      out$samples <- aperm(
+        a = aperm(a = out$samples, perm = c(2, 3, 1)) / normf,
+        perm = c(3, 1, 2) )
 
-        ## now: *original Y* are rows, *original X* are cols
+      ## ## ## Alternative version, with all Y-values
+      ## ## subset to original Y-values
+      ## out$samples <- out$samples[Ytokeep, , , drop = FALSE]
+
+      ## Calculate quantiles from new samples
+      if(doquantiles){
+        out$quantiles <- aperm(
+          a = apply(
+            X = out$samples, MARGIN = c(1, 2),
+            FUN = function(FF){
+              temp <- .funMCEQ(x = FF, prob = quantiles,
+                Qpair = Qerror)
+              c(
+                quantile(x = FF, probs = quantiles, type = 6,
+                  na.rm = TRUE, names = FALSE),
+                (temp[2, ] - temp[1, ]) / 2
+              )}
+          ), perm = c(2, 3, 1) )
+
+        out$quantiles.acc <- out$quantiles[, ,
+          -seq_along(quantiles), drop = FALSE]
+        out$quantiles <- out$quantiles[, ,
+          seq_along(quantiles), drop = FALSE]
 
         ## ## ## Alternative version, with all Y-values
         ## ## subset to original Y-values
-        ## out$value <- out$value[Ytokeep, , drop = FALSE]
-        ## out$value.acc <- out$value.acc[Ytokeep, , drop = FALSE]
+        ## out$quantiles <- out$quantiles[Ytokeep, , , drop = FALSE]
+        ## out$quantiles.acc <-
+        ##     out$quantiles.acc[Ytokeep, , , drop = FALSE]
 
-        if(dosamples){
-            dim(out$samples) <- c(nX, nY, nsamples)
-            out$samples <- out$samples * priorY
-            normf <- c(colSums(x = out$samples, dims = 1, na.rm = TRUE))
-            out$samples <- aperm(
-                a = aperm(a = out$samples, perm = c(2, 3, 1)) / normf,
-                perm = c(3, 1, 2) )
-
-            ## ## ## Alternative version, with all Y-values
-            ## ## subset to original Y-values
-            ## out$samples <- out$samples[Ytokeep, , , drop = FALSE]
-
-            ## Calculate quantiles from new samples
-            if(doquantiles){
-                out$quantiles <- aperm(
-                    a = apply(
-                        X = out$samples, MARGIN = c(1, 2),
-                        FUN = function(FF){
-                            temp <- .funMCEQ(x = FF, prob = quantiles,
-                                Qpair = Qerror)
-                            c(
-                                quantile(x = FF, probs = quantiles, type = 6,
-                                    na.rm = TRUE, names = FALSE),
-                                (temp[2, ] - temp[1, ]) / 2
-                            )}
-                    ), perm = c(2, 3, 1) )
-
-                out$quantiles.acc <- out$quantiles[, ,
-                    -seq_along(quantiles), drop = FALSE]
-                out$quantiles <- out$quantiles[, ,
-                    seq_along(quantiles), drop = FALSE]
-
-                ## ## ## Alternative version, with all Y-values
-                ## ## subset to original Y-values
-                ## out$quantiles <- out$quantiles[Ytokeep, , , drop = FALSE]
-                ## out$quantiles.acc <-
-                ##     out$quantiles.acc[Ytokeep, , , drop = FALSE]
-
-            }
-        }
-
-        ## swap back Y and X
-        ## ## ## Alternative version, with all Y-values
-        ## . <- X[Ytokeep, , drop = FALSE]
-        . <- X
-        X <- Y
-        Y <- .
-        rm(.)
+      }
     }
 
-    ## Jacobian factors
-    y <- Y
-    y[, colnames(y) %in% tailsv] <- NA
-    jacobians <- exp(rowSums(
-        as.matrix(.vtransform(y,
-            auxmetadata = auxmetadata,
-            logjacobianOr = TRUE)),
-        na.rm = TRUE
-    ))
-    rm(y)
-    gc(full = TRUE)
+    ## swap back Y and X
+    ## ## ## Alternative version, with all Y-values
+    ## . <- X[Ytokeep, , drop = FALSE]
+    . <- X
+    X <- Y
+    Y <- .
+    rm(.)
+  }
 
-    ## report whether the probabilities are 'tails' or not
-    if(!is.null(tails)){
-        outtails <- list()
-        outtails[c(colnames(Y), colnames(X))] <- ''
-        outtails[names(tails)[tails == -1]] <- '>='
-        outtails[names(tails)[tails == 1]] <- '<='
-    } else {
-        outtails <- NULL
-    }
+  ## Jacobian factors
+  y <- Y
+  y[, colnames(y) %in% tailsv] <- NA
+  jacobians <- exp(rowSums(
+    as.matrix(.vtransform(y,
+      auxmetadata = auxmetadata,
+      logjacobianOr = TRUE)),
+    na.rm = TRUE
+  ))
+  rm(y)
+  gc(full = TRUE)
 
-    ## report whether the probabilities are densities
-    temp <- (auxmetadata$name %in% colnames(Y)) &
-        (auxmetadata$mcmctype %in% c('R', 'C'))
-    if(!is.null(tails)){
-        temp <- temp & unname(outtails[auxmetadata$name] == '')
-    }
-    out$density <- apply(X = Y[, auxmetadata[temp, 'name'], drop = FALSE],
-        MARGIN = 1,
-        FUN = function(xx){
-            sum(xx > auxmetadata[temp ,'domainmin'] &
-                    xx < auxmetadata[temp ,'domainmax'])
-        }, simplify = TRUE)
+  ## report whether the probabilities are 'tails' or not
+  if(!is.null(tails)){
+    outtails <- list()
+    outtails[c(colnames(Y), colnames(X))] <- ''
+    outtails[names(tails)[tails == -1]] <- '>='
+    outtails[names(tails)[tails == 1]] <- '<='
+  } else {
+    outtails <- NULL
+  }
 
-    ## Dimension & value names for variates
-    Ynames <- setNames(object = list(
-        apply(X = Y, MARGIN = 1, FUN = function(xx){
-            paste0(outtails[colnames(Y)], xx, collapse = sep)
-        }, simplify = TRUE)
+  ## report whether the probabilities are densities
+  temp <- (auxmetadata$name %in% colnames(Y)) &
+    (auxmetadata$mcmctype %in% c('R', 'C'))
+  if(!is.null(tails)){
+    temp <- temp & unname(outtails[auxmetadata$name] == '')
+  }
+  out$density <- apply(X = Y[, auxmetadata[temp, 'name'], drop = FALSE],
+    MARGIN = 1,
+    FUN = function(xx){
+      sum(xx > auxmetadata[temp ,'domainmin'] &
+            xx < auxmetadata[temp ,'domainmax'])
+    }, simplify = TRUE)
+
+  ## Dimension & value names for variates
+  Ynames <- setNames(object = list(
+    apply(X = Y, MARGIN = 1, FUN = function(xx){
+      paste0(outtails[colnames(Y)], xx, collapse = sep)
+    }, simplify = TRUE)
+  ),
+  nm = paste0(colnames(Y), collapse = sep))
+
+  if(!is.null(X)){
+    Xnames <- setNames(object = list(
+      apply(X = X, MARGIN = 1, FUN = function(xx){
+        paste0(outtails[colnames(X)], xx, collapse = sep)
+      }, simplify = TRUE)
     ),
-    nm = paste0(colnames(Y), collapse = sep))
-
-    if(!is.null(X)){
-        Xnames <- setNames(object = list(
-            apply(X = X, MARGIN = 1, FUN = function(xx){
-                paste0(outtails[colnames(X)], xx, collapse = sep)
-            }, simplify = TRUE)
-        ),
-        nm = paste0(solidus, paste0(colnames(X), collapse = sep)))
-    } else {
-        Xnames <- list('')
-    }
+    nm = paste0(solidus, paste0(colnames(X), collapse = sep)))
+  } else {
+    Xnames <- list('')
+  }
 
 
-    out$value <- out$value * jacobians
-    out$value.acc <- out$value.acc * jacobians
-    dimnames(out$value) <- dimnames(out$value.acc) <-
-        c(Ynames, Xnames)
+  out$value <- out$value * jacobians
+  out$value.acc <- out$value.acc * jacobians
+  dimnames(out$value) <- dimnames(out$value.acc) <-
+    c(Ynames, Xnames)
 
-    if(doquantiles){
-        out$quantiles <- out$quantiles * jacobians
-        out$quantiles.acc <-out$quantiles.acc * jacobians
+  if(doquantiles){
+    out$quantiles <- out$quantiles * jacobians
+    out$quantiles.acc <-out$quantiles.acc * jacobians
 
-        temp <- list(Q = names(quantile(x = NA, probs = quantiles,
-            names = TRUE, na.rm = TRUE)))
-        dimnames(out$quantiles) <- dimnames(out$quantiles.acc) <-
-            c(Ynames, Xnames, temp)
-    }
+    temp <- list(Q = names(quantile(x = NA, probs = quantiles,
+      names = TRUE, na.rm = TRUE)))
+    dimnames(out$quantiles) <- dimnames(out$quantiles.acc) <-
+      c(Ynames, Xnames, temp)
+  }
 
-    if(dosamples){
-        out$samples <- out$samples * jacobians
+  if(dosamples){
+    out$samples <- out$samples * jacobians
 
-        temp <- list(sample = round(seq(1, nmcsamples, length.out = nsamples)))
-        dimnames(out$samples) <- c(Ynames, Xnames, temp)
-    }
+    temp <- list(sample = round(seq(1, nmcsamples, length.out = nsamples)))
+    dimnames(out$samples) <- c(Ynames, Xnames, temp)
+  }
 
-    if(isTRUE(keepYX)){
-        ## save Y and X values in the output; useful for plotting methods
-        out <- c(out, list(Y = Y, X = X))
-        ## out$Y <- Y
-        ## out$X <- X
-    }
-    if(!is.null(outtails)){
-        out$tails <- outtails[!(outtails == '')]
-    }
-    out$K <- Kname
+  if(isTRUE(keepYX)){
+    ## save Y and X values in the output; useful for plotting methods
+    out <- c(out, list(Y = Y, X = X))
+    ## out$Y <- Y
+    ## out$X <- X
+  }
+  if(!is.null(outtails)){
+    out$tails <- outtails[!(outtails == '')]
+  }
+  out$K <- Kname
 
-    class(out) <- 'prova_pr'
-    out
+  class(out) <- 'prova_pr'
+  out
 }

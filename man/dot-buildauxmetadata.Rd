@@ -7,15 +7,13 @@
 .buildauxmetadata(data, metadata, Dthreshold = 1, tscalefactor = 4.266)
 }
 \arguments{
-\item{data}{data.frame object}
+\item{data}{data.frame object.}
 
-\item{metadata}{data.frame object}
+\item{metadata}{data.frame object.}
 
-\item{Dthreshold}{Positive number: threshold of fraction
-of unique datapoints to total datapoints, to decide
-whether to treat a rounded variate as continuous}
+\item{Dthreshold}{Positive number: threshold of fraction of unique datapoints to total datapoints, to decide whether to treat a rounded variate as continuous.}
 
-\item{tscalefactor}{Positive number: scaling factor for variate conversion}
+\item{tscalefactor}{Positive number: scaling factor for variate conversion.}
 }
 \value{
 A \link[base:data.frame]{data frame} with auxmetadata.

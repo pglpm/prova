@@ -23,297 +23,297 @@
 #'
 #' @keywords internal
 .testPr <- function(
-    Y,
-    X = NULL,
-    K = NULL,
-    tails = NULL
+  Y,
+  X = NULL,
+  K = NULL,
+  tails = NULL
 ){
-    Qerror <- pnorm(c(-1, 1))
+  Qerror <- pnorm(c(-1, 1))
 
-    ## ## Figure out unnamed arguments
-    ## Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
-    ## if(!is.null(X) && is.null(K)){
-    ##     K <- X
-    ##     X <- NULL
-    ##     Kname <- Kname[2]
-    ## } else if(!is.null(X) && !is.null(K) && is.null(tails) &&
-    ##               !is.null(getK(X))){
-    ##         tails <- K
-    ##         K <- X
-    ##         X <- NULL
-    ##         Kname <- Kname[2]
-    ## } else {
-    ##     Kname <- Kname[1]
-    ## }
+  ## ## Figure out unnamed arguments
+  ## Kname <- c(deparse(substitute(K)), deparse(substitute(X)))
+  ## if(!is.null(X) && is.null(K)){
+  ##     K <- X
+  ##     X <- NULL
+  ##     Kname <- Kname[2]
+  ## } else if(!is.null(X) && !is.null(K) && is.null(tails) &&
+  ##               !is.null(getK(X))){
+  ##         tails <- K
+  ##         K <- X
+  ##         X <- NULL
+  ##         Kname <- Kname[2]
+  ## } else {
+  ##     Kname <- Kname[1]
+  ## }
 
-    ## Check 'K' argument and name
-    K <- getK(K, deparse(substitute(K)))
-    Kname <- K[[2]]
-    K <- K[[1]]
-    gc(full = TRUE)
+  ## Check 'K' argument and name
+  K <- getK(K, deparse(substitute(K)))
+  Kname <- K[[2]]
+  K <- K[[1]]
+  gc(full = TRUE)
 
-    auxmetadata <- K$auxmetadata
-    K$auxmetadata <- NULL
-    K$info <- NULL
-    ncomponents <- nrow(K$W)
-    nmcsamples <- ncol(K$W)
+  auxmetadata <- K$auxmetadata
+  K$auxmetadata <- NULL
+  K$info <- NULL
+  ncomponents <- nrow(K$W)
+  nmcsamples <- ncol(K$W)
 
-    Yv <- names(Y)
-    Xv <- names(X)
+  Yv <- names(Y)
+  Xv <- names(X)
 
-    tailscentre <- list('==', 0, '0', NULL)
-    tailsleft <- list('<=', -1, '-1', 'left', 'lower')
-    tailsright <- list('>=', 1, '+1', 'right', 'upper')
-    tailsvalues <- c(tailscentre, tailsleft, tailsright)
-    ## transform 'tails' to -1, +1
-    ## +1: '<=',    -1: '>='
-    ## this is opposite of the argument convention because
-    ## interval probabilities are calculated with `lower.tail = TRUE`
-    ## eg:
-    ## pnorm(x, mean, sd, lower.tail = FALSE) ==
-    ##     pnorm(-x, -mean, sd, lower.tail = TRUE)
-    tails[tails %in% tailscentre] <- NULL
-    ## cleft <- tails %in% tailsleft
-    ## cright <- tails %in% tailsright
-    ## tails[cleft] <- +1
-    ## tails[cright] <- -1
-    tails <- unlist(tails)
+  tailscentre <- list('==', 0, '0', NULL)
+  tailsleft <- list('<=', -1, '-1', 'left', 'lower')
+  tailsright <- list('>=', 1, '+1', 'right', 'upper')
+  tailsvalues <- c(tailscentre, tailsleft, tailsright)
+  ## transform 'tails' to -1, +1
+  ## +1: '<=',    -1: '>='
+  ## this is opposite of the argument convention because
+  ## interval probabilities are calculated with `lower.tail = TRUE`
+  ## eg:
+  ## pnorm(x, mean, sd, lower.tail = FALSE) ==
+  ##     pnorm(-x, -mean, sd, lower.tail = TRUE)
+  tails[tails %in% tailscentre] <- NULL
+  ## cleft <- tails %in% tailsleft
+  ## cright <- tails %in% tailsright
+  ## tails[cleft] <- +1
+  ## tails[cright] <- -1
+  tails <- unlist(tails)
 
-    ## Function to calculate and sum log-kernels log(K)
-    logK <- function(Z){
-        logprob <- 0
+  ## Function to calculate and sum log-kernels log(K)
+  logK <- function(Z){
+    logprob <- 0
 
-        for(vrt in names(Z)){
-            mctype <- auxmetadata[auxmetadata$name == vrt, 'mcmctype']
-            auxid <- auxmetadata[auxmetadata$name == vrt, 'id']
+    for(vrt in names(Z)){
+      mctype <- auxmetadata[auxmetadata$name == vrt, 'mcmctype']
+      auxid <- auxmetadata[auxmetadata$name == vrt, 'id']
 
-            if(mctype == 'R'){
-                val <- unlist(.vtransform(Z[vrt], Rout = 'normalized',
-                    auxmetadata = auxmetadata, logjacobianOr = NULL))
+      if(mctype == 'R'){
+        val <- unlist(.vtransform(Z[vrt], Rout = 'normalized',
+          auxmetadata = auxmetadata, logjacobianOr = NULL))
 
-                if(!(vrt %in% names(tails))){
-                    logP <- dnorm(x = val,
-                        mean = K$Rmean[auxid, , ],
-                        sd = K$Rsd[auxid, , ],
-                        log = TRUE)
+        if(!(vrt %in% names(tails))){
+          logP <- dnorm(x = val,
+            mean = K$Rmean[auxid, , ],
+            sd = K$Rsd[auxid, , ],
+            log = TRUE)
 
-                } else if(tails[vrt] %in% tailsleft){
-                    logP <- pnorm(q = val,
-                        mean = K$Rmean[auxid, , ],
-                        sd = K$Rsd[auxid, , ],
-                        lower.tail = TRUE, log.p = TRUE)
+        } else if(tails[vrt] %in% tailsleft){
+          logP <- pnorm(q = val,
+            mean = K$Rmean[auxid, , ],
+            sd = K$Rsd[auxid, , ],
+            lower.tail = TRUE, log.p = TRUE)
 
-                } else if(tails[vrt] %in% tailsright){
-                    logP <- pnorm(q = val,
-                        mean = K$Rmean[auxid, , ],
-                        sd = K$Rsd[auxid, , ],
-                        lower.tail = FALSE, log.p = TRUE)
-                }
-
-
-            } else if(mctype == 'C'){
-                ## at first, boundary values are set to NA
-                xorig <- Z[[vrt]]
-                domainmax <- auxmetadata[auxmetadata$name == vrt,
-                    'domainmax']
-                domainmin <- auxmetadata[auxmetadata$name == vrt,
-                    'domainmin']
-                val <- unlist(.vtransform(Z[vrt], Cout = 'boundisna',
-                    auxmetadata = auxmetadata, logjacobianOr = NULL))
-
-                if(!(vrt %in% names(tails))){
-                    if(is.finite(val)){
-                        logP <- dnorm(x = val,
-                            mean = K$Cmean[auxid, , ],
-                            sd = K$Csd[auxid, , ],
-                            log = TRUE)
-                    } else if(xorig > domainmin){
-                        val <- unlist(.vtransform(Z[vrt], Cout = 'rightbound',
-                            auxmetadata = auxmetadata, logjacobianOr = NULL))
-                        logP <- pnorm(q = val,
-                            mean = K$Cmean[auxid, , ],
-                            sd = K$Csd[auxid, , ],
-                            lower.tail = FALSE, log.p = TRUE)
-                    } else if(xorig < domainmax){
-                        val <- unlist(.vtransform(Z[vrt], Cout = 'leftbound',
-                            auxmetadata = auxmetadata, logjacobianOr = NULL))
-                        logP <- pnorm(q = val,
-                            mean = K$Cmean[auxid, , ],
-                            sd = K$Csd[auxid, , ],
-                            lower.tail = TRUE, log.p = TRUE)
-                    } else {
-                        stop('Vrt ', vrt, ' has strange value')
-                    }
-
-                } else if(tails[vrt] %in% tailsleft){
-                    val <- unlist(.vtransform(Z[vrt], Cout = '1',
-                        auxmetadata = auxmetadata, logjacobianOr = NULL))
-                    logP <- pnorm(q = val,
-                        mean = K$Cmean[auxid, , ],
-                        sd = K$Csd[auxid, , ],
-                        lower.tail = TRUE, log.p = TRUE)
-
-                } else if(tails[vrt] %in% tailsright){
-                    val <- unlist(.vtransform(Z[vrt], Cout = '-1',
-                        auxmetadata = auxmetadata, logjacobianOr = NULL))
-                    logP <- pnorm(q = val,
-                        mean = K$Cmean[auxid, , ],
-                        sd = K$Csd[auxid, , ],
-                        lower.tail = FALSE, log.p = TRUE)
-                }
-
-
-            } else if(mctype == 'D'){
-                xorig <- Z[[vrt]]
-                val <- unlist(.vtransform(Z[vrt], Dout = 'boundisna',
-                    auxmetadata = auxmetadata, logjacobianOr = NULL))
-                hstep <- auxmetadata[auxmetadata$name == vrt, 'halfstep'] /
-                    auxmetadata[auxmetadata$name == vrt, 'tscale']
-                domainmaxminushs <- auxmetadata[auxmetadata$name == vrt,
-                    'domainmaxminushs']
-                domainminplushs <- auxmetadata[auxmetadata$name == vrt,
-                    'domainminplushs']
-
-                if(!(vrt %in% names(tails))){
-                    if(!is.na(val)){
-                        logP <- pnorm(q = val + hstep,
-                            mean = K$Dmean[auxid, , ],
-                            sd = K$Dsd[auxid, , ],
-                            lower.tail = TRUE, log.p = TRUE)
-                        logP <- logP + log(-expm1(
-                            pnorm(q = val - hstep,
-                                mean = K$Dmean[auxid, , ],
-                                sd = K$Dsd[auxid, , ],
-                                lower.tail = TRUE, log.p = TRUE) - logP
-                        ))
-                        ##
-                        ## ## this alternate form seems less precise,
-                        ## ## compared with infinite-precision results
-                        ## logP <- log(
-                        ##     pnorm(q = val + hstep,
-                        ##         mean = K$Dmean[auxid, , ],
-                        ##         sd = K$Dsd[auxid, , ],
-                        ##         lower.tail = TRUE, log.p = FALSE) -
-                        ##         pnorm(q = val - hstep,
-                        ##             mean = K$Dmean[auxid, , ],
-                        ##             sd = K$Dsd[auxid, , ],
-                        ##             lower.tail = TRUE, log.p = FALSE)
-                        ## )
-
-                    } else if(xorig <= domainmaxminushs){
-                        val <- unlist(.vtransform(Z[vrt], Dout = 'leftbound',
-                            auxmetadata = auxmetadata, logjacobianOr = NULL))
-                        logP <- pnorm(q = val + hstep,
-                            mean = K$Dmean[auxid, , ],
-                            sd = K$Dsd[auxid, , ],
-                            lower.tail = TRUE, log.p = TRUE)
-
-                    } else if(xorig >= domainminplushs){
-                        val <- unlist(.vtransform(Z[vrt], Dout = 'rightbound',
-                            auxmetadata = auxmetadata, logjacobianOr = NULL))
-                        logP <- pnorm(q = val - hstep,
-                            mean = K$Dmean[auxid, , ],
-                            sd = K$Dsd[auxid, , ],
-                            lower.tail = FALSE, log.p = TRUE)
-                    }
-
-                } else if(tails[vrt] %in% tailsleft){
-                    val <- unlist(.vtransform(Z[vrt], Dout = '1',
-                        auxmetadata = auxmetadata, logjacobianOr = NULL))
-                    logP <- pnorm(q = val + hstep,
-                        mean = K$Dmean[auxid, , ],
-                        sd = K$Dsd[auxid, , ],
-                        lower.tail = TRUE, log.p = TRUE)
-
-                } else if(tails[vrt] %in% tailsright){
-                    val <- unlist(.vtransform(Z[vrt], Dout = '-1',
-                        auxmetadata = auxmetadata, logjacobianOr = NULL))
-                    logP <- pnorm(q = val - hstep,
-                        mean = K$Dmean[auxid, , ],
-                        sd = K$Dsd[auxid, , ],
-                        lower.tail = FALSE, log.p = TRUE)
-                }
-
-
-            } else if(mctype == 'N'){
-                ## ## Old version that didn't calculate tails
-                ##     val <- unlist(.vtransform(Z[vrt], Nout = 'index',
-                ##         auxmetadata = auxmetadata, logjacobianOr = NULL))
-                ##     logP <- log(K$Nprob[val, , ])
-                Nvals <- auxmetadata[auxmetadata$name == vrt, 'Nvalues']
-                seqN <- auxmetadata[auxmetadata$name == vrt, 'indexpos'] +
-                    seq_len(Nvals)
-                allP <- K$Nprob[seqN, , , drop = FALSE]
-                val <- unlist(.vtransform(Z[vrt], Nout = 'numeric',
-                    auxmetadata = auxmetadata, logjacobianOr = NULL))
-
-                if(!(vrt %in% names(tails))){
-                    logP <- log(allP[val, , ])
-                } else if(tails[vrt] %in% tailsleft){
-                    logP <- log(apply(allP[1:val, , , drop = FALSE],
-                        c(2,3), sum))
-                } else if(tails[vrt] %in% tailsright){
-                    logP <- log(apply(allP[val:Nvals, , , drop = FALSE],
-                        c(2,3), sum))
-                }
-
-            } else if(mctype == 'O'){
-                Nvals <- auxmetadata[auxmetadata$name == vrt, 'Nvalues']
-                seqO <- auxmetadata[auxmetadata$name == vrt, 'indexpos'] +
-                    seq_len(Nvals)
-                allP <- K$Oprob[seqO, , , drop = FALSE]
-                val <- unlist(.vtransform(Z[vrt], Oout = 'numeric',
-                    auxmetadata = auxmetadata, logjacobianOr = NULL))
-
-                if(!(vrt %in% names(tails))){
-                    logP <- log(allP[val, , ])
-                } else if(tails[vrt] %in% tailsleft){
-                    logP <- log(apply(allP[1:val, , , drop = FALSE],
-                        c(2,3), sum))
-                } else if(tails[vrt] %in% tailsright){
-                    logP <- log(apply(allP[val:Nvals, , , drop = FALSE],
-                        c(2,3), sum))
-                }
-
-            } else if(mctype == 'B'){
-                val <- unlist(.vtransform(Z[vrt], Bout = 'numeric',
-                    auxmetadata = auxmetadata, logjacobianOr = NULL))
-                if(val == 0){
-                    logP <- log(1 - K$Bprob[auxid, , ])
-                } else {
-                    logP <- log(K$Bprob[auxid, , ])
-                }
-            }
-## cat(vrt, ':', logP[,1532],'\n')
-
-            logprob <- logprob + logP
+        } else if(tails[vrt] %in% tailsright){
+          logP <- pnorm(q = val,
+            mean = K$Rmean[auxid, , ],
+            sd = K$Rsd[auxid, , ],
+            lower.tail = FALSE, log.p = TRUE)
         }
-        c(logprob)
+
+
+      } else if(mctype == 'C'){
+        ## at first, boundary values are set to NA
+        xorig <- Z[[vrt]]
+        domainmax <- auxmetadata[auxmetadata$name == vrt,
+          'domainmax']
+        domainmin <- auxmetadata[auxmetadata$name == vrt,
+          'domainmin']
+        val <- unlist(.vtransform(Z[vrt], Cout = 'boundisna',
+          auxmetadata = auxmetadata, logjacobianOr = NULL))
+
+        if(!(vrt %in% names(tails))){
+          if(is.finite(val)){
+            logP <- dnorm(x = val,
+              mean = K$Cmean[auxid, , ],
+              sd = K$Csd[auxid, , ],
+              log = TRUE)
+          } else if(xorig > domainmin){
+            val <- unlist(.vtransform(Z[vrt], Cout = 'rightbound',
+              auxmetadata = auxmetadata, logjacobianOr = NULL))
+            logP <- pnorm(q = val,
+              mean = K$Cmean[auxid, , ],
+              sd = K$Csd[auxid, , ],
+              lower.tail = FALSE, log.p = TRUE)
+          } else if(xorig < domainmax){
+            val <- unlist(.vtransform(Z[vrt], Cout = 'leftbound',
+              auxmetadata = auxmetadata, logjacobianOr = NULL))
+            logP <- pnorm(q = val,
+              mean = K$Cmean[auxid, , ],
+              sd = K$Csd[auxid, , ],
+              lower.tail = TRUE, log.p = TRUE)
+          } else {
+            stop('Vrt ', vrt, ' has strange value')
+          }
+
+        } else if(tails[vrt] %in% tailsleft){
+          val <- unlist(.vtransform(Z[vrt], Cout = '1',
+            auxmetadata = auxmetadata, logjacobianOr = NULL))
+          logP <- pnorm(q = val,
+            mean = K$Cmean[auxid, , ],
+            sd = K$Csd[auxid, , ],
+            lower.tail = TRUE, log.p = TRUE)
+
+        } else if(tails[vrt] %in% tailsright){
+          val <- unlist(.vtransform(Z[vrt], Cout = '-1',
+            auxmetadata = auxmetadata, logjacobianOr = NULL))
+          logP <- pnorm(q = val,
+            mean = K$Cmean[auxid, , ],
+            sd = K$Csd[auxid, , ],
+            lower.tail = FALSE, log.p = TRUE)
+        }
+
+
+      } else if(mctype == 'D'){
+        xorig <- Z[[vrt]]
+        val <- unlist(.vtransform(Z[vrt], Dout = 'boundisna',
+          auxmetadata = auxmetadata, logjacobianOr = NULL))
+        hstep <- auxmetadata[auxmetadata$name == vrt, 'halfstep'] /
+          auxmetadata[auxmetadata$name == vrt, 'tscale']
+        domainmaxminushs <- auxmetadata[auxmetadata$name == vrt,
+          'domainmaxminushs']
+        domainminplushs <- auxmetadata[auxmetadata$name == vrt,
+          'domainminplushs']
+
+        if(!(vrt %in% names(tails))){
+          if(!is.na(val)){
+            logP <- pnorm(q = val + hstep,
+              mean = K$Dmean[auxid, , ],
+              sd = K$Dsd[auxid, , ],
+              lower.tail = TRUE, log.p = TRUE)
+            logP <- logP + log(-expm1(
+              pnorm(q = val - hstep,
+                mean = K$Dmean[auxid, , ],
+                sd = K$Dsd[auxid, , ],
+                lower.tail = TRUE, log.p = TRUE) - logP
+            ))
+            ##
+            ## ## this alternate form seems less precise,
+            ## ## compared with infinite-precision results
+            ## logP <- log(
+            ##     pnorm(q = val + hstep,
+            ##         mean = K$Dmean[auxid, , ],
+            ##         sd = K$Dsd[auxid, , ],
+            ##         lower.tail = TRUE, log.p = FALSE) -
+            ##         pnorm(q = val - hstep,
+            ##             mean = K$Dmean[auxid, , ],
+            ##             sd = K$Dsd[auxid, , ],
+            ##             lower.tail = TRUE, log.p = FALSE)
+            ## )
+
+          } else if(xorig <= domainmaxminushs){
+            val <- unlist(.vtransform(Z[vrt], Dout = 'leftbound',
+              auxmetadata = auxmetadata, logjacobianOr = NULL))
+            logP <- pnorm(q = val + hstep,
+              mean = K$Dmean[auxid, , ],
+              sd = K$Dsd[auxid, , ],
+              lower.tail = TRUE, log.p = TRUE)
+
+          } else if(xorig >= domainminplushs){
+            val <- unlist(.vtransform(Z[vrt], Dout = 'rightbound',
+              auxmetadata = auxmetadata, logjacobianOr = NULL))
+            logP <- pnorm(q = val - hstep,
+              mean = K$Dmean[auxid, , ],
+              sd = K$Dsd[auxid, , ],
+              lower.tail = FALSE, log.p = TRUE)
+          }
+
+        } else if(tails[vrt] %in% tailsleft){
+          val <- unlist(.vtransform(Z[vrt], Dout = '1',
+            auxmetadata = auxmetadata, logjacobianOr = NULL))
+          logP <- pnorm(q = val + hstep,
+            mean = K$Dmean[auxid, , ],
+            sd = K$Dsd[auxid, , ],
+            lower.tail = TRUE, log.p = TRUE)
+
+        } else if(tails[vrt] %in% tailsright){
+          val <- unlist(.vtransform(Z[vrt], Dout = '-1',
+            auxmetadata = auxmetadata, logjacobianOr = NULL))
+          logP <- pnorm(q = val - hstep,
+            mean = K$Dmean[auxid, , ],
+            sd = K$Dsd[auxid, , ],
+            lower.tail = FALSE, log.p = TRUE)
+        }
+
+
+      } else if(mctype == 'N'){
+        ## ## Old version that didn't calculate tails
+        ##     val <- unlist(.vtransform(Z[vrt], Nout = 'index',
+        ##         auxmetadata = auxmetadata, logjacobianOr = NULL))
+        ##     logP <- log(K$Nprob[val, , ])
+        Nvals <- auxmetadata[auxmetadata$name == vrt, 'Nvalues']
+        seqN <- auxmetadata[auxmetadata$name == vrt, 'indexpos'] +
+          seq_len(Nvals)
+        allP <- K$Nprob[seqN, , , drop = FALSE]
+        val <- unlist(.vtransform(Z[vrt], Nout = 'numeric',
+          auxmetadata = auxmetadata, logjacobianOr = NULL))
+
+        if(!(vrt %in% names(tails))){
+          logP <- log(allP[val, , ])
+        } else if(tails[vrt] %in% tailsleft){
+          logP <- log(apply(allP[1:val, , , drop = FALSE],
+            c(2,3), sum))
+        } else if(tails[vrt] %in% tailsright){
+          logP <- log(apply(allP[val:Nvals, , , drop = FALSE],
+            c(2,3), sum))
+        }
+
+      } else if(mctype == 'O'){
+        Nvals <- auxmetadata[auxmetadata$name == vrt, 'Nvalues']
+        seqO <- auxmetadata[auxmetadata$name == vrt, 'indexpos'] +
+          seq_len(Nvals)
+        allP <- K$Oprob[seqO, , , drop = FALSE]
+        val <- unlist(.vtransform(Z[vrt], Oout = 'numeric',
+          auxmetadata = auxmetadata, logjacobianOr = NULL))
+
+        if(!(vrt %in% names(tails))){
+          logP <- log(allP[val, , ])
+        } else if(tails[vrt] %in% tailsleft){
+          logP <- log(apply(allP[1:val, , , drop = FALSE],
+            c(2,3), sum))
+        } else if(tails[vrt] %in% tailsright){
+          logP <- log(apply(allP[val:Nvals, , , drop = FALSE],
+            c(2,3), sum))
+        }
+
+      } else if(mctype == 'B'){
+        val <- unlist(.vtransform(Z[vrt], Bout = 'numeric',
+          auxmetadata = auxmetadata, logjacobianOr = NULL))
+        if(val == 0){
+          logP <- log(1 - K$Bprob[auxid, , ])
+        } else {
+          logP <- log(K$Bprob[auxid, , ])
+        }
+      }
+      ## cat(vrt, ':', logP[,1532],'\n')
+
+      logprob <- logprob + logP
     }
+    c(logprob)
+  }
 
-    logKY <- logK(Y)
+  logKY <- logK(Y)
 
-    ## Conditional formula sum(W KX KY)/sum(W kX), sum over components
-    if(is.null(X)){
-        FF <- colSums(x = exp(log(K$W) + logKY), na.rm = TRUE)
-        ## logKX <- log(K$W)
-        ## FF <- colSums(x = exp(logKX + logKY), na.rm = TRUE) /
-        ##     colSums(x = exp(logKX), na.rm = TRUE)
-    } else {
-        logKX <- log(K$W) + logK(X)
-        FF <- colSums(x = exp(logKX + logKY), na.rm = TRUE) /
-        colSums(x = exp(logKX), na.rm = TRUE)
-    }
+  ## Conditional formula sum(W KX KY)/sum(W kX), sum over components
+  if(is.null(X)){
+    FF <- colSums(x = exp(log(K$W) + logKY), na.rm = TRUE)
+    ## logKX <- log(K$W)
+    ## FF <- colSums(x = exp(logKX + logKY), na.rm = TRUE) /
+    ##     colSums(x = exp(logKX), na.rm = TRUE)
+  } else {
+    logKX <- log(K$W) + logK(X)
+    FF <- colSums(x = exp(logKX + logKY), na.rm = TRUE) /
+      colSums(x = exp(logKX), na.rm = TRUE)
+  }
 
-    y <- Y
-    y[names(Y) %in% names(tails)] <- NA
-    jacobians <- exp(rowSums(as.matrix(.vtransform(y,
-        auxmetadata = auxmetadata, logjacobianOr = TRUE)),
-        na.rm = TRUE
-    ))
-    rm(y)
+  y <- Y
+  y[names(Y) %in% names(tails)] <- NA
+  jacobians <- exp(rowSums(as.matrix(.vtransform(y,
+    auxmetadata = auxmetadata, logjacobianOr = TRUE)),
+    na.rm = TRUE
+  ))
+  rm(y)
 
-    FF <- FF * jacobians
+  FF <- FF * jacobians
 
-    list(value = mean(FF), samples = FF, jacobians = jacobians)
+  list(value = mean(FF), samples = FF, jacobians = jacobians)
 }

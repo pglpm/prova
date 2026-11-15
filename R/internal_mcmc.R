@@ -21,17 +21,17 @@
 #'
 #' @keywords internal
 .funMCEQalt <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
-    N <- length(x)
-    straces <- sort(x)
-    sapply(prob, function(aprob) {
-        Xlo <- quantile(x = x, probs = aprob,
-            na.rm = TRUE, names = FALSE, type = 6)
-        ##
-        essXlo <- .funESS3(x <= Xlo)
-        ##
-        a <- qbeta(Qpair, essXlo * aprob + 1, essXlo * (1 - aprob) + 1)
-        c(straces[max(round(a[1] * N), 1)], straces[min(round(a[2] * N), N)])
-    })
+  N <- length(x)
+  straces <- sort(x)
+  sapply(prob, function(aprob) {
+    Xlo <- quantile(x = x, probs = aprob,
+      na.rm = TRUE, names = FALSE, type = 6)
+    ##
+    essXlo <- .funESS3(x <= Xlo)
+    ##
+    a <- qbeta(Qpair, essXlo * aprob + 1, essXlo * (1 - aprob) + 1)
+    c(straces[max(round(a[1] * N), 1)], straces[min(round(a[2] * N), N)])
+  })
 }
 
 #' Calculate credibility quantiles on estimated quantile using batch-means
@@ -59,18 +59,18 @@
 #'
 #' @keywords internal
 .funMCEQ <- function(x, prob = c(0.055, 0.945), Qpair = pnorm(c(-1, 1))){
-    N <- length(x)
-    straces <- sort(x)
-    sapply(prob, function(aprob) {
-        Xlo <- quantile(x = x, probs = aprob, na.rm = TRUE, names = FALSE, type = 6)
-        ##
-        temp <- sd(x <= Xlo)
-        essXlo <- (if(temp > 0){(temp / .funMCSEBM(x <= Xlo))^2}else{N})
-#        essXlo <- (temp / .funMCSEBM(x <= Xlo))^2
-        ##
-        a <- qbeta(Qpair, essXlo * aprob + 1, essXlo * (1 - aprob) + 1)
-        c(straces[max(round(a[1] * N), 1)], straces[min(round(a[2] * N), N)])
-    })
+  N <- length(x)
+  straces <- sort(x)
+  sapply(prob, function(aprob) {
+    Xlo <- quantile(x = x, probs = aprob, na.rm = TRUE, names = FALSE, type = 6)
+    ##
+    temp <- sd(x <= Xlo)
+    essXlo <- (if(temp > 0){(temp / .funMCSEBM(x <= Xlo))^2}else{N})
+                                        #        essXlo <- (temp / .funMCSEBM(x <= Xlo))^2
+    ##
+    a <- qbeta(Qpair, essXlo * aprob + 1, essXlo * (1 - aprob) + 1)
+    c(straces[max(round(a[1] * N), 1)], straces[min(round(a[2] * N), N)])
+  })
 }
 
 #' Compute ESS
@@ -105,16 +105,16 @@
   rho_hat_odd <- 1 - (mean_var - acov[t + 2]) / var_plus
   rho_hat_t[t + 2] <- rho_hat_odd
   while (t < length(acov) - 5 &&
-             !is.nan(rho_hat_even + rho_hat_odd) &&
-             (rho_hat_even + rho_hat_odd > 0)) {
-                 t <- t + 2
-                 rho_hat_even = 1 - (mean_var - acov[t + 1]) / var_plus
-                 rho_hat_odd = 1 - (mean_var - acov[t + 2]) / var_plus
-                 if ((rho_hat_even + rho_hat_odd) >= 0) {
-                     rho_hat_t[t + 1] <- rho_hat_even
-                     rho_hat_t[t + 2] <- rho_hat_odd
-                 }
+           !is.nan(rho_hat_even + rho_hat_odd) &&
+           (rho_hat_even + rho_hat_odd > 0)) {
+             t <- t + 2
+             rho_hat_even = 1 - (mean_var - acov[t + 1]) / var_plus
+             rho_hat_odd = 1 - (mean_var - acov[t + 2]) / var_plus
+             if ((rho_hat_even + rho_hat_odd) >= 0) {
+               rho_hat_t[t + 1] <- rho_hat_even
+               rho_hat_t[t + 2] <- rho_hat_odd
              }
+           }
   max_t <- t
   ## this is used in the improved estimate
   if (rho_hat_even>0){rho_hat_t[max_t + 1] <- rho_hat_even}
@@ -133,7 +133,7 @@
   ## tau_hat <- -1 + 2 * sum(rho_hat_t[1:max_t])
   ## Improved estimate reduces variance in antithetic case as in RStan
   tau_hat <- -1 + 2 * sum(rho_hat_t[1:max_t]) + rho_hat_t[max_t+1]
-  # Safety check for negative values and with max ess equal to ess*log10(ess)
+                                        # Safety check for negative values and with max ess equal to ess*log10(ess)
   tau_hat <- max(tau_hat, 1/log10(ess))
   ess <- ess / tau_hat
   ess
@@ -158,16 +158,16 @@
 #'
 #' @keywords internal
 .funMCSEBM <- function(x) {
-    if(is.null(dim(x))){ dim(x) <- c(length(x), 1) }
-    N <- nrow(x)
-    b <- floor(sqrt(N))
-    a <- floor(N/b)
-    i0 <- N - a * b
-    Ys <- rbind(sapply(seq_len(a), function(k) {
-        colMeans(x[((k - 1) * b + 1 + i0):(k * b + i0), , drop = FALSE])
-    }))
-    ## ## Note: this is 'w" in doi.org/10.1080/10618600.2015.1044092
-    sqrt(b * rowSums((Ys - rowMeans(Ys))^2) / ((a - 1) * N))
+  if(is.null(dim(x))){ dim(x) <- c(length(x), 1) }
+  N <- nrow(x)
+  b <- floor(sqrt(N))
+  a <- floor(N/b)
+  i0 <- N - a * b
+  Ys <- rbind(sapply(seq_len(a), function(k) {
+    colMeans(x[((k - 1) * b + 1 + i0):(k * b + i0), , drop = FALSE])
+  }))
+  ## ## Note: this is 'w" in doi.org/10.1080/10618600.2015.1044092
+  sqrt(b * rowSums((Ys - rowMeans(Ys))^2) / ((a - 1) * N))
 }
 
 
@@ -191,7 +191,7 @@
   yc <- c(yc, rep.int(x = 0, times = Mt2 - N))
   transform <- fft(yc)
   ac <- fft(Conj(transform) * transform, inverse = TRUE)
-  # use "biased" estimate as recommended by Geyer (1992)
+                                        # use "biased" estimate as recommended by Geyer (1992)
   ac <- Re(ac)[1:N] / (N^2 * 2)
   ac
 }
@@ -209,8 +209,8 @@
 #'
 #' @keywords internal
 .fftNGS <- function(N) {
-  # Find the optimal next size for the FFT so that
-  # a minimum number of zeros are padded.
+                                        # Find the optimal next size for the FFT so that
+                                        # a minimum number of zeros are padded.
   if (N <= 2)
     return(2)
   while (TRUE) {

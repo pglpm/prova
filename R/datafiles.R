@@ -46,13 +46,13 @@ NULL
 #'
 #' @export
 pwrite.csv <- function(x, file, ...){
-    write.csv(x = x, file = file,
-        row.names = FALSE,
-        quote = TRUE,
-        # sep = ", ",
-        # dec = ".",
-        na = '',
-        ...)
+  write.csv(x = x, file = file,
+    row.names = FALSE,
+    quote = TRUE,
+                                        # sep = ", ",
+                                        # dec = ".",
+    na = '',
+    ...)
 }
 
 #' @rdname data
@@ -61,11 +61,11 @@ pwrite.csv <- function(x, file, ...){
 #'
 #' @export
 pread.csv <- function(file, ...){
-    read.csv(file = file,
-        na.strings = '',
-        stringsAsFactors = FALSE,
-        tryLogical = FALSE,
-        sep = ",",
-        dec = ".",
-        ...)
+  read.csv(file = file,
+    na.strings = '',
+    stringsAsFactors = FALSE,
+    tryLogical = FALSE,
+    sep = ",",
+    dec = ".",
+    ...)
 }

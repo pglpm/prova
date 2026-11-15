@@ -61,27 +61,27 @@
 #' @concept manipulate
 #' @export
 subset.prova_pr <- function(
-    x,
-    subsetY = TRUE,
-    subsetX = TRUE,
-    ...
+  x,
+  subsetY = TRUE,
+  subsetX = TRUE,
+  ...
 ){
-    totakeY <- eval(substitute(subsetY), x$Y, parent.frame())
-    totakeX <- eval(substitute(subsetX), x$X, parent.frame())
-    out <- list(
-        value = x$value[totakeY, totakeX, drop = FALSE],
-        quantiles = x$quantiles[totakeY, totakeX, , drop = FALSE],
-        samples = x$samples[totakeY, totakeX, , drop = FALSE],
-        value.acc = x$value.acc[totakeY, totakeX, drop = FALSE],
-        quantiles.acc = x$quantiles.acc[totakeY, totakeX, , drop = FALSE],
-        density = x$density[totakeY, drop = FALSE],
-        Y = x$Y[totakeY, , drop = FALSE],
-        X = x$X[totakeX, , drop = FALSE],
-        tails = x$tails,
-        K = x$K
-    )
-    class(out) <- 'prova_pr'
-    out
+  totakeY <- eval(substitute(subsetY), x$Y, parent.frame())
+  totakeX <- eval(substitute(subsetX), x$X, parent.frame())
+  out <- list(
+    value = x$value[totakeY, totakeX, drop = FALSE],
+    quantiles = x$quantiles[totakeY, totakeX, , drop = FALSE],
+    samples = x$samples[totakeY, totakeX, , drop = FALSE],
+    value.acc = x$value.acc[totakeY, totakeX, drop = FALSE],
+    quantiles.acc = x$quantiles.acc[totakeY, totakeX, , drop = FALSE],
+    density = x$density[totakeY, drop = FALSE],
+    Y = x$Y[totakeY, , drop = FALSE],
+    X = x$X[totakeX, , drop = FALSE],
+    tails = x$tails,
+    K = x$K
+  )
+  class(out) <- 'prova_pr'
+  out
 }
 
 
@@ -148,134 +148,134 @@ subset.prova_pr <- function(
 #' @concept manipulate
 #' @export
 merge.prova_pr <- function(x, y, ...){
-    ## Check if Y and X variates are the same
-    xnames <- names(dimnames(x$value))
-    ynames <- names(dimnames(y$value))
-    if(xnames[1] != ynames[1]){
-        stop('Probabilities must have same Y variates')
+  ## Check if Y and X variates are the same
+  xnames <- names(dimnames(x$value))
+  ynames <- names(dimnames(y$value))
+  if(xnames[1] != ynames[1]){
+    stop('Probabilities must have same Y variates')
+  }
+  if(xnames[2] != '' && ynames[2] != '' && xnames[2] != ynames[2]){
+    stop('Probabilities must have same X variates')
+  }
+
+  ## ## For possible future extension: match besides a shuffle
+  ## ovals <- match(do.call(paste, c(x$X, sep = '\r')),
+  ##     do.call(paste, c(y$X, sep = '\r')))
+  ##     if(identical(x$X, y$X[ovals, onams, drop = FALSE])){ }
+
+  ## If same X, join Y
+  if(identical(dimnames(x$value)[2], dimnames(y$value)[2])){
+    ## select names for Y,X dimensions
+    yxdimnames <- list(
+      c(dimnames(x$value)[[1]], dimnames(y$value)[[1]]),
+      dimnames(x$value)[[2]]
+    )
+    names(yxdimnames) <- names(dimnames(x$value))
+
+    out <- list(value = NULL, quantiles = NULL, samples = NULL,
+      value.acc = NULL, quantiles.acc = NULL)
+
+    ## value
+    temp <- rbind(x$value, y$value)
+    dimnames(temp) <- yxdimnames
+    out$value <- temp
+
+    ## quantiles; check if x and y have same
+    if(identical(dimnames(x$quantiles)[3], dimnames(y$quantiles)[3])){
+      temp <- .a3bind(x$quantiles, y$quantiles)
+      dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles)[3])
+      out$quantiles <- temp
     }
-    if(xnames[2] != '' && ynames[2] != '' && xnames[2] != ynames[2]){
-        stop('Probabilities must have same X variates')
+
+    ## samples; check if x and y have same
+    if(identical(dimnames(x$samples)[3], dimnames(y$samples)[3])){
+      temp <- .a3bind(x$samples, y$samples)
+      dimnames(temp) <- c(yxdimnames, dimnames(x$samples)[3])
+      out$samples <- temp
     }
 
-    ## ## For possible future extension: match besides a shuffle
-    ## ovals <- match(do.call(paste, c(x$X, sep = '\r')),
-    ##     do.call(paste, c(y$X, sep = '\r')))
-    ##     if(identical(x$X, y$X[ovals, onams, drop = FALSE])){ }
+    ## value.acc
+    temp <- rbind(x$value.acc, y$value.acc)
+    dimnames(temp) <- yxdimnames
+    out$value.acc <- temp
 
-    ## If same X, join Y
-    if(identical(dimnames(x$value)[2], dimnames(y$value)[2])){
-        ## select names for Y,X dimensions
-        yxdimnames <- list(
-            c(dimnames(x$value)[[1]], dimnames(y$value)[[1]]),
-            dimnames(x$value)[[2]]
-        )
-        names(yxdimnames) <- names(dimnames(x$value))
+    ## quantiles.acc; check if x and y have same
+    if(identical(dimnames(x$quantiles.acc)[3], dimnames(y$quantiles.acc)[3])){
+      temp <- .a3bind(x$quantiles.acc, y$quantiles.acc)
+      dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles.acc)[3])
+      out$quantiles.acc <- temp
+    }
 
-        out <- list(value = NULL, quantiles = NULL, samples = NULL,
-            value.acc = NULL, quantiles.acc = NULL)
-
-        ## value
-        temp <- rbind(x$value, y$value)
-        dimnames(temp) <- yxdimnames
-        out$value <- temp
-
-        ## quantiles; check if x and y have same
-        if(identical(dimnames(x$quantiles)[3], dimnames(y$quantiles)[3])){
-            temp <- .a3bind(x$quantiles, y$quantiles)
-            dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles)[3])
-            out$quantiles <- temp
-        }
-
-        ## samples; check if x and y have same
-        if(identical(dimnames(x$samples)[3], dimnames(y$samples)[3])){
-            temp <- .a3bind(x$samples, y$samples)
-            dimnames(temp) <- c(yxdimnames, dimnames(x$samples)[3])
-            out$samples <- temp
-        }
-
-        ## value.acc
-        temp <- rbind(x$value.acc, y$value.acc)
-        dimnames(temp) <- yxdimnames
-        out$value.acc <- temp
-
-        ## quantiles.acc; check if x and y have same
-        if(identical(dimnames(x$quantiles.acc)[3], dimnames(y$quantiles.acc)[3])){
-            temp <- .a3bind(x$quantiles.acc, y$quantiles.acc)
-            dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles.acc)[3])
-            out$quantiles.acc <- temp
-        }
-
-        out$density <- c(x$density, y$density)
-        out$Y = rbind(x$Y, y$Y)
-        out$X = x$X
-        out$tails = unique(c(x$tails, y$tails))
-        out$K = x$K
+    out$density <- c(x$density, y$density)
+    out$Y = rbind(x$Y, y$Y)
+    out$X = x$X
+    out$tails = unique(c(x$tails, y$tails))
+    out$K = x$K
 
 
-        ## If same Y, join X
-    } else if(identical(dimnames(x$value)[1], dimnames(y$value)[1])){
-        ## select names for Y,X dimensions appropriately
-        ## in case one of the Xs is NULL
-        yxdimnames <- list(
-            dimnames(x$value)[[1]],
-            c(dimnames(x$value)[[2]], dimnames(y$value)[[2]])
-        )
-        names(yxdimnames) <- (if(ynames[2] == ''){
-            names(dimnames(x$value))
-        } else {
-            names(dimnames(y$value))
-        })
-
-        out <- list(value = NULL, quantiles = NULL, samples = NULL,
-            value.acc = NULL, quantiles.acc = NULL)
-
-        ## value
-        temp <- cbind(x$value, y$value)
-        dimnames(temp) <- yxdimnames
-        out$value <- temp
-
-        ## quantiles; check if x and y have same
-        if(identical(dimnames(x$quantiles)[3], dimnames(y$quantiles)[3])){
-            temp <- .a3bind2(x$quantiles, y$quantiles)
-            dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles)[3])
-            out$quantiles <- temp
-        }
-
-        ## samples; check if x and y have same
-        if(identical(dimnames(x$samples)[3], dimnames(y$samples)[3])){
-            temp <- .a3bind2(x$samples, y$samples)
-            dimnames(temp) <- c(yxdimnames, dimnames(x$samples)[3])
-            out$samples <- temp
-        }
-
-        ## value.acc
-        temp <- cbind(x$value.acc, y$value.acc)
-        dimnames(temp) <- yxdimnames
-        out$value.acc <- temp
-
-        ## quantiles.acc; check if x and y have same
-        if(identical(dimnames(x$quantiles.acc)[3], dimnames(y$quantiles.acc)[3])){
-            temp <- .a3bind2(x$quantiles.acc, y$quantiles.acc)
-            dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles.acc)[3])
-            out$quantiles.acc <- temp
-        }
-
-        out$density <- x$density
-        out$Y = x$Y
-        out$X = rbind(x$X, y$X)
-        colnames(out$X) <- (if(ynames[2] == ''){
-            colnames(x$X)
-        } else {
-            colnames(y$X)
-        })
-        out$tails = unique(c(x$tails, y$tails))
-        out$K = x$K
-
+    ## If same Y, join X
+  } else if(identical(dimnames(x$value)[1], dimnames(y$value)[1])){
+    ## select names for Y,X dimensions appropriately
+    ## in case one of the Xs is NULL
+    yxdimnames <- list(
+      dimnames(x$value)[[1]],
+      c(dimnames(x$value)[[2]], dimnames(y$value)[[2]])
+    )
+    names(yxdimnames) <- (if(ynames[2] == ''){
+      names(dimnames(x$value))
     } else {
-        stop('Neither the values of Y variates nor of X variates are identical')
+      names(dimnames(y$value))
+    })
+
+    out <- list(value = NULL, quantiles = NULL, samples = NULL,
+      value.acc = NULL, quantiles.acc = NULL)
+
+    ## value
+    temp <- cbind(x$value, y$value)
+    dimnames(temp) <- yxdimnames
+    out$value <- temp
+
+    ## quantiles; check if x and y have same
+    if(identical(dimnames(x$quantiles)[3], dimnames(y$quantiles)[3])){
+      temp <- .a3bind2(x$quantiles, y$quantiles)
+      dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles)[3])
+      out$quantiles <- temp
     }
 
-    class(out) <- 'prova_pr'
-    out
+    ## samples; check if x and y have same
+    if(identical(dimnames(x$samples)[3], dimnames(y$samples)[3])){
+      temp <- .a3bind2(x$samples, y$samples)
+      dimnames(temp) <- c(yxdimnames, dimnames(x$samples)[3])
+      out$samples <- temp
+    }
+
+    ## value.acc
+    temp <- cbind(x$value.acc, y$value.acc)
+    dimnames(temp) <- yxdimnames
+    out$value.acc <- temp
+
+    ## quantiles.acc; check if x and y have same
+    if(identical(dimnames(x$quantiles.acc)[3], dimnames(y$quantiles.acc)[3])){
+      temp <- .a3bind2(x$quantiles.acc, y$quantiles.acc)
+      dimnames(temp) <- c(yxdimnames, dimnames(x$quantiles.acc)[3])
+      out$quantiles.acc <- temp
+    }
+
+    out$density <- x$density
+    out$Y = x$Y
+    out$X = rbind(x$X, y$X)
+    colnames(out$X) <- (if(ynames[2] == ''){
+      colnames(x$X)
+    } else {
+      colnames(y$X)
+    })
+    out$tails = unique(c(x$tails, y$tails))
+    out$K = x$K
+
+  } else {
+    stop('Neither the values of Y variates nor of X variates are identical')
+  }
+
+  class(out) <- 'prova_pr'
+  out
 }

@@ -94,300 +94,300 @@
 #' @concept generate
 #' @export
 rPr <- function(
-    n,
-    Ynames,
-    X = NA,
-    K = NULL,
-    tails = NULL,
-    mcsamples = NULL,
-    parallel = NULL # unused
+  n,
+  Ynames,
+  X = NA,
+  K = NULL,
+  tails = NULL,
+  mcsamples = NULL,
+  parallel = NULL # unused
 ) {
 
-    ## ## Figure out unnamed arguments
-    ## if(!is.null(X) && is.null(K)){
-    ##     K <- X
-    ##     X <- NULL
-    ## }
+  ## ## Figure out unnamed arguments
+  ## if(!is.null(X) && is.null(K)){
+  ##     K <- X
+  ##     X <- NULL
+  ## }
 
-    ## Check 'K' argument
-    K <- getK(K)
+  ## Check 'K' argument
+  K <- getK(K)
 
-    auxmetadata <- K$auxmetadata
-    K$auxmetadata <- NULL
-    K$info <- NULL
-    ncomponents <- nrow(K$W)
-    nmcsamples <- ncol(K$W)
+  auxmetadata <- K$auxmetadata
+  K$auxmetadata <- NULL
+  K$info <- NULL
+  ncomponents <- nrow(K$W)
+  nmcsamples <- ncol(K$W)
 
-    if(is.null(mcsamples) ||
-           (is.character(mcsamples) && mcsamples == 'all') ||
-           isTRUE(mcsamples)) {
-        mcsamples <- seq_len(nmcsamples)
-    } else if (any(!is.finite(mcsamples)) || any(mcsamples < 1)) {
-        stop("'mcsamples' should be a list of positive integers or NULL")
-    } else {
-        mcsamples <- round(mcsamples[mcsamples <= nmcsamples])
+  if(is.null(mcsamples) ||
+       (is.character(mcsamples) && mcsamples == 'all') ||
+       isTRUE(mcsamples)) {
+    mcsamples <- seq_len(nmcsamples)
+  } else if (any(!is.finite(mcsamples)) || any(mcsamples < 1)) {
+    stop("'mcsamples' should be a list of positive integers or NULL")
+  } else {
+    mcsamples <- round(mcsamples[mcsamples <= nmcsamples])
+  }
+
+  nmcs <- length(mcsamples)
+  if(n <= nmcs) {
+    sseq <- mcsamples[sort.int(sample.int(n = nmcs, size = n))]
+  } else {
+    sseq <- c(rep.int(x = mcsamples, times = n %/% nmcs),
+      mcsamples[sort.int(sample.int(n = nmcs, size = n %% nmcs))])
+  }
+
+  if(all(is.na(X))){X <- NULL}
+  if(!is.null(X)){
+    if(!is.data.frame(X)){ X <- as.data.frame(X) }
+    if (nrow(X) > 1) {
+      warning('Only the first row of X is considered')
+      X <- X[1, , drop = FALSE]
     }
+  }
+  Xv <- colnames(X)
 
-    nmcs <- length(mcsamples)
-    if(n <= nmcs) {
-        sseq <- mcsamples[sort.int(sample.int(n = nmcs, size = n))]
-    } else {
-        sseq <- c(rep.int(x = mcsamples, times = n %/% nmcs),
-            mcsamples[sort.int(sample.int(n = nmcs, size = n %% nmcs))])
+  if(!is.null(tails)){
+    tails <- as.list(tails)
+    if(is.null(names(tails))) {
+      stop('Missing variate names in "tails"')
     }
+  }
+  tailsv <- names(tails)
+  tailscentre <- list('==', 0, '0', NULL)
+  tailsleft <- list('<=', -1, '-1', 'left', 'lower')
+  tailsright <- list('>=', 1, '+1', 'right', 'upper')
+  tailsvalues <- c(tailscentre, tailsleft, tailsright)
 
-    if(all(is.na(X))){X <- NULL}
-    if(!is.null(X)){
-        if(!is.data.frame(X)){ X <- as.data.frame(X) }
-        if (nrow(X) > 1) {
-            warning('Only the first row of X is considered')
-            X <- X[1, , drop = FALSE]
-        }
-    }
-    Xv <- colnames(X)
+  ## Consistency checks
+  if(!is.character(Ynames) || any(is.na(Ynames))){
+    stop('Ynames must be a vector of variate names')
+  }
+  if(!all(Ynames %in% auxmetadata$name)) {
+    stop('unknown Y variates\n')
+  }
+  if(length(unique(Ynames)) != length(Ynames)) {
+    stop('duplicate Y variates\n')
+  }
 
-    if(!is.null(tails)){
-        tails <- as.list(tails)
-        if(is.null(names(tails))) {
-            stop('Missing variate names in "tails"')
-        }
-    }
+  if(!all(Xv %in% auxmetadata$name)){
+    stop('unknown X variates\n')
+  }
+  if(anyDuplicated(Xv)){
+    stop('duplicate X variates\n')
+  }
+  if(anyDuplicated(c(Ynames, Xv))){
+    stop('overlap in Y and X variates\n')
+  }
+
+  if(!all(tailsv %in% Xv)){
+    warning('"tails" variate ',
+      paste0(tailsv[!(tailsv %in% Xv)], collapse = ' '),
+      ' not among X; ignored\n')
+    tails <- tails[tailsv %in% Xv]
     tailsv <- names(tails)
-    tailscentre <- list('==', 0, '0', NULL)
-    tailsleft <- list('<=', -1, '-1', 'left', 'lower')
-    tailsright <- list('>=', 1, '+1', 'right', 'upper')
-    tailsvalues <- c(tailscentre, tailsleft, tailsright)
+  }
+  if(anyDuplicated(tailsv)){
+    stop('duplicate "tails" variates\n')
+  }
+  if(!all(tails %in% tailsvalues)) {
+    stop('"tails" values must be ',
+      paste0(tailsvalues, collapse = ' '), '\n')
+  }
 
-    ## Consistency checks
-    if(!is.character(Ynames) || any(is.na(Ynames))){
-        stop('Ynames must be a vector of variate names')
-    }
-    if(!all(Ynames %in% auxmetadata$name)) {
-        stop('unknown Y variates\n')
-    }
-    if(length(unique(Ynames)) != length(Ynames)) {
-        stop('duplicate Y variates\n')
-    }
-
-    if(!all(Xv %in% auxmetadata$name)){
-        stop('unknown X variates\n')
-    }
-    if(anyDuplicated(Xv)){
-        stop('duplicate X variates\n')
-    }
-    if(anyDuplicated(c(Ynames, Xv))){
-        stop('overlap in Y and X variates\n')
-    }
-
-    if(!all(tailsv %in% Xv)){
-        warning('"tails" variate ',
-            paste0(tailsv[!(tailsv %in% Xv)], collapse = ' '),
-            ' not among X; ignored\n')
-        tails <- tails[tailsv %in% Xv]
-        tailsv <- names(tails)
-    }
-    if(anyDuplicated(tailsv)){
-        stop('duplicate "tails" variates\n')
-    }
-    if(!all(tails %in% tailsvalues)) {
-        stop('"tails" values must be ',
-            paste0(tailsvalues, collapse = ' '), '\n')
-    }
-
-    ## transform 'tails' to -1, +1
-    ## +1: '<=',    -1: '>='
-    ## this is opposite of the argument convention because
-    ## interval probabilities are calculated with `lower.tail = TRUE`
-    ## eg:
-    ## pnorm(x, mean, sd, lower.tail = FALSE) ==
-    ##     pnorm(-x, -mean, sd, lower.tail = TRUE)
-    tails[tails %in% tailscentre] <- NULL
-    cleft <- tails %in% tailsleft
-    cright <- tails %in% tailsright
-    tails[cleft] <- +1
-    tails[cright] <- -1
-    tails <- unlist(tails)
+  ## transform 'tails' to -1, +1
+  ## +1: '<=',    -1: '>='
+  ## this is opposite of the argument convention because
+  ## interval probabilities are calculated with `lower.tail = TRUE`
+  ## eg:
+  ## pnorm(x, mean, sd, lower.tail = FALSE) ==
+  ##     pnorm(-x, -mean, sd, lower.tail = TRUE)
+  tails[tails %in% tailscentre] <- NULL
+  cleft <- tails %in% tailsleft
+  cright <- tails %in% tailsright
+  tails[cleft] <- +1
+  tails[cright] <- -1
+  tails <- unlist(tails)
 
 
 #### Adjust component weights W for conditioning on X
-    if(is.null(X)){
-        lW <- log(K$W)
-    } else {
-        lpargs <- .lprobsargsyx(
-            x = X,
-            auxmetadata = auxmetadata,
-            K = K,
-            tails = tails
-        )
+  if(is.null(X)){
+    lW <- log(K$W)
+  } else {
+    lpargs <- .lprobsargsyx(
+      x = X,
+      auxmetadata = auxmetadata,
+      K = K,
+      tails = tails
+    )
 
-        lW <- .lprobsbase(
-            xVs = lpargs$xVs[[1]],
-            params = lpargs$params,
-            logW =  log(K$W)
-        ) # rows=components, columns=samples
+    lW <- .lprobsbase(
+      xVs = lpargs$xVs[[1]],
+      params = lpargs$params,
+      logW =  log(K$W)
+    ) # rows=components, columns=samples
 
-    } # end definition of lW if non-null X
+  } # end definition of lW if non-null X
 
 
-    ## Utility function to avoid finite-precision errors
-    ## now externally defined
-    ## denorm <- function(lprob) {
-    ##     apply(X = lprob, MARGIN = 2, FUN = function(xx) {
-    ##         xx - max(xx[is.finite(xx)])
-    ##     }, simplify = TRUE)
-    ## }
+  ## Utility function to avoid finite-precision errors
+  ## now externally defined
+  ## denorm <- function(lprob) {
+  ##     apply(X = lprob, MARGIN = 2, FUN = function(xx) {
+  ##         xx - max(xx[is.finite(xx)])
+  ##     }, simplify = TRUE)
+  ## }
 
 #### Draw samples of Ynames
-    Wdenorm <- exp(.denorm(lW[, sseq, drop = FALSE]))
-    Ws <- c(t(apply(
-        X = Wdenorm, MARGIN = 2,
-        FUN = function(xx){sample.int(n = ncomponents, size = 1, prob = xx)},
-        simplify = TRUE
-    )))
-    rm(Wdenorm)
-    gc(full = TRUE)
-    ## ## Old version with extraDistr::rcatlp()
-    ## ## extraDistr::rcatlp() can use non-normalized probabilities
-    ## ## NOTA BENE: the '1 - ...' is because of a bug in rcatlp() < 1.10.0.5
-    ## Ws <- 1 - extraDistr::rcatlp(n = 1, log_prob = 0) +
-    ##     extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
-    ##
-    ## ## Old version with extraDistr::cat(), can be 10 times slower
-    ## lWnorm <- .denorm(lW[, sseq, drop = FALSE])
-    ## Ws <- extraDistr::rcat(n = n, prob = t(
-    ##     apply(X = lWnorm, MARGIN = 2, FUN = function(xx){
-    ##         xx <- exp(xx)
-    ##         xx/sum(xx, na.rm = TRUE)
-    ##     }, simplify = TRUE)
-    ## ))
+  Wdenorm <- exp(.denorm(lW[, sseq, drop = FALSE]))
+  Ws <- c(t(apply(
+    X = Wdenorm, MARGIN = 2,
+    FUN = function(xx){sample.int(n = ncomponents, size = 1, prob = xx)},
+    simplify = TRUE
+  )))
+  rm(Wdenorm)
+  gc(full = TRUE)
+  ## ## Old version with extraDistr::rcatlp()
+  ## ## extraDistr::rcatlp() can use non-normalized probabilities
+  ## ## NOTA BENE: the '1 - ...' is because of a bug in rcatlp() < 1.10.0.5
+  ## Ws <- 1 - extraDistr::rcatlp(n = 1, log_prob = 0) +
+  ##     extraDistr::rcatlp(n = n, log_prob = t(lW)[sseq, , drop = FALSE])
+  ##
+  ## ## Old version with extraDistr::cat(), can be 10 times slower
+  ## lWnorm <- .denorm(lW[, sseq, drop = FALSE])
+  ## Ws <- extraDistr::rcat(n = n, prob = t(
+  ##     apply(X = lWnorm, MARGIN = 2, FUN = function(xx){
+  ##         xx <- exp(xx)
+  ##         xx/sum(xx, na.rm = TRUE)
+  ##     }, simplify = TRUE)
+  ## ))
 
-    Yout <- NULL
-    vYout <- NULL
+  Yout <- NULL
+  vYout <- NULL
 
-    ## R
-    toselect <- which((auxmetadata$name %in% Ynames) &
-                          (auxmetadata$mcmctype == 'R'))
-    nvrt <- length(toselect)
-    if(nvrt > 0){
-        aux <- auxmetadata[toselect, ]
-        vYout <- c(vYout, aux$name)
-        totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
-        Yout <- c(Yout,
-            rnorm(n = n * nvrt,
-                mean = K$Rmean[totake],
-                sd = K$Rsd[totake] )
-        )
+  ## R
+  toselect <- which((auxmetadata$name %in% Ynames) &
+                      (auxmetadata$mcmctype == 'R'))
+  nvrt <- length(toselect)
+  if(nvrt > 0){
+    aux <- auxmetadata[toselect, ]
+    vYout <- c(vYout, aux$name)
+    totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
+    Yout <- c(Yout,
+      rnorm(n = n * nvrt,
+        mean = K$Rmean[totake],
+        sd = K$Rsd[totake] )
+    )
+  }
+
+  ## C
+  toselect <- which((auxmetadata$name %in% Ynames) &
+                      (auxmetadata$mcmctype == 'C'))
+  nvrt <- length(toselect)
+  if(nvrt > 0){
+    aux <- auxmetadata[toselect, ]
+    vYout <- c(vYout, aux$name)
+    totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
+    Yout <- c(Yout,
+      rnorm(n = n * nvrt,
+        mean = K$Cmean[totake],
+        sd = K$Csd[totake] )
+    )
+  }
+
+  ## D
+  toselect <- which((auxmetadata$name %in% Ynames) &
+                      (auxmetadata$mcmctype == 'D'))
+  nvrt <- length(toselect)
+  if(nvrt > 0){
+    aux <- auxmetadata[toselect, ]
+    vYout <- c(vYout, aux$name)
+    totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
+    Yout <- c(Yout,
+      rnorm(n = n * nvrt,
+        mean = K$Dmean[totake],
+        sd = K$Dsd[totake] )
+    )
+  }
+
+  ## O
+  toselect <- which((auxmetadata$name %in% Ynames) &
+                      (auxmetadata$mcmctype == 'O'))
+  nvrt <- length(toselect)
+  if(nvrt > 0){
+    vYout <- c(vYout, auxmetadata$name[toselect])
+    for(i in toselect) {
+      aux <- auxmetadata[i, ]
+      Yout <- c(Yout, mapply(FUN = function(xx, yy){
+        sample.int(n = aux$Nvalues, size = 1,
+          prob = K$Oprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
+        Ws, sseq, SIMPLIFY = TRUE))
+      ## ## old version with extraDistr::rcat()
+      ## totake <- cbind(Ws, sseq)
+      ## Yout <- c(Yout,
+      ##     extraDistr::rcat(n = n,
+      ##         prob = apply(
+      ##             X = K$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+      ##             MARGIN = 1, FUN = `[`, totake,
+      ##             simplify = TRUE) )
+      ## )
     }
+  }
 
-    ## C
-    toselect <- which((auxmetadata$name %in% Ynames) &
-                          (auxmetadata$mcmctype == 'C'))
-    nvrt <- length(toselect)
-    if(nvrt > 0){
-        aux <- auxmetadata[toselect, ]
-        vYout <- c(vYout, aux$name)
-        totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
-        Yout <- c(Yout,
-            rnorm(n = n * nvrt,
-                mean = K$Cmean[totake],
-                sd = K$Csd[totake] )
-        )
+  ## N
+  toselect <- which((auxmetadata$name %in% Ynames) &
+                      (auxmetadata$mcmctype == 'N'))
+  nvrt <- length(toselect)
+  if(nvrt > 0){
+    vYout <- c(vYout, auxmetadata$name[toselect])
+    for(i in toselect) {
+      aux <- auxmetadata[i, ]
+      Yout <- c(Yout, mapply(FUN = function(xx, yy){
+        sample.int(n = aux$Nvalues, size = 1,
+          prob = K$Nprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
+        Ws, sseq, SIMPLIFY = TRUE))
+      ## ## old version with extraDistr::rcat()
+      ## totake <- cbind(Ws, sseq)
+      ## Yout <- c(Yout,
+      ##     extraDistr::rcat(n = n,
+      ##         prob = apply(
+      ##             X = K$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
+      ##             MARGIN = 1, FUN = `[`, totake,
+      ##             simplify = TRUE) )
+      ## )
     }
+  }
 
-    ## D
-    toselect <- which((auxmetadata$name %in% Ynames) &
-                          (auxmetadata$mcmctype == 'D'))
-    nvrt <- length(toselect)
-    if(nvrt > 0){
-        aux <- auxmetadata[toselect, ]
-        vYout <- c(vYout, aux$name)
-        totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
-        Yout <- c(Yout,
-            rnorm(n = n * nvrt,
-                mean = K$Dmean[totake],
-                sd = K$Dsd[totake] )
-        )
-    }
+  ## B
+  toselect <- which((auxmetadata$name %in% Ynames) &
+                      (auxmetadata$mcmctype == 'B'))
+  nvrt <- length(toselect)
+  if(nvrt > 0){
+    aux <- auxmetadata[toselect, ]
+    vYout <- c(vYout, aux$name)
+    totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
+    Yout <- c(Yout,
+      rbinom(n = n * nvrt, size = 1, prob = K$Bprob[totake])
+      ## ## Old version
+      ## extraDistr::rbern(n = n * nvrt, prob = K$Bprob[totake])
+    )
+  }
 
-    ## O
-    toselect <- which((auxmetadata$name %in% Ynames) &
-                          (auxmetadata$mcmctype == 'O'))
-    nvrt <- length(toselect)
-    if(nvrt > 0){
-        vYout <- c(vYout, auxmetadata$name[toselect])
-        for(i in toselect) {
-            aux <- auxmetadata[i, ]
-            Yout <- c(Yout, mapply(FUN = function(xx, yy){
-                sample.int(n = aux$Nvalues, size = 1,
-                    prob = K$Oprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
-                Ws, sseq, SIMPLIFY = TRUE))
-            ## ## old version with extraDistr::rcat()
-            ## totake <- cbind(Ws, sseq)
-            ## Yout <- c(Yout,
-            ##     extraDistr::rcat(n = n,
-            ##         prob = apply(
-            ##             X = K$Oprob[aux$indexpos + seq_len(aux$Nvalues), ,],
-            ##             MARGIN = 1, FUN = `[`, totake,
-            ##             simplify = TRUE) )
-            ## )
-        }
-    }
+  dim(Yout) <- c(n, length(Ynames))
+  Yout <- Yout[, match(Ynames, vYout), drop = FALSE]
+  colnames(Yout) <- Ynames
 
-    ## N
-    toselect <- which((auxmetadata$name %in% Ynames) &
-                          (auxmetadata$mcmctype == 'N'))
-    nvrt <- length(toselect)
-    if(nvrt > 0){
-        vYout <- c(vYout, auxmetadata$name[toselect])
-        for(i in toselect) {
-            aux <- auxmetadata[i, ]
-            Yout <- c(Yout, mapply(FUN = function(xx, yy){
-                sample.int(n = aux$Nvalues, size = 1,
-                    prob = K$Nprob[aux$indexpos + seq_len(aux$Nvalues), xx, yy])},
-                Ws, sseq, SIMPLIFY = TRUE))
-            ## ## old version with extraDistr::rcat()
-            ## totake <- cbind(Ws, sseq)
-            ## Yout <- c(Yout,
-            ##     extraDistr::rcat(n = n,
-            ##         prob = apply(
-            ##             X = K$Nprob[aux$indexpos + seq_len(aux$Nvalues), ,],
-            ##             MARGIN = 1, FUN = `[`, totake,
-            ##             simplify = TRUE) )
-            ## )
-        }
-    }
+  Yout <- .vtransform(Yout,
+    auxmetadata = auxmetadata,
+    Rout = 'original',
+    Cout = 'original',
+    Dout = 'original',
+    Oout = 'original',
+    Nout = 'original',
+    Bout = 'original',
+    logjacobianOr = NULL)
 
-    ## B
-    toselect <- which((auxmetadata$name %in% Ynames) &
-                          (auxmetadata$mcmctype == 'B'))
-    nvrt <- length(toselect)
-    if(nvrt > 0){
-        aux <- auxmetadata[toselect, ]
-        vYout <- c(vYout, aux$name)
-        totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
-        Yout <- c(Yout,
-            rbinom(n = n * nvrt, size = 1, prob = K$Bprob[totake])
-            ## ## Old version
-            ## extraDistr::rbern(n = n * nvrt, prob = K$Bprob[totake])
-        )
-    }
+  ## row-name scheme: 'mcsample.draw'
+  rownames(Yout) <- paste0(sseq, '_', ((seq_len(n) - 1L) %/% nmcs) + 1L)
 
-    dim(Yout) <- c(n, length(Ynames))
-    Yout <- Yout[, match(Ynames, vYout), drop = FALSE]
-    colnames(Yout) <- Ynames
-
-    Yout <- .vtransform(Yout,
-        auxmetadata = auxmetadata,
-        Rout = 'original',
-        Cout = 'original',
-        Dout = 'original',
-        Oout = 'original',
-        Nout = 'original',
-        Bout = 'original',
-        logjacobianOr = NULL)
-
-    ## row-name scheme: 'mcsample.draw'
-    rownames(Yout) <- paste0(sseq, '_', ((seq_len(n) - 1L) %/% nmcs) + 1L)
-
-    Yout
+  Yout
 }
