@@ -2,7 +2,7 @@ library('prova')
 
 K <- 'Kall.rds'
 
-parallel <- 12
+options(cl.cores = 12)
 
 starttime <- format(Sys.time(), '%y%m%dT%H%M%S')
 message('Starting calcs ', starttime)
@@ -57,6 +57,5 @@ temp <- mutualinfo(
 tname <- paste0(temp$Y1names, '_', temp$Y2names, '_', temp$X[[1]])
 saveRDS(temp, paste0('MI', tname, '.rds'))
 message('done ', tname, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-
 
 message('Finished ', format(Sys.time(), '%y%m%dT%H%M%S'))
