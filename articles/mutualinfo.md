@@ -372,7 +372,8 @@ pplot(
         samplesGentoo$bill_len),
     type = 'p', pch = c(0, 2, 5), col = 1:3, alpha.f = 0.2,
     xlab = 'body mass / g', ylab = 'bill length / mm',
-    xlim = body_massrange, ylim = bill_lenrange)
+    xlim = body_massrange, ylim = bill_lenrange
+)
 
 legend('top', speciesvalues, pch = c(0, 2, 5), col = 1:3,
     horiz = TRUE, bty = 'n')
@@ -567,14 +568,15 @@ the `$unit` element:
 ``` r
 
 MIislandspecies$value
-# [1] 0.626638
+#          
+# 0.623971
 
 MIislandspecies$unit
 # [1] "Sh"
 ```
 
 Between variates `island` and `species` there is thus a mutual
-information of 0.63 Sh. But what does this mean?
+information of 0.62 Sh. But what does this mean?
 
 ### Understanding mutual-information values
 
@@ -634,13 +636,15 @@ corresponding \\\lvert r \rvert\\ value. In the previous case of the
 
 MIislandspecies[c('value', 'unit')]
 # $value
-# [1] 0.626638
+#          
+# 0.623971 
 # 
 # $unit
 # [1] "Sh"
 
 MIislandspecies$rGauss
-# [1] 0.761909
+#          
+# 0.760889
 ```
 
 ### Mutual information for previous examples
@@ -660,12 +664,14 @@ r <- signif(MIislandspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
 
-pplot(x = samples$island, y = samples$species,
+pplot(
+    x = samples$island, y = samples$species,
     type = 'p', col = 4, alpha.f = 0.5,
     xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues,
     main = paste0('mutual information: ', mi, ' Sh',
-        '  (rough r-equiv: ', r, ')') )
+        '  (rough r-equiv: ', r, ')')
+)
 ```
 
 ![\*\*Scatter plot for \`island\` and
@@ -696,12 +702,14 @@ r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
 
-pplot(x = samples$body_mass, y = samples$species,
+pplot(
+    x = samples$body_mass, y = samples$species,
     type = 'p', col = 5, alpha.f = 0.5,
     xlab = 'body mass / g', ylab = 'species',
     xlim = body_massrange, ydomain = speciesvalues,
     main = paste0('mutual information: ', mi, ' Sh',
-        '  (rough r-equiv: ', r, ')') )
+        '  (rough r-equiv: ', r, ')')
+)
 ```
 
 ![\*\*Scatter plot and mutual info for body mass and
@@ -730,12 +738,14 @@ r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
 
-pplot(x = samples$body_mass, y = samples$bill_len,
+pplot(
+    x = samples$body_mass, y = samples$bill_len,
     type = 'p', col = 6, alpha.f = 0.5,
     xlab = 'body mass / g', ylab = 'bill length / mm',
     xlim = body_massrange, ylim = bill_lenrange,
     main = paste0('mutual information: ', mi, ' Sh',
-        '  (rough r-equiv: ', r, ')') )
+        '  (rough r-equiv: ', r, ')')
+)
 ```
 
 ![\*\*Scatter plot and mutual info for body mass and bill
@@ -815,7 +825,8 @@ pplot(
     type = 'p', pch = c(0, 2, 5), col = 1:3, alpha.f = 0.2,
     xlab = 'body mass / g', ylab = 'bill length / mm',
     main = "mutual information between 'body_mass' and 'bill_len' in different subpopulations",
-    xlim = body_massrange, ylim = bill_lenrange)
+    xlim = body_massrange, ylim = bill_lenrange
+)
 
 legend('top',
     paste(speciesvalues, paste0(mispecies, ' Sh'), sep = ': '),
@@ -865,7 +876,7 @@ and can be seen with the utility function
 
 print(MIislandspecies)
 # value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-#   0.6266   0.0044   0.5530   0.6006   0.6669   0.7075
+#   0.6240   0.0042   0.5506   0.5986   0.6630   0.7075
 ```
 
 which shows that, acquiring more data, we can expect with 89%
