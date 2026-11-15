@@ -15,20 +15,21 @@ data given to 'learn()'. This augmented metadata object is saved in the
 
 - data:
 
-  data.frame object
+  data.frame object.
 
 - metadata:
 
-  data.frame object
+  data.frame object.
 
 - Dthreshold:
 
   Positive number: threshold of fraction of unique datapoints to total
-  datapoints, to decide whether to treat a rounded variate as continuous
+  datapoints, to decide whether to treat a rounded variate as
+  continuous.
 
 - tscalefactor:
 
-  Positive number: scaling factor for variate conversion
+  Positive number: scaling factor for variate conversion.
 
 ## Value
 
