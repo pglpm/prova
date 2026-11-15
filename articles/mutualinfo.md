@@ -1,4 +1,4 @@
-# Associations among variates and mutual information
+# Associations among variates and generating samples
 
 This vignette gives an introduction and guide to the visual and
 quantitative capabilities and functions of the **Prova** package, for
