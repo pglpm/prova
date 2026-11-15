@@ -251,7 +251,8 @@ pplot(
         samplesGentoo$bill_len),
     type = 'p', pch = c(0, 2, 5), col = 1:3, alpha.f = 0.2,
     xlab = 'body mass / g', ylab = 'bill length / mm',
-    xlim = body_massrange, ylim = bill_lenrange)
+    xlim = body_massrange, ylim = bill_lenrange
+)
 
 legend('top', speciesvalues, pch = c(0, 2, 5), col = 1:3,
     horiz = TRUE, bty = 'n')
@@ -366,7 +367,8 @@ $$
 ```{r Ivsr, eval = TRUE, echo = FALSE, fig.cap='**$I$ vs $\\lvert r\\rvert$ for jointly Gaussian variates**', out.width = '75%'}
 x <- seq(0, 1, length.out = 129)
 y <- -0.5 * log2(1-x^2)
-pplot(x = x, y = y, col = 8,
+pplot(
+    x = x, y = y, col = 8,
     xlab = bquote('Pearson'~group('|', italic(r), '|')),
     ylab = bquote('mutual information'~italic(I))
     )
@@ -395,12 +397,14 @@ r <- signif(MIislandspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('island', 'species'), K = K)
 
-pplot(x = samples$island, y = samples$species,
+pplot(
+    x = samples$island, y = samples$species,
     type = 'p', col = 4, alpha.f = 0.5,
     xlab = 'island', ylab = 'species',
     xdomain = islandvalues, ydomain = speciesvalues,
     main = paste0('mutual information: ', mi, ' Sh',
-        '  (rough r-equiv: ', r, ')') )
+        '  (rough r-equiv: ', r, ')')
+)
 ```
 
 ### Body mass and species
@@ -422,12 +426,14 @@ r <- signif(MIbodymassspecies$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'species'), K = K)
 
-pplot(x = samples$body_mass, y = samples$species,
+pplot(
+    x = samples$body_mass, y = samples$species,
     type = 'p', col = 5, alpha.f = 0.5,
     xlab = 'body mass / g', ylab = 'species',
     xlim = body_massrange, ydomain = speciesvalues,
     main = paste0('mutual information: ', mi, ' Sh',
-        '  (rough r-equiv: ', r, ')') )
+        '  (rough r-equiv: ', r, ')')
+)
 ```
 
 ### Body mass and bill length
@@ -449,12 +455,14 @@ r <- signif(MIbodymassbilllen$rGauss, digits = 2)
 
 samples <- rPr(n = 2000, Ynames = c('body_mass', 'bill_len'), K = K)
 
-pplot(x = samples$body_mass, y = samples$bill_len,
+pplot(
+    x = samples$body_mass, y = samples$bill_len,
     type = 'p', col = 6, alpha.f = 0.5,
     xlab = 'body mass / g', ylab = 'bill length / mm',
     xlim = body_massrange, ylim = bill_lenrange,
     main = paste0('mutual information: ', mi, ' Sh',
-        '  (rough r-equiv: ', r, ')') )
+        '  (rough r-equiv: ', r, ')')
+)
 ```
 
 Note that in this case the Pearson correlation between `body_mass` and `bill_len` is
@@ -507,7 +515,8 @@ pplot(
     type = 'p', pch = c(0, 2, 5), col = 1:3, alpha.f = 0.2,
     xlab = 'body mass / g', ylab = 'bill length / mm',
     main = "mutual information between 'body_mass' and 'bill_len' in different subpopulations",
-    xlim = body_massrange, ylim = bill_lenrange)
+    xlim = body_massrange, ylim = bill_lenrange
+)
 
 legend('top',
     paste(speciesvalues, paste0(mispecies, ' Sh'), sep = ': '),
