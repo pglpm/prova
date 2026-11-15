@@ -59,5 +59,4 @@ saveRDS(temp, paste0('MI', tname, '.rds'))
 message('done ', tname, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 
 
-parallel::stopCluster(parallel)
 message('Finished ', format(Sys.time(), '%y%m%dT%H%M%S'))

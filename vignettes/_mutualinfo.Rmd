@@ -45,9 +45,9 @@ MIislandspecies <- readRDS('MIisland_species_.rds')
 MIbodymassspecies <- readRDS('MIbody_mass_species_.rds')
 MIbodymassbilllen <- readRDS('MIbody_mass_bill_len_.rds')
 
-MIadelie <- readRDS('MIbody_mass_bill_len_adelie.rds')
-MIchinstrap <- readRDS('MIbody_mass_bill_len_chinstrap.rds')
-MIgentoo <- readRDS('MIbody_mass_bill_len_gentoo.rds')
+MIadelie <- readRDS('MIbody_mass_bill_len_Adelie.rds')
+MIchinstrap <- readRDS('MIbody_mass_bill_len_Chinstrap.rds')
+MIgentoo <- readRDS('MIbody_mass_bill_len_Gentoo.rds')
 
 ```
 \newcommand{\mo}{\mathrel{\!=\!}}
