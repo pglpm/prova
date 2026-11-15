@@ -464,7 +464,7 @@ The `Pr()` function by default calculates two credibility intervals for each fre
 
 For instance, the plot indicates that there's a 50% probability that the relative frequency of all `Adelie` penguins is roughly between `r printprob(Fspecies10$quantiles['Adelie',1,2])` and `r printprob(Fspecies10$quantiles['Adelie',1,3])`; and an 89% probability that their relative frequency is roughly between `r printprob(Fspecies10$quantiles['Adelie',1,1])` and `r printprob(Fspecies10$quantiles['Adelie',1,4])`.
 
-For the `Gentoo` species, there's a 50% probability that its relative frequency is roughly between `r printprob(Fspecies10$quantiles['Gentoo',1,2])` and `r printprob(Fspecies10$quantiles['Gentoo',1,3])`; and an 89% probability that their relative frequency is roughly between `r printprob(Fspecies10$quantiles['Gentoo',1,1])` and `r printprob(Fspecies10$quantiles['Gentoo',1,4])`.
+For the species `Gentoo` there's a 50% probability that its relative frequency is roughly between `r printprob(Fspecies10$quantiles['Gentoo',1,2])` and `r printprob(Fspecies10$quantiles['Gentoo',1,3])`; and an 89% probability that their relative frequency is roughly between `r printprob(Fspecies10$quantiles['Gentoo',1,1])` and `r printprob(Fspecies10$quantiles['Gentoo',1,4])`.
 
 A different way of visualizing the uncertainty about the long-run frequency distribution is by displaying an ensemble of *probable alternatives* of the distribution. This visualization can be obtained with the argument `spread = 'samples'` in the `plot()` function. Let's compare the two visualizations, by quantile bands and by ensemble:
 
@@ -479,7 +479,7 @@ The visualization by quantile bands often looks neater; but keep in mind that it
 
 **Prova** makes also available a finer visualization of the uncertainty about the long-run frequencies. We can plot the probabilities of all possible such frequencies. To understand this idea, let's ask: what is the relative frequency of Adélie penguins in the whole population? Possible values could be anything between 0 and 1. But some of these values may be more probable than others. If we look at our 10 samples, we see that 3 out of 10 are `Adelie`. So a relative frequency around 0.3 is a little more probable, although there's still a lot of uncertainty because this is just a small sample.
 
-The `Pr()` function has actually calculated the probabilities for all possible frequencies of each species. We can plot the probabilities of the frequencies of the `Adelie` species only by using the `subset()` function, as follows:
+The `Pr()` function has actually calculated the probabilities for all possible frequencies of each species. We can plot the probabilities of the frequencies of the species `Adelie` only by using the `subset()` function, as follows:
 
 ```{r hist10adelie, eval = TRUE, fig.cap='**Probability distribution for the frequency of Adelie penguins**'}
 ## select only Adelie by means of subset()
@@ -488,7 +488,7 @@ hist(subset(Fspecies10, subsetY = (species == 'Adelie')),
 ```
 \
 
-The `subset()` function selects only the probabilities for the `Adelie` species. The `hist()` function plots the probability distribution for all the frequency values. We see that frequencies between around `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.25),1)` and `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.75),1)` have highest probability. But the probability distribution is quite wide; even a frequency of `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.99),1)` has some probability. The vertical line indicates the mean of this probability distribution, which we take as our frequency estimate and as the probability that the next penguin we observe is of the Adélie species.
+The `subset()` function selects only the probabilities for the species `Adelie`. The `hist()` function plots the probability distribution for all the frequency values. We see that frequencies between around `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.25),1)` and `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.75),1)` have highest probability. But the probability distribution is quite wide; even a frequency of `r printprob(quantile(Fspecies10$samples['Adelie',,], 0.99),1)` has some probability. The vertical line indicates the mean of this probability distribution, which we take as our frequency estimate and as the probability that the next penguin we observe is of the Adélie species.
 
 The width of this probability distribution reflects our large uncertainty, which in turn comes from the fact that we have only seen a small sample of penguins. We shall see that this uncertainty decreases and we gather more samples.
 
@@ -960,7 +960,7 @@ median(freqdiff)
 quantile(freqdiff, c(0.055, 0.945))
 ```
 
-> From a sample of 60 penguins, the difference between the frequencies of `Gentoo` species and `Chinstrap` species, on `Biscoe` island, is estimated with a median of `r signif(median(freqdiff), 2)`, and it is between `r printprob(quantile(freqdiff, 0.055))` and `r printprob(quantile(freqdiff, 0.945))` with 89% probability.
+> From a sample of 60 penguins, the difference between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of `r signif(median(freqdiff), 2)`, and it is between `r printprob(quantile(freqdiff, 0.055))` and `r printprob(quantile(freqdiff, 0.945))` with 89% probability.
 
 
 Maybe you prefer a ratio between the two frequencies:
@@ -974,7 +974,7 @@ median(freqratio)
 quantile(freqratio, c(0.055, 0.945))
 ```
 
-> From a sample of 60 penguins, the ratio between the frequencies of `Gentoo` species on `Chinstrap` species, on `Biscoe` island, is estimated with a median of `r signif(median(freqratio), 2)`, and it is between `r printprob(quantile(freqratio, 0.055))` and `r printprob(quantile(freqratio, 0.945))` with 89% probability.
+> From a sample of 60 penguins, the ratio between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of `r signif(median(freqratio), 2)`, and it is between `r printprob(quantile(freqratio, 0.055))` and `r printprob(quantile(freqratio, 0.945))` with 89% probability.
 
 It is remarkable that with only 60 penguins -- and not all of them from Biscoe island -- we can conclude with a high probability (95%) that there are at least `r signif(quantile(freqratio, 0.055),1)` times more Gentoo penguins than Chinstrap penguins on Biscoe island! Note an important consequence from the point of view of hypothesis testing:
 

@@ -489,7 +489,7 @@ The `Pr()` function by default calculates two credibility intervals for each fre
 
 For instance, the plot indicates that there's a 50% probability that the relative frequency of all `Adelie` penguins is roughly between 0.21 and 0.37; and an 89% probability that their relative frequency is roughly between 0.11 and 0.51.
 
-For the `Gentoo` species, there's a 50% probability that its relative frequency is roughly between 0.30 and 0.49; and an 89% probability that their relative frequency is roughly between 0.20 and 0.62.
+For the species `Gentoo` there's a 50% probability that its relative frequency is roughly between 0.30 and 0.49; and an 89% probability that their relative frequency is roughly between 0.20 and 0.62.
 
 A different way of visualizing the uncertainty about the long-run frequency distribution is by displaying an ensemble of *probable alternatives* of the distribution. This visualization can be obtained with the argument `spread = 'samples'` in the `plot()` function. Let's compare the two visualizations, by quantile bands and by ensemble:
 
