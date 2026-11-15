@@ -479,7 +479,7 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmpdM433f/prova-V1_D3_S10_261115T073758_19941706d6cb
+#> /tmp/RtmpZtAui9/prova-V1_D3_S10_261115T083538_19955db915f1
 #> Prova v3.0.0.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
@@ -517,7 +517,7 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmpdM433f/prova-V1_D3_S10_261115T073758_19941706d6cb
+#> /tmp/RtmpZtAui9/prova-V1_D3_S10_261115T083538_19955db915f1
 #> **********************************************************
 
 ## Check structure of `K` object:
