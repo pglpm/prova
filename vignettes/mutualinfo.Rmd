@@ -1,10 +1,10 @@
 ---
-title: "Associations among variates and mutual information"
+title: "Associations among variates and generating samples"
 output:
   rmarkdown::html_vignette:
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Associations among variates and mutual information}
+  %\VignetteIndexEntry{Associations among variates and generating samples}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
