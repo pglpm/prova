@@ -24,12 +24,12 @@ probabilities refers to a *new unit*; for example:
 - If we find that
   \\\mathrm{Pr}(\text{species}\mathrel{\\=\\}\text{Adelie}) = 44\\\\,
   then there’s a 44% probability that the next penguin we sample (from
-  the same population) is of the *Adélie* species.
+  the same population) is of the species *Adélie*.
 - If we find that
   \\\mathrm{Pr}(\text{species}\mathrel{\\=\\}\text{Gentoo} \\\vert\\
   \text{island} \mathrel{\\=\\}\text{Biscoe}) = 1\\\\, then if we have a
   new penguin, and we know it is from Biscoe island, there’s a 1%
-  probability that it is of the *Gentoo* species.
+  probability that it is of the species *Gentoo*.
 
 And these probabilities can also be interpreted as “estimates” of the
 corresponding *whole-population* frequencies.

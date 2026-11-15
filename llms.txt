@@ -143,7 +143,7 @@ print(prob)
 The answer is that there is roughly a 95% probability that a new
 penguin, among those with a 40 mm bill length, is of species ‘Adélie’.
 
-Now ask: what is the relative *frequency* of the ‘Adélie’ species in the
+Now ask: what is the relative *frequency* of the species ‘Adélie’ in the
 whole subpopulation of penguins (including *unsampled* penguins) having
 bill length of 40 mm? This question cannot be answered with certainty,
 because we have only a sample of the full population. But **Prova** can

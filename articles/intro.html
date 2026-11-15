@@ -1293,7 +1293,7 @@ the lighter grey band; these latter intervals contain the 50% ones.</p>
 the relative frequency of all <code>Adelie</code> penguins is roughly
 between 0.21 and 0.37; and an 89% probability that their relative
 frequency is roughly between 0.11 and 0.51.</p>
-<p>For the <code>Gentoo</code> species, there’s a 50% probability that
+<p>For the species <code>Gentoo</code> there’s a 50% probability that
 its relative frequency is roughly between 0.30 and 0.49; and an 89%
 probability that their relative frequency is roughly between 0.20 and
 0.62.</p>
@@ -1338,7 +1338,7 @@ there’s still a lot of uncertainty because this is just a small
 sample.</p>
 <p>The <code><a href="../reference/Pr.html">Pr()</a></code> function has actually calculated the
 probabilities for all possible frequencies of each species. We can plot
-the probabilities of the frequencies of the <code>Adelie</code> species
+the probabilities of the frequencies of the species <code>Adelie</code>
 only by using the <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> function, as follows:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## select only Adelie by means of subset()</span></span>
@@ -1352,7 +1352,7 @@ penguins</strong>
 </div>
 <p><br></p>
 <p>The <code><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset()</a></code> function selects only the probabilities for
-the <code>Adelie</code> species. The <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code> function plots
+the species <code>Adelie</code>. The <code><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist()</a></code> function plots
 the probability distribution for all the frequency values. We see that
 frequencies between around 0.2 and 0.4 have highest probability. But the
 probability distribution is quite wide; even a frequency of 0.6 has some
@@ -2102,7 +2102,7 @@ interval about this difference:</p>
 <span><span class="co"># 0.546721 0.831743</span></span></code></pre></div>
 <blockquote>
 <p>From a sample of 60 penguins, the difference between the frequencies
-of <code>Gentoo</code> species and <code>Chinstrap</code> species, on
+of the species <code>Gentoo</code> and <code>Chinstrap</code>, on
 <code>Biscoe</code> island, is estimated with a median of 0.7, and it is
 between 0.55 and 0.83 with 89% probability.</p>
 </blockquote>
@@ -2119,7 +2119,7 @@ between 0.55 and 0.83 with 89% probability.</p>
 <span><span class="co">#  6.74092 97.68391</span></span></code></pre></div>
 <blockquote>
 <p>From a sample of 60 penguins, the ratio between the frequencies of
-<code>Gentoo</code> species on <code>Chinstrap</code> species, on
+the species <code>Gentoo</code> and <code>Chinstrap</code>, on
 <code>Biscoe</code> island, is estimated with a median of 21, and it is
 between 6.74 and 97.68 with 89% probability.</p>
 </blockquote>

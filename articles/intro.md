@@ -827,7 +827,7 @@ relative frequency of all `Adelie` penguins is roughly between 0.21 and
 0.37; and an 89% probability that their relative frequency is roughly
 between 0.11 and 0.51.
 
-For the `Gentoo` species, there’s a 50% probability that its relative
+For the species `Gentoo` there’s a 50% probability that its relative
 frequency is roughly between 0.30 and 0.49; and an 89% probability that
 their relative frequency is roughly between 0.20 and 0.62.
 
@@ -881,7 +881,7 @@ because this is just a small sample.
 The [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md) function has
 actually calculated the probabilities for all possible frequencies of
 each species. We can plot the probabilities of the frequencies of the
-`Adelie` species only by using the
+species `Adelie` only by using the
 [`subset()`](https://rdrr.io/r/base/subset.html) function, as follows:
 
 ``` r
@@ -899,7 +899,7 @@ penguins\*\*](figure/hist10adelie-1.svg)
   
 
 The [`subset()`](https://rdrr.io/r/base/subset.html) function selects
-only the probabilities for the `Adelie` species. The
+only the probabilities for the species `Adelie`. The
 [`hist()`](https://rdrr.io/r/graphics/hist.html) function plots the
 probability distribution for all the frequency values. We see that
 frequencies between around 0.2 and 0.4 have highest probability. But the
@@ -1761,7 +1761,7 @@ quantile(freqdiff, c(0.055, 0.945))
 ```
 
 > From a sample of 60 penguins, the difference between the frequencies
-> of `Gentoo` species and `Chinstrap` species, on `Biscoe` island, is
+> of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is
 > estimated with a median of 0.7, and it is between 0.55 and 0.83 with
 > 89% probability.
 
@@ -1780,10 +1780,10 @@ quantile(freqratio, c(0.055, 0.945))
 #  6.74092 97.68391
 ```
 
-> From a sample of 60 penguins, the ratio between the frequencies of
-> `Gentoo` species on `Chinstrap` species, on `Biscoe` island, is
-> estimated with a median of 21, and it is between 6.74 and 97.68 with
-> 89% probability.
+> From a sample of 60 penguins, the ratio between the frequencies of the
+> species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated
+> with a median of 21, and it is between 6.74 and 97.68 with 89%
+> probability.
 
 It is remarkable that with only 60 penguins – and not all of them from
 Biscoe island – we can conclude with a high probability (95%) that there
