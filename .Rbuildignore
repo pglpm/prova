@@ -13,6 +13,7 @@
 ^vignettes/.*\.rds$
 ^vignettes/.*\.csv$
 ^vignettes/.*\.R$
+^vignettes/.*\.out$
 figure$
 ^apptainer.*$
 ^robots\.txt$
