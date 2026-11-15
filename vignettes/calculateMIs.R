@@ -12,7 +12,7 @@ temp <- mutualinfoF(
     K = K, parallel = parallel
 )
 tname <- paste0(temp$Y1names, '_', temp$Y2names, '_', colnames(temp$X))
-saveRDS(temp, paste0('MI', tname, '.rds')
+saveRDS(temp, paste0('MI', tname, '.rds'))
 message('done ', tname, format(Sys.time(), '%y%m%dT%H%M%S'))
 
 temp <- mutualinfo(
@@ -20,7 +20,7 @@ temp <- mutualinfo(
     K = K, parallel = parallel
 )
 tname <- paste0(temp$Y1names, '_', temp$Y2names, '_', colnames(temp$X))
-saveRDS(temp, paste0('MI', tname, '.rds')
+saveRDS(temp, paste0('MI', tname, '.rds'))
 message('done ', tname, format(Sys.time(), '%y%m%dT%H%M%S'))
 
 temp <- mutualinfo(
@@ -28,7 +28,7 @@ temp <- mutualinfo(
     K = K, parallel = parallel
 )
 tname <- paste0(temp$Y1names, '_', temp$Y2names, '_', colnames(temp$X))
-saveRDS(temp, paste0('MI', tname, '.rds')
+saveRDS(temp, paste0('MI', tname, '.rds'))
 message('done ', tname, format(Sys.time(), '%y%m%dT%H%M%S'))
 
 temp <- mutualinfo(
@@ -37,7 +37,7 @@ temp <- mutualinfo(
     K = K, parallel = parallel
 )
 tname <- paste0(temp$Y1names, '_', temp$Y2names, '_', colnames(temp$X))
-saveRDS(temp, paste0('MI', tname, '.rds')
+saveRDS(temp, paste0('MI', tname, '.rds'))
 message('done ', tname, format(Sys.time(), '%y%m%dT%H%M%S'))
 
 temp <- mutualinfo(
@@ -46,7 +46,7 @@ temp <- mutualinfo(
     K = K, parallel = parallel
 )
 tname <- paste0(temp$Y1names, '_', temp$Y2names, '_', colnames(temp$X))
-saveRDS(temp, paste0('MI', tname, '.rds')
+saveRDS(temp, paste0('MI', tname, '.rds'))
 message('done ', tname, format(Sys.time(), '%y%m%dT%H%M%S'))
 
 temp <- mutualinfo(
@@ -55,7 +55,7 @@ temp <- mutualinfo(
     K = K, parallel = parallel
 )
 tname <- paste0(temp$Y1names, '_', temp$Y2names, '_', colnames(temp$X))
-saveRDS(temp, paste0('MI', tname, '.rds')
+saveRDS(temp, paste0('MI', tname, '.rds'))
 message('done ', tname, format(Sys.time(), '%y%m%dT%H%M%S'))
 
 
