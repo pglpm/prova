@@ -978,7 +978,7 @@ quantile(freqratio, c(0.055, 0.945))
 
 It is remarkable that with only 60 penguins -- and not all of them from Biscoe island -- we can conclude with a high probability (95%) that there are at least `r signif(quantile(freqratio, 0.055),1)` times more Gentoo penguins than Chinstrap penguins on Biscoe island! Note an important consequence from the point of view of hypothesis testing:
 
-**If your research question had only been to check whether the Gentoo population is at least twice as large as Chinstrap's on Biscoe island, you could have stopped sampling now and report your results.**
+*If your research question had only been to check whether the Gentoo population is at least twice as large as Chinstrap's on Biscoe island, you could have stopped sampling now and report your results.*
 
 By contrast, with a null-hypothesis test based on *p*-values, if you had planned beforehand to examine 300 penguins, you could not state such results before all 300 penguins were collected (and your results would be less clearly interpretable than the ones above).
 

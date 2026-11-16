@@ -83,7 +83,7 @@
 #' print(valuesSpecies)
 #'
 #' ## Remove any default 'K =' argument
-#' useK()
+#' useK(NA)
 #'
 #' @import utils
 #'

@@ -138,7 +138,7 @@
 #'
 #' @examples
 #' \donttest{
-#' ### WARNING: the following example, if run, might even take a minute or more.
+#' ### WARNING: running the following example might take a minute or more.
 #'
 #' ## Create dataset with 3 points of variate 'V' for demonstration:
 #' dataset <- data.frame(V = rnorm(n = 3))
@@ -149,14 +149,14 @@
 #' ## Learn from the data:
 #' K <- learn(
 #'   data = dataset, metadata = metadata,
-#'       ## the following parameters are unrealistic
-#'       ## only used to reduce computation time for this example
+#'      ## the following parameters are unrealistic
+#'      ## only used to reduce computation time for this example
 #'   nsamples = 10, nchains = 1,
 #'   startupMCiterations = 10, maxMCiterations = 10,
 #'   minESS = 0, initES = 0
 #' )
 #'
-#' ## Check structure of `K` object:
+#' ## Check the structure of the produced `K` object:
 #' str(K)
 #' }
 #'

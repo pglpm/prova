@@ -13,8 +13,9 @@
 #'
 #' Alternatively, a default `K = ` argument can be set with `useK()`, in which case the `K = ` argument may be omitted. See "Details" for the interpretation of unnamed arguments.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `X`. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in [Pr()].
-#' @param mcsamples Vector of integers, or `'all'`, or `NULL` (default): which Monte Carlo samples calculated by the [learn()] function should be used to draw the variate values. The default is to choose a random subset if `n` is smaller than their number, otherwise to recycle them as necessary.
-#' @param parallel Not used: this function does not use parallelization.
+#' @param mcsamples Either `NULL` (default, equivalently `'all'` or `TRUE`), or a vector of integers:  which Monte Carlo samples calculated by the [learn()] function should be used to draw the variate values. The default `NULL` chooses a random subset if `n` is smaller than their number, otherwise to recycle them as necessary.
+#' @param mcrownames Logical: whether the row names of the created data frame should report underlying information about the Monte Carlo samples used to generate the datapoints; see **Value** section. Default is `FALSE` if  argument `mcsamples` is `NULL`, and `TRUE` otherwise.
+## #' @param parallel Not used, but reserved for possible: this function does not use parallelization.
 #'
 #' @details This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument `Y`, and conditional on the variate values specified in the argument `X`. It is somewhat analogous to the `rxxx`-variants of [R distribution functions][stats::Distributions]. If `X` is `NA`, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used.
 #'
@@ -24,7 +25,9 @@
 #'
 #' Therefore if `rPr()` is called with two unnamed arguments, `rPr(..., ...)`, then it is interpreted as `rPr(n = ..., Ynames = ...)`, with `X = NA` and the default `K = ` argument set by `useK()`. If it is called with three unnamed arguments, then it is interpreted as `rPr(n = ..., Ynames = ..., X = ...)`, with the default `K = ` argument set by `useK()`. In order to specify `n`, `Ynames`, and `K` without naming the arguments, the form `rPr(..., ..., NA, ...)` must be used, explicitly giving `X` as third argument.
 #'
-#' @return A [data frame][base::data.frame()] of joint draws of the variates `Ynames` from the posterior distribution, conditional on `X`. The row names of the data frame report the Monte Carlo sample (from [learn()]) used for that draw, and the total number of draws from that sample so far.
+#' @return A [data frame][base::data.frame()] of joint draws of the variates `Ynames` from the posterior distribution, conditional on what is specified in the `X` (and `tails`) argument.
+#'
+#' With argument `mcrownames = TRUE` or argument `mcsamples = ` not `NULL`, the row names of the data frame report the Monte Carlo sample (from `learn()`) from which that datapoint was drawn from, and the grand-total of datapoints drawn from that Monte Carlo sample, according to the scheme "`sample_total`".
 #'
 #' @seealso
 #' [learn()], to generate "K" objects required by `qPr()`.
@@ -37,56 +40,48 @@
 #'
 #' [Kexample] an example "K" object included with **Prova**.
 #'
+#' [base::set.seed()] to generate samples reproducibly.
+#'
 #' @examples
-#' ## Use the example "K" object 'Kexample'
-#' ## calculated from the "penguins" dataset;
-#' ## variates: 'species' and 'bill_len'
+#'
+#' ## Use the "K" object 'Kexample' included in *Prova*,
+#' ## calculated from the "penguins" dataset.
+#' ## Variates: 'species' and 'bill_len'
 #'
 #' ## ## Example 1:
 #' ## Generate 10 values of the 'species' variate,
-#' ## according to the frequency distribution estimated from the data
-#'
-#' ## alternatively: rPr(10, 'species', NA, Kexample)
+#' ## with the same probability calculated from the data
 #' datapoints <- rPr(n = 10, Ynames = 'species', K = Kexample)
-#'
-#' c(datapoints)
+#' ## alternatively: rPr(10, 'species', NA, Kexample)
+#' datapoints
 #'
 #'
 #' ## ## Example 2:
-#' ## Generate 5 joint values of the 'species' and 'bill_len' variates.
-#'
+#' ## Generate 5 joint values of 'species' and 'bill_len' variates.
 #' datapoints <- rPr(5, c('species', 'bill_len'), NA, Kexample)
-#'
-#' print(datapoints, row.names = FALSE) ## row names give MCMC information
+#' datapoints
 #'
 #'
 #' ## ## Example 3:
 #' ## Generate 5 values of the 'species' variate,
-#' ## for the subpopulation of penguins having bill length shorter than 40 mm
+#' ## among penguins having bill length shorter than or equal to 40 mm
 #'
-#' datapoints <- rPr(
-#'   5,
-#'   'species',
-#'   data.frame(bill_len = 40),
-#'   Kexample,
-#'   tails = list(bill_len = '<='))
-#'
-#' c(datapoints)
+#' datapoints <- rPr(5, 'species', data.frame(bill_len = 40), Kexample, tails = list(bill_len = '<='))
+#' datapoints
 #'
 #'
 #' ## ## Example 4:
-#' ## To omit 'K =' arguments, we can set a default one with useK()
+#' ## To omit 'K =' arguments, set a default one with useK()
 #' useK(Kexample)
 #'
-#' ## Generate 10 values of the 'species' variate,
-#' ## according to the frequency distribution estimated from the data
-#'
+#' ## Generate 10 values of the 'species' variate.
+#' ## The datapoints are different from before,
+#' ## since we did not set a random seed with 'set.seed()'
 #' datapoints <- rPr(10, 'species')
-#'
-#' c(datapoints)
+#' datapoints
 #'
 #' ## Remove any default 'K =' argument
-#' useK()
+#' useK(NA)
 #'
 #' @import utils
 #' @import stats
@@ -100,9 +95,9 @@ rPr <- function(
   K = NULL,
   tails = NULL,
   mcsamples = NULL,
-  parallel = NULL # unused
-) {
-
+  mcrownames = !is.null(mcsamples)
+  ##  parallel = NULL # unused
+){
   ## ## Figure out unnamed arguments
   ## if(!is.null(X) && is.null(K)){
   ##     K <- X
@@ -386,8 +381,10 @@ rPr <- function(
     Bout = 'original',
     logjacobianOr = NULL)
 
-  ## row-name scheme: 'mcsample.draw'
-  rownames(Yout) <- paste0(sseq, '_', ((seq_len(n) - 1L) %/% nmcs) + 1L)
+  ## row-name scheme: 'mcsample_draw'
+  if(mcrownames){
+    rownames(Yout) <- paste0(sseq, '_', ((seq_len(n) - 1L) %/% nmcs) + 1L)
+  }
 
   Yout
 }
