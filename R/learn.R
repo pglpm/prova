@@ -425,7 +425,7 @@ learn <- function(
 
   ## maxrelMCSE and minESS
   maxrelMCSE <- min(maxrelMCSE, 1 / sqrt(minESS + initES))
-  minESS <- (1 / maxrelMCSE)^2 - initES
+  minESS <- 1 / (maxrelMCSE^2) - initES
 
   if(all(!is.finite(c(maxrelMCSE, maxMCiterations)))) {
     stop('Impossible stopping rule')
