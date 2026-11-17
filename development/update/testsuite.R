@@ -76,6 +76,18 @@ results <- c(results, thisresult)
 print(thisresult)
 saveRDS(results, savefile)
 
+nm <- 'Save Kexample'
+message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
+thisresult <- tc(nm, {
+Kexample <- learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
+    is.list(Kexample)
+    }
+)
+save(Kexample, file = '~/repos/prova/data/Kexample.rda')
+results <- c(results, thisresult)
+print(thisresult)
+saveRDS(results, savefile)
+rm(Kexample)
 
 
 K <- Kdir
