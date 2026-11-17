@@ -252,6 +252,13 @@ In case of a newer version not yet on CRAN, it can be installed with
 remotes::install_github('pglpm/prova')
 ```
 
+or, if you also want the vignettes, with
+
+``` r
+
+remotes::install_github('pglpm/prova', build_vignettes = TRUE, dependencies = TRUE)
+```
+
 ## Documentation
 
 The vignette [*An introduction to probabilistic-statistical variate
