@@ -847,7 +847,6 @@ learn <- function(
   ## R: continuous open domain
   ## C: continuous closed domain (or censored)
   ## D: continuous rounded
-  ## L: latent
   ## O: ordinal
   ## N: nominal
   ## B: binary
@@ -934,25 +933,6 @@ learn <- function(
           Dout = 'init', logjacobianOr = NULL))
       )
     },
-    ## if (vn$L > 0) { # latent
-    ##     list(
-    ##         Ln = vn$L,
-    ##         Lmean1 = rep(0, 1),
-    ##         Lvarm1 = rep(Lvarm1, 1),
-    ##         Lvar1 = rep(1, 1),
-    ##         Lshapelo = rep(Lshapelo, 1),
-    ##         Lshapehi = rep(Lshapehi, 1),
-    ##         Lleft = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
-    ##             auxmetadata = auxmetadata,
-    ##             Lout = 'left')),
-    ##         Lright = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
-    ##             auxmetadata = auxmetadata,
-    ##             Lout = 'right')),
-    ##         Llatinit = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
-    ##             auxmetadata,
-    ##             Lout = 'init'))
-    ##     )
-    ## },
     if (vn$O > 0) { # ordinal
       Ocards <- auxmetadata[auxmetadata$name %in% vnames$O, 'Nvalues']
       Omaxn <- sum(Ocards)
@@ -1047,13 +1027,6 @@ learn <- function(
           Dout = 'aux', logjacobianOr = NULL))
       )
     },
-    ## if (vn$L > 0) { # latent
-    ##     list(
-    ##         Laux = as.matrix(.vtransform(data[, vnames$L, drop = FALSE],
-    ##             auxmetadata = auxmetadata,
-    ##             Lout = 'aux'))
-    ##     )
-    ## },
     if (vn$O > 0) { # nominal
       list(
         Odata = as.matrix(.vtransform(data[, vnames$O, drop = FALSE],
@@ -2099,26 +2072,6 @@ learn <- function(
           )
         )
       }
-      ## if (vn$L > 0) { # latent
-      ##     outlist <- c(
-      ##         outlist,
-      ##         list(
-      ##             Lmean = Lmeans,
-      ##             Lrate = matrix(
-      ##                 nimble::qinvgamma(p = 0.5,
-      ##                     shape = constants$Lshapehi,
-      ##                     rate = constants$Lvar1),
-      ##                 nrow = vn$L, ncol = constants$ncomponents
-      ##             ),
-      ##             Lvar = matrix(1,
-      ##                 nrow = vn$L, ncol = constants$ncomponents),
-      ##             ## for data with boundary values
-      ##             Llat = constants$Llatinit
-      ##             ## Llat = .vtransform(data[, vnames$L, with = FALSE],
-      ##             ##   auxmetadata, Lout = 'init')
-      ##         )
-      ##     )
-      ## }
       if (vn$O > 0) { # ordinal
         outlist <- c(
           outlist,
@@ -2337,24 +2290,6 @@ learn <- function(
           )
         )
       }
-      ## if (vn$L > 0) { # latent
-      ##     outlist <- c(
-      ##         outlist,
-      ##         list(
-      ##             Lmean = Lmeans,
-      ##             Lrate = matrix(
-      ##                 nimble::qinvgamma(p = 0.5,
-      ##                     shape = constants$Lshapehi,
-      ##                     rate = constants$Lvar1),
-      ##                 nrow = vn$L, ncol = constants$ncomponents
-      ##             ),
-      ##             Lvar = matrix(1,
-      ##                 nrow = vn$L, ncol = constants$ncomponents),
-      ##             ## for data with boundary values
-      ##             Llat = constants$Llatinit
-      ##         )
-      ##     )
-      ## }
       if (vn$O > 0) { # ordinal
         outlist <- c(
           outlist,
