@@ -76,6 +76,7 @@ results <- c(results, thisresult)
 print(thisresult)
 saveRDS(results, savefile)
 
+if(FALSE){# do this separately in 'saveKexample.R'
 nm <- 'Save Kexample'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 thisresult <- tc(nm, {
@@ -88,7 +89,7 @@ results <- c(results, thisresult)
 print(thisresult)
 saveRDS(results, savefile)
 rm(Kexample)
-
+}
 
 K <- Kdir
 nm <- 'Simple Pr'
