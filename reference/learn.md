@@ -27,8 +27,8 @@ learn(
   maxMCiterations = 9e+05,
   maxhours = +Inf,
   ncheckpoints = 12,
-  maxrelMCSE = +Inf,
-  minESS = 617,
+  maxrelMCSE = 0.04,
+  minESS = 625,
   initES = 8,
   thinning = NULL,
   verbose = TRUE,
@@ -138,7 +138,8 @@ learn(
   Logical, default `TRUE`: append information about number of variates
   ('V'), number of data points ('D'), number of Monte Carlo samples
   ('S'), and timestamp, to the name of the output directory `outputdir`?
-  The appended string has the format 'Vn_Dn_Sn_YYMMDDTHHMMSS'.
+  The appended string has the format
+  \\\mathrm{V}n\\\mathrm{D}n\\\mathrm{S}n\\\\\mathit{YYMMDD}\\\mathrm{T}\mathit{HHMMSS}\\.
 
 - valueisK:
 
@@ -154,7 +155,7 @@ learn(
 
 - prior:
 
-  Logical: Calculate the prior distribution? Default is `FALSE` unless
+  Logical: calculate the prior distribution? Default is `FALSE` unless
   `data` argument is missing or `NULL`.
 
 - startupMCiterations:
@@ -164,19 +165,19 @@ learn(
 
 - minMCiterations:
 
-  Integer, default 0: Do at least this many Monte Carlo iterations per
+  Integer, default 0: do at least this many Monte Carlo iterations per
   chain.
 
 - maxMCiterations:
 
-  Integer, default 900000: Do at most this many Monte Carlo iterations
+  Integer, default 900000: do at most this many Monte Carlo iterations
   per chain. Data is saved to disk during computation, so the user
   should increase or decrease this number according to disk capacity and
   complexity of the data.
 
 - maxhours:
 
-  Numeric, default `Inf`: Stop the Monte Carlo computation after
+  Numeric, default `Inf`: stop the Monte Carlo computation after
   approximately this many hours, if it has not finished yet. A value of
   0 finishes the computation as soon as possible, compatibly with the
   arguments `startupMCiterations` and `minMCiterations`.
@@ -189,20 +190,20 @@ learn(
 
 - maxrelMCSE:
 
-  Numeric positive, default `+Inf`: desired maximal *relative Monte
-  Carlo Standard Error* of calculated probabilities per chain. The
-  default `+Inf` means that `minESS` is used instead. `maxrelMCSE` is
-  related to `minESS` by \\\mathrm{maxrelMCSE} =
-  1/\sqrt{\mathrm{minESS} + \mathrm{initES}}\\.
+  Numeric positive, default 0.04: desired maximal *relative Monte Carlo
+  Standard Error* of calculated probabilities per chain (after "burn-in"
+  samples have been discarded). If missing, then argument `minESS` is
+  used; if `minESS` is also missing, then the default value is used.
+  `maxrelMCSE` is related to `minESS` by \\\mathrm{maxrelMCSE} =
+  1/\sqrt{\mathrm{minESS}}\\.
 
 - minESS:
 
-  Numeric positive or `NULL`, default 617: desired minimal Monte Carlo
-  *Expected Sample Size* per chain. If `NULL`, it is equal to the final
-  `nsamplesperchain`. `minESS` is related to `maxrelMCSE` by
-  \\\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}\\. The
-  default value \\\mathrm{minESS} = 617\\ corresponds to
-  \\\mathrm{maxrelMCSE} = 0.4\\.
+  Numeric positive, default 625: desired minimal Monte Carlo *Expected
+  Sample Size* per chain (after "burn-in" samples have been discarded).
+  If missing, then argument `maxrelMCSE` is used; if `maxrelMCSE` is
+  also missing, then the default value is used. `minESS` is related to
+  `maxrelMCSE` by \\\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2\\.
 
 - initES:
 
@@ -460,7 +461,7 @@ read and write CSV files in the format used by `learn()`.
 
 ``` r
 # \donttest{
-### WARNING: the following example, if run, might even take a minute or more.
+### WARNING: running the following example might take a minute or more.
 
 ## Create dataset with 3 points of variate 'V' for demonstration:
 dataset <- data.frame(V = rnorm(n = 3))
@@ -471,22 +472,23 @@ metadata <- data.frame(name = 'V', type = 'continuous')
 ## Learn from the data:
 K <- learn(
   data = dataset, metadata = metadata,
-      ## the following parameters are unrealistic
-      ## only used to reduce computation time for this example
+     ## the following parameters are unrealistic
+     ## only used to reduce computation time for this example
   nsamples = 10, nchains = 1,
   startupMCiterations = 10, maxMCiterations = 10,
   minESS = 0, initES = 0
 )
 #> 
 #> Saving output in directory
-#> /tmp/Rtmpsymh3x/prova-V1_D3_S10_261115T212516_199823ccfd3d
-#> Prova v3.0.0.
+#> /tmp/RtmpLSIDBz/prova-V1_D3_S10_261117T163121_18f3798dd1cf
+#> Prova v3.0.1.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
 #> in a space of 191 (effectively 259) dimensions.
 #> Using 1 nodes: 10 samples per chain, max 1 chains per node.
 #> Requested:   ESS 0   rel.MCSE Inf.
+#> With burn-in:   ESS 0   rel.MCSE Inf.
 #> Node logs are being saved in individual files.
 #> 
 #> Finished Monte Carlo sampling.
@@ -495,21 +497,21 @@ K <- learn(
 #> 
 #> Checking test data
 #> (#1 #2 #3):
-#> max abs. quantile error: 0.319 to 1.91
-#> quantile width: 1.07 to 5.21
-#> max rel. quantile error: 0.256 to 0.367
-#> min ESS from rel. qt. error: 7.44 to 15.3
-#> MCSE: 0.13 to 0.327
-#> rel. MCSE: 0.208 to 0.566
-#> quantl-rel. MCSE: 0.0628 to 0.191
-#> ESS: 3.13 to 23.2
-#> needed thinning: 0.59 to 2.88
-#> log-average: -2.71 to -0.842
+#> max abs. quantile error: 0.26 to 1.57
+#> quantile width: 0.774 to 3.54
+#> max rel. quantile error: 0.119 to 0.444
+#> min ESS from rel. qt. error: 5.06 to 70.8
+#> MCSE: 0.102 to 0.531
+#> rel. MCSE: 0.395 to 0.526
+#> quantl-rel. MCSE: 0.118 to 0.186
+#> ESS: 3.61 to 6.41
+#> needed thinning: 1.4 to 2.49
+#> log-average: -2.95 to -1.21
 #> 
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 39 secs
-#> Average preparation & finalization time: 38 secs.
-#> Average Monte Carlo time per chain: 0.57 secs.
+#> Total computation time: 44 secs
+#> Average preparation & finalization time: 42 secs.
+#> Average Monte Carlo time per chain: 0.7 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per node: approx 340MB.
 #> Removing temporary output files.
@@ -517,15 +519,15 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/Rtmpsymh3x/prova-V1_D3_S10_261115T212516_199823ccfd3d
+#> /tmp/RtmpLSIDBz/prova-V1_D3_S10_261117T163121_18f3798dd1cf
 #> **********************************************************
 
-## Check structure of `K` object:
+## Check the structure of the produced `K` object:
 str(K)
 #> List of 6
-#>  $ Rmean      : num [1, 1:64, 1:9] -1.047 3.247 4.229 -2.543 -0.296 ...
-#>  $ Rsd        : num [1, 1:64, 1:9] 8.224 0.227 1.163 1.112 1.444 ...
-#>  $ W          : num [1:64, 1:9] 2.36e-13 2.49e-10 3.42e-01 1.03e-152 1.57e-28 ...
+#>  $ Rmean      : num [1, 1:64, 1:9] -2.32 -3.69 2.92 2.92 -1.05 ...
+#>  $ Rsd        : num [1, 1:64, 1:9] 0.249 2.446 0.629 1.453 0.298 ...
+#>  $ W          : num [1:64, 1:9] 2.40e-13 2.53e-10 3.81e-28 7.68e-263 1.60e-28 ...
 #>  $ MCindex    : num [1:9(1d)] 1 2 3 4 6 7 8 9 10
 #>  $ auxmetadata:'data.frame': 1 obs. of  24 variables:
 #>   ..$ name             : chr "V"
@@ -546,10 +548,10 @@ str(K)
 #>   ..$ domainmaxminushs : num Inf
 #>   ..$ tdomainminplushs : num -Inf
 #>   ..$ tdomainmaxminushs: num Inf
-#>   ..$ tlocation        : num -1.53
-#>   ..$ tscale           : num 0.453
-#>   ..$ plotmin          : num -2.71
-#>   ..$ plotmax          : num 1.15
+#>   ..$ tlocation        : num -0.476
+#>   ..$ tscale           : num 0.574
+#>   ..$ plotmin          : num -2.76
+#>   ..$ plotmax          : num 2.14
 #>   ..$ V1               : logi NA
 #>   ..$ V2               : logi NA
 #>  $ info       :List of 19
@@ -585,25 +587,25 @@ str(K)
 #>   ..$ maxusedcomponents          : num 3
 #>   ..$ nonfinitechains            : num 0
 #>   ..$ stoppedchains              : num 0
-#>   ..$ max abs. quantile error    : Named num [1:4] 0.319 1.046 0.426 1.91
+#>   ..$ max abs. quantile error    : Named num [1:4] 0.26 0.281 0.886 1.571
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ quantile width             : Named num [1:4] 1.07 3.25 1.66 5.21
+#>   ..$ quantile width             : Named num [1:4] 0.774 2.366 2.851 3.535
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ max rel. quantile error    : Named num [1:4] 0.297 0.322 0.256 0.367
+#>   ..$ max rel. quantile error    : Named num [1:4] 0.336 0.119 0.311 0.444
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ min ESS from rel. qt. error: Named num [1:4] 11.37 9.62 15.27 7.44
+#>   ..$ min ESS from rel. qt. error: Named num [1:4] 8.84 70.8 10.37 5.06
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ MCSE                       : Named num [1:4] 0.206 0.327 0.13 0.327
+#>   ..$ MCSE                       : Named num [1:4] 0.102 0.413 0.531 0.416
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ rel. MCSE                  : Named num [1:4] 0.566 0.309 0.209 0.208
+#>   ..$ rel. MCSE                  : Named num [1:4] 0.395 0.47 0.526 0.404
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ quantl-rel. MCSE           : Named num [1:4] 0.1915 0.1008 0.0781 0.0628
+#>   ..$ quantl-rel. MCSE           : Named num [1:4] 0.131 0.175 0.186 0.118
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ ESS                        : Named num [1:4] 3.13 10.46 22.91 23.2
+#>   ..$ ESS                        : Named num [1:4] 6.41 4.53 3.61 6.12
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ needed thinning            : Named num [1:4] 2.879 0.936 0.59 1.209
+#>   ..$ needed thinning            : Named num [1:4] 1.4 1.99 2.49 1.78
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ log-average                : Named num [1:4] -1.607 -1.273 -0.842 -2.707
+#>   ..$ log-average                : Named num [1:4] -2.26 -2.62 -1.21 -2.95
 #>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
 #>  - attr(*, "class")= chr "prova_K"
 # }

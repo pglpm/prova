@@ -13,7 +13,7 @@ rPr(
   K = NULL,
   tails = NULL,
   mcsamples = NULL,
-  parallel = NULL
+  mcrownames = !is.null(mcsamples)
 )
 ```
 
@@ -73,24 +73,32 @@ rPr(
 
 - mcsamples:
 
-  Vector of integers, or `'all'`, or `NULL` (default): which Monte Carlo
-  samples calculated by the
+  Either `NULL` (default, equivalently `'all'` or `TRUE`), or a vector
+  of integers: which Monte Carlo samples calculated by the
   [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function
-  should be used to draw the variate values. The default is to choose a
-  random subset if `n` is smaller than their number, otherwise to
+  should be used to draw the variate values. The default `NULL` chooses
+  a random subset if `n` is smaller than their number, otherwise to
   recycle them as necessary.
 
-- parallel:
+- mcrownames:
 
-  Not used: this function does not use parallelization.
+  Logical: whether the row names of the created data frame should report
+  underlying information about the Monte Carlo samples used to generate
+  the datapoints; see **Value** section. Default is `FALSE` if argument
+  `mcsamples` is `NULL`, and `TRUE` otherwise.
 
 ## Value
 
 A [data frame](https://rdrr.io/r/base/data.frame.html) of joint draws of
 the variates `Ynames` from the posterior distribution, conditional on
-`X`. The row names of the data frame report the Monte Carlo sample (from
-[`learn()`](https://pglpm.github.io/prova/reference/learn.md)) used for
-that draw, and the total number of draws from that sample so far.
+what is specified in the `X` (and `tails`) argument.
+
+With argument `mcrownames = TRUE` or argument `mcsamples = ` not `NULL`,
+the row names of the data frame report the Monte Carlo sample (from
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md)) from
+which that datapoint was drawn from, and the grand-total of datapoints
+drawn from that Monte Carlo sample, according to the scheme
+"`sample_total`".
 
 ## Details
 
@@ -143,74 +151,83 @@ quantiles.
 [Kexample](https://pglpm.github.io/prova/reference/Kexample.md) an
 example "K" object included with **Prova**.
 
+[`base::set.seed()`](https://rdrr.io/r/base/Random.html) to generate
+samples reproducibly.
+
 ## Examples
 
 ``` r
-## Use the example "K" object 'Kexample'
-## calculated from the "penguins" dataset;
-## variates: 'species' and 'bill_len'
+
+## Use the "K" object 'Kexample' included in *Prova*,
+## calculated from the "penguins" dataset.
+## Variates: 'species' and 'bill_len'
 
 ## ## Example 1:
 ## Generate 10 values of the 'species' variate,
-## according to the frequency distribution estimated from the data
-
-## alternatively: rPr(10, 'species', NA, Kexample)
+## with the same probability calculated from the data
 datapoints <- rPr(n = 10, Ynames = 'species', K = Kexample)
-
-c(datapoints)
-#> $species
-#>  [1] "Adelie"    "Adelie"    "Adelie"    "Chinstrap" "Chinstrap" "Chinstrap"
-#>  [7] "Gentoo"    "Chinstrap" "Gentoo"    "Adelie"   
-#> 
+## alternatively: rPr(10, 'species', NA, Kexample)
+datapoints
+#>         species
+#> 3_1      Adelie
+#> 37_1     Adelie
+#> 67_1     Adelie
+#> 69_1     Adelie
+#> 88_1     Adelie
+#> 176_1 Chinstrap
+#> 182_1    Gentoo
+#> 191_1 Chinstrap
+#> 199_1    Gentoo
+#> 218_1    Gentoo
 
 
 ## ## Example 2:
-## Generate 5 joint values of the 'species' and 'bill_len' variates.
-
+## Generate 5 joint values of 'species' and 'bill_len' variates.
 datapoints <- rPr(5, c('species', 'bill_len'), NA, Kexample)
-
-print(datapoints, row.names = FALSE) ## row names give MCMC information
-#>    species bill_len
-#>     Adelie     37.8
-#>     Adelie     37.8
-#>     Adelie     42.0
-#>  Chinstrap     54.4
-#>     Adelie     41.7
+datapoints
+#>         species bill_len
+#> 49_1  Chinstrap     50.2
+#> 61_1     Adelie     38.4
+#> 69_1  Chinstrap     51.1
+#> 109_1    Adelie     44.4
+#> 201_1    Gentoo     52.3
 
 
 ## ## Example 3:
 ## Generate 5 values of the 'species' variate,
-## for the subpopulation of penguins having bill length shorter than 40 mm
+## among penguins having bill length shorter than or equal to 40 mm
 
-datapoints <- rPr(
-  5,
-  'species',
-  data.frame(bill_len = 40),
-  Kexample,
-  tails = list(bill_len = '<='))
-
-c(datapoints)
-#> $species
-#> [1] "Adelie" "Adelie" "Adelie" "Adelie" "Adelie"
-#> 
+datapoints <- rPr(5, 'species', data.frame(bill_len = 40), Kexample, tails = list(bill_len = '<='))
+datapoints
+#>       species
+#> 70_1   Adelie
+#> 191_1  Adelie
+#> 193_1  Adelie
+#> 201_1  Adelie
+#> 216_1  Adelie
 
 
 ## ## Example 4:
-## To omit 'K =' arguments, we can set a default one with useK()
+## To omit 'K =' arguments, set a default one with useK()
 useK(Kexample)
 
-## Generate 10 values of the 'species' variate,
-## according to the frequency distribution estimated from the data
-
+## Generate 10 values of the 'species' variate.
+## The datapoints are different from before,
+## since we did not set a random seed with 'set.seed()'
 datapoints <- rPr(10, 'species')
-
-c(datapoints)
-#> $species
-#>  [1] "Gentoo"    "Adelie"    "Chinstrap" "Adelie"    "Adelie"    "Adelie"   
-#>  [7] "Gentoo"    "Gentoo"    "Chinstrap" "Chinstrap"
-#> 
+datapoints
+#>         species
+#> 17_1     Gentoo
+#> 23_1     Adelie
+#> 38_1     Adelie
+#> 50_1     Gentoo
+#> 58_1     Adelie
+#> 69_1  Chinstrap
+#> 97_1     Gentoo
+#> 143_1 Chinstrap
+#> 155_1    Gentoo
+#> 185_1    Adelie
 
 ## Remove any default 'K =' argument
-useK()
-#> [1] "Kexample"
+useK(NA)
 ```

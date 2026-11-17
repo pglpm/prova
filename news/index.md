@@ -1,5 +1,18 @@
 # Changelog
 
+## Prova v3.0.1
+
+- Slightly redefined the (previously confusing) relationship between
+  arguments `maxrelMCSE` and `minESS` in
+  [`learn()`](https://pglpm.github.io/prova/reference/learn.md), and
+  changed their defaults to slightly strictest values.
+- Removed unused argument `parallel =` from
+  [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md), and added
+  argument `mcrownames =`, with default `FALSE`, to avoid (unless the
+  user requires it) the confusing row names in the produced data frame
+  of synthetic points.
+- Corrected documentation.
+
 ## Prova v3.0.0
 
 CRAN release: 2026-11-14

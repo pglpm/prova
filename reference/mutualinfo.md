@@ -299,5 +299,5 @@ MI <- mutualinfo(
 ## Print mutual information, its accuracy, and its revisability
 print(MI)
 #> value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-#>    0.788    0.035        0    0.715    1.066    1.272 
+#>    0.780    0.031    0.037    0.721    1.066    1.242 
 ```

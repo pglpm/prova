@@ -119,7 +119,7 @@ probs <- Pr(data.frame(species = 'Adelie'), NULL, Kexample)
 probs$value
 #>         
 #> species           
-#>   Adelie 0.4402128
+#>   Adelie 0.4402005
 
 ## show the revisability of this probability; equivalently show
 ## the probability distribution for the relative frequency of

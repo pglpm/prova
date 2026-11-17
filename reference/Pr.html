@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -184,29 +184,28 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Use the "K" object 'Kexample',</span></span></span>
-<span class="r-in"><span><span class="co">## calculated from the "penguins" dataset;</span></span></span>
-<span class="r-in"><span><span class="co">## variates: 'species' and 'bill_len'</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Use the "K" object 'Kexample' included in *Prova*,</span></span></span>
+<span class="r-in"><span><span class="co">## calculated from the "penguins" dataset.</span></span></span>
+<span class="r-in"><span><span class="co">## Variates: 'species' and 'bill_len'</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 1:</span></span></span>
-<span class="r-in"><span><span class="co">## Calculate the probability that an unknown penguin from this population</span></span></span>
-<span class="r-in"><span><span class="co">## is of species 'Adelie'</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## alternatively: Pr(data.frame(species = 'Adelie'), NA, Kexample)</span></span></span>
+<span class="r-in"><span><span class="co">## Probability that a new penguin from this population is of species 'Adelie'</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">Kexample</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## alternatively: Pr(data.frame(species = 'Adelie'), NA, Kexample)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4402128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4402005</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## the full-population frequency of 'Adelie' penguins is unknown;</span></span></span>
-<span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
-<span class="r-in"><span><span class="co">## for such frequency</span></span></span>
+<span class="r-in"><span><span class="co">## The full-population frequency of 'Adelie' penguins is unknown.</span></span></span>
+<span class="r-in"><span><span class="co">## Display the 5.5%- and 94.5%-probability values for such frequency:</span></span></span>
+<span class="r-in"><span><span class="co">## thus the true frequency is, with 89% probability, in this range:</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%     94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3945673 0.4882089 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4008034 0.4849019 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## we can also plot the probability distribution</span></span></span>
 <span class="r-in"><span><span class="co">## for this full-population frequency</span></span></span>
@@ -215,123 +214,113 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 2:</span></span></span>
-<span class="r-in"><span><span class="co">## Calculate the 3 probabilities that an unknown penguin from this population</span></span></span>
+<span class="r-in"><span><span class="co">## The probabilities that a new penguin from this population</span></span></span>
 <span class="r-in"><span><span class="co">## is of species 'Adelie', 'Chinstrap', 'Gentoo'</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Adelie'</span>, <span class="st">'Chinstrap'</span>, <span class="st">'Gentoo'</span><span class="op">)</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## alternatively:</span></span></span>
 <span class="r-in"><span><span class="co">## Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), NA, Kexample)</span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Adelie'</span>, <span class="st">'Chinstrap'</span>, <span class="st">'Gentoo'</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  K <span class="op">=</span> <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 3 probability values</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4402128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1990491</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3607380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4402005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1983577</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3614418</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## the full-population frequencies of the three species are unknown;</span></span></span>
-<span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
-<span class="r-in"><span><span class="co">## for such frequencies</span></span></span>
+<span class="r-in"><span><span class="co">## The full-population frequencies of the three species are unknown.</span></span></span>
+<span class="r-in"><span><span class="co">## Display the 5.5%- and 94.5%-probability values for such frequencies.</span></span></span>
+<span class="r-in"><span><span class="co">## thus the true frequencies are, with 89% probability, in these ranges:</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Q</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species          5.5%     94.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.3945673 0.4882089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1660700 0.2316169</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3196910 0.4032075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4008034 0.4849019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1655133 0.2276942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3251943 0.4000112</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## plot the probabilities and quantiles</span></span></span>
+<span class="r-in"><span><span class="co">## plot the probabilities and the ranges for the frequencies as bands:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="Pr-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## plot the probability distribution for the full-population frequency</span></span></span>
-<span class="r-in"><span><span class="co">## of each species</span></span></span>
+<span class="r-in"><span><span class="co">## plot the probability distributions for the full-population frequencies</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="Pr-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## ## Example 3:</span></span></span>
-<span class="r-in"><span><span class="co">## Calculate the probability that an unknown penguin is of species 'Adelie'</span></span></span>
-<span class="r-in"><span><span class="co">## GIVEN that its bill length is 43 mm</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## ## Example 3:</span></span></span>
+<span class="r-in"><span><span class="co">## Calculate the probability that a new penguin is of species 'Adelie'</span></span></span>
+<span class="r-in"><span><span class="co">## *among those with bill length = 43 mm* (subpopulation)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## alternatively: Pr(Y = ..., X = ..., K = Kexample)</span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species         43</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4635304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4610326</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## the full-subpopulation frequency of 'Adelie' penguins,</span></span></span>
-<span class="r-in"><span><span class="co">## among penguins having bill length of 43 mm, is unknown;</span></span></span>
-<span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
-<span class="r-in"><span><span class="co">## for such conditional frequency</span></span></span>
+<span class="r-in"><span><span class="co">## The frequency of 'Adelie' penguins, in the subpopulation of</span></span></span>
+<span class="r-in"><span><span class="co">## penguins with a bill length of 43 mm, is unknown.</span></span></span>
+<span class="r-in"><span><span class="co">## Display the 5.5%- and 94.5%-probability values for such frequency:</span></span></span>
+<span class="r-in"><span><span class="co">## thus the true frequency is, with 89% probability, in this range:</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%     94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3612267 0.5654892 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3579296 0.5550358 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 4:</span></span></span>
-<span class="r-in"><span><span class="co">## Calculate the probability that</span></span></span>
-<span class="r-in"><span><span class="co">## an unknown penguin is of species 'Adelie' AND its bill length is 43 mm</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Calculate the probability that a new penguin</span></span></span>
+<span class="r-in"><span><span class="co">## is of species 'Adelie' AND its bill length is 43 mm</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span>, bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the probability value</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Adelie,43 0.001833167</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Adelie,43 0.001813403</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
-<span class="r-in"><span><span class="co">## for the full-population frequency of 'Adelie' penguins with 43 mm bills</span></span></span>
+<span class="r-in"><span><span class="co">## display the 89%-probability range for the frequency</span></span></span>
+<span class="r-in"><span><span class="co">## of 'Adelie' penguins with 43 mm bills</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        5.5%       94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.001293080 0.002340539 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.001283524 0.002363858 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 5:</span></span></span>
 <span class="r-in"><span><span class="co">## Calculate the 3 x 2 probabilities for the 3 species</span></span></span>
-<span class="r-in"><span><span class="co">## GIVEN bill-lengths of 43 mm and 44 mm</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## *among penguins having bill-lengths of 43 mm and of 44 mm*</span></span></span>
 <span class="r-in"><span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Adelie'</span>, <span class="st">'Chinstrap'</span>, <span class="st">'Gentoo'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">43</span>, <span class="fl">44</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="va">Y</span>, <span class="va">X</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 3 x 2 probability values</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species            43        44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4635304 0.2220543</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1550337 0.2203152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3814359 0.5576305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4610326 0.2198105</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1519634 0.2139281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3870039 0.5662614</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
-<span class="r-in"><span><span class="co">## for the full-population joint frequencies</span></span></span>
+<span class="r-in"><span><span class="co">## display the 89%-probability range for the six joint population frequencies</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , Q = 5.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species             43        44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.36122673 0.1469467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.09270182 0.1421189</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.29615404 0.4614142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.35792962 0.1442566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.09156218 0.1493615</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.30529529 0.4739648</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , Q = 94.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species            43        44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.5654892 0.3040153</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.2194305 0.3050006</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.4890394 0.6689622</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.5550358 0.2941336</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.2208147 0.2967920</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.4860799 0.6654145</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## plot the probabilities and quantiles</span></span></span>
+<span class="r-in"><span><span class="co">## plot the probabilities and frequency ranges</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="Pr-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -339,12 +328,11 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="co">## ## Example 6:</span></span></span>
 <span class="r-in"><span><span class="co">## Calculate the 3 x 2 joint probabilities for the 3 species</span></span></span>
 <span class="r-in"><span><span class="co">## AND bill-lengths of 43 mm and 44 mm</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Create a grid of values</span></span></span>
 <span class="r-in"><span><span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Adelie'</span>, <span class="st">'Chinstrap'</span>, <span class="st">'Gentoo'</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">43</span>, <span class="fl">44</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## X is not given</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="va">Y</span>, <span class="cn">NA</span>, <span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -352,43 +340,47 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0018331674</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0006123980</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0015093929</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0009604290</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0009505859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0024192357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0018134025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0005974471</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0015225451</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0009501895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0009187148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0024418626</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## display the 5.5%- and 94.5%-probability values</span></span></span>
-<span class="r-in"><span><span class="co">## for the full-population joint frequencies</span></span></span>
+<span class="r-in"><span><span class="co">## display the 89%-probability ranges the full-population joint frequencies</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Q</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len         5.5%        94.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0012930803 0.0023405386</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0003504603 0.0009103917</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0010585493 0.0020202051</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0005966045 0.0013332037</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0005961187 0.0013419007</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0018050459 0.0031778278</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0012835235 0.0023638576</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0003510098 0.0008691072</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0010546947 0.0020697783</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0005781451 0.0013606922</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0005703212 0.0012630814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0018537489 0.0031459102</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 7:</span></span></span>
-<span class="r-in"><span><span class="co">## To omit 'K =' arguments, we can set a default one with useK()</span></span></span>
+<span class="r-in"><span><span class="co">## To omit 'K =' arguments, set a default 'K =' value with useK()</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="Kobjects.html">useK</a></span><span class="op">(</span><span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Calculate the probability that an unknown penguin from this population</span></span></span>
-<span class="r-in"><span><span class="co">## is of species 'Adelie'</span></span></span>
+<span class="r-in"><span><span class="co">## Check against Example 1 above</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span> <span class="co"># same as values from Example 1</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span> <span class="co"># same as range from Example 1</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%     94.5% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4008034 0.4849019 </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span> <span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Calculate the probability that an unknown penguin is of species 'Adelie'</span></span></span>
-<span class="r-in"><span><span class="co">## GIVEN that its bill length is 43 mm</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span> <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Check against Example 3 above</span></span></span>
+<span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">values</span> <span class="co"># same as values from Example 3</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span> <span class="co"># same as range from Example 3</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%     94.5% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3579296 0.5550358 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#' ## Remove any default 'K =' argument</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="Kobjects.html">useK</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Kexample"</span>
+<span class="r-in"><span><span class="fu"><a href="Kobjects.html">useK</a></span><span class="op">(</span><span class="cn">NA</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

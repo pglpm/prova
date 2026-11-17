@@ -321,29 +321,28 @@ example "K" object included with **Prova**.
 ## Examples
 
 ``` r
-## Use the "K" object 'Kexample',
-## calculated from the "penguins" dataset;
-## variates: 'species' and 'bill_len'
+
+## Use the "K" object 'Kexample' included in *Prova*,
+## calculated from the "penguins" dataset.
+## Variates: 'species' and 'bill_len'
 
 ## ## Example 1:
-## Calculate the probability that an unknown penguin from this population
-## is of species 'Adelie'
-
-## alternatively: Pr(data.frame(species = 'Adelie'), NA, Kexample)
+## Probability that a new penguin from this population is of species 'Adelie'
 probs <- Pr(Y = data.frame(species = 'Adelie'), K = Kexample)
+## alternatively: Pr(data.frame(species = 'Adelie'), NA, Kexample)
 
 ## display the probability value
 probs$value
 #>         
 #> species           
-#>   Adelie 0.4402128
+#>   Adelie 0.4402005
 
-## the full-population frequency of 'Adelie' penguins is unknown;
-## display the 5.5%- and 94.5%-probability values
-## for such frequency
+## The full-population frequency of 'Adelie' penguins is unknown.
+## Display the 5.5%- and 94.5%-probability values for such frequency:
+## thus the true frequency is, with 89% probability, in this range:
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>      5.5%     94.5% 
-#> 0.3945673 0.4882089 
+#> 0.4008034 0.4849019 
 
 ## we can also plot the probability distribution
 ## for this full-population frequency
@@ -352,123 +351,113 @@ hist(probs, legend = 'topright')
 
 
 ## ## Example 2:
-## Calculate the 3 probabilities that an unknown penguin from this population
+## The probabilities that a new penguin from this population
 ## is of species 'Adelie', 'Chinstrap', 'Gentoo'
-
+probs <- Pr(Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), K = Kexample)
 ## alternatively:
 ## Pr(data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), NA, Kexample)
-probs <- Pr(Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')),
-  K = Kexample)
 
 ## display the 3 probability values
 probs$value
 #>            
 #> species              
-#>   Adelie    0.4402128
-#>   Chinstrap 0.1990491
-#>   Gentoo    0.3607380
+#>   Adelie    0.4402005
+#>   Chinstrap 0.1983577
+#>   Gentoo    0.3614418
 
-## the full-population frequencies of the three species are unknown;
-## display the 5.5%- and 94.5%-probability values
-## for such frequencies
+## The full-population frequencies of the three species are unknown.
+## Display the 5.5%- and 94.5%-probability values for such frequencies.
+## thus the true frequencies are, with 89% probability, in these ranges:
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>            Q
 #> species          5.5%     94.5%
-#>   Adelie    0.3945673 0.4882089
-#>   Chinstrap 0.1660700 0.2316169
-#>   Gentoo    0.3196910 0.4032075
+#>   Adelie    0.4008034 0.4849019
+#>   Chinstrap 0.1655133 0.2276942
+#>   Gentoo    0.3251943 0.4000112
 
-## plot the probabilities and quantiles
+## plot the probabilities and the ranges for the frequencies as bands:
 plot(probs)
 
 
-## plot the probability distribution for the full-population frequency
-## of each species
+## plot the probability distributions for the full-population frequencies
 hist(probs)
 
 
-## ## Example 3:
-## Calculate the probability that an unknown penguin is of species 'Adelie'
-## GIVEN that its bill length is 43 mm
 
+## ## Example 3:
+## Calculate the probability that a new penguin is of species 'Adelie'
+## *among those with bill length = 43 mm* (subpopulation)
+probs <- Pr(data.frame(species = 'Adelie'), data.frame(bill_len = 43), Kexample)
 ## alternatively: Pr(Y = ..., X = ..., K = Kexample)
-probs <- Pr(data.frame(species = 'Adelie'),
-  data.frame(bill_len = 43),
-  Kexample)
 
 ## display the probability value
 probs$value
 #>         |bill_len
 #> species         43
-#>   Adelie 0.4635304
+#>   Adelie 0.4610326
 
-## the full-subpopulation frequency of 'Adelie' penguins,
-## among penguins having bill length of 43 mm, is unknown;
-## display the 5.5%- and 94.5%-probability values
-## for such conditional frequency
+## The frequency of 'Adelie' penguins, in the subpopulation of
+## penguins with a bill length of 43 mm, is unknown.
+## Display the 5.5%- and 94.5%-probability values for such frequency:
+## thus the true frequency is, with 89% probability, in this range:
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>      5.5%     94.5% 
-#> 0.3612267 0.5654892 
+#> 0.3579296 0.5550358 
 
 
 ## ## Example 4:
-## Calculate the probability that
-## an unknown penguin is of species 'Adelie' AND its bill length is 43 mm
-
+## Calculate the probability that a new penguin
+## is of species 'Adelie' AND its bill length is 43 mm
 probs <- Pr(Y = data.frame(species = 'Adelie', bill_len = 43), K = Kexample)
 
 ## display the probability value
 probs$value
 #>                 
 #> species,bill_len            
-#>        Adelie,43 0.001833167
+#>        Adelie,43 0.001813403
 
-## display the 5.5%- and 94.5%-probability values
-## for the full-population frequency of 'Adelie' penguins with 43 mm bills
+## display the 89%-probability range for the frequency
+## of 'Adelie' penguins with 43 mm bills
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>        5.5%       94.5% 
-#> 0.001293080 0.002340539 
+#> 0.001283524 0.002363858 
 
 
 ## ## Example 5:
 ## Calculate the 3 x 2 probabilities for the 3 species
-## GIVEN bill-lengths of 43 mm and 44 mm
-
+## *among penguins having bill-lengths of 43 mm and of 44 mm*
 Y <- data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo'))
-
 X <- data.frame(bill_len = c(43, 44))
-
 probs <- Pr(Y, X, Kexample)
 
 ## display the 3 x 2 probability values
 probs$value
 #>            |bill_len
 #> species            43        44
-#>   Adelie    0.4635304 0.2220543
-#>   Chinstrap 0.1550337 0.2203152
-#>   Gentoo    0.3814359 0.5576305
+#>   Adelie    0.4610326 0.2198105
+#>   Chinstrap 0.1519634 0.2139281
+#>   Gentoo    0.3870039 0.5662614
 
-## display the 5.5%- and 94.5%-probability values
-## for the full-population joint frequencies
+## display the 89%-probability range for the six joint population frequencies
 probs$quantiles[, , c('5.5%', '94.5%')]
 #> , , Q = 5.5%
 #> 
 #>            |bill_len
 #> species             43        44
-#>   Adelie    0.36122673 0.1469467
-#>   Chinstrap 0.09270182 0.1421189
-#>   Gentoo    0.29615404 0.4614142
+#>   Adelie    0.35792962 0.1442566
+#>   Chinstrap 0.09156218 0.1493615
+#>   Gentoo    0.30529529 0.4739648
 #> 
 #> , , Q = 94.5%
 #> 
 #>            |bill_len
 #> species            43        44
-#>   Adelie    0.5654892 0.3040153
-#>   Chinstrap 0.2194305 0.3050006
-#>   Gentoo    0.4890394 0.6689622
+#>   Adelie    0.5550358 0.2941336
+#>   Chinstrap 0.2208147 0.2967920
+#>   Gentoo    0.4860799 0.6654145
 #> 
 
-## plot the probabilities and quantiles
+## plot the probabilities and frequency ranges
 plot(probs)
 
 
@@ -476,12 +465,11 @@ plot(probs)
 ## ## Example 6:
 ## Calculate the 3 x 2 joint probabilities for the 3 species
 ## AND bill-lengths of 43 mm and 44 mm
-
+## Create a grid of values
 Y <- expand.grid(
   species = c('Adelie', 'Chinstrap', 'Gentoo'),
   bill_len = c(43, 44)
 )
-
 ## X is not given
 probs <- Pr(Y, NA, Kexample)
 
@@ -489,41 +477,45 @@ probs <- Pr(Y, NA, Kexample)
 probs$value
 #>                 
 #> species,bill_len             
-#>     Adelie,43    0.0018331674
-#>     Chinstrap,43 0.0006123980
-#>     Gentoo,43    0.0015093929
-#>     Adelie,44    0.0009604290
-#>     Chinstrap,44 0.0009505859
-#>     Gentoo,44    0.0024192357
+#>     Adelie,43    0.0018134025
+#>     Chinstrap,43 0.0005974471
+#>     Gentoo,43    0.0015225451
+#>     Adelie,44    0.0009501895
+#>     Chinstrap,44 0.0009187148
+#>     Gentoo,44    0.0024418626
 
-## display the 5.5%- and 94.5%-probability values
-## for the full-population joint frequencies
+## display the 89%-probability ranges the full-population joint frequencies
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>                 Q
 #> species,bill_len         5.5%        94.5%
-#>     Adelie,43    0.0012930803 0.0023405386
-#>     Chinstrap,43 0.0003504603 0.0009103917
-#>     Gentoo,43    0.0010585493 0.0020202051
-#>     Adelie,44    0.0005966045 0.0013332037
-#>     Chinstrap,44 0.0005961187 0.0013419007
-#>     Gentoo,44    0.0018050459 0.0031778278
+#>     Adelie,43    0.0012835235 0.0023638576
+#>     Chinstrap,43 0.0003510098 0.0008691072
+#>     Gentoo,43    0.0010546947 0.0020697783
+#>     Adelie,44    0.0005781451 0.0013606922
+#>     Chinstrap,44 0.0005703212 0.0012630814
+#>     Gentoo,44    0.0018537489 0.0031459102
 
 
 ## ## Example 7:
-## To omit 'K =' arguments, we can set a default one with useK()
+## To omit 'K =' arguments, set a default 'K =' value with useK()
 useK(Kexample)
 
-## Calculate the probability that an unknown penguin from this population
-## is of species 'Adelie'
+## Check against Example 1 above
+probs <- Pr(data.frame(species = 'Adelie'))
+probs$values # same as values from Example 1
+#> NULL
+probs$quantiles[, , c('5.5%', '94.5%')] # same as range from Example 1
+#>      5.5%     94.5% 
+#> 0.4008034 0.4849019 
 
-probs <- Pr( data.frame(species = 'Adelie') )
-
-## Calculate the probability that an unknown penguin is of species 'Adelie'
-## GIVEN that its bill length is 43 mm
-
-probs <- Pr( data.frame(species = 'Adelie'), data.frame(bill_len = 43) )
+## Check against Example 3 above
+probs <- Pr(data.frame(species = 'Adelie'), data.frame(bill_len = 43))
+probs$values # same as values from Example 3
+#> NULL
+probs$quantiles[, , c('5.5%', '94.5%')] # same as range from Example 3
+#>      5.5%     94.5% 
+#> 0.3579296 0.5550358 
 
 #' ## Remove any default 'K =' argument
-useK()
-#> [1] "Kexample"
+useK(NA)
 ```

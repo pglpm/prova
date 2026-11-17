@@ -200,6 +200,5 @@ print(valuesSpecies)
 #> 3    Gentoo
 
 ## Remove any default 'K =' argument
-useK()
-#> [1] "Kexample"
+useK(NA)
 ```

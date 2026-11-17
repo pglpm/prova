@@ -242,7 +242,7 @@ quants$value
 #> bill_len     
 #>     0.25 39.2
 #>     0.5  44.3
-#>     0.75 48.3
+#>     0.75 48.4
 
 ## verify these values, within numerical error, using Pr():
 probs <- Pr(data.frame(bill_len = c(quants$value)), NA, Kexample,
@@ -250,19 +250,19 @@ probs <- Pr(data.frame(bill_len = c(quants$value)), NA, Kexample,
 probs$value
 #>         
 #> bill_len          
-#>   <=39.2 0.2524340
-#>   <=44.3 0.5020812
-#>   <=48.3 0.7504611
+#>   <=39.2 0.2537147
+#>   <=44.3 0.5030765
+#>   <=48.4 0.7561297
 
 ## display the revisability about the quantiles
 quants$quantiles
 #> , , Q = 5.5%
 #> 
 #>         
-#> bill_len     
-#>     0.25 38.7
-#>     0.5  43.2
-#>     0.75 47.8
+#> bill_len       
+#>     0.25 38.700
+#>     0.5  43.143
+#>     0.75 47.800
 #> 
 #> , , Q = 50%
 #> 
@@ -270,14 +270,14 @@ quants$quantiles
 #> bill_len     
 #>     0.25 39.2
 #>     0.5  44.3
-#>     0.75 48.3
+#>     0.75 48.4
 #> 
 #> , , Q = 94.5%
 #> 
 #>         
 #> bill_len     
-#>     0.25 39.8
-#>     0.5  45.1
+#>     0.25 39.7
+#>     0.5  45.0
 #>     0.75 48.9
 #> 
 
@@ -308,8 +308,8 @@ probs <- Pr(
 probs$value
 #>         |species
 #> bill_len    Adelie
-#>   <=37   0.2545590
-#>   <=38.8 0.5060331
-#>   <=40.6 0.7519188
+#>   <=37   0.2559531
+#>   <=38.8 0.5084777
+#>   <=40.6 0.7548006
 # }
 ```
