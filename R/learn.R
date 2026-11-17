@@ -454,6 +454,7 @@ learn <- function(
   if(all(!is.finite(c(maxrelMCSE, maxMCiterations)))) {
     stop('Impossible stopping rule')
   }
+
 ##################################################
 #### Read and process data and metadata
 ##################################################
