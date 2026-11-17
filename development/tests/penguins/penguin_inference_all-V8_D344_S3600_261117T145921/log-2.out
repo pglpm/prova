@@ -1,0 +1,143 @@
+Log node 2 - Current time: 2026-11-17 14:59:21 
+nimble version 1.4.3 is loaded.
+For more information on NIMBLE and a User Manual,
+please visit https://R-nimble.org.
+
+Attaching package: ‘nimble’
+
+The following object is masked from ‘package:stats’:
+
+    simulate
+
+The following object is masked from ‘package:base’:
+
+    declare
+
+Loaded Nimble v1.4.3 
+Defining model
+  [Note] 'Dlatinit' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Ncards' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Ocards' is provided in 'constants' but not used in the model code and is being ignored.
+Building model
+Setting data and initial values
+Running calculate on model
+  [Note] Any error reports that follow may simply reflect missing values in model variables.
+Checking model sizes and dimensions
+  [Note] This model is not fully initialized. This is not an error.
+         To see which variables are not initialized, use model$initializeInfo().
+         For more information on model initialization, see help(modelInitialization).
+Compiling
+  [Note] This may take a minute.
+  [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+===== Monitors =====
+thin = 1: Bprob, Dmean, Dvar, Nprob, Oprob, W
+thin2 = 1: K
+===== Samplers =====
+posterior_predictive sampler (19)
+  - Bdata[]  (11 elements)
+  - Dlat[]  (8 elements)
+conjugate sampler (1025)
+  - Dmean[]  (256 elements)
+  - Drate[]  (256 elements)
+  - Bprob[]  (64 elements)
+  - Dvar[]  (256 elements)
+  - Oprob[]  (64 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
+  - W[1:64] 
+categorical sampler (345)
+  - Alpha
+  - K[]  (344 elements)
+RW sampler (1368)
+  - Dlat[]  (1368 elements)
+===== Comments =====
+  [Note] Additional downstream predictive nodes are also being sampled by posterior_predictive sampler.
+  [Note] Reordering posterior_predictive samplers to execute last
+===== Monitors =====
+thin = 1: Bprob, Dmean, Dvar, Nprob, Oprob, W
+thin2 = 1: K
+===== Samplers =====
+posterior_predictive sampler (19)
+  - Bdata[]  (11 elements)
+  - Dlat[]  (8 elements)
+conjugate sampler (1025)
+  - Dmean[]  (256 elements)
+  - Drate[]  (256 elements)
+  - Bprob[]  (64 elements)
+  - Dvar[]  (256 elements)
+  - W
+  - Oprob[]  (64 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
+categorical sampler (345)
+  - Alpha
+  - K[]  (344 elements)
+RW sampler (1368)
+  - Dlat[]  (1368 elements)
+===== Comments =====
+  [Note] Additional downstream predictive nodes are also being sampled by posterior_predictive sampler.
+Compiling
+  [Note] This may take a minute.
+  [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+
+Setup time 6.5 mins 
+
+###########################################################
+Chain # 2 (chain 1 of 1 for this node)
+
+Datapoints for testing chain behaviour:
+ #2 #49 #53 #78 #103 #162 #166 #170 #206 #239 #245 #298 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-17 15:08:27
+MCMC time 2.6 mins 
+
+USED COMPONENTS: 8 OF 64 
+
+max abs. quantile error: 0.025
+quantile width: 0.571
+max rel. quantile error: 0.0438
+min ESS from rel. qt. error: 520
+MCSE: 0.00901
+rel. MCSE: 0.0506
+quantl-rel. MCSE: 0.0158
+ESS: 390
+needed thinning: 9.22
+log-average: -17.7
+Diagnostics time 1.9 secs 
+
+Total iterations 3600 - require further 2237 - continue for 2237 
+
+Chain # 2 - chunk 2 (chain 1 of 1 for this node): increasing by 2238 
+
+Iterations: 2238 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-17 15:10:05
+MCMC time 4.2 mins 
+
+USED COMPONENTS: 8 OF 64 
+
+max abs. quantile error: 0.0199
+quantile width: 0.558
+max rel. quantile error: 0.0356
+min ESS from rel. qt. error: 788
+MCSE: 0.00688
+rel. MCSE: 0.0392
+quantl-rel. MCSE: 0.0123
+ESS: 650
+needed thinning: 8.98
+log-average: -17.7
+Diagnostics time 0.81 secs 
+
+Total iterations 5838 - require further 0 - continue for 0 
+
+Keeping  450 
+
+Current time: 2026-11-17 15:10:07
+MCMC + diagnostics time 4.3 mins 
+
+Current time: 2026-11-17 15:10:07
+Total time 11 mins 

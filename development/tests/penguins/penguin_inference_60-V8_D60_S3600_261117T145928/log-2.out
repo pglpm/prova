@@ -1,0 +1,302 @@
+Log node 2 - Current time: 2026-11-17 14:59:28 
+nimble version 1.4.3 is loaded.
+For more information on NIMBLE and a User Manual,
+please visit https://R-nimble.org.
+
+Attaching package: ‘nimble’
+
+The following object is masked from ‘package:stats’:
+
+    simulate
+
+The following object is masked from ‘package:base’:
+
+    declare
+
+Loaded Nimble v1.4.3 
+Defining model
+  [Note] 'Dlatinit' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Ncards' is provided in 'constants' but not used in the model code and is being ignored.
+  [Note] 'Ocards' is provided in 'constants' but not used in the model code and is being ignored.
+Building model
+Setting data and initial values
+Running calculate on model
+  [Note] Any error reports that follow may simply reflect missing values in model variables.
+Checking model sizes and dimensions
+  [Note] This model is not fully initialized. This is not an error.
+         To see which variables are not initialized, use model$initializeInfo().
+         For more information on model initialization, see help(modelInitialization).
+Compiling
+  [Note] This may take a minute.
+  [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+===== Monitors =====
+thin = 1: Bprob, Dmean, Dvar, Nprob, Oprob, W
+thin2 = 1: K
+===== Samplers =====
+posterior_predictive sampler (6)
+  - Bdata[]  (2 elements)
+  - Dlat[]  (4 elements)
+conjugate sampler (1025)
+  - Dmean[]  (256 elements)
+  - Drate[]  (256 elements)
+  - Bprob[]  (64 elements)
+  - Dvar[]  (256 elements)
+  - Oprob[]  (64 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
+  - W[1:64] 
+categorical sampler (61)
+  - Alpha
+  - K[]  (60 elements)
+RW sampler (236)
+  - Dlat[]  (236 elements)
+===== Comments =====
+  [Note] Additional downstream predictive nodes are also being sampled by posterior_predictive sampler.
+  [Note] Reordering posterior_predictive samplers to execute last
+===== Monitors =====
+thin = 1: Bprob, Dmean, Dvar, Nprob, Oprob, W
+thin2 = 1: K
+===== Samplers =====
+posterior_predictive sampler (6)
+  - Bdata[]  (2 elements)
+  - Dlat[]  (4 elements)
+conjugate sampler (1025)
+  - Dmean[]  (256 elements)
+  - Drate[]  (256 elements)
+  - Bprob[]  (64 elements)
+  - Dvar[]  (256 elements)
+  - W
+  - Oprob[]  (64 multivariate elements)
+  - Nprob[]  (128 multivariate elements)
+categorical sampler (61)
+  - Alpha
+  - K[]  (60 elements)
+RW sampler (236)
+  - Dlat[]  (236 elements)
+===== Comments =====
+  [Note] Additional downstream predictive nodes are also being sampled by posterior_predictive sampler.
+Compiling
+  [Note] This may take a minute.
+  [Note] Use 'showCompilerOutput = TRUE' to see C++ compilation details.
+
+Setup time 1.8 mins 
+
+###########################################################
+Chain # 3 (chain 1 of 2 for this node)
+
+Datapoints for testing chain behaviour:
+ #4 #6 #8 #16 #18 #23 #37 #39 #40 #44 #56 #58 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-17 15:02:08
+MCMC time 50 secs 
+
+USED COMPONENTS: 6 OF 64 
+
+max abs. quantile error: 0.104
+quantile width: 0.982
+max rel. quantile error: 0.106
+min ESS from rel. qt. error: 88.3
+MCSE: 0.0196
+rel. MCSE: 0.064
+quantl-rel. MCSE: 0.0199
+ESS: 244
+needed thinning: 40.8
+log-average: -16.8
+Diagnostics time 1.9 secs 
+
+Total iterations 3600 - require further 22201 - continue for 22201 
+
+Chain # 3 - chunk 2 (chain 1 of 2 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-17 15:02:50
+MCMC time 1.5 mins 
+
+USED COMPONENTS: 6 OF 64 
+
+max abs. quantile error: 0.0653
+quantile width: 0.922
+max rel. quantile error: 0.0708
+min ESS from rel. qt. error: 200
+MCSE: 0.0128
+rel. MCSE: 0.0439
+quantl-rel. MCSE: 0.0139
+ESS: 519
+needed thinning: 36.1
+log-average: -16.8
+Diagnostics time 1.7 secs 
+
+Total iterations 7200 - require further 15633 - continue for 15633 
+
+Chain # 3 - chunk 3 (chain 1 of 2 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-17 15:03:29
+MCMC time 2.2 mins 
+
+USED COMPONENTS: 5 OF 64 
+
+max abs. quantile error: 0.0495
+quantile width: 0.903
+max rel. quantile error: 0.0548
+min ESS from rel. qt. error: 333
+MCSE: 0.0096
+rel. MCSE: 0.0335
+quantl-rel. MCSE: 0.0106
+ESS: 891
+needed thinning: 32.4
+log-average: -16.8
+Diagnostics time 1.7 secs 
+
+Total iterations 10800 - require further 9716 - continue for 9716 
+
+Chain # 3 - chunk 4 (chain 1 of 2 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-17 15:04:07
+MCMC time 2.8 mins 
+
+USED COMPONENTS: 5 OF 64 
+
+max abs. quantile error: 0.0452
+quantile width: 0.888
+max rel. quantile error: 0.0509
+min ESS from rel. qt. error: 386
+MCSE: 0.0083
+rel. MCSE: 0.0295
+quantl-rel. MCSE: 0.00935
+ESS: 1150
+needed thinning: 37.3
+log-average: -16.8
+Diagnostics time 2 secs 
+
+Total iterations 14400 - require further 9215 - continue for 9215 
+
+Chain # 3 - chunk 5 (chain 1 of 2 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-17 15:04:45
+MCMC time 3.5 mins 
+
+USED COMPONENTS: 5 OF 64 
+
+max abs. quantile error: 0.0356
+quantile width: 0.879
+max rel. quantile error: 0.0405
+min ESS from rel. qt. error: 610
+MCSE: 0.00662
+rel. MCSE: 0.0237
+quantl-rel. MCSE: 0.00752
+ESS: 1780
+needed thinning: 29.5
+log-average: -16.8
+Diagnostics time 1.7 secs 
+
+Total iterations 18000 - require further 694 - continue for 694 
+
+Chain # 3 - chunk 6 (chain 1 of 2 for this node): increasing by 695 
+
+Iterations: 695 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-17 15:04:55
+MCMC time 3.6 mins 
+
+USED COMPONENTS: 6 OF 64 
+
+max abs. quantile error: 0.0335
+quantile width: 0.878
+max rel. quantile error: 0.0382
+min ESS from rel. qt. error: 686
+MCSE: 0.00647
+rel. MCSE: 0.0232
+quantl-rel. MCSE: 0.00737
+ESS: 1860
+needed thinning: 27.2
+log-average: -16.8
+Diagnostics time 0.23 secs 
+
+Total iterations 18695 - require further 0 - continue for 0 
+
+Keeping  450 
+
+Current time: 2026-11-17 15:04:57
+MCMC + diagnostics time 3.7 mins 
+
+###########################################################
+Chain # 4 (chain 2 of 2 for this node)
+
+Datapoints for testing chain behaviour:
+ #1 #15 #16 #17 #18 #19 #26 #38 #40 #46 #50 #53 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-17 15:05:31
+MCMC time 4.2 mins 
+
+USED COMPONENTS: 5 OF 64 
+
+max abs. quantile error: 0.0933
+quantile width: 0.981
+max rel. quantile error: 0.0951
+min ESS from rel. qt. error: 111
+MCSE: 0.018
+rel. MCSE: 0.0557
+quantl-rel. MCSE: 0.0183
+ESS: 322
+needed thinning: 32.5
+log-average: -17.7
+Diagnostics time 1.8 secs 
+
+Total iterations 3600 - require further 16994 - continue for 16994 
+
+Chain # 4 - chunk 2 (chain 2 of 2 for this node): increasing by 3600 
+
+Iterations: 3600 
+|-------------|-------------|-------------|-------------|
+|-------------------------------------------------------|
+
+Current time: 2026-11-17 15:06:10
+MCMC time 4.9 mins 
+
+USED COMPONENTS: 5 OF 64 
+
+max abs. quantile error: 0.0248
+quantile width: 0.955
+max rel. quantile error: 0.026
+min ESS from rel. qt. error: 1480
+MCSE: 0.00685
+rel. MCSE: 0.0221
+quantl-rel. MCSE: 0.00717
+ESS: 2050
+needed thinning: 4.87
+log-average: -17.8
+Diagnostics time 1.6 secs 
+
+Total iterations 7200 - require further 0 - continue for 0 
+
+Keeping  450 
+
+Current time: 2026-11-17 15:06:13
+MCMC + diagnostics time 4.9 mins 
+
+Current time: 2026-11-17 15:06:13
+Total time 6.8 mins 
