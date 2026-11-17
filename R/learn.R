@@ -18,7 +18,7 @@
 #' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "cl.cores"; if this option is unset, then use 2 nodes.
 #' @param seed Integer or `NULL` (default): use this seed for the random number generator. If `NULL`, do not set the seed.
 #' @param cleanup Logical, default `TRUE`: remove diagnostic files at the end of the computation?
-#' @param appendinfo Logical, default `TRUE`: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory `outputdir`? The appended string has the format 'Vn_Dn_Sn_YYMMDDTHHMMSS'.
+#' @param appendinfo Logical, default `TRUE`: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory `outputdir`? The appended string has the format 'V*n*_D*n*_S*n*_*YYMMDD*T*HHMMSS*'.
 #' @param subsampledata Integer or `NULL` (default): if integer, use only that many datapoints from the original dataset in the `data` argument.
 #' @param prior Logical: Calculate the prior distribution? Default is `FALSE` unless `data` argument is missing or `NULL`.
 #' @param startupMCiterations Integer, default 3600: number of initial Monte Carlo iterations per chain.
@@ -155,7 +155,7 @@
 #'      ## only used to reduce computation time for this example
 #'   nsamples = 10, nchains = 1,
 #'   startupMCiterations = 10, maxMCiterations = 10,
-#'   minESS = 0, initES = 0
+#'   minESS = 1, initES = 0
 #' )
 #'
 #' ## Check the structure of the produced `K` object:
