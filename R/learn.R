@@ -18,13 +18,13 @@
 #' - `TRUE` (default): use the cluster that was set as default with [parallel::setDefaultCluster()]; if no such object exists, then generate a cluster with as many nodes as in the [option][base::getOption()] "cl.cores"; if this option is unset, then use 2 nodes.
 #' @param seed Integer or `NULL` (default): use this seed for the random number generator. If `NULL`, do not set the seed.
 #' @param cleanup Logical, default `TRUE`: remove diagnostic files at the end of the computation?
-#' @param appendinfo Logical, default `TRUE`: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory `outputdir`? The appended string has the format 'V\eqn{n}_D\eqn{n}_S\eqn{n}_\eqn{\mathit{YYMMDD}}T\eqn{\mathit{HHMMSS}}'.
+#' @param appendinfo Logical, default `TRUE`: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory `outputdir`? The appended string has the format \eqn{\mathrm{V}n\_\mathrm{D}n\_\mathrm{S}n\_\!\mathit{YYMMDD}\,\mathrm{T}\mathit{HHMMSS}}.
 #' @param subsampledata Integer or `NULL` (default): if integer, use only that many datapoints from the original dataset in the `data` argument.
-#' @param prior Logical: Calculate the prior distribution? Default is `FALSE` unless `data` argument is missing or `NULL`.
+#' @param prior Logical: calculate the prior distribution? Default is `FALSE` unless `data` argument is missing or `NULL`.
 #' @param startupMCiterations Integer, default 3600: number of initial Monte Carlo iterations per chain.
-#' @param minMCiterations Integer, default 0: Do at least this many Monte Carlo iterations per chain.
-#' @param maxMCiterations Integer, default 900000: Do at most this many Monte Carlo iterations per chain. Data is saved to disk during computation, so the user should increase or decrease this number according to disk capacity and complexity of the data.
-#' @param maxhours Numeric, default `Inf`: Stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments `startupMCiterations` and `minMCiterations`.
+#' @param minMCiterations Integer, default 0: do at least this many Monte Carlo iterations per chain.
+#' @param maxMCiterations Integer, default 900000: do at most this many Monte Carlo iterations per chain. Data is saved to disk during computation, so the user should increase or decrease this number according to disk capacity and complexity of the data.
+#' @param maxhours Numeric, default `Inf`: stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments `startupMCiterations` and `minMCiterations`.
 #' @param ncheckpoints Integer or `NULL`, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If `NULL`, this is equal to number of variates + 2. If `Inf`, use all datapoints.
 #' @param maxrelMCSE Numeric positive, default 0.04: desired maximal *relative Monte Carlo Standard Error* of calculated probabilities per chain. If missing, then argument `minESS` is used; if `minESS` is also missing, then the default value is used. `maxrelMCSE` is related to `minESS` by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS}}}.
 ## typical values: 0.05, 0.0471405, 0.04, 0.0316228, 0.02

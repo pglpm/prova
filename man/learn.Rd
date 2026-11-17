@@ -66,21 +66,21 @@ learn(
 
 \item{cleanup}{Logical, default \code{TRUE}: remove diagnostic files at the end of the computation?}
 
-\item{appendinfo}{Logical, default \code{TRUE}: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory \code{outputdir}? The appended string has the format 'V\eqn{n}_D\eqn{n}_S\eqn{n}_\eqn{\mathit{YYMMDD}}T\eqn{\mathit{HHMMSS}}'.}
+\item{appendinfo}{Logical, default \code{TRUE}: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory \code{outputdir}? The appended string has the format \eqn{\mathrm{V}n\_\mathrm{D}n\_\mathrm{S}n\_\!\mathit{YYMMDD}\,\mathrm{T}\mathit{HHMMSS}}.}
 
 \item{valueisK}{Logical or \code{NULL}: should the \code{VALUE} returned be the \code{K}nowledge object containing the results from the Monte Carlo computation? Default \code{TRUE}. If \code{FALSE}, then \code{VALUE} is the output directory name. If \code{NULL}, then \code{VALUE} is \code{NULL}.}
 
 \item{subsampledata}{Integer or \code{NULL} (default): if integer, use only that many datapoints from the original dataset in the \code{data} argument.}
 
-\item{prior}{Logical: Calculate the prior distribution? Default is \code{FALSE} unless \code{data} argument is missing or \code{NULL}.}
+\item{prior}{Logical: calculate the prior distribution? Default is \code{FALSE} unless \code{data} argument is missing or \code{NULL}.}
 
 \item{startupMCiterations}{Integer, default 3600: number of initial Monte Carlo iterations per chain.}
 
-\item{minMCiterations}{Integer, default 0: Do at least this many Monte Carlo iterations per chain.}
+\item{minMCiterations}{Integer, default 0: do at least this many Monte Carlo iterations per chain.}
 
-\item{maxMCiterations}{Integer, default 900000: Do at most this many Monte Carlo iterations per chain. Data is saved to disk during computation, so the user should increase or decrease this number according to disk capacity and complexity of the data.}
+\item{maxMCiterations}{Integer, default 900000: do at most this many Monte Carlo iterations per chain. Data is saved to disk during computation, so the user should increase or decrease this number according to disk capacity and complexity of the data.}
 
-\item{maxhours}{Numeric, default \code{Inf}: Stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments \code{startupMCiterations} and \code{minMCiterations}.}
+\item{maxhours}{Numeric, default \code{Inf}: stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments \code{startupMCiterations} and \code{minMCiterations}.}
 
 \item{ncheckpoints}{Integer or \code{NULL}, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If \code{NULL}, this is equal to number of variates + 2. If \code{Inf}, use all datapoints.}
 
