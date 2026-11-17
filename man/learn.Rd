@@ -84,9 +84,9 @@ learn(
 
 \item{ncheckpoints}{Integer or \code{NULL}, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If \code{NULL}, this is equal to number of variates + 2. If \code{Inf}, use all datapoints.}
 
-\item{maxrelMCSE}{Numeric positive, default 0.04: desired maximal \emph{relative Monte Carlo Standard Error} of calculated probabilities per chain. If missing, then argument \code{minESS} is used; if \code{minESS} is also missing, then the default value is used. \code{maxrelMCSE} is related to \code{minESS} by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS}}}.}
+\item{maxrelMCSE}{Numeric positive, default 0.04: desired maximal \emph{relative Monte Carlo Standard Error} of calculated probabilities per chain (after "burn-in" samples have been discarded). If missing, then argument \code{minESS} is used; if \code{minESS} is also missing, then the default value is used. \code{maxrelMCSE} is related to \code{minESS} by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS}}}.}
 
-\item{minESS}{Numeric positive, default 625: desired minimal Monte Carlo \emph{Expected Sample Size} per chain. If missing, then argument \code{maxrelMCSE} is used; if \code{maxrelMCSE} is also missing, then the default value is used. \code{minESS} is related to \code{maxrelMCSE} by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2}.}
+\item{minESS}{Numeric positive, default 625: desired minimal Monte Carlo \emph{Expected Sample Size} per chain (after "burn-in" samples have been discarded). If missing, then argument \code{maxrelMCSE} is used; if \code{maxrelMCSE} is also missing, then the default value is used. \code{minESS} is related to \code{maxrelMCSE} by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2}.}
 
 \item{initES}{Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded per chain. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.}
 
@@ -177,7 +177,7 @@ K <- learn(
      ## only used to reduce computation time for this example
   nsamples = 10, nchains = 1,
   startupMCiterations = 10, maxMCiterations = 10,
-  minESS = 1, initES = 0
+  minESS = 0, initES = 0
 )
 
 ## Check the structure of the produced `K` object:
