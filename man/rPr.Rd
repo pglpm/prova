@@ -11,7 +11,7 @@ rPr(
   K = NULL,
   tails = NULL,
   mcsamples = NULL,
-  parallel = NULL
+  mcrownames = !is.null(mcsamples)
 )
 }
 \arguments{
@@ -33,12 +33,14 @@ Alternatively, a default \verb{K = } argument can be set with \code{useK()}, in 
 
 \item{tails}{Named vector or list, or \code{NULL} (default). The names must match some or all of the variates in arguments \code{X}. For variates in this list, the probability conditional is understood in a semi-open interval sense: \eqn{X \le x} or \eqn{X \ge x}, an so on. See analogous argument in \code{\link[=Pr]{Pr()}}.}
 
-\item{mcsamples}{Vector of integers, or \code{'all'}, or \code{NULL} (default): which Monte Carlo samples calculated by the \code{\link[=learn]{learn()}} function should be used to draw the variate values. The default is to choose a random subset if \code{n} is smaller than their number, otherwise to recycle them as necessary.}
+\item{mcsamples}{Either \code{NULL} (default, equivalently \code{'all'} or \code{TRUE}), or a vector of integers:  which Monte Carlo samples calculated by the \code{\link[=learn]{learn()}} function should be used to draw the variate values. The default \code{NULL} chooses a random subset if \code{n} is smaller than their number, otherwise to recycle them as necessary.}
 
-\item{parallel}{Not used: this function does not use parallelization.}
+\item{mcrownames}{Logical: whether the row names of the created data frame should report underlying information about the Monte Carlo samples used to generate the datapoints; see \strong{Value} section. Default is \code{FALSE} if  argument \code{mcsamples} is \code{NULL}, and \code{TRUE} otherwise.}
 }
 \value{
-A \link[base:data.frame]{data frame} of joint draws of the variates \code{Ynames} from the posterior distribution, conditional on \code{X}. The row names of the data frame report the Monte Carlo sample (from \code{\link[=learn]{learn()}}) used for that draw, and the total number of draws from that sample so far.
+A \link[base:data.frame]{data frame} of joint draws of the variates \code{Ynames} from the posterior distribution, conditional on what is specified in the \code{X} (and \code{tails}) argument.
+
+With argument \code{mcrownames = TRUE} or argument \verb{mcsamples = } not \code{NULL}, the row names of the data frame report the Monte Carlo sample (from \code{learn()}) from which that datapoint was drawn from, and the grand-total of datapoints drawn from that Monte Carlo sample, according to the scheme "\code{sample_total}".
 }
 \description{
 Generates datapoints of chosen joint variates, according to posterior probabilities and posterior conditional probabilities.
@@ -53,55 +55,45 @@ A default value for the \verb{K = } argument can be set (and unset) with \code{u
 Therefore if \code{rPr()} is called with two unnamed arguments, \code{rPr(..., ...)}, then it is interpreted as \code{rPr(n = ..., Ynames = ...)}, with \code{X = NA} and the default \verb{K = } argument set by \code{useK()}. If it is called with three unnamed arguments, then it is interpreted as \code{rPr(n = ..., Ynames = ..., X = ...)}, with the default \verb{K = } argument set by \code{useK()}. In order to specify \code{n}, \code{Ynames}, and \code{K} without naming the arguments, the form \code{rPr(..., ..., NA, ...)} must be used, explicitly giving \code{X} as third argument.
 }
 \examples{
-## Use the example "K" object 'Kexample'
-## calculated from the "penguins" dataset;
-## variates: 'species' and 'bill_len'
+
+## Use the "K" object 'Kexample' included in *Prova*,
+## calculated from the "penguins" dataset.
+## Variates: 'species' and 'bill_len'
 
 ## ## Example 1:
 ## Generate 10 values of the 'species' variate,
-## according to the frequency distribution estimated from the data
-
-## alternatively: rPr(10, 'species', NA, Kexample)
+## with the same probability calculated from the data
 datapoints <- rPr(n = 10, Ynames = 'species', K = Kexample)
-
-c(datapoints)
+## alternatively: rPr(10, 'species', NA, Kexample)
+datapoints
 
 
 ## ## Example 2:
-## Generate 5 joint values of the 'species' and 'bill_len' variates.
-
+## Generate 5 joint values of 'species' and 'bill_len' variates.
 datapoints <- rPr(5, c('species', 'bill_len'), NA, Kexample)
-
-print(datapoints, row.names = FALSE) ## row names give MCMC information
+datapoints
 
 
 ## ## Example 3:
 ## Generate 5 values of the 'species' variate,
-## for the subpopulation of penguins having bill length shorter than 40 mm
+## among penguins having bill length shorter than or equal to 40 mm
 
-datapoints <- rPr(
-  5,
-  'species',
-  data.frame(bill_len = 40),
-  Kexample,
-  tails = list(bill_len = '<='))
-
-c(datapoints)
+datapoints <- rPr(5, 'species', data.frame(bill_len = 40), Kexample, tails = list(bill_len = '<='))
+datapoints
 
 
 ## ## Example 4:
-## To omit 'K =' arguments, we can set a default one with useK()
+## To omit 'K =' arguments, set a default one with useK()
 useK(Kexample)
 
-## Generate 10 values of the 'species' variate,
-## according to the frequency distribution estimated from the data
-
+## Generate 10 values of the 'species' variate.
+## The datapoints are different from before,
+## since we did not set a random seed with 'set.seed()'
 datapoints <- rPr(10, 'species')
-
-c(datapoints)
+datapoints
 
 ## Remove any default 'K =' argument
-useK()
+useK(NA)
 
 }
 \seealso{
@@ -114,5 +106,7 @@ useK()
 \code{\link[=qPr]{qPr()}} to calculate quantiles.
 
 \link{Kexample} an example "K" object included with \strong{Prova}.
+
+\code{\link[base:set.seed]{base::set.seed()}} to generate samples reproducibly.
 }
 \concept{generate}

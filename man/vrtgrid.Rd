@@ -85,7 +85,7 @@ valuesSpecies <- vrtgrid('species')
 print(valuesSpecies)
 
 ## Remove any default 'K =' argument
-useK()
+useK(NA)
 
 }
 \seealso{

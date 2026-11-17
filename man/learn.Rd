@@ -24,8 +24,8 @@ learn(
   maxMCiterations = 9e+05,
   maxhours = +Inf,
   ncheckpoints = 12,
-  maxrelMCSE = +Inf,
-  minESS = 617,
+  maxrelMCSE = 0.04,
+  minESS = 625,
   initES = 8,
   thinning = NULL,
   verbose = TRUE,
@@ -84,9 +84,9 @@ learn(
 
 \item{ncheckpoints}{Integer or \code{NULL}, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If \code{NULL}, this is equal to number of variates + 2. If \code{Inf}, use all datapoints.}
 
-\item{maxrelMCSE}{Numeric positive, default \code{+Inf}: desired maximal \emph{relative Monte Carlo Standard Error} of calculated probabilities per chain. The default \code{+Inf} means that \code{minESS} is used instead. \code{maxrelMCSE} is related to \code{minESS} by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS} + \mathrm{initES}}}.}
+\item{maxrelMCSE}{Numeric positive, default 0.04: desired maximal \emph{relative Monte Carlo Standard Error} of calculated probabilities per chain. If missing, then argument \code{minESS} is used; if \code{minESS} is also missing, then the default value is used. \code{maxrelMCSE} is related to \code{minESS} by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS}}}.}
 
-\item{minESS}{Numeric positive or \code{NULL}, default 617: desired minimal Monte Carlo \emph{Expected Sample Size} per chain. If \code{NULL}, it is equal to the final \code{nsamplesperchain}. \code{minESS} is related to \code{maxrelMCSE} by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2 - \mathrm{initES}}. The default value \eqn{\mathrm{minESS} = 617} corresponds to \eqn{\mathrm{maxrelMCSE} = 0.4}.}
+\item{minESS}{Numeric positive, default 625: desired minimal Monte Carlo \emph{Expected Sample Size} per chain. If missing, then argument \code{maxrelMCSE} is used; if \code{maxrelMCSE} is also missing, then the default value is used. \code{minESS} is related to \code{maxrelMCSE} by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2}.}
 
 \item{initES}{Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded per chain. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.}
 
@@ -162,7 +162,7 @@ with such a call, the file 'learnoutput.out' will contain information about how 
 }
 \examples{
 \donttest{
-### WARNING: the following example, if run, might even take a minute or more.
+### WARNING: running the following example might take a minute or more.
 
 ## Create dataset with 3 points of variate 'V' for demonstration:
 dataset <- data.frame(V = rnorm(n = 3))
@@ -173,14 +173,14 @@ metadata <- data.frame(name = 'V', type = 'continuous')
 ## Learn from the data:
 K <- learn(
   data = dataset, metadata = metadata,
-      ## the following parameters are unrealistic
-      ## only used to reduce computation time for this example
+     ## the following parameters are unrealistic
+     ## only used to reduce computation time for this example
   nsamples = 10, nchains = 1,
   startupMCiterations = 10, maxMCiterations = 10,
   minESS = 0, initES = 0
 )
 
-## Check structure of `K` object:
+## Check the structure of the produced `K` object:
 str(K)
 }
 
