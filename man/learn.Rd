@@ -66,7 +66,7 @@ learn(
 
 \item{cleanup}{Logical, default \code{TRUE}: remove diagnostic files at the end of the computation?}
 
-\item{appendinfo}{Logical, default \code{TRUE}: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory \code{outputdir}? The appended string has the format 'V\emph{n}_D\emph{n}\emph{S\emph{n}}\emph{YYMMDD}T\emph{HHMMSS}'.}
+\item{appendinfo}{Logical, default \code{TRUE}: append information about number of variates ('V'), number of data points ('D'), number of Monte Carlo samples ('S'), and timestamp, to the name of the output directory \code{outputdir}? The appended string has the format 'V\eqn{n}_D\eqn{n}_S\eqn{n}_\eqn{\mathit{YYMMDD}}T\eqn{\mathit{HHMMSS}}'.}
 
 \item{valueisK}{Logical or \code{NULL}: should the \code{VALUE} returned be the \code{K}nowledge object containing the results from the Monte Carlo computation? Default \code{TRUE}. If \code{FALSE}, then \code{VALUE} is the output directory name. If \code{NULL}, then \code{VALUE} is \code{NULL}.}
 

@@ -1,6 +1,7 @@
 # Prova v3.0.1
 
 * Slightly redefined the (previously confusing) relationship between arguments `maxrelMCSE` and `minESS` in `learn()`, and changed their defaults to slightly strictest values.
+* Corrected documentation.
 
 # Prova v3.0.0
 
