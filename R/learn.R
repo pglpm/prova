@@ -26,10 +26,10 @@
 #' @param maxMCiterations Integer, default 900000: do at most this many Monte Carlo iterations per chain. Data is saved to disk during computation, so the user should increase or decrease this number according to disk capacity and complexity of the data.
 #' @param maxhours Numeric, default `Inf`: stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments `startupMCiterations` and `minMCiterations`.
 #' @param ncheckpoints Integer or `NULL`, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If `NULL`, this is equal to number of variates + 2. If `Inf`, use all datapoints.
-#' @param maxrelMCSE Numeric positive, default 0.04: desired maximal *relative Monte Carlo Standard Error* of calculated probabilities per chain. If missing, then argument `minESS` is used; if `minESS` is also missing, then the default value is used. `maxrelMCSE` is related to `minESS` by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS}}}.
+#' @param maxrelMCSE Numeric positive, default 0.04: desired maximal *relative Monte Carlo Standard Error* of calculated probabilities per chain (after "burn-in" samples have been discarded). If missing, then argument `minESS` is used; if `minESS` is also missing, then the default value is used. `maxrelMCSE` is related to `minESS` by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS}}}.
 ## typical values: 0.05, 0.0471405, 0.04, 0.0316228, 0.02
 ## typical values:  400,       450,  625,      1000, 2500
-#' @param minESS Numeric positive, default 625: desired minimal Monte Carlo *Expected Sample Size* per chain. If missing, then argument `maxrelMCSE` is used; if `maxrelMCSE` is also missing, then the default value is used. `minESS` is related to `maxrelMCSE` by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2}.
+#' @param minESS Numeric positive, default 625: desired minimal Monte Carlo *Expected Sample Size* per chain (after "burn-in" samples have been discarded). If missing, then argument `maxrelMCSE` is used; if `maxrelMCSE` is also missing, then the default value is used. `minESS` is related to `maxrelMCSE` by \eqn{\mathrm{minESS} = 1/\mathrm{maxrelMCSE}^2}.
 #' @param initES Numeric positive, default 8: number of initial "burn-in" samples, separated by the Expected Sample Size, to be discarded per chain. Note that the Monte Carlo chain typically starts in a high-probability region, so there is no reason to discard many initial samples.
 #' @param thinning Integer or `NULL` (default): thin out the Monte Carlo samples by this value. If `NULL`: let diagnostics decide the thinning value.
 #' @param verbose Logical, default `TRUE`: output the progress also to terminal? If `FALSE`, the progress is outputted only to the file `'main.out'` in the `outputdir` directory.
@@ -155,7 +155,7 @@
 #'      ## only used to reduce computation time for this example
 #'   nsamples = 10, nchains = 1,
 #'   startupMCiterations = 10, maxMCiterations = 10,
-#'   minESS = 1, initES = 0
+#'   minESS = 0, initES = 0
 #' )
 #'
 #' ## Check the structure of the produced `K` object:
@@ -428,21 +428,21 @@ learn <- function(
   ## maxrelMCSE and minESS
   ## checks
   if(missing('maxrelMCSE') && !missing('minESS')){
-    if(!is.numeric(minESS) || minESS <= 0){
+    if(!is.numeric(minESS) || minESS < 0){
       stop("'minESS' must be strictly positive")
     }
     maxrelMCSE <- 1 / sqrt(minESS)
   } else if(!missing('maxrelMCSE') && missing('minESS')){
-    if(!is.numeric(maxrelMCSE) || maxrelMCSE <= 0 || maxrelMCSE == +Inf){
-      stop("'maxrelMCSE' must be strictly positive and finite")
+    if(!is.numeric(maxrelMCSE) || maxrelMCSE <= 0){
+      stop("'maxrelMCSE' must be strictly positive")
     }
     minESS <- 1 / maxrelMCSE^2
   } else if(!missing('maxrelMCSE') && !missing('minESS')){
-    if(!is.numeric(minESS) || minESS <= 0){
+    if(!is.numeric(minESS) || minESS < 0){
       stop("'minESS' must be strictly positive")
     }
-    if(!is.numeric(maxrelMCSE) || maxrelMCSE <= 0 || maxrelMCSE == +Inf){
-      stop("'maxrelMCSE' must be strictly positive and finite")
+    if(!is.numeric(maxrelMCSE) || maxrelMCSE <= 0){
+      stop("'maxrelMCSE' must be strictly positive")
     }
     message("Both 'maxrelMCSE' and 'minESS' given: choosing strictest value.")
   }
