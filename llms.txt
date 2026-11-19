@@ -21,7 +21,7 @@ These are its main features:
 - **No assumptions about functional dependence** between data variates.
   The analysis and inferences are therefore more general than those by
   neural networks, random forests, regression trees, or similar
-  algorithms.
+  machine-learning algorithms.
 - **No approximations** such as Laplace’s approximation, variational
   inference, and similar.
 - Any combination of **binary**, **nominal**, **ordinal**,
