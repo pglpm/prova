@@ -26,7 +26,7 @@
 #' learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
 #' ```
 #'
-#' It is a list that essentially contains posterior hyperparameters for drawing statistical inferences about the variates `species` and `bill_len`.
+#' It is a list that essentially contains posterior hyperparameters for drawing statistical inferences about the variates `species` and `bill_len`. See `learn()` for a more detailed description of its arguments.
 #'
 #' **Note** that the [learn()] function that produced `Kexample` was called with the option to create only a limited number (225) of Monte Carlo samples, in order to reduce its memory size. Thus the numerical error associated with the Monte Carlo approximation is relatively in inferences drawn from the posterior hyperparameters saved in `Kexample`. It is only meant to be used for illustration purposes of the package's capabilities.
 #'

@@ -184,12 +184,7 @@ metadatatemplate <- function(
     x <- data[[name]]
     x <- x[!is.na(x)]
 
-    ## ## Factors are now dealt with at the beginning
-    ## ## check if it's a 'factor' object and transform
-    ## if(is.factor(x)){
-    ##     x <- as.character(x)
-    ## }
-
+    ## Sorting depends on locale, but the exact sorting is unimportant here
     unx <- sort(unique(x))
     uniquex <- length(unx)
 

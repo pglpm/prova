@@ -78,7 +78,7 @@
 #'
 #' with such a call, the file 'learnoutput.out' will contain information about how the computation is proceeding and the estimated end time.
 #'
-#' @returns A "K" (more precisely "prova_K") object, or name of directory containing such an object and other output files, or `NULL`, depending on argument `valueisK`.
+#' @returns A "K" (more precisely "prova_K") object, or name of directory containing such an object and other output files, or `NULL`, depending on argument `valueisK`. The elements of this object are described below.
 #'
 #' `learn()` saves several files in a directory. By default this output directory is a temporary directory within the one used by [base::tempdir()], but an alternative one can be chosen with the argument `outputdir = `. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
 #'
@@ -91,6 +91,14 @@
 #' It is recommended that an explicit argument `outputdir = ` be given, so as to save the directory with the files above for future reference. In particular, the `MCtraces.pdf` plot and `MCtraces.rds` data can be useful to report Monte Carlo convergence in any work that used **Prova**.
 #'
 #' During operation, computation progress and estimated end times for each node's computation are outputted to the file `'main.out'` in the output directory, and also to the console if argument `verbose` is `TRUE`. Note that the estimated end times are very approximate and often quite conservative.
+#'
+#' *Typical elements of the "K" ojbect*    
+#' - Some among `Rmean`, `Rsd`, `Cmean`, `Csd`, `Dmean`, `Dsd`, `Nprob`, `Oprob`, `Bprob`, depending on the kinds of data variates: samples of component kernel hyperparameters.
+#' - `W`: samples of component weights.
+#' - `MCindex`: Monte Carlo iteration indices.
+#' - `auxmetadata`: list of metadata and auxiliary metadata values.
+#' - `info`: information about the Monte Carlo run and some additional information: `metadata`, `nMCsamples`, `nchains`, `npoints`, `maxiterations`, `maxusedcomponents`, `nonfinitechains`, `stoppedchains`. Also `.Random.seed` containing the [random-seed][base::.Random.seed] state when `learn()` was called; `args` containing most arguments with which the function was called; `diagn` containing final Monte Carlo diagnostics such as relative Monte Carlo Standard Error and Effective Sample Size.
+#'
 #'
 #' @references
 #'
@@ -224,6 +232,12 @@ learn <- function(
     ## Qerror = c(0.055, 0.945) # pnorm(c(-1, 1))
   )
 ){
+  ## Save arguments with which function is called,
+  ## to be saved in the final K object for reproducibility
+  learnargs <- mget(names(formals()), envir = environment())
+  ## Omit potentially large or sensitive arguments
+  learnargs[c('data', 'metadata', 'auxdata', 'outputdir')] <- NULL
+
   ## Collect preliminary messages that will be printed to
   ## the main log file in 'outputdir' (and to terminal if verbose = TRUE)
   ## They cannot yet be printed because the 'outputdir' name
@@ -1248,18 +1262,20 @@ learn <- function(
       nMCsamples = ncol(mcsamples$W),
       nchains = nchains,
       npoints = npoints,
-      hyperparams = hyperparams,
+      ## hyperparams = hyperparams, # included in 'args'
       maxiterations = maxiterations,
       maxusedcomponents = maxusedcomponents,
       nonfinitechains = nonfinitechains,
-      stoppedchains = stoppedchains
+      stoppedchains = stoppedchains,
+      .Random.seed = currentseed,
+      args = learnargs
     )
   ))
   rm(mcsamples)
   ## The 'prova_K' (knowledge) object is preliminarily saved as soon as possible,
   ## in case something crashes during subsequent diagnostics
   saveRDS(K,
-    file = file.path(dirname, paste0('___K', dashnameroot, '.rds'))
+    file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
   )
 
   ## This is to delete the last 'estimated end time'
@@ -1324,6 +1340,7 @@ learn <- function(
   }
 
   ## Save 'prova_K' (knowledge) object
+  ## rewriting the temporary one already written above
   saveRDS(K,
     file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
   )
@@ -1423,7 +1440,7 @@ learn <- function(
     'needed thinning' = JD['autothinning', ],
     'log-average' = colMeans(oktraces)
   )
-  K$info <- c(K$info, toprint)
+  K$info <- c(K$info, list(diagn = toprint))
   class(K) <- 'prova_K'
   saveRDS(K,
     file = file.path(dirname, paste0('K', dashnameroot, '.rds'))

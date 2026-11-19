@@ -103,7 +103,7 @@ learn(
 \item{hyperparams}{List: hyperparameters of the hyperprior; see values in "Usage".}
 }
 \value{
-A "K" (more precisely "prova_K") object, or name of directory containing such an object and other output files, or \code{NULL}, depending on argument \code{valueisK}.
+A "K" (more precisely "prova_K") object, or name of directory containing such an object and other output files, or \code{NULL}, depending on argument \code{valueisK}. The elements of this object are described below.
 
 \code{learn()} saves several files in a directory. By default this output directory is a temporary directory within the one used by \code{\link[base:tempdir]{base::tempdir()}}, but an alternative one can be chosen with the argument \verb{outputdir = }. The output directory contain several diagnostic files for the Monte Carlo computation; in particular:
 \itemize{
@@ -117,6 +117,15 @@ A "K" (more precisely "prova_K") object, or name of directory containing such an
 It is recommended that an explicit argument \verb{outputdir = } be given, so as to save the directory with the files above for future reference. In particular, the \code{MCtraces.pdf} plot and \code{MCtraces.rds} data can be useful to report Monte Carlo convergence in any work that used \strong{Prova}.
 
 During operation, computation progress and estimated end times for each node's computation are outputted to the file \code{'main.out'} in the output directory, and also to the console if argument \code{verbose} is \code{TRUE}. Note that the estimated end times are very approximate and often quite conservative.
+
+\emph{Typical elements of the "K" ojbect}
+\itemize{
+\item Some among \code{Rmean}, \code{Rsd}, \code{Cmean}, \code{Csd}, \code{Dmean}, \code{Dsd}, \code{Nprob}, \code{Oprob}, \code{Bprob}, depending on the kinds of data variates: samples of component kernel hyperparameters.
+\item \code{W}: samples of component weights.
+\item \code{MCindex}: Monte Carlo iteration indices.
+\item \code{auxmetadata}: list of metadata and auxiliary metadata values.
+\item \code{info}: information about the Monte Carlo run and some additional information: \code{metadata}, \code{nMCsamples}, \code{nchains}, \code{npoints}, \code{maxiterations}, \code{maxusedcomponents}, \code{nonfinitechains}, \code{stoppedchains}. Also \code{.Random.seed} containing the \link[base:.Random.seed]{random-seed} state when \code{learn()} was called; \code{args} containing most arguments with which the function was called; \code{diagn} containing final Monte Carlo diagnostics such as relative Monte Carlo Standard Error and Effective Sample Size.
+}
 }
 \description{
 Compute the posterior joint probability distribution of the variates conditional on the given data, by means of Markov-chain Monte Carlo, using the package \strong{Nimble}.

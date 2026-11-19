@@ -5,7 +5,7 @@ message('Testing version ', packageVersion('prova'))
 parallel <- 8
 
 test_equivalent <- function(x, y, tolerance = sqrt(.Machine$double.eps)){
-    all.equal(x, y, tolerance = tolerance, scale = 1, check.attributes = FALSE)
+  all.equal(x, y, tolerance = tolerance, scale = 1, check.attributes = FALSE)
 }
 
 
@@ -23,16 +23,18 @@ message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
 thisresult <- tc(nm, {
-    K <- learn( # outputdir='____deletethisdir',
+  ##
+  K <- learn( # outputdir='____deletethisdir',
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
     ## only used to reduce computation time for this example
     nsamples = 36, nchains = 1,
     startupMCiterations = 36, maxMCiterations = 36,
     minESS = 0, initES = 0, verbose = FALSE
-    )
-    is.list(K)
-    }
+  )
+  ##
+  is.list(K)
+}
 )
 results <- c(results, thisresult)
 print(thisresult)
@@ -45,11 +47,11 @@ nm <- 'Full base learn'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 outputdir <- 'testbase_test'
 thisresult <- tc(nm, {
-    Kdir <- learn(
+  Kdir <- learn(
     data = 'data_basetest.csv',
     metadata = 'metadata_basetest.csv',
-    # nsamples = 200,
-    # nchains = parallel,
+                                        # nsamples = 200,
+                                        # nchains = parallel,
     ## minMCiterations = 3600 * 3,
     prior = FALSE,
     outputdir = outputdir,
@@ -57,8 +59,8 @@ thisresult <- tc(nm, {
     appendinfo = TRUE,
     cleanup = TRUE,
     parallel = parallel,
-    # maxrelMCSE = +Inf,
-    # minESS = 100,
+                                        # maxrelMCSE = +Inf,
+                                        # minESS = 100,
     verbose = FALSE
     ## ncheckpoints = 12,
     ##
@@ -68,82 +70,82 @@ thisresult <- tc(nm, {
     ## nsamplesperchain = 60,
     ## nchains = parallel + 1,
     ##
-    )
-    is.character(Kdir)
-    }
+  )
+  is.character(Kdir)
+}
 )
 results <- c(results, thisresult)
 print(thisresult)
 saveRDS(results, savefile)
 
 if(FALSE){# do this separately in 'saveKexample.R'
-nm <- 'Save Kexample'
-message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-thisresult <- tc(nm, {
-Kexample <- learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
+  nm <- 'Save Kexample'
+  message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
+  thisresult <- tc(nm, {
+    Kexample <- learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
     is.list(Kexample)
-    }
-)
-save(Kexample, file = '~/repos/prova/data/Kexample.rda')
-results <- c(results, thisresult)
-print(thisresult)
-saveRDS(results, savefile)
-rm(Kexample)
+  }
+  )
+  save(Kexample, file = '~/repos/prova/data/Kexample.rda')
+  results <- c(results, thisresult)
+  print(thisresult)
+  saveRDS(results, savefile)
+  rm(Kexample)
 }
 
 K <- Kdir
 nm <- 'Simple Pr'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 suite <- list(
-    Rvrt = seq(-3, 3, length.out = 9),
-    RPvrt = seq(0, 3, length.out = 9),
-    RFvrt = seq(0, 1, length.out = 9),
-    Cvrt = seq(0, 1, length.out = 9),
-    Dvrt = seq(-3, 3, length.out = 9),
-    DPvrt = seq(0, 3, length.out = 9),
-    N1vrt = paste0(letters[1:3], '1'),
-    O1vrt = paste0(LETTERS[1:5], '1'),
-    Bvrt = c('no', 'yes'),
-    N2vrt = paste0(letters[1:4], '2'),
-    O2vrt = paste0(LETTERS[1:3], '2')
+  Rvrt = seq(-3, 3, length.out = 9),
+  RPvrt = seq(0, 3, length.out = 9),
+  RFvrt = seq(0, 1, length.out = 9),
+  Cvrt = seq(0, 1, length.out = 9),
+  Dvrt = seq(-3, 3, length.out = 9),
+  DPvrt = seq(0, 3, length.out = 9),
+  N1vrt = paste0(letters[1:3], '1'),
+  O1vrt = paste0(LETTERS[1:5], '1'),
+  Bvrt = c('no', 'yes'),
+  N2vrt = paste0(letters[1:4], '2'),
+  O2vrt = paste0(LETTERS[1:3], '2')
 )
 allOK <- TRUE
 for(iv in seq_along(suite)){
-    for(atail in c(0, 'left', 'right')){
-        atest <- suite[iv]
-        vrt <- names(atest)
-        tail <- setNames(list(atail), vrt)
-        prob <- targetprob <- NULL
-        ##
-        prob <- Pr(Y = as.data.frame(atest), X = NULL,
-            tails = tail,
-            K = K, parallel = 1)
-        ##
-        vals <- atest[[1]]
-        targetprob <- lapply(vals, function(x){
-                prova:::.testPr(Y = setNames(list(x), vrt), X = NULL,
-                    tails = tail, K = K)
-        })
-        targetprob <- list(value = cbind(sapply(targetprob, `[[`, 1)),
-            samples = t(sapply(targetprob, `[[`, 2)))
-        thisresult1 <- tc(paste0(nm, '-', iv, '-', atail, '-values'),
-            test_equivalent(prob$value, targetprob$value,
-                tolerance = 10 * .Machine$double.eps)
-        )
-        results <- c(results, thisresult1)
-        thisresult2 <-tc(paste0(nm, '-', iv, '-', atail, '-samples'),
-            test_equivalent(c(prob$samples), c(targetprob$samples),
-                tolerance = 10 * .Machine$double.eps)
-        )
-        results <- c(results, thisresult2)
-    }
-    saveRDS(results, savefile)
-    if(!isTRUE(thisresult1[[1]]) || !isTRUE(thisresult2[[1]])){
-        print(thisresult1)
-        print(thisresult2)
-        allOK <- FALSE
-        break
-    }
+  for(atail in c(0, 'left', 'right')){
+    atest <- suite[iv]
+    vrt <- names(atest)
+    tail <- setNames(list(atail), vrt)
+    prob <- targetprob <- NULL
+    ##
+    prob <- Pr(Y = as.data.frame(atest), X = NULL,
+      tails = tail,
+      K = K, parallel = 1)
+    ##
+    vals <- atest[[1]]
+    targetprob <- lapply(vals, function(x){
+      prova:::.testPr(Y = setNames(list(x), vrt), X = NULL,
+        tails = tail, K = K)
+    })
+    targetprob <- list(value = cbind(sapply(targetprob, `[[`, 1)),
+      samples = t(sapply(targetprob, `[[`, 2)))
+    thisresult1 <- tc(paste0(nm, '-', iv, '-', atail, '-values'),
+      test_equivalent(prob$value, targetprob$value,
+        tolerance = 10 * .Machine$double.eps)
+    )
+    results <- c(results, thisresult1)
+    thisresult2 <-tc(paste0(nm, '-', iv, '-', atail, '-samples'),
+      test_equivalent(c(prob$samples), c(targetprob$samples),
+        tolerance = 10 * .Machine$double.eps)
+    )
+    results <- c(results, thisresult2)
+  }
+  saveRDS(results, savefile)
+  if(!isTRUE(thisresult1[[1]]) || !isTRUE(thisresult2[[1]])){
+    print(thisresult1)
+    print(thisresult2)
+    allOK <- FALSE
+    break
+  }
 }
 print(allOK)
 
@@ -156,57 +158,57 @@ atest <- 0L
 set.seed(16)
 allOK <- TRUE
 while(atest < 50){
-    atest <- atest + 1L
-    prob <- targetprob <- NULL
-    nsuite <- length(suite)
-    nY <- sample(1:nsuite, 1)
-    ninY <- sample(1:nsuite, nY, replace = FALSE)
-    ninX <- (1:nsuite)[-ninY]
-    inY <- suite[ninY]
-    inY <- lapply(inY, function(x)sample(unlist(x), 1))
-    inX <- suite[ninX]
-    if(length(inX) > 0){
-        inX <- lapply(inX, function(x)sample(unlist(x), 1))
-    } else {
-        inX <- NULL
-    }
-    intails <- setNames(sample(c(-1, 0, 1), nsuite - 1, replace = TRUE),
-        c('Rvrt', 'RPvrt', 'RFvrt', 'Cvrt', 'Dvrt', 'DPvrt',
-            'O1vrt', 'O2vrt', 'N1vrt', 'N2vrt'))
-    intails <- as.list(intails)
-    if(c(inY, inX)[['RPvrt']] == 0 && intails[['RPvrt']] != 1){
-        intails[['RPvrt']] <- 1
-    }
-    if(c(inY, inX)[['RFvrt']] == 0 && intails[['RFvrt']] != 1){
-        intails[['RFvrt']] <- 1
-    }
-    if(c(inY, inX)[['RFvrt']] == 1 && intails[['RFvrt']] != -1){
-        intails[['RFvrt']] <- -1
-    }
-    ##
-    prob <- Pr(Y = as.data.frame(inY), X = as.data.frame(inX),
-        tails = intails, K = K, parallel = 1)
-    ##
-    targetprob <- prova:::.testPr(Y = inY, X = inX, tails = intails,
-        K = K)
-    ##
-    thisresult1 <- tc(paste0(nm, '-', atest, '-values'),
-        test_equivalent(c(prob$value), c(targetprob$value),
-            tolerance = 10 * .Machine$double.eps)
-    )
-    results <- c(results, thisresult1)
-    thisresult2 <- tc(paste0(nm, '-', atest, '-samples'),
-        test_equivalent(c(prob$samples), c(targetprob$samples),
-            tolerance = 10 * .Machine$double.eps)
-    )
-    results <- c(results, thisresult2)
-    saveRDS(results, savefile)
-    if(!isTRUE(thisresult1[[1]]) || !isTRUE(thisresult2[[1]])){
-        print(thisresult1)
-        print(thisresult2)
-        allOK <- FALSE
-        break
-    }
+  atest <- atest + 1L
+  prob <- targetprob <- NULL
+  nsuite <- length(suite)
+  nY <- sample(1:nsuite, 1)
+  ninY <- sample(1:nsuite, nY, replace = FALSE)
+  ninX <- (1:nsuite)[-ninY]
+  inY <- suite[ninY]
+  inY <- lapply(inY, function(x)sample(unlist(x), 1))
+  inX <- suite[ninX]
+  if(length(inX) > 0){
+    inX <- lapply(inX, function(x)sample(unlist(x), 1))
+  } else {
+    inX <- NULL
+  }
+  intails <- setNames(sample(c(-1, 0, 1), nsuite - 1, replace = TRUE),
+    c('Rvrt', 'RPvrt', 'RFvrt', 'Cvrt', 'Dvrt', 'DPvrt',
+      'O1vrt', 'O2vrt', 'N1vrt', 'N2vrt'))
+  intails <- as.list(intails)
+  if(c(inY, inX)[['RPvrt']] == 0 && intails[['RPvrt']] != 1){
+    intails[['RPvrt']] <- 1
+  }
+  if(c(inY, inX)[['RFvrt']] == 0 && intails[['RFvrt']] != 1){
+    intails[['RFvrt']] <- 1
+  }
+  if(c(inY, inX)[['RFvrt']] == 1 && intails[['RFvrt']] != -1){
+    intails[['RFvrt']] <- -1
+  }
+  ##
+  prob <- Pr(Y = as.data.frame(inY), X = as.data.frame(inX),
+    tails = intails, K = K, parallel = 1)
+  ##
+  targetprob <- prova:::.testPr(Y = inY, X = inX, tails = intails,
+    K = K)
+  ##
+  thisresult1 <- tc(paste0(nm, '-', atest, '-values'),
+    test_equivalent(c(prob$value), c(targetprob$value),
+      tolerance = 10 * .Machine$double.eps)
+  )
+  results <- c(results, thisresult1)
+  thisresult2 <- tc(paste0(nm, '-', atest, '-samples'),
+    test_equivalent(c(prob$samples), c(targetprob$samples),
+      tolerance = 10 * .Machine$double.eps)
+  )
+  results <- c(results, thisresult2)
+  saveRDS(results, savefile)
+  if(!isTRUE(thisresult1[[1]]) || !isTRUE(thisresult2[[1]])){
+    print(thisresult1)
+    print(thisresult2)
+    allOK <- FALSE
+    break
+  }
 }
 print(allOK)
 
@@ -220,52 +222,52 @@ ns <- ncol(K$W)
 nv <- nn / ns
 ##
 suite <- list(
-    list('B', 'N', NULL),
-    list('B', 'R', NULL),
-    list('N', 'R', NULL),
-    list(c('N', 'B'), 'R', NULL),
-    list(c('B', 'R'), 'N', NULL),
-    list(c('N', 'R'), 'B', NULL),
-    list('B', 'N', list(R = -8)),
-    list('B', 'N', list(R = -4)),
-    list('B', 'N', list(R = -2)),
-    list('B', 'N', list(R = 0)),
-    list('B', 'N', list(R = 2)),
-    list('B', 'N', list(R = 4)),
-    list('B', 'N', list(R = 8)),
-    list('B', 'R', list(N = 'a')),
-    list('B', 'R', list(N = 'b')),
-    list('B', 'R', list(N = 'c')),
-    list('B', 'R', list(N = 'd')),
-    list('B', 'R', list(N = 'e')),
-    list('N', 'R', list(B = 'y')),
-    list('N', 'R', list(B = 'n'))
+  list('B', 'N', NULL),
+  list('B', 'R', NULL),
+  list('N', 'R', NULL),
+  list(c('N', 'B'), 'R', NULL),
+  list(c('B', 'R'), 'N', NULL),
+  list(c('N', 'R'), 'B', NULL),
+  list('B', 'N', list(R = -8)),
+  list('B', 'N', list(R = -4)),
+  list('B', 'N', list(R = -2)),
+  list('B', 'N', list(R = 0)),
+  list('B', 'N', list(R = 2)),
+  list('B', 'N', list(R = 4)),
+  list('B', 'N', list(R = 8)),
+  list('B', 'R', list(N = 'a')),
+  list('B', 'R', list(N = 'b')),
+  list('B', 'R', list(N = 'c')),
+  list('B', 'R', list(N = 'd')),
+  list('B', 'R', list(N = 'e')),
+  list('N', 'R', list(B = 'y')),
+  list('N', 'R', list(B = 'n'))
 )
 allOK <- TRUE
 for(atest in suite){
-    testand <- target <- NULL
-    testand <- mutualinfo(
-        Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
-        K = K, nv = nv, ns = ns, parallel = parallel
-    )
-    target <- testMI(
-        Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
-        nn = nn, K = K
-    )
-    thisresult <- tc(paste0(nm, '-', paste0(atest, collapse = '-')),
-        test_equivalent(
-        testand$value, target$value,
-        tolerance = max((testand$value.acc + target$value.acc) * 2,
-            10 * .Machine$double.eps)
-        ))
-    results <- c(results, thisresult)
-    saveRDS(results, savefile)
-    if(!isTRUE(thisresult[[1]])){
-        print(thisresult)
-        allOK <- FALSE
-        print(FALSE)
-        break
-    }
+  testand <- target <- NULL
+  testand <- mutualinfo(
+    Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
+    K = K, nv = nv, ns = ns, parallel = parallel
+  )
+  target <- testMI(
+    Y1names = atest[[1]], Y2names = atest[[2]], X = atest[[3]],
+    nn = nn, K = K
+  )
+  thisresult <- tc(paste0(nm, '-', paste0(atest, collapse = '-')),
+    test_equivalent(
+      testand$value, target$value,
+      tolerance = max((testand$value.acc + target$value.acc) * 2,
+        10 * .Machine$double.eps)
+    ))
+  results <- c(results, thisresult)
+  saveRDS(results, savefile)
+  if(!isTRUE(thisresult[[1]])){
+    print(thisresult)
+    allOK <- FALSE
+    print(FALSE)
+    break
+  }
 }
 print(allOK)
 
@@ -281,16 +283,16 @@ message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
 thisresult <- tc(nm, {
-    K <- learn(
+  K <- learn(
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
     ## only used to reduce computation time for this example
     nsamples = 30, nchains = 3,
     startupMCiterations = 10, maxMCiterations = 10,
     minESS = 0, initES = 0, verbose = FALSE, parallel = TRUE
-    )
-    is.list(K)
-    }
+  )
+  is.list(K)
+}
 )
 results <- c(results, thisresult)
 saveRDS(results, savefile)
@@ -305,16 +307,16 @@ cl <- parallel::makeCluster(6)
 dataset <- data.frame(V = rnorm(n = 3))
 metadata <- data.frame(name = 'V', type = 'continuous')
 thisresult <- tc(nm, {
-    K <- learn(
+  K <- learn(
     data = dataset, metadata = metadata,
     ## the following parameters are unrealistic
     ## only used to reduce computation time for this example
     nsamples = 30, nchains = 3,
     startupMCiterations = 10, maxMCiterations = 10,
     minESS = 0, initES = 0, verbose = FALSE, parallel = cl
-    )
-    is.list(K)
-    }
+  )
+  is.list(K)
+}
 )
 results <- c(results, thisresult)
 saveRDS(results, savefile)

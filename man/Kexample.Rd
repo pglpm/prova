@@ -22,7 +22,7 @@ An example "K" (more precisely "prova_K") object obtained by means of the \code{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
 }\if{html}{\out{</div>}}
 
-It is a list that essentially contains posterior hyperparameters for drawing statistical inferences about the variates \code{species} and \code{bill_len}.
+It is a list that essentially contains posterior hyperparameters for drawing statistical inferences about the variates \code{species} and \code{bill_len}. See \code{learn()} for a more detailed description of its arguments.
 
 \strong{Note} that the \code{\link[=learn]{learn()}} function that produced \code{Kexample} was called with the option to create only a limited number (225) of Monte Carlo samples, in order to reduce its memory size. Thus the numerical error associated with the Monte Carlo approximation is relatively in inferences drawn from the posterior hyperparameters saved in \code{Kexample}. It is only meant to be used for illustration purposes of the package's capabilities.
 }
