@@ -25,7 +25,7 @@
 #' @param minMCiterations Integer, default 0: do at least this many Monte Carlo iterations per chain.
 #' @param maxMCiterations Integer, default 900000: do at most this many Monte Carlo iterations per chain. Data is saved to disk during computation, so the user should increase or decrease this number according to disk capacity and complexity of the data.
 #' @param maxhours Numeric, default `Inf`: stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments `startupMCiterations` and `minMCiterations`.
-#' @param ncheckpoints Integer or `NULL`, default 12: number of datapoints (per chain) to use for checking when the Monte Carlo computation should end. If `NULL`, this is equal to number of variates + 2. If `Inf`, use all datapoints.
+#' @param ncheckpoints Integer or `NULL`: number of datapoints (per chain) to be used for Monte Carlo checks and ending. If `NULL`, this is equal to the maximum between 60 and number of variates plus 2, or all datapoints if they are less than this number. If `Inf`, use all datapoints.
 #' @param maxrelMCSE Numeric positive, default 0.04: desired maximal *relative Monte Carlo Standard Error* of calculated probabilities per chain (after "burn-in" samples have been discarded). If missing, then argument `minESS` is used; if `minESS` is also missing, then the default value is used. `maxrelMCSE` is related to `minESS` by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS}}}.
 ## typical values: 0.05, 0.0471405, 0.04, 0.0316228, 0.02
 ## typical values:  400,       450,  625,      1000, 2500
@@ -197,7 +197,7 @@ learn <- function(
   minMCiterations = 0,
   maxMCiterations = 900000,
   maxhours = +Inf,
-  ncheckpoints = 60,
+  ncheckpoints = NULL,
   maxrelMCSE = 0.04, # 0.05, 0.0471405, 0.04, 0.0316228, 0.02
   minESS = 625,      #  400,       450,  625,      1000, 2500
   initES = 8,
@@ -728,7 +728,8 @@ learn <- function(
   parallel::clusterSetRNGStream(cl = cl, currentseed)
 #### number of checkpoints for Monte Carlo stopping rule
   if(is.null(ncheckpoints)) {
-    ncheckpoints <- nrow(auxmetadata) + 1
+    ## comparison with how many datapoints are really available is done later
+    ncheckpoints <- max(60, nrow(auxmetadata) + 2)
   }
   ncheckpoints <- round(ncheckpoints)
   if (ncheckpoints < 1) {
