@@ -197,7 +197,7 @@ learn <- function(
   minMCiterations = 0,
   maxMCiterations = 900000,
   maxhours = +Inf,
-  ncheckpoints = 12,
+  ncheckpoints = 60,
   maxrelMCSE = 0.04, # 0.05, 0.0471405, 0.04, 0.0316228, 0.02
   minESS = 625,      #  400,       450,  625,      1000, 2500
   initES = 8,
