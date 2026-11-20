@@ -1,0 +1,54 @@
+
+Saving output in directory
+penguin_inference_60-V8_D60_S3600_261119T231209
+
+Prova v3.0.1.
+Registered socket cluster with 4 nodes on host ‘localhost’.
+Learning from 60 datapoints, 8 variates.
+Starting Monte Carlo sampling of 3600 samples by 8 chains
+in a space of 1023 (effectively 16706) dimensions.
+Using 4 nodes: 450 samples per chain, max 2 chains per node.
+Requested:   ESS 625   rel.MCSE 0.04.
+With burn-in:   ESS 633   rel.MCSE 0.0397.
+Node logs are being saved in individual files.
+C-compiling samplers appropriate to the variates (Nimble v1.4.3)
+this can take tens of minutes. Please wait...
+Compiled node 1. Number of samplers: 1328.             
+Estimated end times, updated 2026-11-19 23:13:
+Node 1: estimating...
+Node 2: estimating...
+Node 3: estimating...
+Node 4: estimating...
+[5AEstimated end times, updated 2026-11-19 23:14:[2BNode 2: 2026-11-19 23:55[3B[5AEstimated end times, updated 2026-11-19 23:14:[1BNode 1: 2026-11-19 23:37[4B[5AEstimated end times, updated 2026-11-19 23:15:[4BNode 4: 2026-11-19 23:29[1B[5AEstimated end times, updated 2026-11-19 23:15:[3BNode 3: 2026-11-19 23:42[2B[5AEstimated end times, updated 2026-11-19 23:15:[2BNode 2: 2026-11-19 23:48[3B[5AEstimated end times, updated 2026-11-19 23:15:[1BNode 1: 2026-11-19 23:25[4B[5AEstimated end times, updated 2026-11-19 23:15:[4BNode 4: 2026-11-19 23:22[1B[5AEstimated end times, updated 2026-11-19 23:16:[2BNode 2: 2026-11-19 23:38[3B[5AEstimated end times, updated 2026-11-19 23:16:[1BNode 1: 2026-11-19 23:25[4B[5AEstimated end times, updated 2026-11-19 23:16:[3BNode 3: 2026-11-19 23:25[2B[5AEstimated end times, updated 2026-11-19 23:16:[1BNode 1: 2026-11-19 23:25[4B[5AEstimated end times, updated 2026-11-19 23:16:[4BNode 4: 2026-11-19 23:23[1B[5AEstimated end times, updated 2026-11-19 23:16:[1BNode 1: 2026-11-19 23:26[4B[5AEstimated end times, updated 2026-11-19 23:16:[2BNode 2: 2026-11-19 23:38[3B[5AEstimated end times, updated 2026-11-19 23:17:[1BNode 1: 2026-11-19 23:26[4B[5AEstimated end times, updated 2026-11-19 23:17:[4BNode 4: 2026-11-19 23:23[1B[5AEstimated end times, updated 2026-11-19 23:17:[2BNode 2: 2026-11-19 23:33[3B[5AEstimated end times, updated 2026-11-19 23:17:[1BNode 1: 2026-11-19 23:27[4B[5AEstimated end times, updated 2026-11-19 23:17:[3BNode 3: 2026-11-19 23:27[2B[5AEstimated end times, updated 2026-11-19 23:18:[4BNode 4: 2026-11-19 23:23[1B[5AEstimated end times, updated 2026-11-19 23:18:[4BNode 4: finished.        [1B[5AEstimated end times, updated 2026-11-19 23:18:[2BNode 2: 2026-11-19 23:30[3B[5AEstimated end times, updated 2026-11-19 23:18:[1BNode 1: 2026-11-19 23:24[4B[5AEstimated end times, updated 2026-11-19 23:18:[3BNode 3: 2026-11-19 23:25[2B[5AEstimated end times, updated 2026-11-19 23:18:[1BNode 1: 2026-11-19 23:25[4B[5AEstimated end times, updated 2026-11-19 23:19:[3BNode 3: 2026-11-19 23:25[2B[5AEstimated end times, updated 2026-11-19 23:19:[2BNode 2: 2026-11-19 23:25[3B[5AEstimated end times, updated 2026-11-19 23:19:[2BNode 2: 2026-11-19 23:25[3B[5AEstimated end times, updated 2026-11-19 23:19:[3BNode 3: 2026-11-19 23:25[2B[5AEstimated end times, updated 2026-11-19 23:19:[3BNode 3: finished.        [2B[5AEstimated end times, updated 2026-11-19 23:19:[2BNode 2: 2026-11-19 23:25[3B[5AEstimated end times, updated 2026-11-19 23:19:[2BNode 2: finished.        [3B[5AEstimated end times, updated 2026-11-19 23:19:[1BNode 1: 2026-11-19 23:25[4B[5AEstimated end times, updated 2026-11-19 23:19:[1BNode 1: finished.        [4B
+Finished Monte Carlo sampling.
+Highest number of Monte Carlo iterations across chains: 21600.
+Highest number of used mixture components: 6.
+
+Checking test data
+(#1 #2 #3 #4 #5 #6 #7 #8 #9 #10 #11 #12 #13 #14 #15 #16 #17 #18 #19 #20 #21 #22 #23 #24 #25 #26 #27 #28 #29 #30 #31 #32 #33 #34 #35 #36 #37 #38 #39 #40 #41 #42 #43 #44 #45 #46 #47 #48 #49 #50 #51 #52 #53 #54 #55 #56 #57 #58 #59 #60):
+max abs. quantile error: 0.0127 to 0.315
+quantile width: 0.393 to 5.57
+max rel. quantile error: 0.0181 to 0.0565
+min ESS from rel. qt. error: 314 to 3050
+MCSE: 0.00227 to 0.0409
+rel. MCSE: 0.0132 to 0.0226
+quantl-rel. MCSE: 0.0041 to 0.00756
+ESS: 1950 to 5760
+needed thinning: 1.18 to 11.5
+log-average: -22.7 to -0.907
+
+Plotting final Monte Carlo traces and marginal samples...
+
+Total computation time: 8.5 mins
+Average preparation & finalization time: 2.9 mins.
+Average Monte Carlo time per chain: 2.6 mins.
+Max total memory used: approx 3100MB.
+Max memory used per node: approx 790MB.
+Removing temporary output files.
+Finished.
+
+***********************************************
+Output saved in directory
+penguin_inference_60-V8_D60_S3600_261119T231209
+***********************************************
+
