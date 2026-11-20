@@ -108,7 +108,7 @@ prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'), K = K)
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-# 0.003103 0.000056 0.000413 0.001247 0.004181  0.00824
+# 0.003009 0.000054 0.000405 0.001180 0.004037  0.00802
 ```
 
 \
@@ -126,12 +126,12 @@ Let's first generate 5 samples from the estimated whole population of penguins, 
 
 ``` r
 rPr(n = 5, Ynames = c('island', 'species'), K = K)
-#        island   species
-# 644_1  Biscoe    Gentoo
-# 996_1   Dream Chinstrap
-# 1228_1 Biscoe    Gentoo
-# 2230_1  Dream Chinstrap
-# 3083_1  Dream    Adelie
+#           island   species
+# 644_1     Biscoe    Gentoo
+# 996_1     Biscoe    Gentoo
+# 1228_1     Dream Chinstrap
+# 2230_1     Dream Chinstrap
+# 3083_1 Torgersen    Adelie
 ```
 
 This could have also be entered as `rPr(5, c('island', 'species'), NA, K)`, where `NA` stands for the `X = ` argument.
@@ -512,7 +512,7 @@ Note that in this case the Pearson correlation between `body_mass` and `bill_len
 
 ``` r
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.56415
+# [1] 0.568218
 ```
 
 which is different from the rough $r$-equivalent 0.67.
@@ -584,15 +584,15 @@ It is interesting to contrast this result with values of the Pearson correlation
 ``` r
 ## Pearson r for Adelie subpopulation:
 cor(samplesAdelie$body_mass, samplesAdelie$bill_len, method = 'pearson')
-# [1] 0.497042
+# [1] 0.447427
 
 ## Pearson r for Chinstrap subpopulation:
 cor(samplesChinstrap$body_mass, samplesChinstrap$bill_len, method = 'pearson')
-# [1] 0.337984
+# [1] 0.300739
 
 ## Pearson r for Gentoo subpopulation:
 cor(samplesGentoo$body_mass, samplesGentoo$bill_len, method = 'pearson')
-# [1] 0.504752
+# [1] 0.546061
 ```
 
 The Pearson correlation yields the same the association *ranking* as the mutual information does (first Gentoo, then Adélie, then Chinstrap), but it yields the association for the Adélie subpopulation to be closer to the Gentoo one than to the Chinstrap one. The mutual information yields the opposite.

@@ -332,7 +332,7 @@ K10 <- learn(
 ## Saving output in directory
 ## penguin_inference_10-V8_D10_S3600_yymmddTHHMMSS
 ## 
-## Prova v3.0.1.
+## Prova v3.0.2.
 ## Registered socket cluster with 4 nodes on host ‘localhost’.
 ## Learning from 10 datapoints, 8 variates.
 ## Starting Monte Carlo sampling of 3600 samples by 8 chains
@@ -344,7 +344,7 @@ K10 <- learn(
 ## C-compiling samplers appropriate to the variates (Nimble v1.4.3)
 ## this can take tens of minutes. Please wait...
 ## Compiled node 1. Number of samplers: 1078.             
-## Estimated end times, updated 2026-11-17 15:00:
+## Estimated end times, updated yyyy-mm-dd HH:MM:
 ## Node 1: finished.
 ## Node 2: finished.
 ## Node 3: finished.
@@ -368,9 +368,9 @@ K10 <- learn(
 ## 
 ## Plotting final Monte Carlo traces and marginal samples...
 ## 
-## Total computation time: 9.5 mins
-## Average preparation & finalization time: 1.8 mins.
-## Average Monte Carlo time per chain: 2.5 mins.
+## Total computation time: 9.3 mins
+## Average preparation & finalization time: 1.9 mins.
+## Average Monte Carlo time per chain: 2.9 mins.
 ## Max total memory used: approx 3100MB.
 ## Max memory used per node: approx 820MB.
 ## Removing temporary output files.
@@ -453,7 +453,7 @@ The three estimated frequencies are:
 
 - Adélie: 0.29
 - Chinstrap: 0.31
-- Gentoo: 0.40
+- Gentoo: 0.39
 
 and can be read from the `value` element of the `Fspecies10` object, either directly or by using the `print()` function, which by default a number of significant digits corresponding to the Monte Carlo numerical accuracy:
 
@@ -462,9 +462,9 @@ and can be read from the `value` element of the `Fspecies10` object, either dire
 Fspecies10$value
 #            
 # species             
-#   Adelie    0.294738
-#   Chinstrap 0.307734
-#   Gentoo    0.397528
+#   Adelie    0.294233
+#   Chinstrap 0.311143
+#   Gentoo    0.394624
 
 ## or
 print(Fspecies10, 'value')
@@ -473,7 +473,7 @@ print(Fspecies10, 'value')
 # species         
 #   Adelie    0.29
 #   Chinstrap 0.31
-#   Gentoo    0.40
+#   Gentoo    0.39
 ```
 
 These frequency estimates have also another important meaning: they are the *probabilities for the species of the **next** penguin we'll observe*. More generally, they are the probabilities for the next observation. In the present context they are maybe not so relevant -- unless you're placing bets on which data will arrive next with your colleagues -- but in other inference contexts they may be very important. In a clinical setting, for example, where we try to infer some condition about the next patient, these probabilities are used for clinical decision-making; see the textbooks by Sox & al. and by Hunink & al., and the paper by Lindley & Novick in the [references]{#referencesmedical}.
@@ -488,9 +488,9 @@ In Bayesian theory, a compact way of expressing the uncertainty in a quantity is
 
 The `Pr()` function by default calculates two credibility intervals for each frequency estimate: a 50% one, and an 89% one (why? see [references]{#referencesbayes} for an explanation). In our present inference, the 50%-credibility intervals are shown in the plot above as the darker grey band, and the 89%-credibility intervals as the lighter grey band; these latter intervals contain the 50% ones.
 
-For instance, the plot indicates that there's a 50% probability that the relative frequency of all `Adelie` penguins is roughly between 0.21 and 0.37; and an 89% probability that their relative frequency is roughly between 0.11 and 0.51.
+For instance, the plot indicates that there's a 50% probability that the relative frequency of all `Adelie` penguins is roughly between 0.20 and 0.37; and an 89% probability that their relative frequency is roughly between 0.12 and 0.51.
 
-For the species `Gentoo` there's a 50% probability that its relative frequency is roughly between 0.30 and 0.49; and an 89% probability that their relative frequency is roughly between 0.20 and 0.62.
+For the species `Gentoo` there's a 50% probability that its relative frequency is roughly between 0.30 and 0.49; and an 89% probability that their relative frequency is roughly between 0.19 and 0.61.
 
 A different way of visualizing the uncertainty about the long-run frequency distribution is by displaying an ensemble of *probable alternatives* of the distribution. This visualization can be obtained with the argument `spread = 'samples'` in the `plot()` function. Let's compare the two visualizations, by quantile bands and by ensemble:
 
@@ -538,9 +538,9 @@ The credibility intervals are calculated from the probability distribution above
 Fspecies10$quantiles[, , c('5.5%', '94.5%')]
 #            Q
 # species         5.5%    94.5%
-#   Adelie    0.113392 0.507788
-#   Chinstrap 0.125314 0.519937
-#   Gentoo    0.195601 0.624599
+#   Adelie    0.121977 0.508534
+#   Chinstrap 0.127577 0.523494
+#   Gentoo    0.189761 0.611708
 ```
 
 or we can use the `print()` function to display values and quantiles together:
@@ -550,9 +550,9 @@ or we can use the `print()` function to display values and quantiles together:
 print(Fspecies10)
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   Adelie    0.2947 0.0020 0.1134 0.2055 0.3743 0.5078
-#   Chinstrap 0.3077 0.0020 0.1253 0.2154 0.3916 0.5199
-#   Gentoo    0.3975 0.0024 0.1956 0.2989 0.4879 0.6246
+#   Adelie    0.2942 0.0018 0.1220 0.2044 0.3687 0.5085
+#   Chinstrap 0.3111 0.0021 0.1276 0.2171 0.3952 0.5235
+#   Gentoo    0.3946 0.0024 0.1898 0.2982 0.4880 0.6117
 ```
 
 <!-- As the name tells, this element actually report the *quantiles* of the probability. For example, look at the `= 25%` output: among other things it says `Adelie 0.227634`. This means that there's a 25% probability that the frequency of Adélie penguins is below $0.227634$, and thus a 75% probability that it's above $0.227634$.
@@ -568,13 +568,13 @@ A summary answer could be as follows:
 > From a sample of 10 penguins, the inference about the relative frequencies of the three species in the full population is as follows:
 > 
 > Adélie
-> : rel. frequency between 0.11 and 0.51, with 89% probability.
+> : rel. frequency between 0.12 and 0.51, with 89% probability.
 > 
 > Chinstrap
 > : rel. frequency between 0.13 and 0.52, with 89% probability.
 > 
 > Gentoo
-> : rel. frequency between 0.20 and 0.62, with 89% probability.
+> : rel. frequency between 0.19 and 0.61, with 89% probability.
 
 But we can also give a fuller answer by displaying the probability distributions for all three frequencies:
 
@@ -614,12 +614,12 @@ Fspeciessex10 <- Pr(Y = Y2, K = K10)
 print(Fspeciessex10)
 #                   probability
 # species,sex        value  +/-    Q5.5%   Q25%    Q75%   Q94.5%
-#   Adelie,female    0.1646 0.0014 0.0488  0.0996  0.2142 0.3303
-#   Chinstrap,female 0.1330 0.0014 0.03576 0.0758  0.1761 0.2755
-#   Gentoo,female    0.2913 0.0021 0.1210  0.2008  0.3670 0.5059
-#   Adelie,male      0.1301 0.0013 0.0328  0.07215 0.1758 0.2700
-#   Chinstrap,male   0.1748 0.0014 0.0561  0.1056  0.2270 0.3422
-#   Gentoo,male      0.1063 0.0012 0.02241 0.0538  0.1410 0.2398
+#   Adelie,female    0.1655 0.0015 0.0527  0.0971  0.2154 0.3324
+#   Chinstrap,female 0.1353 0.0014 0.0375  0.0773  0.1789 0.2749
+#   Gentoo,female    0.2860 0.0021 0.1150  0.1959  0.3611 0.4988
+#   Adelie,male      0.1288 0.0011 0.03484 0.0732  0.1694 0.2660
+#   Chinstrap,male   0.1759 0.0013 0.0554  0.1073  0.2259 0.3477
+#   Gentoo,male      0.1086 0.0012 0.0212  0.05400 0.1471 0.2479
 ```
 
 Now let's continue with our simpler plan.
@@ -668,17 +668,17 @@ print(Fspecies10I)
 # 
 #            probability
 # species     value  +/-    Q5.5%   Q25%   Q75%   Q94.5%
-#   Adelie    0.1442 0.0022 0.01409 0.0527 0.2016 0.3787
-#   Chinstrap 0.1388 0.0023 0.01329 0.0501 0.1968 0.3597
-#   Gentoo    0.7170 0.0035 0.4133  0.6068 0.8496 0.9435
+#   Adelie    0.1457 0.0019 0.01516 0.0546 0.2043 0.3820
+#   Chinstrap 0.1414 0.0022 0.01300 0.0493 0.1994 0.3742
+#   Gentoo    0.7128 0.0030 0.3995  0.6007 0.8440 0.9393
 # 
 # , , |island = Dream
 # 
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   Adelie    0.3555 0.0034 0.1015 0.2219 0.4783 0.6543
-#   Chinstrap 0.4753 0.0032 0.1914 0.3354 0.6100 0.7744
-#   Gentoo    0.1692 0.0025 0.0194 0.0665 0.2409 0.4290
+#   Adelie    0.3542 0.0025 0.1026 0.2263 0.4670 0.6425
+#   Chinstrap 0.4821 0.0027 0.2005 0.3477 0.6113 0.7782
+#   Gentoo    0.1637 0.0021 0.0189 0.0647 0.2278 0.4173
 ```
 
 According to these estimates, on Biscoe there should be a predominance of Gentoo penguins, with lower, roughly equal numbers of Adélie and Chinstrap. On Dream, on the other hand, Gentoo should be the minority, and Chinstrap should be the majority. But how sure are we about these estimates? We see that the 89%-credibility intervals of each frequency are quite wide. Also in this case we can get a better picture by displaying the probability distribution of each frequency, by means of the `hist()` function, and see how much they overlap.
@@ -717,7 +717,7 @@ hist(subset(Fspecies10I, subsetX = (island == 'Dream')),
 </div>
 \
 
-Among other things we see here a larger difference in the estimated frequencies of Adélie, around 0.36, and Chinstrap, around 0.48. Still, the probability distributions are wide.
+Among other things we see here a larger difference in the estimated frequencies of Adélie, around 0.35, and Chinstrap, around 0.48. Still, the probability distributions are wide.
 
 **For later, keep in mind the following question: *On Dream, are the frequencies of Adélie and Chinstrap different?*** The present estimates show a difference, but with large uncertainty. Will more sampling data confirm "difference"?
 
@@ -735,17 +735,17 @@ print(Fspecies10I)
 # 
 #            probability
 # species     value  +/-    Q5.5%   Q25%   Q75%   Q94.5%
-#   Adelie    0.1442 0.0022 0.01409 0.0527 0.2016 0.3787
-#   Chinstrap 0.1388 0.0023 0.01329 0.0501 0.1968 0.3597
-#   Gentoo    0.7170 0.0035 0.4133  0.6068 0.8496 0.9435
+#   Adelie    0.1457 0.0019 0.01516 0.0546 0.2043 0.3820
+#   Chinstrap 0.1414 0.0022 0.01300 0.0493 0.1994 0.3742
+#   Gentoo    0.7128 0.0030 0.3995  0.6007 0.8440 0.9393
 # 
 # , , |island = Dream
 # 
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   Adelie    0.3555 0.0034 0.1015 0.2219 0.4783 0.6543
-#   Chinstrap 0.4753 0.0032 0.1914 0.3354 0.6100 0.7744
-#   Gentoo    0.1692 0.0025 0.0194 0.0665 0.2409 0.4290
+#   Adelie    0.3542 0.0025 0.1026 0.2263 0.4670 0.6425
+#   Chinstrap 0.4821 0.0027 0.2005 0.3477 0.6113 0.7782
+#   Gentoo    0.1637 0.0021 0.0189 0.0647 0.2278 0.4173
 ```
 
 ## Differences from "null-hypothesis testing" and *p*-value methods {#nht}
@@ -782,13 +782,13 @@ print(Fspecies10IS, 'value')
 # $value
 #            |island,sex
 # species     Biscoe,female Dream,female Torgersen,female Biscoe,male
-#   Adelie             0.13         0.40             0.48        0.20
-#   Chinstrap          0.11         0.40             0.27        0.22
-#   Gentoo             0.76         0.21             0.25        0.57
+#   Adelie             0.13          0.4             0.47        0.21
+#   Chinstrap          0.12          0.4             0.28        0.22
+#   Gentoo             0.75          0.2             0.25        0.57
 #            |island,sex
 # species     Dream,male Torgersen,male
-#   Adelie          0.32           0.44
-#   Chinstrap       0.54           0.39
+#   Adelie          0.31           0.43
+#   Chinstrap       0.55           0.39
 #   Gentoo          0.14           0.18
 ```
 
@@ -872,11 +872,11 @@ print(imputeddata)
 # 
 #         probability
 # sex      value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   female 0.6821 0.0045 0.254  0.5224 0.8767 0.9752
-#   male   0.3179 0.0045 0.0248 0.1233 0.4776 0.746
+#   female 0.6892 0.0039 0.2658 0.5372 0.8778 0.9763
+#   male   0.3108 0.0039 0.0237 0.1222 0.4628 0.7342
 ```
 
-We see that penguin #1 might have been female with probability 0.68, although further data might shift that probability somewhere between 0.25 and 0.98.
+We see that penguin #1 might have been female with probability 0.69, although further data might shift that probability somewhere between 0.27 and 0.98.
 
 Now let's take datapoint #6 and infer the value of `bill_len`. We can use the function `vrtgrid()` to generate a grid of realistic values based on the data, and then see the probability distribution over these values:
 
@@ -1059,9 +1059,9 @@ Our updated quantitative answer to the question "*What's the overall statistical
 print(Fspecies60)
 #            probability
 # species     value   +/-     Q5.5%  Q25%    Q75%   Q94.5%
-#   Adelie    0.3938  0.0011  0.2980 0.3512  0.4344 0.4961
-#   Chinstrap 0.21163 0.00078 0.1351 0.17493 0.2449 0.2997
-#   Gentoo    0.39456 0.00094 0.2977 0.3511  0.4349 0.4942
+#   Adelie    0.3948  0.0010  0.2984 0.3528  0.4350 0.4975
+#   Chinstrap 0.21034 0.00087 0.1322 0.17423 0.2441 0.2934
+#   Gentoo    0.3949  0.0011  0.2957 0.3536  0.4361 0.4952
 ```
 
 > From a sample of 10 penguins, the inference about the relative frequencies of the three species in the full population is as follows:
@@ -1070,10 +1070,10 @@ print(Fspecies60)
 > : rel. frequency between 0.30 and 0.50, with 89% probability.
 > 
 > Chinstrap
-> : rel. frequency between 0.14 and 0.30, with 89% probability.
+> : rel. frequency between 0.13 and 0.29, with 89% probability.
 > 
 > Gentoo
-> : rel. frequency between 0.30 and 0.49, with 89% probability.
+> : rel. frequency between 0.30 and 0.50, with 89% probability.
 
 
 
@@ -1155,14 +1155,14 @@ There's clearly a high probability that `Gentoo` frequency is larger than `Chins
 
 ``` r
 median(freqdiff)
-# [1] 0.703207
+# [1] 0.703099
 
 quantile(freqdiff, c(0.055, 0.945))
 #     5.5%    94.5% 
-# 0.546721 0.831743
+# 0.542180 0.831901
 ```
 
-> From a sample of 60 penguins, the difference between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of 0.7, and it is between 0.55 and 0.83 with 89% probability.
+> From a sample of 60 penguins, the difference between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of 0.7, and it is between 0.54 and 0.83 with 89% probability.
 
 
 Maybe you prefer a ratio between the two frequencies:
@@ -1173,14 +1173,14 @@ freqratio <- Fspecies60I$samples['Gentoo', 'Biscoe',] /
     Fspecies60I$samples['Chinstrap', 'Biscoe',]
 
 median(freqratio)
-# [1] 21.1094
+# [1] 20.9417
 
 quantile(freqratio, c(0.055, 0.945))
-#     5.5%    94.5% 
-#  6.74092 97.68391
+#      5.5%     94.5% 
+#   6.78397 102.32113
 ```
 
-> From a sample of 60 penguins, the ratio between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of 21, and it is between 6.74 and 97.68 with 89% probability.
+> From a sample of 60 penguins, the ratio between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of 21, and it is between 6.78 and 102.32 with 89% probability.
 
 It is remarkable that with only 60 penguins -- and not all of them from Biscoe island -- we can conclude with a high probability (95%) that there are at least 7 times more Gentoo penguins than Chinstrap penguins on Biscoe island! Note an important consequence from the point of view of hypothesis testing:
 
@@ -1213,7 +1213,7 @@ Kall <- learn(
 ## [Output omitted]
 ```
 
-The calculation with 344 datasamples took around 7 GB and 30 minutes on 8_cores.
+The calculation with 344 datasamples took around 7 GB and 1 hour on 8_cores.
 
 The results of this final inference are stored in the compressed file `K.rds` within the new output directory. The object produced by the computation above can be downloaded as the file [`Kall.rds`](https://github.com/pglpm/prova/raw/main/vignettes/Kall.rds). Once you have downloaded it in your working directory, invoke
 
@@ -1257,16 +1257,16 @@ The last plot is visually the most complete answer we can give to our research q
 print(Fspeciesall)
 #            probability
 # species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
-#   Adelie    0.44308 0.00032 0.4014  0.42545 0.46085 0.48626
-#   Chinstrap 0.19933 0.00029 0.16638 0.18469 0.21347 0.23389
-#   Gentoo    0.35759 0.00036 0.31631 0.34008 0.37492 0.39872
+#   Adelie    0.44179 0.00041 0.39938 0.42400 0.45953 0.48467
+#   Chinstrap 0.19911 0.00030 0.16682 0.18432 0.21337 0.23374
+#   Gentoo    0.35910 0.00036 0.31957 0.34227 0.37582 0.39940
 ```
 
 > From a sample of 344 penguins [add a more thorough specification of population and sampling procedure here], the relative frequencies of the three species in the full population are estimated as follows (obviously the three estimates and uncertainties are not independent, because the frequencies must add up to 1):
 > 
 > Adélie
 > : estimate 0.44
->  <br>true rel. frequency between 0.40 and 0.49 with 89% probability.
+>  <br>true rel. frequency between 0.40 and 0.48 with 89% probability.
 > 
 > Chinstrap
 > : estimate 0.20
@@ -1321,9 +1321,9 @@ print(Fanalysis)
 # 
 #            probability
 # species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
-#   Adelie    0.26848 0.00048 0.21628 0.24506 0.29078 0.32412
-#   Chinstrap 0.01189 0.00016 0.00271 0.00622 0.01552 0.02612
-#   Gentoo    0.71963 0.00054 0.6632  0.69682 0.74309 0.77266
+#   Adelie    0.26686 0.00054 0.2127  0.24449 0.28960 0.31989
+#   Chinstrap 0.01187 0.00013 0.00277 0.00625 0.01581 0.02600
+#   Gentoo    0.72126 0.00053 0.66723 0.69771 0.74397 0.7752
 ```
 
 Conclusion:
@@ -1332,7 +1332,7 @@ Conclusion:
 > 
 > Adélie
 > : estimate 0.27
->  <br>true rel. frequency between 0.22 and 0.32 with 89% probability.
+>  <br>true rel. frequency between 0.21 and 0.32 with 89% probability.
 > 
 > Chinstrap
 > : estimate 0.01
@@ -1340,7 +1340,7 @@ Conclusion:
 > 
 > Gentoo
 > : estimate 0.72
->  <br>true rel. frequency between 0.66 and 0.77 with 89% probability.
+>  <br>true rel. frequency between 0.67 and 0.78 with 89% probability.
 
 Note how our [previous estimates from 60 samples](#surprise) were already quite on the spot.
 
@@ -1376,10 +1376,10 @@ print(Fanalysis)
 # , , |species = Adelie
 # 
 #            probability
-# island      value   +/-     Q5.5%   Q25%    Q75%    Q94.5%
-#   Biscoe    0.29304 0.00061 0.2369  0.26853 0.31770 0.3525
-#   Dream     0.36861 0.00053 0.30848 0.34208 0.39469 0.4301
-#   Torgersen 0.33836 0.00064 0.2797  0.31324 0.36361 0.4011
+# island      value   +/-     Q5.5%  Q25%    Q75%    Q94.5%
+#   Biscoe    0.29300 0.00068 0.2346 0.26747 0.31761 0.3548
+#   Dream     0.36896 0.00061 0.3097 0.34302 0.39466 0.4302
+#   Torgersen 0.33804 0.00064 0.2785 0.31197 0.36259 0.4000
 ```
 
 Conclusions:
@@ -1388,7 +1388,7 @@ Conclusions:
 > 
 > Biscoe
 > : estimate 0.29
->  <br>true rel. frequency between 0.24 and 0.35 with 89% probability.
+>  <br>true rel. frequency between 0.23 and 0.35 with 89% probability.
 > 
 > Dream
 > : estimate 0.37
