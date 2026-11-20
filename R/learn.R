@@ -52,7 +52,7 @@
 #' The computation is done via Markov-chain Monte Carlo, using the package **Nimble**. "Convergence" of the Monte Carlo computation is automatically assessed with methods similar to those described in Vehtari & al. (2021), Kwon & al. (2025), Flegal & al (2008) <doi:10.1214/08-STS257>, Jones & al. (2006): <doi:10.1198/016214506000000492>; see [technical manual](https://github.com/pglpm/prova/raw/main/development/manual/pglpm2024-bayes_nonparam.pdf) for details. The default values for convergence require that all of the following three conditions be fulilled:
 #'
 #' - The computation's numerical error (Monte-Carlo Standard Error) for the posterior probability must be smaller than 4.7% of the standard deviation of the posterior's variability.
-#'  - The computation's numerical error for the 0.055- and 0.945-percentiles of the posterior's variability should be smaller than 4.7% of the distance between them.
+#' - The computation's numerical error for the 0.055- and 0.945-percentiles of the posterior's variability should be smaller than 4.7% of the distance between them.
 #'
 #' Typically this requirement leads to final results obtained with the [Pr()] function having at least two significant digits.
 #'
@@ -780,17 +780,7 @@ learn <- function(
           row.names = seq_len(ncheckpoints),
           col.names = auxmetadata$name)
       )
-      ## ## original alternative way. Delete soon
-      ## testdata <- data.frame(1:3)[,-1]
-      ## for(xx in seq_len(nrow(auxmetadata))) {
-      ##   xx <- as.list(auxmetadata[xx, ])
-      ##   toadd <- unlist(xx[paste0('mctest', 1:3)])
-      ##   if (xx[['mcmctype']] %in% c('B', 'N', 'O')) {
-      ##     toadd <- unlist(xx[paste0('V', toadd)])
-      ##   }
-      ##   testdata <- cbind(testdata, toadd)
-      ## }
-      ## colnames(testdata) <- auxmetadata[['name']]
+
       for(achain in 0:nchains) {
         saveRDS(testdata,
           file = file.path(dirname, paste0('___testdata_', achain, '.rds')))
@@ -803,57 +793,6 @@ learn <- function(
         dimnames = list(NULL, metadata$name))
     )
   }
-
-  ## #### Select and save data for loglikelihood
-  ##   ## Find which datapoints have not all missing entries
-  ##   dataNoNa <- which(apply(data, 1, function(xx) { !all(is.na(xx)) }))
-  ##   ndataNoNa <- length(dataNoNa)
-  ##
-  ##   if (ndataNoNa > 0) {
-  ##     ## if "testdata" is moved into the for-loop,
-  ##     ## then each chain uses a different set of testdata
-  ##     for(achain in seq_len(nchains)) {
-  ##       testdata <- data[sort(sample(dataNoNa, min(ncheckpoints, ndataNoNa))),]
-  ##       saveRDS(testdata,
-  ##               file = file.path(dirname, paste0('___testdata_', achain, '.rds')))
-  ##     }
-  ##   } else {
-  ##       ## no data available: construct one datapoint from the metadata info
-  ##       testdata <- data.table(sapply(seq_len(nrow(auxmetadata)), function(xx) {
-  ##       # consider making this function separate
-  ##       xx <- auxmetadata[xx, ]
-  ##       toadd <- xx[, paste0('mctest', 1:3), with = FALSE]
-  ##       if (xx[['mcmctype']] %in% c('B', 'N', 'O)) {
-  ##         toadd <- xx[1, paste0('V', toadd), with = FALSE]
-  ##       }
-  ##       toadd
-  ##     }))
-  ##     colnames(testdata) <- auxmetadata[['name']]
-  ##     for(achain in seq_len(nchains)) {
-  ##       saveRDS(testdata,
-  ##           file = file.path(dirname, paste0('___testdata_', achain, '.rds')))
-  ##     }
-  ##     rm(testdata)
-  ##     }
-
-
-
-
-##################################################
-#### Define functions
-##################################################
-
-  ## Load auxiliary functions from external files
-  ## source('samplesFDistribution.R')
-  ## source('.plotFsamples.R')
-  ## source('tplotfunctions.R')
-  ## source('.vtransform.R')
-  ## ## These are used within the foreach core loop
-  ## source('proposeburnin.R')
-  ## source('proposethinning.R')
-  ## source('.mcsubset.R')
-
-
 
 #####################################################
 #### Prepare arguments for Nimble model
@@ -872,14 +811,6 @@ learn <- function(
     vnames[[atype]] <- auxmetadata[auxmetadata$mcmctype == atype, 'name']
     vn[[atype]] <- length(vnames[[atype]])
   }
-
-  ## ## REMOVE soon: previous version
-  ## vn <- list() # How many variates of each type
-  ## vnames <- list() # The names for variates of each type
-  ## for (atype in c('R', 'C', 'D', 'L', 'O', 'N', 'B')) {
-  ##   vnames[[atype]] <- auxmetadata[auxmetadata$mcmctype == atype, 'name']
-  ##   vn[[atype]] <- length(vnames[[atype]])
-  ## }
 
 #### CONSTANTS OF NIMBLE MODEL
   ## These constants are available in the Nimble environment
@@ -1108,17 +1039,8 @@ learn <- function(
 #####################################################
 #### BEGINNING OF PARALLEL LOOP OVER CORES
 #####################################################
-  ## Parallel execution over cores
-  ## parallel:clusterExport(cl = cl,
-  ##     varlist = c(
-  ##         'dirname',
-  ##         'dashnameroot',
-  ##         'avoidzeroW',
-  ##         'constants',
-  ##         'initmethod'
-  ##     ),
-  ##     envir = .GlobalEnv)
 
+  ## Parallel execution over cores
   chaininfo <- parallel::parLapply(
     cl = cl,
     X = 1:ncores,
@@ -1215,16 +1137,6 @@ learn <- function(
     }
   }
 
-  ## mcsamples0 <- foreach(chainnumber = 1:nchains,
-  ##         .combine = joinmc, .multicombine = FALSE) %do% {
-  ##             padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'), chainnumber)
-  ##
-  ##             readRDS(file = file.path(dirname,
-  ##                 paste0('___mcsamples', dashnameroot, '--',
-  ##                     padchainnumber, '.rds')
-  ##             ))
-  ##         }
-
   mcsamples <- NULL
   for(chainnumber in seq_len(nchains)){
     padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'),
@@ -1236,24 +1148,6 @@ learn <- function(
       ))
     )
   }
-
-  ## chainnumber <- 1
-  ## padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'), chainnumber)
-  ## mcsamples <- readRDS(file = file.path(dirname,
-  ##             paste0('___mcsamples', dashnameroot, '--',
-  ##                 padchainnumber, '.rds')
-  ## ))
-  ## if(nchains > 1){
-  ##     for(chainnumber in 2:nchains){
-  ##         padchainnumber <- sprintf(paste0('%0', nchar(nchains), 'i'), chainnumber)
-  ##         mcsamples <- joinmc(mcsamples,
-  ##             readRDS(file = file.path(dirname,
-  ##             paste0('___mcsamples', dashnameroot, '--',
-  ##                 padchainnumber, '.rds')
-  ##             ))
-  ##         )
-  ##     }
-  ## }
 
 #### Save all final parameters together with some aux metadata in one file
   K <- c(mcsamples, list(
@@ -1919,28 +1813,6 @@ learn <- function(
           colSums(lpnorm(t(constants$Dlatinit) - ameans), na.rm = TRUE)
         })
       }
-      ## if (vn$L > 0) { #
-      ##     Lmeans <- matrix(rnorm(
-      ##         n = vn$L * constants$ncomponents,
-      ##         mean = constants$Lmean1,
-      ##         sd = sqrt(constants$Lvarm1)
-      ##     ), nrow = vn$L, ncol = constants$ncomponents)
-      ##     ## distances from datapoints
-      ##     distances <- distances + apply(Lmeans, 2, function(ameans){
-      ##         colSums(lpnorm(t(constants$Llatinit) - ameans), na.rm = TRUE)
-      ##     })
-      ## }
-      ## if (vn$B > 0) {
-      ##     Bprobs <- matrix(rbeta(
-      ##         n = vn$B * constants$ncomponents,
-      ##         shape1 = Bshapelo,
-      ##         shape2 = Bshapehi,
-      ##         ), nrow = vn$B, ncol = constants$ncomponents)
-      ##     ## distances from datapoints
-      ##     distances <- distances + apply(Bprobs, 2, function(ameans){
-      ##         colSums(lpnorm(t(datapoints$Bdata) - ameans), na.rm = TRUE)
-      ##     })
-      ## }
 
       ## assign datapoints to component with closest centre
       K <- apply(distances, 1, which.min)
@@ -1988,20 +1860,6 @@ learn <- function(
         ## })^2
         ## Dvars[is.na(Dvars)] <- 1
       }
-      ## if (vn$L > 0) { # continuous open domain
-      ##     Lmeans[, occupied] <- sapply(occupied, function(acomponent){
-      ##         colMeans(constants$Llatinit[which(K == acomponent), , drop = FALSE],
-      ##             na.rm = TRUE)
-      ##     })
-      ##     Lmeans[, -occupied] <- 0
-      ## }
-      ## if (vn$B > 0) {
-      ##     Bprobs[, occupied] <- sapply(occupied, function(acomponent){
-      ##         colMeans(datapoints$Bdata[which(K == acomponent), , drop = FALSE],
-      ##             na.rm = TRUE)
-      ##     })
-      ##     Bprobs[, -occupied] <- 0.5
-      ## }
       ## Alpha <- sample(1:constants$nalpha, 1, prob = constants$probalpha0, replace = TRUE)
       ## W <- c(rep(rempoints, miconstants$npoints), rep(1, constants$ncomponents - miconstants$npoints))
       ## W <- W/sum(W)
@@ -2207,20 +2065,6 @@ learn <- function(
         })
         Dmeans[, -occupied] <- 0
       }
-      ## if (vn$L > 0) { # continuous open domain
-      ##     Lmeans[, occupied] <- sapply(occupied, function(acomponent){
-      ##         colMeans(constants$Llatinit[which(K == acomponent), , drop = FALSE],
-      ##             na.rm = TRUE)
-      ##     })
-      ##     Lmeans[, -occupied] <- 0
-      ## }
-      ## if (vn$B > 0) {
-      ##     Bprobs[, occupied] <- sapply(occupied, function(acomponent){
-      ##         colMeans(datapoints$Bdata[which(K == acomponent), , drop = FALSE],
-      ##             na.rm = TRUE)
-      ##     })
-      ##     Bprobs[, -occupied] <- 0.5
-      ## }
       ## Alpha <- sample(1:constants$nalpha, 1, prob = constants$probalpha0, replace = TRUE)
       ## W <- c(rep(rempoints, miconstants$npoints), rep(1, constants$ncomponents - miconstants$npoints))
       ## W <- W/sum(W)
