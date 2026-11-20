@@ -76,22 +76,22 @@
 <strong>No approximations</strong> such as Laplace’s approximation, variational inference, and similar.</li>
 <li>Any combination of <strong>binary</strong>, <strong>nominal</strong>, <strong>ordinal</strong>, <strong>continuous</strong>, <strong>discrete</strong> data. Continuous data can be bounded, unbounded, <strong>censored</strong>, and rounded.</li>
 <li>
-<strong>Automatic <a href="https://dictionary.apa.org/imputation" class="external-link">imputation</a></strong> of missing data: all sample data are used, even those that lacks some variate values. The imputation is done with a principled method (the marginalization rule of probability theory), rather than ad-hoc procedures.</li>
-<li>Easy and straightforward <strong>subgroup analyses</strong> and <strong>stratified analyses</strong>, for any division of variates, with full statistical details.</li>
+<strong>Automatic <a href="https://dictionary.apa.org/imputation" class="external-link">imputation</a></strong> of missing data: all sample data are used, even those that lack some variate values. The imputation is done with a principled method (the marginalization rule of probability theory), rather than ad-hoc procedures.</li>
+<li>Easy and straightforward <strong>subgroup analyses</strong> and <strong>stratified analyses</strong>, for any partition of variates, with full statistical details.</li>
 <li>
 <strong>No hard-coded distinction between “predictor” and “predictand”/target variates</strong> during learning. Any group of variates can be chosen as predictors, and any other group as targets, <em>on the fly</em> in each application, without need to re-learn from the training data.</li>
 <li>
-<strong>Quantification of <a href="https://dictionary.apa.org/generalizability" class="external-link">generalizability</a></strong> beyond the finite sample size. In other words, quantification of uncertainty of results regarding the whole, unsampled, population.</li>
+<strong>Quantification of <a href="https://dictionary.apa.org/generalizability" class="external-link">generalizability</a></strong> beyond the finite sample size. In other words, quantification of uncertainty of results regarding the whole unsampled population.</li>
 <li>
 <strong>Computation of expected utilities</strong> and more generally straightforward use with <strong>decision theory</strong>, such as <strong>clinical decision-making</strong>. Users can immediately combine the probabilistic results with any measures of utilities, such as <a href="https://dictionary.apa.org/quality-adjusted-life-years" class="external-link">quality-adjusted life years</a>. Uncertainty about long-run expected utilities is also calculated.</li>
 <li>
 <strong>Quantification of associations</strong> between any kinds of variates, without modelling assumptions (gaussianity, linearity, etc.), thanks to the use of <a href="https://electropedia.org/iev/iev.nsf/display?openform&amp;ievref=171-07-26" class="external-link">mutual information</a>.</li>
 <li>
-<strong><a href="https://dictionary.apa.org/base-rate-fallacy" class="external-link">Base-rate</a> correction</strong> for inferences about out-of-population data, by means of Bayes’s theorem.</li>
+<strong><a href="https://dictionary.apa.org/base-rate-fallacy" class="external-link">Base-rate</a> correction</strong> for inferences about out-of-population data, or for inclusion of priors, by means of Bayes’s theorem.</li>
 <li>
 <strong>Automated Markov-chain Monte Carlo</strong> computation. Users unfamiliar with Monte Carlo methods don’t have to worry, because the computations are handled automatically.</li>
 </ul>
-<p>The package essentially performs Bayesian nonparametric inference (also called “density inference” or “inference under exchangeability”), which makes most features above possible.</p>
+<p>The package essentially performs Bayesian nonparametric inference (also called “density inference” or “inference under exchangeability”), which makes most of the features above possible.</p>
 <p><br></p>
 <p>Use examples (see literature below for concrete examples):</p>
 <ul>

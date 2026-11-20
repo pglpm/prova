@@ -28,12 +28,12 @@ These are its main features:
   **continuous**, **discrete** data. Continuous data can be bounded,
   unbounded, **censored**, and rounded.
 - **Automatic [imputation](https://dictionary.apa.org/imputation)** of
-  missing data: all sample data are used, even those that lacks some
+  missing data: all sample data are used, even those that lack some
   variate values. The imputation is done with a principled method (the
   marginalization rule of probability theory), rather than ad-hoc
   procedures.
 - Easy and straightforward **subgroup analyses** and **stratified
-  analyses**, for any division of variates, with full statistical
+  analyses**, for any partition of variates, with full statistical
   details.
 - **No hard-coded distinction between “predictor” and
   “predictand”/target variates** during learning. Any group of variates
@@ -43,7 +43,7 @@ These are its main features:
 - **Quantification of
   [generalizability](https://dictionary.apa.org/generalizability)**
   beyond the finite sample size. In other words, quantification of
-  uncertainty of results regarding the whole, unsampled, population.
+  uncertainty of results regarding the whole unsampled population.
 - **Computation of expected utilities** and more generally
   straightforward use with **decision theory**, such as **clinical
   decision-making**. Users can immediately combine the probabilistic
@@ -55,15 +55,15 @@ These are its main features:
   to the use of [mutual
   information](https://electropedia.org/iev/iev.nsf/display?openform&ievref=171-07-26).
 - **[Base-rate](https://dictionary.apa.org/base-rate-fallacy)
-  correction** for inferences about out-of-population data, by means of
-  Bayes’s theorem.
+  correction** for inferences about out-of-population data, or for
+  inclusion of priors, by means of Bayes’s theorem.
 - **Automated Markov-chain Monte Carlo** computation. Users unfamiliar
   with Monte Carlo methods don’t have to worry, because the computations
   are handled automatically.
 
 The package essentially performs Bayesian nonparametric inference (also
 called “density inference” or “inference under exchangeability”), which
-makes most features above possible.
+makes most of the features above possible.
 
   
 
