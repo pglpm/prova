@@ -1,17 +1,17 @@
 Testing version 3.0.1
-Starting tests 261117T171027
-Quick learn 261117T171027
+Starting tests 261120T104901
+Quick learn 261120T104901
 $`Quick learn`
 [1] TRUE
 
-Full base learn 261117T171045
+Full base learn 261120T104919
 $`Full base learn`
 [1] TRUE
 
-Save Kexample 261117T171215
+Save Kexample 261120T105050
 
 Saving output in directory
-/tmp/RtmpH4KZaK/prova-V2_D344_S225_261117T171215_65612985cf2a
+/tmp/RtmpbUioBH/prova-V2_D344_S225_261120T105050_304343256146
 
 Prova v3.0.1.
 Registered socket cluster with 1 nodes on host ‘localhost’.
@@ -26,31 +26,31 @@ Node logs are being saved in individual files.
 C-compiling samplers appropriate to the variates (Nimble v1.4.3)
 this can take tens of minutes. Please wait...
 Compiled node 1. Number of samplers: 946.             
-Estimated end times, updated 2026-11-17 17:13:
+Estimated end times, updated 2026-11-20 10:52:
 Node 1: estimating...
-[2AEstimated end times, updated 2026-11-17 17:14:[1BNode 1: 2026-11-17 17:22[1B[2AEstimated end times, updated 2026-11-17 17:14:[1BNode 1: 2026-11-17 17:23[1B[2AEstimated end times, updated 2026-11-17 17:15:[1BNode 1: 2026-11-17 17:24[1B[2AEstimated end times, updated 2026-11-17 17:16:[1BNode 1: 2026-11-17 17:23[1B[2AEstimated end times, updated 2026-11-17 17:17:[1BNode 1: 2026-11-17 17:23[1B[2AEstimated end times, updated 2026-11-17 17:17:[1BNode 1: 2026-11-17 17:24[1B[2AEstimated end times, updated 2026-11-17 17:17:[1BNode 1: 2026-11-17 17:24[1B[2AEstimated end times, updated 2026-11-17 17:17:[1BNode 1: finished.        [1B
+[2AEstimated end times, updated 2026-11-20 10:52:[1BNode 1: 2026-11-20 10:57[1B[2AEstimated end times, updated 2026-11-20 10:53:[1BNode 1: 2026-11-20 10:58[1B[2AEstimated end times, updated 2026-11-20 10:53:[1BNode 1: 2026-11-20 10:58[1B[2AEstimated end times, updated 2026-11-20 10:54:[1BNode 1: 2026-11-20 10:59[1B[2AEstimated end times, updated 2026-11-20 10:54:[1BNode 1: 2026-11-20 10:59[1B[2AEstimated end times, updated 2026-11-20 10:54:[1BNode 1: finished.        [1B
 Finished Monte Carlo sampling.
-Highest number of Monte Carlo iterations across chains: 18779.
-Highest number of used mixture components: 6.
+Highest number of Monte Carlo iterations across chains: 9716.
+Highest number of used mixture components: 4.
 
 Checking test data
-(#88 #93 #120 #162 #210 #219 #225 #234 #236 #249 #292 #313):
-max abs. quantile error: 0.013 to 0.13
-quantile width: 0.125 to 0.994
-max rel. quantile error: 0.0663 to 0.165
-min ESS from rel. qt. error: 36.7 to 227
-MCSE: 0.00312 to 0.0288
-rel. MCSE: 0.0664 to 0.104
-quantl-rel. MCSE: 0.0196 to 0.0318
-ESS: 91.9 to 227
-needed thinning: 1.3 to 6.13
-log-average: -6.73 to -5.28
+(#17 #18 #20 #24 #27 #30 #34 #43 #51 #53 #60 #67 #69 #72 #74 #75 #76 #91 #94 #101 #102 #105 #112 #113 #114 #118 #129 #135 #143 #147 #149 #153 #164 #168 #169 #183 #193 #205 #206 #210 #213 #218 #221 #246 #249 #265 #273 #276 #277 #295 #299 #300 #303 #308 #315 #318 #322 #330 #333 #341):
+max abs. quantile error: 0.0137 to 0.188
+quantile width: 0.083 to 1.64
+max rel. quantile error: 0.0559 to 0.165
+min ESS from rel. qt. error: 36.6 to 320
+MCSE: 0.00169 to 0.0532
+rel. MCSE: 0.0494 to 0.104
+quantl-rel. MCSE: 0.0167 to 0.0324
+ESS: 92.7 to 410
+needed thinning: 0.801 to 6.14
+log-average: -8.4 to -5.03
 
 Plotting final Monte Carlo traces and marginal samples...
 
-Total computation time: 5.1 mins
+Total computation time: 3.4 mins
 Average preparation & finalization time: 1.4 mins.
-Average Monte Carlo time per chain: 3.8 mins.
+Average Monte Carlo time per chain: 2 mins.
 Max total memory used: approx 460MB.
 Max memory used per node: approx 460MB.
 Removing temporary output files.
@@ -58,25 +58,25 @@ Finished.
 
 *************************************************************
 Output saved in directory
-/tmp/RtmpH4KZaK/prova-V2_D344_S225_261117T171215_65612985cf2a
+/tmp/RtmpbUioBH/prova-V2_D344_S225_261120T105050_304343256146
 *************************************************************
 
 $`Save Kexample`
 [1] TRUE
 
-Simple Pr 261117T171723
+Simple Pr 261120T105414
 [1] TRUE
-Various Pr 261117T171844
+Various Pr 261120T105535
 [1] TRUE
-Simple MIs 261117T171957
+Simple MIs 261120T105648
 [1] TRUE
-Quick learn autocluster 261117T172245
+Quick learn autocluster 261120T105934
 $`Quick learn autocluster`
 [1] TRUE
 
-Quick learn existing cluster 261117T172305
+Quick learn existing cluster 261120T105954
 $`Quick learn existing cluster`
 [1] TRUE
 
 All test passed: TRUE
-Done 261117T172326
+Done 261120T110015
