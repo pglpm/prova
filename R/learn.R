@@ -198,8 +198,10 @@ learn <- function(
   maxMCiterations = 900000,
   maxhours = +Inf,
   ncheckpoints = NULL,
-  maxrelMCSE = 0.04, # 0.05, 0.0471405, 0.04, 0.0316228, 0.02
-  minESS = 625,      #  400,       450,  625,      1000, 2500
+  maxrelMCSE = 0.04,
+  ## 0.05, 0.0471405, 0.04, 0.3333, 0.0316228, 0.03125, 0.03, 0.025, 0.02, 0.0158114
+  ##  400,       450,  625,    900,      1000,    1024, 1111,  1600, 2500,      4000
+  minESS = 625,
   initES = 8,
   thinning = NULL,
   verbose = TRUE,
@@ -1729,16 +1731,16 @@ learn <- function(
       }
       if (vn$C > 0) { # continuous closed domain
         for (v in 1:Cn) {
+          Clat[d, v] ~ dnorm(mean = Cmean[v, K[d]], var = Cvar[v, K[d]])
           Caux[d, v] ~ dconstraint(Clat[d, v] >= Cleft[d, v] &
                                      Clat[d, v] <= Cright[d, v])
-          Clat[d, v] ~ dnorm(mean = Cmean[v, K[d]], var = Cvar[v, K[d]])
         }
       }
       if (vn$D > 0) { # continuous rounded
         for (v in 1:Dn) {
+          Dlat[d, v] ~ dnorm(mean = Dmean[v, K[d]], var = Dvar[v, K[d]])
           Daux[d, v] ~ dconstraint(Dlat[d, v] >= Dleft[d, v] &
                                      Dlat[d, v] < Dright[d, v])
-          Dlat[d, v] ~ dnorm(mean = Dmean[v, K[d]], var = Dvar[v, K[d]])
         }
       }
       if (vn$O == 1) { # ordinal, one only
