@@ -1,6 +1,6 @@
 library('prova')
 
-K <- 'Kall.rds'
+K <- '~/repos/prova/vignettes/Kall.rds'
 
 options(cl.cores = 12)
 
