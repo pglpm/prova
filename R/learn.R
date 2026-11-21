@@ -198,10 +198,10 @@ learn <- function(
   maxMCiterations = 900000,
   maxhours = +Inf,
   ncheckpoints = NULL,
-  maxrelMCSE = 0.04,
+  maxrelMCSE = 0.0471405,
   ## 0.05, 0.0471405, 0.04, 0.3333, 0.0316228, 0.03125, 0.03, 0.025, 0.02, 0.0158114
   ##  400,       450,  625,    900,      1000,    1024, 1111,  1600, 2500,      4000
-  minESS = 625,
+  minESS = 450,
   initES = 8,
   thinning = NULL,
   verbose = TRUE,
