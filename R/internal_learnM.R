@@ -177,8 +177,8 @@
 #' @import utils
 #'
 #' @concept learn
-#' @export
-learn <- function(
+#' @keywords internal
+.learnold <- function(
   data,
   metadata,
   auxdata = NULL,
@@ -2840,8 +2840,8 @@ learn <- function(
     ## will contain the MC traces of the test points
     traces <- matrix(NA_real_, nrow = 0, ncol = 1 + length(checkindices),
       dimnames = list(NULL,
-        c('gmean', paste0('#', testdata$pointsid[checkindices)))
-      ))
+        c('gmean', paste0('#', testdata$pointsid[checkindices])))
+      )
 
 
     ## Initial values for this chain

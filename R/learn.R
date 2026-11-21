@@ -1512,6 +1512,9 @@ learn <- function(
     nimbleFunction <- sampler_BASE <- extractControlElement <- model <- target <- Ndeps <- depNodes <- rdirch <- eps <- model <- calcNodes <- nimCopy <- mvSaved <- nimbleCode <- dirchalphas <- alphabase <- Alpha <- W <- epsd <- Rn <- Cn <- Dn <- On <- Nn <- Bn <- npoints <- probalpha0 <- Nmaxn <- Bshapelo <- Bshapehi <- Oalpha0 <- Oi <- Of <- Nalpha0 <- Ni <- Nf <- nimbleModel <- compileNimble <- configureMCMC <- buildMCMC <- ncomponentsamples <- nalpha <- minalpha <- maxalpha <- byalpha <- NULL
   }
 
+  ## used in calculation of rel. MCSE
+  qscale <- qnorm(Qhi)-qnorm(Qlo)
+
   ## functions to format printing of time
   printtimeend <- function(tim) {
     format(Sys.time() + tim, format='%Y-%m-%d %H:%M')
@@ -2829,9 +2832,22 @@ learn <- function(
     cat('\nDatapoints for testing chain behaviour:\n',
       paste0('#', testdata$pointsid), '\n')
 
-    ## will contain the MC traces of the test points
-    traces <- matrix(NA_real_, nrow = 0, ncol = 1,
-      dimnames = list(NULL, 'gmean'))
+    ## Find most outlying and most central datapoints
+    ## (in the transformed domain)
+    temp <- order(sapply(testdata$xVs, function(xx){
+      sum(c(xx$xV0, xx$xV1, xx$xV2)^2, na.rm = TRUE)
+    }))
+    ## first is most outlying, second is most central
+    checkindices <- temp[c(1, length(temp))]
+
+    ## Will contain the MC traces of the test points
+    traces <- matrix(NA_real_, nrow = 0, ncol = 1 + length(checkindices),
+      dimnames = list(NULL,
+        c('gmean', paste0('#', testdata$pointsid[checkindices])))
+      )
+
+    ## Will contain diagnostics for traces
+    Qdiagn <- matrix(NA_real_, nrow = 2, ncol = ncol(traces))
 
 
     ## Initial values for this chain
@@ -2946,40 +2962,33 @@ learn <- function(
 
       ## .Pcheckpoints() outputs probabilities
       ll <- log(.Pcheckpoints(testdata = testdata, K = mcsamples))
-      llgmean <- rowMeans(ll, na.rm = TRUE) # geometric mean
-      dim(llgmean) <- c(length(llgmean), 1)
 
+      ## find rows with at least one non-finite value
+      ## this approach is fastest when non-finite values are rare
+      toRemove <- unique(((which(!is.finite(ll)) - 1L) %% nrow(ll)) + 1L)
+      nremoved <- length(toRemove)
+      if(nremoved > 0){
+        flagll <- TRUE
+        ll <- ll[-toRemove, , drop = FALSE]
+        ## We are calculating probabilities of actual datapoints,
+        ## so it is unacceptable to have zero probabilities (-Inf log-probs)
+        ## thus we remove the corresponding anomalous MC samples
+        mcsamples <- .mcsubset(mcsamples, -toRemove)
+        nitertot <- nitertot - nremoved
+      }
+
+      traces <- rbind(traces,
+        cbind(rowMeans(ll), ll[,checkindices, drop = FALSE]))
 
       if(plottraces){
-        ll <- cbind(llgmean, ll)
-        colnames(ll) <- c('gmean', testdata$pointsid)
-        saveRDS(ll,
+        saveRDS(structure(cbind(rowMeans(ll), ll[,checkindices, drop = FALSE]),
+          dimnames = dimnames(traces)),
           file = file.path(dirname,
             paste0('____tempPtraces-',
               padchainnumber, '-',
               subiter, '.rds'))
         )
-        rm(ll)
       }
-
-
-      toRemove <- which(!is.finite(llgmean))
-      if(length(toRemove) > 0){
-        flagll <- TRUE
-        oktraces <- rbind(traces, llgmean[-unique(toRemove), , drop = FALSE])
-        traces <- rbind(traces, llgmean)
-      } else {
-        oktraces <- traces <- rbind(traces, llgmean)
-      }
-
-      ## ## version before geom.mean
-      ## toRemove <- which(!is.finite(traces), arr.ind = TRUE)
-      ## if (length(toRemove) > 0) {
-      ##     flagll <- TRUE
-      ##     oktraces <- traces[-unique(toRemove[, 1]), , drop = FALSE]
-      ## } else {
-      ##     oktraces <- traces
-      ## }
 
       ## ## for debugging
       ## saveRDS(traces,
@@ -3000,41 +3009,6 @@ learn <- function(
       ## ## MCSE, ESS, THINNING, ETC ##
       ## ##############################
 
-      N <- nrow(oktraces)
-
-      ## Calculate empirical quantiles of the vector of MC samples,
-      ## having 'Qlo' and 'Qhi' probabilities
-      Xlo <- quantile(x = oktraces, probs = Qlo,
-        na.rm = FALSE, names = FALSE, type = 6)
-      Xhi <- quantile(x = oktraces, probs = Qhi,
-        na.rm = FALSE, names = FALSE, type = 6)
-      ## quantile width between empirical quantiles
-      qwidth <- Xhi - Xlo
-
-      ## Calculate credibility intervals (proxy for MCSE)
-      ## for the empirical quantiles above
-      temp <- .funMCEQ(x = oktraces, prob = c(Qlo, Qhi), Qpair = Qerror)
-      wXlo <- temp[2, 1] - temp[1, 1]
-      wXhi <- temp[2, 2] - temp[1, 2]
-
-      ## ## For each monitored point,
-      ## ## transform its posterior samples to normalized ranks,
-      ## ## then calculate the ESSs of their means,
-      ## ## as in Vehtari et al. 2021
-      ## ## and Blom 1958 sect 6.10 eqn (6.10.5)
-      ## ## (alternative (6.10.3) gives roughly same results
-      ## ## but is computationally slightly more expensive)
-      ## essnrmean <- .funESS3(qnorm(
-      ## (rank(oktraces, na.last = NA, ties.method = 'average') - 0.5) / N
-      ## ))
-      ## mcsemean <- 1 / sqrt(essnrmean)
-
-      ## For each monitored point,
-      ## calculate the ESSs of their means,
-      ## using batch-means method
-      mcsemean <- .funMCSEBM(oktraces) / sd(oktraces)
-      essnrmean <- 1 / (mcsemean^2)
-
       ## We check the relative MCSE of the following quantities:
       ## - the mean of the MC samples, transformed to normalized ranks
       ## - the lower quantile 'Qlo'
@@ -3043,37 +3017,80 @@ learn <- function(
       ## (representing the "long-run frequency")
       ## and of its 'Qlo'- and 'Qhi'-quantiles
       ## (representing the uncertainty about the freq. estimate)
-      relmcse <- c(mcsemean, wXlo / qwidth, wXhi / qwidth)
 
-      autothinning <- N * max(relmcse)^2
+      N <- nrow(traces)
+
+      ## ## OLD, left as reminder
+      ## ## For each monitored point,
+      ## ## transform its posterior samples to normalized ranks,
+      ## ## then calculate the ESSs of their means,
+      ## ## as in Vehtari et al. 2021
+      ## ## and Blom 1958 sect 6.10 eqn (6.10.5)
+      ## ## (alternative (6.10.3) gives roughly same results
+      ## ## but is computationally slightly more expensive)
+      ## essnrmean <- .funESS3(qnorm(
+      ## (rank(atrace, na.last = NA, ties.method = 'average') - 0.5) / N
+      ## ))
+      ## mcsemean <- 1 / sqrt(essnrmean)
+
+      ## ## For each monitored point,
+      ## ## calculate the ESSs of their means,
+      ## ## using batch-means method
+      ## mcsemean <- .funMCSEBM(atrace) * qscale / qwidth
+      ## essnrmean <- 1 / (mcsemean^2)
+      ## .funMCSEBM() works for several traces at once, faster
+      Fmcse <- .funMCSEBM(traces)
+
+      ## Calculations for quantiles, must be done one trace at a time
+      for(atrace in 1:ncol(traces)){
+        ## Calculate empirical quantiles of the vector of MC samples,
+        ## having 'Qlo' and 'Qhi' probabilities
+        Xlo <- quantile(x = traces[,atrace], probs = Qlo,
+          na.rm = FALSE, names = FALSE, type = 6)
+        Xhi <- quantile(x = traces[,atrace], probs = Qhi,
+          na.rm = FALSE, names = FALSE, type = 6)
+        ## quantile width between empirical quantiles
+        qwidth <- Xhi - Xlo
+
+        ## Calculate credibility intervals (proxy for MCSE)
+        ## for the empirical quantiles above
+        temp <- .funMCEQ(x = traces[,atrace], prob = c(Qlo, Qhi), Qpair = Qerror)
+        wXlo <- temp[2, 1] - temp[1, 1]
+        wXhi <- temp[2, 2] - temp[1, 2]
+
+        Qdiagn[, atrace] <- c(max(wXlo, wXhi), qwidth)
+      }
+      ## relmcse <- c(mcsemean, wXlo / qwidth, wXhi / qwidth)
+
+      mrqe <- Qdiagn[1,] / Qdiagn[2,]
+
+      ## qwidth / qscale in same as sd for a Gaussian
+      relmcse <- qscale * Fmcse / Qdiagn[2,]
+
+      lowestESS <- 1 / max(relmcse, mrqe)^2
+
+      autothinning <- N / lowestESS # N * max(relmcse)^2
+
 
       ## Output available diagnostics
       toprint <- list(
-        'max abs. quantile error' = max(wXlo, wXhi),
-        'quantile width' = qwidth,
-        'max rel. quantile error' = max(relmcse[-1]),
-        'min ESS from rel. qt. error' = 1/(max(relmcse[-1])^2),
-        'MCSE' = mcsemean * sd(oktraces),
-        'rel. MCSE' = mcsemean,
-        'quantl-rel. MCSE' = mcsemean * sd(oktraces) / qwidth,
-        'ESS' = essnrmean,
+        'max abs. quantile error' = Qdiagn[1,], # max(wXlo, wXhi),
+        'quantile width' = Qdiagn[2,], # qwidth,
+        'max rel. quantile error' = mrqe, # max(relmcse[-1]),
+        'min ESS from rel. qt. error' = 1 / mrqe^2,
+        'MCSE' = Fmcse, # mcsemean * sd(oktraces),
+        'rel. MCSE' = relmcse, # mcsemean,
+        ## 'quantl-rel. MCSE' = mcsemean * sd(oktraces) / qwidth,
+        'ESS' = 1 / relmcse^2, # essnrmean,
         'needed thinning' = autothinning,
-        'log-average' = mean(oktraces)
+        'log-average' = colMeans(traces)
       )
 
 ####
-      for(i in names(toprint)) {
-        thisdiagn <- toprint[[i]]
-        cat(paste0('\n', i, ':'),
-          if(length(thisdiagn) > 1){
-            paste(signif(range(thisdiagn), 3), collapse = ' to ')
-          } else {
-            signif(thisdiagn, 3)
-          }
-        )
-      }
-
-      if(flagll){rm(oktraces)}
+      cat(mapply(
+        function(nm, val){paste0(nm, ": ", paste0(val, collapse = " "))},
+        names(toprint), toprint
+      ), sep = "\n")
 
       cat('\nDiagnostics time',
         printtimediff(difftime(Sys.time(), diagntime, units = 'auto')),
@@ -3108,13 +3125,11 @@ learn <- function(
       ## ## CHECK IF CHAIN MUST BE CONTINUED ##
       ## ######################################
 
-      lowess <- 1 / max(relmcse)^2
-
       neededsamples <- max(ceiling(autothinning * (minESS + initES)),
         nsamplesperchain)
 
       ## if(relmcse > minrelMCSE)
-      if(lowess < minESS + initES) {
+      if(lowestESS < minESS + initES) {
         ## too small ESS
         reqiter <- neededsamples - nitertot
       } else {
@@ -3122,8 +3137,8 @@ learn <- function(
       }
 
       ## respect min and max iterations chosen by user
-      remainiter <- max(minMCiterations - nitertot, reqiter)
-      remainiter <- min(maxMCiterations - nitertot, remainiter)
+      remainiter <- max(minMCiterations - nitertot - nremoved, reqiter)
+      remainiter <- min(maxMCiterations - nitertot - nremoved, remainiter)
 
       cat('\nTotal iterations', nitertot,
         '- require further', reqiter,
@@ -3215,7 +3230,7 @@ learn <- function(
               'too many components used'
             },
             if (flagll) {
-              'non-finite values in diagnostics'
+              paste0('non-finite values in diagnostics: ', nremoved)
             },
             paste0(names(toprint), ': ',
               sapply(toprint, function(xx){ signif(xx, 3) })

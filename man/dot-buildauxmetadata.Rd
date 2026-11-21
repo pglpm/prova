@@ -11,12 +11,36 @@
 
 \item{metadata}{data.frame object.}
 
-\item{Dthreshold}{Positive number: threshold of fraction of unique datapoints to total datapoints, to decide whether to treat a rounded variate as continuous.}
+\item{Dthreshold}{Positive number, default 1: threshold of fraction of unique datapoints to total datapoints, to decide whether to treat a rounded variate as continuous.}
 
-\item{tscalefactor}{Positive number: scaling factor for variate conversion.}
+\item{tscalefactor}{Positive number, default 4.266: scaling factor for variate transformation.}
 }
 \value{
-A \link[base:data.frame]{data frame} with auxmetadata.
+A \link[base:data.frame]{data frame} with auxiliary metadata:
+\itemize{
+\item \code{name} of the variate.
+\item \code{type} of the variate.
+\item \code{mcmctype} (\code{R}, \code{C}, \code{D}, \code{O}, \code{N}, \code{B}) of the variate, for internal computation.
+\item \code{id} number of the variate among those of same \code{mcmctype}.
+\item \code{transform} (\code{'identity'}, \code{'Q'}, \code{'log'}, \code{'logminus'}): internal transformation for the variate.
+\item \code{Nvalues}: variate's domain size.
+\item \code{indexpos}: starting position \emph{minus 1} of the nominal/ordinal variate in the \code{Nprob}/\code{Oprob} vector of probabilities.
+\item \code{halfstep}: half of the value step for rounded variates.
+\item \code{domainmin}: domain's lower bound.
+\item \code{domainmax}: domain's upper bound.
+\item \code{minincluded}: is lower bound included in the domain?
+\item \code{maxincluded}: is upper bound included in the domain?
+\item \code{tdomainmin}: transformed lower bound.
+\item \code{tdomainmax}: transformed upper bound.
+\item \code{domainminplushs}: lower bound plus half value-step.
+\item \code{domainmaxminushs}: upper bound minus half value-step.
+\item \code{tdomainminplushs}: transformed lower bound plus half value-step.
+\item \code{tdomainmaxminushs}: transformed upper bound minus half value-step.
+\item \code{tlocation}: transformed location parameter, usually the median.
+\item \code{tscale}: transformed scale parameter, usually InterQuartileRange divided by \code{tscalefactor}.
+\item \code{plotmin}: lower plot range.
+\item \code{plotmax}: upper plot range.
+}
 }
 \description{
 Builds an augmented metadata \link[base:data.frame]{data frame} from the metadata and data given to 'learn()'. This augmented metadata object is saved in the 'K'nowledge object produced by 'learn()'.
