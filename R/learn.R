@@ -729,13 +729,13 @@ learn <- function(
     file = file.path(dirname, paste0('rng_seed', dashnameroot, '.rds')))
   parallel::clusterSetRNGStream(cl = cl, currentseed)
 #### number of checkpoints for Monte Carlo stopping rule
-  if(is.null(ncheckpoints)) {
+  if(is.null(ncheckpoints)){
     ## comparison with how many datapoints are really available is done later
     ncheckpoints <- max(60, nrow(auxmetadata) + 2)
-  }
-  ncheckpoints <- round(ncheckpoints)
-  if (ncheckpoints < 1) {
-    stop('"ncheckpoints" must be > 0')
+  } else if(!is.numeric(ncheckpoints) || ncheckpoints < 1){
+    stop("'ncheckpoints' must be > 0")
+  } else {
+    ncheckpoints<- round(ncheckpoints)
   }
 
   ## if data is not empty, we use it to create data for likelihood
