@@ -1247,7 +1247,7 @@ learn <- function(
   oktraces <- oktraces[apply(oktraces, 1, function(x) { all(is.finite(x)) }), ,
     drop = FALSE]
 
-  colnames(oktraces) <- c('gmean', testdata$pointsid)
+  colnames(oktraces) <- c('gmean', paste0('#', testdata$pointsid))
 
   saveRDS(oktraces, file = file.path(dirname,
     paste0('MCtraces', dashnameroot, '.rds')
@@ -1370,7 +1370,7 @@ learn <- function(
       ## y = matrix(10*log10(oktraces[, avar]), ncol = division),
       type = 'l', lty = 1, col = 1,
       ## col = 1:6, # to evidence consecutive chains
-      main = paste0('#', colnames(oktraces)[avar], ': ',
+      main = paste0(colnames(oktraces)[avar], ': ',
         paste(
           names(toprint[c('max rel. quantile error', 'ESS')]),
           sapply(toprint[c('max rel. quantile error', 'ESS')],
@@ -2828,7 +2828,7 @@ learn <- function(
     ## Read data to be used in log-likelihood
     testdata <- readRDS(file = file.path(dirname,
       paste0('___testdata_', chainnumber, '.rds')))
-    cat('\nDatapoints for log-average:\n',
+    cat('\nDatapoints for log-average:', length(testdata$pointsid), '\n',
       paste0('#', testdata$pointsid), '\n')
 
     ## Find most outlying and most central datapoints
@@ -3248,7 +3248,7 @@ learn <- function(
           pplot(
             y = 4.343 * (traces[is.finite(traces[, avar]), avar]),
             type = 'l', lty = 1, col = 1,
-            main = paste0('#', colnames(traces)[avar]),
+            main = colnames(traces)[avar],
             cex.main = 1.25,
             ylab = paste0('log_F(testpoints)/dHart'),
             xlab = 'Monte Carlo sample',
