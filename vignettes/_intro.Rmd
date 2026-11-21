@@ -1271,13 +1271,13 @@ learn(
 The script 'launch_learn.R' could then be called to work on the background on a bash session with
 
 ``` bash
-$ Rscript myscript.R > logfile.log 2>&1 &
+$ Rscript myscript.R &> logfile.log &
 ```
 
 The file 'logfile.log' will then contain messages about the progress of the computation, and an estimated end time, updated regularly. When desired, this file can be simply opened and inspected, for instance with the bash command `tail`:
 
 ``` bash
-$ tail logfile.log
+$ tail -f logfile.log
 ```
 
 This is just an example; the details and correct procedure will depend on your operating system and computing environment.
