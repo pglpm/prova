@@ -3088,7 +3088,8 @@ learn <- function(
 
 ####
       cat(mapply(
-        function(nm, val){paste0(nm, ": ", paste0(val, collapse = " "))},
+        function(nm, val){paste0(nm, ": ",
+          paste0(signif(val, 4), collapse = " "))},
         names(toprint), toprint
       ), sep = "\n")
 
