@@ -21,7 +21,7 @@
   prior = missing(data) || is.null(data),
   startupMCiterations = 3600,
   minMCiterations = 0,
-  maxMCiterations = 900000,
+  maxMCiterations = 9e+05,
   maxhours = +Inf,
   ncheckpoints = NULL,
   maxrelMCSE = 0.04,
