@@ -2820,7 +2820,6 @@ learn <- function(
     allmcsamples <- NULL
     ## allmcsamplesKA <- list(Alpha = NULL, K = NULL)
     allmcsamplesKA <- NULL
-    flagll <- FALSE
     flagnonfinite <- FALSE
     cat('\n###########################################################\nChain #',
       chainnumber,
@@ -2901,36 +2900,36 @@ learn <- function(
         '\n')
 
 #### Remove iterations with non-finite values
-      if(any(!is.finite(unlist(mcsamples)))) {
-        toRemove <- sort(unique(unlist(lapply(mcsamples, function(xx) {
-          temp <- which(!is.finite(xx), arr.ind = TRUE)
-          temp[, ncol(temp)]
-        }))))
-
-        cat('\nWARNING:', length(toRemove), 'NON-FINITE SAMPLES\n')
-        ##
-        flagnonfinite <- TRUE
-        nonfinitechains <- TRUE
-        saveRDS(mcsamples, file = file.path(dirname,
-          paste0('NONFINITEmcsamples',
-            dashnameroot, '--', padchainnumber,
-            '_', achain, '-',
-            acore, '-i', nitertot, '.rds')
-        ))
-        if (length(toRemove) == ncol(mcsamples$W)) {
-          cat('\n...TOO MANY NON-FINITE OUTPUTS!\n')
-          ## ## registerDoSEQ()
-          ## if(exists('cl')){ parallel::stopCluster(cl) }
-          ## stop('...TOO MANY NON-FINITE OUTPUTS. ABORTING')
-          mcsamples <- NULL
-          niter <- 0
-        } else {
-          mcsamples <- .mcsubset(mcsamples, -toRemove)
-          niter <- niter - length(toRemove)
-        }
-      }
-
-      nitertot <- nitertot + niter
+      ## if(any(!is.finite(unlist(mcsamples)))) {
+      ##   toRemove <- sort(unique(unlist(lapply(mcsamples, function(xx) {
+      ##     temp <- which(!is.finite(xx), arr.ind = TRUE)
+      ##     temp[, ncol(temp)]
+      ##   }))))
+      ## 
+      ##   cat('\nWARNING:', length(toRemove), 'NON-FINITE SAMPLES\n')
+      ##   ##
+      ##   flagnonfinite <- TRUE
+      ##   nonfinitechains <- TRUE
+      ##   saveRDS(mcsamples, file = file.path(dirname,
+      ##     paste0('NONFINITEmcsamples',
+      ##       dashnameroot, '--', padchainnumber,
+      ##       '_', achain, '-',
+      ##       acore, '-i', nitertot, '.rds')
+      ##   ))
+      ##   if (length(toRemove) == ncol(mcsamples$W)) {
+      ##     cat('\n...TOO MANY NON-FINITE OUTPUTS!\n')
+      ##     ## ## registerDoSEQ()
+      ##     ## if(exists('cl')){ parallel::stopCluster(cl) }
+      ##     ## stop('...TOO MANY NON-FINITE OUTPUTS. ABORTING')
+      ##     mcsamples <- NULL
+      ##     niter <- 0
+      ##   } else {
+      ##     mcsamples <- .mcsubset(mcsamples, -toRemove)
+      ##     niter <- niter - length(toRemove)
+      ##   }
+      ## }
+      ## 
+      ## nitertot <- nitertot + niter
 
       ##
       if (showsamplertimes0) {
@@ -2968,14 +2967,31 @@ learn <- function(
       toRemove <- unique(((which(!is.finite(ll)) - 1L) %% nrow(ll)) + 1L)
       nremoved <- length(toRemove)
       if(nremoved > 0){
-        flagll <- TRUE
-        ll <- ll[-toRemove, , drop = FALSE]
         ## We are calculating probabilities of actual datapoints,
         ## so it is unacceptable to have zero probabilities (-Inf log-probs)
-        ## thus we remove the corresponding anomalous MC samples
-        mcsamples <- .mcsubset(mcsamples, -toRemove)
-        nitertot <- nitertot - nremoved
+#### Remove the corresponding anomalous MC samples
+        ll <- ll[-toRemove, , drop = FALSE]
+        cat('\nWARNING:', nremoved, 'ANOMALOUS MC SAMPLES\n')
+        flagnonfinite <- TRUE
+        ## save for debugging
+        saveRDS(mcsamples, file = file.path(dirname,
+          paste0('NONFINITEmcsamples',
+            dashnameroot, '--', padchainnumber,
+            '_', achain, '-',
+            acore, '-i', nitertot, '.rds')
+        ))
+        ## If all MC samples are anomalous, restart this chunk
+        if(nremoved == ncol(mcsamples$W)){
+          cat('\n...TOO MANY NON-FINITE OUTPUTS!\n')
+          mcsamples <- NULL
+          niter <- 0
+        } else {
+          mcsamples <- .mcsubset(mcsamples, -toRemove)
+          niter <- niter - nremoved
+        }
       }
+
+      nitertot <- nitertot + niter
 
       traces <- rbind(traces,
         cbind(rowMeans(ll), ll[,checkindices, drop = FALSE]))
@@ -3088,10 +3104,10 @@ learn <- function(
 
 ####
       cat(mapply(
-        function(nm, val){paste0(nm, ": ",
-          paste0(signif(val, 4), collapse = " "))},
+        function(nm, val){paste0(nm, ': ',
+          paste0(signif(val, 4), collapse = ' '))},
         names(toprint), toprint
-      ), sep = "\n")
+      ), sep = '\n')
 
       cat('\nDiagnostics time',
         printtimediff(difftime(Sys.time(), diagntime, units = 'auto')),
@@ -3137,8 +3153,8 @@ learn <- function(
         reqiter <- 0
       }
 
-      ## respect min and max iterations chosen by user
-      remainiter <- max(minMCiterations - nitertot - nremoved, reqiter)
+      ## respect min and max (including removed) iterations chosen by user
+      remainiter <- max(minMCiterations - nitertot, reqiter)
       remainiter <- min(maxMCiterations - nitertot - nremoved, remainiter)
 
       cat('\nTotal iterations', nitertot,
@@ -3199,44 +3215,24 @@ learn <- function(
         ), height = 8.27, width = 11.69)
 
         ## Summary stats
-        matplot(1:2, type = 'l', col = 'white',
-          main = paste0('Stats chain ', achain),
-          axes = FALSE, ann = FALSE)
-        ## Legends
-        ## legendpositions <- c('topleft', 'topright', 'bottomleft', 'bottomright')
-        ## for (alegend in seq_along(grouplegends)) {
-        ##     legend(x = legendpositions[alegend], bty = 'n', cex = 1.5,
-        ##         legend = grouplegends[[alegend]]
-        ##     )
-        ## }
-        legend(x = 'left', bty = 'n', cex = 0.75,
-          legend = c(
-            paste0('Chain ', chainnumber, ' - ',
-              achain, ' of node ', acore),
-            ##
-            paste0('Test points ',
-              paste0('#', testdata$pointsid, collapse=' ')
-            ),
-            ##
-            paste0('Iterations: ', nitertot),
-            ##
-            paste0('Used components: ', usedcomponents,
-              ' of ', ncomponents),
-            ##
-            'NOTES:',
-            if (flagnonfinite) {
-              'some non-finite MC outputs'
-            },
-            if (usedcomponents > ncomponents - 5) {
-              'too many components used'
-            },
-            if (flagll) {
-              paste0('non-finite values in diagnostics: ', nremoved)
-            },
-            paste0(names(toprint), ': ',
-              sapply(toprint, function(xx){ signif(xx, 3) })
-            )
-          )
+        matplot(1:2, type = 'l', col = 'white', axes = FALSE, ann = FALSE)
+
+        legend(x = 'left', bty = 'n', cex = 0.75, legend = c(
+          paste0('Chain ', chainnumber, ' - ', achain, ' of node ', acore),
+          ##
+          paste0('Test points ', paste0('#', testdata$pointsid, collapse=' ')),
+          ##
+          paste0('Iterations: ', nitertot),
+          ##
+          paste0('Used components: ', usedcomponents, ' of ', ncomponents),
+          ##
+          paste0(names(toprint), ': ', vapply(toprint,
+            function(xx){paste0(signif(xx, 4), collapse = ' ')},  '')),
+          ##
+          'NOTES:',
+          if(usedcomponents > ncomponents - 5){'too many used components'},
+          if(flagnonfinite){paste0('anomalous MC samples: ', nremoved)}
+        )
         )
 
         ## Traces of likelihood and cond. probabilities
