@@ -25,7 +25,7 @@
 #' @param minMCiterations Integer, default 0: do at least this many Monte Carlo iterations per chain.
 #' @param maxMCiterations Integer, default 900000: do at most this many Monte Carlo iterations per chain. Data is saved to disk during computation, so the user should increase or decrease this number according to disk capacity and complexity of the data.
 #' @param maxhours Numeric, default `Inf`: stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments `startupMCiterations` and `minMCiterations`.
-#' @param ncheckpoints Integer or `NULL`: number of datapoints (per chain) to be used for Monte Carlo checks and ending. If `NULL`, this is equal to the maximum between 60 and number of variates plus 2, or all datapoints if they are less than this number. If `Inf`, use all datapoints.
+#' @param ncheckpoints Integer or `NULL`: number of datapoints (per chain) to be used for Monte Carlo checks and ending. If `NULL`, this is equal to 2 \eqn{\times} (number of variates + 2), or all datapoints if they are less than this number. If `Inf`, use all datapoints.
 #' @param maxrelMCSE Numeric positive, default 0.04: desired maximal *relative Monte Carlo Standard Error* of calculated probabilities per chain (after "burn-in" samples have been discarded). If missing, then argument `minESS` is used; if `minESS` is also missing, then the default value is used. `maxrelMCSE` is related to `minESS` by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS}}}.
 ## typical values: 0.05, 0.0471405, 0.04, 0.0316228, 0.02
 ## typical values:  400,       450,  625,      1000, 2500
@@ -178,7 +178,7 @@
 #'
 #' @concept learn
 #' @export
-.learnM <- function(
+learn <- function(
   data,
   metadata,
   auxdata = NULL,
@@ -729,13 +729,13 @@
     file = file.path(dirname, paste0('rng_seed', dashnameroot, '.rds')))
   parallel::clusterSetRNGStream(cl = cl, currentseed)
 #### number of checkpoints for Monte Carlo stopping rule
-  if(is.null(ncheckpoints)) {
+  if(is.null(ncheckpoints)){
     ## comparison with how many datapoints are really available is done later
-    ncheckpoints <- max(60, nrow(auxmetadata) + 2)
-  }
-  ncheckpoints <- round(ncheckpoints)
-  if (ncheckpoints < 1) {
-    stop('"ncheckpoints" must be > 0')
+    ncheckpoints <- (nrow(auxmetadata) + 2L) * 2L
+  } else if(!is.numeric(ncheckpoints) || ncheckpoints < 1L){
+    stop("'ncheckpoints' must be > 1")
+  } else {
+    ncheckpoints <- round(ncheckpoints)
   }
 
   ## if data is not empty, we use it to create data for likelihood
@@ -1216,10 +1216,7 @@
     paste0('#', testdata$pointsid, collapse = ' '), '):')
 
   ## .Pcheckpoints() outputs probabilities
-  oktraces <- log(.Pcheckpoints(
-    testdata = testdata,
-    K = K
-  ))
+  oktraces <- log(.Pcheckpoints(testdata = testdata, K = K))
 
   ## Substitute variances for standard deviations
   if(!is.null(K$Rvar)){
@@ -1768,8 +1765,211 @@
 
 
 #### INITIAL-VALUE FUNCTION
-  ## init functions defined in 'util_mcmcinit.R'
-  if(initmethod == 'precluster'){
+  if(initmethod == 'datacentre'){
+    ## pre-clustering, centering on data
+    initsfn <- function() {
+      ## assign each cluster to a datapoint
+      iK <- sample.int(constants$npoints, size = constants$ncomponents,
+        replace = (constants$npoints < constants$ncomponents))
+
+      ## Create components centres
+      ## distance function
+      ## NB: all variances will be initialized to 1
+      lpnorm <- function(xx){abs(xx)}
+      distances <- matrix(0, nrow = constants$npoints,
+        ncol = constants$ncomponents)
+      if (vn$R > 0) { # continuous open domain
+        Rmeans <- t(datapoints$Rdata[iK, , drop = FALSE])
+        ## distances from datapoints
+        distances <- distances + apply(Rmeans, 2, function(ameans){
+          colSums(lpnorm(t(datapoints$Rdata) - ameans), na.rm = TRUE)
+        })
+      }
+      if (vn$C > 0) { # continuous closed domain
+        Cmeans <- t(datapoints$Clat[iK, , drop = FALSE])
+        ## distances from datapoints
+        distances <- distances + apply(Cmeans, 2, function(ameans){
+          colSums(lpnorm(t(datapoints$Clat) - ameans), na.rm = TRUE)
+        })
+      }
+      if (vn$D > 0) { # discrete
+        Dmeans <- t(constants$Dlatinit[iK, , drop = FALSE])
+        ## distances from datapoints
+        distances <- distances + apply(Dmeans, 2, function(ameans){
+          colSums(lpnorm(t(constants$Dlatinit) - ameans), na.rm = TRUE)
+        })
+      }
+      ## if (vn$L > 0) { #
+      ##     Lmeans <- matrix(rnorm(
+      ##         n = vn$L * constants$ncomponents,
+      ##         mean = constants$Lmean1,
+      ##         sd = sqrt(constants$Lvarm1)
+      ##     ), nrow = vn$L, ncol = constants$ncomponents)
+      ##     ## distances from datapoints
+      ##     distances <- distances + apply(Lmeans, 2, function(ameans){
+      ##         colSums(lpnorm(t(constants$Llatinit) - ameans), na.rm = TRUE)
+      ##     })
+      ## }
+      ## if (vn$B > 0) {
+      ##     Bprobs <- matrix(rbeta(
+      ##         n = vn$B * constants$ncomponents,
+      ##         shape1 = Bshapelo,
+      ##         shape2 = Bshapehi,
+      ##         ), nrow = vn$B, ncol = constants$ncomponents)
+      ##     ## distances from datapoints
+      ##     distances <- distances + apply(Bprobs, 2, function(ameans){
+      ##         colSums(lpnorm(t(datapoints$Bdata) - ameans), na.rm = TRUE)
+      ##     })
+      ## }
+
+      ## assign datapoints to component with closest centre
+      K <- apply(distances, 1, which.min)
+      occupied <- unique(K)
+
+      ## recalculate components centres according to their points
+      if (vn$R > 0) {
+        Rmeans[, occupied] <- sapply(occupied, function(acomponent){
+          colMeans(datapoints$Rdata[which(K == acomponent), , drop = FALSE],
+            na.rm = TRUE)
+        })
+        Rmeans[, -occupied] <- 0
+      }
+      if (vn$C > 0) {
+        Cmeans[, occupied] <- sapply(occupied, function(acomponent){
+          colMeans(datapoints$Clat[which(K == acomponent), , drop = FALSE],
+            na.rm = TRUE)
+        })
+        Cmeans[, -occupied] <- 0
+      }
+      if (vn$D > 0) {
+        Dmeans[, occupied] <- sapply(occupied, function(acomponent){
+          colMeans(constants$Dlatinit[which(K == acomponent), , drop = FALSE],
+            na.rm = TRUE)
+        })
+        Dmeans[, -occupied] <- 0
+      }
+      ## Alpha <- sample(1:constants$nalpha, 1, prob = constants$probalpha0, replace = TRUE)
+      ## W <- c(rep(rempoints, miconstants$npoints), rep(1, constants$ncomponents - miconstants$npoints))
+      ## W <- W/sum(W)
+
+      outlist <- list(
+        Alpha = round(constants$nalpha/2),
+        W = rep.int(x = 1/constants$ncomponents,
+          times = constants$ncomponents),
+        ## ## Assign every point to the closest component centre
+        K = K
+        ## ## Other assignment methods:
+        ## ## A. assign all points to an unsystematically chosen component
+        ## K = rep(sample(rep(which(W > 0), 2), 1), nepoints)
+        ## ## B. distribute points unsystematically among components
+        ## K = sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
+        ## ## or:
+        ## ## C. assign all points to the most probable component
+        ## K = rep(which.max(W), constants$npoints)
+        ## ## or:
+        ## ## D. assign all points to the least probable component
+        ## K = rep(which(W == min(W[W > 0]))[1], constants$npoints)
+        ## ## or:
+        ## ## E. distribute points unsystematically among M=2 components
+        ## K = sample(sample(rep(which(W > 0), 2), 2, replace = TRUE),
+        ##           constants$npoints, replace = TRUE)
+        ## ## F. mix methods A. and B.
+        ## K = (if(achain %% 2 == Ksample) {
+        ##        ## ## assign all points to an unsystematically chosen component
+        ##        rep(sample(rep(which(W > 0), 2), 1), constants$npoints)
+        ##      } else {
+        ##        ## distribute points unsystematically among components
+        ##        sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
+        ##      })
+      )
+      ##
+      if (vn$R > 0) { # continuous open domain
+        outlist <- c(
+          outlist,
+          list(
+            Rmean = Rmeans,
+            Rrate = matrix(
+              nimble::qinvgamma(p = 0.5,
+                shape = constants$Rshapehi,
+                rate = constants$Rvar1),
+              nrow = vn$R, ncol = constants$ncomponents
+            ),
+            Rvar = matrix(1,
+              nrow = vn$R, ncol = constants$ncomponents)
+          )
+        )
+      }
+      if (vn$C > 0) { # continuous closed domain
+        outlist <- c(
+          outlist,
+          list(
+            Cmean = Cmeans,
+            Crate = matrix(
+              nimble::qinvgamma(p = 0.5,
+                shape = constants$Cshapehi,
+                rate = constants$Cvar1),
+              nrow = vn$C, ncol = constants$ncomponents
+            ),
+            Cvar = matrix(1,
+              nrow = vn$C, ncol = constants$ncomponents),
+            ## for data with boundary values
+            Clat = constants$Clatinit
+          )
+        )
+      }
+      if (vn$D > 0) { # continuous rounded
+        outlist <- c(
+          outlist,
+          list(
+            Dmean = Dmeans,
+            Drate = matrix(
+              nimble::qinvgamma(p = 0.5,
+                shape = constants$Dshapehi,
+                rate = constants$Dvar1),
+              nrow = vn$D, ncol = constants$ncomponents
+            ),
+            Dvar = matrix(1,
+              nrow = vn$D, ncol = constants$ncomponents),
+            ## for data with boundary values
+            Dlat = constants$Dlatinit
+          )
+        )
+      }
+      if (vn$O > 0) { # ordinal
+        outlist <- c(
+          outlist,
+          list(
+            Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
+              rep.int(x = 1 / acard, times = acard)
+            })), nrow = sum(constants$Ocards), ncol = ncomponents)
+          )
+        )
+      }
+      if (vn$N > 0) { # nominal
+        outlist <- c(
+          outlist,
+          list(
+            Nprob = matrix(unlist(sapply(constants$Ncards, function(acard){
+              rep.int(x = 1 / acard, times = acard)
+            })), nrow = sum(constants$Ncards), ncol = ncomponents)
+          )
+        )
+      }
+      if (vn$B > 0) { # binary
+        outlist <- c(
+          outlist,
+          list(
+            ## Bprob = Bprobs
+            Bprob = matrix(0.5,
+              nrow = vn$B, ncol = constants$ncomponents)
+          )
+        )
+      }
+      ##
+      outlist
+    } # end datacentre
+
+  } else if(initmethod == 'precluster'){
     ## pre-clustering, k-mean style
     initsfn <- function() {
       ## Create components centres
@@ -1982,210 +2182,6 @@
       ##
       outlist
     } # end precluster
-
-  } else if(initmethod == 'datacentre'){
-    ## pre-clustering, centering on data
-    initsfn <- function() {
-      ## assign each cluster to a datapoint
-      iK <- sample.int(constants$npoints, size = constants$ncomponents,
-        replace = (constants$npoints < constants$ncomponents))
-
-      ## Create components centres
-      ## distance function
-      ## NB: all variances will be initialized to 1
-      lpnorm <- function(xx){abs(xx)}
-      distances <- matrix(0, nrow = constants$npoints,
-        ncol = constants$ncomponents)
-      if (vn$R > 0) { # continuous open domain
-        Rmeans <- t(datapoints$Rdata[iK, , drop = FALSE])
-        ## distances from datapoints
-        distances <- distances + apply(Rmeans, 2, function(ameans){
-          colSums(lpnorm(t(datapoints$Rdata) - ameans), na.rm = TRUE)
-        })
-      }
-      if (vn$C > 0) { # continuous closed domain
-        Cmeans <- t(datapoints$Clat[iK, , drop = FALSE])
-        ## distances from datapoints
-        distances <- distances + apply(Cmeans, 2, function(ameans){
-          colSums(lpnorm(t(datapoints$Clat) - ameans), na.rm = TRUE)
-        })
-      }
-      if (vn$D > 0) { # discrete
-        Dmeans <- t(constants$Dlatinit[iK, , drop = FALSE])
-        ## distances from datapoints
-        distances <- distances + apply(Dmeans, 2, function(ameans){
-          colSums(lpnorm(t(constants$Dlatinit) - ameans), na.rm = TRUE)
-        })
-      }
-      ## if (vn$L > 0) { #
-      ##     Lmeans <- matrix(rnorm(
-      ##         n = vn$L * constants$ncomponents,
-      ##         mean = constants$Lmean1,
-      ##         sd = sqrt(constants$Lvarm1)
-      ##     ), nrow = vn$L, ncol = constants$ncomponents)
-      ##     ## distances from datapoints
-      ##     distances <- distances + apply(Lmeans, 2, function(ameans){
-      ##         colSums(lpnorm(t(constants$Llatinit) - ameans), na.rm = TRUE)
-      ##     })
-      ## }
-      ## if (vn$B > 0) {
-      ##     Bprobs <- matrix(rbeta(
-      ##         n = vn$B * constants$ncomponents,
-      ##         shape1 = Bshapelo,
-      ##         shape2 = Bshapehi,
-      ##         ), nrow = vn$B, ncol = constants$ncomponents)
-      ##     ## distances from datapoints
-      ##     distances <- distances + apply(Bprobs, 2, function(ameans){
-      ##         colSums(lpnorm(t(datapoints$Bdata) - ameans), na.rm = TRUE)
-      ##     })
-      ## }
-
-      ## assign datapoints to component with closest centre
-      K <- apply(distances, 1, which.min)
-      occupied <- unique(K)
-
-      ## recalculate components centres according to their points
-      if (vn$R > 0) {
-        Rmeans[, occupied] <- sapply(occupied, function(acomponent){
-          colMeans(datapoints$Rdata[which(K == acomponent), , drop = FALSE],
-            na.rm = TRUE)
-        })
-        Rmeans[, -occupied] <- 0
-      }
-      if (vn$C > 0) {
-        Cmeans[, occupied] <- sapply(occupied, function(acomponent){
-          colMeans(datapoints$Clat[which(K == acomponent), , drop = FALSE],
-            na.rm = TRUE)
-        })
-        Cmeans[, -occupied] <- 0
-      }
-      if (vn$D > 0) {
-        Dmeans[, occupied] <- sapply(occupied, function(acomponent){
-          colMeans(constants$Dlatinit[which(K == acomponent), , drop = FALSE],
-            na.rm = TRUE)
-        })
-        Dmeans[, -occupied] <- 0
-      }
-      ## Alpha <- sample(1:constants$nalpha, 1, prob = constants$probalpha0, replace = TRUE)
-      ## W <- c(rep(rempoints, miconstants$npoints), rep(1, constants$ncomponents - miconstants$npoints))
-      ## W <- W/sum(W)
-
-      outlist <- list(
-        Alpha = round(constants$nalpha/2),
-        W = rep.int(x = 1/constants$ncomponents,
-          times = constants$ncomponents),
-        ## ## Assign every point to the closest component centre
-        K = K
-        ## ## Other assignment methods:
-        ## ## A. assign all points to an unsystematically chosen component
-        ## K = rep(sample(rep(which(W > 0), 2), 1), nepoints)
-        ## ## B. distribute points unsystematically among components
-        ## K = sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
-        ## ## or:
-        ## ## C. assign all points to the most probable component
-        ## K = rep(which.max(W), constants$npoints)
-        ## ## or:
-        ## ## D. assign all points to the least probable component
-        ## K = rep(which(W == min(W[W > 0]))[1], constants$npoints)
-        ## ## or:
-        ## ## E. distribute points unsystematically among M=2 components
-        ## K = sample(sample(rep(which(W > 0), 2), 2, replace = TRUE),
-        ##           constants$npoints, replace = TRUE)
-        ## ## F. mix methods A. and B.
-        ## K = (if(achain %% 2 == Ksample) {
-        ##        ## ## assign all points to an unsystematically chosen component
-        ##        rep(sample(rep(which(W > 0), 2), 1), constants$npoints)
-        ##      } else {
-        ##        ## distribute points unsystematically among components
-        ##        sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
-        ##      })
-      )
-      ##
-      if (vn$R > 0) { # continuous open domain
-        outlist <- c(
-          outlist,
-          list(
-            Rmean = Rmeans,
-            Rrate = matrix(
-              nimble::qinvgamma(p = 0.5,
-                shape = constants$Rshapehi,
-                rate = constants$Rvar1),
-              nrow = vn$R, ncol = constants$ncomponents
-            ),
-            Rvar = matrix(1,
-              nrow = vn$R, ncol = constants$ncomponents)
-          )
-        )
-      }
-      if (vn$C > 0) { # continuous closed domain
-        outlist <- c(
-          outlist,
-          list(
-            Cmean = Cmeans,
-            Crate = matrix(
-              nimble::qinvgamma(p = 0.5,
-                shape = constants$Cshapehi,
-                rate = constants$Cvar1),
-              nrow = vn$C, ncol = constants$ncomponents
-            ),
-            Cvar = matrix(1,
-              nrow = vn$C, ncol = constants$ncomponents),
-            ## for data with boundary values
-            Clat = constants$Clatinit
-          )
-        )
-      }
-      if (vn$D > 0) { # continuous rounded
-        outlist <- c(
-          outlist,
-          list(
-            Dmean = Dmeans,
-            Drate = matrix(
-              nimble::qinvgamma(p = 0.5,
-                shape = constants$Dshapehi,
-                rate = constants$Dvar1),
-              nrow = vn$D, ncol = constants$ncomponents
-            ),
-            Dvar = matrix(1,
-              nrow = vn$D, ncol = constants$ncomponents),
-            ## for data with boundary values
-            Dlat = constants$Dlatinit
-          )
-        )
-      }
-      if (vn$O > 0) { # ordinal
-        outlist <- c(
-          outlist,
-          list(
-            Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
-              rep.int(x = 1 / acard, times = acard)
-            })), nrow = sum(constants$Ocards), ncol = ncomponents)
-          )
-        )
-      }
-      if (vn$N > 0) { # nominal
-        outlist <- c(
-          outlist,
-          list(
-            Nprob = matrix(unlist(sapply(constants$Ncards, function(acard){
-              rep.int(x = 1 / acard, times = acard)
-            })), nrow = sum(constants$Ncards), ncol = ncomponents)
-          )
-        )
-      }
-      if (vn$B > 0) { # binary
-        outlist <- c(
-          outlist,
-          list(
-            ## Bprob = Bprobs
-            Bprob = matrix(0.5,
-              nrow = vn$B, ncol = constants$ncomponents)
-          )
-        )
-      }
-      ##
-      outlist
-    } # end datacentre
 
   } else if(initmethod == 'prior'){
     ## values chosen from prior
@@ -2833,9 +2829,19 @@
     cat('\nDatapoints for testing chain behaviour:\n',
       paste0('#', testdata$pointsid), '\n')
 
+    ## Find most outlying and most central datapoints
+    ## (in the transformed domain)
+    temp <- order(sapply(testdata$xVs, function(xx){
+      sum(c(xx$xV0, xx$xV1, xx$xV2)^2, na.rm = TRUE)
+    }))
+    ## first is most outlying, second is most central
+    checkindices <- temp[c(1, length(temp))]
+
     ## will contain the MC traces of the test points
-    traces <- matrix(NA_real_, nrow = 0, ncol = 1,
-      dimnames = list(NULL, testdata$pointsid))
+    traces <- matrix(NA_real_, nrow = 0, ncol = 1 + length(checkindices),
+      dimnames = list(NULL,
+        c('gmean', paste0('#', testdata$pointsid[checkindices)))
+      ))
 
 
     ## Initial values for this chain
@@ -2951,33 +2957,29 @@
       ## .Pcheckpoints() outputs probabilities
       ll <- log(.Pcheckpoints(testdata = testdata, K = mcsamples))
 
+      ## find rows with at least one non-finite value
+      ## this approach is fastest when non-finite values are rare
+      toRemove <- unique(((which(!is.finite(ll)) - 1L) %% nrow(ll)) + 1L)
+      if(length(toRemove) > 0){
+        flagll <- TRUE
+        ll <- ll[-toRemove, , drop = FALSE]
+        ## We are calculating probabilities of actual datapoints,
+        ## so it is unacceptable to have zero probabilities (-Inf log-probs)
+        ## thus we remove the corresponding anomalous MC samples
+        mcsamples <- .mcsubset(mcsamples, -toRemove)
+      }
+
+      traces <- rbind(traces, cbind(rowMeans(ll), ll))
 
       if(plottraces){
-        saveRDS(structure(ll, dimnames = list(NULL, testdata$pointsid)),
+        saveRDS(structure(cbind(rowMeans(ll), ll),
+          dimnames = dimnames(traces)),
           file = file.path(dirname,
             paste0('____tempPtraces-',
               padchainnumber, '-',
               subiter, '.rds'))
         )
       }
-
-
-      temp <- which(!is.finite(ll))
-      if(length(temp) > 0){
-        flagll <- TRUE
-        ll <- ll[-unique((temp - 1L) %% nrow(ll) + 1L), , drop = FALSE]
-      }
-
-      oktraces <- traces <- rbind(traces, ll)
-
-      ## ## version before geom.mean
-      ## toRemove <- which(!is.finite(traces), arr.ind = TRUE)
-      ## if (length(toRemove) > 0) {
-      ##     flagll <- TRUE
-      ##     oktraces <- traces[-unique(toRemove[, 1]), , drop = FALSE]
-      ## } else {
-      ##     oktraces <- traces
-      ## }
 
       ## ## for debugging
       ## saveRDS(traces,
@@ -3000,18 +3002,19 @@
 
       N <- nrow(traces)
 
+      oktraces <- traces
       ## Calculate empirical quantiles of the vector of MC samples,
       ## having 'Qlo' and 'Qhi' probabilities
-      Xlo <- quantile(x = traces, probs = Qlo,
+      Xlo <- quantile(x = oktraces, probs = Qlo,
         na.rm = FALSE, names = FALSE, type = 6)
-      Xhi <- quantile(x = traces, probs = Qhi,
+      Xhi <- quantile(x = oktraces, probs = Qhi,
         na.rm = FALSE, names = FALSE, type = 6)
       ## quantile width between empirical quantiles
       qwidth <- Xhi - Xlo
 
       ## Calculate credibility intervals (proxy for MCSE)
       ## for the empirical quantiles above
-      temp <- .funMCEQ(x = traces, prob = c(Qlo, Qhi), Qpair = Qerror)
+      temp <- .funMCEQ(x = oktraces, prob = c(Qlo, Qhi), Qpair = Qerror)
       wXlo <- temp[2, 1] - temp[1, 1]
       wXhi <- temp[2, 2] - temp[1, 2]
 
@@ -3023,15 +3026,14 @@
       ## ## (alternative (6.10.3) gives roughly same results
       ## ## but is computationally slightly more expensive)
       ## essnrmean <- .funESS3(qnorm(
-      ## (rank(traces, na.last = NA, ties.method = 'average') - 0.5) / N
+      ## (rank(oktraces, na.last = NA, ties.method = 'average') - 0.5) / N
       ## ))
       ## mcsemean <- 1 / sqrt(essnrmean)
 
       ## For each monitored point,
       ## calculate the ESSs of their means,
       ## using batch-means method
-
-      mcsemean <- .funMCSEBM(traces) / apply(traces, 2, sd)
+      mcsemean <- .funMCSEBM(oktraces) / sd(oktraces)
       essnrmean <- 1 / (mcsemean^2)
 
       ## We check the relative MCSE of the following quantities:
@@ -3072,7 +3074,7 @@
         )
       }
 
-      rm(oktraces)
+      if(flagll){rm(oktraces)}
 
       cat('\nDiagnostics time',
         printtimediff(difftime(Sys.time(), diagntime, units = 'auto')),
@@ -3080,8 +3082,9 @@
 
 #### concatenate samples with those of previous chunk, if existing
       ## add overall iteration index `MCindex` to mcsamples
-      mcsamples$MCindex <- seq(to = nitertot, length.out = ncol(mcsamples$W))
-      ## need to add 1D to behave well with subset()
+      mcsamples$MCindex <- seq(to = nitertot,
+        length.out = ncol(mcsamples$W))
+      ## need to add 1D to behave well with .mcsubset()
       dim(mcsamples$MCindex) <- ncol(mcsamples$W)
 
       ## concatenate samples
@@ -3093,7 +3096,10 @@
         ## Concatenate samples of K and Alpha
         ## if (showAlphatraces || showKtraces) {
         allmcsamplesKA <- mapply(
-          function(xx, yy){c(xx, yy)}, allmcsamplesKA, mcsamplesKA,
+          function(xx, yy) {
+            c(xx, yy)
+          },
+          allmcsamplesKA, mcsamplesKA,
           SIMPLIFY = FALSE
         )
         ## }
@@ -3135,7 +3141,8 @@
       ## Save cumulated mcsamples to save memory
       ## Only saved when we have at least
       ## 'startupMCiterations' samples
-      if(ncol(allmcsamples$W) > startupMCiterations/2 || remainiter <= 0){
+      if(ncol(allmcsamples$W) > startupMCiterations/2 ||
+           remainiter <= 0){
         savedchunks <- savedchunks + 1L
         saveRDS(
           allmcsamples,
@@ -3148,7 +3155,7 @@
       }
       gc(full = TRUE)
 
-      if(remainiter > 0){ # This chain is going to continue
+      if (remainiter > 0) { # This chain is going to continue
 
         ## limit number of iterations per loop, to save memory
         niter <- min(remainiter + 1L, startupMCiterations)

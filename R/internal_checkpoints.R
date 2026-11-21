@@ -1,12 +1,12 @@
 #' Format datapoints used for MCMC monitoring
 #'
-#' Used in '.Pcheckpoints()' within 'learn()'.
+#' Simplified version of `.lprobsargsyx()`. Used in '.Pcheckpoints()' within 'learn()'.
 #'
 #' @param x Datapoints to be used for checking MCMC progress
 #' @param auxmetadata auxmetadata object
 #' @param pointsid Id of datapoints
 #'
-#' @return some arguments to be repeatedly used in .Pcheckpoints
+#' @return some arguments to be repeatedly used in `.Pcheckpoints()`; see `.lprobsargsyx()`.
 #'
 #' @keywords internal
 .prepPcheckpoints <- function(

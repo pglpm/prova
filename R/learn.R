@@ -1765,8 +1765,211 @@ learn <- function(
 
 
 #### INITIAL-VALUE FUNCTION
-  ## init functions defined in 'util_mcmcinit.R'
-  if(initmethod == 'precluster'){
+  if(initmethod == 'datacentre'){
+    ## pre-clustering, centering on data
+    initsfn <- function() {
+      ## assign each cluster to a datapoint
+      iK <- sample.int(constants$npoints, size = constants$ncomponents,
+        replace = (constants$npoints < constants$ncomponents))
+
+      ## Create components centres
+      ## distance function
+      ## NB: all variances will be initialized to 1
+      lpnorm <- function(xx){abs(xx)}
+      distances <- matrix(0, nrow = constants$npoints,
+        ncol = constants$ncomponents)
+      if (vn$R > 0) { # continuous open domain
+        Rmeans <- t(datapoints$Rdata[iK, , drop = FALSE])
+        ## distances from datapoints
+        distances <- distances + apply(Rmeans, 2, function(ameans){
+          colSums(lpnorm(t(datapoints$Rdata) - ameans), na.rm = TRUE)
+        })
+      }
+      if (vn$C > 0) { # continuous closed domain
+        Cmeans <- t(datapoints$Clat[iK, , drop = FALSE])
+        ## distances from datapoints
+        distances <- distances + apply(Cmeans, 2, function(ameans){
+          colSums(lpnorm(t(datapoints$Clat) - ameans), na.rm = TRUE)
+        })
+      }
+      if (vn$D > 0) { # discrete
+        Dmeans <- t(constants$Dlatinit[iK, , drop = FALSE])
+        ## distances from datapoints
+        distances <- distances + apply(Dmeans, 2, function(ameans){
+          colSums(lpnorm(t(constants$Dlatinit) - ameans), na.rm = TRUE)
+        })
+      }
+      ## if (vn$L > 0) { #
+      ##     Lmeans <- matrix(rnorm(
+      ##         n = vn$L * constants$ncomponents,
+      ##         mean = constants$Lmean1,
+      ##         sd = sqrt(constants$Lvarm1)
+      ##     ), nrow = vn$L, ncol = constants$ncomponents)
+      ##     ## distances from datapoints
+      ##     distances <- distances + apply(Lmeans, 2, function(ameans){
+      ##         colSums(lpnorm(t(constants$Llatinit) - ameans), na.rm = TRUE)
+      ##     })
+      ## }
+      ## if (vn$B > 0) {
+      ##     Bprobs <- matrix(rbeta(
+      ##         n = vn$B * constants$ncomponents,
+      ##         shape1 = Bshapelo,
+      ##         shape2 = Bshapehi,
+      ##         ), nrow = vn$B, ncol = constants$ncomponents)
+      ##     ## distances from datapoints
+      ##     distances <- distances + apply(Bprobs, 2, function(ameans){
+      ##         colSums(lpnorm(t(datapoints$Bdata) - ameans), na.rm = TRUE)
+      ##     })
+      ## }
+
+      ## assign datapoints to component with closest centre
+      K <- apply(distances, 1, which.min)
+      occupied <- unique(K)
+
+      ## recalculate components centres according to their points
+      if (vn$R > 0) {
+        Rmeans[, occupied] <- sapply(occupied, function(acomponent){
+          colMeans(datapoints$Rdata[which(K == acomponent), , drop = FALSE],
+            na.rm = TRUE)
+        })
+        Rmeans[, -occupied] <- 0
+      }
+      if (vn$C > 0) {
+        Cmeans[, occupied] <- sapply(occupied, function(acomponent){
+          colMeans(datapoints$Clat[which(K == acomponent), , drop = FALSE],
+            na.rm = TRUE)
+        })
+        Cmeans[, -occupied] <- 0
+      }
+      if (vn$D > 0) {
+        Dmeans[, occupied] <- sapply(occupied, function(acomponent){
+          colMeans(constants$Dlatinit[which(K == acomponent), , drop = FALSE],
+            na.rm = TRUE)
+        })
+        Dmeans[, -occupied] <- 0
+      }
+      ## Alpha <- sample(1:constants$nalpha, 1, prob = constants$probalpha0, replace = TRUE)
+      ## W <- c(rep(rempoints, miconstants$npoints), rep(1, constants$ncomponents - miconstants$npoints))
+      ## W <- W/sum(W)
+
+      outlist <- list(
+        Alpha = round(constants$nalpha/2),
+        W = rep.int(x = 1/constants$ncomponents,
+          times = constants$ncomponents),
+        ## ## Assign every point to the closest component centre
+        K = K
+        ## ## Other assignment methods:
+        ## ## A. assign all points to an unsystematically chosen component
+        ## K = rep(sample(rep(which(W > 0), 2), 1), nepoints)
+        ## ## B. distribute points unsystematically among components
+        ## K = sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
+        ## ## or:
+        ## ## C. assign all points to the most probable component
+        ## K = rep(which.max(W), constants$npoints)
+        ## ## or:
+        ## ## D. assign all points to the least probable component
+        ## K = rep(which(W == min(W[W > 0]))[1], constants$npoints)
+        ## ## or:
+        ## ## E. distribute points unsystematically among M=2 components
+        ## K = sample(sample(rep(which(W > 0), 2), 2, replace = TRUE),
+        ##           constants$npoints, replace = TRUE)
+        ## ## F. mix methods A. and B.
+        ## K = (if(achain %% 2 == Ksample) {
+        ##        ## ## assign all points to an unsystematically chosen component
+        ##        rep(sample(rep(which(W > 0), 2), 1), constants$npoints)
+        ##      } else {
+        ##        ## distribute points unsystematically among components
+        ##        sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
+        ##      })
+      )
+      ##
+      if (vn$R > 0) { # continuous open domain
+        outlist <- c(
+          outlist,
+          list(
+            Rmean = Rmeans,
+            Rrate = matrix(
+              nimble::qinvgamma(p = 0.5,
+                shape = constants$Rshapehi,
+                rate = constants$Rvar1),
+              nrow = vn$R, ncol = constants$ncomponents
+            ),
+            Rvar = matrix(1,
+              nrow = vn$R, ncol = constants$ncomponents)
+          )
+        )
+      }
+      if (vn$C > 0) { # continuous closed domain
+        outlist <- c(
+          outlist,
+          list(
+            Cmean = Cmeans,
+            Crate = matrix(
+              nimble::qinvgamma(p = 0.5,
+                shape = constants$Cshapehi,
+                rate = constants$Cvar1),
+              nrow = vn$C, ncol = constants$ncomponents
+            ),
+            Cvar = matrix(1,
+              nrow = vn$C, ncol = constants$ncomponents),
+            ## for data with boundary values
+            Clat = constants$Clatinit
+          )
+        )
+      }
+      if (vn$D > 0) { # continuous rounded
+        outlist <- c(
+          outlist,
+          list(
+            Dmean = Dmeans,
+            Drate = matrix(
+              nimble::qinvgamma(p = 0.5,
+                shape = constants$Dshapehi,
+                rate = constants$Dvar1),
+              nrow = vn$D, ncol = constants$ncomponents
+            ),
+            Dvar = matrix(1,
+              nrow = vn$D, ncol = constants$ncomponents),
+            ## for data with boundary values
+            Dlat = constants$Dlatinit
+          )
+        )
+      }
+      if (vn$O > 0) { # ordinal
+        outlist <- c(
+          outlist,
+          list(
+            Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
+              rep.int(x = 1 / acard, times = acard)
+            })), nrow = sum(constants$Ocards), ncol = ncomponents)
+          )
+        )
+      }
+      if (vn$N > 0) { # nominal
+        outlist <- c(
+          outlist,
+          list(
+            Nprob = matrix(unlist(sapply(constants$Ncards, function(acard){
+              rep.int(x = 1 / acard, times = acard)
+            })), nrow = sum(constants$Ncards), ncol = ncomponents)
+          )
+        )
+      }
+      if (vn$B > 0) { # binary
+        outlist <- c(
+          outlist,
+          list(
+            ## Bprob = Bprobs
+            Bprob = matrix(0.5,
+              nrow = vn$B, ncol = constants$ncomponents)
+          )
+        )
+      }
+      ##
+      outlist
+    } # end datacentre
+
+  } else if(initmethod == 'precluster'){
     ## pre-clustering, k-mean style
     initsfn <- function() {
       ## Create components centres
@@ -1979,210 +2182,6 @@ learn <- function(
       ##
       outlist
     } # end precluster
-
-  } else if(initmethod == 'datacentre'){
-    ## pre-clustering, centering on data
-    initsfn <- function() {
-      ## assign each cluster to a datapoint
-      iK <- sample.int(constants$npoints, size = constants$ncomponents,
-        replace = (constants$npoints < constants$ncomponents))
-
-      ## Create components centres
-      ## distance function
-      ## NB: all variances will be initialized to 1
-      lpnorm <- function(xx){abs(xx)}
-      distances <- matrix(0, nrow = constants$npoints,
-        ncol = constants$ncomponents)
-      if (vn$R > 0) { # continuous open domain
-        Rmeans <- t(datapoints$Rdata[iK, , drop = FALSE])
-        ## distances from datapoints
-        distances <- distances + apply(Rmeans, 2, function(ameans){
-          colSums(lpnorm(t(datapoints$Rdata) - ameans), na.rm = TRUE)
-        })
-      }
-      if (vn$C > 0) { # continuous closed domain
-        Cmeans <- t(datapoints$Clat[iK, , drop = FALSE])
-        ## distances from datapoints
-        distances <- distances + apply(Cmeans, 2, function(ameans){
-          colSums(lpnorm(t(datapoints$Clat) - ameans), na.rm = TRUE)
-        })
-      }
-      if (vn$D > 0) { # discrete
-        Dmeans <- t(constants$Dlatinit[iK, , drop = FALSE])
-        ## distances from datapoints
-        distances <- distances + apply(Dmeans, 2, function(ameans){
-          colSums(lpnorm(t(constants$Dlatinit) - ameans), na.rm = TRUE)
-        })
-      }
-      ## if (vn$L > 0) { #
-      ##     Lmeans <- matrix(rnorm(
-      ##         n = vn$L * constants$ncomponents,
-      ##         mean = constants$Lmean1,
-      ##         sd = sqrt(constants$Lvarm1)
-      ##     ), nrow = vn$L, ncol = constants$ncomponents)
-      ##     ## distances from datapoints
-      ##     distances <- distances + apply(Lmeans, 2, function(ameans){
-      ##         colSums(lpnorm(t(constants$Llatinit) - ameans), na.rm = TRUE)
-      ##     })
-      ## }
-      ## if (vn$B > 0) {
-      ##     Bprobs <- matrix(rbeta(
-      ##         n = vn$B * constants$ncomponents,
-      ##         shape1 = Bshapelo,
-      ##         shape2 = Bshapehi,
-      ##         ), nrow = vn$B, ncol = constants$ncomponents)
-      ##     ## distances from datapoints
-      ##     distances <- distances + apply(Bprobs, 2, function(ameans){
-      ##         colSums(lpnorm(t(datapoints$Bdata) - ameans), na.rm = TRUE)
-      ##     })
-      ## }
-
-      ## assign datapoints to component with closest centre
-      K <- apply(distances, 1, which.min)
-      occupied <- unique(K)
-
-      ## recalculate components centres according to their points
-      if (vn$R > 0) {
-        Rmeans[, occupied] <- sapply(occupied, function(acomponent){
-          colMeans(datapoints$Rdata[which(K == acomponent), , drop = FALSE],
-            na.rm = TRUE)
-        })
-        Rmeans[, -occupied] <- 0
-      }
-      if (vn$C > 0) {
-        Cmeans[, occupied] <- sapply(occupied, function(acomponent){
-          colMeans(datapoints$Clat[which(K == acomponent), , drop = FALSE],
-            na.rm = TRUE)
-        })
-        Cmeans[, -occupied] <- 0
-      }
-      if (vn$D > 0) {
-        Dmeans[, occupied] <- sapply(occupied, function(acomponent){
-          colMeans(constants$Dlatinit[which(K == acomponent), , drop = FALSE],
-            na.rm = TRUE)
-        })
-        Dmeans[, -occupied] <- 0
-      }
-      ## Alpha <- sample(1:constants$nalpha, 1, prob = constants$probalpha0, replace = TRUE)
-      ## W <- c(rep(rempoints, miconstants$npoints), rep(1, constants$ncomponents - miconstants$npoints))
-      ## W <- W/sum(W)
-
-      outlist <- list(
-        Alpha = round(constants$nalpha/2),
-        W = rep.int(x = 1/constants$ncomponents,
-          times = constants$ncomponents),
-        ## ## Assign every point to the closest component centre
-        K = K
-        ## ## Other assignment methods:
-        ## ## A. assign all points to an unsystematically chosen component
-        ## K = rep(sample(rep(which(W > 0), 2), 1), nepoints)
-        ## ## B. distribute points unsystematically among components
-        ## K = sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
-        ## ## or:
-        ## ## C. assign all points to the most probable component
-        ## K = rep(which.max(W), constants$npoints)
-        ## ## or:
-        ## ## D. assign all points to the least probable component
-        ## K = rep(which(W == min(W[W > 0]))[1], constants$npoints)
-        ## ## or:
-        ## ## E. distribute points unsystematically among M=2 components
-        ## K = sample(sample(rep(which(W > 0), 2), 2, replace = TRUE),
-        ##           constants$npoints, replace = TRUE)
-        ## ## F. mix methods A. and B.
-        ## K = (if(achain %% 2 == Ksample) {
-        ##        ## ## assign all points to an unsystematically chosen component
-        ##        rep(sample(rep(which(W > 0), 2), 1), constants$npoints)
-        ##      } else {
-        ##        ## distribute points unsystematically among components
-        ##        sample(rep(which(W > 0), 2), constants$npoints, replace = TRUE)
-        ##      })
-      )
-      ##
-      if (vn$R > 0) { # continuous open domain
-        outlist <- c(
-          outlist,
-          list(
-            Rmean = Rmeans,
-            Rrate = matrix(
-              nimble::qinvgamma(p = 0.5,
-                shape = constants$Rshapehi,
-                rate = constants$Rvar1),
-              nrow = vn$R, ncol = constants$ncomponents
-            ),
-            Rvar = matrix(1,
-              nrow = vn$R, ncol = constants$ncomponents)
-          )
-        )
-      }
-      if (vn$C > 0) { # continuous closed domain
-        outlist <- c(
-          outlist,
-          list(
-            Cmean = Cmeans,
-            Crate = matrix(
-              nimble::qinvgamma(p = 0.5,
-                shape = constants$Cshapehi,
-                rate = constants$Cvar1),
-              nrow = vn$C, ncol = constants$ncomponents
-            ),
-            Cvar = matrix(1,
-              nrow = vn$C, ncol = constants$ncomponents),
-            ## for data with boundary values
-            Clat = constants$Clatinit
-          )
-        )
-      }
-      if (vn$D > 0) { # continuous rounded
-        outlist <- c(
-          outlist,
-          list(
-            Dmean = Dmeans,
-            Drate = matrix(
-              nimble::qinvgamma(p = 0.5,
-                shape = constants$Dshapehi,
-                rate = constants$Dvar1),
-              nrow = vn$D, ncol = constants$ncomponents
-            ),
-            Dvar = matrix(1,
-              nrow = vn$D, ncol = constants$ncomponents),
-            ## for data with boundary values
-            Dlat = constants$Dlatinit
-          )
-        )
-      }
-      if (vn$O > 0) { # ordinal
-        outlist <- c(
-          outlist,
-          list(
-            Oprob = matrix(unlist(sapply(constants$Ocards, function(acard){
-              rep.int(x = 1 / acard, times = acard)
-            })), nrow = sum(constants$Ocards), ncol = ncomponents)
-          )
-        )
-      }
-      if (vn$N > 0) { # nominal
-        outlist <- c(
-          outlist,
-          list(
-            Nprob = matrix(unlist(sapply(constants$Ncards, function(acard){
-              rep.int(x = 1 / acard, times = acard)
-            })), nrow = sum(constants$Ncards), ncol = ncomponents)
-          )
-        )
-      }
-      if (vn$B > 0) { # binary
-        outlist <- c(
-          outlist,
-          list(
-            ## Bprob = Bprobs
-            Bprob = matrix(0.5,
-              nrow = vn$B, ncol = constants$ncomponents)
-          )
-        )
-      }
-      ##
-      outlist
-    } # end datacentre
 
   } else if(initmethod == 'prior'){
     ## values chosen from prior

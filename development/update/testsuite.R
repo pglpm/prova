@@ -50,8 +50,8 @@ thisresult <- tc(nm, {
   Kdir <- learn(
     data = 'data_basetest.csv',
     metadata = 'metadata_basetest.csv',
-                                        # nsamples = 200,
-                                        # nchains = parallel,
+    ## nsamples = 200,
+    ## nchains = parallel,
     ## minMCiterations = 3600 * 3,
     prior = FALSE,
     outputdir = outputdir,
@@ -59,8 +59,8 @@ thisresult <- tc(nm, {
     appendinfo = TRUE,
     cleanup = TRUE,
     parallel = parallel,
-                                        # maxrelMCSE = +Inf,
-                                        # minESS = 100,
+    ## maxrelMCSE = +Inf,
+    ## minESS = 100,
     verbose = FALSE
     ## ncheckpoints = 12,
     ##
