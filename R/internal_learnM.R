@@ -2968,7 +2968,7 @@
         ll <- ll[-unique((temp - 1L) %% nrow(ll) + 1L), , drop = FALSE]
       }
 
-      traces <- rbind(traces, ll)
+      oktraces <- traces <- rbind(traces, ll)
 
       ## ## version before geom.mean
       ## toRemove <- which(!is.finite(traces), arr.ind = TRUE)
@@ -3031,16 +3031,7 @@
       ## calculate the ESSs of their means,
       ## using batch-means method
 
-      system.time(for(i in 1:1e2){
-      mcsemean2 <- .funMCSEBM(traces) / apply(traces, 2, sd)
-})
-
-      system.time(for(i in 1:1e2){
-      mcsemean2 <- .funMCSEBM(traces) / apply(traces, 2, sd)
-})
-
-
-
+      mcsemean <- .funMCSEBM(traces) / apply(traces, 2, sd)
       essnrmean <- 1 / (mcsemean^2)
 
       ## We check the relative MCSE of the following quantities:
