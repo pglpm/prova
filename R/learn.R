@@ -1047,7 +1047,6 @@ learn <- function(
     cl = cl,
     X = 1:ncores,
     fun = .workerfun,
-    ## arguments to .workerfun
     dirname = dirname,
     dashnameroot = dashnameroot,
     avoidzeroW = avoidzeroW,
@@ -1217,10 +1216,7 @@ learn <- function(
     paste0('#', testdata$pointsid, collapse = ' '), '):')
 
   ## .Pcheckpoints() outputs probabilities
-  oktraces <- log(.Pcheckpoints(
-    testdata = testdata,
-    K = K
-  ))
+  oktraces <- log(.Pcheckpoints(testdata = testdata, K = K))
 
   ## Substitute variances for standard deviations
   if(!is.null(K$Rvar)){
@@ -2950,35 +2946,31 @@ learn <- function(
       ##
 
       ## .Pcheckpoints() outputs probabilities
-      ll <- log(.Pcheckpoints(
-        testdata = testdata,
-        K = mcsamples
-      ))
+      ll <- log(.Pcheckpoints(testdata = testdata, K = mcsamples))
+      llgmean <- rowMeans(ll, na.rm = TRUE) # geometric mean
+      dim(llgmean) <- c(length(llgmean), 1)
 
-      ll <- cbind(
-        rowMeans(ll, na.rm = TRUE), # geometric mean
-        ll
-      )
-
-      colnames(ll) <- c('gmean', testdata$pointsid)
 
       if(plottraces){
+        ll <- cbind(llgmean, ll)
+        colnames(ll) <- c('gmean', testdata$pointsid)
         saveRDS(ll,
           file = file.path(dirname,
             paste0('____tempPtraces-',
               padchainnumber, '-',
               subiter, '.rds'))
         )
+        rm(ll)
       }
 
-      traces <- rbind(traces, ll[, 1, drop = FALSE])
 
-      toRemove <- which(!is.finite(traces))
-      if (length(toRemove) > 0) {
+      toRemove <- which(!is.finite(llgmean))
+      if(length(toRemove) > 0){
         flagll <- TRUE
-        oktraces <- traces[-unique(toRemove), , drop = FALSE]
+        oktraces <- rbind(traces, llgmean[-unique(toRemove), , drop = FALSE])
+        traces <- rbind(traces, llgmean)
       } else {
-        oktraces <- traces
+        oktraces <- traces <- rbind(traces, llgmean)
       }
 
       ## ## version before geom.mean
@@ -3082,7 +3074,7 @@ learn <- function(
         )
       }
 
-      rm(oktraces)
+      if(flagll){rm(oktraces)}
 
       cat('\nDiagnostics time',
         printtimediff(difftime(Sys.time(), diagntime, units = 'auto')),
