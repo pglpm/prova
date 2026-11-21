@@ -82,7 +82,7 @@ learn(
 
 \item{maxhours}{Numeric, default \code{Inf}: stop the Monte Carlo computation after approximately this many hours, if it has not finished yet. A value of 0 finishes the computation as soon as possible, compatibly with the arguments \code{startupMCiterations} and \code{minMCiterations}.}
 
-\item{ncheckpoints}{Integer or \code{NULL}: number of datapoints (per chain) to be used for Monte Carlo checks and ending. If \code{NULL}, this is equal to 2 \eqn{\times} (number of variates + 2), or all datapoints if they are less than this number. If \code{Inf}, use all datapoints.}
+\item{ncheckpoints}{Integer or \code{NULL}: number of datapoints (per chain) to be used for Monte Carlo checks and ending. If \code{NULL}, it is equal to the largest between 36 and 2 \eqn{\times} (number of variates + 2), or all datapoints if they are less than this maximum. If \code{Inf}, use all datapoints.}
 
 \item{maxrelMCSE}{Numeric positive, default 0.04: desired maximal \emph{relative Monte Carlo Standard Error} of calculated probabilities per chain (after "burn-in" samples have been discarded). If missing, then argument \code{minESS} is used; if \code{minESS} is also missing, then the default value is used. \code{maxrelMCSE} is related to \code{minESS} by \eqn{\mathrm{maxrelMCSE} = 1/\sqrt{\mathrm{minESS}}}.}
 
