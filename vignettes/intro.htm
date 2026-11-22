@@ -48,8 +48,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -742,7 +743,7 @@ should obviously have different names.
 </dd>
 <dt>Variate type (<code>type</code>)</dt>
 <dd>
-<p><strong>Prova</strong> can handle three kinds of variates:</p>
+<strong>Prova</strong> can handle three kinds of variates:
 <ul>
 <li><code>nominal</code>: it can take on a finite number of discrete
 values, which do not have any natural ordering. Examples could be sex or
@@ -756,17 +757,17 @@ scale</a>.</li>
 number of continuous values, although they can be discretized or
 rounded. Examples could be age or weight.</li>
 </ul>
-<p>Many other types of variates exist. For example images and audio are
+Many other types of variates exist. For example images and audio are
 also types of variates; but <strong>Prova</strong> cannot handle these
 complex types. A simple type of variate that <strong>Prova</strong>
 cannot properly handle is the <em>cyclic</em> one, such as time of day.
 There are no clear-cut separations between different types of variates;
-thus it’s sometimes difficult to assess the type.</p>
+thus it’s sometimes difficult to assess the type.
 </dd>
 <dt>Domain minimum and maximum (<code>domainmin</code>,
 <code>domainmax</code>)</dt>
 <dd>
-<p>These are numbers, only defined for numeric-ordinal and continuous
+These are numbers, only defined for numeric-ordinal and continuous
 variates. These metadata are the minimum and maximum value a variate can
 take on in a given study. For example, in a study about health or
 employment of adults, a variate <em>age</em> might have a minimum of
@@ -774,11 +775,11 @@ employment of adults, a variate <em>age</em> might have a minimum of
 minimum would be 0. In a health study where people of 90 years or more
 are pooled together, the maximum would be 90 years. A minimum could also
 be minus-infinity, and a maximum plus-infinity. Obviously the minimum
-should be lower than the maximum.</p>
-<p>Sometimes the minimum or maximum is not clear-cut. For instance,
-there is no theoretical maximum on a person’s age, although we can
-consider an age of 300 impossible to reach today. In such cases the
-maximum or minimum can be taken to be plus or minus infinity.</p>
+should be lower than the maximum.
+Sometimes the minimum or maximum is not clear-cut. For instance, there
+is no theoretical maximum on a person’s age, although we can consider an
+age of 300 impossible to reach today. In such cases the maximum or
+minimum can be taken to be plus or minus infinity.
 </dd>
 <dt>Interval between values (<code>datastep</code>)</dt>
 <dd>
@@ -902,7 +903,7 @@ warnings of the helper function:</p>
 <span id="cb4-64"><a href="#cb4-64" tabindex="-1"></a><span class="co"># Saved proposal metadata file as &quot;meta_penguins_temp.csv&quot; </span></span></code></pre></div>
 <p>The preliminary metadata file created by
 <code>metadatatemplate()</code> looks like this:</p>
-<table style="width:100%;">
+<table style="width:99%;">
 <colgroup>
 <col width="9%" />
 <col width="8%" />
@@ -1149,7 +1150,7 @@ was correctly guessed).</p>
 <code>meta_penguins_temp.csv</code> with our favourite editor, and
 correct and complete the guesses of the helper function. In this case we
 end up with the following corrected metadata:</p>
-<table style="width:100%;">
+<table style="width:99%;">
 <colgroup>
 <col width="11%" />
 <col width="10%" />
@@ -1654,13 +1655,16 @@ probabilities.</p></li>
 are (in accordance to ISO standards) those affected by numerical
 error.</p></li>
 <li><p><code>+/-</code>: it lists the <em>numerical errors</em> (0.0019,
-0.0022, 0.0023) of the probabilities. Note that these are simply the
-intrinsic precision errors of the algorithm; they are like the precision
-with which a calculator computes the result of an algebraic operation.
-They are <em>not</em> related to the variability of traits within the
-population, or the size of the data sample. These errors can always be
-decreased by using a larger <code>nsamples =</code> argument in the
-<code>learn()</code> function.</p></li>
+0.0022, 0.0023) of the probabilities. These are simply the computational
+errors of the algorithm which calculates the probabilities. These
+numerical errors are <em>not</em> related to the variability of traits
+within the population, or to the size of the data sample. They can
+always be made smaller by using a larger <code>nsamples =</code>
+argument in the <code>learn()</code> function. The reported errors
+should be interpreted as done with common measurement errors: they
+represent roughly one standard deviation, so it may happen that the
+correct value is outside the reported interval, although rarely that it
+is outside twice the reported interval.</p></li>
 <li><p><code>Q5.5%</code>: this column reports the <em>long-run
 frequencies</em> of the species have at least these values (0.1147,
 0.1255, 0.185) with a probability of 5.5%. In more technical terms,
