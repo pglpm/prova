@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,17 +66,38 @@
 
 
 <dt id="arg-dthreshold">Dthreshold<a class="anchor" aria-label="anchor" href="#arg-dthreshold"></a></dt>
-<dd><p>Positive number: threshold of fraction of unique datapoints to total datapoints, to decide whether to treat a rounded variate as continuous.</p></dd>
+<dd><p>Positive number, default 1: threshold of fraction of unique datapoints to total datapoints, to decide whether to treat a rounded variate as continuous.</p></dd>
 
 
 <dt id="arg-tscalefactor">tscalefactor<a class="anchor" aria-label="anchor" href="#arg-tscalefactor"></a></dt>
-<dd><p>Positive number: scaling factor for variate conversion.</p></dd>
+<dd><p>Positive number, default 4.266: scaling factor for variate transformation.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> with auxmetadata.</p>
-    </div>
+    <p>A <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data frame</a> with auxiliary metadata:</p><ul><li><p><code>name</code> of the variate.</p></li>
+<li><p><code>type</code> of the variate.</p></li>
+<li><p><code>mcmctype</code> (<code>R</code>, <code>C</code>, <code>D</code>, <code>O</code>, <code>N</code>, <code>B</code>) of the variate, for internal computation.</p></li>
+<li><p><code>id</code> number of the variate among those of same <code>mcmctype</code>.</p></li>
+<li><p><code>transform</code> (<code>'identity'</code>, <code>'Q'</code>, <code>'log'</code>, <code>'logminus'</code>): internal transformation for the variate.</p></li>
+<li><p><code>Nvalues</code>: variate's domain size.</p></li>
+<li><p><code>indexpos</code>: starting position <em>minus 1</em> of the nominal/ordinal variate in the <code>Nprob</code>/<code>Oprob</code> vector of probabilities.</p></li>
+<li><p><code>halfstep</code>: half of the value step for rounded variates.</p></li>
+<li><p><code>domainmin</code>: domain's lower bound.</p></li>
+<li><p><code>domainmax</code>: domain's upper bound.</p></li>
+<li><p><code>minincluded</code>: is lower bound included in the domain?</p></li>
+<li><p><code>maxincluded</code>: is upper bound included in the domain?</p></li>
+<li><p><code>tdomainmin</code>: transformed lower bound.</p></li>
+<li><p><code>tdomainmax</code>: transformed upper bound.</p></li>
+<li><p><code>domainminplushs</code>: lower bound plus half value-step.</p></li>
+<li><p><code>domainmaxminushs</code>: upper bound minus half value-step.</p></li>
+<li><p><code>tdomainminplushs</code>: transformed lower bound plus half value-step.</p></li>
+<li><p><code>tdomainmaxminushs</code>: transformed upper bound minus half value-step.</p></li>
+<li><p><code>tlocation</code>: transformed location parameter, usually the median.</p></li>
+<li><p><code>tscale</code>: transformed scale parameter, usually InterQuartileRange divided by <code>tscalefactor</code>.</p></li>
+<li><p><code>plotmin</code>: lower plot range.</p></li>
+<li><p><code>plotmax</code>: upper plot range.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>In addition to the original metadata it contains info about transformed variates and their domains, estimated location- and scale-parameters, and similar metadata.</p>

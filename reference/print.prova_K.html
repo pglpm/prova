@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,11 +82,11 @@
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Dmean      : num [1, 1:64, 1:225] 4.265 1.53 2.779 1.419 0.676 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Dsd        : num [1, 1:64, 1:225] 1.658 0.213 2.688 4.021 0.448 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Nprob      : num [1:3, 1:64, 1:225] 6.80e-01 3.16e-01 4.08e-03 7.93e-01 7.60e-07 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ W          : num [1:64, 1:225] 2.17e-10 1.75e-11 4.23e-17 1.41e-60 4.95e-30 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MCindex    : num [1:225(1d)] 227 310 392 475 558 641 724 807 889 972 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Dmean      : num [1, 1:64, 1:225] 2.82 1.99 -4.85 -6.57 2.82 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Dsd        : num [1, 1:64, 1:225] 0.397 0.362 1.322 6.767 0.443 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Nprob      : num [1:3, 1:64, 1:225] 0.232 0.192 0.576 0.828 0.115 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ W          : num [1:64, 1:225] 1.35e-70 5.40e-18 4.77e-255 3.51e-20 8.04e-86 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MCindex    : num [1:225(1d)] 311 389 468 546 625 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ auxmetadata:'data.frame':	2 obs. of  25 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ name             : chr [1:2] "species" "bill_len"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ type             : chr [1:2] "nominal" "continuous"</span>
@@ -113,8 +113,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ V1               : chr [1:2] "Adelie" NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ V2               : chr [1:2] "Chinstrap" NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ V3               : chr [1:2] "Gentoo" NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ info       :List of 19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ metadata                   :'data.frame':	2 obs. of  10 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ info       :List of 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ metadata         :'data.frame':	2 obs. of  10 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ name       : chr [1:2] "species" "bill_len"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ type       : chr [1:2] "nominal" "continuous"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ domainmin  : int [1:2] NA 0</span>
@@ -125,55 +125,75 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ V1         : chr [1:2] "Adelie" NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ V2         : chr [1:2] "Chinstrap" NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ V3         : chr [1:2] "Gentoo" NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nMCsamples                 : int 225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nchains                    : num 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ npoints                    : int 344</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ hyperparams                :List of 21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ncomponents : num 64</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ minalpha    : num -4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ maxalpha    : num 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ byalpha     : num 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Rshapelo    : num 0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Rshapehi    : num 0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Rvarm1      : num 9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Cshapelo    : num 0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Cshapehi    : num 0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Cvarm1      : num 9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Dshapelo    : num 0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Dshapehi    : num 0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Dvarm1      : num 9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Bshapelo    : num 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Bshapehi    : num 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Dthreshold  : num 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ tscalefactor: num 4.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Oprior      : chr "Hadamard"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Nprior      : chr "Hadamard"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ initmethod  : chr "datacentre"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ Qerror      : num [1:2] 0.159 0.841</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxiterations              : num 18779</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxusedcomponents          : num 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nonfinitechains            : num 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ stoppedchains              : num 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ max abs. quantile error    : Named num [1:13] 0.013 0.0184 0.053 0.0338 0.0418 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ quantile width             : Named num [1:13] 0.125 0.277 0.609 0.282 0.387 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ max rel. quantile error    : Named num [1:13] 0.1042 0.0663 0.087 0.12 0.1079 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ min ESS from rel. qt. error: Named num [1:13] 92 227.5 132.2 69.4 85.8 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ MCSE                       : Named num [1:13] 0.00312 0.00668 0.01282 0.00624 0.01233 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ rel. MCSE                  : Named num [1:13] 0.082 0.0771 0.0669 0.0702 0.1043 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ quantl-rel. MCSE           : Named num [1:13] 0.025 0.0241 0.0211 0.0221 0.0318 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ ESS                        : Named num [1:13] 148.7 168.3 223.6 203 91.9 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ needed thinning            : Named num [1:13] 2.45 1.34 1.7 3.24 2.62 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ log-average                : Named num [1:13] -5.79 -5.28 -6.67 -5.43 -5.39 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nMCsamples       : int 225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nchains          : num 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ npoints          : int 344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxiterations    : num 17906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxusedcomponents: num 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nonfinitechains  : num 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ stoppedchains    : num 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ .Random.seed     : int [1:626] 10403 624 1298636919 -543651252 1450744541 -112313350 -659834573 -216144680 409417977 25576550 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ args             :List of 24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ nsamples           : num 225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ nchains            : num 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ nsamplesperchain   : num 450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ parallel           : logi TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ seed               : NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ cleanup            : logi TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ appendinfo         : logi TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ valueisK           : logi TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ subsampledata      : NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ prior              : logi FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ startupMCiterations: num 3600</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ minMCiterations    : num 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ maxMCiterations    : num 9e+05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ maxhours           : num Inf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ncheckpoints       : NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ maxrelMCSE         : num 0.0471</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ minESS             : num 450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ initES             : num 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ thinning           : NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ verbose            : logi TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ plottraces         : logi FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ showKtraces        : logi FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ showAlphatraces    : logi FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ hyperparams        :List of 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ ncomponents : num 64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ minalpha    : num -4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ maxalpha    : num 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ byalpha     : num 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Rshapelo    : num 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Rshapehi    : num 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Rvarm1      : num 9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Cshapelo    : num 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Cshapehi    : num 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Cvarm1      : num 9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Dshapelo    : num 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Dshapehi    : num 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Dvarm1      : num 9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Bshapelo    : num 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Bshapehi    : num 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Dthreshold  : num 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ tscalefactor: num 4.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Oprior      : chr "Hadamard"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Nprior      : chr "Hadamard"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ avoidzeroW  : NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ initmethod  : chr "datacentre"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Qerror      : num [1:2] 0.159 0.841</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ diagn            :List of 9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ max abs. quantile error    : num [1:3] 0.0083 0.0373 0.0389</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ quantile width             : num [1:3] 0.107 0.498 0.586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ max rel. quantile error    : num [1:3] 0.0775 0.075 0.0663</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ min ESS from rel. qt. error: num [1:3] 167 178 228</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ MCSE                       : Named num [1:3] 0.00383 0.01425 0.00899</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ rel. MCSE                  : Named num [1:3] 0.1143 0.0915 0.049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ESS                        : Named num [1:3] 76.5 119.4 415.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ max needed thinning        : num 2.94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ log-averages               : Named num [1:3] -5.81 -5.83 -6.28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "prova_K"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -209,7 +209,7 @@ shows that its probability is around 0.3%:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">prob</span><span class="op">)</span></span>
 <span><span class="co">#    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% </span></span>
-<span><span class="co"># 0.003103 0.000056 0.000413 0.001247 0.004181  0.00824</span></span></code></pre></div>
+<span><span class="co"># 0.002957 0.000042 0.000390 0.001174 0.004073  0.00762</span></span></code></pre></div>
 <p><br>
 This example shows the limitations of using sample data for visualizing
 features of the <em>whole</em> population. How would a scatter plot
@@ -239,12 +239,12 @@ from the computation made with the <code><a href="../reference/learn.html">learn
 penguins, as an example:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rPr.html">rPr</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span>, Ynames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'island'</span>, <span class="st">'species'</span><span class="op">)</span>, K <span class="op">=</span> <span class="va">K</span><span class="op">)</span></span>
-<span><span class="co">#        island   species</span></span>
-<span><span class="co"># 644_1  Biscoe    Gentoo</span></span>
-<span><span class="co"># 996_1   Dream Chinstrap</span></span>
-<span><span class="co"># 1228_1 Biscoe    Gentoo</span></span>
-<span><span class="co"># 2230_1  Dream Chinstrap</span></span>
-<span><span class="co"># 3083_1  Dream    Adelie</span></span></code></pre></div>
+<span><span class="co">#           island   species</span></span>
+<span><span class="co"># 644_1     Biscoe    Gentoo</span></span>
+<span><span class="co"># 996_1     Biscoe    Gentoo</span></span>
+<span><span class="co"># 1228_1    Biscoe    Gentoo</span></span>
+<span><span class="co"># 2230_1     Dream Chinstrap</span></span>
+<span><span class="co"># 3083_1 Torgersen    Adelie</span></span></code></pre></div>
 <p>This could have also be entered as
 <code>rPr(5, c('island', 'species'), NA, K)</code>, where
 <code>NA</code> stands for the <code>X =</code> argument.</p>
@@ -554,12 +554,12 @@ element:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">MIislandspecies</span><span class="op">$</span><span class="va">value</span></span>
 <span><span class="co">#          </span></span>
-<span><span class="co"># 0.623971</span></span>
+<span><span class="co"># 0.627532</span></span>
 <span></span>
 <span><span class="va">MIislandspecies</span><span class="op">$</span><span class="va">unit</span></span>
 <span><span class="co"># [1] "Sh"</span></span></code></pre></div>
 <p>Between variates <code>island</code> and <code>species</code> there
-is thus a mutual information of 0.62 Sh. But what does this mean?</p>
+is thus a mutual information of 0.63 Sh. But what does this mean?</p>
 </div>
 <div class="section level3">
 <h3 id="understanding-mutual-information-values">Understanding mutual-information values<a class="anchor" aria-label="anchor" href="#understanding-mutual-information-values"></a>
@@ -617,14 +617,14 @@ have</p>
 <code class="sourceCode R"><span><span class="va">MIislandspecies</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'value'</span>, <span class="st">'unit'</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co"># $value</span></span>
 <span><span class="co">#          </span></span>
-<span><span class="co"># 0.623971 </span></span>
+<span><span class="co"># 0.627532 </span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># $unit</span></span>
 <span><span class="co"># [1] "Sh"</span></span>
 <span></span>
 <span><span class="va">MIislandspecies</span><span class="op">$</span><span class="va">rGauss</span></span>
-<span><span class="co">#          </span></span>
-<span><span class="co"># 0.760889</span></span></code></pre></div>
+<span><span class="co">#         </span></span>
+<span><span class="co"># 0.76225</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="mutual-information-for-previous-examples">Mutual information for previous examples<a class="anchor" aria-label="anchor" href="#mutual-information-for-previous-examples"></a>
@@ -724,7 +724,7 @@ length</strong>
 <code>body_mass</code> and <code>bill_len</code> is</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">samples</span><span class="op">$</span><span class="va">body_mass</span>, <span class="va">samples</span><span class="op">$</span><span class="va">bill_len</span>, method <span class="op">=</span> <span class="st">'pearson'</span><span class="op">)</span></span>
-<span><span class="co"># [1] 0.56415</span></span></code></pre></div>
+<span><span class="co"># [1] 0.560354</span></span></code></pre></div>
 <p>which is different from the rough <span class="math inline">\(r\)</span>-equivalent 0.67.</p>
 <p><br></p>
 </div>
@@ -803,15 +803,15 @@ It is interesting to contrast this result with values of the Pearson correlation
 ``` r
 ## Pearson r for Adelie subpopulation:
 cor(samplesAdelie$body_mass, samplesAdelie$bill_len, method = 'pearson')
-# [1] 0.497042
+# [1] 0.457018
 
 ## Pearson r for Chinstrap subpopulation:
 cor(samplesChinstrap$body_mass, samplesChinstrap$bill_len, method = 'pearson')
-# [1] 0.337984
+# [1] 0.29659
 
 ## Pearson r for Gentoo subpopulation:
 cor(samplesGentoo$body_mass, samplesGentoo$bill_len, method = 'pearson')
-# [1] 0.504752
+# [1] 0.505487
 ```
 
 The Pearson correlation yields the same the association *ranking* as the mutual information does (first Gentoo, then Adélie, then Chinstrap), but it yields the association for the Adélie subpopulation to be closer to the Gentoo one than to the Chinstrap one. The mutual information yields the opposite.
@@ -844,7 +844,7 @@ probability?”. The answer was already calculated by
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">MIislandspecies</span><span class="op">)</span></span>
 <span><span class="co"># value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% </span></span>
-<span><span class="co">#   0.6240   0.0042   0.5506   0.5986   0.6630   0.7075</span></span></code></pre></div>
+<span><span class="co">#   0.6275   0.0041   0.5538   0.6009   0.6676   0.7095</span></span></code></pre></div>
 <p>which shows that, acquiring more data, we can expect with 89%
 probability a mutual information between 0.55 Sh and 0.71 Sh. We can
 also visualize our uncertainty about this “long-run” mutual information

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -181,8 +181,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 39.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  44.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  44.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## verify these values, within numerical error, using Pr():</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="Pr.html">Pr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">quants</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span>, <span class="cn">NA</span>, <span class="va">Kexample</span>,</span></span>
@@ -190,35 +190,35 @@
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=39.2 0.2537147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=44.3 0.5030765</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=48.4 0.7561297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=39.2 0.2540140</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=44.2 0.5019569</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=48.3 0.7539750</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the revisability about the quantiles</span></span></span>
 <span class="r-in"><span><span class="va">quants</span><span class="op">$</span><span class="va">quantiles</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , Q = 5.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 38.700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  43.143</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 47.800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 38.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  43.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 47.8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , Q = 50%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 39.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  44.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  44.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , Q = 94.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 39.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  45.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 39.800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  45.057</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.900</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -248,9 +248,9 @@
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         |species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len    Adelie</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=37   0.2559531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=38.8 0.5084777</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=40.6 0.7548006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=37   0.2542091</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=38.8 0.5047508</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=40.6 0.7508253</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

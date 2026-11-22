@@ -175,7 +175,7 @@ prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'), K = K)
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-# 0.003103 0.000056 0.000413 0.001247 0.004181  0.00824
+# 0.002957 0.000042 0.000390 0.001174 0.004073  0.00762
 ```
 
   
@@ -206,12 +206,12 @@ penguins, as an example:
 ``` r
 
 rPr(n = 5, Ynames = c('island', 'species'), K = K)
-#        island   species
-# 644_1  Biscoe    Gentoo
-# 996_1   Dream Chinstrap
-# 1228_1 Biscoe    Gentoo
-# 2230_1  Dream Chinstrap
-# 3083_1  Dream    Adelie
+#           island   species
+# 644_1     Biscoe    Gentoo
+# 996_1     Biscoe    Gentoo
+# 1228_1    Biscoe    Gentoo
+# 2230_1     Dream Chinstrap
+# 3083_1 Torgersen    Adelie
 ```
 
 This could have also be entered as
@@ -569,14 +569,14 @@ the `$unit` element:
 
 MIislandspecies$value
 #          
-# 0.623971
+# 0.627532
 
 MIislandspecies$unit
 # [1] "Sh"
 ```
 
 Between variates `island` and `species` there is thus a mutual
-information of 0.62 Sh. But what does this mean?
+information of 0.63 Sh. But what does this mean?
 
 ### Understanding mutual-information values
 
@@ -637,14 +637,14 @@ corresponding \\\lvert r \rvert\\ value. In the previous case of the
 MIislandspecies[c('value', 'unit')]
 # $value
 #          
-# 0.623971 
+# 0.627532 
 # 
 # $unit
 # [1] "Sh"
 
 MIislandspecies$rGauss
-#          
-# 0.760889
+#         
+# 0.76225
 ```
 
 ### Mutual information for previous examples
@@ -759,7 +759,7 @@ Note that in this case the Pearson correlation between `body_mass` and
 ``` r
 
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.56415
+# [1] 0.560354
 ```
 
 which is different from the rough \\r\\-equivalent 0.67.
@@ -876,7 +876,7 @@ and can be seen with the utility function
 
 print(MIislandspecies)
 # value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-#   0.6240   0.0042   0.5506   0.5986   0.6630   0.7075
+#   0.6275   0.0041   0.5538   0.6009   0.6676   0.7095
 ```
 
 which shows that, acquiring more data, we can expect with 89%

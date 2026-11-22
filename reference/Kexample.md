@@ -12,7 +12,9 @@ according to the call
 
 It is a list that essentially contains posterior hyperparameters for
 drawing statistical inferences about the variates `species` and
-`bill_len`.
+`bill_len`. See
+[`learn()`](https://pglpm.github.io/prova/reference/learn.md) for a more
+detailed description of its arguments.
 
 **Note** that the
 [`learn()`](https://pglpm.github.io/prova/reference/learn.md) function

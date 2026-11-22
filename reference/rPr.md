@@ -170,15 +170,15 @@ datapoints <- rPr(n = 10, Ynames = 'species', K = Kexample)
 datapoints
 #>         species
 #> 3_1      Adelie
-#> 37_1     Adelie
-#> 67_1     Adelie
-#> 69_1     Adelie
-#> 88_1     Adelie
-#> 176_1 Chinstrap
+#> 37_1     Gentoo
+#> 67_1  Chinstrap
+#> 69_1  Chinstrap
+#> 88_1     Gentoo
+#> 176_1    Gentoo
 #> 182_1    Gentoo
 #> 191_1 Chinstrap
-#> 199_1    Gentoo
-#> 218_1    Gentoo
+#> 199_1    Adelie
+#> 218_1    Adelie
 
 
 ## ## Example 2:
@@ -186,11 +186,11 @@ datapoints
 datapoints <- rPr(5, c('species', 'bill_len'), NA, Kexample)
 datapoints
 #>         species bill_len
-#> 49_1  Chinstrap     50.2
-#> 61_1     Adelie     38.4
-#> 69_1  Chinstrap     51.1
-#> 109_1    Adelie     44.4
-#> 201_1    Gentoo     52.3
+#> 49_1  Chinstrap     48.5
+#> 61_1  Chinstrap     48.4
+#> 69_1  Chinstrap     50.4
+#> 109_1    Adelie     43.4
+#> 201_1    Gentoo     51.7
 
 
 ## ## Example 3:
@@ -218,13 +218,13 @@ datapoints <- rPr(10, 'species')
 datapoints
 #>         species
 #> 17_1     Gentoo
-#> 23_1     Adelie
-#> 38_1     Adelie
-#> 50_1     Gentoo
-#> 58_1     Adelie
+#> 23_1     Gentoo
+#> 38_1  Chinstrap
+#> 50_1     Adelie
+#> 58_1  Chinstrap
 #> 69_1  Chinstrap
-#> 97_1     Gentoo
-#> 143_1 Chinstrap
+#> 97_1     Adelie
+#> 143_1    Adelie
 #> 155_1    Gentoo
 #> 185_1    Adelie
 

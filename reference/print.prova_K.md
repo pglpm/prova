@@ -54,11 +54,11 @@ example "K" object included with **Prova**.
 ## calculated from the "penguins" dataset
 print(Kexample)
 #> List of 7
-#>  $ Dmean      : num [1, 1:64, 1:225] 4.265 1.53 2.779 1.419 0.676 ...
-#>  $ Dsd        : num [1, 1:64, 1:225] 1.658 0.213 2.688 4.021 0.448 ...
-#>  $ Nprob      : num [1:3, 1:64, 1:225] 6.80e-01 3.16e-01 4.08e-03 7.93e-01 7.60e-07 ...
-#>  $ W          : num [1:64, 1:225] 2.17e-10 1.75e-11 4.23e-17 1.41e-60 4.95e-30 ...
-#>  $ MCindex    : num [1:225(1d)] 227 310 392 475 558 641 724 807 889 972 ...
+#>  $ Dmean      : num [1, 1:64, 1:225] 2.82 1.99 -4.85 -6.57 2.82 ...
+#>  $ Dsd        : num [1, 1:64, 1:225] 0.397 0.362 1.322 6.767 0.443 ...
+#>  $ Nprob      : num [1:3, 1:64, 1:225] 0.232 0.192 0.576 0.828 0.115 ...
+#>  $ W          : num [1:64, 1:225] 1.35e-70 5.40e-18 4.77e-255 3.51e-20 8.04e-86 ...
+#>  $ MCindex    : num [1:225(1d)] 311 389 468 546 625 ...
 #>  $ auxmetadata:'data.frame': 2 obs. of  25 variables:
 #>   ..$ name             : chr [1:2] "species" "bill_len"
 #>   ..$ type             : chr [1:2] "nominal" "continuous"
@@ -85,8 +85,8 @@ print(Kexample)
 #>   ..$ V1               : chr [1:2] "Adelie" NA
 #>   ..$ V2               : chr [1:2] "Chinstrap" NA
 #>   ..$ V3               : chr [1:2] "Gentoo" NA
-#>  $ info       :List of 19
-#>   ..$ metadata                   :'data.frame':  2 obs. of  10 variables:
+#>  $ info       :List of 11
+#>   ..$ metadata         :'data.frame':    2 obs. of  10 variables:
 #>   .. ..$ name       : chr [1:2] "species" "bill_len"
 #>   .. ..$ type       : chr [1:2] "nominal" "continuous"
 #>   .. ..$ domainmin  : int [1:2] NA 0
@@ -97,54 +97,74 @@ print(Kexample)
 #>   .. ..$ V1         : chr [1:2] "Adelie" NA
 #>   .. ..$ V2         : chr [1:2] "Chinstrap" NA
 #>   .. ..$ V3         : chr [1:2] "Gentoo" NA
-#>   ..$ nMCsamples                 : int 225
-#>   ..$ nchains                    : num 1
-#>   ..$ npoints                    : int 344
-#>   ..$ hyperparams                :List of 21
-#>   .. ..$ ncomponents : num 64
-#>   .. ..$ minalpha    : num -4
-#>   .. ..$ maxalpha    : num 4
-#>   .. ..$ byalpha     : num 1
-#>   .. ..$ Rshapelo    : num 0.5
-#>   .. ..$ Rshapehi    : num 0.5
-#>   .. ..$ Rvarm1      : num 9
-#>   .. ..$ Cshapelo    : num 0.5
-#>   .. ..$ Cshapehi    : num 0.5
-#>   .. ..$ Cvarm1      : num 9
-#>   .. ..$ Dshapelo    : num 0.5
-#>   .. ..$ Dshapehi    : num 0.5
-#>   .. ..$ Dvarm1      : num 9
-#>   .. ..$ Bshapelo    : num 1
-#>   .. ..$ Bshapehi    : num 1
-#>   .. ..$ Dthreshold  : num 1
-#>   .. ..$ tscalefactor: num 4.27
-#>   .. ..$ Oprior      : chr "Hadamard"
-#>   .. ..$ Nprior      : chr "Hadamard"
-#>   .. ..$ initmethod  : chr "datacentre"
-#>   .. ..$ Qerror      : num [1:2] 0.159 0.841
-#>   ..$ maxiterations              : num 18779
-#>   ..$ maxusedcomponents          : num 6
-#>   ..$ nonfinitechains            : num 0
-#>   ..$ stoppedchains              : num 0
-#>   ..$ max abs. quantile error    : Named num [1:13] 0.013 0.0184 0.053 0.0338 0.0418 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...
-#>   ..$ quantile width             : Named num [1:13] 0.125 0.277 0.609 0.282 0.387 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...
-#>   ..$ max rel. quantile error    : Named num [1:13] 0.1042 0.0663 0.087 0.12 0.1079 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...
-#>   ..$ min ESS from rel. qt. error: Named num [1:13] 92 227.5 132.2 69.4 85.8 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...
-#>   ..$ MCSE                       : Named num [1:13] 0.00312 0.00668 0.01282 0.00624 0.01233 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...
-#>   ..$ rel. MCSE                  : Named num [1:13] 0.082 0.0771 0.0669 0.0702 0.1043 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...
-#>   ..$ quantl-rel. MCSE           : Named num [1:13] 0.025 0.0241 0.0211 0.0221 0.0318 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...
-#>   ..$ ESS                        : Named num [1:13] 148.7 168.3 223.6 203 91.9 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...
-#>   ..$ needed thinning            : Named num [1:13] 2.45 1.34 1.7 3.24 2.62 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...
-#>   ..$ log-average                : Named num [1:13] -5.79 -5.28 -6.67 -5.43 -5.39 ...
-#>   .. ..- attr(*, "names")= chr [1:13] "gmean" "88" "93" "120" ...
+#>   ..$ nMCsamples       : int 225
+#>   ..$ nchains          : num 1
+#>   ..$ npoints          : int 344
+#>   ..$ maxiterations    : num 17906
+#>   ..$ maxusedcomponents: num 6
+#>   ..$ nonfinitechains  : num 0
+#>   ..$ stoppedchains    : num 0
+#>   ..$ .Random.seed     : int [1:626] 10403 624 1298636919 -543651252 1450744541 -112313350 -659834573 -216144680 409417977 25576550 ...
+#>   ..$ args             :List of 24
+#>   .. ..$ nsamples           : num 225
+#>   .. ..$ nchains            : num 1
+#>   .. ..$ nsamplesperchain   : num 450
+#>   .. ..$ parallel           : logi TRUE
+#>   .. ..$ seed               : NULL
+#>   .. ..$ cleanup            : logi TRUE
+#>   .. ..$ appendinfo         : logi TRUE
+#>   .. ..$ valueisK           : logi TRUE
+#>   .. ..$ subsampledata      : NULL
+#>   .. ..$ prior              : logi FALSE
+#>   .. ..$ startupMCiterations: num 3600
+#>   .. ..$ minMCiterations    : num 0
+#>   .. ..$ maxMCiterations    : num 9e+05
+#>   .. ..$ maxhours           : num Inf
+#>   .. ..$ ncheckpoints       : NULL
+#>   .. ..$ maxrelMCSE         : num 0.0471
+#>   .. ..$ minESS             : num 450
+#>   .. ..$ initES             : num 8
+#>   .. ..$ thinning           : NULL
+#>   .. ..$ verbose            : logi TRUE
+#>   .. ..$ plottraces         : logi FALSE
+#>   .. ..$ showKtraces        : logi FALSE
+#>   .. ..$ showAlphatraces    : logi FALSE
+#>   .. ..$ hyperparams        :List of 22
+#>   .. .. ..$ ncomponents : num 64
+#>   .. .. ..$ minalpha    : num -4
+#>   .. .. ..$ maxalpha    : num 4
+#>   .. .. ..$ byalpha     : num 1
+#>   .. .. ..$ Rshapelo    : num 0.5
+#>   .. .. ..$ Rshapehi    : num 0.5
+#>   .. .. ..$ Rvarm1      : num 9
+#>   .. .. ..$ Cshapelo    : num 0.5
+#>   .. .. ..$ Cshapehi    : num 0.5
+#>   .. .. ..$ Cvarm1      : num 9
+#>   .. .. ..$ Dshapelo    : num 0.5
+#>   .. .. ..$ Dshapehi    : num 0.5
+#>   .. .. ..$ Dvarm1      : num 9
+#>   .. .. ..$ Bshapelo    : num 1
+#>   .. .. ..$ Bshapehi    : num 1
+#>   .. .. ..$ Dthreshold  : num 1
+#>   .. .. ..$ tscalefactor: num 4.27
+#>   .. .. ..$ Oprior      : chr "Hadamard"
+#>   .. .. ..$ Nprior      : chr "Hadamard"
+#>   .. .. ..$ avoidzeroW  : NULL
+#>   .. .. ..$ initmethod  : chr "datacentre"
+#>   .. .. ..$ Qerror      : num [1:2] 0.159 0.841
+#>   ..$ diagn            :List of 9
+#>   .. ..$ max abs. quantile error    : num [1:3] 0.0083 0.0373 0.0389
+#>   .. ..$ quantile width             : num [1:3] 0.107 0.498 0.586
+#>   .. ..$ max rel. quantile error    : num [1:3] 0.0775 0.075 0.0663
+#>   .. ..$ min ESS from rel. qt. error: num [1:3] 167 178 228
+#>   .. ..$ MCSE                       : Named num [1:3] 0.00383 0.01425 0.00899
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"
+#>   .. ..$ rel. MCSE                  : Named num [1:3] 0.1143 0.0915 0.049
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"
+#>   .. ..$ ESS                        : Named num [1:3] 76.5 119.4 415.9
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"
+#>   .. ..$ max needed thinning        : num 2.94
+#>   .. ..$ log-averages               : Named num [1:3] -5.81 -5.83 -6.28
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"
 #>  - attr(*, "class")= chr "prova_K"
 ```

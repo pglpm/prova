@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -198,14 +198,14 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4402005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4433652</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## The full-population frequency of 'Adelie' penguins is unknown.</span></span></span>
 <span class="r-in"><span><span class="co">## Display the 5.5%- and 94.5%-probability values for such frequency:</span></span></span>
 <span class="r-in"><span><span class="co">## thus the true frequency is, with 89% probability, in this range:</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%     94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4008034 0.4849019 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3974547 0.4864715 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## we can also plot the probability distribution</span></span></span>
 <span class="r-in"><span><span class="co">## for this full-population frequency</span></span></span>
@@ -224,9 +224,9 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4402005</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1983577</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3614418</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4433652</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1986575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3579773</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## The full-population frequencies of the three species are unknown.</span></span></span>
 <span class="r-in"><span><span class="co">## Display the 5.5%- and 94.5%-probability values for such frequencies.</span></span></span>
@@ -234,9 +234,9 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Q</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species          5.5%     94.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4008034 0.4849019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1655133 0.2276942</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3251943 0.4000112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.3974547 0.4864715</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1675626 0.2371634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3182725 0.4036608</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## plot the probabilities and the ranges for the frequencies as bands:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span></span></span>
@@ -257,7 +257,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species         43</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4610326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie 0.4660975</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## The frequency of 'Adelie' penguins, in the subpopulation of</span></span></span>
 <span class="r-in"><span><span class="co">## penguins with a bill length of 43 mm, is unknown.</span></span></span>
@@ -265,7 +265,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="co">## thus the true frequency is, with 89% probability, in this range:</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%     94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3579296 0.5550358 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3678362 0.5737320 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 4:</span></span></span>
@@ -277,13 +277,13 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Adelie,43 0.001813403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Adelie,43 0.001867135</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 89%-probability range for the frequency</span></span></span>
 <span class="r-in"><span><span class="co">## of 'Adelie' penguins with 43 mm bills</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        5.5%       94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.001283524 0.002363858 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       5.5%      94.5% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.00130985 0.00241594 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 5:</span></span></span>
@@ -297,9 +297,9 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species            43        44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4610326 0.2198105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1519634 0.2139281</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3870039 0.5662614</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.4660975 0.2253932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.1500508 0.2133198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.3838517 0.5612871</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 89%-probability range for the six joint population frequencies</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
@@ -307,17 +307,17 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species             43        44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.35792962 0.1442566</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.09156218 0.1493615</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.30529529 0.4739648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.36783616 0.1466575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.09184573 0.1405543</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.28873257 0.4562266</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , Q = 94.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            |bill_len</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species            43        44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.5550358 0.2941336</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.2208147 0.2967920</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.4860799 0.6654145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Adelie    0.5737320 0.3085731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Chinstrap 0.2159958 0.2887027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Gentoo    0.4798345 0.6461153</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## plot the probabilities and frequency ranges</span></span></span>
@@ -340,23 +340,23 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0018134025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0005974471</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0015225451</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0009501895</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0009187148</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0024418626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0018671346</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0005978219</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0015352814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0009885649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0009287091</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0024661611</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the 89%-probability ranges the full-population joint frequencies</span></span></span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 Q</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> species,bill_len         5.5%        94.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0012835235 0.0023638576</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0003510098 0.0008691072</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0010546947 0.0020697783</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0005781451 0.0013606922</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0005703212 0.0012630814</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0018537489 0.0031459102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,43    0.0013098504 0.0024159401</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,43 0.0003457606 0.0008825139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,43    0.0011099123 0.0020376132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Adelie,44    0.0006072010 0.0013933918</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Chinstrap,44 0.0005945148 0.0012795409</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Gentoo,44    0.0019124066 0.0031667982</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## ## Example 7:</span></span></span>
@@ -369,7 +369,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span> <span class="co"># same as range from Example 1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%     94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4008034 0.4849019 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3974547 0.4864715 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Check against Example 3 above</span></span></span>
 <span class="r-in"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">Pr</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Adelie'</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>bill_len <span class="op">=</span> <span class="fl">43</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -377,7 +377,7 @@ $$\mathrm{Pr}(Y = y \vert X = x, K, \text{prior})
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">quantiles</span><span class="op">[</span>, , <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'5.5%'</span>, <span class="st">'94.5%'</span><span class="op">)</span><span class="op">]</span> <span class="co"># same as range from Example 3</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      5.5%     94.5% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3579296 0.5550358 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3678362 0.5737320 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#' ## Remove any default 'K =' argument</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="Kobjects.html">useK</a></span><span class="op">(</span><span class="cn">NA</span><span class="op">)</span></span></span>

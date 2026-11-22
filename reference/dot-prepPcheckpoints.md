@@ -1,5 +1,7 @@
 # Format datapoints used for MCMC monitoring
 
+Simplified version of
+[`.lprobsargsyx()`](https://pglpm.github.io/prova/reference/dot-lprobsargsyx.md).
 Used in '.Pcheckpoints()' within 'learn()'.
 
 ## Usage
@@ -24,4 +26,7 @@ Used in '.Pcheckpoints()' within 'learn()'.
 
 ## Value
 
-some arguments to be repeatedly used in .Pcheckpoints
+some arguments to be repeatedly used in
+[`.Pcheckpoints()`](https://pglpm.github.io/prova/reference/dot-Pcheckpoints.md);
+see
+[`.lprobsargsyx()`](https://pglpm.github.io/prova/reference/dot-lprobsargsyx.md).

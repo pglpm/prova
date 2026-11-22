@@ -579,48 +579,55 @@ K10 <- learn(
 ##
 ## Saving output in directory
 ## penguin_inference_10-V8_D10_S3600_yymmddTHHMMSS
-## 
-## Prova v3.0.1.
+##
+## Prova v3.0.2.
 ## Registered socket cluster with 4 nodes on host ‘localhost’.
 ## Learning from 10 datapoints, 8 variates.
 ## Starting Monte Carlo sampling of 3600 samples by 8 chains
 ## in a space of 1023 (effectively 3856) dimensions.
 ## Using 4 nodes: 450 samples per chain, max 2 chains per node.
-## Requested:   ESS 625   rel.MCSE 0.04.
-## With burn-in:   ESS 633   rel.MCSE 0.0397.
+## Requested:     ESS 450   rel.MCSE 0.0471.
+## With burn-in:  ESS 458   rel.MCSE 0.0467.
 ## Node logs are being saved in individual files.
 ## C-compiling samplers appropriate to the variates (Nimble v1.4.3)
 ## this can take tens of minutes. Please wait...
 ## Compiled node 1. Number of samplers: 1078.             
-## Estimated end times, updated 2026-11-17 15:00:
+## Estimated end times, updated 2026-11-22 13:08:
 ## Node 1: finished.
 ## Node 2: finished.
 ## Node 3: finished.
 ## Node 4: finished.
 ## Finished Monte Carlo sampling.
-## Highest number of Monte Carlo iterations across chains: 84093.
-## Highest number of used mixture components: 5.
+## Highest number of Monte Carlo iterations across chains: 59776.
+## Highest number of used mixture components: 6.
 ## 
-## Checking test data
-## (#1 #2 #3 #4 #5 #6 #7 #8 #9 #10):
-## max abs. quantile error: 0.0525 to 0.313
-## quantile width: 1.37 to 8.84
-## max rel. quantile error: 0.0197 to 0.0383
-## min ESS from rel. qt. error: 680 to 2570
-## MCSE: 0.00709 to 0.0535
-## rel. MCSE: 0.0153 to 0.0202
-## quantl-rel. MCSE: 0.00486 to 0.0064
-## ESS: 2450 to 4250
-## needed thinning: 1.4 to 5.29
-## log-average: -19.4 to -1.21
+## Diagnostics with 10 test data:
+## #1 #2 #3 #4 #5 #6 #7 #8 #9 #10
+## max abs. quantile error: 0.04548 -- 0.2115
+## 
+## quantile width: 1.364 -- 8.724
+## 
+## max rel. quantile error: 0.02424 -- 0.03333
+## 
+## min ESS from rel. qt. error: 900.3 -- 1702
+## 
+## MCSE: 0.00723 -- 0.06233
+## 
+## rel. MCSE: 0.01694 -- 0.02284
+## 
+## ESS: 1918 -- 3486
+## 
+## max needed thinning: 3.999 -- 3.999
+## 
+## log-averages: -15.87 -- -1.192
 ## 
 ## Plotting final Monte Carlo traces and marginal samples...
 ## 
-## Total computation time: 9.5 mins
-## Average preparation & finalization time: 1.8 mins.
-## Average Monte Carlo time per chain: 2.5 mins.
-## Max total memory used: approx 3100MB.
-## Max memory used per node: approx 820MB.
+## Total computation time: 6.7 mins
+## Average preparation & finalization time: 1.9 mins.
+## Average Monte Carlo time per chain: 1.7 mins.
+## Max total memory used: approx 2300MB.
+## Max memory used per node: approx 580MB.
 ## Removing temporary output files.
 ## Finished.
 ## 
@@ -636,7 +643,7 @@ end times, one for each computation node, are periodically updated. Once
 the computation is finished, some final information about the underlying
 Monte Carlo computation and time and memory use is provided.[^2] The
 inference above, with 10 datasamples and 8 variates, took around 3 GB
-and around 10 minutes to complete on 4 cores.
+and 10 minutes to complete on 4 cores.
 
 The results of this main inference are what we call a “K” object (for
 ‘Knowledge’ or ‘Known’). This object is now stored in the compressed
@@ -774,9 +781,9 @@ numerical accuracy:
 Fspecies10$value
 #            
 # species             
-#   Adelie    0.294738
-#   Chinstrap 0.307734
-#   Gentoo    0.397528
+#   Adelie    0.290205
+#   Chinstrap 0.312381
+#   Gentoo    0.397413
 
 ## or
 print(Fspecies10, 'value')
@@ -824,13 +831,13 @@ are shown in the plot above as the darker grey band, and the
 intervals contain the 50% ones.
 
 For instance, the plot indicates that there’s a 50% probability that the
-relative frequency of all `Adelie` penguins is roughly between 0.21 and
+relative frequency of all `Adelie` penguins is roughly between 0.20 and
 0.37; and an 89% probability that their relative frequency is roughly
 between 0.11 and 0.51.
 
 For the species `Gentoo` there’s a 50% probability that its relative
 frequency is roughly between 0.30 and 0.49; and an 89% probability that
-their relative frequency is roughly between 0.20 and 0.62.
+their relative frequency is roughly between 0.18 and 0.63.
 
 A different way of visualizing the uncertainty about the long-run
 frequency distribution is by displaying an ensemble of *probable
@@ -925,23 +932,60 @@ element of the `Fspecies10` object. For instance, we can read the
 Fspecies10$quantiles[, , c('5.5%', '94.5%')]
 #            Q
 # species         5.5%    94.5%
-#   Adelie    0.113392 0.507788
-#   Chinstrap 0.125314 0.519937
-#   Gentoo    0.195601 0.624599
+#   Adelie    0.114747 0.506832
+#   Chinstrap 0.125529 0.532208
+#   Gentoo    0.184954 0.626999
 ```
 
-or we can use the [`print()`](https://rdrr.io/r/base/print.html)
-function to display values and quantiles together:
+### Meaning of the full output of the probability object
+
+Calling the `Fspecies10` object (or also `print(Fspecies10)`) shows the
+following columns:
 
 ``` r
 
 print(Fspecies10)
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   Adelie    0.2947 0.0020 0.1134 0.2055 0.3743 0.5078
-#   Chinstrap 0.3077 0.0020 0.1253 0.2154 0.3916 0.5199
-#   Gentoo    0.3975 0.0024 0.1956 0.2989 0.4879 0.6246
+#   Adelie    0.2902 0.0019 0.1147 0.1987 0.3656 0.5068
+#   Chinstrap 0.3124 0.0022 0.1255 0.2186 0.3961 0.5322
+#   Gentoo    0.3974 0.0023 0.1850 0.2988 0.4931 0.6270
 ```
+
+We have already seen the meaning of most of these columns. Let’s
+summarize them:
+
+- `species`: this column lists the species (Adelie, Chinstrap, Gentoo)
+  for which we have calculated the probabilities.
+
+- `value`: it lists the *probabilities* (0.2902, 0.3124, 0.3974) for the
+  species. The last two digits of each probability are (in accordance to
+  ISO standards) those affected by numerical error.
+
+- `+/-`: it lists the *numerical errors* (0.0019, 0.0022, 0.0023) of the
+  probabilities. These are simply the computational errors of the
+  algorithm which calculates the probabilities. These numerical errors
+  are *not* related to the variability of traits within the population,
+  or to the size of the data sample. They can always be made smaller by
+  using a larger `nsamples =` argument in the
+  [`learn()`](https://pglpm.github.io/prova/reference/learn.md)
+  function. The reported errors should be interpreted as done with
+  common measurement errors: they represent roughly one standard
+  deviation, so it may happen that the correct value is outside the
+  reported interval, although rarely that it is outside twice the
+  reported interval.
+
+- `Q5.5%`: this column reports the *long-run frequencies* of the species
+  have at least these values (0.1147, 0.1255, 0.185) with a probability
+  of 5.5%. In more technical terms, these are the 5.5% quantiles of the
+  probability distributions for the (unknown) long-run frequencies.
+
+- `Q25%`, `Q75%`, `Q94.5%`: these columns are analogous to the `Q5.5%`
+  one: the *long-run frequencies* of the species have at least these
+  values with a probabilities of 25%, 75%, 94.5%. Note that these values
+  do depend on the size of the data sample. As the data sample
+  increases, all the “`Q%`” values for each species tend to converge to
+  the same value: the long-run frequency of that species.
 
 ### A preliminary report on question Q1
 
@@ -955,9 +999,9 @@ A summary answer could be as follows:
 > frequencies of the three species in the full population is as follows:
 >
 > - Adélie: rel. frequency between 0.11 and 0.51, with 89% probability.
-> - Chinstrap: rel. frequency between 0.13 and 0.52, with 89%
+> - Chinstrap: rel. frequency between 0.13 and 0.53, with 89%
 >   probability.
-> - Gentoo: rel. frequency between 0.20 and 0.62, with 89% probability.
+> - Gentoo: rel. frequency between 0.18 and 0.63, with 89% probability.
 
 But we can also give a fuller answer by displaying the probability
 distributions for all three frequencies:
@@ -1008,13 +1052,13 @@ Fspeciessex10 <- Pr(Y = Y2, K = K10)
 ## as well as their credibility intervals
 print(Fspeciessex10)
 #                   probability
-# species,sex        value  +/-    Q5.5%   Q25%    Q75%   Q94.5%
-#   Adelie,female    0.1646 0.0014 0.0488  0.0996  0.2142 0.3303
-#   Chinstrap,female 0.1330 0.0014 0.03576 0.0758  0.1761 0.2755
-#   Gentoo,female    0.2913 0.0021 0.1210  0.2008  0.3670 0.5059
-#   Adelie,male      0.1301 0.0013 0.0328  0.07215 0.1758 0.2700
-#   Chinstrap,male   0.1748 0.0014 0.0561  0.1056  0.2270 0.3422
-#   Gentoo,male      0.1063 0.0012 0.02241 0.0538  0.1410 0.2398
+# species,sex        value  +/-    Q5.5%   Q25%   Q75%   Q94.5%
+#   Adelie,female    0.1619 0.0015 0.0474  0.0945 0.2113 0.3266
+#   Chinstrap,female 0.1357 0.0015 0.03621 0.0772 0.1786 0.2843
+#   Gentoo,female    0.2895 0.0019 0.1130  0.1988 0.3671 0.5031
+#   Adelie,male      0.1283 0.0014 0.0349  0.0710 0.1703 0.2658
+#   Chinstrap,male   0.1766 0.0017 0.0565  0.1082 0.2269 0.3448
+#   Gentoo,male      0.1079 0.0014 0.02219 0.0532 0.1474 0.2402
 ```
 
 Now let’s continue with our simpler plan.
@@ -1097,17 +1141,17 @@ print(Fspecies10I)
 # 
 #            probability
 # species     value  +/-    Q5.5%   Q25%   Q75%   Q94.5%
-#   Adelie    0.1442 0.0022 0.01409 0.0527 0.2016 0.3787
-#   Chinstrap 0.1388 0.0023 0.01329 0.0501 0.1968 0.3597
-#   Gentoo    0.7170 0.0035 0.4133  0.6068 0.8496 0.9435
+#   Adelie    0.1448 0.0019 0.01432 0.0533 0.2030 0.3721
+#   Chinstrap 0.1399 0.0017 0.01259 0.0512 0.1991 0.3659
+#   Gentoo    0.7153 0.0027 0.4093  0.6086 0.8479 0.9409
 # 
 # , , |island = Dream
 # 
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   Adelie    0.3555 0.0034 0.1015 0.2219 0.4783 0.6543
-#   Chinstrap 0.4753 0.0032 0.1914 0.3354 0.6100 0.7744
-#   Gentoo    0.1692 0.0025 0.0194 0.0665 0.2409 0.4290
+#   Adelie    0.3492 0.0030 0.1034 0.2145 0.4654 0.6571
+#   Chinstrap 0.4850 0.0032 0.1923 0.3486 0.6173 0.7838
+#   Gentoo    0.1658 0.0023 0.0188 0.0654 0.2378 0.4149
 ```
 
 According to these estimates, on Biscoe there should be a predominance
@@ -1163,7 +1207,7 @@ Biscoe\*\*](figure/hist10dream-1.svg)
   
 
 Among other things we see here a larger difference in the estimated
-frequencies of Adélie, around 0.36, and Chinstrap, around 0.48. Still,
+frequencies of Adélie, around 0.35, and Chinstrap, around 0.49. Still,
 the probability distributions are wide.
 
 **For later, keep in mind the following question: *On Dream, are the
@@ -1190,17 +1234,17 @@ print(Fspecies10I)
 # 
 #            probability
 # species     value  +/-    Q5.5%   Q25%   Q75%   Q94.5%
-#   Adelie    0.1442 0.0022 0.01409 0.0527 0.2016 0.3787
-#   Chinstrap 0.1388 0.0023 0.01329 0.0501 0.1968 0.3597
-#   Gentoo    0.7170 0.0035 0.4133  0.6068 0.8496 0.9435
+#   Adelie    0.1448 0.0019 0.01432 0.0533 0.2030 0.3721
+#   Chinstrap 0.1399 0.0017 0.01259 0.0512 0.1991 0.3659
+#   Gentoo    0.7153 0.0027 0.4093  0.6086 0.8479 0.9409
 # 
 # , , |island = Dream
 # 
 #            probability
 # species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   Adelie    0.3555 0.0034 0.1015 0.2219 0.4783 0.6543
-#   Chinstrap 0.4753 0.0032 0.1914 0.3354 0.6100 0.7744
-#   Gentoo    0.1692 0.0025 0.0194 0.0665 0.2409 0.4290
+#   Adelie    0.3492 0.0030 0.1034 0.2145 0.4654 0.6571
+#   Chinstrap 0.4850 0.0032 0.1923 0.3486 0.6173 0.7838
+#   Gentoo    0.1658 0.0023 0.0188 0.0654 0.2378 0.4149
 ```
 
 ### Differences from “null-hypothesis testing” and *p*-value methods
@@ -1276,13 +1320,13 @@ print(Fspecies10IS, 'value')
 # $value
 #            |island,sex
 # species     Biscoe,female Dream,female Torgersen,female Biscoe,male
-#   Adelie             0.13         0.40             0.48        0.20
-#   Chinstrap          0.11         0.40             0.27        0.22
-#   Gentoo             0.76         0.21             0.25        0.57
+#   Adelie             0.13         0.39             0.47        0.20
+#   Chinstrap          0.11         0.41             0.27        0.22
+#   Gentoo             0.76         0.20             0.25        0.57
 #            |island,sex
 # species     Dream,male Torgersen,male
-#   Adelie          0.32           0.44
-#   Chinstrap       0.54           0.39
+#   Adelie          0.31           0.43
+#   Chinstrap       0.55           0.39
 #   Gentoo          0.14           0.18
 ```
 
@@ -1390,13 +1434,13 @@ print(imputeddata)
 # 
 #         probability
 # sex      value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
-#   female 0.6821 0.0045 0.254  0.5224 0.8767 0.9752
-#   male   0.3179 0.0045 0.0248 0.1233 0.4776 0.746
+#   female 0.6764 0.0045 0.2338 0.5141 0.8735 0.9725
+#   male   0.3236 0.0045 0.0275 0.1265 0.4859 0.7662
 ```
 
 We see that penguin \#1 might have been female with probability 0.68,
 although further data might shift that probability somewhere between
-0.25 and 0.98.
+0.23 and 0.97.
 
 Now let’s take datapoint \#6 and infer the value of `bill_len`. We can
 use the function
@@ -1643,17 +1687,17 @@ is as follows:
 
 print(Fspecies60)
 #            probability
-# species     value   +/-     Q5.5%  Q25%    Q75%   Q94.5%
-#   Adelie    0.3938  0.0011  0.2980 0.3512  0.4344 0.4961
-#   Chinstrap 0.21163 0.00078 0.1351 0.17493 0.2449 0.2997
-#   Gentoo    0.39456 0.00094 0.2977 0.3511  0.4349 0.4942
+# species     value   +/-     Q5.5%  Q25%   Q75%   Q94.5%
+#   Adelie    0.39563 0.00094 0.3015 0.3541 0.4352 0.4964
+#   Chinstrap 0.21029 0.00087 0.1346 0.1744 0.2430 0.2943
+#   Gentoo    0.3941  0.0010  0.2986 0.3517 0.4349 0.4950
 ```
 
 > From a sample of 10 penguins, the inference about the relative
 > frequencies of the three species in the full population is as follows:
 >
 > - Adélie: rel. frequency between 0.30 and 0.50, with 89% probability.
-> - Chinstrap: rel. frequency between 0.14 and 0.30, with 89%
+> - Chinstrap: rel. frequency between 0.13 and 0.29, with 89%
 >   probability.
 > - Gentoo: rel. frequency between 0.30 and 0.49, with 89% probability.
 
@@ -1754,16 +1798,16 @@ estimate (median) and an 89%-credibility interval about this difference:
 ``` r
 
 median(freqdiff)
-# [1] 0.703207
+# [1] 0.703645
 
 quantile(freqdiff, c(0.055, 0.945))
 #     5.5%    94.5% 
-# 0.546721 0.831743
+# 0.538214 0.830695
 ```
 
 > From a sample of 60 penguins, the difference between the frequencies
 > of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is
-> estimated with a median of 0.7, and it is between 0.55 and 0.83 with
+> estimated with a median of 0.7, and it is between 0.54 and 0.83 with
 > 89% probability.
 
 Maybe you prefer a ratio between the two frequencies:
@@ -1774,16 +1818,16 @@ freqratio <- Fspecies60I$samples['Gentoo', 'Biscoe',] /
     Fspecies60I$samples['Chinstrap', 'Biscoe',]
 
 median(freqratio)
-# [1] 21.1094
+# [1] 21.1849
 
 quantile(freqratio, c(0.055, 0.945))
 #     5.5%    94.5% 
-#  6.74092 97.68391
+#  6.62362 96.09973
 ```
 
 > From a sample of 60 penguins, the ratio between the frequencies of the
 > species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated
-> with a median of 21, and it is between 6.74 and 97.68 with 89%
+> with a median of 21, and it is between 6.6 and 96. with 89%
 > probability.
 
 It is remarkable that with only 60 penguins – and not all of them from
@@ -1841,7 +1885,7 @@ Kall <- learn(
 ## [Output omitted]
 ```
 
-The calculation with 344 datasamples took around 7 GB and 30 minutes on
+The calculation with 344 datasamples took around 6 GB and 1 hour on
 8_cores.
 
 The results of this final inference are stored in the compressed file
@@ -1896,9 +1940,9 @@ be extracted from the `Fspeciesall` in the usual way:
 print(Fspeciesall)
 #            probability
 # species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
-#   Adelie    0.44308 0.00032 0.4014  0.42545 0.46085 0.48626
-#   Chinstrap 0.19933 0.00029 0.16638 0.18469 0.21347 0.23389
-#   Gentoo    0.35759 0.00036 0.31631 0.34008 0.37492 0.39872
+#   Adelie    0.44245 0.00039 0.40062 0.42478 0.46014 0.48396
+#   Chinstrap 0.19794 0.00031 0.16471 0.18359 0.21139 0.23400
+#   Gentoo    0.35961 0.00042 0.31906 0.34298 0.37635 0.39989
 ```
 
 > From a sample of 344 penguins \[add a more thorough specification of
@@ -1910,12 +1954,12 @@ print(Fspeciesall)
 > - Adélie:
 >
 >   estimate 0.44  
->   true rel. frequency between 0.40 and 0.49 with 89% probability.
+>   true rel. frequency between 0.40 and 0.48 with 89% probability.
 >
 > - Chinstrap:
 >
 >   estimate 0.20  
->   true rel. frequency between 0.17 and 0.23 with 89% probability.
+>   true rel. frequency between 0.16 and 0.23 with 89% probability.
 >
 > - Gentoo:
 >
@@ -1991,9 +2035,9 @@ print(Fanalysis)
 # 
 #            probability
 # species     value   +/-     Q5.5%   Q25%    Q75%    Q94.5% 
-#   Adelie    0.26848 0.00048 0.21628 0.24506 0.29078 0.32412
-#   Chinstrap 0.01189 0.00016 0.00271 0.00622 0.01552 0.02612
-#   Gentoo    0.71963 0.00054 0.6632  0.69682 0.74309 0.77266
+#   Adelie    0.26672 0.00058 0.2156  0.24341 0.28882 0.32136
+#   Chinstrap 0.01131 0.00017 0.00251 0.00570 0.01477 0.02588
+#   Gentoo    0.72197 0.00059 0.6668  0.69982 0.74580 0.7735
 ```
 
 Conclusion:
@@ -2014,7 +2058,7 @@ Conclusion:
 > - Gentoo:
 >
 >   estimate 0.72  
->   true rel. frequency between 0.66 and 0.77 with 89% probability.
+>   true rel. frequency between 0.67 and 0.77 with 89% probability.
 
 Note how our [previous estimates from 60 samples](#surprise) were
 already quite on the spot.
@@ -2054,10 +2098,10 @@ print(Fanalysis)
 # , , |species = Adelie
 # 
 #            probability
-# island      value   +/-     Q5.5%   Q25%    Q75%    Q94.5%
-#   Biscoe    0.29304 0.00061 0.2369  0.26853 0.31770 0.3525
-#   Dream     0.36861 0.00053 0.30848 0.34208 0.39469 0.4301
-#   Torgersen 0.33836 0.00064 0.2797  0.31324 0.36361 0.4011
+# island      value   +/-     Q5.5%  Q25%    Q75%    Q94.5%
+#   Biscoe    0.29251 0.00063 0.2363 0.26694 0.3163  0.3515
+#   Dream     0.36778 0.00066 0.3065 0.34121 0.39323 0.4303
+#   Torgersen 0.33971 0.00057 0.2795 0.31408 0.36531 0.4030
 ```
 
 Conclusions:
@@ -2248,7 +2292,7 @@ The script ‘launch_learn.R’ could then be called to work on the
 background on a bash session with
 
 ``` bash
-$ Rscript myscript.R > logfile.log 2>&1 &
+$ Rscript myscript.R &> logfile.log &
 ```
 
 The file ‘logfile.log’ will then contain messages about the progress of
@@ -2257,7 +2301,7 @@ desired, this file can be simply opened and inspected, for instance with
 the bash command `tail`:
 
 ``` bash
-$ tail logfile.log
+$ tail -f logfile.log
 ```
 
 This is just an example; the details and correct procedure will depend

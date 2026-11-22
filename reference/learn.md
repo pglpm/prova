@@ -26,9 +26,9 @@ learn(
   minMCiterations = 0,
   maxMCiterations = 9e+05,
   maxhours = +Inf,
-  ncheckpoints = 12,
-  maxrelMCSE = 0.04,
-  minESS = 625,
+  ncheckpoints = NULL,
+  maxrelMCSE = 0.0471405,
+  minESS = 450,
   initES = 8,
   thinning = NULL,
   verbose = TRUE,
@@ -184,9 +184,11 @@ learn(
 
 - ncheckpoints:
 
-  Integer or `NULL`, default 12: number of datapoints (per chain) to use
-  for checking when the Monte Carlo computation should end. If `NULL`,
-  this is equal to number of variates + 2. If `Inf`, use all datapoints.
+  Integer or `NULL`: number of datapoints (per chain) to be used for
+  Monte Carlo checks and ending. If `NULL`, it is equal to the largest
+  between 30 and 2 \\\times\\ (number of variates + 2), or all
+  datapoints if they are less than this maximum. If `Inf`, use all
+  datapoints.
 
 - maxrelMCSE:
 
@@ -246,7 +248,7 @@ learn(
 
 A "K" (more precisely "prova_K") object, or name of directory containing
 such an object and other output files, or `NULL`, depending on argument
-`valueisK`.
+`valueisK`. The elements of this object are described below.
 
 `learn()` saves several files in a directory. By default this output
 directory is a temporary directory within the one used by
@@ -282,6 +284,27 @@ node's computation are outputted to the file `'main.out'` in the output
 directory, and also to the console if argument `verbose` is `TRUE`. Note
 that the estimated end times are very approximate and often quite
 conservative.
+
+*Typical elements of the "K" ojbect*
+
+- Some among `Rmean`, `Rsd`, `Cmean`, `Csd`, `Dmean`, `Dsd`, `Nprob`,
+  `Oprob`, `Bprob`, depending on the kinds of data variates: samples of
+  component kernel hyperparameters.
+
+- `W`: samples of component weights.
+
+- `MCindex`: Monte Carlo iteration indices.
+
+- `auxmetadata`: list of metadata and auxiliary metadata values.
+
+- `info`: information about the Monte Carlo run and some additional
+  information: `metadata`, `nMCsamples`, `nchains`, `npoints`,
+  `maxiterations`, `maxusedcomponents`, `nonfinitechains`,
+  `stoppedchains`. Also `.Random.seed` containing the
+  [random-seed](https://rdrr.io/r/base/Random.html) state when `learn()`
+  was called; `args` containing most arguments with which the function
+  was called; `diagn` containing final Monte Carlo diagnostics such as
+  relative Monte Carlo Standard Error and Effective Sample Size.
 
 ## Details
 
@@ -480,38 +503,36 @@ K <- learn(
 )
 #> 
 #> Saving output in directory
-#> /tmp/RtmplXOI8T/prova-V1_D3_S10_261120T002500_1b0e2ca9ae96
-#> Prova v3.0.1.
+#> /tmp/RtmpDZJ9KR/prova-V1_D3_S10_261122T203239_19ca764ebe1f
+#> Prova v3.0.2.
 #> Registered socket cluster with 1 nodes on host ‘localhost’.
 #> Learning from 3 datapoints, 1 variates.
 #> Starting Monte Carlo sampling of 10 samples by 1 chains
 #> in a space of 191 (effectively 259) dimensions.
 #> Using 1 nodes: 10 samples per chain, max 1 chains per node.
-#> Requested:   ESS 0   rel.MCSE Inf.
-#> With burn-in:   ESS 0   rel.MCSE Inf.
+#> Requested:     ESS 0   rel.MCSE Inf.
+#> With burn-in:  ESS 0   rel.MCSE Inf.
 #> Node logs are being saved in individual files.
 #> 
 #> Finished Monte Carlo sampling.
 #> Highest number of Monte Carlo iterations across chains: 10.
 #> Highest number of used mixture components: 3.
 #> 
-#> Checking test data
-#> (#1 #2 #3):
-#> max abs. quantile error: 0.26 to 1.57
-#> quantile width: 0.774 to 3.54
-#> max rel. quantile error: 0.119 to 0.444
-#> min ESS from rel. qt. error: 5.06 to 70.8
-#> MCSE: 0.102 to 0.531
-#> rel. MCSE: 0.395 to 0.526
-#> quantl-rel. MCSE: 0.118 to 0.186
-#> ESS: 3.61 to 6.41
-#> needed thinning: 1.4 to 2.49
-#> log-average: -2.95 to -1.21
-#> 
+#> Diagnostics with 3 test data:
+#> #1 #2 #3
+#> max abs. quantile error: 0.2605 -- 0.8855
+#> quantile width: 0.7744 -- 2.851
+#> max rel. quantile error: 0.1188 -- 0.3364
+#> min ESS from rel. qt. error: 8.839 -- 70.8
+#> MCSE: 0.1018 -- 0.5315
+#> rel. MCSE: 0.4203 -- 0.5957
+#> ESS: 2.818 -- 5.66
+#> max needed thinning: 3.194 -- 3.194
+#> log-averages: -2.623 -- -1.21
 #> Plotting final Monte Carlo traces and marginal samples...
-#> Total computation time: 41 secs
-#> Average preparation & finalization time: 40 secs.
-#> Average Monte Carlo time per chain: 0.55 secs.
+#> Total computation time: 38 secs
+#> Average preparation & finalization time: 36 secs.
+#> Average Monte Carlo time per chain: 0.71 secs.
 #> Max total memory used: approx 340MB.
 #> Max memory used per node: approx 340MB.
 #> Removing temporary output files.
@@ -519,7 +540,7 @@ K <- learn(
 #> 
 #> **********************************************************
 #> Output saved in directory
-#> /tmp/RtmplXOI8T/prova-V1_D3_S10_261120T002500_1b0e2ca9ae96
+#> /tmp/RtmpDZJ9KR/prova-V1_D3_S10_261122T203239_19ca764ebe1f
 #> **********************************************************
 
 ## Check the structure of the produced `K` object:
@@ -554,59 +575,79 @@ str(K)
 #>   ..$ plotmax          : num 2.14
 #>   ..$ V1               : logi NA
 #>   ..$ V2               : logi NA
-#>  $ info       :List of 19
-#>   ..$ metadata                   :'data.frame':  1 obs. of  2 variables:
+#>  $ info       :List of 11
+#>   ..$ metadata         :'data.frame':    1 obs. of  2 variables:
 #>   .. ..$ name: chr "V"
 #>   .. ..$ type: chr "continuous"
-#>   ..$ nMCsamples                 : int 9
-#>   ..$ nchains                    : num 1
-#>   ..$ npoints                    : int 3
-#>   ..$ hyperparams                :List of 21
-#>   .. ..$ ncomponents : num 64
-#>   .. ..$ minalpha    : num -4
-#>   .. ..$ maxalpha    : num 4
-#>   .. ..$ byalpha     : num 1
-#>   .. ..$ Rshapelo    : num 0.5
-#>   .. ..$ Rshapehi    : num 0.5
-#>   .. ..$ Rvarm1      : num 9
-#>   .. ..$ Cshapelo    : num 0.5
-#>   .. ..$ Cshapehi    : num 0.5
-#>   .. ..$ Cvarm1      : num 9
-#>   .. ..$ Dshapelo    : num 0.5
-#>   .. ..$ Dshapehi    : num 0.5
-#>   .. ..$ Dvarm1      : num 9
-#>   .. ..$ Bshapelo    : num 1
-#>   .. ..$ Bshapehi    : num 1
-#>   .. ..$ Dthreshold  : num 1
-#>   .. ..$ tscalefactor: num 4.27
-#>   .. ..$ Oprior      : chr "Hadamard"
-#>   .. ..$ Nprior      : chr "Hadamard"
-#>   .. ..$ initmethod  : chr "datacentre"
-#>   .. ..$ Qerror      : num [1:2] 0.159 0.841
-#>   ..$ maxiterations              : num 10
-#>   ..$ maxusedcomponents          : num 3
-#>   ..$ nonfinitechains            : num 0
-#>   ..$ stoppedchains              : num 0
-#>   ..$ max abs. quantile error    : Named num [1:4] 0.26 0.281 0.886 1.571
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ quantile width             : Named num [1:4] 0.774 2.366 2.851 3.535
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ max rel. quantile error    : Named num [1:4] 0.336 0.119 0.311 0.444
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ min ESS from rel. qt. error: Named num [1:4] 8.84 70.8 10.37 5.06
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ MCSE                       : Named num [1:4] 0.102 0.413 0.531 0.416
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ rel. MCSE                  : Named num [1:4] 0.395 0.47 0.526 0.404
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ quantl-rel. MCSE           : Named num [1:4] 0.131 0.175 0.186 0.118
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ ESS                        : Named num [1:4] 6.41 4.53 3.61 6.12
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ needed thinning            : Named num [1:4] 1.4 1.99 2.49 1.78
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
-#>   ..$ log-average                : Named num [1:4] -2.26 -2.62 -1.21 -2.95
-#>   .. ..- attr(*, "names")= chr [1:4] "gmean" "1" "2" "3"
+#>   ..$ nMCsamples       : int 9
+#>   ..$ nchains          : num 1
+#>   ..$ npoints          : int 3
+#>   ..$ maxiterations    : num 10
+#>   ..$ maxusedcomponents: num 3
+#>   ..$ nonfinitechains  : num 0
+#>   ..$ stoppedchains    : num 0
+#>   ..$ .Random.seed     : int [1:626] 10403 481 1901576442 305780618 1771555321 140805362 -1701321808 1010115073 1617144363 1953263465 ...
+#>   ..$ args             :List of 24
+#>   .. ..$ nsamples           : num 10
+#>   .. ..$ nchains            : num 1
+#>   .. ..$ nsamplesperchain   : num 450
+#>   .. ..$ parallel           : logi TRUE
+#>   .. ..$ seed               : NULL
+#>   .. ..$ cleanup            : logi TRUE
+#>   .. ..$ appendinfo         : logi TRUE
+#>   .. ..$ valueisK           : logi TRUE
+#>   .. ..$ subsampledata      : NULL
+#>   .. ..$ prior              : logi FALSE
+#>   .. ..$ startupMCiterations: num 10
+#>   .. ..$ minMCiterations    : num 0
+#>   .. ..$ maxMCiterations    : num 10
+#>   .. ..$ maxhours           : num Inf
+#>   .. ..$ ncheckpoints       : NULL
+#>   .. ..$ maxrelMCSE         : num 0.0471
+#>   .. ..$ minESS             : num 0
+#>   .. ..$ initES             : num 0
+#>   .. ..$ thinning           : NULL
+#>   .. ..$ verbose            : logi TRUE
+#>   .. ..$ plottraces         : logi FALSE
+#>   .. ..$ showKtraces        : logi FALSE
+#>   .. ..$ showAlphatraces    : logi FALSE
+#>   .. ..$ hyperparams        :List of 22
+#>   .. .. ..$ ncomponents : num 64
+#>   .. .. ..$ minalpha    : num -4
+#>   .. .. ..$ maxalpha    : num 4
+#>   .. .. ..$ byalpha     : num 1
+#>   .. .. ..$ Rshapelo    : num 0.5
+#>   .. .. ..$ Rshapehi    : num 0.5
+#>   .. .. ..$ Rvarm1      : num 9
+#>   .. .. ..$ Cshapelo    : num 0.5
+#>   .. .. ..$ Cshapehi    : num 0.5
+#>   .. .. ..$ Cvarm1      : num 9
+#>   .. .. ..$ Dshapelo    : num 0.5
+#>   .. .. ..$ Dshapehi    : num 0.5
+#>   .. .. ..$ Dvarm1      : num 9
+#>   .. .. ..$ Bshapelo    : num 1
+#>   .. .. ..$ Bshapehi    : num 1
+#>   .. .. ..$ Dthreshold  : num 1
+#>   .. .. ..$ tscalefactor: num 4.27
+#>   .. .. ..$ Oprior      : chr "Hadamard"
+#>   .. .. ..$ Nprior      : chr "Hadamard"
+#>   .. .. ..$ avoidzeroW  : NULL
+#>   .. .. ..$ initmethod  : chr "datacentre"
+#>   .. .. ..$ Qerror      : num [1:2] 0.159 0.841
+#>   ..$ diagn            :List of 9
+#>   .. ..$ max abs. quantile error    : num [1:3] 0.26 0.886 0.281
+#>   .. ..$ quantile width             : num [1:3] 0.774 2.851 2.366
+#>   .. ..$ max rel. quantile error    : num [1:3] 0.336 0.311 0.119
+#>   .. ..$ min ESS from rel. qt. error: num [1:3] 8.84 10.37 70.8
+#>   .. ..$ MCSE                       : Named num [1:3] 0.102 0.531 0.413
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#2" "#1"
+#>   .. ..$ rel. MCSE                  : Named num [1:3] 0.42 0.596 0.558
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#2" "#1"
+#>   .. ..$ ESS                        : Named num [1:3] 5.66 2.82 3.21
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#2" "#1"
+#>   .. ..$ max needed thinning        : num 3.19
+#>   .. ..$ log-averages               : Named num [1:3] -2.26 -1.21 -2.62
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#2" "#1"
 #>  - attr(*, "class")= chr "prova_K"
 # }
 ```
