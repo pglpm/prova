@@ -1024,9 +1024,9 @@ learn <- function(
   print2user('Using ', ncores, ' nodes: ',
     nsamplesperchain, ' samples per chain, max ',
     minchainspercore + (coreswithextrachain > 0), ' chains per node.')
-  print2user('Requested:   ESS ', round(minESS),
+  print2user('Requested:     ESS ', round(minESS),
     '   rel.MCSE ', signif(maxrelMCSE, 3), '.')
-  print2user('With burn-in:   ESS ', round(minESS + initES),
+  print2user('With burn-in:  ESS ', round(minESS + initES),
     '   rel.MCSE ', signif(1/sqrt(minESS + initES), 3), '.')
   print2user('Node logs are being saved in individual files.')
 
@@ -1212,12 +1212,30 @@ learn <- function(
 
   testdata <- readRDS(file = file.path(dirname,
     paste0('___testdata_', 0, '.rds')))
-  print2user('\nChecking test data\n(',
-    paste0('#', testdata$pointsid, collapse = ' '), '):')
+  print2user('\nDiagnostics with ', length(testdata$pointsid), ' test data:\n',
+    paste0('#', testdata$pointsid, collapse = ' '))
+
+  ## Find most outlying and most central datapoints
+  ## (in the transformed domain)
+  temp <- order(sapply(testdata$xVs, function(xx){
+    sum(c(xx$xV0, xx$xV1, xx$xV2)^2, na.rm = TRUE)
+  }))
+  ## first is most outlying, second is most central
+  checkindices <- temp[c(1, length(temp))]
+
+  ## Will contain the MC traces of the test points
+  traces <- matrix(NA_real_, nrow = 0, ncol = 1 + length(checkindices),
+    dimnames = list(NULL,
+      c('gmean', paste0('#', testdata$pointsid[checkindices])))
+  )
+  ## Will contain diagnostics for traces
+  Qdiagn <- matrix(NA_real_, nrow = 2, ncol = ncol(traces))
 
   ## .Pcheckpoints() outputs probabilities
-  oktraces <- log(.Pcheckpoints(testdata = testdata, K = K))
+  ll <- log(.Pcheckpoints(testdata = testdata, K = K))
 
+
+#### Transform variances to sd in K
   ## Substitute variances for standard deviations
   if(!is.null(K$Rvar)){
     K$Rvar <- sqrt(K$Rvar)
@@ -1231,146 +1249,102 @@ learn <- function(
     K$Dvar <- sqrt(K$Dvar)
     names(K)[which(names(K) == 'Dvar')] <- 'Dsd'
   }
-
   ## Save 'prova_K' (knowledge) object
   ## rewriting the temporary one already written above
   saveRDS(K,
     file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
   )
+####
 
+  toRemove <- unique(((which(!is.finite(ll)) - 1L) %% nrow(ll)) + 1L)
+  nremoved <- length(toRemove)
+  if(nremoved > 0){
+    ll <- ll[-toRemove, , drop = FALSE]
+    print2user('\nWARNING:', nremoved, 'ANOMALOUS MC SAMPLES\n')
+  }
+  traces <- rbind(traces,
+    cbind(rowMeans(ll), ll[,checkindices, drop = FALSE]))
 
-  oktraces <- cbind(
-    rowMeans(oktraces, na.rm = TRUE), # geometric mean
-    oktraces
-  )
+#### Save traces
+  saveRDS(traces,
+    file = file.path(dirname, paste0('MCtraces', dashnameroot, '.rds')))
+####
 
-  oktraces <- oktraces[apply(oktraces, 1, function(x) { all(is.finite(x)) }), ,
-    drop = FALSE]
+  qscale <- qnorm(Qhi) - qnorm(Qlo)
+  N <- nrow(traces)
 
-  colnames(oktraces) <- c('gmean', paste0('#', testdata$pointsid))
+  Fmcse <- .funMCSEBM(traces)
 
-  saveRDS(oktraces, file = file.path(dirname,
-    paste0('MCtraces', dashnameroot, '.rds')
-  ))
-
-  ## ##############################
-  ## ## MCSE, ESS, THINNING, ETC ##
-  ## ##############################
-
-  N <- nrow(oktraces)
-
-  JD <- apply(oktraces, 2, function(atrace) {
-### same as within cores
-
+  ## Calculations for quantiles, must be done one trace at a time
+  for(atrace in 1:ncol(traces)){
     ## Calculate empirical quantiles of the vector of MC samples,
     ## having 'Qlo' and 'Qhi' probabilities
-    Xlo <- quantile(x = atrace, probs = Qlo,
+    Xlo <- quantile(x = traces[,atrace], probs = Qlo,
       na.rm = FALSE, names = FALSE, type = 6)
-    Xhi <- quantile(x = atrace, probs = Qhi,
+    Xhi <- quantile(x = traces[,atrace], probs = Qhi,
       na.rm = FALSE, names = FALSE, type = 6)
-    ## quantile width
+    ## quantile width between empirical quantiles
     qwidth <- Xhi - Xlo
 
     ## Calculate credibility intervals (proxy for MCSE)
     ## for the empirical quantiles above
-    temp <- .funMCEQ(x = atrace, prob = c(Qlo, Qhi), Qpair = Qerror)
+    temp <- .funMCEQ(x = traces[,atrace], prob = c(Qlo, Qhi), Qpair = Qerror)
     wXlo <- temp[2, 1] - temp[1, 1]
     wXhi <- temp[2, 2] - temp[1, 2]
 
-    ## ## For each monitored point,
-    ## ## transform its posterior samples to normalized ranks,
-    ## ## then calculate the ESSs of their means,
-    ## ## as in Vehtari et al. 2021
-    ## ## and Blom 1958 sect 6.10 eqn (6.10.5)
-    ## ## (alternative (6.10.3) gives roughly same results
-    ## ## but is computationally slightly more expensive)
-    ## essnrmean <- .funESS3(qnorm(
-    ## (rank(atrace, na.last = NA, ties.method = 'average') - 0.5) / N
-    ## ))
-    ## mcsemean <- 1 / sqrt(essnrmean)
+    Qdiagn[, atrace] <- c(max(wXlo, wXhi), qwidth)
+  }
 
-    ## For each monitored point,
-    ## calculate the ESSs of their means,
-    ## using batch-means method
-    mcsemean <- .funMCSEBM(atrace) / sd(atrace)
-    essnrmean <- 1 / (mcsemean^2)
+  mrqe <- Qdiagn[1,] / Qdiagn[2,]
 
-    ## We check the relative MCSE of the following quantities:
-    ## - the mean of the MC samples, transformed to normalized ranks
-    ## - the lower quantile 'Qlo'
-    ## - the upper quantile 'Qhi'
-    ## so as to ensure the stability of the mean value
-    ## (representing the "long-run frequency")
-    ## and of its 'Qlo'- and 'Qhi'-quantiles
-    ## (representing the uncertainty about the freq. estimate)
-    relmcse <- c(mcsemean, wXlo / qwidth, wXhi / qwidth)
+  ## qwidth / qscale in same as SD for a Gaussian
+  relmcse <- qscale * Fmcse / Qdiagn[2,]
 
-    autothinning <- N * max(relmcse)^2
+  lowestESS <- 1 / max(relmcse, mrqe)^2
 
-### same as within cores
-
-    c(
-      maxrelmcse = max(relmcse[-1]),
-      essnrmean = essnrmean,
-      autothinning = autothinning,
-      qwidth = qwidth,
-      maxwX = max(wXhi, wXlo),
-      mcsemean = mcsemean,
-      MCSE = mcsemean * sd(atrace)
-    )
-  })
+  autothinning <- N / lowestESS # N * max(relmcse)^2
 
   ## Output available diagnostics
   toprint <- list(
-    'max abs. quantile error' = JD['maxwX', ],
-    'quantile width' = JD['qwidth', ],
-    'max rel. quantile error' = JD['maxrelmcse', ],
-    'min ESS from rel. qt. error' = 1/(JD['maxrelmcse', ]^2),
-    'MCSE' = JD['MCSE', ],
-    'rel. MCSE' = JD['mcsemean', ],
-    'quantl-rel. MCSE' = JD['MCSE', ] / JD['qwidth', ],
-    'ESS' = JD['essnrmean', ],
-    'needed thinning' = JD['autothinning', ],
-    'log-average' = colMeans(oktraces)
+    'max abs. quantile error' = Qdiagn[1,], # max(wXlo, wXhi),
+    'quantile width' = Qdiagn[2,], # qwidth,
+    'max rel. quantile error' = mrqe, # max(relmcse[-1]),
+    'min ESS from rel. qt. error' = 1 / mrqe^2,
+    'MCSE' = Fmcse, # mcsemean * sd(oktraces),
+    'rel. MCSE' = relmcse, # mcsemean,
+    ## 'quantl-rel. MCSE' = mcsemean * sd(oktraces) / qwidth,
+    'ESS' = 1 / relmcse^2, # essnrmean,
+    'max needed thinning' = autothinning,
+    'log-averages' = colMeans(traces)
   )
+
+#### Include diagnostic info in K, and save it
   K$info <- c(K$info, list(diagn = toprint))
   class(K) <- 'prova_K'
-  saveRDS(K,
-    file = file.path(dirname, paste0('K', dashnameroot, '.rds'))
-  )
-
+  saveRDS(K, file = file.path(dirname, paste0('K', dashnameroot, '.rds')))
 ####
-  for(i in names(toprint)) {
-    thisdiagn <- toprint[[i]]
-    print2user(i, ': ',
-      if(length(thisdiagn) > 1){
-        paste(signif(range(thisdiagn), 3), collapse = ' to ')
-      } else {
-        signif(thisdiagn, 3)
-      }
-    )
-  }
 
+  print2user(paste0(mapply(
+    function(nm, val){paste0(nm, ': ',
+      paste0(signif(range(val), 4), collapse = ' -- '))},
+    names(toprint), toprint
+  ), sep = '\n'))
 
   ## Plot various info and traces
-  print2user('\nPlotting final Monte Carlo traces and marginal samples...\n')
+  print2user('Plotting final Monte Carlo traces and marginal samples...\n')
 
   graphics.off()
   pdf(file.path(dirname,
     paste0('MCtraces', dashnameroot, '.pdf')
   ), height = 8.27, width = 11.69)
   ## Traces of likelihood and cond. probabilities
-  for (avar in 1:ncol(oktraces)) {
+  for (avar in 1:ncol(traces)) {
     ## Do not join separate chains in the plot
     division <- (if(N > nchains) nchains else 1)
     pplot(
-      y = 4.343 * (oktraces[is.finite(oktraces[, avar]), avar]),
-      ## 4.343 is 10/log(10)
-      ## x = matrix(seq_len(nsamples), ncol = division),
-      ## y = matrix(10*log10(oktraces[, avar]), ncol = division),
+      y = 4.343 * (traces[is.finite(traces[, avar]), avar]),
       type = 'l', lty = 1, col = 1,
-      ## col = 1:6, # to evidence consecutive chains
-      main = paste0(colnames(oktraces)[avar], ': ',
+      main = paste0(colnames(traces)[avar], ': ',
         paste(
           names(toprint[c('max rel. quantile error', 'ESS')]),
           sapply(toprint[c('max rel. quantile error', 'ESS')],
@@ -1513,7 +1487,7 @@ learn <- function(
   }
 
   ## used in calculation of rel. MCSE
-  qscale <- qnorm(Qhi)-qnorm(Qlo)
+  qscale <- qnorm(Qhi) - qnorm(Qlo)
 
   ## functions to format printing of time
   printtimeend <- function(tim) {
@@ -2764,7 +2738,7 @@ learn <- function(
   ## Inform user that compilation is done, if node 1:
   if (acore == 1) {
     print2user(paste0(
-      '\rCompiled node ', acore, '. ',
+      'Compiled node ', acore, '. ',
       'Number of samplers: ',
       length(confnimble$samplerExecutionOrder), '.             \n',
       'Estimated end times, updated ',
@@ -2845,8 +2819,7 @@ learn <- function(
     traces <- matrix(NA_real_, nrow = 0, ncol = 1 + length(checkindices),
       dimnames = list(NULL,
         c('gmean', paste0('#', testdata$pointsid[checkindices])))
-      )
-
+    )
     ## Will contain diagnostics for traces
     Qdiagn <- matrix(NA_real_, nrow = 2, ncol = ncol(traces))
 
@@ -3015,13 +2988,6 @@ learn <- function(
       ##             dashnameroot, '--',
       ##             padchainnumber,'-',subiter, '.rds')
       ##     ))
-      ## saveRDS(oktraces,
-      ##     file = file.path(dirname,
-      ##         paste0('___oktraces',
-      ##             dashnameroot, '--',
-      ##             padchainnumber,'-',subiter, '.rds')
-      ##     ))
-
 
       ## ##############################
       ## ## MCSE, ESS, THINNING, ETC ##
@@ -3078,11 +3044,10 @@ learn <- function(
 
         Qdiagn[, atrace] <- c(max(wXlo, wXhi), qwidth)
       }
-      ## relmcse <- c(mcsemean, wXlo / qwidth, wXhi / qwidth)
 
       mrqe <- Qdiagn[1,] / Qdiagn[2,]
 
-      ## qwidth / qscale in same as sd for a Gaussian
+      ## qwidth / qscale in same as SD for a Gaussian
       relmcse <- qscale * Fmcse / Qdiagn[2,]
 
       lowestESS <- 1 / max(relmcse, mrqe)^2
@@ -3100,14 +3065,13 @@ learn <- function(
         'rel. MCSE' = relmcse, # mcsemean,
         ## 'quantl-rel. MCSE' = mcsemean * sd(oktraces) / qwidth,
         'ESS' = 1 / relmcse^2, # essnrmean,
-        'needed thinning' = autothinning,
-        'log-average' = colMeans(traces)
+        'max needed thinning' = autothinning,
+        'log-averages' = colMeans(traces)
       )
 
-####
       cat(mapply(
         function(nm, val){paste0(nm, ': ',
-          paste0(signif(val, 4), collapse = ' '))},
+          paste0(signif(val, 4), collapse = ', '))},
         names(toprint), toprint
       ), sep = '\n')
 
