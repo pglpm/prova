@@ -4,7 +4,7 @@
 
 * Added a section in the `intro` vignette, to explain the meaning of the columns displayed by a probability object.
 
-* Changed the titles and information reported in the PDF files and logs created by `learn()`.
+* Changed titles and information reported in the PDF files and logs created by `learn()`.
 
 * Cleaned some code.
 
