@@ -1,70 +1,17 @@
 Testing version 3.0.2
-Starting tests 261121T194028
-Quick learn 261121T194028
-
-Saving output in directory
-____deletethisdir
-
-Prova v3.0.2.
-Registered socket cluster with 1 nodes on host ‘localhost’.
-Learning from 3 datapoints, 1 variates.
-Starting Monte Carlo sampling of 36 samples by 1 chains
-in a space of 191 (effectively 259) dimensions.
-Using 1 nodes: 36 samples per chain, max 1 chains per node.
-Requested:   ESS 0   rel.MCSE Inf.
-With burn-in:   ESS 0   rel.MCSE Inf.
-Node logs are being saved in individual files.
-C-compiling samplers appropriate to the variates (Nimble v1.4.3)
-this can take tens of minutes. Please wait...
-Compiled node 1. Number of samplers: 197.             
-Estimated end times, updated 2026-11-21 19:40:
-Node 1: estimating...
-[2AEstimated end times, updated 2026-11-21 19:40:[1BNode 1: 2026-11-21 19:43[1B[2AEstimated end times, updated 2026-11-21 19:40:[1BNode 1: finished.        [1B
-Finished Monte Carlo sampling.
-Highest number of Monte Carlo iterations across chains: 36.
-Highest number of used mixture components: 2.
-
-Checking test data
-(#1 #2 #3):
-max abs. quantile error: 0.541 to 1.96
-quantile width: 1.57 to 3.55
-max rel. quantile error: 0.313 to 0.551
-min ESS from rel. qt. error: 3.29 to 10.2
-MCSE: 0.111 to 0.204
-rel. MCSE: 0.16 to 0.254
-quantl-rel. MCSE: 0.0437 to 0.0707
-ESS: 15.5 to 39.2
-needed thinning: 3.44 to 10.6
-log-average: -2.69 to -1.86
-
-Plotting final Monte Carlo traces and marginal samples...
-
-Total computation time: 18 secs
-Average preparation & finalization time: 17 secs.
-Average Monte Carlo time per chain: 0.36 secs.
-Max total memory used: approx 330MB.
-Max memory used per node: approx 330MB.
-Removing temporary output files.
-Finished.
-
-**************************
-Output saved in directory
-____deletethisdir
-**************************
-
-Warning message:
-In dir.create(dirname) : '____deletethisdir' already exists
+Starting tests 261122T113838
+Quick learn 261122T113838
 $`Quick learn`
 [1] TRUE
 
-Full base learn 261121T194046
+Full base learn 261122T113856
 $`Full base learn`
 [1] TRUE
 
-Save Kexample 261121T194241
+Save Kexample 261122T114033
 
 Saving output in directory
-/tmp/RtmpXwSbv8/prova-V2_D344_S225_261121T194241_56c2163d27ac
+/tmp/RtmpeOBpr1/prova-V2_D344_S225_261122T114034_3ddf6e325a65
 
 Prova v3.0.2.
 Registered socket cluster with 1 nodes on host ‘localhost’.
@@ -73,65 +20,62 @@ Learning from 344 datapoints, 2 variates.
 Starting Monte Carlo sampling of 225 samples by 1 chains
 in a space of 319 (effectively 22746) dimensions.
 Using 1 nodes: 225 samples per chain, max 1 chains per node.
-Requested:   ESS 625   rel.MCSE 0.04.
-With burn-in:   ESS 633   rel.MCSE 0.0397.
+Requested:     ESS 450   rel.MCSE 0.0471.
+With burn-in:  ESS 458   rel.MCSE 0.0467.
 Node logs are being saved in individual files.
 C-compiling samplers appropriate to the variates (Nimble v1.4.3)
 this can take tens of minutes. Please wait...
-Compiled node 1. Number of samplers: 946.             
-Estimated end times, updated 2026-11-21 19:43:
+Compiled node 1. Number of samplers: 946.             
+Estimated end times, updated 2026-11-22 11:41:
 Node 1: estimating...
-[2AEstimated end times, updated 2026-11-21 19:44:[1BNode 1: 2026-11-21 19:48[1B[2AEstimated end times, updated 2026-11-21 19:44:[1BNode 1: finished.        [1B
+[2AEstimated end times, updated 2026-11-22 11:42:[1BNode 1: 2026-11-22 11:46[1B[2AEstimated end times, updated 2026-11-22 11:42:[1BNode 1: finished.        [1B
 Finished Monte Carlo sampling.
 Highest number of Monte Carlo iterations across chains: 3600.
 Highest number of used mixture components: 3.
 
-Checking test data
-(#178 #181 #189 #201 #226 #284 #287 #293):
-max abs. quantile error: 0.0199 to 0.126
-quantile width: 0.298 to 0.98
-max rel. quantile error: 0.0384 to 0.16
-min ESS from rel. qt. error: 39 to 679
-MCSE: 0.0117 to 0.0413
-rel. MCSE: 0.0784 to 0.133
-quantl-rel. MCSE: 0.023 to 0.0421
-ESS: 56.4 to 163
-needed thinning: 1.62 to 5.76
-log-average: -6.74 to -5.4
+Diagnostics with 30 test data:
+#23 #32 #34 #51 #57 #58 #65 #68 #73 #80 #91 #107 #138 #139 #157 #163 #164 #168 #173 #180 #204 #205 #207 #213 #226 #302 #314 #317 #321 #338
+max abs. quantile error: 0.01159 -- 0.08679
+quantile width: 0.09569 -- 0.5621
+max rel. quantile error: 0.0664 -- 0.1544
+min ESS from rel. qt. error: 41.95 -- 226.8
+MCSE: 0.003639 -- 0.02473
+rel. MCSE: 0.07726 -- 0.1407
+ESS: 50.54 -- 167.5
+max needed thinning: 5.364 -- 5.364
+log-averages: -5.697 -- -5.647
 
 Plotting final Monte Carlo traces and marginal samples...
 
 Total computation time: 2.1 mins
 Average preparation & finalization time: 1.4 mins.
 Average Monte Carlo time per chain: 44 secs.
-Max total memory used: approx 460MB.
-Max memory used per node: approx 460MB.
+Max total memory used: approx 450MB.
+Max memory used per node: approx 450MB.
 Removing temporary output files.
 Finished.
 
 *************************************************************
 Output saved in directory
-/tmp/RtmpXwSbv8/prova-V2_D344_S225_261121T194241_56c2163d27ac
+/tmp/RtmpeOBpr1/prova-V2_D344_S225_261122T114034_3ddf6e325a65
 *************************************************************
 
 $`Save Kexample`
 [1] TRUE
 
-Simple Pr 261121T194447
+Simple Pr 261122T114240
 [1] TRUE
-Various Pr 261121T194609
+Various Pr 261122T114402
 [1] TRUE
-Simple MIs 261121T194723
+Simple MIs 261122T114515
 [1] TRUE
-Quick learn autocluster 261121T195008
+Quick learn autocluster 261122T114800
 $`Quick learn autocluster`
 [1] TRUE
 
-Quick learn existing cluster 261121T195028
+Quick learn existing cluster 261122T114820
 $`Quick learn existing cluster`
-<simpleError in checkForRemoteErrors(val): 3 nodes produced errors; first error: cannot change working directory>
+[1] TRUE
 
-Warning message:
-In rm(K) : object 'K' not found
-All test passed: FALSE
-Done 261121T195039
+All test passed: TRUE
+Done 261122T114841

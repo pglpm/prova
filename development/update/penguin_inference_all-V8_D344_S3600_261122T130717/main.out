@@ -1,0 +1,65 @@
+
+Saving output in directory
+penguin_inference_all-V8_D344_S3600_261122T130717
+
+Prova v3.0.2.
+Registered socket cluster with 8 nodes on host ‘localhost’.
+Learning from 344 datapoints, 8 variates.
+Starting Monte Carlo sampling of 3600 samples by 8 chains
+in a space of 1023 (effectively 89707) dimensions.
+Using 8 nodes: 450 samples per chain, max 1 chains per node.
+Requested:     ESS 450   rel.MCSE 0.0471.
+With burn-in:  ESS 458   rel.MCSE 0.0467.
+Node logs are being saved in individual files.
+C-compiling samplers appropriate to the variates (Nimble v1.4.3)
+this can take tens of minutes. Please wait...
+[9AEstimated end times, updated 2026-11-22 13:15:[4BNode 4: 2026-11-22 13:37[5BCompiled node 1. Number of samplers: 2757.             
+Estimated end times, updated 2026-11-22 13:15:
+Node 1: estimating...
+Node 2: estimating...
+Node 3: estimating...
+Node 4: estimating...
+Node 5: estimating...
+Node 6: estimating...
+Node 7: estimating...
+Node 8: estimating...
+[9AEstimated end times, updated 2026-11-22 13:16:[5BNode 5: 2026-11-22 13:55[4B[9AEstimated end times, updated 2026-11-22 13:17:[7BNode 7: 2026-11-22 13:24[2B[9AEstimated end times, updated 2026-11-22 13:17:[8BNode 8: 2026-11-22 14:03[1B[9AEstimated end times, updated 2026-11-22 13:17:[6BNode 6: 2026-11-22 13:24[3B[9AEstimated end times, updated 2026-11-22 13:17:[2BNode 2: 2026-11-22 14:40[7B[9AEstimated end times, updated 2026-11-22 13:17:[3BNode 3: 2026-11-22 13:27[6B[9AEstimated end times, updated 2026-11-22 13:18:[7BNode 7: 2026-11-22 13:29[2B[9AEstimated end times, updated 2026-11-22 13:18:[4BNode 4: 2026-11-22 13:41[5B[9AEstimated end times, updated 2026-11-22 13:18:[6BNode 6: 2026-11-22 13:25[3B[9AEstimated end times, updated 2026-11-22 13:18:[1BNode 1: 2026-11-22 13:39[8B[9AEstimated end times, updated 2026-11-22 13:18:[5BNode 5: 2026-11-22 14:02[4B[9AEstimated end times, updated 2026-11-22 13:18:[6BNode 6: 2026-11-22 13:25[3B[9AEstimated end times, updated 2026-11-22 13:18:[6BNode 6: finished.        [3B[9AEstimated end times, updated 2026-11-22 13:20:[3BNode 3: 2026-11-22 13:30[6B[9AEstimated end times, updated 2026-11-22 13:20:[8BNode 8: 2026-11-22 15:01[1B[9AEstimated end times, updated 2026-11-22 13:20:[7BNode 7: 2026-11-22 13:29[2B[9AEstimated end times, updated 2026-11-22 13:20:[2BNode 2: 2026-11-22 14:51[7B[9AEstimated end times, updated 2026-11-22 13:20:[7BNode 7: 2026-11-22 13:36[2B[9AEstimated end times, updated 2026-11-22 13:20:[4BNode 4: 2026-11-22 13:38[5B[9AEstimated end times, updated 2026-11-22 13:20:[1BNode 1: 2026-11-22 13:40[8B[9AEstimated end times, updated 2026-11-22 13:21:[5BNode 5: 2026-11-22 13:42[4B[9AEstimated end times, updated 2026-11-22 13:21:[3BNode 3: 2026-11-22 13:33[6B[9AEstimated end times, updated 2026-11-22 13:22:[8BNode 8: 2026-11-22 14:48[1B[9AEstimated end times, updated 2026-11-22 13:22:[3BNode 3: 2026-11-22 13:34[6B[9AEstimated end times, updated 2026-11-22 13:22:[2BNode 2: 2026-11-22 14:10[7B[9AEstimated end times, updated 2026-11-22 13:23:[7BNode 7: 2026-11-22 13:49[2B[9AEstimated end times, updated 2026-11-22 13:23:[4BNode 4: 2026-11-22 13:49[5B[9AEstimated end times, updated 2026-11-22 13:23:[1BNode 1: 2026-11-22 13:46[8B[9AEstimated end times, updated 2026-11-22 13:23:[3BNode 3: 2026-11-22 13:34[6B[9AEstimated end times, updated 2026-11-22 13:23:[3BNode 3: finished.        [6B[9AEstimated end times, updated 2026-11-22 13:23:[5BNode 5: 2026-11-22 13:43[4B[9AEstimated end times, updated 2026-11-22 13:24:[8BNode 8: 2026-11-22 13:53[1B[9AEstimated end times, updated 2026-11-22 13:25:[2BNode 2: 2026-11-22 14:13[7B[9AEstimated end times, updated 2026-11-22 13:25:[7BNode 7: 2026-11-22 13:56[2B[9AEstimated end times, updated 2026-11-22 13:25:[4BNode 4: 2026-11-22 13:45[5B[9AEstimated end times, updated 2026-11-22 13:25:[1BNode 1: 2026-11-22 14:01[8B[9AEstimated end times, updated 2026-11-22 13:26:[5BNode 5: 2026-11-22 13:41[4B[9AEstimated end times, updated 2026-11-22 13:26:[5BNode 5: finished.        [4B[9AEstimated end times, updated 2026-11-22 13:27:[8BNode 8: 2026-11-22 14:01[1B[9AEstimated end times, updated 2026-11-22 13:27:[4BNode 4: 2026-11-22 13:48[5B[9AEstimated end times, updated 2026-11-22 13:27:[2BNode 2: 2026-11-22 13:55[7B[9AEstimated end times, updated 2026-11-22 13:28:[7BNode 7: 2026-11-22 14:07[2B[9AEstimated end times, updated 2026-11-22 13:28:[1BNode 1: 2026-11-22 13:52[8B[9AEstimated end times, updated 2026-11-22 13:29:[4BNode 4: 2026-11-22 13:47[5B[9AEstimated end times, updated 2026-11-22 13:29:[4BNode 4: finished.        [5B[9AEstimated end times, updated 2026-11-22 13:29:[8BNode 8: 2026-11-22 14:04[1B[9AEstimated end times, updated 2026-11-22 13:30:[2BNode 2: 2026-11-22 13:47[7B[9AEstimated end times, updated 2026-11-22 13:30:[2BNode 2: finished.        [7B[9AEstimated end times, updated 2026-11-22 13:30:[7BNode 7: 2026-11-22 13:56[2B[9AEstimated end times, updated 2026-11-22 13:30:[1BNode 1: 2026-11-22 13:48[8B[9AEstimated end times, updated 2026-11-22 13:30:[1BNode 1: 2026-11-22 13:54[8B[9AEstimated end times, updated 2026-11-22 13:32:[8BNode 8: 2026-11-22 14:09[1B[9AEstimated end times, updated 2026-11-22 13:32:[7BNode 7: 2026-11-22 13:53[2B[9AEstimated end times, updated 2026-11-22 13:32:[7BNode 7: 2026-11-22 13:55[2B[9AEstimated end times, updated 2026-11-22 13:33:[1BNode 1: 2026-11-22 14:03[8B[9AEstimated end times, updated 2026-11-22 13:33:[7BNode 7: 2026-11-22 13:55[2B[9AEstimated end times, updated 2026-11-22 13:33:[7BNode 7: finished.        [2B[9AEstimated end times, updated 2026-11-22 13:34:[8BNode 8: 2026-11-22 14:19[1B[9AEstimated end times, updated 2026-11-22 13:35:[1BNode 1: 2026-11-22 13:59[8B[9AEstimated end times, updated 2026-11-22 13:36:[1BNode 1: 2026-11-22 14:00[8B[9AEstimated end times, updated 2026-11-22 13:36:[8BNode 8: 2026-11-22 14:30[1B[9AEstimated end times, updated 2026-11-22 13:36:[1BNode 1: 2026-11-22 14:00[8B[9AEstimated end times, updated 2026-11-22 13:36:[1BNode 1: finished.        [8B[9AEstimated end times, updated 2026-11-22 13:38:[8BNode 8: 2026-11-22 14:37[1B[9AEstimated end times, updated 2026-11-22 13:40:[8BNode 8: 2026-11-22 14:41[1B[9AEstimated end times, updated 2026-11-22 13:42:[8BNode 8: 2026-11-22 14:45[1B[9AEstimated end times, updated 2026-11-22 13:45:[8BNode 8: 2026-11-22 14:47[1B[9AEstimated end times, updated 2026-11-22 13:47:[8BNode 8: 2026-11-22 14:51[1B[9AEstimated end times, updated 2026-11-22 13:49:[8BNode 8: 2026-11-22 14:59[1B[9AEstimated end times, updated 2026-11-22 13:51:[8BNode 8: 2026-11-22 14:56[1B[9AEstimated end times, updated 2026-11-22 13:53:[8BNode 8: 2026-11-22 14:57[1B[9AEstimated end times, updated 2026-11-22 13:55:[8BNode 8: 2026-11-22 14:58[1B[9AEstimated end times, updated 2026-11-22 13:57:[8BNode 8: 2026-11-22 14:58[1B[9AEstimated end times, updated 2026-11-22 14:00:[8BNode 8: 2026-11-22 14:58[1B[9AEstimated end times, updated 2026-11-22 14:02:[8BNode 8: 2026-11-22 15:00[1B[9AEstimated end times, updated 2026-11-22 14:04:[8BNode 8: 2026-11-22 15:01[1B[9AEstimated end times, updated 2026-11-22 14:06:[8BNode 8: 2026-11-22 15:02[1B[9AEstimated end times, updated 2026-11-22 14:07:[8BNode 8: 2026-11-22 15:03[1B[9AEstimated end times, updated 2026-11-22 14:07:[8BNode 8: 2026-11-22 15:03[1B[9AEstimated end times, updated 2026-11-22 14:07:[8BNode 8: 2026-11-22 15:04[1B[9AEstimated end times, updated 2026-11-22 14:07:[8BNode 8: 2026-11-22 15:04[1B[9AEstimated end times, updated 2026-11-22 14:08:[8BNode 8: finished.        [1B
+Finished Monte Carlo sampling.
+Highest number of Monte Carlo iterations across chains: 85271.
+Highest number of used mixture components: 10.
+
+Diagnostics with 30 test data:
+#2 #8 #31 #37 #78 #80 #90 #96 #115 #116 #129 #162 #164 #169 #170 #188 #200 #230 #232 #234 #245 #256 #258 #261 #298 #315 #319 #332 #338 #342
+max abs. quantile error: 0.01533 -- 0.09743
+
+quantile width: 0.3223 -- 3.393
+
+max rel. quantile error: 0.02871 -- 0.04756
+
+min ESS from rel. qt. error: 442.1 -- 1213
+
+MCSE: 0.004132 -- 0.03068
+
+rel. MCSE: 0.02866 -- 0.04098
+
+ESS: 595.4 -- 1217
+
+max needed thinning: 8.144 -- 8.144
+
+log-averages: -20.55 -- -17.21
+
+Plotting final Monte Carlo traces and marginal samples...
+
+Total computation time: 1 hours
+Average preparation & finalization time: 7.8 mins.
+Average Monte Carlo time per chain: 19 mins.
+Max total memory used: approx 5600MB.
+Max memory used per node: approx 690MB.
+Removing temporary output files.
+Finished.
+
+*************************************************
+Output saved in directory
+penguin_inference_all-V8_D344_S3600_261122T130717
+*************************************************
+

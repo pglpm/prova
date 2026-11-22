@@ -19,7 +19,7 @@ Kdir <- learn(
     ## appendtimestamp = TRUE,
     ## appendinfo = TRUE,
     ## output = 'directory',
-    cleanup = FALSE,
+    ## cleanup = FALSE,
     ## maxrelMCSE = +Inf, # 0.038,
     ## minESS = 450, # 0.038,
     ## ncheckpoints = 12,
