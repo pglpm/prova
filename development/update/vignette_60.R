@@ -6,7 +6,7 @@ datafile <- '~/repos/prova/vignettes/penguins_60.csv'
 metadatafile <- '~/repos/prova/vignettes/meta_penguins.csv'
 parallel <- 4
 
-outputdir <- 'penguin_inference_60ESS450swapCD'
+outputdir <- 'penguin_inference_60'
 Kdir <- learn(
     data = datafile,
     metadata = metadatafile,
@@ -19,7 +19,7 @@ Kdir <- learn(
     ## appendtimestamp = TRUE,
     ## appendinfo = TRUE,
     ## output = 'directory',
-    cleanup = FALSE,
+    ## cleanup = FALSE,
     ## maxrelMCSE = +Inf, # 0.038,
     ## minESS = 450, # 0.038,
     ## ncheckpoints = 12,
