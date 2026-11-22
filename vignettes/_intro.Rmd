@@ -522,7 +522,7 @@ We have already seen the meaning of most of these columns. Let's summarize them:
 
 - `value`: it lists the *probabilities* (`r signif(Fspecies10$value, 4)`) for the species. The last two digits of each probability are (in accordance to ISO standards) those affected by numerical error.
 
-- `+/-`: it lists the *numerical errors* (`r signif(Fspecies10$value.acc, 2)`) of the probabilities. Note that these are simply the intrinsic precision errors of the algorithm; they are like the precision with which a calculator computes the result of an algebraic operation. They are *not* related to the variability of traits within the population, or the size of the data sample. These errors can always be decreased by using a larger `nsamples = ` argument in the `learn()` function.
+- `+/-`: it lists the *numerical errors* (`r signif(Fspecies10$value.acc, 2)`) of the probabilities. These are simply the computational errors of the algorithm which calculates the probabilities. These numerical errors are *not* related to the variability of traits within the population, or to the size of the data sample. They can always be made smaller by using a larger `nsamples = ` argument in the `learn()` function. The reported errors represent one standard deviation.
 
 - `Q5.5%`: this column reports the *long-run frequencies* of the species have at least these values (`r signif(Fspecies10$quantiles[,,'5.5%'], 4)`) with a probability of 5.5%. In more technical terms, these are the 5.5% quantiles of the probability distributions for the (unknown) long-run frequencies.
 
