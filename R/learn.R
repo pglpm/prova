@@ -1226,7 +1226,7 @@ learn <- function(
   ## Will contain the MC traces of the test points
   traces <- matrix(NA_real_, nrow = 0, ncol = 1 + length(checkindices),
     dimnames = list(NULL,
-      c('gmean', paste0('#', testdata$pointsid[checkindices])))
+      c('entropy / joint log-F', paste0('#', testdata$pointsid[checkindices])))
   )
   ## Will contain diagnostics for traces
   Qdiagn <- matrix(NA_real_, nrow = 2, ncol = ncol(traces))
@@ -2818,7 +2818,7 @@ learn <- function(
     ## Will contain the MC traces of the test points
     traces <- matrix(NA_real_, nrow = 0, ncol = 1 + length(checkindices),
       dimnames = list(NULL,
-        c('gmean', paste0('#', testdata$pointsid[checkindices])))
+        c('entropy / joint log-F', paste0('#', testdata$pointsid[checkindices])))
     )
     ## Will contain diagnostics for traces
     Qdiagn <- matrix(NA_real_, nrow = 2, ncol = ncol(traces))
