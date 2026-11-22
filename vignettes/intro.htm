@@ -48,8 +48,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -742,7 +743,7 @@ should obviously have different names.
 </dd>
 <dt>Variate type (<code>type</code>)</dt>
 <dd>
-<p><strong>Prova</strong> can handle three kinds of variates:</p>
+<strong>Prova</strong> can handle three kinds of variates:
 <ul>
 <li><code>nominal</code>: it can take on a finite number of discrete
 values, which do not have any natural ordering. Examples could be sex or
@@ -756,17 +757,17 @@ scale</a>.</li>
 number of continuous values, although they can be discretized or
 rounded. Examples could be age or weight.</li>
 </ul>
-<p>Many other types of variates exist. For example images and audio are
+Many other types of variates exist. For example images and audio are
 also types of variates; but <strong>Prova</strong> cannot handle these
 complex types. A simple type of variate that <strong>Prova</strong>
 cannot properly handle is the <em>cyclic</em> one, such as time of day.
 There are no clear-cut separations between different types of variates;
-thus it’s sometimes difficult to assess the type.</p>
+thus it’s sometimes difficult to assess the type.
 </dd>
 <dt>Domain minimum and maximum (<code>domainmin</code>,
 <code>domainmax</code>)</dt>
 <dd>
-<p>These are numbers, only defined for numeric-ordinal and continuous
+These are numbers, only defined for numeric-ordinal and continuous
 variates. These metadata are the minimum and maximum value a variate can
 take on in a given study. For example, in a study about health or
 employment of adults, a variate <em>age</em> might have a minimum of
@@ -774,11 +775,11 @@ employment of adults, a variate <em>age</em> might have a minimum of
 minimum would be 0. In a health study where people of 90 years or more
 are pooled together, the maximum would be 90 years. A minimum could also
 be minus-infinity, and a maximum plus-infinity. Obviously the minimum
-should be lower than the maximum.</p>
-<p>Sometimes the minimum or maximum is not clear-cut. For instance,
-there is no theoretical maximum on a person’s age, although we can
-consider an age of 300 impossible to reach today. In such cases the
-maximum or minimum can be taken to be plus or minus infinity.</p>
+should be lower than the maximum.
+Sometimes the minimum or maximum is not clear-cut. For instance, there
+is no theoretical maximum on a person’s age, although we can consider an
+age of 300 impossible to reach today. In such cases the maximum or
+minimum can be taken to be plus or minus infinity.
 </dd>
 <dt>Interval between values (<code>datastep</code>)</dt>
 <dd>
@@ -902,7 +903,7 @@ warnings of the helper function:</p>
 <span id="cb4-64"><a href="#cb4-64" tabindex="-1"></a><span class="co"># Saved proposal metadata file as &quot;meta_penguins_temp.csv&quot; </span></span></code></pre></div>
 <p>The preliminary metadata file created by
 <code>metadatatemplate()</code> looks like this:</p>
-<table style="width:100%;">
+<table style="width:99%;">
 <colgroup>
 <col width="9%" />
 <col width="8%" />
@@ -1149,7 +1150,7 @@ was correctly guessed).</p>
 <code>meta_penguins_temp.csv</code> with our favourite editor, and
 correct and complete the guesses of the helper function. In this case we
 end up with the following corrected metadata:</p>
-<table style="width:100%;">
+<table style="width:99%;">
 <colgroup>
 <col width="11%" />
 <col width="10%" />
@@ -1624,19 +1625,51 @@ For instance, we can read the 89%-credibility intervals as follows:</p>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#   Adelie    0.114747 0.506832</span></span>
 <span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#   Chinstrap 0.125529 0.532208</span></span>
 <span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#   Gentoo    0.184954 0.626999</span></span></code></pre></div>
-<p>or we can use the <code>print()</code> function to display values and
-quantiles together:</p>
+</div>
+<div id="meaning-of-the-full-output-of-the-probability-object" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Meaning of the full
+output of the probability object</h2>
+<p>Calling the <code>Fspecies10</code> object by itself (or also
+<code>print(Fspecies10</code>) shows the following columns:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">print</span>(Fspecies10)</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#            probability</span></span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co"># species     value  +/-    Q5.5%  Q25%   Q75%   Q94.5%</span></span>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#   Adelie    0.2902 0.0019 0.1147 0.1987 0.3656 0.5068</span></span>
 <span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#   Chinstrap 0.3124 0.0022 0.1255 0.2186 0.3961 0.5322</span></span>
 <span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#   Gentoo    0.3974 0.0023 0.1850 0.2988 0.4931 0.6270</span></span></code></pre></div>
+<p>We have already seen the meaning of most of these columns. Let’s
+summarize them:</p>
+<ul>
+<li><p>Column <code>species</code>: it lists the species () for which we
+have calculated the probabilities.</p></li>
+<li><p>Column <code>value</code>: it lists the <em>probabilities</em>
+(0.2902, 0.3124, 0.3974) (0.2902, 0.3124, 0.3974) for the species. The
+last two digits of each probability are (in accordance to ISO standards)
+those affected by numerical error.</p></li>
+<li><p>Column <code>+/-</code>: it lists the <em>numerical errors</em>
+() of the probabilities. Note that these are simply the intrinsic
+precision errors of the algorithm; they are like the precision with
+which a calculator computes the result of an algebraic operation. They
+are <em>not</em> related to the variability of traits within the
+population, or the size of the data sample. These errors can always be
+decreased by using a larger <code>nsamples =</code> argument in the
+<code>learn()</code> function.</p></li>
+<li><p>Column <code>Q5.5%</code>: the <em>long-run frequencies</em> of
+the species have at least these values () with a probability of
+5.5%.</p></li>
+</ul>
+<p><em>numerical errors</em> () of the probabilities. Note that these
+are simply the intrinsic precision errors of the algorithm; they are
+like the precision with which a calculator computes the result of an
+algebraic operation. They are <em>not</em> related to the variability of
+traits within the population, or the size of the data sample. These
+errors can always be decreased by using a larger <code>nsamples =</code>
+argument in the <code>learn()</code> function.</p>
 <!-- As the name tells, this element actually report the *quantiles* of the probability. For example, look at the `= 25%` output: among other things it says `Adelie 0.227634`. This means that there's a 25% probability that the frequency of Adélie penguins is below $0.227634$, and thus a 75% probability that it's above $0.227634$.
  -->
 </div>
-<div id="a-preliminary-report-on-question-q1" class="section level2" number="4.3">
-<h2><span class="header-section-number">4.3</span> A preliminary report
+<div id="a-preliminary-report-on-question-q1" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> A preliminary report
 on question Q1</h2>
 <p>We can now give a preliminary answer to our question
 <strong>Q1</strong>, “what’s the overall statistical occurrence of the
@@ -1677,8 +1710,8 @@ species</strong>
 to 1, so if our future estimates of some of them increase, then the
 estimate of some others must decrease.</p>
 </div>
-<div id="twovariates" class="section level2" number="4.4">
-<h2><span class="header-section-number">4.4</span> What if we’re
+<div id="twovariates" class="section level2" number="4.5">
+<h2><span class="header-section-number">4.5</span> What if we’re
 interested in more than one variate?</h2>
 <p>Our first example inference, just discussed, focused on the specific
 ‘species’ variate. It should be obvious how a similar analysis and code
@@ -2351,7 +2384,7 @@ between 0.54 and 0.83 with 89% probability.</p>
 <p>From a sample of 60 penguins, the ratio between the frequencies of
 the species <code>Gentoo</code> and <code>Chinstrap</code>, on
 <code>Biscoe</code> island, is estimated with a median of 21, and it is
-between 6.62 and 96.10 with 89% probability.</p>
+between 6.6 and 96. with 89% probability.</p>
 </blockquote>
 <p>It is remarkable that with only 60 penguins – and not all of them
 from Biscoe island – we can conclude with a high probability (95%) that

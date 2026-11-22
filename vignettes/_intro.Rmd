@@ -26,7 +26,8 @@ options(knitr.kable.NA = '')
 cl <- parallel::makeCluster(6)
 parallel::setDefaultCluster(cl)
 
-printprob <- function(x, d = 2){sprintf(paste0('%.', d, 'f'), x)}
+printprob <- function(x, d = 2){sprintf('%.*f', d, x)}
+printprobs <- function(x, s = 2){sprintf('%#.*g', s, x)}
 
 ## Tol colour-blind-friendly palette
 palette(c(
@@ -500,11 +501,27 @@ The credibility intervals are calculated from the probability distribution above
 Fspecies10$quantiles[, , c('5.5%', '94.5%')]
 ```
 
-or we can use the `print()` function to display values and quantiles together:
+## Meaning of the full output of the probability object
+
+Calling the `Fspecies10` object by itself (or also `print(Fspecies10`) shows the following columns:
 
 ```{r quant10print, eval = TRUE}
 print(Fspecies10)
 ```
+
+We have already seen the meaning of most of these columns. Let's summarize them:
+
+- Column `species`: it lists the species (`r rownames(Fspecies10$value)`) for which we have calculated the probabilities.
+
+- Column `value`: it lists the *probabilities* (`r signif(Fspecies10$value, 4)`) for the species. The last two digits of each probability are (in accordance to ISO standards) those affected by numerical error.
+
+- Column `+/-`: it lists the *numerical errors* (`r signif(Fspecies10$value.acc, 4)`) of the probabilities. Note that these are simply the intrinsic precision errors of the algorithm; they are like the precision with which a calculator computes the result of an algebraic operation. They are *not* related to the variability of traits within the population, or the size of the data sample. These errors can always be decreased by using a larger `nsamples = ` argument in the `learn()` function.
+
+- Column `Q5.5%`: the *long-run frequencies* of the species have at least these values (`r Fspecies10$quantiles[,,'5.5%']`) with a probability of 5.5%. In more technical terms, these are the 5.5% quantiles of the probability distributions for the (unknown) long-run frequencies.
+
+- Columns `Q25%`, `Q75%`, `Q94.5%`: analogous to the `Q5.5%` column:
+the *long-run frequencies* of the species have at least these values  with a probabilities of 25%, 75%, 94.5%.  Note that these values do depend on the size of the data sample. As the data sample increases, all the "`Q%`" values for each species tend to converge to the same value: the long-run frequency of that species.
+
 
 <!-- As the name tells, this element actually report the *quantiles* of the probability. For example, look at the `= 25%` output: among other things it says `Adelie 0.227634`. This means that there's a 25% probability that the frequency of Adélie penguins is below $0.227634$, and thus a 75% probability that it's above $0.227634$.
  -->
@@ -961,7 +978,7 @@ median(freqdiff)
 quantile(freqdiff, c(0.055, 0.945))
 ```
 
-> From a sample of 60 penguins, the difference between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of `r signif(median(freqdiff), 2)`, and it is between `r printprob(quantile(freqdiff, 0.055))` and `r printprob(quantile(freqdiff, 0.945))` with 89% probability.
+> From a sample of 60 penguins, the difference between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of `r signif(median(freqdiff), 2)`, and it is between `r printprobs(quantile(freqdiff, 0.055))` and `r printprobs(quantile(freqdiff, 0.945))` with 89% probability.
 
 
 Maybe you prefer a ratio between the two frequencies:
@@ -975,7 +992,7 @@ median(freqratio)
 quantile(freqratio, c(0.055, 0.945))
 ```
 
-> From a sample of 60 penguins, the ratio between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of `r signif(median(freqratio), 2)`, and it is between `r printprob(quantile(freqratio, 0.055))` and `r printprob(quantile(freqratio, 0.945))` with 89% probability.
+> From a sample of 60 penguins, the ratio between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of `r signif(median(freqratio), 2)`, and it is between `r printprobs(quantile(freqratio, 0.055))` and `r printprobs(quantile(freqratio, 0.945))` with 89% probability.
 
 It is remarkable that with only 60 penguins -- and not all of them from Biscoe island -- we can conclude with a high probability (95%) that there are at least `r signif(quantile(freqratio, 0.055),1)` times more Gentoo penguins than Chinstrap penguins on Biscoe island! Note an important consequence from the point of view of hypothesis testing:
 

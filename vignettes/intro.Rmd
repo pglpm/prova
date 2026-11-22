@@ -543,7 +543,9 @@ Fspecies10$quantiles[, , c('5.5%', '94.5%')]
 #   Gentoo    0.184954 0.626999
 ```
 
-or we can use the `print()` function to display values and quantiles together:
+## Meaning of the full output of the probability object
+
+Calling the `Fspecies10` object by itself (or also `print(Fspecies10`) shows the following columns:
 
 
 ``` r
@@ -554,6 +556,21 @@ print(Fspecies10)
 #   Chinstrap 0.3124 0.0022 0.1255 0.2186 0.3961 0.5322
 #   Gentoo    0.3974 0.0023 0.1850 0.2988 0.4931 0.6270
 ```
+
+We have already seen the meaning of most of these columns. Let's summarize them:
+
+- Column `species`: it lists the species () for which we have calculated the probabilities.
+
+- Column `value`: it lists the *probabilities* (0.2902, 0.3124, 0.3974) (0.2902, 0.3124, 0.3974) for the species. The last two digits of each probability are (in accordance to ISO standards) those affected by numerical error.
+
+- Column `+/-`: it lists the *numerical errors* () of the probabilities. Note that these are simply the intrinsic precision errors of the algorithm; they are like the precision with which a calculator computes the result of an algebraic operation. They are *not* related to the variability of traits within the population, or the size of the data sample. These errors can always be decreased by using a larger `nsamples = ` argument in the `learn()` function.
+
+- Column `Q5.5%`: the *long-run frequencies* of the species have at least these values () with a probability of 5.5%.
+
+*numerical errors* () of the probabilities. Note that these are simply the intrinsic precision errors of the algorithm; they are like the precision with which a calculator computes the result of an algebraic operation. They are *not* related to the variability of traits within the population, or the size of the data sample. These errors can always be decreased by using a larger `nsamples = ` argument in the `learn()` function.
+
+
+
 
 <!-- As the name tells, this element actually report the *quantiles* of the probability. For example, look at the `= 25%` output: among other things it says `Adelie 0.227634`. This means that there's a 25% probability that the frequency of Adélie penguins is below $0.227634$, and thus a 75% probability that it's above $0.227634$.
  -->
@@ -1180,7 +1197,7 @@ quantile(freqratio, c(0.055, 0.945))
 #  6.62362 96.09973
 ```
 
-> From a sample of 60 penguins, the ratio between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of 21, and it is between 6.62 and 96.10 with 89% probability.
+> From a sample of 60 penguins, the ratio between the frequencies of the species `Gentoo` and `Chinstrap`, on `Biscoe` island, is estimated with a median of 21, and it is between 6.6 and 96. with 89% probability.
 
 It is remarkable that with only 60 penguins -- and not all of them from Biscoe island -- we can conclude with a high probability (95%) that there are at least 7 times more Gentoo penguins than Chinstrap penguins on Biscoe island! Note an important consequence from the point of view of hypothesis testing:
 
