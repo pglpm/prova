@@ -108,7 +108,7 @@ prob <- Pr(Y = data.frame(island = 'Torgersen', species = 'Chinstrap'), K = K)
 
 print(prob)
 #    value      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-# 0.003009 0.000054 0.000405 0.001180 0.004037  0.00802
+# 0.002957 0.000042 0.000390 0.001174 0.004073  0.00762
 ```
 
 \
@@ -129,7 +129,7 @@ rPr(n = 5, Ynames = c('island', 'species'), K = K)
 #           island   species
 # 644_1     Biscoe    Gentoo
 # 996_1     Biscoe    Gentoo
-# 1228_1     Dream Chinstrap
+# 1228_1    Biscoe    Gentoo
 # 2230_1     Dream Chinstrap
 # 3083_1 Torgersen    Adelie
 ```
@@ -358,13 +358,13 @@ The resulting object `MIislandspecies` is a list of several quantities; the mutu
 ``` r
 MIislandspecies$value
 #          
-# 0.623971
+# 0.627532
 
 MIislandspecies$unit
 # [1] "Sh"
 ```
 
-Between variates `island` and `species` there is thus a mutual information of 0.62 Sh. But what does this mean?
+Between variates `island` and `species` there is thus a mutual information of 0.63 Sh. But what does this mean?
 
 ## Understanding mutual-information values
 
@@ -394,14 +394,14 @@ This relationship can be a *rough* guide to get familiar with mutual-information
 MIislandspecies[c('value', 'unit')]
 # $value
 #          
-# 0.623971 
+# 0.627532 
 # 
 # $unit
 # [1] "Sh"
 
 MIislandspecies$rGauss
-#          
-# 0.760889
+#         
+# 0.76225
 ```
 
 ## Mutual information for previous examples
@@ -512,7 +512,7 @@ Note that in this case the Pearson correlation between `body_mass` and `bill_len
 
 ``` r
 cor(samples$body_mass, samples$bill_len, method = 'pearson')
-# [1] 0.568218
+# [1] 0.560354
 ```
 
 which is different from the rough $r$-equivalent 0.67.
@@ -584,15 +584,15 @@ It is interesting to contrast this result with values of the Pearson correlation
 ``` r
 ## Pearson r for Adelie subpopulation:
 cor(samplesAdelie$body_mass, samplesAdelie$bill_len, method = 'pearson')
-# [1] 0.447427
+# [1] 0.457018
 
 ## Pearson r for Chinstrap subpopulation:
 cor(samplesChinstrap$body_mass, samplesChinstrap$bill_len, method = 'pearson')
-# [1] 0.300739
+# [1] 0.29659
 
 ## Pearson r for Gentoo subpopulation:
 cor(samplesGentoo$body_mass, samplesGentoo$bill_len, method = 'pearson')
-# [1] 0.546061
+# [1] 0.505487
 ```
 
 The Pearson correlation yields the same the association *ranking* as the mutual information does (first Gentoo, then Adélie, then Chinstrap), but it yields the association for the Adélie subpopulation to be closer to the Gentoo one than to the Chinstrap one. The mutual information yields the opposite.
@@ -612,7 +612,7 @@ Let's see for example how much variation we can expect in the case of the [assoc
 ``` r
 print(MIislandspecies)
 # value/Sh      +/-    Q5.5%     Q25%     Q75%   Q94.5% 
-#   0.6240   0.0042   0.5506   0.5986   0.6630   0.7075
+#   0.6275   0.0041   0.5538   0.6009   0.6676   0.7095
 ```
 
 which shows that, acquiring more data, we can expect with 89% probability a mutual information between 0.55 Sh and 0.71 Sh. We can also visualize our uncertainty about this "long-run" mutual information by means of a probability distribution, using the `hist()` function:
