@@ -11,7 +11,7 @@ rPr(
   K = NULL,
   tails = NULL,
   mcsamples = NULL,
-  mcrownames = !is.null(mcsamples)
+  mcrownames = NULL
 )
 }
 \arguments{
