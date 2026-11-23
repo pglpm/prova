@@ -1,6 +1,6 @@
 # Prova v3.0.3
 
-* The `mcrownames = ` argument of `rPr()` now works properly.
+* The `mcrownames = ` argument of `rPr()` works correctly now.
 
 * Updated vignette on association and generation of synthetic datapoints.
 
