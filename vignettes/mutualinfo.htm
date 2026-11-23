@@ -501,12 +501,12 @@ from the computation made with the <code>learn()</code> function.</li>
 <p>Let’s first generate 5 samples from the estimated whole population of
 penguins, as an example:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">rPr</span>(<span class="at">n =</span> <span class="dv">5</span>, <span class="at">Ynames =</span> <span class="fu">c</span>(<span class="st">&#39;island&#39;</span>, <span class="st">&#39;species&#39;</span>), <span class="at">K =</span> K)</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#           island   species</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co"># 644_1     Biscoe    Gentoo</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co"># 996_1     Biscoe    Gentoo</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co"># 1228_1    Biscoe    Gentoo</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co"># 2230_1     Dream Chinstrap</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co"># 3083_1 Torgersen    Adelie</span></span></code></pre></div>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#      island   species</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co"># 1    Biscoe    Gentoo</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co"># 2    Biscoe    Gentoo</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co"># 3    Biscoe    Gentoo</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co"># 4     Dream Chinstrap</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co"># 5 Torgersen    Adelie</span></span></code></pre></div>
 <p>This could have also be entered as
 <code>rPr(5, c(&#39;island&#39;, &#39;species&#39;), NA, K)</code>, where
 <code>NA</code> stands for the <code>X =</code> argument.</p>
