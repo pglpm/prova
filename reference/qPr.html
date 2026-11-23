@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,7 +141,7 @@
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function calculates the quantiles of \(\mathrm{Pr}(Y = y \vert X = x, K)\) or of \(\mathrm{Pr}(Y = y \vert X \le x, K)\) or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \(Y\) having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the <code>qxxx</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>.</p>
+    <p>This function calculates the quantiles of \(\mathrm{Pr}(Y = y \vert X = x, K)\) or of \(\mathrm{Pr}(Y = y \vert X \le x, K)\) or combinations thereof, at specified cumulative-probability levels. In other words, it calculates the values of \(Y\) having specified cumulative probabilities or conditional probabilities. It also calculates the revisability of those quantiles if more learning data were provided. It is somewhat analogous to the <code>q...</code>-variants of <a href="https://rdrr.io/r/stats/Distributions.html" class="external-link">R distribution functions</a>.</p>
 <p>The revisability can be expressed in the form of quantiles, samples, or both, as in the <code><a href="Pr.html">Pr()</a></code> function. If several joint values are given for the probability levels and for <code>X</code>, the function creates a 2D grid of results for all possible combinations of the given probability levels and <code>X</code> values.</p>
 <p>Each variate in the argument <code>X</code> can be specified either as a point-value \(X = x\) or as a left-open interval \(X \le x\) or as a right-open interval \(X \ge x\), through the argument <code>tails</code> (see <em>Tail probabilities</em> in the <code><a href="Pr.html">Pr()</a></code> documentation).</p>
 <p>A default value for the <code>K = </code> argument can be set (and unset) with <code><a href="Kobjects.html">useK()</a></code>. When this is done, the <code>K = </code> argument may be omitted, saving a lot of <code>K = ...</code>-typing in this and other functions.</p>
@@ -190,9 +190,9 @@
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=39.2 0.2540140</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=44.2 0.5019569</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=48.3 0.7539750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=39.2 0.2551595</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=44.2 0.5006897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=48.3 0.7536432</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## display the revisability about the quantiles</span></span></span>
 <span class="r-in"><span><span class="va">quants</span><span class="op">$</span><span class="va">quantiles</span></span></span>
@@ -215,10 +215,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , Q = 94.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 39.800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  45.057</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bill_len     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.25 39.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.5  45.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.75 48.8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -248,9 +248,9 @@
 <span class="r-in"><span><span class="va">probs</span><span class="op">$</span><span class="va">value</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         |species</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bill_len    Adelie</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=37   0.2542091</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=38.8 0.5047508</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=40.6 0.7508253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=37   0.2560310</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=38.8 0.5090289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;=40.6 0.7552887</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

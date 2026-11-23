@@ -13,7 +13,7 @@ rPr(
   K = NULL,
   tails = NULL,
   mcsamples = NULL,
-  mcrownames = !is.null(mcsamples)
+  mcrownames = NULL
 )
 ```
 
@@ -106,7 +106,7 @@ This function generates datapoints according to the posterior
 probability \\\mathrm{Pr}(Y = y \vert X = x, K)\\ or \\\mathrm{Pr}(Y = y
 \vert X \le x, K)\\ or combinations thereof, for the variates specified
 in the argument `Y`, and conditional on the variate values specified in
-the argument `X`. It is somewhat analogous to the `rxxx`-variants of [R
+the argument `X`. It is somewhat analogous to the `r...`-variants of [R
 distribution functions](https://rdrr.io/r/stats/Distributions.html). If
 `X` is `NA`, then the posterior probability \\\mathrm{Pr}(Y \| K)\\ is
 used.
@@ -168,29 +168,29 @@ samples reproducibly.
 datapoints <- rPr(n = 10, Ynames = 'species', K = Kexample)
 ## alternatively: rPr(10, 'species', NA, Kexample)
 datapoints
-#>         species
-#> 3_1      Adelie
-#> 37_1     Gentoo
-#> 67_1  Chinstrap
-#> 69_1  Chinstrap
-#> 88_1     Gentoo
-#> 176_1    Gentoo
-#> 182_1    Gentoo
-#> 191_1 Chinstrap
-#> 199_1    Adelie
-#> 218_1    Adelie
+#>      species
+#> 1     Adelie
+#> 2     Gentoo
+#> 3     Adelie
+#> 4     Gentoo
+#> 5  Chinstrap
+#> 6     Adelie
+#> 7  Chinstrap
+#> 8     Adelie
+#> 9     Gentoo
+#> 10    Adelie
 
 
 ## ## Example 2:
 ## Generate 5 joint values of 'species' and 'bill_len' variates.
 datapoints <- rPr(5, c('species', 'bill_len'), NA, Kexample)
 datapoints
-#>         species bill_len
-#> 49_1  Chinstrap     48.5
-#> 61_1  Chinstrap     48.4
-#> 69_1  Chinstrap     50.4
-#> 109_1    Adelie     43.4
-#> 201_1    Gentoo     51.7
+#>     species bill_len
+#> 1    Adelie     38.3
+#> 2    Gentoo     46.0
+#> 3    Adelie     41.5
+#> 4 Chinstrap     54.7
+#> 5    Adelie     42.0
 
 
 ## ## Example 3:
@@ -199,12 +199,12 @@ datapoints
 
 datapoints <- rPr(5, 'species', data.frame(bill_len = 40), Kexample, tails = list(bill_len = '<='))
 datapoints
-#>       species
-#> 70_1   Adelie
-#> 191_1  Adelie
-#> 193_1  Adelie
-#> 201_1  Adelie
-#> 216_1  Adelie
+#>   species
+#> 1  Adelie
+#> 2  Adelie
+#> 3  Adelie
+#> 4  Adelie
+#> 5  Adelie
 
 
 ## ## Example 4:
@@ -216,17 +216,17 @@ useK(Kexample)
 ## since we did not set a random seed with 'set.seed()'
 datapoints <- rPr(10, 'species')
 datapoints
-#>         species
-#> 17_1     Gentoo
-#> 23_1     Gentoo
-#> 38_1  Chinstrap
-#> 50_1     Adelie
-#> 58_1  Chinstrap
-#> 69_1  Chinstrap
-#> 97_1     Adelie
-#> 143_1    Adelie
-#> 155_1    Gentoo
-#> 185_1    Adelie
+#>      species
+#> 1     Gentoo
+#> 2     Gentoo
+#> 3     Gentoo
+#> 4     Adelie
+#> 5     Adelie
+#> 6     Adelie
+#> 7     Gentoo
+#> 8     Adelie
+#> 9  Chinstrap
+#> 10    Gentoo
 
 ## Remove any default 'K =' argument
 useK(NA)

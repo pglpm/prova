@@ -190,7 +190,7 @@ This function calculates the posterior probability \\\mathrm{Pr}(Y = y
 overlapping) sets of joint variate values, inputted as [data
 frame](https://rdrr.io/r/base/data.frame.html) arguments `Y` and `X`,
 and \\K\\ is the information in the data and metadata. It is somewhat
-analogous to the `dxxx`-variants and `pxxx`-variants of [R distribution
+analogous to the `d...`-variants and `p...`-variants of [R distribution
 functions](https://rdrr.io/r/stats/Distributions.html). If `X` is `NA`,
 then the posterior probability \\\mathrm{Pr}(Y = y \vert K)\\ is
 calculated.
@@ -335,14 +335,14 @@ probs <- Pr(Y = data.frame(species = 'Adelie'), K = Kexample)
 probs$value
 #>         
 #> species           
-#>   Adelie 0.4433652
+#>   Adelie 0.4417818
 
 ## The full-population frequency of 'Adelie' penguins is unknown.
 ## Display the 5.5%- and 94.5%-probability values for such frequency:
 ## thus the true frequency is, with 89% probability, in this range:
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>      5.5%     94.5% 
-#> 0.3974547 0.4864715 
+#> 0.3993814 0.4865208 
 
 ## we can also plot the probability distribution
 ## for this full-population frequency
@@ -361,9 +361,9 @@ probs <- Pr(Y = data.frame(species = c('Adelie', 'Chinstrap', 'Gentoo')), K = Ke
 probs$value
 #>            
 #> species              
-#>   Adelie    0.4433652
-#>   Chinstrap 0.1986575
-#>   Gentoo    0.3579773
+#>   Adelie    0.4417818
+#>   Chinstrap 0.1976989
+#>   Gentoo    0.3605192
 
 ## The full-population frequencies of the three species are unknown.
 ## Display the 5.5%- and 94.5%-probability values for such frequencies.
@@ -371,9 +371,9 @@ probs$value
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>            Q
 #> species          5.5%     94.5%
-#>   Adelie    0.3974547 0.4864715
-#>   Chinstrap 0.1675626 0.2371634
-#>   Gentoo    0.3182725 0.4036608
+#>   Adelie    0.3993814 0.4865208
+#>   Chinstrap 0.1622504 0.2375967
+#>   Gentoo    0.3162802 0.4034252
 
 ## plot the probabilities and the ranges for the frequencies as bands:
 plot(probs)
@@ -394,7 +394,7 @@ probs <- Pr(data.frame(species = 'Adelie'), data.frame(bill_len = 43), Kexample)
 probs$value
 #>         |bill_len
 #> species         43
-#>   Adelie 0.4660975
+#>   Adelie 0.4581298
 
 ## The frequency of 'Adelie' penguins, in the subpopulation of
 ## penguins with a bill length of 43 mm, is unknown.
@@ -402,7 +402,7 @@ probs$value
 ## thus the true frequency is, with 89% probability, in this range:
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>      5.5%     94.5% 
-#> 0.3678362 0.5737320 
+#> 0.3529635 0.5550730 
 
 
 ## ## Example 4:
@@ -414,13 +414,13 @@ probs <- Pr(Y = data.frame(species = 'Adelie', bill_len = 43), K = Kexample)
 probs$value
 #>                 
 #> species,bill_len            
-#>        Adelie,43 0.001867135
+#>        Adelie,43 0.001802924
 
 ## display the 89%-probability range for the frequency
 ## of 'Adelie' penguins with 43 mm bills
 probs$quantiles[, , c('5.5%', '94.5%')]
-#>       5.5%      94.5% 
-#> 0.00130985 0.00241594 
+#>        5.5%       94.5% 
+#> 0.001292764 0.002354646 
 
 
 ## ## Example 5:
@@ -434,9 +434,9 @@ probs <- Pr(Y, X, Kexample)
 probs$value
 #>            |bill_len
 #> species            43        44
-#>   Adelie    0.4660975 0.2253932
-#>   Chinstrap 0.1500508 0.2133198
-#>   Gentoo    0.3838517 0.5612871
+#>   Adelie    0.4581298 0.2170985
+#>   Chinstrap 0.1517864 0.2165196
+#>   Gentoo    0.3900838 0.5663819
 
 ## display the 89%-probability range for the six joint population frequencies
 probs$quantiles[, , c('5.5%', '94.5%')]
@@ -444,17 +444,17 @@ probs$quantiles[, , c('5.5%', '94.5%')]
 #> 
 #>            |bill_len
 #> species             43        44
-#>   Adelie    0.36783616 0.1466575
-#>   Chinstrap 0.09184573 0.1405543
-#>   Gentoo    0.28873257 0.4562266
+#>   Adelie    0.35296349 0.1429274
+#>   Chinstrap 0.09101603 0.1404368
+#>   Gentoo    0.28845903 0.4539498
 #> 
 #> , , Q = 94.5%
 #> 
 #>            |bill_len
 #> species            43        44
-#>   Adelie    0.5737320 0.3085731
-#>   Chinstrap 0.2159958 0.2887027
-#>   Gentoo    0.4798345 0.6461153
+#>   Adelie    0.5550730 0.2948054
+#>   Chinstrap 0.2205274 0.3053230
+#>   Gentoo    0.5009354 0.6728543
 #> 
 
 ## plot the probabilities and frequency ranges
@@ -477,23 +477,23 @@ probs <- Pr(Y, NA, Kexample)
 probs$value
 #>                 
 #> species,bill_len             
-#>     Adelie,43    0.0018671346
-#>     Chinstrap,43 0.0005978219
-#>     Gentoo,43    0.0015352814
-#>     Adelie,44    0.0009885649
-#>     Chinstrap,44 0.0009287091
-#>     Gentoo,44    0.0024661611
+#>     Adelie,43    0.0018029242
+#>     Chinstrap,43 0.0005961597
+#>     Gentoo,43    0.0015347297
+#>     Adelie,44    0.0009426087
+#>     Chinstrap,44 0.0009367631
+#>     Gentoo,44    0.0024665069
 
 ## display the 89%-probability ranges the full-population joint frequencies
 probs$quantiles[, , c('5.5%', '94.5%')]
 #>                 Q
 #> species,bill_len         5.5%        94.5%
-#>     Adelie,43    0.0013098504 0.0024159401
-#>     Chinstrap,43 0.0003457606 0.0008825139
-#>     Gentoo,43    0.0011099123 0.0020376132
-#>     Adelie,44    0.0006072010 0.0013933918
-#>     Chinstrap,44 0.0005945148 0.0012795409
-#>     Gentoo,44    0.0019124066 0.0031667982
+#>     Adelie,43    0.0012927641 0.0023546458
+#>     Chinstrap,43 0.0003372492 0.0008502564
+#>     Gentoo,43    0.0011132888 0.0021235183
+#>     Adelie,44    0.0005943976 0.0013462921
+#>     Chinstrap,44 0.0005728778 0.0013017380
+#>     Gentoo,44    0.0018513190 0.0032382762
 
 
 ## ## Example 7:
@@ -506,7 +506,7 @@ probs$values # same as values from Example 1
 #> NULL
 probs$quantiles[, , c('5.5%', '94.5%')] # same as range from Example 1
 #>      5.5%     94.5% 
-#> 0.3974547 0.4864715 
+#> 0.3993814 0.4865208 
 
 ## Check against Example 3 above
 probs <- Pr(data.frame(species = 'Adelie'), data.frame(bill_len = 43))
@@ -514,7 +514,7 @@ probs$values # same as values from Example 3
 #> NULL
 probs$quantiles[, , c('5.5%', '94.5%')] # same as range from Example 3
 #>      5.5%     94.5% 
-#> 0.3678362 0.5737320 
+#> 0.3529635 0.5550730 
 
 #' ## Remove any default 'K =' argument
 useK(NA)

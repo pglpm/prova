@@ -90,8 +90,8 @@ probs1
 #> , , |species = Adelie
 #> 
 #>         probability
-#> bill_len value   +/-     Q5.5%  Q25%   Q75%    Q94.5%
-#>     <=43 0.93479 0.00099 0.9077 0.9259 0.94465 0.9574
+#> bill_len value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
+#>     <=43 0.9364 0.0013 0.9098 0.9259 0.9482 0.9590
 #> 
 
 ## Calculate the probability that bill_len >= 43.1
@@ -107,8 +107,8 @@ probs2
 #> , , |species = Adelie
 #> 
 #>         probability
-#> bill_len value   +/-     Q5.5%  Q25%    Q75%   Q94.5%
-#>   >=43.1 0.06521 0.00099 0.0426 0.05535 0.0741 0.0923
+#> bill_len value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
+#>   >=43.1 0.0636 0.0013 0.0410 0.0518 0.0741 0.0902
 #> 
 
 ## Combine the two tail probabilities for bill_len in one object
@@ -118,8 +118,8 @@ probs
 #> , , |species = Adelie
 #> 
 #>         probability
-#> bill_len value   +/-     Q5.5%  Q25%    Q75%    Q94.5%
-#>   <=43   0.93479 0.00099 0.9077 0.9259  0.94465 0.9574
-#>   >=43.1 0.06521 0.00099 0.0426 0.05535 0.0741  0.0923
+#> bill_len value  +/-    Q5.5%  Q25%   Q75%   Q94.5%
+#>   <=43   0.9364 0.0013 0.9098 0.9259 0.9482 0.9590
+#>   >=43.1 0.0636 0.0013 0.0410 0.0518 0.0741 0.0902
 #> 
 ```

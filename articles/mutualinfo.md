@@ -206,12 +206,12 @@ penguins, as an example:
 ``` r
 
 rPr(n = 5, Ynames = c('island', 'species'), K = K)
-#           island   species
-# 644_1     Biscoe    Gentoo
-# 996_1     Biscoe    Gentoo
-# 1228_1    Biscoe    Gentoo
-# 2230_1     Dream Chinstrap
-# 3083_1 Torgersen    Adelie
+#      island   species
+# 1    Biscoe    Gentoo
+# 2    Biscoe    Gentoo
+# 3    Biscoe    Gentoo
+# 4     Dream Chinstrap
+# 5 Torgersen    Adelie
 ```
 
 This could have also be entered as

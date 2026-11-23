@@ -167,7 +167,7 @@ thereof, at specified cumulative-probability levels. In other words, it
 calculates the values of \\Y\\ having specified cumulative probabilities
 or conditional probabilities. It also calculates the revisability of
 those quantiles if more learning data were provided. It is somewhat
-analogous to the `qxxx`-variants of [R distribution
+analogous to the `q...`-variants of [R distribution
 functions](https://rdrr.io/r/stats/Distributions.html).
 
 The revisability can be expressed in the form of quantiles, samples, or
@@ -250,9 +250,9 @@ probs <- Pr(data.frame(bill_len = c(quants$value)), NA, Kexample,
 probs$value
 #>         
 #> bill_len          
-#>   <=39.2 0.2540140
-#>   <=44.2 0.5019569
-#>   <=48.3 0.7539750
+#>   <=39.2 0.2551595
+#>   <=44.2 0.5006897
+#>   <=48.3 0.7536432
 
 ## display the revisability about the quantiles
 quants$quantiles
@@ -275,10 +275,10 @@ quants$quantiles
 #> , , Q = 94.5%
 #> 
 #>         
-#> bill_len       
-#>     0.25 39.800
-#>     0.5  45.057
-#>     0.75 48.900
+#> bill_len     
+#>     0.25 39.7
+#>     0.5  45.1
+#>     0.75 48.8
 #> 
 
 
@@ -308,8 +308,8 @@ probs <- Pr(
 probs$value
 #>         |species
 #> bill_len    Adelie
-#>   <=37   0.2542091
-#>   <=38.8 0.5047508
-#>   <=40.6 0.7508253
+#>   <=37   0.2560310
+#>   <=38.8 0.5090289
+#>   <=40.6 0.7552887
 # }
 ```

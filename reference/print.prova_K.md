@@ -54,11 +54,11 @@ example "K" object included with **Prova**.
 ## calculated from the "penguins" dataset
 print(Kexample)
 #> List of 7
-#>  $ Dmean      : num [1, 1:64, 1:225] 2.82 1.99 -4.85 -6.57 2.82 ...
-#>  $ Dsd        : num [1, 1:64, 1:225] 0.397 0.362 1.322 6.767 0.443 ...
-#>  $ Nprob      : num [1:3, 1:64, 1:225] 0.232 0.192 0.576 0.828 0.115 ...
-#>  $ W          : num [1:64, 1:225] 1.35e-70 5.40e-18 4.77e-255 3.51e-20 8.04e-86 ...
-#>  $ MCindex    : num [1:225(1d)] 311 389 468 546 625 ...
+#>  $ Dmean      : num [1, 1:64, 1:225] -4.117 1.462 4.843 -1.678 -0.462 ...
+#>  $ Dsd        : num [1, 1:64, 1:225] 0.6 10.553 0.239 4.27 0.176 ...
+#>  $ Nprob      : num [1:3, 1:64, 1:225] 0.0355 0.7931 0.1714 0.0212 0.8802 ...
+#>  $ W          : num [1:64, 1:225] 3.19e-04 8.25e-15 1.27e-06 1.17e-18 2.07e-52 ...
+#>  $ MCindex    : num [1:225(1d)] 238 298 358 418 477 537 597 657 717 777 ...
 #>  $ auxmetadata:'data.frame': 2 obs. of  25 variables:
 #>   ..$ name             : chr [1:2] "species" "bill_len"
 #>   ..$ type             : chr [1:2] "nominal" "continuous"
@@ -100,11 +100,11 @@ print(Kexample)
 #>   ..$ nMCsamples       : int 225
 #>   ..$ nchains          : num 1
 #>   ..$ npoints          : int 344
-#>   ..$ maxiterations    : num 17906
-#>   ..$ maxusedcomponents: num 6
+#>   ..$ maxiterations    : num 13646
+#>   ..$ maxusedcomponents: num 5
 #>   ..$ nonfinitechains  : num 0
 #>   ..$ stoppedchains    : num 0
-#>   ..$ .Random.seed     : int [1:626] 10403 624 1298636919 -543651252 1450744541 -112313350 -659834573 -216144680 409417977 25576550 ...
+#>   ..$ .Random.seed     : int [1:626] 10403 95 -251349914 817189872 -776917741 361681585 -166445728 940012286 1143156361 -2060035653 ...
 #>   ..$ args             :List of 24
 #>   .. ..$ nsamples           : num 225
 #>   .. ..$ nchains            : num 1
@@ -153,18 +153,18 @@ print(Kexample)
 #>   .. .. ..$ initmethod  : chr "datacentre"
 #>   .. .. ..$ Qerror      : num [1:2] 0.159 0.841
 #>   ..$ diagn            :List of 9
-#>   .. ..$ max abs. quantile error    : num [1:3] 0.0083 0.0373 0.0389
-#>   .. ..$ quantile width             : num [1:3] 0.107 0.498 0.586
-#>   .. ..$ max rel. quantile error    : num [1:3] 0.0775 0.075 0.0663
-#>   .. ..$ min ESS from rel. qt. error: num [1:3] 167 178 228
-#>   .. ..$ MCSE                       : Named num [1:3] 0.00383 0.01425 0.00899
-#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"
-#>   .. ..$ rel. MCSE                  : Named num [1:3] 0.1143 0.0915 0.049
-#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"
-#>   .. ..$ ESS                        : Named num [1:3] 76.5 119.4 415.9
-#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"
-#>   .. ..$ max needed thinning        : num 2.94
-#>   .. ..$ log-averages               : Named num [1:3] -5.81 -5.83 -6.28
-#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"
+#>   .. ..$ max abs. quantile error    : num [1:3] 0.024 0.0591 0.0731
+#>   .. ..$ quantile width             : num [1:3] 0.104 0.559 0.672
+#>   .. ..$ max rel. quantile error    : num [1:3] 0.231 0.106 0.109
+#>   .. ..$ min ESS from rel. qt. error: num [1:3] 18.7 89.6 84.5
+#>   .. ..$ MCSE                       : Named num [1:3] 0.00256 0.01506 0.01101
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#191" "#93"
+#>   .. ..$ rel. MCSE                  : Named num [1:3] 0.079 0.0861 0.0524
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#191" "#93"
+#>   .. ..$ ESS                        : Named num [1:3] 160 135 365
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#191" "#93"
+#>   .. ..$ max needed thinning        : num 12
+#>   .. ..$ log-averages               : Named num [1:3] -5.78 -6.02 -6.67
+#>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#191" "#93"
 #>  - attr(*, "class")= chr "prova_K"
 ```

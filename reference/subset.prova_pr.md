@@ -95,9 +95,9 @@ probs <- Pr(
 probs$value
 #>            |bill_len
 #> species            43         45
-#>   Adelie    0.4660975 0.09137827
-#>   Chinstrap 0.1500508 0.25318004
-#>   Gentoo    0.3838517 0.65544169
+#>   Adelie    0.4581298 0.08803413
+#>   Chinstrap 0.1517864 0.25467171
+#>   Gentoo    0.3900838 0.65729416
 
 ## Subset by retaining the values 'Adelie' and 'Gentoo' for species,
 ## and 44 or less for bill length
@@ -110,8 +110,8 @@ newprobs <- subset(
 newprobs$value
 #>         |bill_len
 #> species         43
-#>   Adelie 0.4660975
-#>   Gentoo 0.3838517
+#>   Adelie 0.4581298
+#>   Gentoo 0.3900838
 
 ## Plot these conditional probabilities and their revisabilities
 plot(newprobs)

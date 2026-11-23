@@ -144,10 +144,10 @@ eu <- exputility(umatrix, probs)
 eu$value
 #>        
 #> actions          
-#>      A1 0.4041251
-#>      A2 0.3512369
-#>      A3 0.4362398
-#>      A4 0.2382722
+#>      A1 0.4010841
+#>      A2 0.3512699
+#>      A3 0.4329753
+#>      A4 0.2397027
 
 ## optimal action:
 eu$optimal
@@ -159,9 +159,9 @@ eu$optimal
 ## if many more sample data were available
 eu$optimal.probs
 #>        
-#> actions           
-#>      A1 0.02222222
-#>      A2 0.06666667
-#>      A3 0.91111111
-#>      A4 0.00000000
+#> actions            
+#>      A1 0.008888889
+#>      A2 0.057777778
+#>      A3 0.933333333
+#>      A4 0.000000000
 ```

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">prova</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,11 +82,11 @@
 <span class="r-in"><span><span class="co">## calculated from the "penguins" dataset</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Kexample</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Dmean      : num [1, 1:64, 1:225] 2.82 1.99 -4.85 -6.57 2.82 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Dsd        : num [1, 1:64, 1:225] 0.397 0.362 1.322 6.767 0.443 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Nprob      : num [1:3, 1:64, 1:225] 0.232 0.192 0.576 0.828 0.115 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ W          : num [1:64, 1:225] 1.35e-70 5.40e-18 4.77e-255 3.51e-20 8.04e-86 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MCindex    : num [1:225(1d)] 311 389 468 546 625 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Dmean      : num [1, 1:64, 1:225] -4.117 1.462 4.843 -1.678 -0.462 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Dsd        : num [1, 1:64, 1:225] 0.6 10.553 0.239 4.27 0.176 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ Nprob      : num [1:3, 1:64, 1:225] 0.0355 0.7931 0.1714 0.0212 0.8802 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ W          : num [1:64, 1:225] 3.19e-04 8.25e-15 1.27e-06 1.17e-18 2.07e-52 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MCindex    : num [1:225(1d)] 238 298 358 418 477 537 597 657 717 777 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ auxmetadata:'data.frame':	2 obs. of  25 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ name             : chr [1:2] "species" "bill_len"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ type             : chr [1:2] "nominal" "continuous"</span>
@@ -128,11 +128,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nMCsamples       : int 225</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nchains          : num 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ npoints          : int 344</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxiterations    : num 17906</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxusedcomponents: num 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxiterations    : num 13646</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ maxusedcomponents: num 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ nonfinitechains  : num 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ stoppedchains    : num 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ .Random.seed     : int [1:626] 10403 624 1298636919 -543651252 1450744541 -112313350 -659834573 -216144680 409417977 25576550 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ .Random.seed     : int [1:626] 10403 95 -251349914 817189872 -776917741 361681585 -166445728 940012286 1143156361 -2060035653 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ args             :List of 24</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ nsamples           : num 225</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ nchains            : num 1</span>
@@ -181,19 +181,19 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ initmethod  : chr "datacentre"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ Qerror      : num [1:2] 0.159 0.841</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ diagn            :List of 9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ max abs. quantile error    : num [1:3] 0.0083 0.0373 0.0389</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ quantile width             : num [1:3] 0.107 0.498 0.586</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ max rel. quantile error    : num [1:3] 0.0775 0.075 0.0663</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ min ESS from rel. qt. error: num [1:3] 167 178 228</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ MCSE                       : Named num [1:3] 0.00383 0.01425 0.00899</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ rel. MCSE                  : Named num [1:3] 0.1143 0.0915 0.049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ESS                        : Named num [1:3] 76.5 119.4 415.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ max needed thinning        : num 2.94</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ log-averages               : Named num [1:3] -5.81 -5.83 -6.28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#179" "#15"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ max abs. quantile error    : num [1:3] 0.024 0.0591 0.0731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ quantile width             : num [1:3] 0.104 0.559 0.672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ max rel. quantile error    : num [1:3] 0.231 0.106 0.109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ min ESS from rel. qt. error: num [1:3] 18.7 89.6 84.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ MCSE                       : Named num [1:3] 0.00256 0.01506 0.01101</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#191" "#93"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ rel. MCSE                  : Named num [1:3] 0.079 0.0861 0.0524</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#191" "#93"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ESS                        : Named num [1:3] 160 135 365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#191" "#93"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ max needed thinning        : num 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ log-averages               : Named num [1:3] -5.78 -6.02 -6.67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..- attr(*, "names")= chr [1:3] "entropy / joint log-F" "#191" "#93"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "prova_K"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
