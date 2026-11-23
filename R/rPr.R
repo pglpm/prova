@@ -17,7 +17,7 @@
 #' @param mcrownames Logical: whether the row names of the created data frame should report underlying information about the Monte Carlo samples used to generate the datapoints; see **Value** section. Default is `FALSE` if  argument `mcsamples` is `NULL`, and `TRUE` otherwise.
 ## #' @param parallel Not used, but reserved for possible: this function does not use parallelization.
 #'
-#' @details This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument `Y`, and conditional on the variate values specified in the argument `X`. It is somewhat analogous to the `rxxx`-variants of [R distribution functions][stats::Distributions]. If `X` is `NA`, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used.
+#' @details This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument `Y`, and conditional on the variate values specified in the argument `X`. It is somewhat analogous to the `r...`-variants of [R distribution functions][stats::Distributions]. If `X` is `NA`, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used.
 #'
 #' Each variate in the argument `X` can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument `tails` (see *Tail probabilities* in the [Pr()] documentation).
 #'
@@ -107,14 +107,14 @@ rPr <- function(
   ## Check 'K' argument
   K <- getK(K)
 
+  mcrownames <- mcrownames # because of lazy evaluation
   auxmetadata <- K$auxmetadata
   K$auxmetadata <- NULL
   K$info <- NULL
   ncomponents <- nrow(K$W)
   nmcsamples <- ncol(K$W)
 
-  if(is.null(mcsamples) ||
-       (is.character(mcsamples) && mcsamples == 'all') ||
+  if(is.null(mcsamples) || (is.character(mcsamples) && mcsamples == 'all') ||
        isTRUE(mcsamples)) {
     mcsamples <- seq_len(nmcsamples)
   } else if (any(!is.finite(mcsamples)) || any(mcsamples < 1)) {
@@ -268,10 +268,7 @@ rPr <- function(
     vYout <- c(vYout, aux$name)
     totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
     Yout <- c(Yout,
-      rnorm(n = n * nvrt,
-        mean = K$Rmean[totake],
-        sd = K$Rsd[totake] )
-    )
+      rnorm(n = n * nvrt, mean = K$Rmean[totake], sd = K$Rsd[totake]))
   }
 
   ## C
@@ -283,10 +280,7 @@ rPr <- function(
     vYout <- c(vYout, aux$name)
     totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
     Yout <- c(Yout,
-      rnorm(n = n * nvrt,
-        mean = K$Cmean[totake],
-        sd = K$Csd[totake] )
-    )
+      rnorm(n = n * nvrt, mean = K$Cmean[totake], sd = K$Csd[totake]))
   }
 
   ## D
@@ -298,10 +292,7 @@ rPr <- function(
     vYout <- c(vYout, aux$name)
     totake <- cbind(rep(x = aux$id, each = n), Ws, sseq)
     Yout <- c(Yout,
-      rnorm(n = n * nvrt,
-        mean = K$Dmean[totake],
-        sd = K$Dsd[totake] )
-    )
+      rnorm(n = n * nvrt, mean = K$Dmean[totake], sd = K$Dsd[totake]))
   }
 
   ## O

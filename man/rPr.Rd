@@ -46,7 +46,7 @@ With argument \code{mcrownames = TRUE} or argument \verb{mcsamples = } not \code
 Generates datapoints of chosen joint variates, according to posterior probabilities and posterior conditional probabilities.
 }
 \details{
-This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument \code{Y}, and conditional on the variate values specified in the argument \code{X}. It is somewhat analogous to the \code{rxxx}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is \code{NA}, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used.
+This function generates datapoints according to the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)} or \eqn{\mathrm{Pr}(Y = y \vert X \le x, K)} or combinations thereof, for the variates specified in the argument \code{Y}, and conditional on the variate values specified in the argument \code{X}. It is somewhat analogous to the \code{r...}-variants of \link[stats:Distributions]{R distribution functions}. If \code{X} is \code{NA}, then the posterior probability \eqn{\mathrm{Pr}(Y | K)} is used.
 
 Each variate in the argument \code{X} can be specified either as a point-value \eqn{X = x} or as a left-open interval \eqn{X \le x} or as a right-open interval \eqn{X \ge x}, through the argument \code{tails} (see \emph{Tail probabilities} in the \code{\link[=Pr]{Pr()}} documentation).
 
