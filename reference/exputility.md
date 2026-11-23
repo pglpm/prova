@@ -45,17 +45,20 @@ A [list](https://rdrr.io/r/base/list.html) of the following elements:
 
 - `'value.acc'`: numerical accuracies of `'value'` elements.
 
-- `'optimal`': [list](https://rdrr.io/r/base/list.html) of actions
+- `'max.value`': vector of maximal expected utilities, one element per
+  column of `p` (that is, its conditional values `X`).
+
+- `'max.action`': [list](https://rdrr.io/r/base/list.html) of actions
   having maximal expected utility, one list element per column of `p`
   (that is, its conditional values `X`). If there are ties, all actions
   in the tie are reported.
 
-- `'optimal.probs'`: [matrix](https://rdrr.io/r/base/matrix.html) with
-  the probabilities that each action would be chosen as the optimal one,
-  if more data were available. One row for each action, one column for
-  each column of `p` (that is, its conditional values `X`).
+- `'max.probs'`: [matrix](https://rdrr.io/r/base/matrix.html) with the
+  probabilities that each action would be chosen as the optimal one, if
+  more data were available. One row for each action, one column for each
+  column of `p` (that is, its conditional values `X`).
 
-- `'optimal.samples'`: [matrix](https://rdrr.io/r/base/matrix.html) of
+- `'max.samples'`: [matrix](https://rdrr.io/r/base/matrix.html) of
   samples of actions having maximal expected utility, if many more
   sample data were available. Each row correspond to a column of `p`
   (that is, its conditional values `X`); each column is a sample. In
@@ -150,14 +153,14 @@ eu$value
 #>      A4 0.2397027
 
 ## optimal action:
-eu$optimal
+eu$max.action
 #> [[1]]
 #> [1] "A3"
 #> 
 
 ## Probabilities for the actions to be judged as optimal
 ## if many more sample data were available
-eu$optimal.probs
+eu$max.probs
 #>        
 #> actions            
 #>      A1 0.008888889

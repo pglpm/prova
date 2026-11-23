@@ -1,5 +1,14 @@
 # Changelog
 
+## Prova v3.0.4
+
+- Function
+  [`exputility()`](https://pglpm.github.io/prova/reference/exputility.md)
+  now also outputs the maximal expected utility (for every `X`) as
+  element `max.value`. Having this value immediately available may be
+  useful in some applications. Some other output elements have been
+  renamed.
+
 ## Prova v3.0.3
 
 - The `mcrownames =` argument of
