@@ -50,7 +50,7 @@ A [list](https://rdrr.io/r/base/list.html) of the following elements:
   (that is, its conditional values `X`). If there are ties, all actions
   in the tie are reported.
 
-- `'optimal.samples'`: [matrix](https://rdrr.io/r/base/matrix.html) with
+- `'optimal.probs'`: [matrix](https://rdrr.io/r/base/matrix.html) with
   the probabilities that each action would be chosen as the optimal one,
   if more data were available. One row for each action, one column for
   each column of `p` (that is, its conditional values `X`).
