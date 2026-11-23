@@ -95,7 +95,7 @@ rPr <- function(
   K = NULL,
   tails = NULL,
   mcsamples = NULL,
-  mcrownames = !is.null(mcsamples)
+  mcrownames = NULL
   ##  parallel = NULL # unused
 ){
   ## ## Figure out unnamed arguments
@@ -107,7 +107,7 @@ rPr <- function(
   ## Check 'K' argument
   K <- getK(K)
 
-  mcrownames <- mcrownames # because of lazy evaluation
+  mcrownames <- !is.null(mcsamples)
   auxmetadata <- K$auxmetadata
   K$auxmetadata <- NULL
   K$info <- NULL
@@ -117,7 +117,8 @@ rPr <- function(
   if(is.null(mcsamples) || (is.character(mcsamples) && mcsamples == 'all') ||
        isTRUE(mcsamples)) {
     mcsamples <- seq_len(nmcsamples)
-  } else if (any(!is.finite(mcsamples)) || any(mcsamples < 1)) {
+  } else if(!is.numeric(mcsamples) ||
+              any(!is.finite(mcsamples)) || any(mcsamples < 1)){
     stop("'mcsamples' should be a list of positive integers or NULL")
   } else {
     mcsamples <- round(mcsamples[mcsamples <= nmcsamples])
