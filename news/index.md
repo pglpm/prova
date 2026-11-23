@@ -3,8 +3,8 @@
 ## Prova v3.0.3
 
 - The `mcrownames =` argument of
-  [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md) now works
-  properly.
+  [`rPr()`](https://pglpm.github.io/prova/reference/rPr.md) works
+  correctly now.
 
 - Updated vignette on association and generation of synthetic
   datapoints.
