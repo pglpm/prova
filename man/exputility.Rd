@@ -18,7 +18,7 @@ A \link[base:list]{list} of the following elements:
 \item \code{'samples'}: an \link[base:array]{array} of samples of the expeceted utilities that the actions would have, if many more sample data were available. The first dimension corresponds to the actions, the second to the values of the conditional \eqn{X}, and the third the sample index.
 \item \code{'value.acc'}: numerical accuracies of \code{'value'} elements.
 \item \verb{'optimal}': \link[base:list]{list} of actions having maximal expected utility, one list element per column of \code{p} (that is, its conditional values \code{X}). If there are ties, all actions in the tie are reported.
-\item \code{'optimal.samples'}: \link[base:matrix]{matrix} with the probabilities that each action would be chosen as the optimal one, if more data were available. One row for each action, one column for each column of \code{p} (that is, its conditional values \code{X}).
+\item \code{'optimal.probs'}: \link[base:matrix]{matrix} with the probabilities that each action would be chosen as the optimal one, if more data were available. One row for each action, one column for each column of \code{p} (that is, its conditional values \code{X}).
 \item \code{'optimal.samples'}: \link[base:matrix]{matrix} of samples of actions having maximal expected utility, if many more sample data were available. Each row correspond to a column of \code{p} (that is, its conditional values \code{X}); each column is a sample. In case of ties, one action is unsystematically selected via \code{\link[base:sample]{base::sample()}}.
 \item \code{'X'}, \code{'tails'}, \code{'K'}: copies of the homonymous values from the probability object \code{p}.
 }

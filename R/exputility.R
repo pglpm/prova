@@ -20,7 +20,7 @@
 #' - `'samples'`: an [array][base::array()] of samples of the expeceted utilities that the actions would have, if many more sample data were available. The first dimension corresponds to the actions, the second to the values of the conditional \eqn{X}, and the third the sample index.
 #' - `'value.acc'`: numerical accuracies of `'value'` elements.
 #' - `'optimal`': [list][base::list()] of actions having maximal expected utility, one list element per column of `p` (that is, its conditional values `X`). If there are ties, all actions in the tie are reported.
-#' - `'optimal.samples'`: [matrix][base::matrix()] with the probabilities that each action would be chosen as the optimal one, if more data were available. One row for each action, one column for each column of `p` (that is, its conditional values `X`).
+#' - `'optimal.probs'`: [matrix][base::matrix()] with the probabilities that each action would be chosen as the optimal one, if more data were available. One row for each action, one column for each column of `p` (that is, its conditional values `X`).
 #' - `'optimal.samples'`: [matrix][base::matrix()] of samples of actions having maximal expected utility, if many more sample data were available. Each row correspond to a column of `p` (that is, its conditional values `X`); each column is a sample. In case of ties, one action is unsystematically selected via [base::sample()].
 #' - `'X'`, `'tails'`, `'K'`: copies of the homonymous values from the probability object `p`.
 #'
