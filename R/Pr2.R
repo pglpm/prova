@@ -445,6 +445,7 @@ Pr2 <- function(
     }
 
 
+#### Calculate and save arrays for values of prior variates Z:
     ## Construction of the arguments for util_lprobs, Z (prior) argument
     lpargs <- .lprobsargsyx(
       x = Z,

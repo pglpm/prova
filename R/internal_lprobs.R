@@ -592,14 +592,10 @@
   doquantiles, quantiles,
   dosamples, nsamples,
   Qerror
-) {
-  if(usememory) {
-    lprobX <- readRDS(file.path(tmpdir,
-      paste0('__X', iyx['jx'], '__.rds')
-    ))
-    lprobY <- readRDS(file.path(tmpdir,
-      paste0('__Y', iyx['jy'], '__.rds')
-    ))
+){
+  if(usememory){
+    lprobX <- readRDS(file.path(tmpdir, paste0('__X', iyx['jx'], '__.rds')))
+    lprobY <- readRDS(file.path(tmpdir, paste0('__Y', iyx['jy'], '__.rds')))
   }
 
   FF <- colSums(x = exp(lprobX + lprobY), na.rm = TRUE) /
@@ -627,6 +623,45 @@
     ##
     ## error = sd(FF, na.rm = TRUE)/sqrt(nmcsamples)
   )
+}
+
+
+#' Calculate component weights corrected for prior probabilities
+#'
+#' Alternative if lprobZ not transposed, logW not included.
+#' Used in [Pr()].
+#'
+#' @keywords internal
+.priorW <- function(
+  logp0, logW,
+  tmpdir = NULL,
+  usememory = TRUE
+){
+  Wp0 <- 0
+  for(vrt in seq_along(logp0)){
+    lprobZ <- readRDS(file.path(tmpdir, paste0('__Z', vrt, '__.rds')))
+    Wp0 <- Wp0 + exp(logp0[vrt] + t(lprobZ) - log(colSums(exp(logW + lprobZ))))
+  }
+  logW + t(log(Wp0))
+}
+
+#' Calculate component weights corrected for prior probabilities
+#'
+#' Alternative if lprobZ not transposed, logW already included.
+#' Used in [Pr()].
+#'
+#' @keywords internal
+.priorWi <- function(
+  logp0,
+  tmpdir = NULL,
+  usememory = TRUE
+){
+  Wp0 <- 0
+  for(vrt in seq_along(logp0)){
+    lprobZ <- readRDS(file.path(tmpdir, paste0('__Z', vrt, '__.rds')))
+    Wp0 <- Wp0 + exp(logp0[vrt] + t(lprobZ) - log(colSums(exp(lprobZ))))
+  }
+  t(log(Wp0))
 }
 
 
