@@ -465,16 +465,14 @@ Pr <- function(
   nX <- max(nrow(X), 1L)
 
 #### tmp dir where to save X and Y objects
-  temporarydir <- tempdir()
-
+  tmpdir <- tempfile("Pr")
+  dir.create(tmpdir)
+  on.exit(unlink(tmpdir, recursive = TRUE, force = TRUE), add = TRUE)
 
 #### Calculate and save arrays for X values:
   if (is.null(X)) {
     lprobX <- log(K$W)
-    saveRDS(lprobX,
-      file.path(temporarydir,
-        paste0('__X', 1, '__.rds'))
-    )
+    saveRDS(lprobX, file.path(tmpdir, paste0('__X', 1, '__.rds')))
   } else {
     ## Construction of the arguments for util_lprobs, X argument
     lpargs <- .lprobsargsyx(
@@ -490,7 +488,7 @@ Pr <- function(
       fun = .lprobsbase,
       params = lpargs$params,
       logW = c(log(K$W)),
-      temporarydir = temporarydir,
+      tmpdir = tmpdir,
       lab = '__X'
     ))
   }
@@ -519,7 +517,7 @@ Pr <- function(
     fun = .lprobsbase,
     params = lpargs$params,
     logW = 0,
-    temporarydir = temporarydir,
+    tmpdir = tmpdir,
     lab = '__Y'
   ))
 
@@ -542,7 +540,7 @@ Pr <- function(
         KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
       MARGIN = 1,
       FUN = .combineYX,
-      temporarydir = temporarydir, usememory = usememory,
+      tmpdir = tmpdir, usememory = usememory,
       doquantiles = doquantiles, quantiles = quantiles,
       dosamples = dosamples, nsamples = nsamples,
       Qerror = Qerror
@@ -555,7 +553,7 @@ Pr <- function(
         KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
       MARGIN = 1,
       FUN = .combineYX,
-      temporarydir = temporarydir, usememory = usememory,
+      tmpdir = tmpdir, usememory = usememory,
       doquantiles = doquantiles, quantiles = quantiles,
       dosamples = dosamples, nsamples = nsamples,
       Qerror = Qerror
@@ -564,14 +562,7 @@ Pr <- function(
 
   ## clean temp files
   if(usememory) {
-    unlink(x = c(
-      sapply(seq_len(nX), function(jx){
-        file.path(temporarydir, paste0('__X', jx, '__.rds'))
-      }),
-      sapply(seq_len(nY), function(jy){
-        file.path(temporarydir, paste0('__Y', jy, '__.rds'))
-      })
-    ))
+    unlink(tmpdir, recursive = TRUE, force = TRUE)
   }
 
   ## transform to grid

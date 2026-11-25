@@ -352,16 +352,15 @@ qPr <- function(
   auxY <- auxmetadata[auxmetadata$name == Yname, ]
 
 #### tmp dir where to save X and Y objects
-  temporarydir <- tempdir()
+  tmpdir <- tempfile("qPr")
+  dir.create(tmpdir)
+  on.exit(unlink(tmpdir, recursive = TRUE, force = TRUE), add = TRUE)
 
 
 #### Calculate and save arrays for X values:
   if (is.null(X)) {
     lprobX <- log(K$W)
-    saveRDS(lprobX,
-      file.path(temporarydir,
-        paste0('__X', 1, '__.rds'))
-    )
+    saveRDS(lprobX, file.path(tmpdir, paste0('__X', 1, '__.rds')))
   } else {
     ## Construction of the arguments for util_lprobs, X argument
     lpargs <- .lprobsargsyx(
@@ -376,7 +375,7 @@ qPr <- function(
       fun = .lprobsbase,
       params = lpargs$params,
       logW = c(log(K$W)),
-      temporarydir = temporarydir,
+      tmpdir = tmpdir,
       lab = '__X'
     ))
   }
@@ -423,7 +422,7 @@ qPr <- function(
     FUN = util_qYX,
     params1 = params1, params2 = params2,
     auxmetadata = auxY,
-    temporarydir = temporarydir, usememory = usememory,
+    tmpdir = tmpdir, usememory = usememory,
     doquantiles = doquantiles, quantiles = quantiles,
     dosamples = dosamples, nsamples = nsamples,
     Qerror = Qerror,
@@ -432,9 +431,7 @@ qPr <- function(
 
   ## clean temp files
   if(usememory) {
-    unlink(x = sapply(seq_len(nX), function(jx){
-      file.path(temporarydir, paste0('__X', jx, '__.rds'))
-    }))
+    unlink(tmpdir, recursive = TRUE, force = TRUE)
   }
 
 
@@ -534,7 +531,7 @@ qPr <- function(
   iyx,
   params1, params2,
   auxmetadata,
-  temporarydir, usememory = TRUE,
+  tmpdir, usememory = TRUE,
   doquantiles, quantiles,
   dosamples, nsamples,
   Qerror,
@@ -543,9 +540,7 @@ qPr <- function(
   pY <- iyx['pY']
 
   if(usememory) {
-    lprobX <- readRDS(file.path(temporarydir,
-      paste0('__X', iyx['jx'], '__.rds')
-    ))
+    lprobX <- readRDS(file.path(tmpdir, paste0('__X', iyx['jx'], '__.rds')))
   }
   sumlpX <- colSums(exp(lprobX), na.rm = TRUE)
 
@@ -661,7 +656,7 @@ qPr <- function(
   iyx,
   params1, params2,
   auxmetadata,
-  temporarydir, usememory = TRUE,
+  tmpdir, usememory = TRUE,
   doquantiles, quantiles,
   dosamples, nsamples,
   Qerror = NULL,
@@ -670,9 +665,7 @@ qPr <- function(
   pY <- iyx['pY']
 
   if(usememory) {
-    lprobX <- readRDS(file.path(temporarydir,
-      paste0('__X', iyx['jx'], '__.rds')
-    ))
+    lprobX <- readRDS(file.path(tmpdir, paste0('__X', iyx['jx'], '__.rds')))
   }
   sumlpX <- colSums(exp(lprobX), na.rm = TRUE)
 
