@@ -158,9 +158,9 @@ For a low-level course on Bayesian nonparametric inference and Decision Theory s
 
 ## Projects using **Prova**:
 
-- [*Personalized prognosis & treatment using an optimal predictor machine: An example study on conversion from Mild Cognitive Impairment to Alzheimer's Disease*](https://doi.org/10.31219/osf.io/8nr56).
+- [*Personalized prognosis & treatment using Bayesian nonparametric inference: An example study on conversion from Mild Cognitive Impairment to Alzheimer's Disease*](https://doi.org/10.31219/osf.io/8nr56_v3).
 
-- [*Don't guess what's true: choose what's optimal. A probability transducer for machine-learning classifiers*](https://doi.org/10.31219/osf.io/vct9y)
+- [*A probability calibrator for machine-learning classifiers*](https://doi.org/10.31219/osf.io/vct9y_v2)
 
 - [*Does the evaluation stand up to evaluation? A first-principle approach to the evaluation of classifiers*](https://doi.org/10.31219/osf.io/7rz8t)
 
