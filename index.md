@@ -67,7 +67,8 @@ makes most of the features above possible.
 
   
 
-Use examples (see literature below for concrete examples):
+Use examples (see [Projects using **Prova**](#projects-using-prova)
+below for concrete examples):
 
 - Inference and prediction, classification, regression.
 - Hypothesis testing.
@@ -220,7 +221,7 @@ explains the use of this powerful measure of association.
 
 The package is under continuous development, but the core
 functionalities work and have been tested in concrete research projects;
-see [example applications](#example-applications) below.
+see [Projects using **Prova**](#projects-using-prova) below.
 
 The package internally does the computations necessary for Bayesian
 inference by means of Monte Carlo methods thanks to the R package
@@ -284,7 +285,7 @@ For a low-level course on Bayesian nonparametric inference and Decision
 Theory see [Data Science and AI
 Prototyping](https://pglpm.github.io/ADA511/).
 
-## Projects using **Prova**:
+## Projects using **Prova**
 
 - [*Personalized prognosis & treatment using Bayesian nonparametric
   inference: An example study on conversion from Mild Cognitive
