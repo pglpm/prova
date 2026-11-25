@@ -156,7 +156,7 @@ A summary of the theoretical foundations, including further references, is avail
 For a low-level course on Bayesian nonparametric inference and Decision Theory see [Data Science and AI Prototyping](https://pglpm.github.io/ADA511/).
 
 
-## Example applications
+## Projects using **Prova**:
 
 - [*Personalized prognosis & treatment using an optimal predictor machine: An example study on conversion from Mild Cognitive Impairment to Alzheimer's Disease*](https://doi.org/10.31219/osf.io/8nr56).
 
@@ -167,8 +167,6 @@ For a low-level course on Bayesian nonparametric inference and Decision Theory s
 - [*Calibrated and uncertain? Evaluating uncertainty estimates in
 binary classification models*](https://doi.org/10.1088/2632-2153/ae45ed)
 
-
-## Projects using **Prova**:
 
 - [InfernoCalibNet](https://inferno.m4siko.cc/): uncertainty-aware predictions for medical AI using CNN and Bayesian nonparametrics framework
 - [parkinsonbayes](https://github.com/pglpm/parkinsonbayes/): Examples of Bayesian nonparametric inference for studies of Parkinson's Disease
@@ -183,7 +181,7 @@ If you have other questions about application, theory, technical implementation,
 
 ## Disclaimer
 
-No large language models were used in the production of this software and of its documents.
+No large language models are used in the production of this software and of its documents.
 
 
 [^1]: [*variate*](https://archive.org/details/conciseoxfordeng0000unse_i8l8/page/1598/mode/1up): "a quantity having a numerical value for each member of a group, especially one whose values occur according to a frequency distribution." (Concise Oxford English Dictionary).<br>[*variable*](https://archive.org/details/conciseoxfordeng0000unse_i8l8/page/1598/mode/1up): "a factor or quantity able to assume different numerical values" (Concise Oxford English Dictionary).
