@@ -284,7 +284,7 @@ For a low-level course on Bayesian nonparametric inference and Decision
 Theory see [Data Science and AI
 Prototyping](https://pglpm.github.io/ADA511/).
 
-## Example applications
+## Projects using **Prova**:
 
 - [*Personalized prognosis & treatment using an optimal predictor
   machine: An example study on conversion from Mild Cognitive Impairment
@@ -301,13 +301,13 @@ Prototyping](https://pglpm.github.io/ADA511/).
 - [*Calibrated and uncertain? Evaluating uncertainty estimates in binary
   classification models*](https://doi.org/10.1088/2632-2153/ae45ed)
 
-## Projects using **Prova**:
-
 - [InfernoCalibNet](https://inferno.m4siko.cc/): uncertainty-aware
   predictions for medical AI using CNN and Bayesian nonparametrics
   framework
+
 - [parkinsonbayes](https://github.com/pglpm/parkinsonbayes/): Examples
   of Bayesian nonparametric inference for studies of Parkinson’s Disease
+
 - [Inferno-App](https://github.com/Myddis/Inferno-App/): PySide6
   application that integrates Python and R functionality using the
   **Inferno** (old version of **Prova**) R package.
@@ -322,8 +322,8 @@ anti-spam purposes).
 
 ## Disclaimer
 
-No large language models were used in the production of this software
-and of its documents.
+No large language models are used in the production of this software and
+of its documents.
 
 [^1]: [*variate*](https://archive.org/details/conciseoxfordeng0000unse_i8l8/page/1598/mode/1up):
     “a quantity having a numerical value for each member of a group,
