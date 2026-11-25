@@ -457,9 +457,9 @@ Pr2 <- function(
     ## each instance of .lprobsbase() takes one datapoint
     invisible(parallel::parLapply(cl = cl,
       X = lpargs$xVs,
-      fun = .lprobsbase,
+      fun = .lprobsZ,
       params = lpargs$params,
-      logW = c(log(K$W)),
+      logW = log(K$W),
       tmpdir = tmpdir,
       lab = '__Z'
     ))

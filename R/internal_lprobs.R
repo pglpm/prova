@@ -626,43 +626,30 @@
 }
 
 
-#' Calculate component weights corrected for prior probabilities
-#'
-#' Alternative if lprobZ not transposed, logW not included.
-#' Used in [Pr()].
-#'
-#' @keywords internal
-.priorW <- function(
-  logp0, logW,
-  tmpdir = NULL,
-  usememory = TRUE
-){
-  Wp0 <- 0
-  for(vrt in seq_along(logp0)){
-    lprobZ <- readRDS(file.path(tmpdir, paste0('__Z', vrt, '__.rds')))
-    Wp0 <- Wp0 + exp(logp0[vrt] + t(lprobZ) - log(colSums(exp(logW + lprobZ))))
-  }
-  logW + t(log(Wp0))
-}
 
 #' Calculate component weights corrected for prior probabilities
 #'
-#' Alternative if lprobZ not transposed, logW already included.
-#' Used in [Pr()].
+#' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()], [.Pcheckpoints()].
+#'
+#' @return Matrix of weights corrected for prior
 #'
 #' @keywords internal
-.priorWi <- function(
-  logp0,
-  tmpdir = NULL,
-  usememory = TRUE
+.lprobsZ <- function(
+  xVs, params, logW,
+  tmpdir = NULL, lab = ''
 ){
-  Wp0 <- 0
-  for(vrt in seq_along(logp0)){
-    lprobZ <- readRDS(file.path(tmpdir, paste0('__Z', vrt, '__.rds')))
-    Wp0 <- Wp0 + exp(logp0[vrt] + t(lprobZ) - log(colSums(exp(lprobZ))))
-  }
-  t(log(Wp0))
+  out <- .lprobsbase(xVs = xVs, params = params, logW = 0,
+    tmpdir = NULL, lab = '')
+
+  out <- t(t(out) - colSums(exp(logW + out)))
+
+  if(is.null(tmpdir)){
+      out
+    }else{
+      saveRDS(out, file.path(tmpdir, paste0(lab, xVs$ii, '__.rds')))
+    }
 }
+
 
 
 #' Calculate and combine log-probabilities to compute entropies
