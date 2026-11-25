@@ -4,7 +4,7 @@
 \alias{.lprobsbase}
 \title{Calculate collection of log-probabilities for different components and samples}
 \usage{
-.lprobsbase(xVs, params, logW, temporarydir = NULL, lab = "")
+.lprobsbase(xVs, params, logW, tmpdir = NULL, lab = "")
 }
 \value{
 Matrix of log-probabilities, with as many rows as components and as many cols as samples.

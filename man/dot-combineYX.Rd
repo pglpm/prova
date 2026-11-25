@@ -6,7 +6,7 @@
 \usage{
 .combineYX(
   iyx,
-  temporarydir,
+  tmpdir,
   usememory = TRUE,
   doquantiles,
   quantiles,
