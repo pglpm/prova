@@ -78,21 +78,6 @@ results <- c(results, thisresult)
 print(thisresult)
 saveRDS(results, savefile)
 
-# if(FALSE){# do this separately in 'saveKexample.R'
-  nm <- 'Save Kexample'
-  message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
-  thisresult <- tc(nm, {
-    Kexample <- learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
-    is.list(Kexample)
-  }
-  )
-  save(Kexample, file = '~/repos/prova/data/Kexample.rda')
-  results <- c(results, thisresult)
-  print(thisresult)
-  saveRDS(results, savefile)
-  rm(Kexample)
-# }
-
 K <- Kdir
 nm <- 'Simple Pr'
 message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
@@ -324,6 +309,21 @@ print(thisresult)
 parallel::stopCluster(cl)
 rm(K)
 
+
+if(FALSE){# do this separately in 'saveKexample.R'
+  nm <- 'Save Kexample'
+  message(nm, ' ', format(Sys.time(), '%y%m%dT%H%M%S'))
+  thisresult <- tc(nm, {
+    Kexample <- learn(data = penguins, metadata = metadataExample, nsamples = 225, nchains = 1)
+    is.list(Kexample)
+  }
+  )
+  save(Kexample, file = '~/repos/prova/data/Kexample.rda')
+  results <- c(results, thisresult)
+  print(thisresult)
+  saveRDS(results, savefile)
+  rm(Kexample)
+}
 
 
 message('All test passed: ', all(sapply(results, isTRUE)))
