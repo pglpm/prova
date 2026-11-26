@@ -33,7 +33,7 @@ The package essentially performs Bayesian nonparametric inference (also called "
 
 <br>
 
-Use examples (see literature below for concrete examples):
+Use examples (see [Projects using **Prova**](#projects-using-prova) below for concrete examples):
 
 - Inference and prediction, classification, regression.
 - Hypothesis testing.
@@ -123,7 +123,7 @@ This was just a minimal example, just touching on the basic functionality. More 
 
 The [introductory vignette](https://pglpm.github.io/prova/articles/intro.html) explains, with a guided example, most of the features above, as well as the main ideas and functions. It can be particularly useful for researchers who are more familiar with traditional "frequentist" statistics but would like to try the Bayesian approach. See the [post](https://www.apadivisions.org/division-7/publications/newsletters/developmental/2018/07/bayesian-statistics) by Barbara W. Sarnecka, frequentist statistician turned Bayesian, for a brilliant overview of the Bayesian advantages. The [vignette about mutual information](https://pglpm.github.io/prova/articles/mutualinfo.html) explains the use of this powerful measure of association.
 
-The package is under continuous development, but the core functionalities work and have been tested in concrete research projects; see [example applications](#example-applications) below.
+The package is under continuous development, but the core functionalities work and have been tested in concrete research projects; see [Projects using **Prova**](#projects-using-prova) below.
 
 The package internally does the computations necessary for Bayesian inference by means of Monte Carlo methods thanks to the R package [**Nimble**](https://r-nimble.org/). As already mentioned, this computation is automated. Users familiar with Monte Carlo methods can still access computational details and can even change some of the computation hyperparameters.
 
@@ -156,7 +156,7 @@ A summary of the theoretical foundations, including further references, is avail
 For a low-level course on Bayesian nonparametric inference and Decision Theory see [Data Science and AI Prototyping](https://pglpm.github.io/ADA511/).
 
 
-## Projects using **Prova**:
+## Projects using **Prova**
 
 - [*Personalized prognosis & treatment using Bayesian nonparametric inference: An example study on conversion from Mild Cognitive Impairment to Alzheimer's Disease*](https://doi.org/10.5281/zenodo.17430468).
 
