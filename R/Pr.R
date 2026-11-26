@@ -399,7 +399,7 @@ Pr <- function(
   ## interval probabilities are calculated with `lower.tail = TRUE`
   ## eg:
   ## pnorm(x, mean, sd, lower.tail = FALSE) ==
-  ##     pnorm(-x, -mean, sd, lower.tail = TRUE)
+  ##   pnorm(-x, -mean, sd, lower.tail = TRUE)
   tails[tails %in% tailscentre] <- NULL
   cleft <- tails %in% tailsleft
   cright <- tails %in% tailsright
@@ -441,13 +441,79 @@ Pr <- function(
       p0 <- p0 / sum(p0)
     }
 
-    Z <- prior[, -1]
+    Z <- prior[, -1, drop = FALSE]
+    Zt <- .vtransform(x = Z, auxmetadata = auxmetadata,
+        Rout = 'normalized', Cout = 'boundisna', Dout = 'boundisna',
+        Oout = 'numeric', Nout = 'numeric', Bout = 'numeric')
+    
 #### Find prior-variates that appear in Y and X, and their needed value ranges
-    ZYv <- Zv[Zv %in% Yv]
+    ZXv <- Zv[Zv %in% Xv]
+    if(length(ZXv) > 0){
+      ## only prior elements appearing in X are relevant
+      elsX <- Reduce(intersect, mapply(
+        FUN = function(y, p, t){
+          if(is.na(t)){
+            which(p == y)
+          }else if(t == -1){
+            which(p >= y)
+          }else if(t == 1){
+            which(p <= y)}
+        },
+        ## data
+        vtransform(x = X[, ZXv, drop = FALSE], auxmetadata = auxmetadata,
+        Rout = 'normalized', Cout = 'boundisna', Dout = 'boundisna',
+        Oout = 'numeric', Nout = 'numeric', Bout = 'numeric'),
+        ## prior values
+        Zt[, ZXv, drop = FALSE],
+        ## tails
+        tails[ZXv]
+      ))
+    } else {
+      ## all prior elements
+      elsX <- seq_len(nrow(Zt))
+    }
+
+    ## ZYv <- Zv[Zv %in% Yv]
+    ## if(length(ZYv) > 0){
+    ##   elsY <- Reduce(intersect, mapply(
+    ##     FUN = function(y, p, t){
+    ##       if(is.na(t)){
+    ##         which(p == y)
+    ##       }else if(t == -1){
+    ##         which(p >= y)
+    ##       }else if(t == 1){
+    ##         which(p <= y)}
+    ##     },
+    ##     ## data
+    ##     vtransform(x = Y[, ZYv, drop = FALSE], auxmetadata = auxmetadata,
+    ##     Rout = 'normalized', Cout = 'boundisna', Dout = 'boundisna',
+    ##     Oout = 'numeric', Nout = 'numeric', Bout = 'numeric'),
+    ##     ## prior values
+    ##     Zt[, ZYv, drop = FALSE],
+    ##     ## tails
+    ##     tails[ZYv]
+    ##   ))
+    ## }
+
+
+
+
+    
+
+        
+      rZYv <- apply(X = .vtransform(x = Y[, ZYv], auxmetadata = auxmetadata,
+        Rout = 'normalized', Cout = 'boundisna', Dout = 'boundisna',
+        Oout = 'numeric', Nout = 'numeric', Bout = 'numeric'),
+        MARGIN = 2, FUN = range, na.rm = TRUE, 
+      }
     rZY <- 
     ZXv <- Zv[Zv %in% Xv]
     
 
+fn <- function(y, p, t){if(t == -1){which(p >= y)}else if(t == 1){which(p <= y)}else{which(p == y)}}
+
+## *** remember to use findInterval()
+      
 #### Calculate and save arrays for values of prior variates Z:
     ## Construction of the arguments for util_lprobs, Z (prior) argument
     lpargs <- .lprobsargsyx(
