@@ -12,7 +12,11 @@
 #'
 #' Alternatively, a default `K = ` argument can be set with `useK()`, in which case the `K = ` argument may be omitted. See "Details" for the interpretation of unnamed arguments.
 #' @param tails Named vector or list, or `NULL` (default). The names must match some or all of the variates in arguments `Y` and `X`. For variates in this list, the probability arguments are understood in a semi-open interval sense: \eqn{Y \le y} or \eqn{Y \ge y}, an so on. This is true for `Y` and `X` variates (on the left and on the right of the conditional sign \eqn{\,\vert\,}). A left-open interval \eqn{Y \le y} is indicated by `'<='` or `'lower'` or`'left'` or `-1`; a right-open interval \eqn{Y \ge y} is indicated by `'>='` or `'upper'` or `'right'` or `+1`. Values `NULL`, `'=='`, `0` indicate that a point value `Y = y` (not an interval) should be calculated. **Warning**: the semi-open intervals *always* include the given value; this is important for ordinal or rounded variates. For instance, if \eqn{Y} is an integer variate, then to calculate  \eqn{\mathrm{Pr}(Y < 3)} the user should require \eqn{\mathrm{Pr}(Y \le 2)}; for this reason we also have that \eqn{\mathrm{Pr}(Y \le 2)} and  \eqn{\mathrm{Pr}(Y \ge 2)} generally add up to *more* than 1.
-#' @param priorY Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
+#' @param prior Data frame or `NULL` (default). A [data frame][][base::data.frame()] specifies *prior probabilities* (or *base rates*) for a set of joint variates. The data frame must have at least two columns:
+#' - First column:
+#' - Second
+#' **** OLD:    
+#' Numeric vector with the same length as the rows of `Y`, or `TRUE`, or `NULL` (default): prior probabilities or base rates for the `Y` values. If `TRUE`, the prior probabilities are assumed to be all equal.
 #' @param nsamples Integer or `NULL` or `'all'` (default): desired number of samples of the revisability of the probability for `Y`. If `NULL` or 0, no samples are reported. If `'all'` or `Inf`, all samples obtained by the [learn()] function are used.
 #' @param quantiles Numeric vector, between 0 and 1, or `NULL`: desired quantiles of the revisability of the probability for `Y`. Default `c(0.055, 0.25, 0.75, 0.945)`, that is, the 5.5%, 25%, 75%, 94.5% quantiles. These are typical quantile values in the Bayesian literature: they give 50% and 89% credibility intervals, which correspond to 1 shannons and 0.5 shannons of uncertainty (see <doi:10.5281/zenodo.17072199>). If `NULL`, no quantiles are calculated.
 #' @param parallel One of the following values:
@@ -232,7 +236,7 @@ Pr <- function(
   X = NA,
   K = NULL,
   tails = NULL,
-  priorY = NULL,
+  prior = NULL,
   nsamples = 'all',
   quantiles = c(0.055, 0.25, 0.75, 0.945),
   parallel = TRUE,
@@ -404,70 +408,70 @@ Pr <- function(
   tails <- unlist(tails)
   tailsv <- names(tails)
 
-  ## Check if a prior for Y is given, in that case Y and X will be swapped
-  if(!is.null(priorY) && (isFALSE(priorY) || any(is.na(priorY)))){
-    priorY <- NULL
-  }
-
-  if(!is.null(priorY)){
-    ## Conditions for using priorY
-    if(is.null(X)){ stop("'X' must be non-null if 'priorY' is given") }
-
-    if(anyDuplicated(Y)){
-      stop("All rows in 'Y' must be unique if 'priorY' is given")
-    }
-
-    ## if priorY is TRUE, the user wants a uniform prior distribution
-    if(isTRUE(priorY)){
-      priorY <- 1 + numeric(nrow(Y))
-    }
-    if(length(priorY) != nrow(Y)){
-      stop("'priorY' must have as many entries as rows of 'Y'")
-    }
-    if(!is.numeric(priorY) || any(priorY < 0)) {
-      stop("'priorY' contains invalid probabilities")
-    }
-
-    ## Swap X and Y, to use Bayes's theorem
-    ## And consider all values of Y, if it only has discrete variates
-    . <- Y
-    Y <- X
-    X <- .
-    ## ## ## Alternative version: calculate for all possible Y-values,
-    ## ## ## if Y has finite domain
-    ## ## 'X' used below will contain all values of the original Y-variates
-    ## if(all(auxmetadata[auxmetadata$name %in% Yv, 'mcmctype'] %in%
-    ##            c('B', 'O', 'N'))){
-    ##     X <- do.call(what = expand.grid,
-    ##         args = c(setNames(
-    ##             object = lapply(X = Yv, FUN = vrtgrid,
-    ##                 K = list(auxmetadata = auxmetadata)),
-    ##             nm = Yv),
-    ##             list(KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-    ##         ) )
-    ##
-    ##     Ytokeep <- match(do.call(paste0, Y0), do.call(paste0, X))
-    ##
-    ## } else {
-    ##     X <- Y0
-    ##     Ytokeep <- TRUE
-    ## }
-
-    . <- Yv
-    Yv <- Xv
-    Xv <- .
-    rm(.)
-    gc(full = TRUE)
-
-  }
-
   nY <- nrow(Y)
   nX <- max(nrow(X), 1L)
 
-#### tmp dir where to save X and Y objects
+#### tmp dir where to save X, Y, prior objects
   tmpdir <- tempfile("Pr")
   dir.create(tmpdir)
   on.exit(unlink(tmpdir, recursive = TRUE, force = TRUE), add = TRUE)
+
+
+  ## **** insert here consistency checks for 'prior' argument
+  if(isFALSE(prior)){ prior <- NULL }
+  if(!is.null(prior){
+    if(!is.data.frame(prior)){ prior <- as.data.frame(prior) }
+
+    Zv <- colnames(prior)[-1]
+    if (!all(Zv %in% auxmetadata$name)) {
+      stop('unknown prior variate ',
+        paste0(Zv[!(Zv %in% auxmetadata$name)], collapse = ' '),
+        '\n')
+    }
+    if(anyDuplicated(Zv)){
+      stop('duplicate prior variates\n')
+    }
+
+    p0 <- prior[, 1]
+    if(!is.numeric(p0) || any(p0 < 0)){
+      stop("'prior' contains invalid probabilities")
+    }
+    if(sum(p0) != 1){
+      if(verbose){message('Normalizing prior distribution')}
+      p0 <- p0 / sum(p0)
+    }
+
+    Z <- prior[, -1]
+#### Find prior-variates that appear in Y and X, and their needed value ranges
+    ZYv <- Zv[Zv %in% Yv]
+    rZY <- 
+    ZXv <- Zv[Zv %in% Xv]
+    
+
+#### Calculate and save arrays for values of prior variates Z:
+    ## Construction of the arguments for util_lprobs, Z (prior) argument
+    lpargs <- .lprobsargsyx(
+      x = Z,
+      auxmetadata = auxmetadata,
+      K = K,
+      tails = NULL
+    )
+
+    ## each instance of .lprobsbase() takes one datapoint
+    invisible(parallel::parLapply(cl = cl,
+      X = lpargs$xVs,
+      fun = .lprobsZ,
+      params = lpargs$params,
+      logW = log(K$W),
+      tmpdir = tmpdir,
+      lab = '__Z'
+    ))
+
+
+
+  }
+
+
 
 #### Calculate and save arrays for X values:
   if (is.null(X)) {
