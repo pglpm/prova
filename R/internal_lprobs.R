@@ -5,7 +5,7 @@
 #' @keywords internal
 .lprobsargsyx <- function(
   x, auxmetadata, K, tails = NULL, ids = seq_len(nrow(x))
-) {
+){
   Xv <- colnames(x)
   nX <- nrow(x)
   tailsv <- names(tails)
@@ -507,7 +507,7 @@
 .lprobsbase <- function(
   xVs, params, logW,
   tmpdir = NULL, lab = ''
-) {
+){
   with(c(xVs, params), {
     out <- logW
     ## point probability density
@@ -627,39 +627,18 @@
 
 
 
-#' Calculate component weights corrected for prior probabilities
-#'
-#' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()], [.Pcheckpoints()].
-#'
-#' @return Matrix of weights corrected for prior
-#'
-#' @keywords internal
-.lprobsZ <- function(
-  xVs, params, logW,
-  tmpdir = NULL, lab = ''
-){
-  out <- .lprobsbase(xVs = xVs, params = params, logW = 0,
-    tmpdir = NULL, lab = '')
-
-  out <- t(t(out) - colSums(exp(logW + out)))
-
-  if(is.null(tmpdir)){
-      out
-    }else{
-      saveRDS(out, file.path(tmpdir, paste0(lab, xVs$ii, '__.rds')))
-    }
-}
-
-
-
 #' Calculate and combine log-probabilities to compute entropies
 #'
 #' Calculate log2_p(Y1|Y2), log2_p(Y2|Y1), log2_p(Y1), log2_p(Y2) for one datapoint. Used in [mutualinfo()].
 #'
 #' @return A vector of two pointwise mutual informations; one calculated from all MC samples, the other from the "limit frequencies" (MC sample corresponding to the input datapoint).
 #' @keywords internal
-.lprobsmi <- function(xVs, params1, params2, lW){
-
+.lprobsmi <- function(
+  xVs,
+  params1,
+  params2,
+  lW
+){
   thisid <- xVs[[1]] # MC-sample id of this datapoint
 
   lprobY1 <- .lprobsbase(xVs = xVs[1:6], params = params1, logW = 0,
@@ -697,7 +676,7 @@
 #' Used in '.lprobsmi()'.
 #'
 #' @keywords internal
-.denorm <- function(lprob) {
+.denorm <- function(lprob){
   apply(X = lprob, MARGIN = 2, FUN = function(xx) {
     xx - max(xx[is.finite(xx)])
   }, simplify = TRUE)
