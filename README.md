@@ -29,7 +29,7 @@ A versatile R package for general-purpose probabilistic and statistical data ana
 - **[Base-rate](https://dictionary.apa.org/base-rate-fallacy) correction** for inferences about out-of-population data, or for inclusion of priors, by means of Bayes's theorem.
 - **Automated Markov-chain Monte Carlo** computation. Users unfamiliar with Monte Carlo methods don't have to worry, because the computations are handled automatically.
 
-The package essentially performs Bayesian nonparametric inference (also called "density inference" or "inference under exchangeability"), which makes most of the features above possible.
+The package essentially performs **Bayesian nonparametric inference** (also called "density inference" or "inference under exchangeability"), which makes most of the features above possible.
 
 <br>
 
