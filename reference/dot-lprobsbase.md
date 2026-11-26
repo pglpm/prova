@@ -9,7 +9,7 @@ Used in [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md),
 ## Usage
 
 ``` r
-.lprobsbase(xVs, params, logW, temporarydir = NULL, lab = "")
+.lprobsbase(xVs, params, logW, tmpdir = NULL, lab = "")
 ```
 
 ## Value

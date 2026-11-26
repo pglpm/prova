@@ -10,7 +10,7 @@ Used in 'qPr()'.
   params1,
   params2,
   auxmetadata,
-  temporarydir,
+  tmpdir,
   usememory = TRUE,
   doquantiles,
   quantiles,

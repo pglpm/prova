@@ -7,7 +7,7 @@ Used in [`Pr()`](https://pglpm.github.io/prova/reference/Pr.md).
 ``` r
 .combineYX(
   iyx,
-  temporarydir,
+  tmpdir,
   usememory = TRUE,
   doquantiles,
   quantiles,
