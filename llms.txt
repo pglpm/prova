@@ -61,9 +61,9 @@ These are its main features:
   with Monte Carlo methods don’t have to worry, because the computations
   are handled automatically.
 
-The package essentially performs Bayesian nonparametric inference (also
-called “density inference” or “inference under exchangeability”), which
-makes most of the features above possible.
+The package essentially performs **Bayesian nonparametric inference**
+(also called “density inference” or “inference under exchangeability”),
+which makes most of the features above possible.
 
   
 
