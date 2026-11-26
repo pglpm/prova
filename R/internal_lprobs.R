@@ -506,7 +506,7 @@
 #' @keywords internal
 .lprobsbase <- function(
   xVs, params, logW,
-  temporarydir = NULL, lab = ''
+  tmpdir = NULL, lab = ''
 ) {
   with(c(xVs, params), {
     out <- logW
@@ -569,10 +569,10 @@
         na.rm = TRUE, dims = 1)
     }
 
-    if(is.null(temporarydir)){
+    if(is.null(tmpdir)){
       out
     }else{
-      saveRDS(out, file.path(temporarydir, paste0(lab, ii, '__.rds')))
+      saveRDS(out, file.path(tmpdir, paste0(lab, ii, '__.rds')))
     }
   })
 }
@@ -588,18 +588,14 @@
 #' @keywords internal
 .combineYX <- function(
   iyx,
-  temporarydir, usememory = TRUE,
+  tmpdir, usememory = TRUE,
   doquantiles, quantiles,
   dosamples, nsamples,
   Qerror
-) {
-  if(usememory) {
-    lprobX <- readRDS(file.path(temporarydir,
-      paste0('__X', iyx['jx'], '__.rds')
-    ))
-    lprobY <- readRDS(file.path(temporarydir,
-      paste0('__Y', iyx['jy'], '__.rds')
-    ))
+){
+  if(usememory){
+    lprobX <- readRDS(file.path(tmpdir, paste0('__X', iyx['jx'], '__.rds')))
+    lprobY <- readRDS(file.path(tmpdir, paste0('__Y', iyx['jy'], '__.rds')))
   }
 
   FF <- colSums(x = exp(lprobX + lprobY), na.rm = TRUE) /
@@ -641,9 +637,9 @@
   thisid <- xVs[[1]] # MC-sample id of this datapoint
 
   lprobY1 <- .lprobsbase(xVs = xVs[1:6], params = params1, logW = 0,
-    temporarydir= NULL)
+    tmpdir= NULL)
   lprobY2 <- .lprobsbase(xVs = xVs[7:12], params = params2, logW = 0,
-    temporarydir = NULL)
+    tmpdir = NULL)
 
   lprobnorm <- .denorm(lW) # subtract max from each prob-col. of lW
   celprobnorm <- colSums(exp(lprobnorm))

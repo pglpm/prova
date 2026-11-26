@@ -309,7 +309,7 @@
               VBprobs = VBprobs
             ),
             logW = lprobX,
-            temporarydir = NULL
+            tmpdir = NULL
           )
           ## Output: rows=components, columns=samples
           ## log(colSums(exp(lprobY))) - log(colSums(W))

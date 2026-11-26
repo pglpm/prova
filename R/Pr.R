@@ -26,7 +26,7 @@
 #' @param keepYX Logical, default `TRUE`: keep a copy of the `Y` and `X` arguments in the output? This is used for [plot.prova_pr()].
 #'
 #' @details
-#' This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as [data frame][base::data.frame()] arguments `Y` and `X`, and \eqn{K} is the information in the data and metadata. It is somewhat analogous to the `dxxx`-variants and `pxxx`-variants of [R distribution functions][stats::Distributions]. If `X` is `NA`, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert K)} is calculated.
+#' This function calculates the posterior probability \eqn{\mathrm{Pr}(Y = y \vert X = x, K)}, where \eqn{Y = y} and \eqn{X = x} are two (non overlapping) sets of joint variate values, inputted as [data frame][base::data.frame()] arguments `Y` and `X`, and \eqn{K} is the information in the data and metadata. It is somewhat analogous to the `d...`-variants and `p...`-variants of [R distribution functions][stats::Distributions]. If `X` is `NA`, then the posterior probability \eqn{\mathrm{Pr}(Y = y \vert K)} is calculated.
 #'
 #' *Tail probabilities.* For some variates in `Y` or `X`, tail values can also be prescribed, so that this function calculates mixed probabilities such as \deqn{\mathrm{Pr}(Y_1 = y_1, Y_2 \le y_2, \dotsc \vert X_1 = x_1, X_2 \ge x_2, \dotsc, K)\ .} Tail values are inputted via the `'tails'` argument; see "Usage". Note that nominal variates, strictly speaking, have no meaningful ordering, so the "\eqn{\ge}" and "\eqn{\le}" relations are not meaningful for them. For this kind of variates the "\eqn{\ge}" relation is understood in the sense of the value order appearing in the [metadata] file.
 #'
@@ -465,16 +465,14 @@ Pr <- function(
   nX <- max(nrow(X), 1L)
 
 #### tmp dir where to save X and Y objects
-  temporarydir <- tempdir()
-
+  tmpdir <- tempfile("Pr")
+  dir.create(tmpdir)
+  on.exit(unlink(tmpdir, recursive = TRUE, force = TRUE), add = TRUE)
 
 #### Calculate and save arrays for X values:
   if (is.null(X)) {
     lprobX <- log(K$W)
-    saveRDS(lprobX,
-      file.path(temporarydir,
-        paste0('__X', 1, '__.rds'))
-    )
+    saveRDS(lprobX, file.path(tmpdir, paste0('__X', 1, '__.rds')))
   } else {
     ## Construction of the arguments for util_lprobs, X argument
     lpargs <- .lprobsargsyx(
@@ -490,7 +488,7 @@ Pr <- function(
       fun = .lprobsbase,
       params = lpargs$params,
       logW = c(log(K$W)),
-      temporarydir = temporarydir,
+      tmpdir = tmpdir,
       lab = '__X'
     ))
   }
@@ -519,7 +517,7 @@ Pr <- function(
     fun = .lprobsbase,
     params = lpargs$params,
     logW = 0,
-    temporarydir = temporarydir,
+    tmpdir = tmpdir,
     lab = '__Y'
   ))
 
@@ -542,7 +540,7 @@ Pr <- function(
         KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
       MARGIN = 1,
       FUN = .combineYX,
-      temporarydir = temporarydir, usememory = usememory,
+      tmpdir = tmpdir, usememory = usememory,
       doquantiles = doquantiles, quantiles = quantiles,
       dosamples = dosamples, nsamples = nsamples,
       Qerror = Qerror
@@ -555,7 +553,7 @@ Pr <- function(
         KEEP.OUT.ATTRS = TRUE, stringsAsFactors = FALSE),
       MARGIN = 1,
       FUN = .combineYX,
-      temporarydir = temporarydir, usememory = usememory,
+      tmpdir = tmpdir, usememory = usememory,
       doquantiles = doquantiles, quantiles = quantiles,
       dosamples = dosamples, nsamples = nsamples,
       Qerror = Qerror
@@ -564,14 +562,7 @@ Pr <- function(
 
   ## clean temp files
   if(usememory) {
-    unlink(x = c(
-      sapply(seq_len(nX), function(jx){
-        file.path(temporarydir, paste0('__X', jx, '__.rds'))
-      }),
-      sapply(seq_len(nY), function(jy){
-        file.path(temporarydir, paste0('__Y', jy, '__.rds'))
-      })
-    ))
+    unlink(tmpdir, recursive = TRUE, force = TRUE)
   }
 
   ## transform to grid

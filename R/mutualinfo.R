@@ -500,7 +500,7 @@ mutualinfo <- function(
   ## MCsample 3 again
   ## MCsample 5 again
   ## MCsample 8 again
-                                        # etc
+  ## etc
 
   Y1transf <- Yout[, Y1names, drop = FALSE]
   Y2transf <- Yout[, Y2names, drop = FALSE]
