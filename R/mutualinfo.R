@@ -326,7 +326,7 @@ mutualinfo <- function(
   if(is.null(X)){
     lW <- log(K$W)
   } else {
-    lpargs <- .lprobsargsyx(
+    lpargs <- .lprobsargs(
       x = X,
       auxmetadata = auxmetadata,
       K = K,
@@ -517,7 +517,7 @@ mutualinfo <- function(
   ## Keep track of the MC-sample id of each datapoint
   ids <- rep.int(x = sseq, times = nv)
 
-  lpargs1 <- .lprobsargsyx(
+  lpargs1 <- .lprobsargs(
     x = Y1transf,
     auxmetadata = auxmetadata,
     K = K,
@@ -525,7 +525,7 @@ mutualinfo <- function(
     ids = ids
   )
 
-  lpargs2 <- .lprobsargsyx(
+  lpargs2 <- .lprobsargs(
     x = Y2transf,
     auxmetadata = auxmetadata,
     K = K,

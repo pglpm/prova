@@ -3,7 +3,7 @@
 #' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()]
 #'
 #' @keywords internal
-.lprobsargsyx <- function(
+.lprobsargs <- function(
   x, auxmetadata, K, tails = NULL, ids = seq_len(nrow(x))
 ){
   Xv <- colnames(x)
@@ -685,7 +685,7 @@
 
 #' Cumulative sum along first dimension
 #'
-#' Used in '.lprobsargsyx()'.
+#' Used in '.lprobsargs()'.
 #'
 #' @keywords internal
 .rowcumsum <- function(x){
@@ -698,7 +698,7 @@
 
 #' Inverse cumulative sum along first dimension
 #'
-#' Used in '.lprobsargsyx()'.
+#' Used in '.lprobsargs()'.
 #'
 #' @keywords internal
 .rowinvcumsum <- function(x){

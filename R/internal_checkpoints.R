@@ -1,19 +1,19 @@
 #' Format datapoints used for MCMC monitoring
 #'
-#' Simplified version of `.lprobsargsyx()`. Used in '.Pcheckpoints()' within 'learn()'.
+#' Simplified version of `.lprobsargs()`. Used in '.Pcheckpoints()' within 'learn()'.
 #'
 #' @param x Datapoints to be used for checking MCMC progress
 #' @param auxmetadata auxmetadata object
 #' @param pointsid Id of datapoints
 #'
-#' @return some arguments to be repeatedly used in `.Pcheckpoints()`; see `.lprobsargsyx()`.
+#' @return some arguments to be repeatedly used in `.Pcheckpoints()`; see `.lprobsargs()`.
 #'
 #' @keywords internal
 .prepPcheckpoints <- function(
   x, auxmetadata, pointsid = NULL
 ){
-  ## Use .lprobsargsyx() as done in Pr(), but throw away some elements
-  temp <- .lprobsargsyx(
+  ## Use .lprobsargs() as done in Pr(), but throw away some elements
+  temp <- .lprobsargs(
     x = x, auxmetadata = auxmetadata,
     K = list(
       W = matrix(NA, nrow = 1, ncol = 1),
