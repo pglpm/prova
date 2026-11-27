@@ -598,7 +598,7 @@
     tmpdir = NULL, lab = NULL)
 
   ## For prior factors, we must perform a sort of normalization
-  out <- t(t(out) - colSums(exp(logW + out))) - xVs$p0
+  out <- t(t(out) - colSums(exp(logW + out))) - xVs$lp0
 
   if(is.null(tmpdir)){
     out

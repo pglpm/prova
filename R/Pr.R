@@ -419,7 +419,7 @@ Pr <- function(
 
   ## **** insert here consistency checks for 'prior' argument
   if(isFALSE(prior)){ prior <- NULL }
-  if(!is.null(prior){
+  if(!is.null(prior)){
     if(!is.data.frame(prior)){ prior <- as.data.frame(prior) }
 
     Zv <- colnames(prior)[-1]
@@ -475,8 +475,8 @@ Pr <- function(
       p0 <- p0[temp]
     }
 
-#### Calculate and save arrays for values of prior variates Z:
-    ## Construction of the arguments for util_lprobs, Z (prior) argument
+#### Calculate and save prior-correction factors
+    ## Construction of the arguments for util_lprobs, Z argument
     lpargs <- .lprobsargs(
       x = Z,
       auxmetadata = auxmetadata,
@@ -485,7 +485,7 @@ Pr <- function(
       lp0 = log(p0)
     )
 
-    ## each instance of .lprobsbase() takes one datapoint
+    ## Calculate & save prior-correction factors, one per prior-vrt combination
     invisible(parallel::parLapply(cl = cl,
       X = lpargs$xVs,
       fun = .lprobsZ,
@@ -495,9 +495,7 @@ Pr <- function(
       lab = '__Z'
     ))
 
-
-
-  }
+  } # end calculation lprobZ for non-null prior
 
 ## **** remember to use findInterval()
 
