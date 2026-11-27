@@ -464,7 +464,7 @@ For developers (beware!)
 - [`.learnalt()`](https://pglpm.github.io/prova/reference/dot-learnalt.md)
   : Monte Carlo computation of posterior probability distribution -
   alternative
-- [`.lprobsargsyx()`](https://pglpm.github.io/prova/reference/dot-lprobsargsyx.md)
+- [`.lprobsargs()`](https://pglpm.github.io/prova/reference/dot-lprobsargs.md)
   : Prepare arguments for util_lprobsyx from data
 - [`.lprobsbase()`](https://pglpm.github.io/prova/reference/dot-lprobsbase.md)
   : Calculate collection of log-probabilities for different components

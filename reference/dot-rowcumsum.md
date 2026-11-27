@@ -1,6 +1,6 @@
 # Cumulative sum along first dimension
 
-Used in '.lprobsargsyx()'.
+Used in '.lprobsargs()'.
 
 ## Usage
 
