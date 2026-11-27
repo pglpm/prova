@@ -363,7 +363,7 @@ qPr <- function(
     saveRDS(lprobX, file.path(tmpdir, paste0('__X', 1, '__.rds')))
   } else {
     ## Construction of the arguments for util_lprobs, X argument
-    lpargs <- .lprobsargsyx(
+    lpargs <- .lprobsargs(
       x = X,
       auxmetadata = auxmetadata,
       K = K,
