@@ -209,7 +209,7 @@ rPr <- function(
   if(is.null(X)){
     lW <- log(K$W)
   } else {
-    lpargs <- .lprobsargsyx(
+    lpargs <- .lprobsargs(
       x = X,
       auxmetadata = auxmetadata,
       K = K,
