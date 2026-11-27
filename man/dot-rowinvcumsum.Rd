@@ -7,6 +7,6 @@
 .rowinvcumsum(x)
 }
 \description{
-Used in '.lprobsargsyx()'.
+Used in '.lprobsargs()'.
 }
 \keyword{internal}

@@ -14,9 +14,9 @@
 \item{pointsid}{Id of datapoints}
 }
 \value{
-some arguments to be repeatedly used in \code{.Pcheckpoints()}; see \code{.lprobsargsyx()}.
+some arguments to be repeatedly used in \code{.Pcheckpoints()}; see \code{.lprobsargs()}.
 }
 \description{
-Simplified version of \code{.lprobsargsyx()}. Used in '.Pcheckpoints()' within 'learn()'.
+Simplified version of \code{.lprobsargs()}. Used in '.Pcheckpoints()' within 'learn()'.
 }
 \keyword{internal}
