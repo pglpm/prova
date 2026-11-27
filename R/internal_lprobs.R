@@ -4,7 +4,8 @@
 #'
 #' @keywords internal
 .lprobsargs <- function(
-  x, auxmetadata, K, tails = NULL, ids = seq_len(nrow(x))
+  x, auxmetadata, K, tails = NULL,
+  ids = seq_len(nrow(x)), lp0 = NULL
 ){
   Xv <- colnames(x)
   nX <- nrow(x)
@@ -485,14 +486,16 @@
       nVB = nVB, VBprobs = VBprobs
     ),
     xVs = lapply(seq_len(nX), function(i){
-      list(
+      c(list(
         ii = ids[i],
         xV0 = xV0[,i], # point vrts, handled by dnorm()
         xV1 = xV1[,i], # tail vrts, handled by pnorm()
         xV2 = xV2[,i], # interval vrts, handled by pnorm()-diff.
         xVN = xVN[,i], # nominal vrts, handled directly
         xVB = xVB[,i] # binary vrts, handled directly
-      )})
+      ),
+      if(!is.null(lp0)){list(lp0 = lp0[i])})
+      })
   )
 }
 
@@ -575,6 +578,33 @@
       saveRDS(out, file.path(tmpdir, paste0(lab, ii, '__.rds')))
     }
   })
+}
+
+
+
+#' Calculate collection of log-prior-factors
+#'
+#' Used in [Pr()], [qPr()], [rPr()], [mutualinfo()], [.Pcheckpoints()].
+#'
+#' @return Matrix of log-probabilities, with as many rows as components and as many cols as samples.
+#' @keywords internal
+.lprobsZ <- function(
+  xVs, params, logW,
+  tmpdir = NULL, lab = ''
+){
+  ## Calculate collection of log-probs using main function
+  ## columns: components; rows: MC samples
+  out <- .lprobsbase(xVs = xVs, params = params, logW = 0,
+    tmpdir = NULL, lab = NULL)
+
+  ## For prior factors, we must perform a sort of normalization
+  out <- t(t(out) - colSums(exp(logW + out))) - xVs$p0
+
+  if(is.null(tmpdir)){
+    out
+  }else{
+    saveRDS(out, file.path(tmpdir, paste0(lab, xVs$ii, '__.rds')))
+  }
 }
 
 

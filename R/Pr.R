@@ -477,11 +477,12 @@ Pr <- function(
 
 #### Calculate and save arrays for values of prior variates Z:
     ## Construction of the arguments for util_lprobs, Z (prior) argument
-    lpargs <- .lprobsargsyx(
+    lpargs <- .lprobsargs(
       x = Z,
       auxmetadata = auxmetadata,
       K = K,
-      tails = NULL
+      tails = NULL,
+      lp0 = log(p0)
     )
 
     ## each instance of .lprobsbase() takes one datapoint
