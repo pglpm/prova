@@ -442,36 +442,41 @@ Pr <- function(
     }
 
     Z <- prior[, -1, drop = FALSE]
-    Zt <- .vtransform(x = Z, auxmetadata = auxmetadata,
-        Rout = 'normalized', Cout = 'boundisna', Dout = 'boundisna',
-        Oout = 'numeric', Nout = 'numeric', Bout = 'numeric')
 
-#### Find prior-variates that appear X, and their needed value ranges
+#### Find prior-variates that appear in X, and their needed value ranges
     ZXv <- Zv[Zv %in% Xv]
     if(length(ZXv) > 0){
       ## only prior elements appearing in X are relevant
-      temp <- Reduce(intersect, mapply(
-        FUN = function(y, p, t){
-          if(is.na(t)){
-            which(p == y)
-          }else if(t == -1){
-            which(p >= y)
-          }else if(t == 1){
-            which(p <= y)}
-        },
-        ## data
-        vtransform(x = X[, ZXv, drop = FALSE], auxmetadata = auxmetadata,
+      ZXt <- .vtransform(x = Z[, ZXv, drop = FALSE], auxmetadata = auxmetadata,
         Rout = 'normalized', Cout = 'boundisna', Dout = 'boundisna',
-        Oout = 'numeric', Nout = 'numeric', Bout = 'numeric'),
-        ## prior values
-        Zt[, ZXv, drop = FALSE],
-        ## tails
+        Oout = 'numeric', Nout = 'numeric', Bout = 'numeric')
+
+      ## This goes through every variate ZXv in X, Z, tails,
+      ## finds which values for that variate should be kept,
+      ## then takes the intersection among all variates
+      temp <- Reduce(intersect, mapply(
+        FUN = function(dd, pp, tt){
+          if(is.na(tt)){
+            which(pp %in% dd)
+          }else if(tt == -1){
+            which(pp >= min(dd))
+          }else if(tt == 1){
+            which(pp <= max(dd))}
+        },
+        ## arguments:
+        ## dd: data
+        .vtransform(x = X[, ZXv, drop = FALSE], auxmetadata = auxmetadata,
+          Rout = 'normalized', Cout = 'boundisna', Dout = 'boundisna',
+          Oout = 'numeric', Nout = 'numeric', Bout = 'numeric'),
+        ## pp: prior values
+        ZXt,
+        ## tt: tails
         tails[ZXv]
       ))
 
       ## Discard elements not appearing in X
       Z <- Z[temp, , drop = FALSE]
-      Zt <- Zt[temp, , drop = FALSE]
+      ZXt <- ZXt[temp, , drop = FALSE]
       p0 <- p0[temp]
     }
 
@@ -485,7 +490,8 @@ Pr <- function(
       lp0 = log(p0)
     )
 
-    ## Calculate & save prior-correction factors, one per prior-vrt combination
+    ## Calculate & save prior-correction factors
+    ## factors are numbered consecutively according to Z rows
     invisible(parallel::parLapply(cl = cl,
       X = lpargs$xVs,
       fun = .lprobsZ,
@@ -495,6 +501,43 @@ Pr <- function(
       lab = '__Z'
     ))
 
+    ## Find which subsets of Z rows are needed by each Y and X point
+    ZYv <- Zv[Zv %in% Yv]
+    if(length(ZYv) > 0){
+      ## only prior elements appearing in Y are relevant
+      ZYt <- .vtransform(x = Z[, ZYv, drop = FALSE], auxmetadata = auxmetadata,
+        Rout = 'normalized', Cout = 'boundisna', Dout = 'boundisna',
+        Oout = 'numeric', Nout = 'numeric', Bout = 'numeric')
+
+      ## This goes through every variate ZYv in Y, Z, tails,
+      ## finds which values for that variate should be kept,
+      ## then takes the intersection among all variates
+      temp <- Reduce(intersect, mapply(
+        FUN = function(dd, pp, tt){
+          if(is.na(tt)){
+            which(pp == dd)
+          }else if(tt == -1){
+            which(pp >= dd)
+          }else if(tt == 1){
+            which(pp <= dd)}
+        },
+        ## arguments:
+        ## dd: data
+        .vtransform(x = Y[, ZYv, drop = FALSE], auxmetadata = auxmetadata,
+          Rout = 'normalized', Cout = 'boundisna', Dout = 'boundisna',
+          Oout = 'numeric', Nout = 'numeric', Bout = 'numeric'),
+        ## pp: prior values
+        ZYt,
+        ## tt: tails
+        tails[ZYv]
+      ))
+
+      ## Discard elements not appearing in Y
+      Z <- Z[temp, , drop = FALSE]
+      ZYt <- ZYt[temp, , drop = FALSE]
+      p0 <- p0[temp]
+    }
+
   } # end calculation lprobZ for non-null prior
 
 ## **** remember to use findInterval()
@@ -502,7 +545,7 @@ Pr <- function(
 
 
 #### Calculate and save arrays for X values:
-  if (is.null(X)) {
+  if(is.null(X)){
     lprobX <- log(K$W)
     saveRDS(lprobX, file.path(tmpdir, paste0('__X', 1, '__.rds')))
   } else {
@@ -514,7 +557,7 @@ Pr <- function(
       tails = tails
     )
 
-    ## each instance of .lprobsbase() takes one datapoint
+    ## each instance of .lprobsbase() takes one X datapoint
     invisible(parallel::parLapply(cl = cl,
       X = lpargs$xVs,
       fun = .lprobsbase,
@@ -543,7 +586,7 @@ Pr <- function(
     tails = tails
   )
 
-  ## each instance of .lprobsbase() takes one datapoint
+  ## each instance of .lprobsbase() takes one Y datapoint
   invisible(parallel::parLapply(cl = cl,
     X = lpargs$xVs,
     fun = .lprobsbase,
